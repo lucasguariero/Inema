@@ -1,0 +1,92 @@
+- generic [active] [ref=f6e1]:
+  - link "Pular para o conteúdo" [ref=f6e2] [cursor=pointer]:
+    - /url: "#fi-main-content"
+  - navigation "Barra superior" [ref=f6e4]:
+    - generic [ref=f6e5]:
+      - button "Recolher barra lateral" [expanded] [ref=f6e7] [cursor=pointer]
+      - link [ref=f6e9] [cursor=pointer]:
+        - /url: https://gla-inema-hml.acto.com.br
+        - img "Logotipo de INEMA" [ref=f6e10]
+    - generic [ref=f6e11]:
+      - generic [ref=f6e14]:
+        - generic [ref=f6e15]: Pesquisa global
+        - searchbox "Pesquisa global" [ref=f6e21]
+      - button "Abrir guia da página" [ref=f6e22] [cursor=pointer]
+      - generic [ref=f6e25]:
+        - button "Abrir notificações" [disabled]:
+          - generic: "4"
+      - button "Menu do usuário" [ref=f6e28] [cursor=pointer]:
+        - img "Avatar de Admin INEMA" [ref=f6e29]
+  - generic [ref=f6e30]:
+    - generic [ref=f6e32]:
+      - navigation "Navegação da barra lateral" [ref=f6e33]:
+        - list [ref=f6e34]:
+          - listitem [ref=f6e35]:
+            - link "Início" [ref=f6e36] [cursor=pointer]:
+              - /url: https://gla-inema-hml.acto.com.br
+          - listitem [ref=f6e40]:
+            - link "Iniciar Requerimento" [ref=f6e41] [cursor=pointer]:
+              - /url: https://gla-inema-hml.acto.com.br/requerimento/informacoes
+          - listitem [ref=f6e46]:
+            - link "Meus Processos" [ref=f6e47] [cursor=pointer]:
+              - /url: https://gla-inema-hml.acto.com.br/meus-processos
+          - listitem [ref=f6e51]:
+            - link "Notificações" [ref=f6e52] [cursor=pointer]:
+              - /url: https://gla-inema-hml.acto.com.br/notificacoes
+          - listitem [ref=f6e56]:
+            - link "Acesso Público" [ref=f6e57] [cursor=pointer]:
+              - /url: https://gla-inema-hml.acto.com.br/acesso-publico
+          - listitem [ref=f6e61]:
+            - button "Análise Técnica" [ref=f6e62] [cursor=pointer]
+          - listitem [ref=f6e68]:
+            - button "Processos" [ref=f6e69] [cursor=pointer]
+            - list [ref=f6e75]:
+              - listitem [ref=f6e76]:
+                - link "Consultar Processos" [ref=f6e77] [cursor=pointer]:
+                  - /url: https://gla-inema-hml.acto.com.br/processos
+              - listitem [ref=f6e81]:
+                - link "Processos Finalizados" [disabled]:
+                  - /url: "#"
+          - listitem [ref=f6e82]:
+            - button "SISPASS" [ref=f6e83] [cursor=pointer]
+          - listitem [ref=f6e89]:
+            - button "Financeiro" [ref=f6e90] [cursor=pointer]
+          - listitem [ref=f6e96]:
+            - button "Meu Cadastro" [ref=f6e97] [cursor=pointer]
+          - listitem [ref=f6e103]:
+            - button "Atividades Não Passíveis de Licenciamento Ambiental" [ref=f6e104] [cursor=pointer]
+          - listitem [ref=f6e110]:
+            - button "Requerimentos" [ref=f6e111] [cursor=pointer]
+          - listitem [ref=f6e117]:
+            - button "administrator-line Administração" [ref=f6e118] [cursor=pointer]:
+              - img "administrator-line" [ref=f6e119]
+              - generic [ref=f6e125]: Administração
+          - listitem [ref=f6e128]:
+            - link "Configurações" [ref=f6e129] [cursor=pointer]:
+              - /url: https://gla-inema-hml.acto.com.br/configuracoes
+          - listitem [ref=f6e133]:
+            - button "Auditoria" [ref=f6e134] [cursor=pointer]
+          - listitem [ref=f6e140]:
+            - button "Gestão de Fauna" [ref=f6e141] [cursor=pointer]
+          - listitem [ref=f6e147]:
+            - button "Diretoria de Desenvolvimento" [ref=f6e148] [cursor=pointer]
+      - button "Abrir assistente" [ref=f6e155] [cursor=pointer]:
+        - generic [ref=f6e158]: Assistente INEMA
+    - main [ref=f6e160]:
+      - generic [ref=f6e162]:
+        - generic [ref=f6e164]:
+          - navigation "filament::components/breadcrumbs.label" [ref=f6e165]:
+            - list [ref=f6e166]:
+              - listitem [ref=f6e167]:
+                - link "Processos" [ref=f6e168] [cursor=pointer]:
+                  - /url: https://gla-inema-hml.acto.com.br/processos
+              - listitem [ref=f6e169]:
+                - generic [ref=f6e172]: Criar
+          - heading "Criar Processo" [level=1] [ref=f6e173]
+        - generic [ref=f6e184]:
+          - button "Criar" [ref=f6e185] [cursor=pointer]
+          - button "Salvar e criar outro" [ref=f6e187] [cursor=pointer]
+          - button "Cancelar" [ref=f6e188] [cursor=pointer]
+  - generic:
+    - status
+  - generic: vUnreleased

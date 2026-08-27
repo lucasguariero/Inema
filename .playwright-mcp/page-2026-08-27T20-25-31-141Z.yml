@@ -1,0 +1,209 @@
+- generic [active] [ref=f1e1]:
+  - link "Pular para o conteúdo" [ref=f1e2] [cursor=pointer]:
+    - /url: "#fi-main-content"
+  - navigation "Barra superior" [ref=f1e4]:
+    - generic [ref=f1e5]:
+      - button "Recolher barra lateral" [expanded] [ref=f1e7] [cursor=pointer]
+      - link [ref=f1e9] [cursor=pointer]:
+        - /url: https://gla-inema-hml.acto.com.br
+        - img "Logotipo de INEMA" [ref=f1e10]
+    - generic [ref=f1e11]:
+      - generic [ref=f1e14]:
+        - generic [ref=f1e15]: Pesquisa global
+        - searchbox "Pesquisa global" [ref=f1e21]
+      - button "Abrir guia da página" [ref=f1e22] [cursor=pointer]
+      - generic [ref=f1e25]:
+        - button "Abrir notificações" [disabled]:
+          - generic: "4"
+      - button "Menu do usuário" [ref=f1e28] [cursor=pointer]:
+        - img "Avatar de Admin INEMA" [ref=f1e29]
+  - generic [ref=f1e30]:
+    - generic [ref=f1e32]:
+      - navigation "Navegação da barra lateral" [ref=f1e33]:
+        - list [ref=f1e34]:
+          - listitem [ref=f1e35]:
+            - link "Início" [ref=f1e36] [cursor=pointer]:
+              - /url: https://gla-inema-hml.acto.com.br
+          - listitem [ref=f1e40]:
+            - link "Iniciar Requerimento" [ref=f1e41] [cursor=pointer]:
+              - /url: https://gla-inema-hml.acto.com.br/requerimento/informacoes
+          - listitem [ref=f1e46]:
+            - link "Meus Processos" [ref=f1e47] [cursor=pointer]:
+              - /url: https://gla-inema-hml.acto.com.br/meus-processos
+          - listitem [ref=f1e51]:
+            - link "Notificações" [ref=f1e52] [cursor=pointer]:
+              - /url: https://gla-inema-hml.acto.com.br/notificacoes
+          - listitem [ref=f1e56]:
+            - link "Acesso Público" [ref=f1e57] [cursor=pointer]:
+              - /url: https://gla-inema-hml.acto.com.br/acesso-publico
+          - listitem [ref=f1e61]:
+            - button "Análise Técnica" [ref=f1e62] [cursor=pointer]
+          - listitem [ref=f1e68]:
+            - button "Processos" [ref=f1e69] [cursor=pointer]
+            - list [ref=f1e75]:
+              - listitem [ref=f1e76]:
+                - link "Consultar Processos" [ref=f1e77] [cursor=pointer]:
+                  - /url: https://gla-inema-hml.acto.com.br/processos
+              - listitem [ref=f1e81]:
+                - link "Processos Finalizados" [disabled]:
+                  - /url: "#"
+          - listitem [ref=f1e82]:
+            - button "SISPASS" [ref=f1e83] [cursor=pointer]
+          - listitem [ref=f1e89]:
+            - button "Financeiro" [ref=f1e90] [cursor=pointer]
+          - listitem [ref=f1e96]:
+            - button "Meu Cadastro" [ref=f1e97] [cursor=pointer]
+          - listitem [ref=f1e103]:
+            - button "Atividades Não Passíveis de Licenciamento Ambiental" [ref=f1e104] [cursor=pointer]
+          - listitem [ref=f1e110]:
+            - button "Requerimentos" [ref=f1e111] [cursor=pointer]
+          - listitem [ref=f1e117]:
+            - button "administrator-line Administração" [ref=f1e118] [cursor=pointer]:
+              - img "administrator-line" [ref=f1e119]
+              - generic [ref=f1e125]: Administração
+          - listitem [ref=f1e128]:
+            - link "Configurações" [ref=f1e129] [cursor=pointer]:
+              - /url: https://gla-inema-hml.acto.com.br/configuracoes
+          - listitem [ref=f1e133]:
+            - button "Auditoria" [ref=f1e134] [cursor=pointer]
+          - listitem [ref=f1e140]:
+            - button "Gestão de Fauna" [ref=f1e141] [cursor=pointer]
+          - listitem [ref=f1e147]:
+            - button "Diretoria de Desenvolvimento" [ref=f1e148] [cursor=pointer]
+      - button "Abrir assistente" [ref=f1e155] [cursor=pointer]:
+        - generic [ref=f1e158]: Assistente INEMA
+    - main [ref=f1e160]:
+      - generic [ref=f1e162]:
+        - generic [ref=f1e163]:
+          - generic [ref=f1e164]:
+            - navigation "filament::components/breadcrumbs.label" [ref=f1e165]:
+              - list [ref=f1e166]:
+                - listitem [ref=f1e167]:
+                  - link "Processos" [ref=f1e168] [cursor=pointer]:
+                    - /url: https://gla-inema-hml.acto.com.br/processos
+                - listitem [ref=f1e169]:
+                  - generic [ref=f1e172]: Listar
+            - heading "Processos" [level=1] [ref=f1e173]
+          - generic [ref=f1e175]:
+            - link "Criar Processo" [ref=f1e176] [cursor=pointer]:
+              - /url: https://gla-inema-hml.acto.com.br/processos/create
+            - button "Gerar relatório" [ref=f1e179] [cursor=pointer]
+        - generic [ref=f1e189]:
+          - generic [ref=f1e192]:
+            - generic [ref=f1e193]:
+              - generic [ref=f1e194]: Pesquisar
+              - searchbox "Pesquisar" [ref=f1e200]
+            - button "Filtrar" [ref=f1e203] [cursor=pointer]:
+              - generic [ref=f1e206]: "0"
+            - button "Alternar colunas" [ref=f1e210] [cursor=pointer]
+          - generic [ref=f1e213]:
+            - status [ref=f1e214]: 2 resultados
+            - table "Processos" [ref=f1e215]:
+              - rowgroup [ref=f1e216]:
+                - row [ref=f1e217]:
+                  - columnheader [ref=f1e218]:
+                    - checkbox "Marcar/desmarcar todos os itens para ações em massa." [ref=f1e219]
+                  - columnheader [ref=f1e220]:
+                    - button "Número" [ref=f1e221] [cursor=pointer]
+                  - columnheader [ref=f1e224]:
+                    - button "Tipo" [ref=f1e225] [cursor=pointer]
+                  - columnheader "Assunto" [ref=f1e228]
+                  - columnheader [ref=f1e229]:
+                    - button "Requerente" [ref=f1e230] [cursor=pointer]
+                  - columnheader [ref=f1e233]:
+                    - button "Status" [ref=f1e234] [cursor=pointer]
+                  - columnheader [ref=f1e237]:
+                    - button "Setor Atual" [ref=f1e238] [cursor=pointer]
+                  - columnheader "Rascunho" [ref=f1e241]
+                  - columnheader [ref=f1e242]:
+                    - button "Data Protocolo" [ref=f1e243] [cursor=pointer]
+                  - columnheader "Tags" [ref=f1e246]
+                  - columnheader "Ações" [ref=f1e247]
+              - rowgroup [ref=f1e248]:
+                - row "Marcar/desmarcar o item 2 para ações em massa. 2026.000001 Licenciamento Ambiental Licença prévia para unidade industrial Agro Bahia Comercial Ltda Em Análise PROT Não 21/07/2026 13:05 Visualizar Editar Outros" [ref=f1e249]:
+                  - cell [ref=f1e250]:
+                    - checkbox "Marcar/desmarcar o item 2 para ações em massa." [ref=f1e251]
+                  - cell [ref=f1e252]:
+                    - link "2026.000001" [ref=f1e253] [cursor=pointer]:
+                      - /url: https://gla-inema-hml.acto.com.br/processos/2
+                  - cell [ref=f1e255]:
+                    - link "Licenciamento Ambiental" [ref=f1e256] [cursor=pointer]:
+                      - /url: https://gla-inema-hml.acto.com.br/processos/2
+                  - cell [ref=f1e259]:
+                    - link "Licença prévia para unidade industrial" [ref=f1e260] [cursor=pointer]:
+                      - /url: https://gla-inema-hml.acto.com.br/processos/2
+                  - cell [ref=f1e262]:
+                    - link "Agro Bahia Comercial Ltda" [ref=f1e263] [cursor=pointer]:
+                      - /url: https://gla-inema-hml.acto.com.br/processos/2
+                  - cell [ref=f1e265]:
+                    - link "Em Análise" [ref=f1e266] [cursor=pointer]:
+                      - /url: https://gla-inema-hml.acto.com.br/processos/2
+                  - cell [ref=f1e271]:
+                    - link "PROT" [ref=f1e272] [cursor=pointer]:
+                      - /url: https://gla-inema-hml.acto.com.br/processos/2
+                  - cell [ref=f1e274]:
+                    - link "Não" [ref=f1e275] [cursor=pointer]:
+                      - /url: https://gla-inema-hml.acto.com.br/processos/2
+                  - cell [ref=f1e280]:
+                    - link "21/07/2026 13:05" [ref=f1e281] [cursor=pointer]:
+                      - /url: https://gla-inema-hml.acto.com.br/processos/2
+                  - cell [ref=f1e283]:
+                    - link [ref=f1e284] [cursor=pointer]:
+                      - /url: https://gla-inema-hml.acto.com.br/processos/2
+                  - cell [ref=f1e286]:
+                    - generic [ref=f1e287]:
+                      - link "Visualizar" [ref=f1e288] [cursor=pointer]:
+                        - /url: https://gla-inema-hml.acto.com.br/processos/2
+                      - link "Editar" [ref=f1e293] [cursor=pointer]:
+                        - /url: https://gla-inema-hml.acto.com.br/processos/2/edit
+                      - button "Outros" [ref=f1e300] [cursor=pointer]
+                - row "Marcar/desmarcar o item 1 para ações em massa. Rascunho Outorga de Uso de Recursos Hídricos Outorga de poço tubular para irrigação João Silva Novo COUT Sim Visualizar Editar Outros" [ref=f1e303]:
+                  - cell [ref=f1e304]:
+                    - checkbox "Marcar/desmarcar o item 1 para ações em massa." [ref=f1e305]
+                  - cell [ref=f1e306]:
+                    - link [ref=f1e307] [cursor=pointer]:
+                      - /url: https://gla-inema-hml.acto.com.br/processos/1
+                      - paragraph [ref=f1e309]: Rascunho
+                  - cell [ref=f1e310]:
+                    - link "Outorga de Uso de Recursos Hídricos" [ref=f1e311] [cursor=pointer]:
+                      - /url: https://gla-inema-hml.acto.com.br/processos/1
+                  - cell [ref=f1e314]:
+                    - link "Outorga de poço tubular para irrigação" [ref=f1e315] [cursor=pointer]:
+                      - /url: https://gla-inema-hml.acto.com.br/processos/1
+                  - cell [ref=f1e317]:
+                    - link "João Silva" [ref=f1e318] [cursor=pointer]:
+                      - /url: https://gla-inema-hml.acto.com.br/processos/1
+                  - cell [ref=f1e320]:
+                    - link "Novo" [ref=f1e321] [cursor=pointer]:
+                      - /url: https://gla-inema-hml.acto.com.br/processos/1
+                  - cell [ref=f1e326]:
+                    - link "COUT" [ref=f1e327] [cursor=pointer]:
+                      - /url: https://gla-inema-hml.acto.com.br/processos/1
+                  - cell [ref=f1e329]:
+                    - link "Sim" [ref=f1e330] [cursor=pointer]:
+                      - /url: https://gla-inema-hml.acto.com.br/processos/1
+                  - cell [ref=f1e335]:
+                    - link [ref=f1e336] [cursor=pointer]:
+                      - /url: https://gla-inema-hml.acto.com.br/processos/1
+                  - cell [ref=f1e338]:
+                    - link [ref=f1e339] [cursor=pointer]:
+                      - /url: https://gla-inema-hml.acto.com.br/processos/1
+                  - cell [ref=f1e341]:
+                    - generic [ref=f1e342]:
+                      - link "Visualizar" [ref=f1e343] [cursor=pointer]:
+                        - /url: https://gla-inema-hml.acto.com.br/processos/1
+                      - link "Editar" [ref=f1e348] [cursor=pointer]:
+                        - /url: https://gla-inema-hml.acto.com.br/processos/1/edit
+                      - button "Outros" [ref=f1e355] [cursor=pointer]
+          - navigation "Paginação" [ref=f1e358]:
+            - generic [ref=f1e359]: Exibindo 1 a 2 de 2 resultados
+            - generic [ref=f1e362]:
+              - generic [ref=f1e363]: por página
+              - combobox "por página" [ref=f1e366]:
+                - option "5"
+                - option "10" [selected]
+                - option "25"
+                - option "50"
+  - generic:
+    - status
+  - generic: vUnreleased

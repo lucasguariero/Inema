@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal INEMA - Início</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface": "#f8f9fb",
+                        "surface-dim": "#d9dadc",
+                        "surface-bright": "#f8f9fb",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f3f4f6",
+                        "surface-container": "#edeef0",
+                        "surface-container-high": "#e7e8ea",
+                        "surface-container-highest": "#e1e2e4",
+                        "on-surface": "#191c1e",
+                        "on-surface-variant": "#404945",
+                        "inverse-surface": "#2e3132",
+                        "inverse-on-surface": "#f0f1f3",
+                        "outline": "#707975",
+                        "outline-variant": "#bfc9c4",
+                        "surface-tint": "#326859",
+                        "primary": "#002f25",
+                        "on-primary": "#ffffff",
+                        "primary-container": "#0a473a",
+                        "on-primary-container": "#7eb5a4",
+                        "inverse-primary": "#9ad2c0",
+                        "secondary": "#2a6862",
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#aeebe4",
+                        "on-secondary-container": "#2f6c66",
+                        "tertiary": "#461c13",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-container": "#613127",
+                        "on-tertiary-container": "#dd998b",
+                        "error": "#ba1a1a",
+                        "on-error": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-error-container": "#93000a",
+                        "primary-fixed": "#b6eedc",
+                        "primary-fixed-dim": "#9ad2c0",
+                        "on-primary-fixed": "#002019",
+                        "on-primary-fixed-variant": "#175042",
+                        "secondary-fixed": "#b1eee7",
+                        "secondary-fixed-dim": "#95d2cb",
+                        "on-secondary-fixed": "#00201d",
+                        "on-secondary-fixed-variant": "#09504b",
+                        "tertiary-fixed": "#ffdad3",
+                        "tertiary-fixed-dim": "#fdb5a6",
+                        "on-tertiary-fixed": "#350f08",
+                        "on-tertiary-fixed-variant": "#6b392f",
+                        "background": "#f8f9fb",
+                        "on-background": "#191c1e",
+                        "surface-variant": "#e1e2e4",
+                        "sidebar-active": "#d1e1de",
+                        "text-main": "#111827",
+                        "text-muted": "#6b7280",
+                        "border-subtle": "#e5e7eb"
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        full: "9999px"
+                    },
+                    spacing: {
+                        gutter: "1.5rem",
+                        "container-padding": "2rem",
+                        "header-height": "64px",
+                        "sidebar-width": "280px",
+                        "stack-gap": "1rem"
+                    },
+                    fontFamily: {
+                        "headline-xl": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"]
+                    },
+                    fontSize: {
+                        "headline-xl": ["32px", { lineHeight: "1.2", fontWeight: "700" }],
+                        "label-sm": ["12px", { lineHeight: "1.2", fontWeight: "500" }],
+                        "body-md": ["14px", { lineHeight: "1.5", fontWeight: "400" }],
+                        "headline-lg": ["24px", { lineHeight: "1.3", fontWeight: "600" }],
+                        "label-md": ["14px", { lineHeight: "1.2", fontWeight: "600" }],
+                        "body-lg": ["16px", { lineHeight: "1.5", fontWeight: "400" }],
+                        "headline-lg-mobile": ["20px", { lineHeight: "1.3", fontWeight: "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background">
+    <!-- Topbar - Full width -->
+    <header class="h-header-height bg-primary-container fixed top-0 left-0 right-0 z-50 flex items-center px-4 gap-4">
+        <!-- Hamburger + Logo -->
+        <div class="flex items-center gap-3">
+            <button class="w-10 h-10 rounded-lg hover:bg-white/10 flex items-center justify-center text-white transition-colors">
+                <span class="material-symbols-outlined text-2xl">menu</span>
+            </button>
+            <img src="logo.svg" alt="INEMA" class="h-10 w-auto">
+        </div>
+
+        <!-- Right side: Search, Notifications, Profile -->
+        <div class="flex items-center gap-3 ml-auto">
+            <!-- Search -->
+            <div class="relative">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/60">search</span>
+                <input
+                    type="text"
+                    placeholder="Buscar no sistema..."
+                    class="w-80 pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 text-sm focus:outline-none focus:border-white/40"
+                >
+            </div>
+
+            <!-- Notifications -->
+            <button class="w-10 h-10 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors relative">
+                <span class="material-symbols-outlined">notifications</span>
+                <span class="absolute -top-1 -right-1 w-5 h-5 bg-error rounded-full text-xs flex items-center justify-center font-semibold">3</span>
+            </button>
+
+            <!-- Profile Dropdown -->
+            <div class="relative">
+                <button id="profileBtn" class="flex items-center gap-2 p-1.5 rounded-lg hover:bg-white/10 transition-colors">
+                    <div class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                        LM
+                    </div>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div id="profileDropdown" class="hidden absolute right-0 top-12 w-48 bg-surface-container-lowest rounded-xl border border-border-subtle shadow-lg py-2">
+                    <div class="px-4 py-2 border-b border-border-subtle">
+                        <p class="text-sm font-semibold text-on-surface">Lucas Manager</p>
+                        <p class="text-xs text-text-muted">Administrador</p>
+                    </div>
+                    <a href="#" class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-low transition-colors">
+                        <span class="material-symbols-outlined text-lg">person</span>
+                        <span class="text-sm">Perfil</span>
+                    </a>
+                    <a href="#" class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-low transition-colors">
+                        <span class="material-symbols-outlined text-lg">settings</span>
+                        <span class="text-sm">Configurações</span>
+                    </a>
+                    <hr class="my-2 border-border-subtle">
+                    <a href="#" class="flex items-center gap-3 px-4 py-2 text-error hover:bg-error/10 transition-colors">
+                        <span class="material-symbols-outlined text-lg">logout</span>
+                        <span class="text-sm">Sair</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex min-h-screen pt-header-height">
+        <!-- Sidebar -->
+        <aside class="w-sidebar-width bg-surface-container-lowest border-r border-border-subtle flex flex-col fixed" style="top: 64px; bottom: 0;">
+            <!-- Navigation -->
+            <nav class="flex-1 py-4 px-3 overflow-y-auto">
+                <ul class="space-y-1">
+                    <li>
+                        <a href="index.html" class="flex items-center gap-3 px-3 py-1 rounded-lg bg-sidebar-active text-primary-container font-semibold">
+                            <span class="material-symbols-outlined text-xl">home</span>
+                            <span class="text-sm">Início</span>
+                        </a>
+                    </li>
+                    <li>
+                        <button class="w-full flex items-center gap-3 px-3 py-1 rounded-lg text-on-surface-variant hover:bg-surface-container-low">
+                            <span class="material-symbols-outlined text-xl">gavel</span>
+                            <span class="text-sm">Fiscalização</span>
+                            <span class="material-symbols-outlined text-lg ml-auto">expand_more</span>
+                        </button>
+                        <ul class="ml-9 mt-1 space-y-1">
+                            <li><a href="fiscalizacao.html" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Atendente (DOR001)</a></li>
+                            <li><a href="fiscalizacao.html?fluxo=externo" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Cidadão (DOR002)</a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <!-- Assistant Button -->
+                <div class="p-4 border-t border-border-subtle">
+                    <button class="w-full flex items-center gap-3 px-4 py-3 bg-primary-container text-white rounded-xl hover:bg-primary/90 transition-colors">
+                        <span class="material-symbols-outlined text-xl">auto_awesome</span>
+                        <span class="text-sm font-medium">Assistente INEMA</span>
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Assistant Button -->
+            <div class="p-4 border-t border-border-subtle">
+                <button class="w-full flex items-center gap-3 px-4 py-3 bg-primary-container text-white rounded-xl hover:bg-primary/90 transition-colors">
+                    <span class="material-symbols-outlined text-xl">auto_awesome</span>
+                    <span class="text-sm font-medium">Assistente INEMA</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 ml-sidebar-width">
+            <!-- Content -->
+            <main class="p-8">
+                <!-- Welcome -->
+                <div class="mb-8">
+                    <h2 class="text-headline-xl text-on-surface">Bem-vindo, Lucas</h2>
+                    <p class="text-body-md text-text-muted mt-1">Acompanhe as atividades e acessos rápidos do sistema</p>
+                </div>
+
+                <!-- Quick Access -->
+                <h3 class="text-headline-lg text-on-surface mb-4">Acesso Rápido</h3>
+                <div class="grid grid-cols-3 gap-6">
+                    <!-- Card: Fiscalização Atendente -->
+                    <a href="fiscalizacao.html" class="bg-surface-container-lowest rounded-xl p-6 border border-border-subtle hover:shadow-lg hover:shadow-black/5 transition-all group cursor-pointer">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-primary-container rounded-lg flex items-center justify-center">
+                                <span class="material-symbols-outlined text-white text-2xl">fact_check</span>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-on-surface group-hover:text-primary-container transition-colors">Fiscalização - Atendente</h4>
+                                <p class="text-sm text-text-muted mt-1">Cadastro manual de denúncias</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center text-primary-container font-medium text-sm">
+                            <span>Acessar</span>
+                            <span class="material-symbols-outlined ml-1 text-lg">arrow_forward</span>
+                        </div>
+                    </a>
+
+                    <!-- Card: Fiscalização Cidadão -->
+                    <a href="fiscalizacao.html?fluxo=externo" class="bg-surface-container-lowest rounded-xl p-6 border border-border-subtle hover:shadow-lg hover:shadow-black/5 transition-all group cursor-pointer">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-secondary rounded-lg flex items-center justify-center">
+                                <span class="material-symbols-outlined text-white text-2xl">person</span>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-on-surface group-hover:text-secondary transition-colors">Denúncia - Cidadão</h4>
+                                <p class="text-sm text-text-muted mt-1">Portal de autoatendimento</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center text-secondary font-medium text-sm">
+                            <span>Acessar</span>
+                            <span class="material-symbols-outlined ml-1 text-lg">arrow_forward</span>
+                        </div>
+                    </a>
+
+                    <!-- Card: Licenciamento -->
+                    <a href="#" class="bg-surface-container-lowest rounded-xl p-6 border border-border-subtle hover:shadow-lg hover:shadow-black/5 transition-all group cursor-pointer">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-secondary rounded-lg flex items-center justify-center">
+                                <span class="material-symbols-outlined text-white text-2xl">description</span>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-on-surface group-hover:text-secondary transition-colors">Licenciamento</h4>
+                                <p class="text-sm text-text-muted mt-1">Processos de licenciamento ambiental</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center text-secondary font-medium text-sm">
+                            <span>Acessar</span>
+                            <span class="material-symbols-outlined ml-1 text-lg">arrow_forward</span>
+                        </div>
+                    </a>
+
+                    <!-- Card: Monitoramento -->
+                    <a href="#" class="bg-surface-container-lowest rounded-xl p-6 border border-border-subtle hover:shadow-lg hover:shadow-black/5 transition-all group cursor-pointer">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-tertiary-container rounded-lg flex items-center justify-center">
+                                <span class="material-symbols-outlined text-white text-2xl">monitor_heart</span>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-on-surface group-hover:text-tertiary-container transition-colors">Monitoramento</h4>
+                                <p class="text-sm text-text-muted mt-1">Monitoramento de áreas e empreendimentos</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center text-tertiary-container font-medium text-sm">
+                            <span>Acessar</span>
+                            <span class="material-symbols-outlined ml-1 text-lg">arrow_forward</span>
+                        </div>
+                    </a>
+
+                    <!-- Card: Laboratório -->
+                    <a href="#" class="bg-surface-container-lowest rounded-xl p-6 border border-border-subtle hover:shadow-lg hover:shadow-black/5 transition-all group cursor-pointer">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-secondary-container rounded-lg flex items-center justify-center">
+                                <span class="material-symbols-outlined text-on-secondary-container text-2xl">science</span>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-on-surface group-hover:text-on-secondary-container transition-colors">Laboratório</h4>
+                                <p class="text-sm text-text-muted mt-1">Resultados de análises laboratoriais</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center text-on-secondary-container font-medium text-sm">
+                            <span>Acessar</span>
+                            <span class="material-symbols-outlined ml-1 text-lg">arrow_forward</span>
+                        </div>
+                    </a>
+
+                    <!-- Card: Geoprocessamento -->
+                    <a href="#" class="bg-surface-container-lowest rounded-xl p-6 border border-border-subtle hover:shadow-lg hover:shadow-black/5 transition-all group cursor-pointer">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-primary-container/10 rounded-lg flex items-center justify-center">
+                                <span class="material-symbols-outlined text-primary-container text-2xl">map</span>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-on-surface group-hover:text-primary-container transition-colors">Geoprocessamento</h4>
+                                <p class="text-sm text-text-muted mt-1">Mapas e análise geográfica</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center text-primary-container font-medium text-sm">
+                            <span>Acessar</span>
+                            <span class="material-symbols-outlined ml-1 text-lg">arrow_forward</span>
+                        </div>
+                    </a>
+
+                    <!-- Card: Relatórios -->
+                    <a href="#" class="bg-surface-container-lowest rounded-xl p-6 border border-border-subtle hover:shadow-lg hover:shadow-black/5 transition-all group cursor-pointer">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-surface-container rounded-lg flex items-center justify-center">
+                                <span class="material-symbols-outlined text-on-surface-variant text-2xl">assessment</span>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-on-surface group-hover:text-on-surface-variant transition-colors">Relatórios</h4>
+                                <p class="text-sm text-text-muted mt-1">Relatórios e estatísticas do sistema</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center text-on-surface-variant font-medium text-sm">
+                            <span>Acessar</span>
+                            <span class="material-symbols-outlined ml-1 text-lg">arrow_forward</span>
+                        </div>
+                    </a>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Profile dropdown toggle
+        const profileBtn = document.getElementById('profileBtn');
+        const profileDropdown = document.getElementById('profileDropdown');
+
+        profileBtn.addEventListener('click', () => {
+            profileDropdown.classList.toggle('hidden');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
+                profileDropdown.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

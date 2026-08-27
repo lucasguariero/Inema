@@ -1,0 +1,113 @@
+- generic [active] [ref=e1]:
+  - link "Pular para o conteúdo" [ref=e2] [cursor=pointer]:
+    - /url: "#fi-main-content"
+  - navigation "Barra superior" [ref=e4]:
+    - generic [ref=e5]:
+      - button "Recolher barra lateral" [expanded] [ref=e7] [cursor=pointer]
+      - link [ref=e9] [cursor=pointer]:
+        - /url: https://gla-inema-hml.acto.com.br
+        - img "Logotipo de INEMA" [ref=e10]
+    - generic [ref=e11]:
+      - generic [ref=e14]:
+        - generic [ref=e15]: Pesquisa global
+        - searchbox "Pesquisa global" [ref=e21]
+      - generic [ref=e22]:
+        - button "Abrir notificações" [disabled]:
+          - generic: "4"
+      - button "Menu do usuário" [ref=e25] [cursor=pointer]:
+        - img "Avatar de Admin INEMA" [ref=e26]
+  - generic [ref=e27]:
+    - generic [ref=e29]:
+      - navigation "Navegação da barra lateral" [ref=e30]:
+        - list [ref=e31]:
+          - listitem [ref=e32]:
+            - link "Início" [ref=e33] [cursor=pointer]:
+              - /url: https://gla-inema-hml.acto.com.br
+          - listitem [ref=e37]:
+            - link "Iniciar Requerimento" [ref=e38] [cursor=pointer]:
+              - /url: https://gla-inema-hml.acto.com.br/requerimento/informacoes
+          - listitem [ref=e43]:
+            - link "Meus Processos" [ref=e44] [cursor=pointer]:
+              - /url: https://gla-inema-hml.acto.com.br/meus-processos
+          - listitem [ref=e48]:
+            - link "Notificações" [ref=e49] [cursor=pointer]:
+              - /url: https://gla-inema-hml.acto.com.br/notificacoes
+          - listitem [ref=e53]:
+            - link "Acesso Público" [ref=e54] [cursor=pointer]:
+              - /url: https://gla-inema-hml.acto.com.br/acesso-publico
+          - listitem [ref=e58]:
+            - button "Análise Técnica" [ref=e59] [cursor=pointer]
+          - listitem [ref=e65]:
+            - button "Processos" [ref=e66] [cursor=pointer]
+          - listitem [ref=e72]:
+            - button "SISPASS" [ref=e73] [cursor=pointer]
+          - listitem [ref=e79]:
+            - button "Financeiro" [ref=e80] [cursor=pointer]
+          - listitem [ref=e86]:
+            - button "Meu Cadastro" [ref=e87] [cursor=pointer]
+          - listitem [ref=e93]:
+            - button "Atividades Não Passíveis de Licenciamento Ambiental" [ref=e94] [cursor=pointer]
+          - listitem [ref=e100]:
+            - button "Requerimentos" [ref=e101] [cursor=pointer]
+          - listitem [ref=e107]:
+            - button "administrator-line Administração" [ref=e108] [cursor=pointer]:
+              - img "administrator-line" [ref=e109]
+              - generic [ref=e115]: Administração
+          - listitem [ref=e118]:
+            - link "Configurações" [ref=e119] [cursor=pointer]:
+              - /url: https://gla-inema-hml.acto.com.br/configuracoes
+          - listitem [ref=e123]:
+            - button "Auditoria" [ref=e124] [cursor=pointer]
+          - listitem [ref=e130]:
+            - button "Gestão de Fauna" [ref=e131] [cursor=pointer]
+          - listitem [ref=e137]:
+            - button "Diretoria de Desenvolvimento" [ref=e138] [cursor=pointer]
+      - button "Abrir assistente" [ref=e145] [cursor=pointer]:
+        - generic [ref=e148]: Assistente INEMA
+    - main [ref=e150]:
+      - generic [ref=e152]:
+        - heading "Início" [level=1] [ref=e155]
+        - generic [ref=e157]:
+          - generic [ref=e158]:
+            - heading "Acesso rápido" [level=2] [ref=e159]
+            - paragraph [ref=e160]: Atalhos para as funcionalidades disponíveis para o seu perfil.
+          - generic [ref=e161]:
+            - link [ref=e162] [cursor=pointer]:
+              - /url: https://gla-inema-hml.acto.com.br/meu-cadastro
+              - generic [ref=e166]:
+                - heading "Dados Pessoais" [level=3] [ref=e167]
+                - paragraph [ref=e168]: Complete e mantenha seus dados cadastrais atualizados.
+              - generic [ref=e169]: Acessar
+            - link [ref=e172] [cursor=pointer]:
+              - /url: https://gla-inema-hml.acto.com.br/empreendimentos
+              - generic [ref=e176]:
+                - heading "Empreendimentos" [level=3] [ref=e177]
+                - paragraph [ref=e178]: Gerencie os seus empreendimentos cadastrados.
+              - generic [ref=e179]: Acessar
+            - link [ref=e182] [cursor=pointer]:
+              - /url: https://gla-inema-hml.acto.com.br/cerhs
+              - generic [ref=e186]:
+                - heading "CERH" [level=3] [ref=e187]
+                - paragraph [ref=e188]: Cadastro Estadual de Recursos Hídricos.
+              - generic [ref=e189]: Acessar
+            - link [ref=e192] [cursor=pointer]:
+              - /url: https://gla-inema-hml.acto.com.br/dtrp-requerimento/dtrp-requerimentos
+              - generic [ref=e196]:
+                - heading "DTRP" [level=3] [ref=e197]
+                - paragraph [ref=e198]: Requerimentos de Dispensa de Transporte.
+              - generic [ref=e199]: Acessar
+            - link [ref=e202] [cursor=pointer]:
+              - /url: https://gla-inema-hml.acto.com.br/reposicao-florestal/reposicao-florestals
+              - generic [ref=e206]:
+                - heading "Reposição Florestal" [level=3] [ref=e207]
+                - paragraph [ref=e208]: Acompanhe suas obrigações de reposição florestal.
+              - generic [ref=e209]: Acessar
+            - link [ref=e212] [cursor=pointer]:
+              - /url: https://gla-inema-hml.acto.com.br/pessoa-fisicas
+              - generic [ref=e216]:
+                - heading "Pessoa Física" [level=3] [ref=e217]
+                - paragraph [ref=e218]: Consulte e gerencie pessoas físicas.
+              - generic [ref=e219]: Acessar
+  - generic:
+    - status
+  - generic: vUnreleased

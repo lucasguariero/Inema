@@ -1,0 +1,131 @@
+- generic [active] [ref=f2e1]:
+  - link "Pular para o conteúdo" [ref=f2e2] [cursor=pointer]:
+    - /url: "#fi-main-content"
+  - navigation "Barra superior" [ref=f2e4]:
+    - generic [ref=f2e5]:
+      - button "Recolher barra lateral" [expanded] [ref=f2e7] [cursor=pointer]
+      - link [ref=f2e9] [cursor=pointer]:
+        - /url: https://gla-inema-hml.acto.com.br
+        - img "Logotipo de INEMA" [ref=f2e10]
+    - generic [ref=f2e11]:
+      - generic [ref=f2e14]:
+        - generic [ref=f2e15]: Pesquisa global
+        - searchbox "Pesquisa global" [ref=f2e21]
+      - generic [ref=f2e22]:
+        - button "Abrir notificações" [disabled]:
+          - generic: "4"
+      - button "Menu do usuário" [ref=f2e25] [cursor=pointer]:
+        - img "Avatar de Admin INEMA" [ref=f2e26]
+  - generic [ref=f2e27]:
+    - generic [ref=f2e29]:
+      - navigation "Navegação da barra lateral" [ref=f2e30]:
+        - list [ref=f2e31]:
+          - listitem [ref=f2e32]:
+            - link "Início" [ref=f2e33] [cursor=pointer]:
+              - /url: https://gla-inema-hml.acto.com.br
+          - listitem [ref=f2e37]:
+            - link "Iniciar Requerimento" [ref=f2e38] [cursor=pointer]:
+              - /url: https://gla-inema-hml.acto.com.br/requerimento/informacoes
+          - listitem [ref=f2e43]:
+            - link "Meus Processos" [ref=f2e44] [cursor=pointer]:
+              - /url: https://gla-inema-hml.acto.com.br/meus-processos
+          - listitem [ref=f2e48]:
+            - link "Notificações" [ref=f2e49] [cursor=pointer]:
+              - /url: https://gla-inema-hml.acto.com.br/notificacoes
+          - listitem [ref=f2e53]:
+            - link "Acesso Público" [ref=f2e54] [cursor=pointer]:
+              - /url: https://gla-inema-hml.acto.com.br/acesso-publico
+          - listitem [ref=f2e58]:
+            - button "Análise Técnica" [ref=f2e59] [cursor=pointer]
+          - listitem [ref=f2e65]:
+            - button "Processos" [ref=f2e66] [cursor=pointer]
+          - listitem [ref=f2e72]:
+            - button "SISPASS" [ref=f2e73] [cursor=pointer]
+          - listitem [ref=f2e79]:
+            - button "Financeiro" [ref=f2e80] [cursor=pointer]
+          - listitem [ref=f2e86]:
+            - button "Meu Cadastro" [ref=f2e87] [cursor=pointer]
+          - listitem [ref=f2e93]:
+            - button "Atividades Não Passíveis de Licenciamento Ambiental" [ref=f2e94] [cursor=pointer]
+          - listitem [ref=f2e100]:
+            - button "Requerimentos" [ref=f2e101] [cursor=pointer]
+          - listitem [ref=f2e107]:
+            - button "administrator-line Administração" [ref=f2e108] [cursor=pointer]:
+              - img "administrator-line" [ref=f2e109]
+              - generic [ref=f2e115]: Administração
+          - listitem [ref=f2e118]:
+            - link "Configurações" [ref=f2e119] [cursor=pointer]:
+              - /url: https://gla-inema-hml.acto.com.br/configuracoes
+          - listitem [ref=f2e123]:
+            - button "Auditoria" [ref=f2e124] [cursor=pointer]
+          - listitem [ref=f2e130]:
+            - button "Gestão de Fauna" [ref=f2e131] [cursor=pointer]
+          - listitem [ref=f2e137]:
+            - button "Diretoria de Desenvolvimento" [ref=f2e138] [cursor=pointer]
+      - button "Abrir assistente" [ref=f2e145] [cursor=pointer]:
+        - generic [ref=f2e148]: Assistente INEMA
+    - main [ref=f2e150]:
+      - generic [ref=f2e152]:
+        - heading "Meus Processos" [level=1] [ref=f2e155]
+        - generic [ref=f2e158]:
+          - tablist [ref=f2e162]:
+            - tab "Todos 1" [selected] [ref=f2e163] [cursor=pointer]:
+              - generic [ref=f2e164]: Todos
+              - generic [ref=f2e165]: "1"
+            - tab "Rascunho 1" [ref=f2e168] [cursor=pointer]:
+              - generic [ref=f2e169]: Rascunho
+              - generic [ref=f2e170]: "1"
+            - tab "Aguardando Pagamento 0" [ref=f2e173] [cursor=pointer]:
+              - generic [ref=f2e174]: Aguardando Pagamento
+              - generic [ref=f2e175]: "0"
+            - tab "Em Análise 0" [ref=f2e178] [cursor=pointer]:
+              - generic [ref=f2e179]: Em Análise
+              - generic [ref=f2e180]: "0"
+            - tab "Pendentes 0" [ref=f2e183] [cursor=pointer]:
+              - generic [ref=f2e184]: Pendentes
+              - generic [ref=f2e185]: "0"
+            - tab "Concluído 0" [ref=f2e188] [cursor=pointer]:
+              - generic [ref=f2e189]: Concluído
+              - generic [ref=f2e190]: "0"
+          - generic [ref=f2e197]:
+            - generic [ref=f2e201]:
+              - generic [ref=f2e202]: Pesquisar
+              - searchbox "Pesquisar" [ref=f2e208]
+            - generic [ref=f2e209]:
+              - status [ref=f2e210]: 1 resultado
+              - table "meu processos" [ref=f2e211]:
+                - rowgroup [ref=f2e212]:
+                  - row [ref=f2e213]:
+                    - columnheader [ref=f2e214]:
+                      - button "Nº Processo" [ref=f2e215] [cursor=pointer]
+                    - columnheader [ref=f2e218]:
+                      - button "Data Formação" [ref=f2e219] [cursor=pointer]
+                    - columnheader [ref=f2e222]:
+                      - button "Ato" [ref=f2e223] [cursor=pointer]
+                    - columnheader [ref=f2e226]:
+                      - button "Etapa" [ref=f2e227] [cursor=pointer]
+                    - columnheader "Ações" [ref=f2e230]
+                - rowgroup [ref=f2e231]:
+                  - row [ref=f2e232]:
+                    - cell [ref=f2e233]:
+                      - paragraph [ref=f2e236]: —
+                    - cell "25/08/2026" [ref=f2e237]
+                    - cell "Certidão de Débito Ambiental" [ref=f2e240]
+                    - cell "Rascunho" [ref=f2e243]
+                    - cell [ref=f2e247]:
+                      - generic [ref=f2e248]:
+                        - link "Visualizar" [ref=f2e249] [cursor=pointer]:
+                          - /url: https://gla-inema-hml.acto.com.br/certidao-debito-ambiental/solicitar?certidao=1
+                        - button "Ações" [ref=f2e254] [cursor=pointer]
+            - navigation "Paginação" [ref=f2e257]:
+              - generic [ref=f2e258]: Exibindo 1 resultado
+              - generic [ref=f2e261]:
+                - generic [ref=f2e262]: por página
+                - combobox "por página" [ref=f2e265]:
+                  - option "5"
+                  - option "10" [selected]
+                  - option "25"
+                  - option "50"
+  - generic:
+    - status
+  - generic: vUnreleased

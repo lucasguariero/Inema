@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Denúncia - Fiscalização - INEMA</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface": "#f8f9fb",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f3f4f6",
+                        "on-surface": "#191c1e",
+                        "on-surface-variant": "#404945",
+                        "primary-container": "#0a473a",
+                        "error": "#ba1a1a",
+                        "text-muted": "#6b7280",
+                        "border-subtle": "#e5e7eb",
+                        "sidebar-active": "#d1e1de",
+                        "stepper-teal": "#005b52"
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="bg-white min-h-screen">
+    <!-- ============================================ -->
+    <!-- MODAL DE ESCOLHA (Apenas Externo) -->
+    <!-- ============================================ -->
+    <div id="modal-escolha" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-primary-container rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span class="material-symbols-outlined text-white text-3xl">gavel</span>
+                </div>
+                <h2 class="text-xl font-semibold text-on-surface">Nova Denúncia Ambiental</h2>
+                <p class="text-sm text-text-muted mt-2">Como você deseja fazer sua denúncia?</p>
+            </div>
+            <div class="space-y-3">
+                <button onclick="escolherTipo('anonima')" class="w-full p-4 border-2 border-gray-200 rounded-xl hover:border-stepper-teal hover:bg-stepper-teal/5 transition-all text-left group">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center group-hover:bg-stepper-teal/10">
+                            <span class="material-symbols-outlined text-gray-500 group-hover:text-stepper-teal">visibility_off</span>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-semibold text-on-surface">Denúncia Anônima</h3>
+                            <p class="text-xs text-text-muted mt-1">Seus dados não serão identificados</p>
+                        </div>
+                        <span class="material-symbols-outlined text-gray-400">chevron_right</span>
+                    </div>
+                </button>
+                <button onclick="escolherTipo('identificada')" class="w-full p-4 border-2 border-gray-200 rounded-xl hover:border-stepper-teal hover:bg-stepper-teal/5 transition-all text-left group">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center group-hover:bg-stepper-teal/10">
+                            <span class="material-symbols-outlined text-gray-500 group-hover:text-stepper-teal">person</span>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-semibold text-on-surface">Denúncia Identificada</h3>
+                            <p class="text-xs text-text-muted mt-1">Seus dados serão incluídos para contato</p>
+                        </div>
+                        <span class="material-symbols-outlined text-gray-400">chevron_right</span>
+                    </div>
+                </button>
+            </div>
+            <div class="mt-6 pt-4 border-t border-gray-100">
+                <p class="text-xs text-text-muted text-center">Você será redirecionado para autenticação via Gov.br</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Topbar -->
+    <header class="h-16 bg-primary-container fixed top-0 left-0 right-0 z-50 flex items-center px-4 gap-4">
+        <div class="flex items-center gap-3">
+            <button class="w-10 h-10 rounded-lg hover:bg-white/10 flex items-center justify-center text-white"><span class="material-symbols-outlined text-2xl">menu</span></button>
+            <img src="logo.svg" alt="INEMA" class="h-10 w-auto">
+        </div>
+        <div class="flex items-center gap-3 ml-auto">
+            <div class="relative">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/60">search</span>
+                <input type="text" placeholder="Buscar no sistema..." class="w-80 pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 text-sm">
+            </div>
+            <button class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-white relative">
+                <span class="material-symbols-outlined">notifications</span>
+                <span class="absolute -top-1 -right-1 w-5 h-5 bg-error rounded-full text-xs flex items-center justify-center font-semibold">3</span>
+            </button>
+            <div class="relative">
+                <button id="profileBtn" class="flex items-center gap-2 p-1.5 rounded-lg hover:bg-white/10">
+                    <div class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center text-white font-semibold text-sm">LM</div>
+                </button>
+                <div id="profileDropdown" class="hidden absolute right-0 top-12 w-48 bg-surface-container-lowest rounded-xl border border-border-subtle shadow-lg py-2">
+                    <div class="px-4 py-2 border-b border-border-subtle">
+                        <p class="text-sm font-semibold text-on-surface">Lucas Manager</p>
+                        <p class="text-xs text-text-muted">Administrador</p>
+                    </div>
+                    <a href="#" class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-low"><span class="material-symbols-outlined text-lg">person</span><span class="text-sm">Perfil</span></a>
+                    <a href="#" class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-low"><span class="material-symbols-outlined text-lg">settings</span><span class="text-sm">Configurações</span></a>
+                    <hr class="my-2 border-border-subtle">
+                    <a href="#" class="flex items-center gap-3 px-4 py-2 text-error hover:bg-error/10"><span class="material-symbols-outlined text-lg">logout</span><span class="text-sm">Sair</span></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex min-h-screen pt-16">
+        <!-- Sidebar -->
+        <aside class="w-[280px] bg-surface-container-lowest border-r border-border-subtle flex flex-col fixed" style="top: 64px; bottom: 0;">
+            <nav class="flex-1 py-4 px-3 overflow-y-auto">
+                <ul class="space-y-1">
+                    <li><a href="index.html" class="flex items-center gap-3 px-3 py-1 rounded-lg text-on-surface-variant hover:bg-surface-container-low"><span class="material-symbols-outlined text-xl">home</span><span class="text-sm">Início</span></a></li>
+                    <li>
+                        <button class="w-full flex items-center gap-3 px-3 py-1 rounded-lg bg-sidebar-active text-primary-container font-semibold">
+                            <span class="material-symbols-outlined text-xl">gavel</span><span class="text-sm">Fiscalização</span><span class="material-symbols-outlined text-lg ml-auto">expand_more</span>
+                        </button>
+                        <ul class="ml-9 mt-1 space-y-1">
+                            <li><a href="fiscalizacao.html" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-primary-container font-semibold bg-sidebar-active">Atendente (DOR001)</a></li>
+                            <li><a href="fiscalizacao.html?fluxo=externo" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Cidadão (DOR002)</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <div class="p-4 border-t border-border-subtle">
+                <button class="w-full flex items-center gap-3 px-4 py-3 bg-primary-container text-white rounded-xl hover:bg-primary/90"><span class="material-symbols-outlined text-xl">auto_awesome</span><span class="text-sm font-medium">Assistente INEMA</span></button>
+            </div>
+        </aside>
+
+        <div class="flex-1 ml-[280px]">
+            <main class="p-8">
+                <div class="mb-6">
+                    <nav class="flex items-center gap-2 text-sm text-text-muted mb-2">
+                        <a href="index.html" class="hover:text-primary-container">Início</a>
+                        <span class="material-symbols-outlined text-lg">chevron_right</span>
+                        <a href="#" class="hover:text-primary-container">Fiscalização</a>
+                        <span class="material-symbols-outlined text-lg">chevron_right</span>
+                        <span class="text-on-surface">Nova Denúncia</span>
+                    </nav>
+                    <h1 class="text-2xl font-semibold text-on-surface">Nova Denúncia</h1>
+                </div>
+
+                <!-- ============================================ -->
+                <!-- FORMULÁRIO COMPLETO - PAGE SCROLL -->
+                <!-- ============================================ -->
+                <form id="form-denuncia" class="space-y-6">
+                    <!-- CARD 1: Detalhes do Registro (Apenas Interno) -->
+                    <div id="card-detalhes-registro" class="bg-white border border-gray-200 rounded-xl p-6">
+                        <h2 class="text-lg font-semibold text-on-surface mb-4 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-stepper-teal">description</span>
+                            Detalhes do Registro
+                        </h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Origem <span class="text-red-500">*</span></label>
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-stepper-teal bg-white">
+                                    <option value="">Selecione o local de recebimento</option>
+                                    <option value="call_center">Call center</option>
+                                    <option value="correspondencia">Correspondência</option>
+                                    <option value="email">E-mail</option>
+                                    <option value="oficio">Ofício</option>
+                                    <option value="ouvidoria">Ouvidoria</option>
+                                    <option value="presencial">Presencial</option>
+                                    <option value="sei">SEI</option>
+                                    <option value="telefone">Telefone (interno INEMA)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Órgão</label>
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-stepper-teal bg-white" disabled>
+                                    <option value="">Selecione o órgão</option>
+                                    <option value="ibama">IBAMA</option>
+                                    <option value="icmbio">ICMBio</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Número original</label>
+                                <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-stepper-teal" placeholder="Número do ofício/protocolo">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Data e Hora do comunicado <span class="text-red-500">*</span></label>
+                                <input type="datetime-local" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-stepper-teal">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CARD 2: Ocorrência -->
+                    <div class="bg-white border border-gray-200 rounded-xl p-6">
+                        <h2 class="text-lg font-semibold text-on-surface mb-4 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-stepper-teal">event_note</span>
+                            Ocorrência
+                        </h2>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Período da ocorrência <span class="text-red-500">*</span></label>
+                            <div class="flex gap-2 items-center">
+                                <input type="date" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-stepper-teal">
+                                <span class="text-gray-500">até</span>
+                                <input type="date" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-stepper-teal">
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Descrição <span class="text-red-500">*</span><span class="text-gray-400 text-xs ml-2">(máximo 7.000 caracteres)</span></label>
+                            <textarea rows="5" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-stepper-teal resize-none" placeholder="Descreva aqui seu relato em detalhes sobre a denúncia"></textarea>
+                            <div class="text-right text-xs text-gray-400 mt-1">0 / 7.000</div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Anexos</label>
+                            <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:bg-white cursor-pointer">
+                                <span class="material-symbols-outlined text-4xl text-gray-400">cloud_upload</span>
+                                <p class="text-sm text-gray-500 mt-2">Arraste arquivos aqui ou clique para selecionar</p>
+                                <p class="text-xs text-gray-400 mt-1">São aceitos: .pdf, .doc, .docx, .txt, .jpeg, .jpg, .png, .bmp, .xls, .xlsx, .mp3, .mp4, .shp, .shx, .dbf, .prj, .kml, .kmz, .zip</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CARD 3: Localização -->
+                    <div class="bg-white border border-gray-200 rounded-xl p-6">
+                        <h2 class="text-lg font-semibold text-on-surface mb-4 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-stepper-teal">location_on</span>
+                            Localização
+                        </h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Município <span class="text-red-500">*</span></label>
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-stepper-teal bg-white">
+                                    <option value="">Selecione o município</option>
+                                    <option value="salvador">Salvador</option>
+                                    <option value="feira">Feira de Santana</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">CEP</label>
+                                <div class="flex">
+                                    <input type="text" class="flex-1 px-3 py-2 border border-gray-300 border-r-0 rounded-l-lg text-sm focus:outline-none focus:border-stepper-teal" placeholder="00000-000">
+                                    <button type="button" class="px-3 py-2 bg-white border border-gray-300 rounded-r-lg"><span class="material-symbols-outlined text-lg">search</span></button>
+                                </div>
+                            </div>
+                            <div class="lg:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Endereço/Local <span class="text-red-500">*</span></label>
+                                <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-stepper-teal" placeholder="Informe o endereço">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Bairro</label>
+                                <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-stepper-teal">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Número</label>
+                                <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-stepper-teal">
+                            </div>
+                            <div class="lg:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Ponto de referência <span class="text-red-500">*</span></label>
+                                <textarea rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-stepper-teal resize-none"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Coordenadas -->
+                        <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="text-sm font-medium text-gray-700">Coordenadas</h3>
+                                <button type="button" class="text-sm text-stepper-teal hover:underline flex items-center gap-1"><span class="material-symbols-outlined text-lg">add</span>Adicionar coordenada</button>
+                            </div>
+                            <div class="grid grid-cols-4 gap-3">
+                                <div>
+                                    <label class="block text-xs text-gray-500 mb-1">Tipo</label>
+                                    <select class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-stepper-teal bg-white">
+                                        <option value="">Selecione</option>
+                                        <option value="geografica">Geográfica/Grau decimal</option>
+                                        <option value="gms">Grau/Min/Seg</option>
+                                        <option value="utm23">UTM 23</option>
+                                        <option value="utm24">UTM 24</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-gray-500 mb-1">Latitude</label>
+                                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-stepper-teal" placeholder="Ex: -12.9714">
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-gray-500 mb-1">Longitude</label>
+                                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-stepper-teal" placeholder="Ex: -38.5014">
+                                </div>
+                                <div class="flex items-end">
+                                    <button type="button" class="px-3 py-2 text-sm text-red-500 hover:bg-red-50 rounded-lg"><span class="material-symbols-outlined">delete</span></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Complemento -->
+                        <div class="mt-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Complemento <span class="text-red-500">*</span><span class="text-gray-400 text-xs ml-2">(selecione até 3)</span></label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <label class="flex items-center gap-2 p-2 border border-gray-300 rounded-lg hover:bg-white cursor-pointer"><input type="checkbox" class="w-4 h-4 text-stepper-teal"><span class="text-sm">Área Urbana</span></label>
+                                <label class="flex items-center gap-2 p-2 border border-gray-300 rounded-lg hover:bg-white cursor-pointer"><input type="checkbox" class="w-4 h-4 text-stepper-teal"><span class="text-sm">Distrito</span></label>
+                                <label class="flex items-center gap-2 p-2 border border-gray-300 rounded-lg hover:bg-white cursor-pointer"><input type="checkbox" class="w-4 h-4 text-stepper-teal"><span class="text-sm">Assentamento Rural</span></label>
+                                <label class="flex items-center gap-2 p-2 border border-gray-300 rounded-lg hover:bg-white cursor-pointer"><input type="checkbox" class="w-4 h-4 text-stepper-teal"><span class="text-sm">Comunidade Indígena</span></label>
+                                <label class="flex items-center gap-2 p-2 border border-gray-300 rounded-lg hover:bg-white cursor-pointer"><input type="checkbox" class="w-4 h-4 text-stepper-teal"><span class="text-sm">Área Industrial</span></label>
+                                <label class="flex items-center gap-2 p-2 border border-gray-300 rounded-lg hover:bg-white cursor-pointer"><input type="checkbox" class="w-4 h-4 text-stepper-teal"><span class="text-sm">Dutovia</span></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CARD 4: Denunciante (Com Variantes) -->
+                    <div class="bg-white border border-gray-200 rounded-xl p-6">
+                        <h2 class="text-lg font-semibold text-on-surface mb-4 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-stepper-teal">person</span>
+                            Denunciante
+                        </h2>
+
+                        <!-- Variante Interno: SIM/NÃO -->
+                        <div id="bloco-denunciante-interno">
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Denunciante identificado? <span class="text-red-500">*</span></label>
+                                <div class="flex gap-4">
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="radio" name="identificado" value="sim" class="w-4 h-4 text-stepper-teal">
+                                        <span class="text-sm">SIM</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="radio" name="identificado" value="nao" class="w-4 h-4 text-stepper-teal">
+                                        <span class="text-sm">NÃO</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="campos-identificado-interno" class="hidden">
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">CPF/CNPJ</label>
+                                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-stepper-teal" placeholder="000.000.000-00">
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Nome/Razão Social <span class="text-red-500">*</span></label>
+                                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-stepper-teal">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Telefone/Celular <span class="text-red-500">*</span></label>
+                                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-stepper-teal" placeholder="(00) 00000-0000">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Outro Telefone</label>
+                                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-stepper-teal">
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
+                                        <input type="email" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-stepper-teal">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Variante Externo: Dados Importados -->
+                        <div id="bloco-denunciante-externo" class="hidden">
+                            <div id="dados-importados" class="hidden">
+                                <div class="p-4 bg-gray-50 rounded-lg mb-4">
+                                    <div class="flex items-center gap-2 text-sm text-text-muted mb-2">
+                                        <span class="material-symbols-outlined text-lg">person</span>
+                                        <span>Dados importados do Gov.br</span>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">CPF/CNPJ</label>
+                                        <input type="text" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-gray-50 text-gray-500" value="***.000.000-**" readonly>
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Nome/Razão Social</label>
+                                        <input type="text" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-gray-50 text-gray-500" value="João Silva Santos" readonly>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Telefone/Celular</label>
+                                        <input type="text" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-gray-50 text-gray-500" value="(71) 99999-0000" readonly>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Outro Telefone</label>
+                                        <input type="text" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-gray-50 text-gray-500" readonly>
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
+                                        <input type="email" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-gray-50 text-gray-500" value="joao.silva@email.com" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="dados-anonimo" class="hidden">
+                                <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                                    <div class="flex gap-3">
+                                        <span class="material-symbols-outlined text-blue-600">visibility_off</span>
+                                        <div>
+                                            <p class="text-sm text-blue-800 font-medium">Denúncia Anônima</p>
+                                            <p class="text-xs text-blue-600 mt-1">Seus dados não serão identificados nesta denúncia.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RODAPÉ DE AÇÕES -->
+                    <div class="flex justify-end gap-2 pt-4 border-t border-gray-200">
+                        <button type="button" class="px-4 py-2 text-sm font-medium text-red-500 border border-red-500 rounded-lg hover:bg-red-50">Excluir rascunho</button>
+                        <button type="button" class="px-4 py-2 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-white">Salvar Rascunho</button>
+                        <button type="submit" class="px-6 py-2 text-sm font-medium text-white bg-stepper-teal rounded-lg hover:opacity-90">Finalizar Denúncia</button>
+                    </div>
+                </form>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // ESTADO
+        // ============================================
+        let tipoFluxo = 'interno'; // 'interno' ou 'externo'
+        let tipoDenuncia = null;
+
+        // ============================================
+        // INICIALIZAÇÃO
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('fluxo') === 'externo') {
+                tipoFluxo = 'externo';
+                configurarFluxoExterno();
+            } else {
+                tipoFluxo = 'interno';
+                configurarFluxoInterno();
+            }
+        });
+
+        // ============================================
+        // CONFIGURAÇÃO DOS FLUXOS
+        // ============================================
+        function configurarFluxoInterno() {
+            // Interno: mostra Detalhes do Registro
+            document.getElementById('card-detalhes-registro').classList.remove('hidden');
+            document.getElementById('bloco-denunciante-interno').classList.remove('hidden');
+            document.getElementById('bloco-denunciante-externo').classList.add('hidden');
+        }
+
+        function configurarFluxoExterno() {
+            // Externo: esconde Detalhes do Registro, mostra modal
+            document.getElementById('card-detalhes-registro').classList.add('hidden');
+            document.getElementById('bloco-denunciante-interno').classList.add('hidden');
+            document.getElementById('bloco-denunciante-externo').classList.remove('hidden');
+            document.getElementById('modal-escolha').classList.remove('hidden');
+        }
+
+        function escolherTipo(tipo) {
+            tipoDenuncia = tipo;
+            document.getElementById('modal-escolha').classList.add('hidden');
+
+            if (tipo === 'anonima') {
+                document.getElementById('dados-importados').classList.add('hidden');
+                document.getElementById('dados-anonimo').classList.remove('hidden');
+            } else {
+                document.getElementById('dados-anonimo').classList.add('hidden');
+                document.getElementById('dados-importados').classList.remove('hidden');
+            }
+        }
+
+        // ============================================
+        // PROFILE DROPDOWN
+        // ============================================
+        const profileBtn = document.getElementById('profileBtn');
+        const profileDropdown = document.getElementById('profileDropdown');
+        profileBtn.addEventListener('click', () => profileDropdown.classList.toggle('hidden'));
+        document.addEventListener('click', (e) => {
+            if (!profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
+                profileDropdown.classList.add('hidden');
+            }
+        });
+
+        // ============================================
+        // DENUNCIANTE TOGGLE (Interno)
+        // ============================================
+        document.querySelectorAll('input[name="identificado"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                document.getElementById('campos-identificado-interno').classList.toggle('hidden', this.value !== 'sim');
+            });
+        });
+    </script>
+</body>
+</html>

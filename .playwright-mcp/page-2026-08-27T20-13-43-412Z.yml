@@ -1,0 +1,39 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - generic:
+        - img "Cachoeira da Fumaça - INEMA"
+      - img "INEMA" [ref=e6]
+    - generic [ref=e10]:
+      - banner [ref=e11]:
+        - heading "Faça login" [level=1] [ref=e12]
+        - paragraph [ref=e13]:
+          - text: ou
+          - link "Cadastre-se como usuário clicando aqui!" [ref=e14] [cursor=pointer]:
+            - /url: https://gla-inema-hml.acto.com.br/register
+      - generic [ref=e19]:
+        - generic [ref=e23]:
+          - generic [ref=e26]:
+            - generic [ref=e30]:
+              - text: CPF
+              - superscript [ref=e31]: "*"
+            - textbox "CPF*" [active] [ref=e35]:
+              - /placeholder: 000.000.000-00
+          - generic [ref=e38]:
+            - generic [ref=e40]:
+              - generic [ref=e42]:
+                - text: Senha
+                - superscript [ref=e43]: "*"
+              - link "Esqueceu sua senha?" [ref=e48] [cursor=pointer]:
+                - /url: https://gla-inema-hml.acto.com.br/password-reset/request
+            - generic [ref=e51]:
+              - textbox "Senha*" [ref=e53]:
+                - /placeholder: Digite a senha
+              - button "Mostrar senha" [ref=e56] [cursor=pointer]
+          - generic [ref=e65]:
+            - checkbox "Lembrar de mim" [ref=e66]
+            - generic [ref=e67]: Lembrar de mim
+        - button "Entrar" [ref=e73] [cursor=pointer]
+  - generic:
+    - status
+  - generic: vUnreleased
