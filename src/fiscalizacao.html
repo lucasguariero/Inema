@@ -83,13 +83,13 @@
     <!-- Topbar -->
     <header class="h-16 bg-primary-container fixed top-0 left-0 right-0 z-50 flex items-center px-4 gap-4">
         <div class="flex items-center gap-3">
-            <button class="w-10 h-10 rounded-lg hover:bg-white/10 flex items-center justify-center text-white"><span class="material-symbols-outlined text-2xl">menu</span></button>
+            <button class="w-10 h-10 rounded-lg hover:bg-white/10 flex items-center justify-center text-white" onclick="toggleSidebar()"><span class="material-symbols-outlined text-2xl">menu</span></button>
             <img src="logo.svg" alt="INEMA" class="h-10 w-auto">
         </div>
         <div class="flex items-center gap-3 ml-auto">
             <div class="relative">
                 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/60">search</span>
-                <input type="text" placeholder="Buscar no sistema..." class="w-80 pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 text-sm">
+                <input type="text" placeholder="Buscar no sistema..." class="w-full md:w-80 pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 text-sm">
             </div>
             <button class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-white relative">
                 <span class="material-symbols-outlined">notifications</span>
@@ -115,7 +115,7 @@
 
     <div class="flex min-h-screen pt-16">
         <!-- Sidebar -->
-        <aside class="w-[280px] bg-surface-container-lowest border-r border-border-subtle flex flex-col fixed" style="top: 64px; bottom: 0;">
+        <aside id="sidebar" class="w-[280px] bg-surface-container-lowest border-r border-border-subtle flex flex-col fixed transition-transform duration-300 lg:translate-x-0" style="top: 64px; bottom: 0; left: 0; transform: translateX(-100%);">
             <nav class="flex-1 py-4 px-3 overflow-y-auto">
                 <ul class="space-y-1">
                     <li><a href="index.html" class="flex items-center gap-3 px-3 py-1 rounded-lg text-on-surface-variant hover:bg-surface-container-low"><span class="material-symbols-outlined text-xl">home</span><span class="text-sm">Início</span></a></li>
@@ -135,7 +135,7 @@
             </div>
         </aside>
 
-        <div class="flex-1 ml-[280px]">
+        <div class="flex-1 lg:ml-[280px]">
             <main class="p-8">
                 <div class="mb-6">
                     <nav class="flex items-center gap-2 text-sm text-text-muted mb-2">
@@ -412,6 +412,15 @@
     </div>
 
     <script>
+        // ============================================
+        // SIDEBAR TOGGLE
+        // ============================================
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('translate-x-0');
+            sidebar.classList.toggle('-translate-x-full');
+        }
+
         // ============================================
         // ESTADO
         // ============================================

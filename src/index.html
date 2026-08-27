@@ -115,7 +115,7 @@
         <!-- Hamburger + Logo -->
         <div class="flex items-center gap-3">
             <button class="w-10 h-10 rounded-lg hover:bg-white/10 flex items-center justify-center text-white transition-colors">
-                <span class="material-symbols-outlined text-2xl">menu</span>
+                <span class="material-symbols-outlined text-2xl cursor-pointer" onclick="toggleSidebar()">menu</span>
             </button>
             <img src="logo.svg" alt="INEMA" class="h-10 w-auto">
         </div>
@@ -128,7 +128,7 @@
                 <input
                     type="text"
                     placeholder="Buscar no sistema..."
-                    class="w-80 pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 text-sm focus:outline-none focus:border-white/40"
+                    class="w-full md:w-80 pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 text-sm focus:outline-none focus:border-white/40"
                 >
             </div>
 
@@ -172,7 +172,7 @@
 
     <div class="flex min-h-screen pt-header-height">
         <!-- Sidebar -->
-        <aside class="w-sidebar-width bg-surface-container-lowest border-r border-border-subtle flex flex-col fixed" style="top: 64px; bottom: 0;">
+        <aside id="sidebar" class="w-sidebar-width bg-surface-container-lowest border-r border-border-subtle flex flex-col fixed transition-transform duration-300 z-40 lg:translate-x-0" style="top: 64px; bottom: 0; left: 0; transform: translateX(-100%);">
             <!-- Navigation -->
             <nav class="flex-1 py-4 px-3 overflow-y-auto">
                 <ul class="space-y-1">
@@ -206,7 +206,7 @@
         </aside>
 
         <!-- Main Content -->
-        <div class="flex-1 ml-sidebar-width">
+        <div class="flex-1 lg:ml-sidebar-width">
             <!-- Content -->
             <main class="p-8">
                 <!-- Welcome -->
@@ -217,7 +217,7 @@
 
                 <!-- Quick Access -->
                 <h3 class="text-headline-lg text-on-surface mb-4">Acesso Rápido</h3>
-                <div class="grid grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <!-- Card: Fiscalização Atendente -->
                     <a href="fiscalizacao.html" class="bg-surface-container-lowest rounded-xl p-6 border border-border-subtle hover:shadow-lg hover:shadow-black/5 transition-all group cursor-pointer">
                         <div class="flex items-start gap-4">
@@ -342,6 +342,13 @@
     </div>
 
     <script>
+        // Sidebar toggle for mobile
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('translate-x-0');
+            sidebar.classList.toggle('-translate-x-full');
+        }
+
         // Profile dropdown toggle
         const profileBtn = document.getElementById('profileBtn');
         const profileDropdown = document.getElementById('profileDropdown');
