@@ -87,9 +87,9 @@
             <img src="logo.svg" alt="INEMA" class="h-10 w-auto">
         </div>
         <div class="flex items-center gap-3 ml-auto">
-            <div class="relative">
-                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/60">search</span>
-                <input type="text" placeholder="Buscar no sistema..." class="w-full md:w-80 pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 text-sm">
+            <div class="relative" id="searchContainer">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/60 cursor-pointer md:hidden" onclick="toggleSearch()" id="searchIcon">search</span>
+                <input type="text" placeholder="Buscar no sistema..." class="hidden md:inline w-full md:w-80 pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 text-sm" id="searchInput">
             </div>
             <button class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-white relative">
                 <span class="material-symbols-outlined">notifications</span>
@@ -417,8 +417,30 @@
         // ============================================
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('translate-x-0');
-            sidebar.classList.toggle('-translate-x-full');
+            if (sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.remove('-translate-x-full');
+                sidebar.classList.add('translate-x-0');
+            } else {
+                sidebar.classList.remove('translate-x-0');
+                sidebar.classList.add('-translate-x-full');
+            }
+        }
+
+        // Search toggle for mobile
+        function toggleSearch() {
+            const icon = document.getElementById('searchIcon');
+            const input = document.getElementById('searchInput');
+            if (icon.classList.contains('hidden')) {
+                icon.classList.remove('hidden');
+                input.classList.add('hidden');
+                input.classList.remove('inline');
+            } else {
+                icon.classList.add('hidden');
+                input.classList.remove('hidden');
+                input.classList.add('inline');
+                input.focus();
+            }
+        }
         }
 
         // ============================================
