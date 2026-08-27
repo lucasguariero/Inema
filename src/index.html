@@ -123,8 +123,8 @@
         <!-- Right side: Search, Notifications, Profile -->
         <div class="flex items-center gap-3 ml-auto">
             <!-- Search -->
-            <div class="relative" id="searchContainer">
-                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/60 cursor-pointer md:hidden" onclick="toggleSearch()" id="searchIcon">search</span>
+            <div class="relative w-10 md:w-auto" id="searchContainer">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/60 cursor-pointer md:hidden text-xl" onclick="toggleSearch()" id="searchIcon">search</span>
                 <input
                     type="text"
                     placeholder="Buscar no sistema..."
@@ -173,7 +173,7 @@
 
     <div class="flex min-h-screen pt-header-height">
         <!-- Sidebar -->
-        <aside id="sidebar" class="w-sidebar-width bg-surface-container-lowest border-r border-border-subtle flex flex-col fixed transition-transform duration-300 z-40 lg:translate-x-0" style="top: 64px; bottom: 0; left: 0; transform: translateX(-100%);">
+        <aside id="sidebar" class="w-sidebar-width bg-surface-container-lowest border-r border-border-subtle flex flex-col fixed transition-transform duration-300 z-40 " style="top: 64px; bottom: 0; left: 0; transform: translateX(-100%);">
             <!-- Navigation -->
             <nav class="flex-1 py-4 px-3 overflow-y-auto">
                 <ul class="space-y-1">
@@ -346,12 +346,11 @@
         // Sidebar toggle for mobile
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
-            if (sidebar.classList.contains('-translate-x-full')) {
-                sidebar.classList.remove('-translate-x-full');
-                sidebar.classList.add('translate-x-0');
+            const currentTransform = sidebar.style.transform;
+            if (currentTransform === 'translateX(-100%)' || currentTransform === '') {
+                sidebar.style.transform = 'translateX(0)';
             } else {
-                sidebar.classList.remove('translate-x-0');
-                sidebar.classList.add('-translate-x-full');
+                sidebar.style.transform = 'translateX(-100%)';
             }
         }
 

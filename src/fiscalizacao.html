@@ -87,8 +87,8 @@
             <img src="logo.svg" alt="INEMA" class="h-10 w-auto">
         </div>
         <div class="flex items-center gap-3 ml-auto">
-            <div class="relative" id="searchContainer">
-                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/60 cursor-pointer md:hidden" onclick="toggleSearch()" id="searchIcon">search</span>
+            <div class="relative w-10 md:w-auto" id="searchContainer">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/60 cursor-pointer md:hidden text-xl" onclick="toggleSearch()" id="searchIcon">search</span>
                 <input type="text" placeholder="Buscar no sistema..." class="hidden md:inline w-full md:w-80 pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 text-sm" id="searchInput">
             </div>
             <button class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-white relative">
@@ -115,7 +115,7 @@
 
     <div class="flex min-h-screen pt-16">
         <!-- Sidebar -->
-        <aside id="sidebar" class="w-[280px] bg-surface-container-lowest border-r border-border-subtle flex flex-col fixed transition-transform duration-300 lg:translate-x-0" style="top: 64px; bottom: 0; left: 0; transform: translateX(-100%);">
+        <aside id="sidebar" class="w-[280px] bg-surface-container-lowest border-r border-border-subtle flex flex-col fixed transition-transform duration-300 z-40" style="top: 64px; bottom: 0; left: 0;">
             <nav class="flex-1 py-4 px-3 overflow-y-auto">
                 <ul class="space-y-1">
                     <li><a href="index.html" class="flex items-center gap-3 px-3 py-1 rounded-lg text-on-surface-variant hover:bg-surface-container-low"><span class="material-symbols-outlined text-xl">home</span><span class="text-sm">Início</span></a></li>
@@ -417,12 +417,11 @@
         // ============================================
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
-            if (sidebar.classList.contains('-translate-x-full')) {
-                sidebar.classList.remove('-translate-x-full');
-                sidebar.classList.add('translate-x-0');
+            const currentTransform = sidebar.style.transform;
+            if (currentTransform === 'translateX(-100%)' || currentTransform === '') {
+                sidebar.style.transform = 'translateX(0)';
             } else {
-                sidebar.classList.remove('translate-x-0');
-                sidebar.classList.add('-translate-x-full');
+                sidebar.style.transform = 'translateX(-100%)';
             }
         }
 
