@@ -448,6 +448,14 @@
                 profileDropdown.classList.add('hidden');
             }
         });
+
+        // Inicializar sidebar no desktop (aberta)
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth >= 1024) {
+                sidebar.style.transform = 'translateX(0)';
+            }
+        });
     </script>
 </body>
 </html>
