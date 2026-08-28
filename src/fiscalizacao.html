@@ -164,7 +164,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Origem <span class="text-red-500">*</span></label>
-                                <select class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-stepper-teal bg-white">
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-stepper-teal bg-white" id="select-origem" onchange="toggleNumeroOriginal()">
                                     <option value="">Selecione o local de recebimento</option>
                                     <option value="call_center">Call center</option>
                                     <option value="correspondencia">Correspondência</option>
@@ -190,8 +190,8 @@
                                 <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-stepper-teal" placeholder="Informe o órgão">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Número original</label>
-                                <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-stepper-teal" placeholder="Número do ofício/protocolo">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Número original <span id="obrigatorio-numero" class="text-red-500 hidden">*</span></label>
+                                <input type="text" id="input-numero-original" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-stepper-teal" placeholder="Número do ofício/protocolo">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Data e Hora do comunicado <span class="text-red-500">*</span></label>
@@ -598,6 +598,23 @@
                 campoOutro.classList.remove('hidden');
             } else {
                 campoOutro.classList.add('hidden');
+            }
+        }
+
+        // ============================================
+        // NÚMERO ORIGINAL CONDICIONAL
+        // ============================================
+        function toggleNumeroOriginal() {
+            const selectOrigem = document.getElementById('select-origem');
+            const labelObrigatorio = document.getElementById('obrigatorio-numero');
+            const inputNumero = document.getElementById('input-numero-original');
+
+            if (selectOrigem.value === 'oficio' || selectOrigem.value === 'call_center') {
+                labelObrigatorio.classList.remove('hidden');
+                inputNumero.setAttribute('required', 'required');
+            } else {
+                labelObrigatorio.classList.add('hidden');
+                inputNumero.removeAttribute('required');
             }
         }
     </script>
