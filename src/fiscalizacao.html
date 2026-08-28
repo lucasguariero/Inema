@@ -148,7 +148,7 @@
             </div>
         </aside>
 
-        <div class="flex-1 lg:ml-[72px] transition-all duration-300" id="mainContent">
+        <div class="flex-1 lg:ml-[280px] transition-all duration-300" id="mainContent">
             <main class="p-8">
                 <div class="mb-6">
                     <nav class="flex items-center gap-2 text-sm text-text-muted mb-2">
@@ -547,6 +547,12 @@
         // INICIALIZAÇÃO
         // ============================================
         document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar sidebar no desktop (aberta)
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth >= 1024) {
+                sidebar.style.transform = 'translateX(0)';
+            }
+
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('fluxo') === 'externo') {
                 tipoFluxo = 'externo';
