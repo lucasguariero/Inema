@@ -118,27 +118,37 @@
 
     <div class="flex min-h-screen pt-16">
         <!-- Sidebar -->
-        <aside id="sidebar" class="w-[280px] bg-surface-container-lowest border-r border-border-subtle flex flex-col fixed transition-transform duration-300 z-40 -translate-x-full lg:translate-x-0" style="top: 64px; bottom: 0; left: 0;">
+        <aside id="sidebar" class="w-[280px] bg-surface-container-lowest border-r border-border-subtle flex flex-col fixed transition-all duration-300 z-40 -translate-x-full lg:translate-x-0 lg:w-[72px] lg:collapsed:w-[280px]" style="top: 64px; bottom: 0; left: 0;">
             <nav class="flex-1 py-4 px-3 overflow-y-auto">
                 <ul class="space-y-1">
-                    <li><a href="index.html" class="flex items-center gap-3 px-3 py-1 rounded-lg text-on-surface-variant hover:bg-surface-container-low"><span class="material-symbols-outlined text-xl">home</span><span class="text-sm">Início</span></a></li>
                     <li>
-                        <button class="w-full flex items-center gap-3 px-3 py-1 rounded-lg bg-sidebar-active text-primary-container font-semibold">
-                            <span class="material-symbols-outlined text-xl">gavel</span><span class="text-sm">Fiscalização</span><span class="material-symbols-outlined text-lg ml-auto">expand_more</span>
+                        <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low lg:justify-center">
+                            <span class="material-symbols-outlined text-xl">home</span>
+                            <span class="text-sm lg:hidden">Início</span>
+                        </a>
+                    </li>
+                    <li>
+                        <button class="w-full flex items-center gap-3 px-3 py-2 rounded-lg bg-sidebar-active text-primary-container font-semibold lg:justify-center">
+                            <span class="material-symbols-outlined text-xl">gavel</span>
+                            <span class="text-sm lg:hidden">Fiscalização</span>
+                            <span class="material-symbols-outlined text-lg ml-auto hidden lg:inline">expand_more</span>
                         </button>
-                        <ul class="ml-9 mt-1 space-y-1">
+                        <ul class="ml-9 mt-1 space-y-1 lg:ml-0 lg:mt-0 lg:hidden">
                             <li><a href="fiscalizacao.html" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-primary-container font-semibold bg-sidebar-active">Atendente (DOR001)</a></li>
                             <li><a href="fiscalizacao.html?fluxo=externo" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Cidadão (DOR002)</a></li>
                         </ul>
                     </li>
                 </ul>
             </nav>
-            <div class="p-4 border-t border-border-subtle">
-                <button class="w-full flex items-center gap-3 px-4 py-3 bg-primary-container text-white rounded-xl hover:bg-primary/90"><span class="material-symbols-outlined text-xl">auto_awesome</span><span class="text-sm font-medium">Assistente INEMA</span></button>
+            <div class="p-4 border-t border-border-subtle lg:p-2">
+                <button class="w-full flex items-center gap-3 px-4 py-3 bg-primary-container text-white rounded-xl hover:bg-primary/90 lg:justify-center lg:px-2 lg:py-2">
+                    <span class="material-symbols-outlined text-xl">auto_awesome</span>
+                    <span class="text-sm font-medium lg:hidden">Assistente INEMA</span>
+                </button>
             </div>
         </aside>
 
-        <div class="flex-1 lg:ml-[280px] transition-all duration-300" id="mainContent">
+        <div class="flex-1 lg:ml-[72px] transition-all duration-300" id="mainContent">
             <main class="p-8">
                 <div class="mb-6">
                     <nav class="flex items-center gap-2 text-sm text-text-muted mb-2">
@@ -441,12 +451,12 @@
         // ============================================
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebarOverlay');
             const mainContent = document.getElementById('mainContent');
             const isMobile = window.innerWidth < 1024;
 
             if (isMobile) {
                 // Mobile: abre/fecha sidebar com slide
+                const overlay = document.getElementById('sidebarOverlay');
                 const isOpen = !sidebar.classList.contains('-translate-x-full');
                 if (isOpen) {
                     sidebar.classList.add('-translate-x-full');
@@ -456,14 +466,18 @@
                     overlay.classList.remove('hidden');
                 }
             } else {
-                // Desktop: apenas alterna margem
-                const isOpen = sidebar.classList.contains('lg:translate-x-0');
-                if (isOpen) {
-                    sidebar.classList.remove('lg:translate-x-0');
-                    sidebar.classList.add('-translate-x-full');
+                // Desktop: colapsar/expandir (só ícones / com texto)
+                const isCollapsed = sidebar.classList.contains('collapsed');
+                if (isCollapsed) {
+                    // Expandir: mostrar texto
+                    sidebar.classList.remove('collapsed');
+                    mainContent.classList.remove('lg:ml-[72px]');
+                    mainContent.classList.add('lg:ml-[280px]');
                 } else {
-                    sidebar.classList.remove('-translate-x-full');
-                    sidebar.classList.add('lg:translate-x-0');
+                    // Colapsar: só ícones
+                    sidebar.classList.add('collapsed');
+                    mainContent.classList.remove('lg:ml-[280px]');
+                    mainContent.classList.add('lg:ml-[72px]');
                 }
             }
         }
