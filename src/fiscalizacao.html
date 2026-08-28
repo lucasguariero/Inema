@@ -134,8 +134,8 @@
                             <span class="material-symbols-outlined text-lg ml-auto sidebar-text">expand_more</span>
                         </button>
                         <ul class="ml-9 mt-1 space-y-1 sidebar-text">
-                            <li><a href="fiscalizacao.html" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-primary-container font-semibold bg-sidebar-active">Atendente (DOR001)</a></li>
-                            <li><a href="fiscalizacao.html?fluxo=externo" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Cidadão (DOR002)</a></li>
+                            <li><a href="fiscalizacao.html" id="menu-atendente" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-primary-container font-semibold bg-sidebar-active">Atendente (DOR001)</a></li>
+                            <li><a href="fiscalizacao.html?fluxo=externo" id="menu-cidadao" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Cidadão (DOR002)</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -557,9 +557,19 @@
             if (urlParams.get('fluxo') === 'externo') {
                 tipoFluxo = 'externo';
                 configurarFluxoExterno();
+                // Destacar menu Cidadao
+                document.getElementById('menu-cidadao').classList.add('bg-sidebar-active', 'text-primary-container', 'font-semibold');
+                document.getElementById('menu-cidadao').classList.remove('text-on-surface-variant', 'hover:bg-surface-container-low');
+                // Ocultar menu Atendente
+                document.getElementById('menu-atendente').classList.remove('bg-sidebar-active', 'text-primary-container', 'font-semibold');
             } else {
                 tipoFluxo = 'interno';
                 configurarFluxoInterno();
+                // Destacar menu Atendente
+                document.getElementById('menu-atendente').classList.add('bg-sidebar-active', 'text-primary-container', 'font-semibold');
+                document.getElementById('menu-atendente').classList.remove('text-on-surface-variant', 'hover:bg-surface-container-low');
+                // Ocultar menu Cidadao
+                document.getElementById('menu-cidadao').classList.remove('bg-sidebar-active', 'text-primary-container', 'font-semibold');
             }
         });
 
