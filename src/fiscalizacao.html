@@ -113,9 +113,12 @@
         </div>
     </header>
 
+    <!-- Overlay para mobile -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden" onclick="closeSidebar()"></div>
+
     <div class="flex min-h-screen pt-16">
         <!-- Sidebar -->
-        <aside id="sidebar" class="w-[280px] bg-surface-container-lowest border-r border-border-subtle flex flex-col fixed transition-transform duration-300 z-40" style="top: 64px; bottom: 0; left: 0;">
+        <aside id="sidebar" class="w-[280px] bg-surface-container-lowest border-r border-border-subtle flex flex-col fixed transition-transform duration-300 z-40 -translate-x-full lg:translate-x-0" style="top: 64px; bottom: 0; left: 0;">
             <nav class="flex-1 py-4 px-3 overflow-y-auto">
                 <ul class="space-y-1">
                     <li><a href="index.html" class="flex items-center gap-3 px-3 py-1 rounded-lg text-on-surface-variant hover:bg-surface-container-low"><span class="material-symbols-outlined text-xl">home</span><span class="text-sm">Início</span></a></li>
@@ -135,7 +138,7 @@
             </div>
         </aside>
 
-        <div class="flex-1 lg:ml-[280px]">
+        <div class="flex-1 lg:ml-[280px] transition-all duration-300" id="mainContent">
             <main class="p-8">
                 <div class="mb-6">
                     <nav class="flex items-center gap-2 text-sm text-text-muted mb-2">
@@ -158,8 +161,8 @@
                             <span class="material-symbols-outlined text-stepper-teal">description</span>
                             Detalhes do Registro
                         </h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                            <div class="md:col-span-2">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Origem <span class="text-red-500">*</span></label>
                                 <select class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-stepper-teal bg-white">
                                     <option value="">Selecione o local de recebimento</option>
@@ -175,11 +178,16 @@
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Órgão</label>
-                                <select class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-stepper-teal bg-white" disabled>
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-stepper-teal bg-white" id="select-orgao" onchange="toggleOutroOrgao()">
                                     <option value="">Selecione o órgão</option>
                                     <option value="ibama">IBAMA</option>
                                     <option value="icmbio">ICMBio</option>
+                                    <option value="outros">Outros</option>
                                 </select>
+                            </div>
+                            <div id="campo-outro-orgao" class="hidden">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Outros - órgão</label>
+                                <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-stepper-teal" placeholder="Informe o órgão">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Número original</label>
@@ -304,6 +312,13 @@
                                 <label class="flex items-center gap-2 p-2 border border-gray-300 rounded-lg hover:bg-white cursor-pointer"><input type="checkbox" class="w-4 h-4 text-stepper-teal"><span class="text-sm">Dutovia</span></label>
                             </div>
                         </div>
+
+                        <!-- Descrição do Complemento -->
+                        <div class="mt-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Descrição do complemento <span class="text-red-500">*</span><span class="text-gray-400 text-xs ml-2">(máximo 1.000 caracteres)</span></label>
+                            <textarea rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-stepper-teal resize-none" placeholder="Descreva informações adicionais sobre o complemento"></textarea>
+                            <div class="text-right text-xs text-gray-400 mt-1">0 / 1.000</div>
+                        </div>
                     </div>
 
                     <!-- CARD 4: Denunciante (Com Variantes) -->
@@ -417,12 +432,38 @@
         // ============================================
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
-            const currentTransform = sidebar.style.transform;
-            if (currentTransform === 'translateX(-100%)' || currentTransform === '') {
-                sidebar.style.transform = 'translateX(0)';
+            const overlay = document.getElementById('sidebarOverlay');
+            const mainContent = document.getElementById('mainContent');
+            const isMobile = window.innerWidth < 1024;
+
+            if (isMobile) {
+                // Mobile: abre/fecha sidebar com slide
+                const isOpen = !sidebar.classList.contains('-translate-x-full');
+                if (isOpen) {
+                    sidebar.classList.add('-translate-x-full');
+                    overlay.classList.add('hidden');
+                } else {
+                    sidebar.classList.remove('-translate-x-full');
+                    overlay.classList.remove('hidden');
+                }
             } else {
-                sidebar.style.transform = 'translateX(-100%)';
+                // Desktop: apenas alterna margem
+                const isOpen = sidebar.classList.contains('lg:translate-x-0');
+                if (isOpen) {
+                    sidebar.classList.remove('lg:translate-x-0');
+                    sidebar.classList.add('-translate-x-full');
+                } else {
+                    sidebar.classList.remove('-translate-x-full');
+                    sidebar.classList.add('lg:translate-x-0');
+                }
             }
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
         }
 
         // Search toggle for mobile
@@ -440,7 +481,31 @@
                 input.focus();
             }
         }
-        }
+
+        // Handle resize
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            if (window.innerWidth >= 1024) {
+                // Desktop: garante sidebar visível
+                sidebar.classList.remove('-translate-x-full');
+                sidebar.classList.add('lg:translate-x-0');
+                overlay.classList.add('hidden');
+            } else {
+                // Mobile: garante sidebar oculta
+                sidebar.classList.add('-translate-x-full');
+                sidebar.classList.remove('lg:translate-x-0');
+            }
+        });
+
+        // Fechar sidebar ao clicar em um link (mobile)
+        document.querySelectorAll('#sidebar a').forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth < 1024) {
+                    closeSidebar();
+                }
+            });
+        });
 
         // ============================================
         // ESTADO
@@ -513,6 +578,19 @@
                 document.getElementById('campos-identificado-interno').classList.toggle('hidden', this.value !== 'sim');
             });
         });
+
+        // ============================================
+        // OUTRO ÓRGÃO TOGGLE
+        // ============================================
+        function toggleOutroOrgao() {
+            const selectOrgao = document.getElementById('select-orgao');
+            const campoOutro = document.getElementById('campo-outro-orgao');
+            if (selectOrgao.value === 'outros') {
+                campoOutro.classList.remove('hidden');
+            } else {
+                campoOutro.classList.add('hidden');
+            }
+        }
     </script>
 </body>
 </html>

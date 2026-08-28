@@ -172,8 +172,10 @@
     </header>
 
     <div class="flex min-h-screen pt-header-height">
+        <!-- Sidebar Overlay -->
+        <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden" onclick="closeSidebar()" style="top: 64px;"></div>
         <!-- Sidebar -->
-        <aside id="sidebar" class="w-sidebar-width bg-surface-container-lowest border-r border-border-subtle flex flex-col fixed transition-transform duration-300 z-40 " style="top: 64px; bottom: 0; left: 0; transform: translateX(-100%);">
+        <aside id="sidebar" class="w-sidebar-width bg-surface-container-lowest border-r border-border-subtle flex flex-col fixed transition-transform duration-300 z-40" style="top: 64px; bottom: 0; left: 0; transform: translateX(-100%);">
             <!-- Navigation -->
             <nav class="flex-1 py-4 px-3 overflow-y-auto">
                 <ul class="space-y-1">
@@ -190,8 +192,8 @@
                             <span class="material-symbols-outlined text-lg ml-auto">expand_more</span>
                         </button>
                         <ul class="ml-9 mt-1 space-y-1">
-                            <li><a href="fiscalizacao.html" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Atendente (DOR001)</a></li>
-                            <li><a href="fiscalizacao.html?fluxo=externo" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Cidadão (DOR002)</a></li>
+                            <li><a href="fiscalizacao.html" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Atendente (DOR001)</a></li>
+                            <li><a href="fiscalizacao.html?fluxo=externo" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Cidadão (DOR002)</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -220,7 +222,7 @@
                 <h3 class="text-headline-lg text-on-surface mb-4">Acesso Rápido</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <!-- Card: Fiscalização Atendente -->
-                    <a href="fiscalizacao.html" class="bg-surface-container-lowest rounded-xl p-6 border border-border-subtle hover:shadow-lg hover:shadow-black/5 transition-all group cursor-pointer">
+                    <a href="fiscalizacao.html" onclick="closeSidebar()" class="bg-surface-container-lowest rounded-xl p-6 border border-border-subtle hover:shadow-lg hover:shadow-black/5 transition-all group cursor-pointer">
                         <div class="flex items-start gap-4">
                             <div class="w-12 h-12 bg-primary-container rounded-lg flex items-center justify-center">
                                 <span class="material-symbols-outlined text-white text-2xl">fact_check</span>
@@ -346,13 +348,60 @@
         // Sidebar toggle for mobile
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
-            const currentTransform = sidebar.style.transform;
-            if (currentTransform === 'translateX(-100%)' || currentTransform === '') {
-                sidebar.style.transform = 'translateX(0)';
+            const overlay = document.getElementById('sidebarOverlay');
+            const isMobile = window.innerWidth < 1024;
+
+            if (isMobile) {
+                // Mobile: abre/fecha sidebar com slide
+                const isOpen = sidebar.style.transform === 'translateX(0)';
+                if (isOpen) {
+                    sidebar.style.transform = 'translateX(-100%)';
+                    overlay.classList.add('hidden');
+                } else {
+                    sidebar.style.transform = 'translateX(0)';
+                    overlay.classList.remove('hidden');
+                }
             } else {
-                sidebar.style.transform = 'translateX(-100%)';
+                // Desktop: apenas alterna visibilidade
+                const isVisible = sidebar.style.transform !== 'translateX(-100%)';
+                if (isVisible) {
+                    sidebar.style.transform = 'translateX(-100%)';
+                } else {
+                    sidebar.style.transform = 'translateX(0)';
+                }
             }
         }
+
+        // Close sidebar when clicking on overlay or a link
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.style.transform = 'translateX(-100%)';
+            if (overlay) overlay.classList.add('hidden');
+        }
+
+        // Handle resize
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            if (window.innerWidth >= 1024) {
+                // Desktop: garante sidebar visível
+                sidebar.style.transform = 'translateX(0)';
+                overlay.classList.add('hidden');
+            } else {
+                // Mobile: garante sidebar oculta
+                sidebar.style.transform = 'translateX(-100%)';
+            }
+        });
+
+        // Fechar sidebar ao clicar em um link (mobile)
+        document.querySelectorAll('#sidebar a').forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth < 1024) {
+                    closeSidebar();
+                }
+            });
+        });
 
         // Search toggle for mobile
         function toggleSearch() {
