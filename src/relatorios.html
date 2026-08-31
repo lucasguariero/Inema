@@ -5,10 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Regulação – Dashboard Gerencial | INEMA</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/recharts@4/umd/Recharts.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <script>
@@ -56,49 +52,56 @@
         .scrollbar-thin::-webkit-scrollbar-track { background: #f1f5f9; }
         .scrollbar-thin::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
         .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        /* Simple bar chart styles */
+        .bar-chart-item { display: flex; align-items: center; margin-bottom: 12px; }
+        .bar-chart-label { width: 80px; font-size: 12px; color: #64748b; flex-shrink: 0; }
+        .bar-chart-bar-container { flex: 1; height: 24px; background: #e2e8f0; border-radius: 4px; overflow: hidden; position: relative; }
+        .bar-chart-bar { height: 100%; border-radius: 4px; transition: width 0.5s ease; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; }
+        .bar-chart-value { font-size: 11px; color: white; font-weight: 600; }
+        /* Donut chart */
+        .donut-chart { width: 180px; height: 180px; border-radius: 50%; position: relative; margin: 0 auto; }
+        .donut-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100px; height: 100px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-direction: column; }
     </style>
 </head>
 <body>
-    <div id="root"></div>
+    <div id="app"></div>
 
-    <script type="text/babel">
-        const { useState, useEffect, useMemo } = React;
-
-        // Icons as components
+    <script>
+        // Icons
         const Icons = {
-            Menu: () => <span className="material-icons-round">menu</span>,
-            Search: () => <span className="material-icons-round">search</span>,
-            Notifications: () => <span className="material-icons-round">notifications</span>,
-            Person: () => <span className="material-icons-round">person</span>,
-            Home: () => <span className="material-icons-round">home</span>,
-            Gavel: () => <span className="material-icons-round">gavel</span>,
-            Description: () => <span className="material-icons-round">description</span>,
-            MonitorHeart: () => <span className="material-icons-round">monitor_heart</span>,
-            Science: () => <span className="material-icons-round">science</span>,
-            Map: () => <span className="material-icons-round">map</span>,
-            Assessment: () => <span className="material-icons-round">assessment</span>,
-            Settings: () => <span className="material-icons-round">settings</span>,
-            Calendar: () => <span className="material-icons-round">calendar_today</span>,
-            Filter: () => <span className="material-icons-round">filter_list</span>,
-            Download: () => <span className="material-icons-round">download</span>,
-            ExpandMore: () => <span className="material-icons-round">expand_more</span>,
-            ExpandLess: () => <span className="material-icons-round">expand_less</span>,
-            Close: () => <span className="material-icons-round">close</span>,
-            ArrowBack: () => <span className="material-icons-round">arrow_back</span>,
-            ArrowForward: () => <span className="material-icons-round">arrow_forward</span>,
-            CheckCircle: () => <span className="material-icons-round">check_circle</span>,
-            Warning: () => <span className="material-icons-round">warning</span>,
-            Schedule: () => <span className="material-icons-round">schedule</span>,
-            TrendingUp: () => <span className="material-icons-round">trending_up</span>,
-            TrendingDown: () => <span className="material-icons-round">trending_down</span>,
-            FactCheck: () => <span className="material-icons-round">fact_check</span>,
-            PersonPin: () => <span className="material-icons-round">person_pin</span>,
-            AccountBalance: () => <span className="material-icons-round">account_balance</span>,
-            FileCopy: () => <span className="material-icons-round">file_copy</span>,
-            Visibility: () => <span className="material-icons-round">visibility</span>,
-            PictureAsPdf: () => <span className="material-icons-round">picture_as_pdf</span>,
-            TableChart: () => <span className="material-icons-round">table_chart</span>,
-            Code: () => <span className="material-icons-round">code</span>,
+            Menu: () => '<span class="material-icons-round">menu</span>',
+            Search: () => '<span class="material-icons-round">search</span>',
+            Notifications: () => '<span class="material-icons-round">notifications</span>',
+            Person: () => '<span class="material-icons-round">person</span>',
+            Home: () => '<span class="material-icons-round">home</span>',
+            Gavel: () => '<span class="material-icons-round">gavel</span>',
+            Description: () => '<span class="material-icons-round">description</span>',
+            MonitorHeart: () => '<span class="material-icons-round">monitor_heart</span>',
+            Science: () => '<span class="material-icons-round">science</span>',
+            Map: () => '<span class="material-icons-round">map</span>',
+            Assessment: () => '<span class="material-icons-round">assessment</span>',
+            Settings: () => '<span class="material-icons-round">settings</span>',
+            Calendar: () => '<span class="material-icons-round">calendar_today</span>',
+            Filter: () => '<span class="material-icons-round">filter_list</span>',
+            Download: () => '<span class="material-icons-round">download</span>',
+            ExpandMore: () => '<span class="material-icons-round">expand_more</span>',
+            ExpandLess: () => '<span class="material-icons-round">expand_less</span>',
+            Close: () => '<span class="material-icons-round">close</span>',
+            ArrowBack: () => '<span class="material-icons-round">arrow_back</span>',
+            ArrowForward: () => '<span class="material-icons-round">arrow_forward</span>',
+            CheckCircle: () => '<span class="material-icons-round">check_circle</span>',
+            Warning: () => '<span class="material-icons-round">warning</span>',
+            Schedule: () => '<span class="material-icons-round">schedule</span>',
+            TrendingUp: () => '<span class="material-icons-round">trending_up</span>',
+            TrendingDown: () => '<span class="material-icons-round">trending_down</span>',
+            FactCheck: () => '<span class="material-icons-round">fact_check</span>',
+            PersonPin: () => '<span class="material-icons-round">person_pin</span>',
+            AccountBalance: () => '<span class="material-icons-round">account_balance</span>',
+            FileCopy: () => '<span class="material-icons-round">file_copy</span>',
+            Visibility: () => '<span class="material-icons-round">visibility</span>',
+            PictureAsPdf: () => '<span class="material-icons-round">picture_as_pdf</span>',
+            TableChart: () => '<span class="material-icons-round">table_chart</span>',
+            Code: () => '<span class="material-icons-round">code</span>',
         };
 
         // Data
@@ -167,6 +170,12 @@
             { processo: 'SEIA-REG-2024/001077', tipo: 'Autorização Ambiental', unidade: 'DIREC', etapa: 'Diretoria', responsavel: 'Ana Paula', diasVencido: 19 },
         ];
 
+        const historicoTramitacao = [
+            { data: '15/08/2024', hora: '14:32', etapa: 'Análise Técnica', usuario: 'João Silva', acao: 'Parecer técnico solicitado', observacao: 'Solicitação de informação adicional ao requerente' },
+            { data: '12/08/2024', hora: '09:15', etapa: 'Análise Técnica', usuario: 'Maria Santos', acao: 'Análise iniciada', observacao: 'Processo distribuído para análise técnica' },
+            { data: '10/08/2024', hora: '11:45', etapa: 'Triagem', usuario: 'Sistema', acao: 'Protocolado', observacao: 'Entrada no módulo de regulação' },
+        ];
+
         const filtrosOptions = {
             tipoProcesso: ['Licenciamento Ambiental', 'Autorização Ambiental', 'Outorga', 'Licença Prévia', 'Licença de Operação'],
             status: ['Em análise', 'Pendente', 'Aguardando pagamento', 'Com condicionantes', 'Arquivado'],
@@ -178,15 +187,13 @@
             modalidadeAto: ['Licença', 'Autorização', 'Outorga', 'Certidão', 'Parecer'],
         };
 
-        const historicoTramitacao = [
-            { data: '15/08/2024', hora: '14:32', etapa: 'Análise Técnica', usuario: 'João Silva', acao: 'Parecer técnico solicitado', observacao: 'Solicitação de informação adicional ao requerente' },
-            { data: '12/08/2024', hora: '09:15', etapa: 'Análise Técnica', usuario: 'Maria Santos', acao: 'Análise iniciada', observacao: 'Processo distribuído para análise técnica' },
-            { data: '10/08/2024', hora: '11:45', etapa: 'Triagem', usuario: 'Sistema', acao: 'Protocolado', observacao: 'Entrada no módulo de regulação' },
-        ];
-
-        // Filter Drawer Component
-        const FilterDrawer = ({ isOpen, onClose }) => {
-            const [filters, setFilters] = useState({
+        // State
+        let state = {
+            sidebarOpen: true,
+            filterDrawerOpen: false,
+            selectedProcess: null,
+            exportDropdownOpen: false,
+            filters: {
                 tipoProcesso: [],
                 status: [],
                 etapa: [],
@@ -195,546 +202,517 @@
                 responsavel: [],
                 situacaoPrazo: [],
                 modalidadeAto: [],
-            });
+            }
+        };
 
-            const toggleFilter = (category, value) => {
-                setFilters(prev => ({
-                    ...prev,
-                    [category]: prev[category].includes(value)
-                        ? prev[category].filter(v => v !== value)
-                        : [...prev[category], value]
-                }));
-            };
+        // Helper functions
+        function toggleFilter(category, value) {
+            const idx = state.filters[category].indexOf(value);
+            if (idx > -1) {
+                state.filters[category].splice(idx, 1);
+            } else {
+                state.filters[category].push(value);
+            }
+            render();
+        }
 
-            const activeFiltersCount = Object.values(filters).flat().length;
+        function activeFiltersCount() {
+            return Object.values(state.filters).flat().length;
+        }
 
-            return (
-                <div className={`drawer fixed inset-y-0 right-0 w-96 bg-white shadow-2xl z-50 ${isOpen ? 'drawer-open' : 'drawer-closed'}`}>
-                    <div className="h-full flex flex-col">
-                        <div className="flex items-center justify-between p-4 border-b border-slate-200">
-                            <div className="flex items-center gap-2">
-                                <Icons.Filter />
-                                <h3 className="font-semibold text-slate-800">Filtros Avançados</h3>
-                                {activeFiltersCount > 0 && (
-                                    <span className="bg-inema-primary text-white text-xs px-2 py-0.5 rounded-full">{activeFiltersCount}</span>
-                                )}
+        function renderBarChart(data, colors, maxValue = null) {
+            const max = maxValue || Math.max(...data.map(d => d.value));
+            return data.map((item, idx) => {
+                const width = (item.value / max) * 100;
+                const color = item.color || (colors ? colors[idx % colors.length] : '#004b87');
+                return `
+                    <div class="bar-chart-item">
+                        <div class="bar-chart-label">${item.name}</div>
+                        <div class="bar-chart-bar-container">
+                            <div class="bar-chart-bar" style="width: ${width}%; background: ${color};">
+                                <span class="bar-chart-value">${item.value}</span>
                             </div>
-                            <button onClick={onClose} className="p-1 hover:bg-slate-100 rounded">
-                                <Icons.Close />
-                            </button>
                         </div>
-                        <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin">
-                            {Object.entries(filtrosOptions).map(([key, options]) => (
-                                <div key={key}>
-                                    <label className="block text-sm font-medium text-slate-700 mb-2">
-                                        {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
-                                    </label>
-                                    <div className="flex flex-wrap gap-2">
-                                        {options.map(opt => (
-                                            <button
-                                                key={opt}
-                                                onClick={() => toggleFilter(key, opt)}
-                                                className={`px-3 py-1.5 text-xs rounded-full border transition-colors ${
-                                                    filters[key].includes(opt)
-                                                        ? 'bg-inema-primary text-white border-inema-primary'
-                                                        : 'bg-white text-slate-600 border-slate-300 hover:border-inema-primary'
-                                                }`}
-                                            >
-                                                {opt}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                            ))}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderDonutChart(data) {
+            let cumulative = 0;
+            const segments = data.map((item, idx) => {
+                const start = cumulative;
+                cumulative += item.value;
+                const strokeDasharray = `${item.value} ${100 - item.value}`;
+                const strokeDashoffset = -start;
+                cumulative = cumulative;
+                return `
+                    <circle cx="90" cy="90" r="70" fill="transparent" stroke="${item.color}" stroke-width="25"
+                        stroke-dasharray="${strokeDasharray}" stroke-dashoffset="${strokeDashoffset}"
+                        transform="rotate(-90 90 90)" style="cursor: pointer;" onclick="showProcessModal(processosVencidos[0])">
+                    </circle>
+                `;
+            }).join('');
+
+            return `
+                <div class="donut-chart">
+                    <svg width="180" height="180" viewBox="0 0 180 180">
+                        ${segments}
+                    </svg>
+                    <div class="donut-center">
+                        <span class="text-2xl font-bold text-slate-800">${data.reduce((a, b) => a + b.value, 0)}%</span>
+                        <span class="text-xs text-slate-500">Total</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderLineChart(data) {
+            const max = Math.max(...data.flatMap(d => [d.entrada, d.saida])) * 1.1;
+            const height = 160;
+
+            const getY = (val) => height - (val / max * height);
+
+            const pointsEntrada = data.map((d, i) => `${i * 100 + 50},${getY(d.entrada)}`).join(' ');
+            const pointsSaida = data.map((d, i) => `${i * 100 + 50},${getY(d.saida)}`).join(' ');
+
+            return `
+                <div class="relative h-48">
+                    <svg width="100%" height="200" viewBox="0 0 350 200" preserveAspectRatio="none">
+                        <!-- Grid lines -->
+                        ${[0, 0.25, 0.5, 0.75, 1].map(p => `
+                            <line x1="40" y1="${p * height + 20}" x2="340" y2="${p * height + 20}" stroke="#e2e8f0" stroke-dasharray="4"/>
+                        `).join('')}
+
+                        <!-- Y axis labels -->
+                        ${[0, 0.25, 0.5, 0.75, 1].map(p => `
+                            <text x="35" y="${p * height + 24}" fill="#64748b" font-size="10" text-anchor="end">${Math.round(max * (1-p))}</text>
+                        `).join('')}
+
+                        <!-- X axis labels -->
+                        ${data.map((d, i) => `
+                            <text x="${i * 100 + 50}" y="${height + 40}" fill="#64748b" font-size="11" text-anchor="middle">${d.name}</text>
+                        `).join('')}
+
+                        <!-- Entrada line -->
+                        <polyline points="${pointsEntrada}" fill="none" stroke="#004b87" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="50" cy="${getY(data[0].entrada)}" r="5" fill="#004b87"/>
+                        <circle cx="150" cy="${getY(data[1].entrada)}" r="5" fill="#004b87"/>
+                        <circle cx="250" cy="${getY(data[2].entrada)}" r="5" fill="#004b87"/>
+
+                        <!-- Saida line -->
+                        <polyline points="${pointsSaida}" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="50" cy="${getY(data[0].saida)}" r="5" fill="#059669"/>
+                        <circle cx="150" cy="${getY(data[1].saida)}" r="5" fill="#059669"/>
+                        <circle cx="250" cy="${getY(data[2].saida)}" r="5" fill="#059669"/>
+                    </svg>
+                    <div class="flex justify-center gap-6 mt-2">
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 rounded-full bg-[#004b87]"></div>
+                            <span class="text-xs text-slate-600">Entrada</span>
                         </div>
-                        <div className="p-4 border-t border-slate-200 flex gap-2">
-                            <button
-                                onClick={() => setFilters({
-                                    tipoProcesso: [], status: [], etapa: [], unidade: [],
-                                    municipio: [], responsavel: [], situacaoPrazo: [], modalidadeAto: []
-                                })}
-                                className="flex-1 px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50"
-                            >
-                                Limpar
-                            </button>
-                            <button
-                                onClick={onClose}
-                                className="flex-1 px-4 py-2 bg-inema-primary text-white rounded-lg hover:bg-inema-dark"
-                            >
-                                Aplicar
-                            </button>
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 rounded-full bg-[#059669]"></div>
+                            <span class="text-xs text-slate-600">Saída</span>
                         </div>
                     </div>
                 </div>
-            );
-        };
+            `;
+        }
 
-        // Modal Component
-        const Modal = ({ isOpen, onClose, title, children }) => {
-            if (!isOpen) return null;
-            return (
-                <div className="fixed inset-0 z-50 flex items-center justify-center modal-overlay animate-fade-in" onClick={onClose}>
-                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden animate-slide-up" onClick={e => e.stopPropagation()}>
-                        <div className="flex items-center justify-between p-4 border-b border-slate-200 bg-slate-50">
-                            <h3 className="font-semibold text-slate-800">{title}</h3>
-                            <button onClick={onClose} className="p-1 hover:bg-slate-200 rounded-lg">
-                                <Icons.Close />
+        function showProcessModal(processo) {
+            state.selectedProcess = processo;
+            render();
+        }
+
+        function closeModal() {
+            state.selectedProcess = null;
+            render();
+        }
+
+        function closeDrawer() {
+            state.filterDrawerOpen = false;
+            render();
+        }
+
+        // Main render function
+        function render() {
+            const app = document.getElementById('app');
+
+            app.innerHTML = `
+                <div class="min-h-screen bg-slate-100">
+                    <!-- Header -->
+                    <header class="bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
+                        <div class="flex items-center gap-4">
+                            <button onclick="state.sidebarOpen = !state.sidebarOpen; render()" class="p-2 hover:bg-slate-100 rounded-lg">
+                                ${Icons.Menu()}
                             </button>
-                        </div>
-                        <div className="overflow-y-auto max-h-[calc(90vh-80px)] p-4 scrollbar-thin">
-                            {children}
-                        </div>
-                    </div>
-                </div>
-            );
-        };
-
-        // KPI Card Component
-        const KPICard = ({ label, value, change, type }) => {
-            const isPositive = change > 0;
-            const isAlert = type === 'red';
-
-            return (
-                <div className={`kpi-card kpi-card.${type} bg-white rounded-xl p-4 card-hover border border-slate-200 shadow-sm`}>
-                    <div className="flex items-start justify-between">
-                        <div>
-                            <p className="text-sm text-slate-500 font-medium">{label}</p>
-                            <p className={`text-2xl font-bold mt-1 ${isAlert ? 'text-inema-danger' : 'text-slate-800'}`}>{value}</p>
-                        </div>
-                        <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
-                            type === 'green' ? 'bg-green-50 text-green-700' :
-                            type === 'red' ? 'bg-red-50 text-red-700' :
-                            type === 'orange' ? 'bg-amber-50 text-amber-700' :
-                            'bg-blue-50 text-blue-700'
-                        }`}>
-                            {isPositive ? <Icons.TrendingUp /> : <Icons.TrendingDown />}
-                            <span>{Math.abs(change)}%</span>
-                        </div>
-                    </div>
-                    <p className="text-xs text-slate-400 mt-2">vs. período anterior</p>
-                </div>
-            );
-        };
-
-        // Chart Components
-        const LineChartComponent = () => (
-            <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm h-72">
-                <h4 className="font-semibold text-slate-800 mb-4">Entrada x Saída de Processos</h4>
-                <Recharts.ResponsiveContainer width="100%" height={220}>
-                    <Recharts.LineChart data={lineChartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                        <Recharts.CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                        <Recharts.XAxis dataKey="name" stroke="#64748b" fontSize={12} />
-                        <Recharts.YAxis stroke="#64748b" fontSize={12} />
-                        <Recharts.Tooltip
-                            contentStyle={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px' }}
-                            formatter={(value) => [value, '']}
-                        />
-                        <Recharts.Line type="monotone" dataKey="entrada" name="Entrada" stroke="#004b87" strokeWidth={3} dot={{ r: 4, fill: '#004b87' }} />
-                        <Recharts.Line type="monotone" dataKey="saida" name="Saída" stroke="#059669" strokeWidth={3} dot={{ r: 4, fill: '#059669' }} />
-                        <Recharts.Legend />
-                    </Recharts.LineChart>
-                </Recharts.ResponsiveContainer>
-            </div>
-        );
-
-        const DonutChartComponent = ({ onClick }) => (
-            <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm h-72">
-                <h4 className="font-semibold text-slate-800 mb-4">Processos por Status</h4>
-                <div className="flex items-center justify-center">
-                    <Recharts.ResponsiveContainer width="100%" height={220}>
-                        <Recharts.PieChart>
-                            <Pie
-                                data={donutChartData}
-                                cx="50%"
-                                cy="50%"
-                                innerRadius={60}
-                                outerRadius={80}
-                                paddingAngle={2}
-                                dataKey="value"
-                                onClick={onClick}
-                                style={{ cursor: 'pointer' }}
-                            >
-                                {donutChartData.map((entry, index) => (
-                                    <Recharts.Cell key={`cell-${index}`} fill={entry.color} />
-                                ))}
-                            </Pie>
-                            <Recharts.Tooltip
-                                contentStyle={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px' }}
-                                formatter={(value) => [`${value}%`, '']}
-                            />
-                        </Recharts.PieChart>
-                    </Recharts.ResponsiveContainer>
-                </div>
-                <div className="flex flex-wrap justify-center gap-2 mt-2">
-                    {donutChartData.map((item, idx) => (
-                        <div key={idx} className="flex items-center gap-1 text-xs">
-                            <div className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }}></div>
-                            <span className="text-slate-600">{item.name}</span>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        );
-
-        const BarChartHorizontal = ({ data, title, colors, showValue = true }) => (
-            <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm h-72">
-                <h4 className="font-semibold text-slate-800 mb-4">{title}</h4>
-                <Recharts.ResponsiveContainer width="100%" height={220}>
-                    <Recharts.BarChart data={data} layout="vertical" margin={{ top: 5, right: 30, left: 80, bottom: 5 }}>
-                        <Recharts.CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" horizontal={false} />
-                        <Recharts.XAxis type="number" stroke="#64748b" fontSize={12} />
-                        <Recharts.YAxis dataKey="name" type="category" stroke="#64748b" fontSize={12} width={70} />
-                        <Recharts.Tooltip
-                            contentStyle={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px' }}
-                            formatter={(value) => [showValue ? value : value, '']}
-                        />
-                        <Recharts.Bar dataKey="value" radius={[0, 4, 4, 0]}>
-                            {data.map((entry, index) => (
-                                <Recharts.Cell key={`cell-${index}`} fill={entry.color || (colors ? colors[index % colors.length] : '#004b87')} />
-                            ))}
-                        </Recharts.Bar>
-                    </Recharts.BarChart>
-                </Recharts.ResponsiveContainer>
-            </div>
-        );
-
-        // Process Detail Modal
-        const ProcessDetailModal = ({ processo, isOpen, onClose }) => {
-            if (!processo) return null;
-
-            return (
-                <Modal isOpen={isOpen} onClose={onClose} title={`Detalhamento - ${processo.processo}`}>
-                    <div className="space-y-6">
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="bg-slate-50 rounded-lg p-4">
-                                <p className="text-xs text-slate-500 uppercase tracking-wide">Tipo de Processo</p>
-                                <p className="font-medium text-slate-800 mt-1">{processo.tipo}</p>
-                            </div>
-                            <div className="bg-slate-50 rounded-lg p-4">
-                                <p className="text-xs text-slate-500 uppercase tracking-wide">Unidade</p>
-                                <p className="font-medium text-slate-800 mt-1">{processo.unidade}</p>
-                            </div>
-                            <div className="bg-slate-50 rounded-lg p-4">
-                                <p className="text-xs text-slate-500 uppercase tracking-wide">Etapa Atual</p>
-                                <p className="font-medium text-slate-800 mt-1">{processo.etapa}</p>
-                            </div>
-                            <div className="bg-slate-50 rounded-lg p-4">
-                                <p className="text-xs text-slate-500 uppercase tracking-wide">Responsável</p>
-                                <p className="font-medium text-slate-800 mt-1">{processo.responsavel}</p>
-                            </div>
-                            <div className="bg-red-50 rounded-lg p-4 col-span-2">
-                                <p className="text-xs text-red-600 uppercase tracking-wide">Tempo Vencido</p>
-                                <p className="font-bold text-red-700 text-2xl mt-1">{processo.diasVencido} dias</p>
+                            <div class="flex items-center gap-3">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40'%3E%3Crect fill='%23004b87' width='100' height='40'/%3E%3Ctext x='50' y='25' fill='white' font-family='Arial' font-size='16' font-weight='bold' text-anchor='middle'%3EINEMA%3C/text%3E%3C/svg%3E" alt="INEMA" class="h-8" />
+                                <span class="text-slate-400">|</span>
+                                <span class="text-sm font-medium text-slate-600">SEIA</span>
                             </div>
                         </div>
 
-                        <div>
-                            <h4 className="font-semibold text-slate-800 mb-3 flex items-center gap-2">
-                                <Icons.Schedule /> Histórico de Tramitação
-                            </h4>
-                            <div className="border border-slate-200 rounded-lg overflow-hidden">
-                                <table className="w-full text-sm">
-                                    <thead className="bg-slate-50">
-                                        <tr>
-                                            <th className="text-left p-3 font-medium text-slate-600">Data</th>
-                                            <th className="text-left p-3 font-medium text-slate-600">Etapa</th>
-                                            <th className="text-left p-3 font-medium text-slate-600">Ação</th>
-                                            <th className="text-left p-3 font-medium text-slate-600">Usuário</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {historicoTramitacao.map((item, idx) => (
-                                            <tr key={idx} className="border-t border-slate-100">
-                                                <td className="p-3 text-slate-600">{item.data} {item.hora}</td>
-                                                <td className="p-3 text-slate-800">{item.etapa}</td>
-                                                <td className="p-3 text-slate-600">{item.acao}</td>
-                                                <td className="p-3 text-slate-600">{item.usuario}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <div className="flex gap-2">
-                            <button className="flex-1 px-4 py-2 bg-inema-primary text-white rounded-lg hover:bg-inema-dark flex items-center justify-center gap-2">
-                                <Icons.Visibility /> Ver Processo Completo
-                            </button>
-                            <button className="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 flex items-center gap-2">
-                                <Icons.FileCopy /> Copy
-                            </button>
-                        </div>
-                    </div>
-                </Modal>
-            );
-        };
-
-        // Table Component
-        const ProcessTable = ({ onProcessClick }) => (
-            <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-                <div className="p-4 border-b border-slate-200 flex items-center justify-between">
-                    <h4 className="font-semibold text-slate-800 flex items-center gap-2">
-                        <Icons.Warning className="text-inema-danger" /> Processos Vencidos (Top 5)
-                    </h4>
-                    <button className="text-sm text-inema-primary hover:underline">Ver todos</button>
-                </div>
-                <div className="overflow-x-auto">
-                    <table className="w-full text-sm">
-                        <thead className="bg-slate-50">
-                            <tr>
-                                <th className="text-left p-3 font-medium text-slate-600">Processo</th>
-                                <th className="text-left p-3 font-medium text-slate-600">Tipo</th>
-                                <th className="text-left p-3 font-medium text-slate-600">Unidade</th>
-                                <th className="text-left p-3 font-medium text-slate-600">Etapa</th>
-                                <th className="text-left p-3 font-medium text-slate-600">Responsável</th>
-                                <th className="text-left p-3 font-medium text-slate-600">Vencido há</th>
-                                <th className="text-center p-3 font-medium text-slate-600">Ação</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {processosVencidos.map((proc, idx) => (
-                                <tr key={idx} className="border-t border-slate-100 hover:bg-slate-50">
-                                    <td className="p-3 font-medium text-inema-primary">{proc.processo}</td>
-                                    <td className="p-3 text-slate-600">{proc.tipo}</td>
-                                    <td className="p-3 text-slate-600">{proc.unidade}</td>
-                                    <td className="p-3 text-slate-600">{proc.etapa}</td>
-                                    <td className="p-3 text-slate-600">{proc.responsavel}</td>
-                                    <td className="p-3">
-                                        <span className="px-2 py-1 bg-red-50 text-red-700 rounded-full text-xs font-medium">
-                                            {proc.diasVencido} dias
-                                        </span>
-                                    </td>
-                                    <td className="p-3 text-center">
-                                        <button
-                                            onClick={() => onProcessClick(proc)}
-                                            className="px-3 py-1.5 bg-inema-primary text-white text-xs rounded-lg hover:bg-inema-dark flex items-center gap-1 mx-auto"
-                                        >
-                                            <Icons.Visibility /> Ver Detalhes
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        );
-
-        // Export Dropdown
-        const ExportDropdown = () => {
-            const [isOpen, setIsOpen] = useState(false);
-
-            return (
-                <div className="relative">
-                    <button
-                        onClick={() => setIsOpen(!isOpen)}
-                        className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 text-slate-700"
-                    >
-                        <Icons.Download /> Exportar
-                    </button>
-                    {isOpen && (
-                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-slate-200 py-1 z-10 animate-fade-in">
-                            <button className="w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2">
-                                <Icons.PictureAsPdf /> PDF
-                            </button>
-                            <button className="w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2">
-                                <Icons.TableChart /> Excel (XLSX)
-                            </button>
-                            <button className="w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2">
-                                <Icons.Code /> CSV
-                            </button>
-                        </div>
-                    )}
-                </div>
-            );
-        };
-
-        // Main App Component
-        const App = () => {
-            const [sidebarOpen, setSidebarOpen] = useState(true);
-            const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
-            const [selectedProcess, setSelectedProcess] = useState(null);
-            const [dateRange, setDateRange] = useState('01/01/2026 a 31/03/2026');
-
-            const handleProcessClick = (processo) => {
-                setSelectedProcess(processo);
-            };
-
-            const handleDonutClick = () => {
-                setSelectedProcess(processosVencidos[0]);
-            };
-
-            return (
-                <div className="min-h-screen bg-slate-100">
-                    {/* Header */}
-                    <header className="bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
-                        <div className="flex items-center gap-4">
-                            <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 hover:bg-slate-100 rounded-lg">
-                                <Icons.Menu />
-                            </button>
-                            <div className="flex items-center gap-3">
-                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40'%3E%3Crect fill='%23004b87' width='100' height='40'/%3E%3Ctext x='50' y='25' fill='white' font-family='Arial' font-size='16' font-weight='bold' text-anchor='middle'%3EINEMA%3C/text%3E%3C/svg%3E" alt="INEMA" className="h-8" />
-                                <span className="text-slate-400">|</span>
-                                <span className="text-sm font-medium text-slate-600">SEIA</span>
-                            </div>
-                        </div>
-
-                        <div className="flex-1 max-w-xl mx-8">
-                            <div className="relative">
-                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
-                                    <Icons.Search />
+                        <div class="flex-1 max-w-xl mx-8">
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" style="top: 50%;">
+                                    ${Icons.Search()}
                                 </span>
-                                <input
-                                    type="text"
-                                    placeholder="Buscar processos, requerentes, atos..."
-                                    className="w-full pl-10 pr-4 py-2 bg-slate-100 border border-transparent rounded-lg text-sm focus:bg-white focus:border-inema-primary focus:outline-none"
-                                />
+                                <input type="text" placeholder="Buscar processos, requerentes, atos..." class="w-full pl-10 pr-4 py-2 bg-slate-100 border border-transparent rounded-lg text-sm focus:bg-white focus:border-inema-primary focus:outline-none" style="padding-left: 2.5rem;" />
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-3">
-                            <button className="p-2 relative hover:bg-slate-100 rounded-lg">
-                                <Icons.Notifications />
-                                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                        <div class="flex items-center gap-3">
+                            <button class="p-2 relative hover:bg-slate-100 rounded-lg">
+                                ${Icons.Notifications()}
+                                <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
                             </button>
-                            <button className="flex items-center gap-2 px-3 py-1.5 hover:bg-slate-100 rounded-lg">
-                                <div className="w-8 h-8 bg-inema-primary rounded-full flex items-center justify-center text-white text-sm font-medium">LM</div>
-                                <span className="text-sm font-medium text-slate-700">Lucas Manager</span>
+                            <button class="flex items-center gap-2 px-3 py-1.5 hover:bg-slate-100 rounded-lg">
+                                <div class="w-8 h-8 bg-inema-primary rounded-full flex items-center justify-center text-white text-sm font-medium">LM</div>
+                                <span class="text-sm font-medium text-slate-700">Lucas Manager</span>
                             </button>
                         </div>
                     </header>
 
-                    <div className="flex">
-                        {/* Sidebar */}
-                        <aside className={`sidebar text-white transition-all duration-300 ${sidebarOpen ? 'w-64' : 'w-16'} min-h-[calc(100vh-64px)]`}>
-                            <nav className="py-4">
-                                <ul className="space-y-1 px-2">
+                    <div class="flex">
+                        <!-- Sidebar -->
+                        <aside class="sidebar text-white transition-all duration-300 ${state.sidebarOpen ? 'w-64' : 'w-16'}" style="${state.sidebarOpen ? 'width: 16rem;' : 'width: 4rem;'}">
+                            <nav class="py-4">
+                                <ul class="space-y-1 px-2">
                                     <li>
-                                        <a href="index.html" className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition-colors">
-                                            <Icons.Home />
-                                            {sidebarOpen && <span>Início</span>}
+                                        <a href="index.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition-colors" style="gap: 0.75rem;">
+                                            ${Icons.Home()}
+                                            ${state.sidebarOpen ? '<span>Início</span>' : ''}
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="fiscalizacao.html" className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition-colors">
-                                            <Icons.Gavel />
-                                            {sidebarOpen && <span>Fiscalização</span>}
+                                        <a href="fiscalizacao.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition-colors" style="gap: 0.75rem;">
+                                            ${Icons.Gavel()}
+                                            ${state.sidebarOpen ? '<span>Fiscalização</span>' : ''}
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition-colors">
-                                            <Icons.Description />
-                                            {sidebarOpen && <span>Licenciamento</span>}
+                                        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition-colors" style="gap: 0.75rem;">
+                                            ${Icons.Description()}
+                                            ${state.sidebarOpen ? '<span>Licenciamento</span>' : ''}
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition-colors">
-                                            <Icons.AccountBalance />
-                                            {sidebarOpen && <span>Regulação/Outorga</span>}
+                                        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition-colors" style="gap: 0.75rem;">
+                                            ${Icons.AccountBalance()}
+                                            ${state.sidebarOpen ? '<span>Regulação/Outorga</span>' : ''}
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white/20">
-                                            <Icons.Assessment />
-                                            {sidebarOpen && <span>Relatórios Gerenciais</span>}
+                                        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white/20" style="gap: 0.75rem;">
+                                            ${Icons.Assessment()}
+                                            ${state.sidebarOpen ? '<span>Relatórios Gerenciais</span>' : ''}
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition-colors">
-                                            <Icons.Map />
-                                            {sidebarOpen && <span>Geoprocessamento</span>}
+                                        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition-colors" style="gap: 0.75rem;">
+                                            ${Icons.Map()}
+                                            ${state.sidebarOpen ? '<span>Geoprocessamento</span>' : ''}
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition-colors">
-                                            <Icons.Settings />
-                                            {sidebarOpen && <span>Configurações</span>}
+                                        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition-colors" style="gap: 0.75rem;">
+                                            ${Icons.Settings()}
+                                            ${state.sidebarOpen ? '<span>Configurações</span>' : ''}
                                         </a>
                                     </li>
                                 </ul>
                             </nav>
                         </aside>
 
-                        {/* Main Content */}
-                        <main className="flex-1 p-6">
-                            {/* Page Header */}
-                            <div className="mb-6">
-                                <div className="flex items-start justify-between">
+                        <!-- Main Content -->
+                        <main class="flex-1 p-6">
+                            <!-- Page Header -->
+                            <div class="mb-6">
+                                <div class="flex items-start justify-between flex-wrap gap-4">
                                     <div>
-                                        <h1 className="text-2xl font-bold text-slate-800">Regulação – Dashboard Gerencial</h1>
-                                        <p className="text-slate-500 mt-1 max-w-2xl">
+                                        <h1 class="text-2xl font-bold text-slate-800">Regulação – Dashboard Gerencial</h1>
+                                        <p class="text-slate-500 mt-1 max-w-2xl">
                                             Acompanhamento em tempo real do desempenho dos processos de regulação, controle de prazos, produtividade, gargalos e apoio à decisão.
                                         </p>
                                     </div>
-                                    <div className="flex items-center gap-3">
-                                        {/* Date Range Picker */}
-                                        <div className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 rounded-lg">
-                                            <Icons.Calendar className="text-slate-400" />
-                                            <span className="text-sm text-slate-700">{dateRange}</span>
+                                    <div class="flex items-center gap-3 flex-wrap">
+                                        <!-- Date Range Picker -->
+                                        <div class="flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 rounded-lg">
+                                            ${Icons.Calendar()}
+                                            <span class="text-sm text-slate-700">01/01/2026 a 31/03/2026</span>
                                         </div>
 
-                                        {/* Filters Button */}
-                                        <button
-                                            onClick={() => setFilterDrawerOpen(true)}
-                                            className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 text-slate-700"
-                                        >
-                                            <Icons.Filter /> Filtros
+                                        <!-- Filters Button -->
+                                        <button onclick="state.filterDrawerOpen = true; render()" class="flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 text-slate-700">
+                                            ${Icons.Filter()} Filtros
+                                            ${activeFiltersCount() > 0 ? `<span class="bg-inema-primary text-white text-xs px-2 py-0.5 rounded-full">${activeFiltersCount()}</span>` : ''}
                                         </button>
 
-                                        {/* Export Button */}
-                                        <ExportDropdown />
+                                        <!-- Export Button -->
+                                        <div class="relative">
+                                            <button onclick="state.exportDropdownOpen = !state.exportDropdownOpen; render()" class="flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 text-slate-700">
+                                                ${Icons.Download()} Exportar
+                                            </button>
+                                            ${state.exportDropdownOpen ? `
+                                                <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-slate-200 py-1 z-10 animate-fade-in" style="position: absolute; right: 0; margin-top: 0.5rem; width: 12rem; background: white; border-radius: 0.5rem; border: 1px solid #e2e8f0; padding: 0.25rem 0; z-index: 10;">
+                                                    <button class="w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2" style="width: 100%; padding: 0.5rem 1rem; text-align: left; display: flex; align-items: center; gap: 0.5rem;">
+                                                        ${Icons.PictureAsPdf()} PDF
+                                                    </button>
+                                                    <button class="w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2" style="width: 100%; padding: 0.5rem 1rem; text-align: left; display: flex; align-items: center; gap: 0.5rem;">
+                                                        ${Icons.TableChart()} Excel (XLSX)
+                                                    </button>
+                                                    <button class="w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2" style="width: 100%; padding: 0.5rem 1rem; text-align: left; display: flex; align-items: center; gap: 0.5rem;">
+                                                        ${Icons.Code()} CSV
+                                                    </button>
+                                                </div>
+                                            ` : ''}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* KPI Cards */}
-                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
-                                {kpiData.map((kpi, idx) => (
-                                    <KPICard key={idx} {...kpi} />
-                                ))}
+                            <!-- KPI Cards -->
+                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+                                ${kpiData.map(kpi => `
+                                    <div class="kpi-card kpi-card.${kpi.type} bg-white rounded-xl p-4 card-hover border border-slate-200 shadow-sm" style="border-left: 4px solid ${kpi.type === 'blue' ? '#004b87' : kpi.type === 'green' ? '#059669' : kpi.type === 'red' ? '#dc2626' : '#d97706'};">
+                                        <div class="flex items-start justify-between">
+                                            <div>
+                                                <p class="text-sm text-slate-500 font-medium">${kpi.label}</p>
+                                                <p class="text-2xl font-bold mt-1 ${kpi.type === 'red' ? 'text-inema-danger' : 'text-slate-800'}">${kpi.value}</p>
+                                            </div>
+                                            <div class="flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${kpi.type === 'green' ? 'bg-green-50 text-green-700' : kpi.type === 'red' ? 'bg-red-50 text-red-700' : kpi.type === 'orange' ? 'bg-amber-50 text-amber-700' : 'bg-blue-50 text-blue-700'}">
+                                                ${kpi.change > 0 ? Icons.TrendingUp() : Icons.TrendingDown()}
+                                                <span>${Math.abs(kpi.change)}%</span>
+                                            </div>
+                                        </div>
+                                        <p class="text-xs text-slate-400 mt-2">vs. período anterior</p>
+                                    </div>
+                                `).join('')}
                             </div>
 
-                            {/* Charts Grid - Row 1 */}
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                                <LineChartComponent />
-                                <DonutChartComponent onClick={handleDonutClick} />
-                                <BarChartHorizontal data={unidadeData} title="Processos por Unidade" colors={['#004b87', '#0284c7', '#0369a1', '#075985', '#0c4a6e', '#082f49']} />
+                            <!-- Charts Grid - Row 1 -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                                <!-- Line Chart -->
+                                <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
+                                    <h4 class="font-semibold text-slate-800 mb-4">Entrada x Saída de Processos</h4>
+                                    ${renderLineChart(lineChartData)}
+                                </div>
+                                <!-- Donut Chart -->
+                                <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
+                                    <h4 class="font-semibold text-slate-800 mb-4">Processos por Status</h4>
+                                    ${renderDonutChart(donutChartData)}
+                                    <div class="flex flex-wrap justify-center gap-2 mt-4">
+                                        ${donutChartData.map(item => `
+                                            <div class="flex items-center gap-1 text-xs">
+                                                <div class="w-2 h-2 rounded-full" style="background-color: ${item.color};"></div>
+                                                <span class="text-slate-600">${item.name}</span>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                                <!-- Bar Chart - Unidade -->
+                                <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
+                                    <h4 class="font-semibold text-slate-800 mb-4">Processos por Unidade</h4>
+                                    ${renderBarChart(unidadeData, ['#004b87', '#0284c7', '#0369a1', '#075985', '#0c4a6e', '#082f49'])}
+                                </div>
                             </div>
 
-                            {/* Charts Grid - Row 2 */}
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                                <BarChartHorizontal data={agingData} title="Aging do Estoque (tempo de permanência)" />
-                                <BarChartHorizontal data={tempoAnaliseData} title="Tempo Médio de Análise (dias)" colors={['#059669', '#10b981', '#34d399', '#6ee7b7', '#a7f3d0']} />
-                                <BarChartHorizontal data={vencidosUnidadeData} title="Processos Vencidos por Unidade" colors={['#dc2626', '#ef4444', '#f87171', '#fca5a5', '#fecaca']} />
+                            <!-- Charts Grid - Row 2 -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                                <!-- Aging -->
+                                <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
+                                    <h4 class="font-semibold text-slate-800 mb-4">Aging do Estoque (tempo de permanência)</h4>
+                                    ${renderBarChart(agingData)}
+                                </div>
+                                <!-- Tempo Médio -->
+                                <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
+                                    <h4 class="font-semibold text-slate-800 mb-4">Tempo Médio de Análise (dias)</h4>
+                                    ${renderBarChart(tempoAnaliseData, ['#059669', '#10b981', '#34d399', '#6ee7b7', '#a7f3d0'], 25)}
+                                </div>
+                                <!-- Vencidos por Unidade -->
+                                <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
+                                    <h4 class="font-semibold text-slate-800 mb-4">Processos Vencidos por Unidade</h4>
+                                    ${renderBarChart(vencidosUnidadeData, ['#dc2626', '#ef4444', '#f87171', '#fca5a5', '#fecaca'], 100)}
+                                </div>
                             </div>
 
-                            {/* Table */}
-                            <div className="mt-4">
-                                <ProcessTable onProcessClick={handleProcessClick} />
+                            <!-- Table -->
+                            <div class="mt-4">
+                                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                                    <div class="p-4 border-b border-slate-200 flex items-center justify-between">
+                                        <h4 class="font-semibold text-slate-800 flex items-center gap-2">
+                                            ${Icons.Warning()} Processos Vencidos (Top 5)
+                                        </h4>
+                                        <button class="text-sm text-inema-primary hover:underline">Ver todos</button>
+                                    </div>
+                                    <div class="overflow-x-auto">
+                                        <table class="w-full text-sm">
+                                            <thead class="bg-slate-50">
+                                                <tr>
+                                                    <th class="text-left p-3 font-medium text-slate-600">Processo</th>
+                                                    <th class="text-left p-3 font-medium text-slate-600">Tipo</th>
+                                                    <th class="text-left p-3 font-medium text-slate-600">Unidade</th>
+                                                    <th class="text-left p-3 font-medium text-slate-600">Etapa</th>
+                                                    <th class="text-left p-3 font-medium text-slate-600">Responsável</th>
+                                                    <th class="text-left p-3 font-medium text-slate-600">Vencido há</th>
+                                                    <th class="text-center p-3 font-medium text-slate-600">Ação</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                ${processosVencidos.map((proc, idx) => `
+                                                    <tr class="border-t border-slate-100 hover:bg-slate-50">
+                                                        <td class="p-3 font-medium text-inema-primary">${proc.processo}</td>
+                                                        <td class="p-3 text-slate-600">${proc.tipo}</td>
+                                                        <td class="p-3 text-slate-600">${proc.unidade}</td>
+                                                        <td class="p-3 text-slate-600">${proc.etapa}</td>
+                                                        <td class="p-3 text-slate-600">${proc.responsavel}</td>
+                                                        <td class="p-3">
+                                                            <span class="px-2 py-1 bg-red-50 text-red-700 rounded-full text-xs font-medium">
+                                                                ${proc.diasVencido} dias
+                                                            </span>
+                                                        </td>
+                                                        <td class="p-3 text-center">
+                                                            <button onclick="showProcessModal(processosVencidos[${idx}])" class="px-3 py-1.5 bg-inema-primary text-white text-xs rounded-lg hover:bg-inema-dark flex items-center gap-1 mx-auto" style="display: inline-flex; align-items: center; gap: 0.25rem;">
+                                                                ${Icons.Visibility()} Ver Detalhes
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                `).join('')}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </main>
                     </div>
 
-                    {/* Filter Drawer */}
-                    <FilterDrawer isOpen={filterDrawerOpen} onClose={() => setFilterDrawerOpen(false)} />
+                    <!-- Filter Drawer -->
+                    ${state.filterDrawerOpen ? `
+                        <div class="drawer fixed inset-y-0 right-0 w-96 bg-white shadow-2xl z-50" style="position: fixed; top: 0; right: 0; bottom: 0; width: 24rem; background: white; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); z-index: 50;">
+                            <div class="h-full flex flex-col">
+                                <div class="flex items-center justify-between p-4 border-b border-slate-200">
+                                    <div class="flex items-center gap-2">
+                                        ${Icons.Filter()}
+                                        <h3 class="font-semibold text-slate-800">Filtros Avançados</h3>
+                                        ${activeFiltersCount() > 0 ? `<span class="bg-inema-primary text-white text-xs px-2 py-0.5 rounded-full">${activeFiltersCount()}</span>` : ''}
+                                    </div>
+                                    <button onclick="closeDrawer()" class="p-1 hover:bg-slate-100 rounded">
+                                        ${Icons.Close()}
+                                    </button>
+                                </div>
+                                <div class="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin" style="flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 1rem;">
+                                    ${Object.entries(filtrosOptions).map(([key, options]) => `
+                                        <div>
+                                            <label class="block text-sm font-medium text-slate-700 mb-2">
+                                                ${key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                                            </label>
+                                            <div class="flex flex-wrap gap-2">
+                                                ${options.map(opt => `
+                                                    <button onclick="toggleFilter('${key}', '${opt}')" class="px-3 py-1.5 text-xs rounded-full border transition-colors ${state.filters[key].includes(opt) ? 'bg-inema-primary text-white border-inema-primary' : 'bg-white text-slate-600 border-slate-300 hover:border-inema-primary'}" style="padding: 0.375rem 0.75rem; font-size: 0.75rem; border-radius: 9999px; border: 1px solid ${state.filters[key].includes(opt) ? '#004b87' : '#cbd5e1'}; background: ${state.filters[key].includes(opt) ? '#004b87' : 'white'}; color: ${state.filters[key].includes(opt) ? 'white' : '#475569'};">
+                                                        ${opt}
+                                                    </button>
+                                                `).join('')}
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                <div class="p-4 border-t border-slate-200 flex gap-2">
+                                    <button onclick="state.filters = {tipoProcesso: [], status: [], etapa: [], unidade: [], municipio: [], responsavel: [], situacaoPrazo: [], modalidadeAto: []}; render();" class="flex-1 px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50" style="flex: 1; padding: 0.5rem 1rem; border: 1px solid #cbd5e1; border-radius: 0.5rem;">
+                                        Limpar
+                                    </button>
+                                    <button onclick="closeDrawer()" class="flex-1 px-4 py-2 bg-inema-primary text-white rounded-lg hover:bg-inema-dark" style="flex: 1; padding: 0.5rem 1rem; background: #004b87; color: white; border-radius: 0.5rem;">
+                                        Aplicar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fixed inset-0 bg-black/30 z-40" onclick="closeDrawer()" style="position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 40;"></div>
+                    ` : ''}
 
-                    {/* Process Detail Modal */}
-                    <ProcessDetailModal
-                        processo={selectedProcess}
-                        isOpen={!!selectedProcess}
-                        onClose={() => setSelectedProcess(null)}
-                    />
+                    <!-- Process Detail Modal -->
+                    ${state.selectedProcess ? `
+                        <div class="fixed inset-0 z-50 flex items-center justify-center modal-overlay animate-fade-in" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 50;">
+                            <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden animate-slide-up" style="background: white; border-radius: 0.75rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); max-width: 42rem; max-height: 90vh; overflow: auto;">
+                                <div class="flex items-center justify-between p-4 border-b border-slate-200 bg-slate-50">
+                                    <h3 class="font-semibold text-slate-800">Detalhamento - ${state.selectedProcess.processo}</h3>
+                                    <button onclick="closeModal()" class="p-1 hover:bg-slate-200 rounded-lg">
+                                        ${Icons.Close()}
+                                    </button>
+                                </div>
+                                <div class="overflow-y-auto max-h-[calc(90vh-80px)] p-4 scrollbar-thin" style="padding: 1rem;">
+                                    <div class="space-y-6">
+                                        <div class="grid grid-cols-2 gap-4">
+                                            <div class="bg-slate-50 rounded-lg p-4">
+                                                <p class="text-xs text-slate-500 uppercase tracking-wide">Tipo de Processo</p>
+                                                <p class="font-medium text-slate-800 mt-1">${state.selectedProcess.tipo}</p>
+                                            </div>
+                                            <div class="bg-slate-50 rounded-lg p-4">
+                                                <p class="text-xs text-slate-500 uppercase tracking-wide">Unidade</p>
+                                                <p class="font-medium text-slate-800 mt-1">${state.selectedProcess.unidade}</p>
+                                            </div>
+                                            <div class="bg-slate-50 rounded-lg p-4">
+                                                <p class="text-xs text-slate-500 uppercase tracking-wide">Etapa Atual</p>
+                                                <p class="font-medium text-slate-800 mt-1">${state.selectedProcess.etapa}</p>
+                                            </div>
+                                            <div class="bg-slate-50 rounded-lg p-4">
+                                                <p class="text-xs text-slate-500 uppercase tracking-wide">Responsável</p>
+                                                <p class="font-medium text-slate-800 mt-1">${state.selectedProcess.responsavel}</p>
+                                            </div>
+                                            <div class="bg-red-50 rounded-lg p-4 col-span-2" style="grid-column: span 2;">
+                                                <p class="text-xs text-red-600 uppercase tracking-wide">Tempo Vencido</p>
+                                                <p class="font-bold text-red-700 text-2xl mt-1">${state.selectedProcess.diasVencido} dias</p>
+                                            </div>
+                                        </div>
 
-                    {/* Overlay for drawer */}
-                    {filterDrawerOpen && (
-                        <div className="fixed inset-0 bg-black/30 z-40" onClick={() => setFilterDrawerOpen(false)}></div>
-                    )}
+                                        <div>
+                                            <h4 class="font-semibold text-slate-800 mb-3 flex items-center gap-2">
+                                                ${Icons.Schedule()} Histórico de Tramitação
+                                            </h4>
+                                            <div class="border border-slate-200 rounded-lg overflow-hidden">
+                                                <table class="w-full text-sm">
+                                                    <thead class="bg-slate-50">
+                                                        <tr>
+                                                            <th class="text-left p-3 font-medium text-slate-600">Data</th>
+                                                            <th class="text-left p-3 font-medium text-slate-600">Etapa</th>
+                                                            <th class="text-left p-3 font-medium text-slate-600">Ação</th>
+                                                            <th class="text-left p-3 font-medium text-slate-600">Usuário</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        ${historicoTramitacao.map(item => `
+                                                            <tr class="border-t border-slate-100">
+                                                                <td class="p-3 text-slate-600">${item.data} ${item.hora}</td>
+                                                                <td class="p-3 text-slate-800">${item.etapa}</td>
+                                                                <td class="p-3 text-slate-600">${item.acao}</td>
+                                                                <td class="p-3 text-slate-600">${item.usuario}</td>
+                                                            </tr>
+                                                        `).join('')}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <div class="flex gap-2">
+                                            <button class="flex-1 px-4 py-2 bg-inema-primary text-white rounded-lg hover:bg-inema-dark flex items-center justify-center gap-2" style="flex: 1; padding: 0.5rem 1rem; background: #004b87; color: white; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                                                ${Icons.Visibility()} Ver Processo Completo
+                                            </button>
+                                            <button class="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 flex items-center gap-2" style="padding: 0.5rem 1rem; border: 1px solid #cbd5e1; border-radius: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                                                ${Icons.FileCopy()} Copy
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ` : ''}
                 </div>
-            );
-        };
+            `;
+        }
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+        // Initial render
+        render();
     </script>
 </body>
 </html>
