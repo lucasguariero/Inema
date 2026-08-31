@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal INEMA - Relatórios Gerenciais</title>
+    <title>Portal INEMA - Relatórios Gerenciais v3</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <script>
         tailwind.config = {
@@ -17,13 +17,12 @@
                         "surface": "#f8f9fb", "surface-container-lowest": "#ffffff", "surface-container-low": "#f3f4f6",
                         "surface-container": "#edeef0", "on-surface": "#191c1e", "on-surface-variant": "#404945",
                         "primary": "#002f25", "primary-container": "#0a473a", "on-primary-container": "#7eb5a4",
-                        "secondary": "#2a6862", "secondary-container": "#aeebe4", "on-secondary-container": "#2f6c66",
-                        "tertiary": "#461c13", "tertiary-container": "#613127", "error": "#ba1a1a",
-                        "background": "#f8f9fb", "text-muted": "#6b7280", "border-subtle": "#e5e7eb",
-                        "sidebar-active": "#d1e1de"
+                        "secondary": "#2a6862", "error": "#ba1a1a", "background": "#f8f9fb",
+                        "text-muted": "#64748b", "border-subtle": "#e5e7eb", "sidebar-active": "#d1e1de",
+                        "inema": { "green": "#0F4C3A", "emerald": "#10B981", "amber": "#F59E0B", "rose": "#E11D48", "ocean": "#0284C7", "violet": "#8B5CF6" }
                     },
-                    fontFamily: { "headline-xl": ["Inter"], "body-md": ["Inter"], "headline-lg": ["Inter"] },
-                    fontSize: { "headline-xl": ["32px", {lineHeight:"1.2",fontWeight:"700"}], "body-md": ["14px",{lineHeight:"1.5"}], "headline-lg": ["24px",{lineHeight:"1.3",fontWeight:"600"}] }
+                    fontFamily: { "sans": ["Inter", "sans-serif"], "mono": ["JetBrains Mono", "monospace"] },
+                    boxShadow: { "card": "0 2px 8px rgba(0,0,0,0.04)", "cardHover": "0 4px 12px rgba(0,0,0,0.08)" }
                 }
             }
         }
@@ -34,7 +33,7 @@
     </style>
 </head>
 <body class="bg-background">
-    <!-- Topbar -->
+    <!-- Header -->
     <header class="h-16 bg-primary-container fixed top-0 left-0 right-0 z-50 flex items-center px-4 gap-4">
         <div class="flex items-center gap-3">
             <button class="w-10 h-10 rounded-lg hover:bg-white/10 flex items-center justify-center text-white" onclick="toggleSidebar()">
@@ -44,8 +43,8 @@
         </div>
         <div class="flex items-center gap-3 ml-auto">
             <div class="relative">
-                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/60 text-xl cursor-pointer" onclick="toggleSearch()">search</span>
-                <input type="text" placeholder="Buscar no sistema..." class="hidden md:inline w-80 pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 text-sm focus:outline-none" id="searchInput">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/60 text-xl cursor-pointer">search</span>
+                <input type="text" placeholder="Buscar no sistema..." class="w-80 pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 text-sm focus:outline-none">
             </div>
             <button class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-white relative">
                 <span class="material-symbols-outlined">notifications</span>
@@ -57,518 +56,508 @@
         </div>
     </header>
 
-    <div class="flex min-h-screen pt-16">
-        <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden" onclick="closeSidebar()" style="top: 64px;"></div>
-
+    <div class="flex pt-16">
         <!-- Sidebar -->
-        <aside id="sidebar" class="bg-surface-container-lowest border-r border-border-subtle flex flex-col fixed transition-all duration-300 z-40" style="top: 64px; bottom: 0; left: 0; width: 280px;">
+        <aside id="sidebar" class="w-[280px] bg-surface-container-lowest border-r border-border-subtle flex flex-col fixed transition-transform z-40" style="top: 64px; bottom: 0; left: 0;">
             <nav class="flex-1 py-4 px-3 overflow-y-auto">
                 <ul class="space-y-1">
                     <li><a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low"><span class="material-symbols-outlined text-xl">home</span><span class="text-sm">Início</span></a></li>
                     <li>
                         <button class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low" onclick="toggleSubmenu(this)"><span class="material-symbols-outlined text-xl">gavel</span><span class="text-sm">Fiscalização</span><span class="material-symbols-outlined text-lg ml-auto">expand_more</span></button>
-                        <ul class="ml-9 mt-1 space-y-1">
+                        <ul class="ml-9 mt-1 space-y-1 hidden">
                             <li><a href="fiscalizacao.html" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Atendente (DOR001)</a></li>
                             <li><a href="fiscalizacao.html?fluxo=externo" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Cidadão (DOR002)</a></li>
                         </ul>
                     </li>
-                    <li><a href="relatorios-v3.html" class="flex items-center gap-3 px-3 py-2 rounded-lg bg-sidebar-active text-primary-container font-semibold"><span class="material-symbols-outlined text-xl">assessment</span><span class="text-sm">Relatórios Gerenciais</span></a></li>
+                    <li><a href="relatorios.html" class="flex items-center gap-3 px-3 py-2 rounded-lg bg-sidebar-active text-primary-container font-semibold"><span class="material-symbols-outlined text-xl">assessment</span><span class="text-sm">Relatórios Gerenciais</span></a></li>
                 </ul>
             </nav>
             <div class="p-4 border-t border-border-subtle mt-auto">
                 <button class="w-full flex items-center gap-3 px-4 py-3 bg-primary-container text-white rounded-xl hover:bg-primary/90">
-                    <span class="material-symbols-outlined text-xl">auto_awesome</span>
-                    <span class="text-sm font-medium">Assistente INEMA</span>
+                    <span class="material-symbols-outlined text-xl">auto_awesome</span><span class="text-sm font-medium">Assistente INEMA</span>
                 </button>
             </div>
         </aside>
 
         <!-- Main Content -->
-        <div class="flex-1 lg:ml-[280px] transition-all duration-300" id="mainContent">
-            <main class="p-8">
-                <!-- Header -->
-                <div class="mb-6">
-                    <div class="flex items-start justify-between flex-wrap gap-4">
-                        <div>
-                            <h1 class="text-2xl font-bold text-on-surface">Regulação – Dashboard Gerencial</h1>
-                            <p class="text-body-md text-text-muted mt-1">Acompanhamento em tempo real do desempenho dos processos de regulação, controle de prazos, produtividade, gargalos e apoio à decisões.</p>
+        <main class="flex-1 ml-[280px] p-8" id="mainContent">
+            <!-- Header -->
+            <div class="mb-6">
+                <div class="flex items-start justify-between flex-wrap gap-4">
+                    <div>
+                        <h1 class="text-2xl font-bold text-on-surface">Regulação – Dashboard Gerencial</h1>
+                        <p class="text-body-md text-text-muted mt-1">Acompanhamento em tempo real do desempenho dos processos de regulação.</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border border-border-subtle rounded-lg">
+                            <span class="material-symbols-outlined text-on-surface-variant">calendar_today</span><span class="text-sm text-on-surface">01/01/2026 a 31/03/2026</span>
                         </div>
-                        <div class="flex items-center gap-3 flex-wrap">
-                            <div class="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border border-border-subtle rounded-lg">
-                                <span class="material-symbols-outlined text-on-surface-variant">calendar_today</span>
-                                <span class="text-sm text-on-surface">01/01/2026 a 31/03/2026</span>
+                        <button class="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border border-border-subtle rounded-lg hover:bg-surface-container-low">
+                            <span class="material-symbols-outlined text-on-surface-variant">filter_list</span><span class="text-sm text-on-surface">Filtros</span>
+                        </button>
+                        <button class="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border border-border-subtle rounded-lg hover:bg-surface-container-low">
+                            <span class="material-symbols-outlined text-on-surface-variant">download</span><span class="text-sm text-on-surface">Exportar</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KPIs -->
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6" id="kpis"></div>
+
+            <!-- Charts Row 1 -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div class="bg-white rounded-xl border border-slate-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] overflow-hidden h-[270px] flex flex-col">
+                    <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
+                        <div class="flex items-center gap-2.5">
+                            <span class="material-symbols-outlined text-xl text-slate-400">show_chart</span>
+                            <h3 class="text-[15px] font-bold text-slate-800 tracking-tight">Entrada x Saída de Processos</h3>
+                        </div>
+                        <div class="relative group">
+                            <span class="material-symbols-outlined text-lg text-slate-400 cursor-help">info</span>
+                            <div class="absolute right-0 top-6 w-48 bg-slate-800 text-white text-xs p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                                Evolução mensal de processos protocolados vs concluídos
                             </div>
-                            <button onclick="toggleFilterDrawer()" class="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border border-border-subtle rounded-lg hover:bg-surface-container-low">
-                                <span class="material-symbols-outlined text-on-surface-variant">filter_list</span>
-                                <span class="text-sm text-on-surface">Filtros</span>
-                            </button>
-                            <div class="relative">
-                                <button onclick="toggleExport()" class="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border border-border-subtle rounded-lg hover:bg-surface-container-low">
-                                    <span class="material-symbols-outlined text-on-surface-variant">download</span>
-                                    <span class="text-sm text-on-surface">Exportar</span>
-                                </button>
-                                <div id="exportMenu" class="hidden absolute right-0 mt-2 w-40 bg-surface-container-lowest rounded-xl border border-border-subtle shadow-lg py-1 z-20">
-                                    <button class="w-full flex items-center gap-2 px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-container-low"><span class="material-symbols-outlined text-lg">picture_as_pdf</span> PDF</button>
-                                    <button class="w-full flex items-center gap-2 px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-container-low"><span class="material-symbols-outlined text-lg">table_chart</span> Excel (XLSX)</button>
-                                    <button class="w-full flex items-center gap-2 px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-container-low"><span class="material-symbols-outlined text-lg">code</span> CSV</button>
+                        </div>
+                    </div>
+                    <div class="p-5 flex-1 min-h-0 relative"><canvas id="lineChart"></canvas></div>
+                </div>
+                <div class="bg-white rounded-xl border border-slate-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] overflow-hidden h-[270px] flex flex-col">
+                    <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
+                        <div class="flex items-center gap-2.5">
+                            <span class="material-symbols-outlined text-xl text-slate-400">donut_large</span>
+                            <h3 class="text-[15px] font-bold text-slate-800 tracking-tight">Processos por Status</h3>
+                        </div>
+                        <div class="relative group">
+                            <span class="material-symbols-outlined text-lg text-slate-400 cursor-help">info</span>
+                            <div class="absolute right-0 top-6 w-48 bg-slate-800 text-white text-xs p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                                Distribuição atual de todos os processos
+                            </div>
+                        </div>
+                    </div>
+                    <div class="px-6 py-4 flex-1 min-h-0 flex items-center">
+                        <div class="flex-1 flex items-center justify-center">
+                            <div class="relative flex items-center justify-center flex-shrink-0" style="width: 140px; height: 140px;">
+                                <canvas id="donutChart"></canvas>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                                    <p class="text-2xl font-bold text-slate-800 leading-none tracking-tight">8.461</p>
+                                    <p class="text-xs text-slate-400 font-normal mt-1.5">Total</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-1 flex items-center justify-center pl-2">
+                            <div class="w-full max-w-[200px] flex flex-col justify-center gap-3">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:#0F4C3A"></div>
+                                        <span class="text-xs font-medium text-slate-600">Em Análise</span>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-800">54%</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:#F59E0B"></div>
+                                        <span class="text-xs font-medium text-slate-600">Pendentes</span>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-800">20%</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:#0284C7"></div>
+                                        <span class="text-xs font-medium text-slate-600">Aguard. Pagamento</span>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-800">8%</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:#8B5CF6"></div>
+                                        <span class="text-xs font-medium text-slate-600">Condicionantes</span>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-800">6%</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:#94A3B8"></div>
+                                        <span class="text-xs font-medium text-slate-600">Outros</span>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-800">12%</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- KPIs -->
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6" id="kpiContainer"></div>
-
-                <!-- Charts Row 1 -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                    <div class="bg-surface-container-lowest rounded-xl p-4 border border-border-subtle">
-                        <h4 class="font-semibold text-on-surface mb-4">Entrada x Saída de Processos</h4>
-                        <div id="lineChart"></div>
+                <div class="bg-white rounded-xl border border-slate-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] overflow-hidden h-[270px] flex flex-col">
+                    <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
+                        <div class="flex items-center gap-2.5">
+                            <span class="material-symbols-outlined text-xl text-slate-400">bar_chart</span>
+                            <h3 class="text-[15px] font-bold text-slate-800 tracking-tight">Processos por Unidade</h3>
+                        </div>
+                        <div class="relative group">
+                            <span class="material-symbols-outlined text-lg text-slate-400 cursor-help">info</span>
+                            <div class="absolute right-0 top-6 w-48 bg-slate-800 text-white text-xs p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                                Volume de processos por unidade organizacional
+                            </div>
+                        </div>
                     </div>
-                    <div class="bg-surface-container-lowest rounded-xl p-4 border border-border-subtle">
-                        <h4 class="font-semibold text-on-surface mb-4">Processos por Status</h4>
-                        <div id="donutChart"></div>
-                    </div>
-                    <div class="bg-surface-container-lowest rounded-xl p-4 border border-border-subtle">
-                        <h4 class="font-semibold text-on-surface mb-4">Processos por Unidade</h4>
-                        <div id="barChart1"></div>
-                    </div>
+                    <div class="p-5 flex-1 min-h-0 relative"><canvas id="barChartUnidade"></canvas></div>
                 </div>
-
-                <!-- Charts Row 2 -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                    <div class="bg-surface-container-lowest rounded-xl p-4 border border-border-subtle">
-                        <h4 class="font-semibold text-on-surface mb-4">Aging do Estoque</h4>
-                        <div id="barChart2"></div>
-                    </div>
-                    <div class="bg-surface-container-lowest rounded-xl p-4 border border-border-subtle">
-                        <h4 class="font-semibold text-on-surface mb-4">Tempo Médio de Análise (dias)</h4>
-                        <div id="barChart3"></div>
-                    </div>
-                    <div class="bg-surface-container-lowest rounded-xl p-4 border border-border-subtle">
-                        <h4 class="font-semibold text-on-surface mb-4">Processos Vencidos por Unidade</h4>
-                        <div id="barChart4"></div>
-                    </div>
-                </div>
-
-                <!-- Table -->
-                <div class="bg-surface-container-lowest rounded-xl border border-border-subtle overflow-hidden mt-4">
-                    <div class="p-4 border-b border-border-subtle flex items-center justify-between">
-                        <h4 class="font-semibold text-on-surface flex items-center gap-2">
-                            <span class="material-symbols-outlined text-error">warning</span>
-                            Processos Vencidos (Top 5)
-                        </h4>
-                        <button class="text-sm text-primary-container hover:underline">Ver todos</button>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-sm">
-                            <thead class="bg-surface-container-low">
-                                <tr>
-                                    <th class="text-left p-3 font-medium text-text-muted">Processo</th>
-                                    <th class="text-left p-3 font-medium text-text-muted">Tipo</th>
-                                    <th class="text-left p-3 font-medium text-text-muted">Unidade</th>
-                                    <th class="text-left p-3 font-medium text-text-muted">Etapa</th>
-                                    <th class="text-left p-3 font-medium text-text-muted">Responsável</th>
-                                    <th class="text-left p-3 font-medium text-text-muted">Vencido há</th>
-                                    <th class="text-center p-3 font-medium text-text-muted">Ação</th>
-                                </tr>
-                            </thead>
-                            <tbody id="processTable"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </main>
-        </div>
-    </div>
-
-    <!-- Filter Drawer -->
-    <div id="filterDrawer" class="fixed inset-y-0 right-0 w-96 bg-surface-container-lowest shadow-2xl z-50 transform translate-x-full transition-transform duration-300">
-        <div class="h-full flex flex-col">
-            <div class="flex items-center justify-between p-4 border-b border-border-subtle">
-                <div class="flex items-center gap-2">
-                    <span class="material-symbols-outlined text-on-surface-variant">filter_list</span>
-                    <h3 class="font-semibold text-on-surface">Filtros Avançados</h3>
-                </div>
-                <button onclick="toggleFilterDrawer()" class="p-1 hover:bg-surface-container-low rounded"><span class="material-symbols-outlined">close</span></button>
             </div>
-            <div class="flex-1 overflow-y-auto p-4 space-y-4" id="filtersContainer"></div>
-            <div class="p-4 border-t border-border-subtle flex gap-2">
-                <button onclick="clearFilters()" class="flex-1 px-4 py-2 border border-border-subtle text-on-surface-variant rounded-lg hover:bg-surface-container-low">Limpar</button>
-                <button onclick="toggleFilterDrawer()" class="flex-1 px-4 py-2 bg-primary-container text-white rounded-lg hover:bg-primary/90">Aplicar</button>
-            </div>
-        </div>
-    </div>
-    <div id="filterDrawerOverlay" class="fixed inset-0 bg-black/50 z-40 hidden" onclick="toggleFilterDrawer()"></div>
 
-    <!-- Modal -->
-    <div id="processModal" class="fixed inset-0 z-50 hidden">
-        <div class="fixed inset-0 bg-black/50" onclick="closeModal()"></div>
-        <div class="fixed bg-surface-container-lowest rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-            <div class="flex items-center justify-between p-4 border-b border-border-subtle bg-surface-container-low">
-                <h3 class="font-semibold text-on-surface" id="modalTitle">Detalhamento</h3>
-                <button onclick="closeModal()" class="p-1 hover:bg-surface-container-low rounded-lg"><span class="material-symbols-outlined">close</span></button>
+            <!-- Charts Row 2 -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div class="bg-white rounded-xl border border-slate-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] overflow-hidden h-[270px] flex flex-col">
+                    <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
+                        <div class="flex items-center gap-2.5">
+                            <span class="material-symbols-outlined text-xl text-slate-400">bar_chart</span>
+                            <h3 class="text-[15px] font-bold text-slate-800 tracking-tight">Aging do Estoque</h3>
+                        </div>
+                        <div class="relative group">
+                            <span class="material-symbols-outlined text-lg text-slate-400 cursor-help">info</span>
+                            <div class="absolute right-0 top-6 w-48 bg-slate-800 text-white text-xs p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                                Tempo de permanência do estoque de processos
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-5 flex-1 min-h-0 relative"><canvas id="barChartAging"></canvas></div>
+                </div>
+                <div class="bg-white rounded-xl border border-slate-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] overflow-hidden h-[270px] flex flex-col">
+                    <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
+                        <div class="flex items-center gap-2.5">
+                            <span class="material-symbols-outlined text-xl text-slate-400">bar_chart</span>
+                            <h3 class="text-[15px] font-bold text-slate-800 tracking-tight">Tempo Médio de Análise (dias)</h3>
+                        </div>
+                        <div class="relative group">
+                            <span class="material-symbols-outlined text-lg text-slate-400 cursor-help">info</span>
+                            <div class="absolute right-0 top-6 w-48 bg-slate-800 text-white text-xs p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                                Duração média por etapa do processo
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-5 flex-1 min-h-0 relative"><canvas id="barChartTempo"></canvas></div>
+                </div>
+                <div class="bg-white rounded-xl border border-slate-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] overflow-hidden h-[270px] flex flex-col">
+                    <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
+                        <div class="flex items-center gap-2.5">
+                            <span class="material-symbols-outlined text-xl text-slate-400">bar_chart</span>
+                            <h3 class="text-[15px] font-bold text-slate-800 tracking-tight">Processos Vencidos por Unidade</h3>
+                        </div>
+                        <div class="relative group">
+                            <span class="material-symbols-outlined text-lg text-slate-400 cursor-help">info</span>
+                            <div class="absolute right-0 top-6 w-48 bg-slate-800 text-white text-xs p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                                Quantidade de processos vencidos por unidade
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-5 flex-1 min-h-0 relative"><canvas id="barChartVencidos"></canvas></div>
+                </div>
             </div>
-            <div class="p-4 overflow-y-auto max-h-[calc(90vh-80px)]" id="modalContent"></div>
-        </div>
+
+            <!-- Table -->
+            <div class="bg-white rounded-xl border border-slate-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] overflow-hidden">
+                <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-rose-600">warning</span>
+                        <h3 class="text-sm font-bold text-slate-800 tracking-tight">Processos Vencidos (Top 5)</h3>
+                    </div>
+                    <button class="text-xs text-emerald-700 font-medium hover:underline">Ver todos</button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-slate-50/80 text-[11px] font-semibold uppercase tracking-wider text-slate-500 border-b border-slate-200">
+                                <th class="text-left p-4">Processo</th>
+                                <th class="text-left p-4">Tipo</th>
+                                <th class="text-left p-4">Unidade</th>
+                                <th class="text-left p-4">Etapa</th>
+                                <th class="text-left p-4">Responsável</th>
+                                <th class="text-left p-4">Vencido há</th>
+                                <th class="text-center p-4">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody id="processosTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
     </div>
 
     <script>
         // Data
         const kpiData = [
-            { label: 'Protocolados', value: '1.245', change: 12, type: 'green' },
-            { label: 'Em análise', value: '2.356', change: -3, type: 'gray' },
-            { label: 'Pendentes', value: '873', change: 8, type: 'yellow' },
-            { label: 'Vencidos', value: '198', change: 15, type: 'red' },
-            { label: 'Concluídos', value: '1.987', change: 18, type: 'green' },
-            { label: 'Atos emitidos', value: '1.604', change: 20, type: 'green' },
+            { label: 'Protocolados', value: '1.245', change: 12, type: 'emerald' },
+            { label: 'Em análise', value: '2.356', change: -3, type: 'slate' },
+            { label: 'Pendentes', value: '873', change: 8, type: 'amber' },
+            { label: 'Vencidos', value: '198', change: 15, type: 'rose' },
+            { label: 'Concluídos', value: '1.987', change: 18, type: 'emerald' },
+            { label: 'Atos emitidos', value: '1.604', change: 20, type: 'emerald' },
         ];
 
-        const processosVencidos = [
-            { processo: 'SEIA-REG-2024/001234', tipo: 'Licenciamento Ambiental', unidade: 'DIRRE', etapa: 'Análise Técnica', responsavel: 'João Silva', diasVencido: 32 },
-            { processo: 'SEIA-REG-2024/001198', tipo: 'Autorização Ambiental', unidade: 'DIBIO', etapa: 'Análise Técnica', responsavel: 'Maria Santos', diasVencido: 28 },
-            { processo: 'SEIA-REG-2024/001145', tipo: 'Licenciamento Ambiental', unidade: 'DILIC', etapa: 'Coordenação', responsavel: 'Carlos Lima', diasVencido: 25 },
-            { processo: 'SEIA-REG-2024/001089', tipo: 'Outorga', unidade: 'DIRRE', etapa: 'Análise Técnica', responsavel: 'João Silva', diasVencido: 22 },
-            { processo: 'SEIA-REG-2024/001077', tipo: 'Autorização Ambiental', unidade: 'DIREC', etapa: 'Diretoria', responsavel: 'Ana Paula', diasVencido: 19 },
-        ];
-
-        const historicoTramitacao = [
-            { data: '15/08/2024', hora: '14:32', etapa: 'Análise Técnica', usuario: 'João Silva', acao: 'Parecer técnico solicitado' },
-            { data: '12/08/2024', hora: '09:15', etapa: 'Análise Técnica', usuario: 'Maria Santos', acao: 'Análise iniciada' },
-            { data: '10/08/2024', hora: '11:45', etapa: 'Triagem', usuario: 'Sistema', acao: 'Protocolado' },
-        ];
-
-        const filtrosOptions = {
-            tipoProcesso: ['Licenciamento Ambiental', 'Autorização Ambiental', 'Outorga', 'Licença Prévia', 'Licença de Operação'],
-            status: ['Em análise', 'Pendente', 'Aguardando pagamento', 'Com condicionantes', 'Arquivado'],
-            etapa: ['Triagem', 'Análise Técnica', 'Coordenação', 'Diretoria', 'Publicação'],
-            unidade: ['DIRRE', 'DIREC', 'DIBA', 'DILIC', 'DISUC', 'DIBIO'],
-            municipio: ['Salvador', 'Feira de Santana', 'Vitória da Conquista', 'Ilhéus', 'Porto Seguro', 'Outros'],
-            responsavel: ['João Silva', 'Maria Santos', 'Carlos Lima', 'Ana Paula', 'Pedro Santos'],
-            situacaoPrazo: ['No prazo', 'A vencer (5 dias)', 'Vencido'],
-            modalidadeAto: ['Licença', 'Autorização', 'Outorga', 'Certidão', 'Parecer'],
+        const lineChartData = {
+            labels: ['Jan/26', 'Fev/26', 'Mar/26', 'Abr/26', 'Mai/26', 'Jun/26'],
+            entrada: [1245, 1356, 1189, 1423, 1567, 1678],
+            saida: [987, 1120, 1456, 1289, 1345, 1523]
         };
 
-        const filters = {};
-        Object.keys(filtrosOptions).forEach(k => filters[k] = []);
+        const donutData = {
+            labels: ['Em Análise', 'Pendentes', 'Aguard. Pagamento', 'Condicionantes', 'Outros'],
+            values: [54, 20, 8, 6, 12],
+            colors: ['#0F4C3A', '#F59E0B', '#0284C7', '#8B5CF6', '#94A3B8']
+        };
+
+        const unidadeData = {
+            labels: ['DIRRE', 'DIREC', 'DIBA', 'DILIC', 'DISUC', 'Outras'],
+            values: [1254, 856, 642, 511, 309, 254],
+            colors: ['#0D5C46', '#0F766E', '#115E59', '#147D6B', '#178C7B', '#199BAB']
+        };
+
+        const agingData = {
+            labels: ['0-15 dias', '16-30 dias', '31-60 dias', '61-90 dias', '91-180 dias', '> 180 dias'],
+            values: [412, 678, 945, 612, 403, 198],
+            colors: ['#10B981', '#0D9488', '#F59E0B', '#EA580C', '#E11D48', '#BE123C']
+        };
+
+        const tempoData = {
+            labels: ['Triagem', 'Análise Técnica', 'Coordenação', 'Diretoria', 'Publicação'],
+            values: [2.3, 18.7, 5.2, 8.1, 3.4],
+            colors: ['#10B981', '#0F4C3A', '#2A6862', '#326859', '#3D7A6F']
+        };
+
+        const vencidosData = {
+            labels: ['DIRRE', 'DIBIO', 'DILIC', 'DIREC', 'DISUC'],
+            values: [78, 46, 34, 25, 15],
+            colors: Array(5).fill('#E11D48')
+        };
+
+        const processosVencidos = [
+            { processo: 'SEIA-REG-2024/001234', tipo: 'Licenciamento Ambiental', unidade: 'DIRRE', etapa: 'Análise Técnica', responsavel: 'João Silva', dias: 32 },
+            { processo: 'SEIA-REG-2024/001198', tipo: 'Autorização Ambiental', unidade: 'DIBIO', etapa: 'Análise Técnica', responsavel: 'Maria Santos', dias: 28 },
+            { processo: 'SEIA-REG-2024/001145', tipo: 'Licenciamento Ambiental', unidade: 'DILIC', etapa: 'Coordenação', responsavel: 'Carlos Lima', dias: 25 },
+            { processo: 'SEIA-REG-2024/001089', tipo: 'Outorga', unidade: 'DIRRE', etapa: 'Análise Técnica', responsavel: 'João Silva', dias: 22 },
+            { processo: 'SEIA-REG-2024/001077', tipo: 'Autorização Ambiental', unidade: 'DIREC', etapa: 'Diretoria', responsavel: 'Ana Paula', dias: 19 },
+        ];
 
         // Render KPIs
         function renderKPIs() {
-            const container = document.getElementById('kpiContainer');
+            const container = document.getElementById('kpis');
+            const colors = {
+                emerald: { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200', icon: 'bg-emerald-100', iconText: 'text-emerald-600' },
+                amber: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', icon: 'bg-amber-100', iconText: 'text-amber-600' },
+                rose: { bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-200', icon: 'bg-rose-100', iconText: 'text-rose-600' },
+                slate: { bg: 'bg-slate-100', text: 'text-slate-600', border: 'border-slate-200', icon: 'bg-slate-100', iconText: 'text-slate-500' }
+            };
+
             container.innerHTML = kpiData.map(kpi => {
-                const typeClass = kpi.type === 'green' ? 'bg-green-100 text-green-700' : kpi.type === 'red' ? 'bg-red-100 text-red-700' : kpi.type === 'yellow' ? 'bg-yellow-100 text-yellow-700' : 'bg-slate-100 text-slate-700';
+                const c = colors[kpi.type];
+                const isPositive = kpi.change >= 0;
                 return `
-                    <div class="bg-surface-container-lowest rounded-xl p-4 border border-border-subtle hover:shadow-lg transition-all">
+                    <div class="bg-white rounded-xl border border-slate-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] p-5 relative overflow-hidden transition-all hover:border-emerald-200 hover:shadow-cardHover group">
                         <div class="flex items-start justify-between">
-                            <div>
-                                <p class="text-sm text-text-muted font-medium">${kpi.label}</p>
-                                <p class="text-2xl font-bold text-on-surface mt-1">${kpi.value}</p>
+                            <div class="flex-1">
+                                <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">${kpi.label}</p>
+                                <p class="text-2xl font-bold tracking-tight text-slate-900 mt-2">${kpi.value}</p>
                             </div>
-                            <div class="flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${typeClass}">
-                                <span class="material-symbols-outlined text-sm">${kpi.change > 0 ? 'trending_up' : 'trending_down'}</span>
-                                ${Math.abs(kpi.change)}%
+                            <div class="w-8 h-8 rounded-lg flex items-center justify-center ${c.icon}">
+                                <span class="material-symbols-outlined text-lg ${c.iconText}">
+                                    ${kpi.type === 'emerald' ? 'trending_up' : kpi.type === 'rose' ? 'warning' : kpi.type === 'amber' ? 'schedule' : 'hourglass_empty'}
+                                </span>
                             </div>
                         </div>
-                        <p class="text-xs text-text-muted mt-2">vs. período anterior</p>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // Render Bar Chart
-        function renderBarChart(data, maxOverride = null) {
-            const max = maxOverride || Math.max(...data.map(d => d.value));
-            return data.map(item => {
-                const width = (item.value / max) * 100;
-                return `
-                    <div class="flex items-center mb-2.5">
-                        <div class="w-20 text-xs text-text-muted flex-shrink-0">${item.name}</div>
-                        <div class="flex-1 h-5 bg-slate-200 rounded overflow-hidden">
-                            <div class="h-full rounded flex items-center justify-end pr-2" style="width: ${width}%; background: ${item.color};">
-                                <span class="text-xs text-white font-semibold">${item.value}</span>
-                            </div>
+                        <div class="mt-3 flex items-center">
+                            <span class="inline-flex items-center text-xs font-medium px-2 py-0.5 rounded-full ${c.bg} ${c.text} border ${c.border}">
+                                <span class="material-symbols-outlined text-xs">${isPositive ? 'trending_up' : 'trending_down'}</span>
+                                <span class="ml-1">${Math.abs(kpi.change)}%</span>
+                            </span>
+                            <span class="text-slate-400 text-[11px] ml-1.5">vs. período anterior</span>
                         </div>
                     </div>
                 `;
             }).join('');
-        }
-
-        // Render Line Chart
-        function renderLineChart() {
-            const data = [
-                { name: 'Jan/26', entrada: 1245, saida: 987 },
-                { name: 'Fev/26', entrada: 1356, saida: 1120 },
-                { name: 'Mar/26', entrada: 1189, saida: 1456 },
-            ];
-            const max = 1600;
-            const getY = val => 100 - (val / max * 100);
-
-            let html = '<div class="relative h-32">';
-            html += '<svg width="100%" height="130" viewBox="0 0 300 130">';
-
-            // Grid
-            [0, 400, 800, 1200, 1600].forEach(v => {
-                const y = getY(v);
-                html += `<line x1="30" y1="${y}" x2="290" y2="${y}" stroke="#e2e8f0" stroke-dasharray="2"/>`;
-                html += `<text x="25" y="${y+4}" fill="#64748b" font-size="10" text-anchor="end">${v}</text>`;
-            });
-
-            // Entrada line
-            html += `<polyline points="50,${getY(1245)} 150,${getY(1356)} 250,${getY(1189)}" fill="none" stroke="#0a473a" stroke-width="3" stroke-linecap="round"/>`;
-            [1245, 1356, 1189].forEach((v, i) => {
-                html += `<circle cx="${50 + i*100}" cy="${getY(v)}" r="4" fill="#0a473a"/>`;
-            });
-
-            // Saida line
-            html += `<polyline points="50,${getY(987)} 150,${getY(1120)} 250,${getY(1456)}" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round"/>`;
-            [987, 1120, 1456].forEach((v, i) => {
-                html += `<circle cx="${50 + i*100}" cy="${getY(v)}" r="4" fill="#10b981"/>`;
-            });
-
-            // Labels
-            data.forEach((d, i) => {
-                html += `<text x="${50 + i*100}" y="120" fill="#64748b" font-size="10" text-anchor="middle">${d.name}</text>`;
-            });
-
-            html += '</svg></div>';
-            html += '<div class="flex justify-center gap-4 mt-1">';
-            html += '<div class="flex items-center gap-1 text-xs text-text-muted"><div class="w-3 h-0.5 bg-[#0a473a]"></div> Entrada</div>';
-            html += '<div class="flex items-center gap-1 text-xs text-text-muted"><div class="w-3 h-0.5 bg-[#10b981]"></div> Saída</div>';
-            html += '</div>';
-            return html;
-        }
-
-        // Render Donut Chart
-        function renderDonutChart() {
-            const data = [
-                { name: 'Em análise', value: 54, color: '#0a473a' },
-                { name: 'Pendentes', value: 20, color: '#f59e0b' },
-                { name: 'Aguard. pagamento', value: 8, color: '#6b7280' },
-                { name: 'Condicionantes', value: 6, color: '#2a6862' },
-                { name: 'Outros', value: 12, color: '#9ca3af' },
-            ];
-
-            let cumulative = 0;
-            const segments = data.map(item => {
-                const start = cumulative;
-                cumulative += item.value;
-                return `<circle cx="80" cy="80" r="60" fill="transparent" stroke="${item.color}" stroke-width="20" stroke-dasharray="${item.value} ${100 - item.value}" stroke-dashoffset="${-start}" transform="rotate(-90 80 80)"></circle>`;
-            }).join('');
-
-            return `
-                <div class="flex flex-col items-center">
-                    <div class="relative w-40 h-40">
-                        <svg width="160" height="160" viewBox="0 0 160 160">${segments}</svg>
-                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-surface-container-low rounded-full flex items-center justify-center">
-                            <span class="text-xl font-bold text-on-surface">100%</span>
-                        </div>
-                    </div>
-                    <div class="flex flex-wrap justify-center gap-2 mt-3">
-                        ${data.map(item => `
-                            <div class="flex items-center gap-1 text-xs text-text-muted">
-                                <div class="w-2 h-2 rounded-full" style="background: ${item.color};"></div>
-                                ${item.name}
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
         }
 
         // Render Table
         function renderTable() {
-            const tbody = document.getElementById('processTable');
-            tbody.innerHTML = processosVencidos.map((proc, idx) => `
-                <tr class="border-t border-border-subtle hover:bg-surface-container-low">
-                    <td class="p-3 font-medium text-primary-container">${proc.processo}</td>
-                    <td class="p-3 text-text-muted">${proc.tipo}</td>
-                    <td class="p-3 text-text-muted">${proc.unidade}</td>
-                    <td class="p-3 text-text-muted">${proc.etapa}</td>
-                    <td class="p-3 text-text-muted">${proc.responsavel}</td>
-                    <td class="p-3"><span class="px-2 py-1 bg-red-50 text-red-700 border border-red-200 rounded-full text-xs font-medium">${proc.diasVencido} dias</span></td>
-                    <td class="p-3 text-center">
-                        <button onclick="showModal(${idx})" class="px-3 py-1.5 bg-primary-container text-white text-xs rounded-lg hover:bg-primary/90 flex items-center gap-1 mx-auto">
-                            <span class="material-symbols-outlined text-sm">visibility</span>
-                            Ver Detalhes
+            const tbody = document.getElementById('processosTable');
+            tbody.innerHTML = processosVencidos.map(proc => `
+                <tr class="border-b border-slate-100 hover:bg-slate-50/50">
+                    <td class="p-4"><span class="font-mono text-xs font-semibold text-emerald-950 hover:underline cursor-pointer">${proc.processo}</span></td>
+                    <td class="p-4 text-slate-600">${proc.tipo}</td>
+                    <td class="p-4 text-slate-600">${proc.unidade}</td>
+                    <td class="p-4 text-slate-600">${proc.etapa}</td>
+                    <td class="p-4 text-slate-600">${proc.responsavel}</td>
+                    <td class="p-4"><span class="inline-flex items-center gap-1 font-semibold text-xs px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 border border-rose-200/60">${proc.dias} dias</span></td>
+                    <td class="p-4 text-center">
+                        <button class="inline-flex items-center gap-1 text-xs font-medium px-3 py-1.5 rounded-lg border border-emerald-200 text-emerald-800 hover:bg-emerald-50 transition-colors">
+                            Detalhes <span class="material-symbols-outlined text-sm">chevron_right</span>
                         </button>
                     </td>
                 </tr>
             `).join('');
         }
 
-        // Render Filters
-        function renderFilters() {
-            const container = document.getElementById('filtersContainer');
-            container.innerHTML = Object.entries(filtrosOptions).map(([key, options]) => `
-                <div>
-                    <label class="block text-sm font-medium text-on-surface-variant mb-2">${key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}</label>
-                    <div class="flex flex-wrap gap-2">
-                        ${options.map(opt => `
-                            <button onclick="toggleFilter('${key}', '${opt}')" class="px-3 py-1.5 text-xs rounded-full border transition-colors ${filters[key].includes(opt) ? 'bg-primary-container text-white border-primary-container' : 'bg-surface-container-lowest text-text-muted border-border-subtle hover:border-primary-container'}">${opt}</button>
-                        `).join('')}
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Render Charts
+        // Charts
         function renderCharts() {
-            document.getElementById('lineChart').innerHTML = renderLineChart();
-            document.getElementById('donutChart').innerHTML = renderDonutChart();
-            document.getElementById('barChart1').innerHTML = renderBarChart([
-                { name: 'DIRRE', value: 1254, color: '#0a473a' },
-                { name: 'DIREC', value: 856, color: '#2a6862' },
-                { name: 'DIBA', value: 642, color: '#326859' },
-                { name: 'DILIC', value: 511, color: '#3d7a6f' },
-                { name: 'DISUC', value: 309, color: '#4d8c85' },
-                { name: 'Outras', value: 254, color: '#5e9e9b' },
-            ]);
-            document.getElementById('barChart2').innerHTML = renderBarChart([
-                { name: '0-15 dias', value: 412, color: '#10b981' },
-                { name: '16-30 dias', value: 678, color: '#34d399' },
-                { name: '31-60 dias', value: 945, color: '#f59e0b' },
-                { name: '61-90 dias', value: 612, color: '#fb923c' },
-                { name: '91-180 dias', value: 403, color: '#f87171' },
-                { name: '> 180 dias', value: 198, color: '#ef4444' },
-            ]);
-            document.getElementById('barChart3').innerHTML = renderBarChart([
-                { name: 'Triagem', value: 2.3, color: '#10b981' },
-                { name: 'Análise', value: 18.7, color: '#0a473a' },
-                { name: 'Coord.', value: 5.2, color: '#2a6862' },
-                { name: 'Diret.', value: 8.1, color: '#326859' },
-                { name: 'Public.', value: 3.4, color: '#3d7a6f' },
-            ], 25);
-            document.getElementById('barChart4').innerHTML = renderBarChart([
-                { name: 'DIRRE', value: 78, color: '#ef4444' },
-                { name: 'DIBIO', value: 46, color: '#f87171' },
-                { name: 'DILIC', value: 34, color: '#fca5a5' },
-                { name: 'DIREC', value: 25, color: '#fecaca' },
-                { name: 'DISUC', value: 15, color: '#fee2e2' },
-            ], 100);
+            // Line Chart
+            new Chart(document.getElementById('lineChart'), {
+                type: 'line',
+                data: {
+                    labels: lineChartData.labels,
+                    datasets: [
+                        { label: 'Entrada', data: lineChartData.entrada, borderColor: '#0F4C3A', backgroundColor: 'rgba(15, 76, 58, 0.1)', fill: true, tension: 0.4 },
+                        { label: 'Saída (Concluídos)', data: lineChartData.saida, borderColor: '#10B981', backgroundColor: 'rgba(16, 185, 129, 0.1)', fill: true, tension: 0.4 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                            titleFont: { size: 12, weight: 'bold' },
+                            bodyFont: { size: 11 },
+                            padding: 8,
+                            cornerRadius: 8
+                        }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#F1F5F9' } },
+                        x: { grid: { display: false } }
+                    },
+                    animation: false
+                }
+            });
+
+            // Donut Chart
+            new Chart(document.getElementById('donutChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: donutData.labels,
+                    datasets: [{ data: donutData.values, backgroundColor: donutData.colors, borderWidth: 0 }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                            titleFont: { size: 12, weight: 'bold' },
+                            bodyFont: { size: 11 },
+                            padding: 8,
+                            cornerRadius: 8
+                        }
+                    },
+                    cutout: '65%',
+                    animation: false
+                }
+            });
+
+            // Bar Charts
+            new Chart(document.getElementById('barChartUnidade'), {
+                type: 'bar',
+                data: { labels: unidadeData.labels, datasets: [{ data: unidadeData.values, backgroundColor: unidadeData.colors, borderRadius: 6 }] },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                            titleFont: { size: 12, weight: 'bold' },
+                            bodyFont: { size: 11 },
+                            padding: 8,
+                            cornerRadius: 8
+                        }
+                    },
+                    animation: false
+                }
+            });
+
+            new Chart(document.getElementById('barChartAging'), {
+                type: 'bar',
+                data: { labels: agingData.labels, datasets: [{ data: agingData.values, backgroundColor: agingData.colors, borderRadius: 6 }] },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                            titleFont: { size: 12, weight: 'bold' },
+                            bodyFont: { size: 11 },
+                            padding: 8,
+                            cornerRadius: 8
+                        }
+                    },
+                    animation: false
+                }
+            });
+
+            new Chart(document.getElementById('barChartTempo'), {
+                type: 'bar',
+                data: { labels: tempoData.labels, datasets: [{ data: tempoData.values, backgroundColor: tempoData.colors, borderRadius: 6 }] },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                            titleFont: { size: 12, weight: 'bold' },
+                            bodyFont: { size: 11 },
+                            padding: 8,
+                            cornerRadius: 8
+                        }
+                    },
+                    animation: false
+                }
+            });
+
+            new Chart(document.getElementById('barChartVencidos'), {
+                type: 'bar',
+                data: { labels: vencidosData.labels, datasets: [{ data: vencidosData.values, backgroundColor: vencidosData.colors, borderRadius: 6 }] },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                            titleFont: { size: 12, weight: 'bold' },
+                            bodyFont: { size: 11 },
+                            padding: 8,
+                            cornerRadius: 8
+                        }
+                    },
+                    animation: false
+                }
+            });
         }
 
-        // Modal
-        function showModal(idx) {
-            const proc = processosVencidos[idx];
-            document.getElementById('modalTitle').textContent = `Detalhamento - ${proc.processo}`;
-            document.getElementById('modalContent').innerHTML = `
-                <div class="grid grid-cols-2 gap-4 mb-6">
-                    <div class="bg-surface-container-low rounded-lg p-4">
-                        <p class="text-xs text-text-muted uppercase">Tipo de Processo</p>
-                        <p class="font-medium text-on-surface mt-1">${proc.tipo}</p>
-                    </div>
-                    <div class="bg-surface-container-low rounded-lg p-4">
-                        <p class="text-xs text-text-muted uppercase">Unidade</p>
-                        <p class="font-medium text-on-surface mt-1">${proc.unidade}</p>
-                    </div>
-                    <div class="bg-surface-container-low rounded-lg p-4">
-                        <p class="text-xs text-text-muted uppercase">Etapa Atual</p>
-                        <p class="font-medium text-on-surface mt-1">${proc.etapa}</p>
-                    </div>
-                    <div class="bg-surface-container-low rounded-lg p-4">
-                        <p class="text-xs text-text-muted uppercase">Responsável</p>
-                        <p class="font-medium text-on-surface mt-1">${proc.responsavel}</p>
-                    </div>
-                    <div class="bg-red-50 rounded-lg p-4 col-span-2 border border-red-200">
-                        <p class="text-xs text-red-600 uppercase">Tempo Vencido</p>
-                        <p class="font-bold text-red-700 text-2xl mt-1">${proc.diasVencido} dias</p>
-                    </div>
-                </div>
-                <h4 class="font-semibold text-on-surface mb-3 flex items-center gap-2">
-                    <span class="material-symbols-outlined text-on-surface-variant">schedule</span>
-                    Histórico de Tramitação
-                </h4>
-                <div class="border border-border-subtle rounded-lg overflow-hidden">
-                    <table class="w-full text-sm">
-                        <thead class="bg-surface-container-low">
-                            <tr><th class="text-left p-3 font-medium text-text-muted">Data</th><th class="text-left p-3 font-medium text-text-muted">Etapa</th><th class="text-left p-3 font-medium text-text-muted">Ação</th><th class="text-left p-3 font-medium text-text-muted">Usuário</th></tr>
-                        </thead>
-                        <tbody>
-                            ${historicoTramitacao.map(item => `
-                                <tr class="border-t border-border-subtle">
-                                    <td class="p-3 text-text-muted">${item.data} ${item.hora}</td>
-                                    <td class="p-3 text-on-surface">${item.etapa}</td>
-                                    <td class="p-3 text-text-muted">${item.acao}</td>
-                                    <td class="p-3 text-text-muted">${item.usuario}</td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                </div>
-                <div class="flex gap-2 mt-6">
-                    <button class="flex-1 px-4 py-2 bg-primary-container text-white rounded-lg hover:bg-primary/90 flex items-center justify-center gap-2">
-                        <span class="material-symbols-outlined">visibility</span>
-                        Ver Processo Completo
-                    </button>
-                    <button class="px-4 py-2 border border-border-subtle text-on-surface-variant rounded-lg hover:bg-surface-container-low flex items-center gap-2">
-                        <span class="material-symbols-outlined">content_copy</span>
-                        Copy
-                    </button>
-                </div>
-            `;
-            document.getElementById('processModal').classList.remove('hidden');
-        }
-
-        function closeModal() {
-            document.getElementById('processModal').classList.add('hidden');
-        }
-
-        // UI Functions
+        // Toggle Sidebar
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-            if (sidebar.style.transform === 'translateX(-100%)' || !sidebar.classList.contains('lg:translate-x-0')) {
-                sidebar.style.transform = 'translateX(0)';
-                overlay.classList.remove('hidden');
-            } else {
-                sidebar.style.transform = 'translateX(-100%)';
-                overlay.classList.add('hidden');
-            }
+            const main = document.getElementById('mainContent');
+            sidebar.classList.toggle('-translate-x-full');
+            main.classList.toggle('ml-0');
         }
 
-        function closeSidebar() {
-            document.getElementById('sidebar').style.transform = 'translateX(-100%)';
-            document.getElementById('sidebarOverlay').classList.add('hidden');
+        // Toggle Submenu
+        function toggleSubmenu(btn) {
+            const submenu = btn.nextElementSibling;
+            submenu.classList.toggle('hidden');
         }
-
-        function toggleSearch() {
-            const input = document.getElementById('searchInput');
-            input.classList.toggle('hidden');
-        }
-
-        function toggleExport() {
-            document.getElementById('exportMenu').classList.toggle('hidden');
-        }
-
-        function toggleFilterDrawer() {
-            document.getElementById('filterDrawer').classList.toggle('translate-x-full');
-            document.getElementById('filterDrawerOverlay').classList.toggle('hidden');
-        }
-
-        function toggleFilter(category, value) {
-            const idx = filters[category].indexOf(value);
-            if (idx > -1) filters[category].splice(idx, 1);
-            else filters[category].push(value);
-            renderFilters();
-        }
-
-        function clearFilters() {
-            Object.keys(filters).forEach(k => filters[k] = []);
-            renderFilters();
-        }
-
-        // Close dropdowns
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('[onclick="toggleExport()"]') && !e.target.closest('#exportMenu')) {
-                document.getElementById('exportMenu').classList.add('hidden');
-            }
-        });
 
         // Init
-        renderKPIs();
-        renderTable();
-        renderCharts();
-        renderFilters();
+        document.addEventListener('DOMContentLoaded', () => {
+            renderKPIs();
+            renderTable();
+            renderCharts();
+        });
     </script>
 </body>
 </html>
