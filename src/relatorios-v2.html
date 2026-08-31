@@ -58,8 +58,8 @@
 
     <div class="flex pt-16">
         <!-- Sidebar -->
-        <aside id="sidebar" class="w-[280px] bg-surface-container-lowest border-r border-border-subtle fixed h-screen overflow-y-auto transition-transform" style="top: 64px;">
-            <nav class="py-4 px-3">
+        <aside id="sidebar" class="w-[280px] bg-surface-container-lowest border-r border-border-subtle flex flex-col fixed transition-transform z-40" style="top: 64px; bottom: 0; left: 0;">
+            <nav class="flex-1 py-4 px-3 overflow-y-auto">
                 <ul class="space-y-1">
                     <li><a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low"><span class="material-symbols-outlined text-xl">home</span><span class="text-sm">Início</span></a></li>
                     <li>
@@ -72,7 +72,7 @@
                     <li><a href="relatorios-v3.html" class="flex items-center gap-3 px-3 py-2 rounded-lg bg-sidebar-active text-primary-container font-semibold"><span class="material-symbols-outlined text-xl">assessment</span><span class="text-sm">Relatórios Gerenciais</span></a></li>
                 </ul>
             </nav>
-            <div class="p-4 border-t border-border-subtle">
+            <div class="p-4 border-t border-border-subtle mt-auto">
                 <button class="w-full flex items-center gap-3 px-4 py-3 bg-primary-container text-white rounded-xl hover:bg-primary/90">
                     <span class="material-symbols-outlined text-xl">auto_awesome</span><span class="text-sm font-medium">Assistente INEMA</span>
                 </button>
