@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal INEMA - Relatórios Gerenciais v3</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface": "#f8f9fb", "surface-container-lowest": "#ffffff", "surface-container-low": "#f3f4f6",
+                        "surface-container": "#edeef0", "on-surface": "#191c1e", "on-surface-variant": "#404945",
+                        "primary": "#002f25", "primary-container": "#0a473a", "on-primary-container": "#7eb5a4",
+                        "secondary": "#2a6862", "error": "#ba1a1a", "background": "#f8f9fb",
+                        "text-muted": "#64748b", "border-subtle": "#e5e7eb", "sidebar-active": "#d1e1de",
+                        "inema": { "green": "#0F4C3A", "emerald": "#10B981", "amber": "#F59E0B", "rose": "#E11D48", "ocean": "#0284C7", "violet": "#8B5CF6" }
+                    },
+                    fontFamily: { "sans": ["Inter", "sans-serif"], "mono": ["JetBrains Mono", "monospace"] },
+                    boxShadow: { "card": "0 2px 8px rgba(0,0,0,0.04)", "cardHover": "0 4px 12px rgba(0,0,0,0.08)" }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="bg-background">
+    <!-- Header -->
+    <header class="h-16 bg-primary-container fixed top-0 left-0 right-0 z-50 flex items-center px-4 gap-4">
+        <div class="flex items-center gap-3">
+            <button class="w-10 h-10 rounded-lg hover:bg-white/10 flex items-center justify-center text-white" onclick="toggleSidebar()">
+                <span class="material-symbols-outlined text-2xl">menu</span>
+            </button>
+            <img src="logo.svg" alt="INEMA" class="h-10">
+        </div>
+        <div class="flex items-center gap-3 ml-auto">
+            <div class="relative">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/60 text-xl cursor-pointer">search</span>
+                <input type="text" placeholder="Buscar no sistema..." class="w-80 pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 text-sm focus:outline-none">
+            </div>
+            <button class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-white relative">
+                <span class="material-symbols-outlined">notifications</span>
+                <span class="absolute -top-1 -right-1 w-5 h-5 bg-error rounded-full text-xs flex items-center justify-center font-semibold">3</span>
+            </button>
+            <button class="flex items-center gap-2 p-1.5 rounded-lg hover:bg-white/10">
+                <div class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center text-white font-semibold text-sm">LM</div>
+            </button>
+        </div>
+    </header>
+
+    <div class="flex pt-16">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="w-[280px] bg-surface-container-lowest border-r border-border-subtle fixed h-screen overflow-y-auto transition-transform" style="top: 64px;">
+            <nav class="py-4 px-3">
+                <ul class="space-y-1">
+                    <li><a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low"><span class="material-symbols-outlined text-xl">home</span><span class="text-sm">Início</span></a></li>
+                    <li>
+                        <button class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low" onclick="toggleSubmenu(this)"><span class="material-symbols-outlined text-xl">gavel</span><span class="text-sm">Fiscalização</span><span class="material-symbols-outlined text-lg ml-auto">expand_more</span></button>
+                        <ul class="ml-9 mt-1 space-y-1 hidden">
+                            <li><a href="fiscalizacao.html" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Atendente (DOR001)</a></li>
+                            <li><a href="fiscalizacao.html?fluxo=externo" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Cidadão (DOR002)</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="relatorios-v3.html" class="flex items-center gap-3 px-3 py-2 rounded-lg bg-sidebar-active text-primary-container font-semibold"><span class="material-symbols-outlined text-xl">assessment</span><span class="text-sm">Relatórios Gerenciais</span></a></li>
+                </ul>
+            </nav>
+            <div class="p-4 border-t border-border-subtle">
+                <button class="w-full flex items-center gap-3 px-4 py-3 bg-primary-container text-white rounded-xl hover:bg-primary/90">
+                    <span class="material-symbols-outlined text-xl">auto_awesome</span><span class="text-sm font-medium">Assistente INEMA</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 ml-[280px] p-8" id="mainContent">
+            <!-- Header -->
+            <div class="mb-6">
+                <div class="flex items-start justify-between flex-wrap gap-4">
+                    <div>
+                        <h1 class="text-2xl font-bold text-on-surface">Regulação – Dashboard Gerencial</h1>
+                        <p class="text-body-md text-text-muted mt-1">Acompanhamento em tempo real do desempenho dos processos de regulação.</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border border-border-subtle rounded-lg">
+                            <span class="material-symbols-outlined text-on-surface-variant">calendar_today</span><span class="text-sm text-on-surface">01/01/2026 a 31/03/2026</span>
+                        </div>
+                        <button class="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border border-border-subtle rounded-lg hover:bg-surface-container-low">
+                            <span class="material-symbols-outlined text-on-surface-variant">filter_list</span><span class="text-sm text-on-surface">Filtros</span>
+                        </button>
+                        <button class="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border border-border-subtle rounded-lg hover:bg-surface-container-low">
+                            <span class="material-symbols-outlined text-on-surface-variant">download</span><span class="text-sm text-on-surface">Exportar</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KPIs -->
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6" id="kpis"></div>
+
+            <!-- Charts Row 1 -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div class="bg-white rounded-xl border border-slate-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] overflow-hidden h-[270px] flex flex-col">
+                    <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
+                        <div class="flex items-center gap-2.5">
+                            <span class="material-symbols-outlined text-xl text-slate-400">show_chart</span>
+                            <h3 class="text-[15px] font-bold text-slate-800 tracking-tight">Entrada x Saída de Processos</h3>
+                        </div>
+                        <div class="relative group">
+                            <span class="material-symbols-outlined text-lg text-slate-400 cursor-help">info</span>
+                            <div class="absolute right-0 top-6 w-48 bg-slate-800 text-white text-xs p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                                Evolução mensal de processos protocolados vs concluídos
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-5 flex-1 min-h-0 relative"><canvas id="lineChart"></canvas></div>
+                </div>
+                <div class="bg-white rounded-xl border border-slate-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] overflow-hidden h-[270px] flex flex-col">
+                    <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
+                        <div class="flex items-center gap-2.5">
+                            <span class="material-symbols-outlined text-xl text-slate-400">donut_large</span>
+                            <h3 class="text-[15px] font-bold text-slate-800 tracking-tight">Processos por Status</h3>
+                        </div>
+                        <div class="relative group">
+                            <span class="material-symbols-outlined text-lg text-slate-400 cursor-help">info</span>
+                            <div class="absolute right-0 top-6 w-48 bg-slate-800 text-white text-xs p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                                Distribuição atual de todos os processos
+                            </div>
+                        </div>
+                    </div>
+                    <div class="px-6 py-4 flex-1 min-h-0 flex items-center">
+                        <div class="flex-1 flex items-center justify-center">
+                            <div class="relative flex items-center justify-center flex-shrink-0" style="width: 140px; height: 140px;">
+                                <canvas id="donutChart"></canvas>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                                    <p class="text-2xl font-bold text-slate-800 leading-none tracking-tight">8.461</p>
+                                    <p class="text-xs text-slate-400 font-normal mt-1.5">Total</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-1 flex items-center justify-center pl-2">
+                            <div class="w-full max-w-[200px] flex flex-col justify-center gap-3">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:#0F4C3A"></div>
+                                        <span class="text-xs font-medium text-slate-600">Em Análise</span>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-800">54%</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:#F59E0B"></div>
+                                        <span class="text-xs font-medium text-slate-600">Pendentes</span>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-800">20%</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:#0284C7"></div>
+                                        <span class="text-xs font-medium text-slate-600">Aguard. Pagamento</span>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-800">8%</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:#8B5CF6"></div>
+                                        <span class="text-xs font-medium text-slate-600">Condicionantes</span>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-800">6%</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:#94A3B8"></div>
+                                        <span class="text-xs font-medium text-slate-600">Outros</span>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-800">12%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl border border-slate-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] overflow-hidden h-[270px] flex flex-col">
+                    <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
+                        <div class="flex items-center gap-2.5">
+                            <span class="material-symbols-outlined text-xl text-slate-400">bar_chart</span>
+                            <h3 class="text-[15px] font-bold text-slate-800 tracking-tight">Processos por Unidade</h3>
+                        </div>
+                        <div class="relative group">
+                            <span class="material-symbols-outlined text-lg text-slate-400 cursor-help">info</span>
+                            <div class="absolute right-0 top-6 w-48 bg-slate-800 text-white text-xs p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                                Volume de processos por unidade organizacional
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-5 flex-1 min-h-0 relative"><canvas id="barChartUnidade"></canvas></div>
+                </div>
+            </div>
+
+            <!-- Charts Row 2 -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div class="bg-white rounded-xl border border-slate-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] overflow-hidden h-[270px] flex flex-col">
+                    <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
+                        <div class="flex items-center gap-2.5">
+                            <span class="material-symbols-outlined text-xl text-slate-400">bar_chart</span>
+                            <h3 class="text-[15px] font-bold text-slate-800 tracking-tight">Aging do Estoque</h3>
+                        </div>
+                        <div class="relative group">
+                            <span class="material-symbols-outlined text-lg text-slate-400 cursor-help">info</span>
+                            <div class="absolute right-0 top-6 w-48 bg-slate-800 text-white text-xs p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                                Tempo de permanência do estoque de processos
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-5 flex-1 min-h-0 relative"><canvas id="barChartAging"></canvas></div>
+                </div>
+                <div class="bg-white rounded-xl border border-slate-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] overflow-hidden h-[270px] flex flex-col">
+                    <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
+                        <div class="flex items-center gap-2.5">
+                            <span class="material-symbols-outlined text-xl text-slate-400">bar_chart</span>
+                            <h3 class="text-[15px] font-bold text-slate-800 tracking-tight">Tempo Médio de Análise (dias)</h3>
+                        </div>
+                        <div class="relative group">
+                            <span class="material-symbols-outlined text-lg text-slate-400 cursor-help">info</span>
+                            <div class="absolute right-0 top-6 w-48 bg-slate-800 text-white text-xs p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                                Duração média por etapa do processo
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-5 flex-1 min-h-0 relative"><canvas id="barChartTempo"></canvas></div>
+                </div>
+                <div class="bg-white rounded-xl border border-slate-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] overflow-hidden h-[270px] flex flex-col">
+                    <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
+                        <div class="flex items-center gap-2.5">
+                            <span class="material-symbols-outlined text-xl text-slate-400">bar_chart</span>
+                            <h3 class="text-[15px] font-bold text-slate-800 tracking-tight">Processos Vencidos por Unidade</h3>
+                        </div>
+                        <div class="relative group">
+                            <span class="material-symbols-outlined text-lg text-slate-400 cursor-help">info</span>
+                            <div class="absolute right-0 top-6 w-48 bg-slate-800 text-white text-xs p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                                Quantidade de processos vencidos por unidade
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-5 flex-1 min-h-0 relative"><canvas id="barChartVencidos"></canvas></div>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="bg-white rounded-xl border border-slate-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] overflow-hidden">
+                <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-rose-600">warning</span>
+                        <h3 class="text-sm font-bold text-slate-800 tracking-tight">Processos Vencidos (Top 5)</h3>
+                    </div>
+                    <button class="text-xs text-emerald-700 font-medium hover:underline">Ver todos</button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-slate-50/80 text-[11px] font-semibold uppercase tracking-wider text-slate-500 border-b border-slate-200">
+                                <th class="text-left p-4">Processo</th>
+                                <th class="text-left p-4">Tipo</th>
+                                <th class="text-left p-4">Unidade</th>
+                                <th class="text-left p-4">Etapa</th>
+                                <th class="text-left p-4">Responsável</th>
+                                <th class="text-left p-4">Vencido há</th>
+                                <th class="text-center p-4">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody id="processosTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Data
+        const kpiData = [
+            { label: 'Protocolados', value: '1.245', change: 12, type: 'emerald' },
+            { label: 'Em análise', value: '2.356', change: -3, type: 'slate' },
+            { label: 'Pendentes', value: '873', change: 8, type: 'amber' },
+            { label: 'Vencidos', value: '198', change: 15, type: 'rose' },
+            { label: 'Concluídos', value: '1.987', change: 18, type: 'emerald' },
+            { label: 'Atos emitidos', value: '1.604', change: 20, type: 'emerald' },
+        ];
+
+        const lineChartData = {
+            labels: ['Jan/26', 'Fev/26', 'Mar/26', 'Abr/26', 'Mai/26', 'Jun/26'],
+            entrada: [1245, 1356, 1189, 1423, 1567, 1678],
+            saida: [987, 1120, 1456, 1289, 1345, 1523]
+        };
+
+        const donutData = {
+            labels: ['Em Análise', 'Pendentes', 'Aguard. Pagamento', 'Condicionantes', 'Outros'],
+            values: [54, 20, 8, 6, 12],
+            colors: ['#0F4C3A', '#F59E0B', '#0284C7', '#8B5CF6', '#94A3B8']
+        };
+
+        const unidadeData = {
+            labels: ['DIRRE', 'DIREC', 'DIBA', 'DILIC', 'DISUC', 'Outras'],
+            values: [1254, 856, 642, 511, 309, 254],
+            colors: ['#0D5C46', '#0F766E', '#115E59', '#147D6B', '#178C7B', '#199BAB']
+        };
+
+        const agingData = {
+            labels: ['0-15 dias', '16-30 dias', '31-60 dias', '61-90 dias', '91-180 dias', '> 180 dias'],
+            values: [412, 678, 945, 612, 403, 198],
+            colors: ['#10B981', '#0D9488', '#F59E0B', '#EA580C', '#E11D48', '#BE123C']
+        };
+
+        const tempoData = {
+            labels: ['Triagem', 'Análise Técnica', 'Coordenação', 'Diretoria', 'Publicação'],
+            values: [2.3, 18.7, 5.2, 8.1, 3.4],
+            colors: ['#10B981', '#0F4C3A', '#2A6862', '#326859', '#3D7A6F']
+        };
+
+        const vencidosData = {
+            labels: ['DIRRE', 'DIBIO', 'DILIC', 'DIREC', 'DISUC'],
+            values: [78, 46, 34, 25, 15],
+            colors: Array(5).fill('#E11D48')
+        };
+
+        const processosVencidos = [
+            { processo: 'SEIA-REG-2024/001234', tipo: 'Licenciamento Ambiental', unidade: 'DIRRE', etapa: 'Análise Técnica', responsavel: 'João Silva', dias: 32 },
+            { processo: 'SEIA-REG-2024/001198', tipo: 'Autorização Ambiental', unidade: 'DIBIO', etapa: 'Análise Técnica', responsavel: 'Maria Santos', dias: 28 },
+            { processo: 'SEIA-REG-2024/001145', tipo: 'Licenciamento Ambiental', unidade: 'DILIC', etapa: 'Coordenação', responsavel: 'Carlos Lima', dias: 25 },
+            { processo: 'SEIA-REG-2024/001089', tipo: 'Outorga', unidade: 'DIRRE', etapa: 'Análise Técnica', responsavel: 'João Silva', dias: 22 },
+            { processo: 'SEIA-REG-2024/001077', tipo: 'Autorização Ambiental', unidade: 'DIREC', etapa: 'Diretoria', responsavel: 'Ana Paula', dias: 19 },
+        ];
+
+        // Render KPIs
+        function renderKPIs() {
+            const container = document.getElementById('kpis');
+            const colors = {
+                emerald: { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200', icon: 'bg-emerald-100', iconText: 'text-emerald-600' },
+                amber: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', icon: 'bg-amber-100', iconText: 'text-amber-600' },
+                rose: { bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-200', icon: 'bg-rose-100', iconText: 'text-rose-600' },
+                slate: { bg: 'bg-slate-100', text: 'text-slate-600', border: 'border-slate-200', icon: 'bg-slate-100', iconText: 'text-slate-500' }
+            };
+
+            container.innerHTML = kpiData.map(kpi => {
+                const c = colors[kpi.type];
+                const isPositive = kpi.change >= 0;
+                return `
+                    <div class="bg-white rounded-xl border border-slate-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] p-5 relative overflow-hidden transition-all hover:border-emerald-200 hover:shadow-cardHover group">
+                        <div class="flex items-start justify-between">
+                            <div class="flex-1">
+                                <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">${kpi.label}</p>
+                                <p class="text-2xl font-bold tracking-tight text-slate-900 mt-2">${kpi.value}</p>
+                            </div>
+                            <div class="w-8 h-8 rounded-lg flex items-center justify-center ${c.icon}">
+                                <span class="material-symbols-outlined text-lg ${c.iconText}">
+                                    ${kpi.type === 'emerald' ? 'trending_up' : kpi.type === 'rose' ? 'warning' : kpi.type === 'amber' ? 'schedule' : 'hourglass_empty'}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="mt-3 flex items-center">
+                            <span class="inline-flex items-center text-xs font-medium px-2 py-0.5 rounded-full ${c.bg} ${c.text} border ${c.border}">
+                                <span class="material-symbols-outlined text-xs">${isPositive ? 'trending_up' : 'trending_down'}</span>
+                                <span class="ml-1">${Math.abs(kpi.change)}%</span>
+                            </span>
+                            <span class="text-slate-400 text-[11px] ml-1.5">vs. período anterior</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Render Table
+        function renderTable() {
+            const tbody = document.getElementById('processosTable');
+            tbody.innerHTML = processosVencidos.map(proc => `
+                <tr class="border-b border-slate-100 hover:bg-slate-50/50">
+                    <td class="p-4"><span class="font-mono text-xs font-semibold text-emerald-950 hover:underline cursor-pointer">${proc.processo}</span></td>
+                    <td class="p-4 text-slate-600">${proc.tipo}</td>
+                    <td class="p-4 text-slate-600">${proc.unidade}</td>
+                    <td class="p-4 text-slate-600">${proc.etapa}</td>
+                    <td class="p-4 text-slate-600">${proc.responsavel}</td>
+                    <td class="p-4"><span class="inline-flex items-center gap-1 font-semibold text-xs px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 border border-rose-200/60">${proc.dias} dias</span></td>
+                    <td class="p-4 text-center">
+                        <button class="inline-flex items-center gap-1 text-xs font-medium px-3 py-1.5 rounded-lg border border-emerald-200 text-emerald-800 hover:bg-emerald-50 transition-colors">
+                            Detalhes <span class="material-symbols-outlined text-sm">chevron_right</span>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Charts
+        function renderCharts() {
+            // Line Chart
+            new Chart(document.getElementById('lineChart'), {
+                type: 'line',
+                data: {
+                    labels: lineChartData.labels,
+                    datasets: [
+                        { label: 'Entrada', data: lineChartData.entrada, borderColor: '#0F4C3A', backgroundColor: 'rgba(15, 76, 58, 0.1)', fill: true, tension: 0.4 },
+                        { label: 'Saída (Concluídos)', data: lineChartData.saida, borderColor: '#10B981', backgroundColor: 'rgba(16, 185, 129, 0.1)', fill: true, tension: 0.4 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                            titleFont: { size: 12, weight: 'bold' },
+                            bodyFont: { size: 11 },
+                            padding: 8,
+                            cornerRadius: 8
+                        }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#F1F5F9' } },
+                        x: { grid: { display: false } }
+                    },
+                    animation: false
+                }
+            });
+
+            // Donut Chart
+            new Chart(document.getElementById('donutChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: donutData.labels,
+                    datasets: [{ data: donutData.values, backgroundColor: donutData.colors, borderWidth: 0 }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                            titleFont: { size: 12, weight: 'bold' },
+                            bodyFont: { size: 11 },
+                            padding: 8,
+                            cornerRadius: 8
+                        }
+                    },
+                    cutout: '65%',
+                    animation: false
+                }
+            });
+
+            // Bar Charts
+            new Chart(document.getElementById('barChartUnidade'), {
+                type: 'bar',
+                data: { labels: unidadeData.labels, datasets: [{ data: unidadeData.values, backgroundColor: unidadeData.colors, borderRadius: 6 }] },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                            titleFont: { size: 12, weight: 'bold' },
+                            bodyFont: { size: 11 },
+                            padding: 8,
+                            cornerRadius: 8
+                        }
+                    },
+                    animation: false
+                }
+            });
+
+            new Chart(document.getElementById('barChartAging'), {
+                type: 'bar',
+                data: { labels: agingData.labels, datasets: [{ data: agingData.values, backgroundColor: agingData.colors, borderRadius: 6 }] },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                            titleFont: { size: 12, weight: 'bold' },
+                            bodyFont: { size: 11 },
+                            padding: 8,
+                            cornerRadius: 8
+                        }
+                    },
+                    animation: false
+                }
+            });
+
+            new Chart(document.getElementById('barChartTempo'), {
+                type: 'bar',
+                data: { labels: tempoData.labels, datasets: [{ data: tempoData.values, backgroundColor: tempoData.colors, borderRadius: 6 }] },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                            titleFont: { size: 12, weight: 'bold' },
+                            bodyFont: { size: 11 },
+                            padding: 8,
+                            cornerRadius: 8
+                        }
+                    },
+                    animation: false
+                }
+            });
+
+            new Chart(document.getElementById('barChartVencidos'), {
+                type: 'bar',
+                data: { labels: vencidosData.labels, datasets: [{ data: vencidosData.values, backgroundColor: vencidosData.colors, borderRadius: 6 }] },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                            titleFont: { size: 12, weight: 'bold' },
+                            bodyFont: { size: 11 },
+                            padding: 8,
+                            cornerRadius: 8
+                        }
+                    },
+                    animation: false
+                }
+            });
+        }
+
+        // Toggle Sidebar
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const main = document.getElementById('mainContent');
+            sidebar.classList.toggle('-translate-x-full');
+            main.classList.toggle('ml-0');
+        }
+
+        // Toggle Submenu
+        function toggleSubmenu(btn) {
+            const submenu = btn.nextElementSibling;
+            submenu.classList.toggle('hidden');
+        }
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            renderKPIs();
+            renderTable();
+            renderCharts();
+        });
+    </script>
+</body>
+</html>

@@ -1,2 +1,5 @@
 .vercel
 .env*
+.playwright-mcp
+donut-test.png
+test_*.png
