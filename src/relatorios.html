@@ -13,13 +13,14 @@
                 extend: {
                     colors: {
                         inema: {
-                            primary: '#004b87',
-                            secondary: '#0284c7',
-                            dark: '#022c4a',
-                            light: '#e8f4f8',
-                            success: '#059669',
-                            warning: '#d97706',
-                            danger: '#dc2626'
+                            primary: '#0F4C3A',
+                            primaryDark: '#064E3B',
+                            primaryHover: '#134E39',
+                            light: '#D1E7DD',
+                            success: '#10B981',
+                            warning: '#F59E0B',
+                            danger: '#EF4444',
+                            muted: '#64748B'
                         }
                     },
                     fontFamily: {
@@ -31,19 +32,17 @@
     </script>
     <style>
         * { box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #f1f5f9; }
-        .sidebar { background: linear-gradient(180deg, #022c4a 0%, #0a3d5c 100%); }
+        body { font-family: 'Inter', sans-serif; background: #F8F9FA; }
+        .sidebar { background: #FFFFFF; border-right: 1px solid #E5E7EB; }
+        .sidebar-item { transition: all 0.2s ease; }
+        .sidebar-item:hover { background: #F1F5F9; }
+        .sidebar-item.active { background: #E2ECE9; color: #0F4C3A; }
         .card-hover { transition: all 0.2s ease; }
         .card-hover:hover { transform: translateY(-2px); box-shadow: 0 8px 25px -5px rgba(0,0,0,0.1); }
         .drawer { transition: transform 0.3s ease; }
         .drawer-open { transform: translateX(0); }
         .drawer-closed { transform: translateX(100%); }
         .modal-overlay { background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
-        .kpi-card { border-left: 4px solid; }
-        .kpi-card.blue { border-color: #004b87; }
-        .kpi-card.green { border-color: #059669; }
-        .kpi-card.red { border-color: #dc2626; }
-        .kpi-card.orange { border-color: #d97706; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade-in { animation: fadeIn 0.3s ease; }
@@ -51,11 +50,10 @@
         .scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
         .scrollbar-thin::-webkit-scrollbar-track { background: #f1f5f9; }
         .scrollbar-thin::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-        .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        /* Simple bar chart styles */
-        .bar-chart-item { display: flex; align-items: center; margin-bottom: 12px; }
+        /* Bar chart styles */
+        .bar-chart-item { display: flex; align-items: center; margin-bottom: 10px; }
         .bar-chart-label { width: 80px; font-size: 12px; color: #64748b; flex-shrink: 0; }
-        .bar-chart-bar-container { flex: 1; height: 24px; background: #e2e8f0; border-radius: 4px; overflow: hidden; position: relative; }
+        .bar-chart-bar-container { flex: 1; height: 22px; background: #E2E8F0; border-radius: 4px; overflow: hidden; position: relative; }
         .bar-chart-bar { height: 100%; border-radius: 4px; transition: width 0.5s ease; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; }
         .bar-chart-value { font-size: 11px; color: white; font-weight: 600; }
         /* Donut chart */
@@ -72,43 +70,39 @@
             Menu: () => '<span class="material-icons-round">menu</span>',
             Search: () => '<span class="material-icons-round">search</span>',
             Notifications: () => '<span class="material-icons-round">notifications</span>',
-            Person: () => '<span class="material-icons-round">person</span>',
             Home: () => '<span class="material-icons-round">home</span>',
             Gavel: () => '<span class="material-icons-round">gavel</span>',
+            ExpandMore: () => '<span class="material-icons-round">expand_more</span>',
+            ExpandLess: () => '<span class="material-icons-round">expand_less</span>',
+            Close: () => '<span class="material-icons-round">close</span>',
+            Calendar: () => '<span class="material-icons-round">calendar_today</span>',
+            Filter: () => '<span class="material-icons-round">filter_list</span>',
+            Download: () => '<span class="material-icons-round">download</span>',
+            Warning: () => '<span class="material-icons-round">warning</span>',
+            Schedule: () => '<span class="material-icons-round">schedule</span>',
+            TrendingUp: () => '<span class="material-icons-round">trending_up</span>',
+            TrendingDown: () => '<span class="material-icons-round">trending_down</span>',
+            Visibility: () => '<span class="material-icons-round">visibility</span>',
+            PictureAsPdf: () => '<span class="material-icons-round">picture_as_pdf</span>',
+            TableChart: () => '<span class="material-icons-round">table_chart</span>',
+            Code: () => '<span class="material-icons-round">code</span>',
             Description: () => '<span class="material-icons-round">description</span>',
             MonitorHeart: () => '<span class="material-icons-round">monitor_heart</span>',
             Science: () => '<span class="material-icons-round">science</span>',
             Map: () => '<span class="material-icons-round">map</span>',
             Assessment: () => '<span class="material-icons-round">assessment</span>',
             Settings: () => '<span class="material-icons-round">settings</span>',
-            Calendar: () => '<span class="material-icons-round">calendar_today</span>',
-            Filter: () => '<span class="material-icons-round">filter_list</span>',
-            Download: () => '<span class="material-icons-round">download</span>',
-            ExpandMore: () => '<span class="material-icons-round">expand_more</span>',
-            ExpandLess: () => '<span class="material-icons-round">expand_less</span>',
-            Close: () => '<span class="material-icons-round">close</span>',
-            ArrowBack: () => '<span class="material-icons-round">arrow_back</span>',
-            ArrowForward: () => '<span class="material-icons-round">arrow_forward</span>',
-            CheckCircle: () => '<span class="material-icons-round">check_circle</span>',
-            Warning: () => '<span class="material-icons-round">warning</span>',
-            Schedule: () => '<span class="material-icons-round">schedule</span>',
-            TrendingUp: () => '<span class="material-icons-round">trending_up</span>',
-            TrendingDown: () => '<span class="material-icons-round">trending_down</span>',
-            FactCheck: () => '<span class="material-icons-round">fact_check</span>',
-            PersonPin: () => '<span class="material-icons-round">person_pin</span>',
+            AutoAwesome: () => '<span class="material-icons-round">auto_awesome</span>',
+            Person: () => '<span class="material-icons-round">person</span>',
             AccountBalance: () => '<span class="material-icons-round">account_balance</span>',
             FileCopy: () => '<span class="material-icons-round">file_copy</span>',
-            Visibility: () => '<span class="material-icons-round">visibility</span>',
-            PictureAsPdf: () => '<span class="material-icons-round">picture_as_pdf</span>',
-            TableChart: () => '<span class="material-icons-round">table_chart</span>',
-            Code: () => '<span class="material-icons-round">code</span>',
         };
 
         // Data
         const kpiData = [
             { label: 'Protocolados', value: '1.245', change: 12, type: 'blue' },
-            { label: 'Em análise', value: '2.356', change: -3, type: 'blue' },
-            { label: 'Pendentes', value: '873', change: 8, type: 'orange' },
+            { label: 'Em análise', value: '2.356', change: -3, type: 'gray' },
+            { label: 'Pendentes', value: '873', change: 8, type: 'yellow' },
             { label: 'Vencidos', value: '198', change: 15, type: 'red' },
             { label: 'Concluídos', value: '1.987', change: 18, type: 'green' },
             { label: 'Atos emitidos', value: '1.604', change: 20, type: 'green' },
@@ -121,45 +115,45 @@
         ];
 
         const donutChartData = [
-            { name: 'Em análise', value: 54, color: '#004b87' },
-            { name: 'Pendentes', value: 20, color: '#d97706' },
-            { name: 'Aguard. pagamento', value: 8, color: '#6b7280' },
-            { name: 'Condicionantes', value: 6, color: '#8b5cf6' },
-            { name: 'Outros', value: 12, color: '#9ca3af' },
+            { name: 'Em análise', value: 54, color: '#0F4C3A' },
+            { name: 'Pendentes', value: 20, color: '#F59E0B' },
+            { name: 'Aguard. pagamento', value: 8, color: '#6B7280' },
+            { name: 'Condicionantes', value: 6, color: '#0D9488' },
+            { name: 'Outros', value: 12, color: '#9CA3AF' },
         ];
 
         const unidadeData = [
-            { name: 'DIRRE', value: 1254 },
-            { name: 'DIREC', value: 856 },
-            { name: 'DIBA', value: 642 },
-            { name: 'DILIC', value: 511 },
-            { name: 'DISUC', value: 309 },
-            { name: 'Outras', value: 254 },
+            { name: 'DIRRE', value: 1254, color: '#0F4C3A' },
+            { name: 'DIREC', value: 856, color: '#134E39' },
+            { name: 'DIBA', value: 642, color: '#0D9488' },
+            { name: 'DILIC', value: 511, color: '#10B981' },
+            { name: 'DISUC', value: 309, color: '#34D399' },
+            { name: 'Outras', value: 254, color: '#6EE7B7' },
         ];
 
         const agingData = [
-            { name: '0-15 dias', value: 412, color: '#059669' },
-            { name: '16-30 dias', value: 678, color: '#10b981' },
-            { name: '31-60 dias', value: 945, color: '#f59e0b' },
-            { name: '61-90 dias', value: 612, color: '#f97316' },
-            { name: '91-180 dias', value: 403, color: '#ef4444' },
-            { name: '> 180 dias', value: 198, color: '#dc2626' },
+            { name: '0-15 dias', value: 412, color: '#10B981' },
+            { name: '16-30 dias', value: 678, color: '#34D399' },
+            { name: '31-60 dias', value: 945, color: '#F59E0B' },
+            { name: '61-90 dias', value: 612, color: '#FB923C' },
+            { name: '91-180 dias', value: 403, color: '#F87171' },
+            { name: '> 180 dias', value: 198, color: '#EF4444' },
         ];
 
         const tempoAnaliseData = [
-            { name: 'Triagem', value: 2.3 },
-            { name: 'Análise técnica', value: 18.7 },
-            { name: 'Coordenação', value: 5.2 },
-            { name: 'Diretoria', value: 8.1 },
-            { name: 'Publicação', value: 3.4 },
+            { name: 'Triagem', value: 2.3, color: '#10B981' },
+            { name: 'Análise técnica', value: 18.7, color: '#0F4C3A' },
+            { name: 'Coordenação', value: 5.2, color: '#0D9488' },
+            { name: 'Diretoria', value: 8.1, color: '#14B8A6' },
+            { name: 'Publicação', value: 3.4, color: '#34D399' },
         ];
 
         const vencidosUnidadeData = [
-            { name: 'DIRRE', value: 78 },
-            { name: 'DIBIO', value: 46 },
-            { name: 'DILIC', value: 34 },
-            { name: 'DIREC', value: 25 },
-            { name: 'DISUC', value: 15 },
+            { name: 'DIRRE', value: 78, color: '#EF4444' },
+            { name: 'DIBIO', value: 46, color: '#F87171' },
+            { name: 'DILIC', value: 34, color: '#FCA5A5' },
+            { name: 'DIREC', value: 25, color: '#FECACA' },
+            { name: 'DISUC', value: 15, color: '#FEE2E2' },
         ];
 
         const processosVencidos = [
@@ -193,6 +187,7 @@
             filterDrawerOpen: false,
             selectedProcess: null,
             exportDropdownOpen: false,
+            fiscalizacaoExpanded: true,
             filters: {
                 tipoProcesso: [],
                 status: [],
@@ -220,16 +215,15 @@
             return Object.values(state.filters).flat().length;
         }
 
-        function renderBarChart(data, colors, maxValue = null) {
+        function renderBarChart(data, maxValue = null) {
             const max = maxValue || Math.max(...data.map(d => d.value));
             return data.map((item, idx) => {
                 const width = (item.value / max) * 100;
-                const color = item.color || (colors ? colors[idx % colors.length] : '#004b87');
                 return `
                     <div class="bar-chart-item">
                         <div class="bar-chart-label">${item.name}</div>
                         <div class="bar-chart-bar-container">
-                            <div class="bar-chart-bar" style="width: ${width}%; background: ${color};">
+                            <div class="bar-chart-bar" style="width: ${width}%; background: ${item.color};">
                                 <span class="bar-chart-value">${item.value}</span>
                             </div>
                         </div>
@@ -240,12 +234,11 @@
 
         function renderDonutChart(data) {
             let cumulative = 0;
-            const segments = data.map((item, idx) => {
+            const segments = data.map((item) => {
                 const start = cumulative;
                 cumulative += item.value;
                 const strokeDasharray = `${item.value} ${100 - item.value}`;
                 const strokeDashoffset = -start;
-                cumulative = cumulative;
                 return `
                     <circle cx="90" cy="90" r="70" fill="transparent" stroke="${item.color}" stroke-width="25"
                         stroke-dasharray="${strokeDasharray}" stroke-dashoffset="${strokeDashoffset}"
@@ -260,8 +253,8 @@
                         ${segments}
                     </svg>
                     <div class="donut-center">
-                        <span class="text-2xl font-bold text-slate-800">${data.reduce((a, b) => a + b.value, 0)}%</span>
-                        <span class="text-xs text-slate-500">Total</span>
+                        <span class="text-2xl font-bold" style="color: #0F4C3A;">${data.reduce((a, b) => a + b.value, 0)}%</span>
+                        <span class="text-xs" style="color: #64748B;">Total</span>
                     </div>
                 </div>
             `;
@@ -279,41 +272,32 @@
             return `
                 <div class="relative h-48">
                     <svg width="100%" height="200" viewBox="0 0 350 200" preserveAspectRatio="none">
-                        <!-- Grid lines -->
                         ${[0, 0.25, 0.5, 0.75, 1].map(p => `
-                            <line x1="40" y1="${p * height + 20}" x2="340" y2="${p * height + 20}" stroke="#e2e8f0" stroke-dasharray="4"/>
+                            <line x1="40" y1="${p * height + 20}" x2="340" y2="${p * height + 20}" stroke="#E2E8F0" stroke-dasharray="4"/>
                         `).join('')}
-
-                        <!-- Y axis labels -->
                         ${[0, 0.25, 0.5, 0.75, 1].map(p => `
-                            <text x="35" y="${p * height + 24}" fill="#64748b" font-size="10" text-anchor="end">${Math.round(max * (1-p))}</text>
+                            <text x="35" y="${p * height + 24}" fill="#64748B" font-size="10" text-anchor="end">${Math.round(max * (1-p))}</text>
                         `).join('')}
-
-                        <!-- X axis labels -->
                         ${data.map((d, i) => `
-                            <text x="${i * 100 + 50}" y="${height + 40}" fill="#64748b" font-size="11" text-anchor="middle">${d.name}</text>
+                            <text x="${i * 100 + 50}" y="${height + 40}" fill="#64748B" font-size="11" text-anchor="middle">${d.name}</text>
                         `).join('')}
-
-                        <!-- Entrada line -->
-                        <polyline points="${pointsEntrada}" fill="none" stroke="#004b87" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                        <circle cx="50" cy="${getY(data[0].entrada)}" r="5" fill="#004b87"/>
-                        <circle cx="150" cy="${getY(data[1].entrada)}" r="5" fill="#004b87"/>
-                        <circle cx="250" cy="${getY(data[2].entrada)}" r="5" fill="#004b87"/>
-
-                        <!-- Saida line -->
-                        <polyline points="${pointsSaida}" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                        <circle cx="50" cy="${getY(data[0].saida)}" r="5" fill="#059669"/>
-                        <circle cx="150" cy="${getY(data[1].saida)}" r="5" fill="#059669"/>
-                        <circle cx="250" cy="${getY(data[2].saida)}" r="5" fill="#059669"/>
+                        <polyline points="${pointsEntrada}" fill="none" stroke="#0F4C3A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="50" cy="${getY(data[0].entrada)}" r="5" fill="#0F4C3A"/>
+                        <circle cx="150" cy="${getY(data[1].entrada)}" r="5" fill="#0F4C3A"/>
+                        <circle cx="250" cy="${getY(data[2].entrada)}" r="5" fill="#0F4C3A"/>
+                        <polyline points="${pointsSaida}" fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="50" cy="${getY(data[0].saida)}" r="5" fill="#10B981"/>
+                        <circle cx="150" cy="${getY(data[1].saida)}" r="5" fill="#10B981"/>
+                        <circle cx="250" cy="${getY(data[2].saida)}" r="5" fill="#10B981"/>
                     </svg>
                     <div class="flex justify-center gap-6 mt-2">
                         <div class="flex items-center gap-2">
-                            <div class="w-3 h-3 rounded-full bg-[#004b87]"></div>
-                            <span class="text-xs text-slate-600">Entrada</span>
+                            <div class="w-3 h-3 rounded-full" style="background: #0F4C3A;"></div>
+                            <span class="text-xs" style="color: #64748B;">Entrada</span>
                         </div>
                         <div class="flex items-center gap-2">
-                            <div class="w-3 h-3 rounded-full bg-[#059669]"></div>
-                            <span class="text-xs text-slate-600">Saída</span>
+                            <div class="w-3 h-3 rounded-full" style="background: #10B981;"></div>
+                            <span class="text-xs" style="color: #64748B;">Saída</span>
                         </div>
                     </div>
                 </div>
@@ -340,374 +324,398 @@
             const app = document.getElementById('app');
 
             app.innerHTML = `
-                <div class="min-h-screen bg-slate-100">
-                    <!-- Header -->
-                    <header class="bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
-                        <div class="flex items-center gap-4">
-                            <button onclick="state.sidebarOpen = !state.sidebarOpen; render()" class="p-2 hover:bg-slate-100 rounded-lg">
-                                ${Icons.Menu()}
-                            </button>
-                            <div class="flex items-center gap-3">
-                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40'%3E%3Crect fill='%23004b87' width='100' height='40'/%3E%3Ctext x='50' y='25' fill='white' font-family='Arial' font-size='16' font-weight='bold' text-anchor='middle'%3EINEMA%3C/text%3E%3C/svg%3E" alt="INEMA" class="h-8" />
-                                <span class="text-slate-400">|</span>
-                                <span class="text-sm font-medium text-slate-600">SEIA</span>
-                            </div>
-                        </div>
-
-                        <div class="flex-1 max-w-xl mx-8">
-                            <div class="relative">
-                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" style="top: 50%;">
-                                    ${Icons.Search()}
-                                </span>
-                                <input type="text" placeholder="Buscar processos, requerentes, atos..." class="w-full pl-10 pr-4 py-2 bg-slate-100 border border-transparent rounded-lg text-sm focus:bg-white focus:border-inema-primary focus:outline-none" style="padding-left: 2.5rem;" />
-                            </div>
-                        </div>
-
+                <!-- Header Superior - Fundo Verde Floresta INEMA -->
+                <header style="background: linear-gradient(135deg, #0F4C3A 0%, #064E3B 100%);" class="px-4 py-3 flex items-center justify-between sticky top-0 z-40">
+                    <div class="flex items-center gap-4">
+                        <button onclick="state.sidebarOpen = !state.sidebarOpen; render()" class="p-2 hover:bg-white/10 rounded-lg text-white">
+                            ${Icons.Menu()}
+                        </button>
                         <div class="flex items-center gap-3">
-                            <button class="p-2 relative hover:bg-slate-100 rounded-lg">
-                                ${Icons.Notifications()}
-                                <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-                            </button>
-                            <button class="flex items-center gap-2 px-3 py-1.5 hover:bg-slate-100 rounded-lg">
-                                <div class="w-8 h-8 bg-inema-primary rounded-full flex items-center justify-center text-white text-sm font-medium">LM</div>
-                                <span class="text-sm font-medium text-slate-700">Lucas Manager</span>
-                            </button>
+                            <span class="text-white font-bold text-xl tracking-wide">inema</span>
+                            <span class="text-white/50">|</span>
+                            <span class="text-white/70 text-sm">Sistema de Gestão Ambiental</span>
                         </div>
-                    </header>
-
-                    <div class="flex">
-                        <!-- Sidebar -->
-                        <aside class="sidebar text-white transition-all duration-300 ${state.sidebarOpen ? 'w-64' : 'w-16'}" style="${state.sidebarOpen ? 'width: 16rem;' : 'width: 4rem;'}">
-                            <nav class="py-4">
-                                <ul class="space-y-1 px-2">
-                                    <li>
-                                        <a href="index.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition-colors" style="gap: 0.75rem;">
-                                            ${Icons.Home()}
-                                            ${state.sidebarOpen ? '<span>Início</span>' : ''}
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="fiscalizacao.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition-colors" style="gap: 0.75rem;">
-                                            ${Icons.Gavel()}
-                                            ${state.sidebarOpen ? '<span>Fiscalização</span>' : ''}
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition-colors" style="gap: 0.75rem;">
-                                            ${Icons.Description()}
-                                            ${state.sidebarOpen ? '<span>Licenciamento</span>' : ''}
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition-colors" style="gap: 0.75rem;">
-                                            ${Icons.AccountBalance()}
-                                            ${state.sidebarOpen ? '<span>Regulação/Outorga</span>' : ''}
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white/20" style="gap: 0.75rem;">
-                                            ${Icons.Assessment()}
-                                            ${state.sidebarOpen ? '<span>Relatórios Gerenciais</span>' : ''}
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition-colors" style="gap: 0.75rem;">
-                                            ${Icons.Map()}
-                                            ${state.sidebarOpen ? '<span>Geoprocessamento</span>' : ''}
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition-colors" style="gap: 0.75rem;">
-                                            ${Icons.Settings()}
-                                            ${state.sidebarOpen ? '<span>Configurações</span>' : ''}
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </aside>
-
-                        <!-- Main Content -->
-                        <main class="flex-1 p-6">
-                            <!-- Page Header -->
-                            <div class="mb-6">
-                                <div class="flex items-start justify-between flex-wrap gap-4">
-                                    <div>
-                                        <h1 class="text-2xl font-bold text-slate-800">Regulação – Dashboard Gerencial</h1>
-                                        <p class="text-slate-500 mt-1 max-w-2xl">
-                                            Acompanhamento em tempo real do desempenho dos processos de regulação, controle de prazos, produtividade, gargalos e apoio à decisão.
-                                        </p>
-                                    </div>
-                                    <div class="flex items-center gap-3 flex-wrap">
-                                        <!-- Date Range Picker -->
-                                        <div class="flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 rounded-lg">
-                                            ${Icons.Calendar()}
-                                            <span class="text-sm text-slate-700">01/01/2026 a 31/03/2026</span>
-                                        </div>
-
-                                        <!-- Filters Button -->
-                                        <button onclick="state.filterDrawerOpen = true; render()" class="flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 text-slate-700">
-                                            ${Icons.Filter()} Filtros
-                                            ${activeFiltersCount() > 0 ? `<span class="bg-inema-primary text-white text-xs px-2 py-0.5 rounded-full">${activeFiltersCount()}</span>` : ''}
-                                        </button>
-
-                                        <!-- Export Button -->
-                                        <div class="relative">
-                                            <button onclick="state.exportDropdownOpen = !state.exportDropdownOpen; render()" class="flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 text-slate-700">
-                                                ${Icons.Download()} Exportar
-                                            </button>
-                                            ${state.exportDropdownOpen ? `
-                                                <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-slate-200 py-1 z-10 animate-fade-in" style="position: absolute; right: 0; margin-top: 0.5rem; width: 12rem; background: white; border-radius: 0.5rem; border: 1px solid #e2e8f0; padding: 0.25rem 0; z-index: 10;">
-                                                    <button class="w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2" style="width: 100%; padding: 0.5rem 1rem; text-align: left; display: flex; align-items: center; gap: 0.5rem;">
-                                                        ${Icons.PictureAsPdf()} PDF
-                                                    </button>
-                                                    <button class="w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2" style="width: 100%; padding: 0.5rem 1rem; text-align: left; display: flex; align-items: center; gap: 0.5rem;">
-                                                        ${Icons.TableChart()} Excel (XLSX)
-                                                    </button>
-                                                    <button class="w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2" style="width: 100%; padding: 0.5rem 1rem; text-align: left; display: flex; align-items: center; gap: 0.5rem;">
-                                                        ${Icons.Code()} CSV
-                                                    </button>
-                                                </div>
-                                            ` : ''}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- KPI Cards -->
-                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
-                                ${kpiData.map(kpi => `
-                                    <div class="kpi-card kpi-card.${kpi.type} bg-white rounded-xl p-4 card-hover border border-slate-200 shadow-sm" style="border-left: 4px solid ${kpi.type === 'blue' ? '#004b87' : kpi.type === 'green' ? '#059669' : kpi.type === 'red' ? '#dc2626' : '#d97706'};">
-                                        <div class="flex items-start justify-between">
-                                            <div>
-                                                <p class="text-sm text-slate-500 font-medium">${kpi.label}</p>
-                                                <p class="text-2xl font-bold mt-1 ${kpi.type === 'red' ? 'text-inema-danger' : 'text-slate-800'}">${kpi.value}</p>
-                                            </div>
-                                            <div class="flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${kpi.type === 'green' ? 'bg-green-50 text-green-700' : kpi.type === 'red' ? 'bg-red-50 text-red-700' : kpi.type === 'orange' ? 'bg-amber-50 text-amber-700' : 'bg-blue-50 text-blue-700'}">
-                                                ${kpi.change > 0 ? Icons.TrendingUp() : Icons.TrendingDown()}
-                                                <span>${Math.abs(kpi.change)}%</span>
-                                            </div>
-                                        </div>
-                                        <p class="text-xs text-slate-400 mt-2">vs. período anterior</p>
-                                    </div>
-                                `).join('')}
-                            </div>
-
-                            <!-- Charts Grid - Row 1 -->
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                                <!-- Line Chart -->
-                                <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
-                                    <h4 class="font-semibold text-slate-800 mb-4">Entrada x Saída de Processos</h4>
-                                    ${renderLineChart(lineChartData)}
-                                </div>
-                                <!-- Donut Chart -->
-                                <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
-                                    <h4 class="font-semibold text-slate-800 mb-4">Processos por Status</h4>
-                                    ${renderDonutChart(donutChartData)}
-                                    <div class="flex flex-wrap justify-center gap-2 mt-4">
-                                        ${donutChartData.map(item => `
-                                            <div class="flex items-center gap-1 text-xs">
-                                                <div class="w-2 h-2 rounded-full" style="background-color: ${item.color};"></div>
-                                                <span class="text-slate-600">${item.name}</span>
-                                            </div>
-                                        `).join('')}
-                                    </div>
-                                </div>
-                                <!-- Bar Chart - Unidade -->
-                                <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
-                                    <h4 class="font-semibold text-slate-800 mb-4">Processos por Unidade</h4>
-                                    ${renderBarChart(unidadeData, ['#004b87', '#0284c7', '#0369a1', '#075985', '#0c4a6e', '#082f49'])}
-                                </div>
-                            </div>
-
-                            <!-- Charts Grid - Row 2 -->
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                                <!-- Aging -->
-                                <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
-                                    <h4 class="font-semibold text-slate-800 mb-4">Aging do Estoque (tempo de permanência)</h4>
-                                    ${renderBarChart(agingData)}
-                                </div>
-                                <!-- Tempo Médio -->
-                                <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
-                                    <h4 class="font-semibold text-slate-800 mb-4">Tempo Médio de Análise (dias)</h4>
-                                    ${renderBarChart(tempoAnaliseData, ['#059669', '#10b981', '#34d399', '#6ee7b7', '#a7f3d0'], 25)}
-                                </div>
-                                <!-- Vencidos por Unidade -->
-                                <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
-                                    <h4 class="font-semibold text-slate-800 mb-4">Processos Vencidos por Unidade</h4>
-                                    ${renderBarChart(vencidosUnidadeData, ['#dc2626', '#ef4444', '#f87171', '#fca5a5', '#fecaca'], 100)}
-                                </div>
-                            </div>
-
-                            <!-- Table -->
-                            <div class="mt-4">
-                                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-                                    <div class="p-4 border-b border-slate-200 flex items-center justify-between">
-                                        <h4 class="font-semibold text-slate-800 flex items-center gap-2">
-                                            ${Icons.Warning()} Processos Vencidos (Top 5)
-                                        </h4>
-                                        <button class="text-sm text-inema-primary hover:underline">Ver todos</button>
-                                    </div>
-                                    <div class="overflow-x-auto">
-                                        <table class="w-full text-sm">
-                                            <thead class="bg-slate-50">
-                                                <tr>
-                                                    <th class="text-left p-3 font-medium text-slate-600">Processo</th>
-                                                    <th class="text-left p-3 font-medium text-slate-600">Tipo</th>
-                                                    <th class="text-left p-3 font-medium text-slate-600">Unidade</th>
-                                                    <th class="text-left p-3 font-medium text-slate-600">Etapa</th>
-                                                    <th class="text-left p-3 font-medium text-slate-600">Responsável</th>
-                                                    <th class="text-left p-3 font-medium text-slate-600">Vencido há</th>
-                                                    <th class="text-center p-3 font-medium text-slate-600">Ação</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                ${processosVencidos.map((proc, idx) => `
-                                                    <tr class="border-t border-slate-100 hover:bg-slate-50">
-                                                        <td class="p-3 font-medium text-inema-primary">${proc.processo}</td>
-                                                        <td class="p-3 text-slate-600">${proc.tipo}</td>
-                                                        <td class="p-3 text-slate-600">${proc.unidade}</td>
-                                                        <td class="p-3 text-slate-600">${proc.etapa}</td>
-                                                        <td class="p-3 text-slate-600">${proc.responsavel}</td>
-                                                        <td class="p-3">
-                                                            <span class="px-2 py-1 bg-red-50 text-red-700 rounded-full text-xs font-medium">
-                                                                ${proc.diasVencido} dias
-                                                            </span>
-                                                        </td>
-                                                        <td class="p-3 text-center">
-                                                            <button onclick="showProcessModal(processosVencidos[${idx}])" class="px-3 py-1.5 bg-inema-primary text-white text-xs rounded-lg hover:bg-inema-dark flex items-center gap-1 mx-auto" style="display: inline-flex; align-items: center; gap: 0.25rem;">
-                                                                ${Icons.Visibility()} Ver Detalhes
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                `).join('')}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </main>
                     </div>
 
-                    <!-- Filter Drawer -->
-                    ${state.filterDrawerOpen ? `
-                        <div class="drawer fixed inset-y-0 right-0 w-96 bg-white shadow-2xl z-50" style="position: fixed; top: 0; right: 0; bottom: 0; width: 24rem; background: white; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); z-index: 50;">
-                            <div class="h-full flex flex-col">
-                                <div class="flex items-center justify-between p-4 border-b border-slate-200">
-                                    <div class="flex items-center gap-2">
-                                        ${Icons.Filter()}
-                                        <h3 class="font-semibold text-slate-800">Filtros Avançados</h3>
-                                        ${activeFiltersCount() > 0 ? `<span class="bg-inema-primary text-white text-xs px-2 py-0.5 rounded-full">${activeFiltersCount()}</span>` : ''}
-                                    </div>
-                                    <button onclick="closeDrawer()" class="p-1 hover:bg-slate-100 rounded">
-                                        ${Icons.Close()}
+                    <div class="flex items-center gap-3">
+                        <!-- Busca estilo pill -->
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-white/60" style="top: 50%;">
+                                ${Icons.Search()}
+                            </span>
+                            <input type="text" placeholder="Buscar no sistema..." class="pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-full text-sm text-white placeholder-white/60 focus:bg-white/20 focus:outline-none focus:border-white/40" style="width: 280px; padding-left: 2.5rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);" />
+                        </div>
+
+                        <!-- Notificações -->
+                        <button class="p-2 relative hover:bg-white/10 rounded-full text-white">
+                            ${Icons.Notifications()}
+                            <span class="absolute top-1 right-1 w-4 h-4 bg-red-500 rounded-full text-white text-xs flex items-center justify-center">3</span>
+                        </button>
+
+                        <!-- Avatar usuário -->
+                        <button class="flex items-center gap-2 px-2 py-1 hover:bg-white/10 rounded-full">
+                            <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-white text-sm font-medium">LM</div>
+                        </button>
+                    </div>
+                </header>
+
+                <div class="flex">
+                    <!-- Sidebar Lateral - Fundo Branco -->
+                    <aside class="sidebar text-slate-700 transition-all duration-300 ${state.sidebarOpen ? 'w-64' : 'w-16'}" style="${state.sidebarOpen ? 'width: 16rem;' : 'width: 4rem;'}">
+                        <nav class="py-4">
+                            <ul class="space-y-1 px-3">
+                                <li>
+                                    <a href="index.html" class="sidebar-item flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-colors" style="gap: 0.75rem;">
+                                        ${Icons.Home()}
+                                        ${state.sidebarOpen ? '<span>Início</span>' : ''}
+                                    </a>
+                                </li>
+                                <li>
+                                    <button onclick="state.fiscalizacaoExpanded = !state.fiscalizacaoExpanded; render()" class="sidebar-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-colors" style="gap: 0.75rem; justify-content: space-between;">
+                                        <div class="flex items-center gap-3">${Icons.Gavel()}${state.sidebarOpen ? '<span>Fiscalização</span>' : ''}</div>
+                                        ${state.sidebarOpen ? (state.fiscalizacaoExpanded ? Icons.ExpandLess() : Icons.ExpandMore()) : ''}
                                     </button>
+                                    ${state.sidebarOpen && state.fiscalizacaoExpanded ? `
+                                        <ul class="ml-8 mt-1 space-y-1">
+                                            <li><a href="fiscalizacao.html" class="flex items-center gap-2 px-3 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg">Atendente (DOR001)</a></li>
+                                            <li><a href="fiscalizacao.html?fluxo=externo" class="flex items-center gap-2 px-3 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg">Cidadão (DOR002)</a></li>
+                                        </ul>
+                                    ` : ''}
+                                </li>
+                                <li>
+                                    <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-colors" style="gap: 0.75rem;">
+                                        ${Icons.Description()}
+                                        ${state.sidebarOpen ? '<span>Licenciamento</span>' : ''}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-colors" style="gap: 0.75rem;">
+                                        ${Icons.AccountBalance()}
+                                        ${state.sidebarOpen ? '<span>Regulação / Outorga</span>' : ''}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="sidebar-item active flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors" style="gap: 0.75rem; background: #E2ECE9; color: #0F4C3A;">
+                                        ${Icons.Assessment()}
+                                        ${state.sidebarOpen ? '<span>Relatórios Gerenciais</span>' : ''}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-colors" style="gap: 0.75rem;">
+                                        ${Icons.MonitorHeart()}
+                                        ${state.sidebarOpen ? '<span>Monitoramento</span>' : ''}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-colors" style="gap: 0.75rem;">
+                                        ${Icons.Science()}
+                                        ${state.sidebarOpen ? '<span>Laboratório</span>' : ''}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-colors" style="gap: 0.75rem;">
+                                        ${Icons.Map()}
+                                        ${state.sidebarOpen ? '<span>Geoprocessamento</span>' : ''}
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <!-- Botão Assistente INEMA -->
+                        <div class="absolute bottom-4 left-3 right-3">
+                            <button class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-white font-medium transition-colors" style="background: linear-gradient(135deg, #0F4C3A 0%, #064E3B 100%);">
+                                ${Icons.AutoAwesome()}
+                                ${state.sidebarOpen ? '<span>Assistente INEMA</span>' : ''}
+                            </button>
+                        </div>
+                    </aside>
+
+                    <!-- Área Principal -->
+                    <main class="flex-1 p-8" style="background: #F8F9FA; min-height: calc(100vh - 60px);">
+                        <!-- Cabeçalho do Módulo -->
+                        <div class="mb-6">
+                            <div class="flex items-start justify-between flex-wrap gap-4">
+                                <div>
+                                    <h1 class="text-2xl font-bold" style="color: #0F172A;">Regulação – Dashboard Gerencial</h1>
+                                    <p class="mt-1" style="color: #64748B;">
+                                        Acompanhamento em tempo real do desempenho dos processos de regulação, controle de prazos, produtividade, gargalos e apoio à decisão.
+                                    </p>
                                 </div>
-                                <div class="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin" style="flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 1rem;">
-                                    ${Object.entries(filtrosOptions).map(([key, options]) => `
-                                        <div>
-                                            <label class="block text-sm font-medium text-slate-700 mb-2">
-                                                ${key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
-                                            </label>
-                                            <div class="flex flex-wrap gap-2">
-                                                ${options.map(opt => `
-                                                    <button onclick="toggleFilter('${key}', '${opt}')" class="px-3 py-1.5 text-xs rounded-full border transition-colors ${state.filters[key].includes(opt) ? 'bg-inema-primary text-white border-inema-primary' : 'bg-white text-slate-600 border-slate-300 hover:border-inema-primary'}" style="padding: 0.375rem 0.75rem; font-size: 0.75rem; border-radius: 9999px; border: 1px solid ${state.filters[key].includes(opt) ? '#004b87' : '#cbd5e1'}; background: ${state.filters[key].includes(opt) ? '#004b87' : 'white'}; color: ${state.filters[key].includes(opt) ? 'white' : '#475569'};">
-                                                        ${opt}
-                                                    </button>
-                                                `).join('')}
+                                <div class="flex items-center gap-3 flex-wrap">
+                                    <!-- Date Range Picker -->
+                                    <div class="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg" style="border-color: #CBD5E1;">
+                                        ${Icons.Calendar()}
+                                        <span class="text-sm" style="color: #334155;">01/01/2026 a 31/03/2026</span>
+                                    </div>
+
+                                    <!-- Filters Button -->
+                                    <button onclick="state.filterDrawerOpen = true; render()" class="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg hover:bg-slate-50 text-slate-700" style="border-color: #CBD5E1;">
+                                        ${Icons.Filter()} Filtros
+                                        ${activeFiltersCount() > 0 ? `<span class="text-white text-xs px-2 py-0.5 rounded-full" style="background: #0F4C3A;">${activeFiltersCount()}</span>` : ''}
+                                    </button>
+
+                                    <!-- Export Button -->
+                                    <div class="relative">
+                                        <button onclick="state.exportDropdownOpen = !state.exportDropdownOpen; render()" class="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg hover:bg-slate-50 text-slate-700" style="border-color: #CBD5E1;">
+                                            ${Icons.Download()} Exportar
+                                        </button>
+                                        ${state.exportDropdownOpen ? `
+                                            <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-slate-200 py-1 z-10" style="position: absolute; right: 0; margin-top: 0.5rem; width: 12rem; border-radius: 0.5rem; border: 1px solid #e2e8f0; padding: 0.25rem 0; z-index: 10;">
+                                                <button class="w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2" style="width: 100%; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                                                    ${Icons.PictureAsPdf()} PDF
+                                                </button>
+                                                <button class="w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2" style="width: 100%; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                                                    ${Icons.TableChart()} Excel (XLSX)
+                                                </button>
+                                                <button class="w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2" style="width: 100%; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                                                    ${Icons.Code()} CSV
+                                                </button>
                                             </div>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- KPI Cards -->
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+                            ${kpiData.map(kpi => `
+                                <div class="bg-white rounded-2xl p-4 card-hover border shadow-xs" style="border-color: #E2E8F0; border: 1px solid #E2E8F0;">
+                                    <div class="flex items-start justify-between">
+                                        <div>
+                                            <p class="text-sm font-medium" style="color: #64748B;">${kpi.label}</p>
+                                            <p class="text-2xl font-bold mt-1" style="color: #0F172A;">${kpi.value}</p>
+                                        </div>
+                                        <div class="flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
+                                            kpi.type === 'green' ? 'bg-green-100 text-green-700' :
+                                            kpi.type === 'red' ? 'bg-red-100 text-red-700' :
+                                            kpi.type === 'yellow' ? 'bg-yellow-100 text-yellow-700' :
+                                            kpi.type === 'gray' ? 'bg-slate-100 text-slate-700' :
+                                            'bg-blue-100 text-blue-700'
+                                        }">
+                                            ${kpi.change > 0 ? Icons.TrendingUp() : Icons.TrendingDown()}
+                                            <span>${Math.abs(kpi.change)}%</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-xs mt-2" style="color: #94A3B8;">vs. período anterior</p>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <!-- Charts Grid - Row 1 -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                            <!-- Line Chart -->
+                            <div class="bg-white rounded-2xl p-4 border shadow-xs" style="border-color: #E2E8F0; border: 1px solid #E2E8F0;">
+                                <h4 class="font-semibold mb-4" style="color: #0F172A;">Entrada x Saída de Processos</h4>
+                                ${renderLineChart(lineChartData)}
+                            </div>
+                            <!-- Donut Chart -->
+                            <div class="bg-white rounded-2xl p-4 border shadow-xs" style="border-color: #E2E8F0; border: 1px solid #E2E8F0;">
+                                <h4 class="font-semibold mb-4" style="color: #0F172A;">Processos por Status</h4>
+                                ${renderDonutChart(donutChartData)}
+                                <div class="flex flex-wrap justify-center gap-2 mt-4">
+                                    ${donutChartData.map(item => `
+                                        <div class="flex items-center gap-1 text-xs">
+                                            <div class="w-2 h-2 rounded-full" style="background-color: ${item.color};"></div>
+                                            <span style="color: #64748B;">${item.name}</span>
                                         </div>
                                     `).join('')}
                                 </div>
-                                <div class="p-4 border-t border-slate-200 flex gap-2">
-                                    <button onclick="state.filters = {tipoProcesso: [], status: [], etapa: [], unidade: [], municipio: [], responsavel: [], situacaoPrazo: [], modalidadeAto: []}; render();" class="flex-1 px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50" style="flex: 1; padding: 0.5rem 1rem; border: 1px solid #cbd5e1; border-radius: 0.5rem;">
-                                        Limpar
-                                    </button>
-                                    <button onclick="closeDrawer()" class="flex-1 px-4 py-2 bg-inema-primary text-white rounded-lg hover:bg-inema-dark" style="flex: 1; padding: 0.5rem 1rem; background: #004b87; color: white; border-radius: 0.5rem;">
-                                        Aplicar
-                                    </button>
+                            </div>
+                            <!-- Bar Chart - Unidade -->
+                            <div class="bg-white rounded-2xl p-4 border shadow-xs" style="border-color: #E2E8F0; border: 1px solid #E2E8F0;">
+                                <h4 class="font-semibold mb-4" style="color: #0F172A;">Processos por Unidade</h4>
+                                ${renderBarChart(unidadeData)}
+                            </div>
+                        </div>
+
+                        <!-- Charts Grid - Row 2 -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                            <!-- Aging -->
+                            <div class="bg-white rounded-2xl p-4 border shadow-xs" style="border-color: #E2E8F0; border: 1px solid #E2E8F0;">
+                                <h4 class="font-semibold mb-4" style="color: #0F172A;">Aging do Estoque (tempo de permanência)</h4>
+                                ${renderBarChart(agingData)}
+                            </div>
+                            <!-- Tempo Médio -->
+                            <div class="bg-white rounded-2xl p-4 border shadow-xs" style="border-color: #E2E8F0; border: 1px solid #E2E8F0;">
+                                <h4 class="font-semibold mb-4" style="color: #0F172A;">Tempo Médio de Análise (dias)</h4>
+                                ${renderBarChart(tempoAnaliseData, 25)}
+                            </div>
+                            <!-- Vencidos por Unidade -->
+                            <div class="bg-white rounded-2xl p-4 border shadow-xs" style="border-color: #E2E8F0; border: 1px solid #E2E8F0;">
+                                <h4 class="font-semibold mb-4" style="color: #0F172A;">Processos Vencidos por Unidade</h4>
+                                ${renderBarChart(vencidosUnidadeData, 100)}
+                            </div>
+                        </div>
+
+                        <!-- Table -->
+                        <div class="mt-4">
+                            <div class="bg-white rounded-2xl border shadow-xs overflow-hidden" style="border-color: #E2E8F0; border: 1px solid #E2E8F0;">
+                                <div class="p-4 border-b flex items-center justify-between" style="border-color: #E2E8F0;">
+                                    <h4 class="font-semibold flex items-center gap-2" style="color: #0F172A;">
+                                        ${Icons.Warning()} Processos Vencidos (Top 5)
+                                    </h4>
+                                    <button class="text-sm hover:underline" style="color: #0F4C3A;">Ver todos</button>
+                                </div>
+                                <div class="overflow-x-auto">
+                                    <table class="w-full text-sm">
+                                        <thead style="background: #F8FAFC;">
+                                            <tr>
+                                                <th class="text-left p-3 font-medium" style="color: #64748B;">Processo</th>
+                                                <th class="text-left p-3 font-medium" style="color: #64748B;">Tipo</th>
+                                                <th class="text-left p-3 font-medium" style="color: #64748B;">Unidade</th>
+                                                <th class="text-left p-3 font-medium" style="color: #64748B;">Etapa</th>
+                                                <th class="text-left p-3 font-medium" style="color: #64748B;">Responsável</th>
+                                                <th class="text-left p-3 font-medium" style="color: #64748B;">Vencido há</th>
+                                                <th class="text-center p-3 font-medium" style="color: #64748B;">Ação</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ${processosVencidos.map((proc, idx) => `
+                                                <tr class="border-t" style="border-color: #F1F5F9;">
+                                                    <td class="p-3 font-medium" style="color: #0F4C3A;">${proc.processo}</td>
+                                                    <td class="p-3" style="color: #64748B;">${proc.tipo}</td>
+                                                    <td class="p-3" style="color: #64748B;">${proc.unidade}</td>
+                                                    <td class="p-3" style="color: #64748B;">${proc.etapa}</td>
+                                                    <td class="p-3" style="color: #64748B;">${proc.responsavel}</td>
+                                                    <td class="p-3">
+                                                        <span class="px-2 py-1 rounded-full text-xs font-medium border" style="background: #FEF2F2; color: #DC2626; border-color: #FECACA;">
+                                                            ${proc.diasVencido} dias
+                                                        </span>
+                                                    </td>
+                                                    <td class="p-3 text-center">
+                                                        <button onclick="showProcessModal(processosVencidos[${idx}])" class="px-3 py-1.5 text-white text-xs rounded-lg transition-colors flex items-center gap-1 mx-auto" style="background: #0F4C3A;" onmouseover="this.style.background='#134E39'" onmouseout="this.style.background='#0F4C3A'">
+                                                            ${Icons.Visibility()} Ver Detalhes
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            `).join('')}
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
-                        <div class="fixed inset-0 bg-black/30 z-40" onclick="closeDrawer()" style="position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 40;"></div>
-                    ` : ''}
+                    </main>
+                </div>
 
-                    <!-- Process Detail Modal -->
-                    ${state.selectedProcess ? `
-                        <div class="fixed inset-0 z-50 flex items-center justify-center modal-overlay animate-fade-in" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 50;">
-                            <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden animate-slide-up" style="background: white; border-radius: 0.75rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); max-width: 42rem; max-height: 90vh; overflow: auto;">
-                                <div class="flex items-center justify-between p-4 border-b border-slate-200 bg-slate-50">
-                                    <h3 class="font-semibold text-slate-800">Detalhamento - ${state.selectedProcess.processo}</h3>
-                                    <button onclick="closeModal()" class="p-1 hover:bg-slate-200 rounded-lg">
-                                        ${Icons.Close()}
-                                    </button>
+                <!-- Filter Drawer -->
+                ${state.filterDrawerOpen ? `
+                    <div class="drawer fixed inset-y-0 right-0 w-96 bg-white shadow-2xl z-50" style="position: fixed; top: 0; right: 0; bottom: 0; width: 24rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); z-index: 50;">
+                        <div class="h-full flex flex-col">
+                            <div class="flex items-center justify-between p-4 border-b" style="border-color: #E2E8F0;">
+                                <div class="flex items-center gap-2">
+                                    ${Icons.Filter()}
+                                    <h3 class="font-semibold" style="color: #0F172A;">Filtros Avançados</h3>
+                                    ${activeFiltersCount() > 0 ? `<span class="text-white text-xs px-2 py-0.5 rounded-full" style="background: #0F4C3A;">${activeFiltersCount()}</span>` : ''}
                                 </div>
-                                <div class="overflow-y-auto max-h-[calc(90vh-80px)] p-4 scrollbar-thin" style="padding: 1rem;">
-                                    <div class="space-y-6">
-                                        <div class="grid grid-cols-2 gap-4">
-                                            <div class="bg-slate-50 rounded-lg p-4">
-                                                <p class="text-xs text-slate-500 uppercase tracking-wide">Tipo de Processo</p>
-                                                <p class="font-medium text-slate-800 mt-1">${state.selectedProcess.tipo}</p>
-                                            </div>
-                                            <div class="bg-slate-50 rounded-lg p-4">
-                                                <p class="text-xs text-slate-500 uppercase tracking-wide">Unidade</p>
-                                                <p class="font-medium text-slate-800 mt-1">${state.selectedProcess.unidade}</p>
-                                            </div>
-                                            <div class="bg-slate-50 rounded-lg p-4">
-                                                <p class="text-xs text-slate-500 uppercase tracking-wide">Etapa Atual</p>
-                                                <p class="font-medium text-slate-800 mt-1">${state.selectedProcess.etapa}</p>
-                                            </div>
-                                            <div class="bg-slate-50 rounded-lg p-4">
-                                                <p class="text-xs text-slate-500 uppercase tracking-wide">Responsável</p>
-                                                <p class="font-medium text-slate-800 mt-1">${state.selectedProcess.responsavel}</p>
-                                            </div>
-                                            <div class="bg-red-50 rounded-lg p-4 col-span-2" style="grid-column: span 2;">
-                                                <p class="text-xs text-red-600 uppercase tracking-wide">Tempo Vencido</p>
-                                                <p class="font-bold text-red-700 text-2xl mt-1">${state.selectedProcess.diasVencido} dias</p>
-                                            </div>
+                                <button onclick="closeDrawer()" class="p-1 hover:bg-slate-100 rounded">
+                                    ${Icons.Close()}
+                                </button>
+                            </div>
+                            <div class="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin" style="flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 1rem;">
+                                ${Object.entries(filtrosOptions).map(([key, options]) => `
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2" style="color: #334155;">
+                                            ${key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                                        </label>
+                                        <div class="flex flex-wrap gap-2">
+                                            ${options.map(opt => `
+                                                <button onclick="toggleFilter('${key}', '${opt}')" class="px-3 py-1.5 text-xs rounded-full border transition-colors" style="${state.filters[key].includes(opt) ? 'background: #0F4C3A; color: white; border-color: #0F4C3A;' : 'background: white; color: #475569; border-color: #CBD5E1;'}">
+                                                    ${opt}
+                                                </button>
+                                            `).join('')}
                                         </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <div class="p-4 border-t flex gap-2" style="border-color: #E2E8F0;">
+                                <button onclick="state.filters = {tipoProcesso: [], status: [], etapa: [], unidade: [], municipio: [], responsavel: [], situacaoPrazo: [], modalidadeAto: []}; render();" class="flex-1 px-4 py-2 border rounded-lg hover:bg-slate-50" style="border-color: #CBD5E1; color: #475569;">
+                                    Limpar
+                                </button>
+                                <button onclick="closeDrawer()" class="flex-1 px-4 py-2 text-white rounded-lg" style="background: #0F4C3A;">
+                                    Aplicar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fixed inset-0 bg-black/30 z-40" onclick="closeDrawer()" style="position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 40;"></div>
+                ` : ''}
 
-                                        <div>
-                                            <h4 class="font-semibold text-slate-800 mb-3 flex items-center gap-2">
-                                                ${Icons.Schedule()} Histórico de Tramitação
-                                            </h4>
-                                            <div class="border border-slate-200 rounded-lg overflow-hidden">
-                                                <table class="w-full text-sm">
-                                                    <thead class="bg-slate-50">
-                                                        <tr>
-                                                            <th class="text-left p-3 font-medium text-slate-600">Data</th>
-                                                            <th class="text-left p-3 font-medium text-slate-600">Etapa</th>
-                                                            <th class="text-left p-3 font-medium text-slate-600">Ação</th>
-                                                            <th class="text-left p-3 font-medium text-slate-600">Usuário</th>
+                <!-- Process Detail Modal -->
+                ${state.selectedProcess ? `
+                    <div class="fixed inset-0 z-50 flex items-center justify-center modal-overlay animate-fade-in" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 50;">
+                        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden animate-slide-up" style="background: white; border-radius: 0.75rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); max-width: 42rem; max-height: 90vh; overflow: auto;">
+                            <div class="flex items-center justify-between p-4 border-b" style="background: #F8FAFC; border-color: #E2E8F0;">
+                                <h3 class="font-semibold" style="color: #0F172A;">Detalhamento - ${state.selectedProcess.processo}</h3>
+                                <button onclick="closeModal()" class="p-1 hover:bg-slate-200 rounded-lg">
+                                    ${Icons.Close()}
+                                </button>
+                            </div>
+                            <div class="p-4 scrollbar-thin" style="padding: 1rem;">
+                                <div class="space-y-6">
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="rounded-lg p-4" style="background: #F8FAFC;">
+                                            <p class="text-xs uppercase tracking-wide" style="color: #64748B;">Tipo de Processo</p>
+                                            <p class="font-medium mt-1" style="color: #0F172A;">${state.selectedProcess.tipo}</p>
+                                        </div>
+                                        <div class="rounded-lg p-4" style="background: #F8FAFC;">
+                                            <p class="text-xs uppercase tracking-wide" style="color: #64748B;">Unidade</p>
+                                            <p class="font-medium mt-1" style="color: #0F172A;">${state.selectedProcess.unidade}</p>
+                                        </div>
+                                        <div class="rounded-lg p-4" style="background: #F8FAFC;">
+                                            <p class="text-xs uppercase tracking-wide" style="color: #64748B;">Etapa Atual</p>
+                                            <p class="font-medium mt-1" style="color: #0F172A;">${state.selectedProcess.etapa}</p>
+                                        </div>
+                                        <div class="rounded-lg p-4" style="background: #F8FAFC;">
+                                            <p class="text-xs uppercase tracking-wide" style="color: #64748B;">Responsável</p>
+                                            <p class="font-medium mt-1" style="color: #0F172A;">${state.selectedProcess.responsavel}</p>
+                                        </div>
+                                        <div class="rounded-lg p-4 col-span-2" style="background: #FEF2F2; grid-column: span 2;">
+                                            <p class="text-xs uppercase tracking-wide" style="color: #DC2626;">Tempo Vencido</p>
+                                            <p class="font-bold text-2xl mt-1" style="color: #DC2626;">${state.selectedProcess.diasVencido} dias</p>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h4 class="font-semibold mb-3 flex items-center gap-2" style="color: #0F172A;">
+                                            ${Icons.Schedule()} Histórico de Tramitação
+                                        </h4>
+                                        <div class="rounded-lg border overflow-hidden" style="border-color: #E2E8F0;">
+                                            <table class="w-full text-sm">
+                                                <thead style="background: #F8FAFC;">
+                                                    <tr>
+                                                        <th class="text-left p-3 font-medium" style="color: #64748B;">Data</th>
+                                                        <th class="text-left p-3 font-medium" style="color: #64748B;">Etapa</th>
+                                                        <th class="text-left p-3 font-medium" style="color: #64748B;">Ação</th>
+                                                        <th class="text-left p-3 font-medium" style="color: #64748B;">Usuário</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    ${historicoTramitacao.map(item => `
+                                                        <tr class="border-t" style="border-color: #F1F5F9;">
+                                                            <td class="p-3" style="color: #64748B;">${item.data} ${item.hora}</td>
+                                                            <td class="p-3" style="color: #0F172A;">${item.etapa}</td>
+                                                            <td class="p-3" style="color: #64748B;">${item.acao}</td>
+                                                            <td class="p-3" style="color: #64748B;">${item.usuario}</td>
                                                         </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        ${historicoTramitacao.map(item => `
-                                                            <tr class="border-t border-slate-100">
-                                                                <td class="p-3 text-slate-600">${item.data} ${item.hora}</td>
-                                                                <td class="p-3 text-slate-800">${item.etapa}</td>
-                                                                <td class="p-3 text-slate-600">${item.acao}</td>
-                                                                <td class="p-3 text-slate-600">${item.usuario}</td>
-                                                            </tr>
-                                                        `).join('')}
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                                    `).join('')}
+                                                </tbody>
+                                            </table>
                                         </div>
+                                    </div>
 
-                                        <div class="flex gap-2">
-                                            <button class="flex-1 px-4 py-2 bg-inema-primary text-white rounded-lg hover:bg-inema-dark flex items-center justify-center gap-2" style="flex: 1; padding: 0.5rem 1rem; background: #004b87; color: white; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
-                                                ${Icons.Visibility()} Ver Processo Completo
-                                            </button>
-                                            <button class="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 flex items-center gap-2" style="padding: 0.5rem 1rem; border: 1px solid #cbd5e1; border-radius: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                                                ${Icons.FileCopy()} Copy
-                                            </button>
-                                        </div>
+                                    <div class="flex gap-2">
+                                        <button class="flex-1 px-4 py-2 text-white rounded-lg flex items-center justify-center gap-2 transition-colors" style="background: #0F4C3A;" onmouseover="this.style.background='#134E39'" onmouseout="this.style.background='#0F4C3A'">
+                                            ${Icons.Visibility()} Ver Processo Completo
+                                        </button>
+                                        <button class="px-4 py-2 border rounded-lg flex items-center gap-2 hover:bg-slate-50" style="border-color: #CBD5E1; color: #475569;">
+                                            ${Icons.FileCopy()} Copy
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    ` : ''}
-                </div>
+                    </div>
+                ` : ''}
             `;
         }
 
