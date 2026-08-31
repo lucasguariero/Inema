@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regulação – Dashboard Gerencial | INEMA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/recharts@4/umd/Recharts.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        inema: {
+                            primary: '#004b87',
+                            secondary: '#0284c7',
+                            dark: '#022c4a',
+                            light: '#e8f4f8',
+                            success: '#059669',
+                            warning: '#d97706',
+                            danger: '#dc2626'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f1f5f9; }
+        .sidebar { background: linear-gradient(180deg, #022c4a 0%, #0a3d5c 100%); }
+        .card-hover { transition: all 0.2s ease; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 8px 25px -5px rgba(0,0,0,0.1); }
+        .drawer { transition: transform 0.3s ease; }
+        .drawer-open { transform: translateX(0); }
+        .drawer-closed { transform: translateX(100%); }
+        .modal-overlay { background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
+        .kpi-card { border-left: 4px solid; }
+        .kpi-card.blue { border-color: #004b87; }
+        .kpi-card.green { border-color: #059669; }
+        .kpi-card.red { border-color: #dc2626; }
+        .kpi-card.orange { border-color: #d97706; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fadeIn 0.3s ease; }
+        .animate-slide-up { animation: slideUp 0.4s ease; }
+        .scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+        .scrollbar-thin::-webkit-scrollbar-track { background: #f1f5f9; }
+        .scrollbar-thin::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useMemo } = React;
+
+        // Icons as components
+        const Icons = {
+            Menu: () => <span className="material-icons-round">menu</span>,
+            Search: () => <span className="material-icons-round">search</span>,
+            Notifications: () => <span className="material-icons-round">notifications</span>,
+            Person: () => <span className="material-icons-round">person</span>,
+            Home: () => <span className="material-icons-round">home</span>,
+            Gavel: () => <span className="material-icons-round">gavel</span>,
+            Description: () => <span className="material-icons-round">description</span>,
+            MonitorHeart: () => <span className="material-icons-round">monitor_heart</span>,
+            Science: () => <span className="material-icons-round">science</span>,
+            Map: () => <span className="material-icons-round">map</span>,
+            Assessment: () => <span className="material-icons-round">assessment</span>,
+            Settings: () => <span className="material-icons-round">settings</span>,
+            Calendar: () => <span className="material-icons-round">calendar_today</span>,
+            Filter: () => <span className="material-icons-round">filter_list</span>,
+            Download: () => <span className="material-icons-round">download</span>,
+            ExpandMore: () => <span className="material-icons-round">expand_more</span>,
+            ExpandLess: () => <span className="material-icons-round">expand_less</span>,
+            Close: () => <span className="material-icons-round">close</span>,
+            ArrowBack: () => <span className="material-icons-round">arrow_back</span>,
+            ArrowForward: () => <span className="material-icons-round">arrow_forward</span>,
+            CheckCircle: () => <span className="material-icons-round">check_circle</span>,
+            Warning: () => <span className="material-icons-round">warning</span>,
+            Schedule: () => <span className="material-icons-round">schedule</span>,
+            TrendingUp: () => <span className="material-icons-round">trending_up</span>,
+            TrendingDown: () => <span className="material-icons-round">trending_down</span>,
+            FactCheck: () => <span className="material-icons-round">fact_check</span>,
+            PersonPin: () => <span className="material-icons-round">person_pin</span>,
+            AccountBalance: () => <span className="material-icons-round">account_balance</span>,
+            FileCopy: () => <span className="material-icons-round">file_copy</span>,
+            Visibility: () => <span className="material-icons-round">visibility</span>,
+            PictureAsPdf: () => <span className="material-icons-round">picture_as_pdf</span>,
+            TableChart: () => <span className="material-icons-round">table_chart</span>,
+            Code: () => <span className="material-icons-round">code</span>,
+        };
+
+        // Data
+        const kpiData = [
+            { label: 'Protocolados', value: '1.245', change: 12, type: 'blue' },
+            { label: 'Em análise', value: '2.356', change: -3, type: 'blue' },
+            { label: 'Pendentes', value: '873', change: 8, type: 'orange' },
+            { label: 'Vencidos', value: '198', change: 15, type: 'red' },
+            { label: 'Concluídos', value: '1.987', change: 18, type: 'green' },
+            { label: 'Atos emitidos', value: '1.604', change: 20, type: 'green' },
+        ];
+
+        const lineChartData = [
+            { name: 'Jan/26', entrada: 1245, saida: 987 },
+            { name: 'Fev/26', entrada: 1356, saida: 1120 },
+            { name: 'Mar/26', entrada: 1189, saida: 1456 },
+        ];
+
+        const donutChartData = [
+            { name: 'Em análise', value: 54, color: '#004b87' },
+            { name: 'Pendentes', value: 20, color: '#d97706' },
+            { name: 'Aguard. pagamento', value: 8, color: '#6b7280' },
+            { name: 'Condicionantes', value: 6, color: '#8b5cf6' },
+            { name: 'Outros', value: 12, color: '#9ca3af' },
+        ];
+
+        const unidadeData = [
+            { name: 'DIRRE', value: 1254 },
+            { name: 'DIREC', value: 856 },
+            { name: 'DIBA', value: 642 },
+            { name: 'DILIC', value: 511 },
+            { name: 'DISUC', value: 309 },
+            { name: 'Outras', value: 254 },
+        ];
+
+        const agingData = [
+            { name: '0-15 dias', value: 412, color: '#059669' },
+            { name: '16-30 dias', value: 678, color: '#10b981' },
+            { name: '31-60 dias', value: 945, color: '#f59e0b' },
+            { name: '61-90 dias', value: 612, color: '#f97316' },
+            { name: '91-180 dias', value: 403, color: '#ef4444' },
+            { name: '> 180 dias', value: 198, color: '#dc2626' },
+        ];
+
+        const tempoAnaliseData = [
+            { name: 'Triagem', value: 2.3 },
+            { name: 'Análise técnica', value: 18.7 },
+            { name: 'Coordenação', value: 5.2 },
+            { name: 'Diretoria', value: 8.1 },
+            { name: 'Publicação', value: 3.4 },
+        ];
+
+        const vencidosUnidadeData = [
+            { name: 'DIRRE', value: 78 },
+            { name: 'DIBIO', value: 46 },
+            { name: 'DILIC', value: 34 },
+            { name: 'DIREC', value: 25 },
+            { name: 'DISUC', value: 15 },
+        ];
+
+        const processosVencidos = [
+            { processo: 'SEIA-REG-2024/001234', tipo: 'Licenciamento Ambiental', unidade: 'DIRRE', etapa: 'Análise Técnica', responsavel: 'João Silva', diasVencido: 32 },
+            { processo: 'SEIA-REG-2024/001198', tipo: 'Autorização Ambiental', unidade: 'DIBIO', etapa: 'Análise Técnica', responsavel: 'Maria Santos', diasVencido: 28 },
+            { processo: 'SEIA-REG-2024/001145', tipo: 'Licenciamento Ambiental', unidade: 'DILIC', etapa: 'Coordenação', responsavel: 'Carlos Lima', diasVencido: 25 },
+            { processo: 'SEIA-REG-2024/001089', tipo: 'Outorga', unidade: 'DIRRE', etapa: 'Análise Técnica', responsavel: 'João Silva', diasVencido: 22 },
+            { processo: 'SEIA-REG-2024/001077', tipo: 'Autorização Ambiental', unidade: 'DIREC', etapa: 'Diretoria', responsavel: 'Ana Paula', diasVencido: 19 },
+        ];
+
+        const filtrosOptions = {
+            tipoProcesso: ['Licenciamento Ambiental', 'Autorização Ambiental', 'Outorga', 'Licença Prévia', 'Licença de Operação'],
+            status: ['Em análise', 'Pendente', 'Aguardando pagamento', 'Com condicionantes', 'Arquivado'],
+            etapa: ['Triagem', 'Análise Técnica', 'Coordenação', 'Diretoria', 'Publicação'],
+            unidade: ['DIRRE', 'DIREC', 'DIBA', 'DILIC', 'DISUC', 'DIBIO'],
+            municipio: ['Salvador', 'Feira de Santana', 'Vitória da Conquista', 'Ilhéus', 'Porto Seguro', 'Outros'],
+            responsavel: ['João Silva', 'Maria Santos', 'Carlos Lima', 'Ana Paula', 'Pedro Santos'],
+            situacaoPrazo: ['No prazo', 'A vencer (5 dias)', 'Vencido'],
+            modalidadeAto: ['Licença', 'Autorização', 'Outorga', 'Certidão', 'Parecer'],
+        };
+
+        const historicoTramitacao = [
+            { data: '15/08/2024', hora: '14:32', etapa: 'Análise Técnica', usuario: 'João Silva', acao: 'Parecer técnico solicitado', observacao: 'Solicitação de informação adicional ao requerente' },
+            { data: '12/08/2024', hora: '09:15', etapa: 'Análise Técnica', usuario: 'Maria Santos', acao: 'Análise iniciada', observacao: 'Processo distribuído para análise técnica' },
+            { data: '10/08/2024', hora: '11:45', etapa: 'Triagem', usuario: 'Sistema', acao: 'Protocolado', observacao: 'Entrada no módulo de regulação' },
+        ];
+
+        // Filter Drawer Component
+        const FilterDrawer = ({ isOpen, onClose }) => {
+            const [filters, setFilters] = useState({
+                tipoProcesso: [],
+                status: [],
+                etapa: [],
+                unidade: [],
+                municipio: [],
+                responsavel: [],
+                situacaoPrazo: [],
+                modalidadeAto: [],
+            });
+
+            const toggleFilter = (category, value) => {
+                setFilters(prev => ({
+                    ...prev,
+                    [category]: prev[category].includes(value)
+                        ? prev[category].filter(v => v !== value)
+                        : [...prev[category], value]
+                }));
+            };
+
+            const activeFiltersCount = Object.values(filters).flat().length;
+
+            return (
+                <div className={`drawer fixed inset-y-0 right-0 w-96 bg-white shadow-2xl z-50 ${isOpen ? 'drawer-open' : 'drawer-closed'}`}>
+                    <div className="h-full flex flex-col">
+                        <div className="flex items-center justify-between p-4 border-b border-slate-200">
+                            <div className="flex items-center gap-2">
+                                <Icons.Filter />
+                                <h3 className="font-semibold text-slate-800">Filtros Avançados</h3>
+                                {activeFiltersCount > 0 && (
+                                    <span className="bg-inema-primary text-white text-xs px-2 py-0.5 rounded-full">{activeFiltersCount}</span>
+                                )}
+                            </div>
+                            <button onClick={onClose} className="p-1 hover:bg-slate-100 rounded">
+                                <Icons.Close />
+                            </button>
+                        </div>
+                        <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin">
+                            {Object.entries(filtrosOptions).map(([key, options]) => (
+                                <div key={key}>
+                                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                                        {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                                    </label>
+                                    <div className="flex flex-wrap gap-2">
+                                        {options.map(opt => (
+                                            <button
+                                                key={opt}
+                                                onClick={() => toggleFilter(key, opt)}
+                                                className={`px-3 py-1.5 text-xs rounded-full border transition-colors ${
+                                                    filters[key].includes(opt)
+                                                        ? 'bg-inema-primary text-white border-inema-primary'
+                                                        : 'bg-white text-slate-600 border-slate-300 hover:border-inema-primary'
+                                                }`}
+                                            >
+                                                {opt}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="p-4 border-t border-slate-200 flex gap-2">
+                            <button
+                                onClick={() => setFilters({
+                                    tipoProcesso: [], status: [], etapa: [], unidade: [],
+                                    municipio: [], responsavel: [], situacaoPrazo: [], modalidadeAto: []
+                                })}
+                                className="flex-1 px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50"
+                            >
+                                Limpar
+                            </button>
+                            <button
+                                onClick={onClose}
+                                className="flex-1 px-4 py-2 bg-inema-primary text-white rounded-lg hover:bg-inema-dark"
+                            >
+                                Aplicar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Modal Component
+        const Modal = ({ isOpen, onClose, title, children }) => {
+            if (!isOpen) return null;
+            return (
+                <div className="fixed inset-0 z-50 flex items-center justify-center modal-overlay animate-fade-in" onClick={onClose}>
+                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden animate-slide-up" onClick={e => e.stopPropagation()}>
+                        <div className="flex items-center justify-between p-4 border-b border-slate-200 bg-slate-50">
+                            <h3 className="font-semibold text-slate-800">{title}</h3>
+                            <button onClick={onClose} className="p-1 hover:bg-slate-200 rounded-lg">
+                                <Icons.Close />
+                            </button>
+                        </div>
+                        <div className="overflow-y-auto max-h-[calc(90vh-80px)] p-4 scrollbar-thin">
+                            {children}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // KPI Card Component
+        const KPICard = ({ label, value, change, type }) => {
+            const isPositive = change > 0;
+            const isAlert = type === 'red';
+
+            return (
+                <div className={`kpi-card kpi-card.${type} bg-white rounded-xl p-4 card-hover border border-slate-200 shadow-sm`}>
+                    <div className="flex items-start justify-between">
+                        <div>
+                            <p className="text-sm text-slate-500 font-medium">{label}</p>
+                            <p className={`text-2xl font-bold mt-1 ${isAlert ? 'text-inema-danger' : 'text-slate-800'}`}>{value}</p>
+                        </div>
+                        <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
+                            type === 'green' ? 'bg-green-50 text-green-700' :
+                            type === 'red' ? 'bg-red-50 text-red-700' :
+                            type === 'orange' ? 'bg-amber-50 text-amber-700' :
+                            'bg-blue-50 text-blue-700'
+                        }`}>
+                            {isPositive ? <Icons.TrendingUp /> : <Icons.TrendingDown />}
+                            <span>{Math.abs(change)}%</span>
+                        </div>
+                    </div>
+                    <p className="text-xs text-slate-400 mt-2">vs. período anterior</p>
+                </div>
+            );
+        };
+
+        // Chart Components
+        const LineChartComponent = () => (
+            <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm h-72">
+                <h4 className="font-semibold text-slate-800 mb-4">Entrada x Saída de Processos</h4>
+                <Recharts.ResponsiveContainer width="100%" height={220}>
+                    <Recharts.LineChart data={lineChartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                        <Recharts.CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                        <Recharts.XAxis dataKey="name" stroke="#64748b" fontSize={12} />
+                        <Recharts.YAxis stroke="#64748b" fontSize={12} />
+                        <Recharts.Tooltip
+                            contentStyle={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px' }}
+                            formatter={(value) => [value, '']}
+                        />
+                        <Recharts.Line type="monotone" dataKey="entrada" name="Entrada" stroke="#004b87" strokeWidth={3} dot={{ r: 4, fill: '#004b87' }} />
+                        <Recharts.Line type="monotone" dataKey="saida" name="Saída" stroke="#059669" strokeWidth={3} dot={{ r: 4, fill: '#059669' }} />
+                        <Recharts.Legend />
+                    </Recharts.LineChart>
+                </Recharts.ResponsiveContainer>
+            </div>
+        );
+
+        const DonutChartComponent = ({ onClick }) => (
+            <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm h-72">
+                <h4 className="font-semibold text-slate-800 mb-4">Processos por Status</h4>
+                <div className="flex items-center justify-center">
+                    <Recharts.ResponsiveContainer width="100%" height={220}>
+                        <Recharts.PieChart>
+                            <Pie
+                                data={donutChartData}
+                                cx="50%"
+                                cy="50%"
+                                innerRadius={60}
+                                outerRadius={80}
+                                paddingAngle={2}
+                                dataKey="value"
+                                onClick={onClick}
+                                style={{ cursor: 'pointer' }}
+                            >
+                                {donutChartData.map((entry, index) => (
+                                    <Recharts.Cell key={`cell-${index}`} fill={entry.color} />
+                                ))}
+                            </Pie>
+                            <Recharts.Tooltip
+                                contentStyle={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px' }}
+                                formatter={(value) => [`${value}%`, '']}
+                            />
+                        </Recharts.PieChart>
+                    </Recharts.ResponsiveContainer>
+                </div>
+                <div className="flex flex-wrap justify-center gap-2 mt-2">
+                    {donutChartData.map((item, idx) => (
+                        <div key={idx} className="flex items-center gap-1 text-xs">
+                            <div className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }}></div>
+                            <span className="text-slate-600">{item.name}</span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+
+        const BarChartHorizontal = ({ data, title, colors, showValue = true }) => (
+            <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm h-72">
+                <h4 className="font-semibold text-slate-800 mb-4">{title}</h4>
+                <Recharts.ResponsiveContainer width="100%" height={220}>
+                    <Recharts.BarChart data={data} layout="vertical" margin={{ top: 5, right: 30, left: 80, bottom: 5 }}>
+                        <Recharts.CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" horizontal={false} />
+                        <Recharts.XAxis type="number" stroke="#64748b" fontSize={12} />
+                        <Recharts.YAxis dataKey="name" type="category" stroke="#64748b" fontSize={12} width={70} />
+                        <Recharts.Tooltip
+                            contentStyle={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px' }}
+                            formatter={(value) => [showValue ? value : value, '']}
+                        />
+                        <Recharts.Bar dataKey="value" radius={[0, 4, 4, 0]}>
+                            {data.map((entry, index) => (
+                                <Recharts.Cell key={`cell-${index}`} fill={entry.color || (colors ? colors[index % colors.length] : '#004b87')} />
+                            ))}
+                        </Recharts.Bar>
+                    </Recharts.BarChart>
+                </Recharts.ResponsiveContainer>
+            </div>
+        );
+
+        // Process Detail Modal
+        const ProcessDetailModal = ({ processo, isOpen, onClose }) => {
+            if (!processo) return null;
+
+            return (
+                <Modal isOpen={isOpen} onClose={onClose} title={`Detalhamento - ${processo.processo}`}>
+                    <div className="space-y-6">
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="bg-slate-50 rounded-lg p-4">
+                                <p className="text-xs text-slate-500 uppercase tracking-wide">Tipo de Processo</p>
+                                <p className="font-medium text-slate-800 mt-1">{processo.tipo}</p>
+                            </div>
+                            <div className="bg-slate-50 rounded-lg p-4">
+                                <p className="text-xs text-slate-500 uppercase tracking-wide">Unidade</p>
+                                <p className="font-medium text-slate-800 mt-1">{processo.unidade}</p>
+                            </div>
+                            <div className="bg-slate-50 rounded-lg p-4">
+                                <p className="text-xs text-slate-500 uppercase tracking-wide">Etapa Atual</p>
+                                <p className="font-medium text-slate-800 mt-1">{processo.etapa}</p>
+                            </div>
+                            <div className="bg-slate-50 rounded-lg p-4">
+                                <p className="text-xs text-slate-500 uppercase tracking-wide">Responsável</p>
+                                <p className="font-medium text-slate-800 mt-1">{processo.responsavel}</p>
+                            </div>
+                            <div className="bg-red-50 rounded-lg p-4 col-span-2">
+                                <p className="text-xs text-red-600 uppercase tracking-wide">Tempo Vencido</p>
+                                <p className="font-bold text-red-700 text-2xl mt-1">{processo.diasVencido} dias</p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 className="font-semibold text-slate-800 mb-3 flex items-center gap-2">
+                                <Icons.Schedule /> Histórico de Tramitação
+                            </h4>
+                            <div className="border border-slate-200 rounded-lg overflow-hidden">
+                                <table className="w-full text-sm">
+                                    <thead className="bg-slate-50">
+                                        <tr>
+                                            <th className="text-left p-3 font-medium text-slate-600">Data</th>
+                                            <th className="text-left p-3 font-medium text-slate-600">Etapa</th>
+                                            <th className="text-left p-3 font-medium text-slate-600">Ação</th>
+                                            <th className="text-left p-3 font-medium text-slate-600">Usuário</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {historicoTramitacao.map((item, idx) => (
+                                            <tr key={idx} className="border-t border-slate-100">
+                                                <td className="p-3 text-slate-600">{item.data} {item.hora}</td>
+                                                <td className="p-3 text-slate-800">{item.etapa}</td>
+                                                <td className="p-3 text-slate-600">{item.acao}</td>
+                                                <td className="p-3 text-slate-600">{item.usuario}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div className="flex gap-2">
+                            <button className="flex-1 px-4 py-2 bg-inema-primary text-white rounded-lg hover:bg-inema-dark flex items-center justify-center gap-2">
+                                <Icons.Visibility /> Ver Processo Completo
+                            </button>
+                            <button className="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 flex items-center gap-2">
+                                <Icons.FileCopy /> Copy
+                            </button>
+                        </div>
+                    </div>
+                </Modal>
+            );
+        };
+
+        // Table Component
+        const ProcessTable = ({ onProcessClick }) => (
+            <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                <div className="p-4 border-b border-slate-200 flex items-center justify-between">
+                    <h4 className="font-semibold text-slate-800 flex items-center gap-2">
+                        <Icons.Warning className="text-inema-danger" /> Processos Vencidos (Top 5)
+                    </h4>
+                    <button className="text-sm text-inema-primary hover:underline">Ver todos</button>
+                </div>
+                <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                        <thead className="bg-slate-50">
+                            <tr>
+                                <th className="text-left p-3 font-medium text-slate-600">Processo</th>
+                                <th className="text-left p-3 font-medium text-slate-600">Tipo</th>
+                                <th className="text-left p-3 font-medium text-slate-600">Unidade</th>
+                                <th className="text-left p-3 font-medium text-slate-600">Etapa</th>
+                                <th className="text-left p-3 font-medium text-slate-600">Responsável</th>
+                                <th className="text-left p-3 font-medium text-slate-600">Vencido há</th>
+                                <th className="text-center p-3 font-medium text-slate-600">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {processosVencidos.map((proc, idx) => (
+                                <tr key={idx} className="border-t border-slate-100 hover:bg-slate-50">
+                                    <td className="p-3 font-medium text-inema-primary">{proc.processo}</td>
+                                    <td className="p-3 text-slate-600">{proc.tipo}</td>
+                                    <td className="p-3 text-slate-600">{proc.unidade}</td>
+                                    <td className="p-3 text-slate-600">{proc.etapa}</td>
+                                    <td className="p-3 text-slate-600">{proc.responsavel}</td>
+                                    <td className="p-3">
+                                        <span className="px-2 py-1 bg-red-50 text-red-700 rounded-full text-xs font-medium">
+                                            {proc.diasVencido} dias
+                                        </span>
+                                    </td>
+                                    <td className="p-3 text-center">
+                                        <button
+                                            onClick={() => onProcessClick(proc)}
+                                            className="px-3 py-1.5 bg-inema-primary text-white text-xs rounded-lg hover:bg-inema-dark flex items-center gap-1 mx-auto"
+                                        >
+                                            <Icons.Visibility /> Ver Detalhes
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        );
+
+        // Export Dropdown
+        const ExportDropdown = () => {
+            const [isOpen, setIsOpen] = useState(false);
+
+            return (
+                <div className="relative">
+                    <button
+                        onClick={() => setIsOpen(!isOpen)}
+                        className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 text-slate-700"
+                    >
+                        <Icons.Download /> Exportar
+                    </button>
+                    {isOpen && (
+                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-slate-200 py-1 z-10 animate-fade-in">
+                            <button className="w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2">
+                                <Icons.PictureAsPdf /> PDF
+                            </button>
+                            <button className="w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2">
+                                <Icons.TableChart /> Excel (XLSX)
+                            </button>
+                            <button className="w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2">
+                                <Icons.Code /> CSV
+                            </button>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        // Main App Component
+        const App = () => {
+            const [sidebarOpen, setSidebarOpen] = useState(true);
+            const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
+            const [selectedProcess, setSelectedProcess] = useState(null);
+            const [dateRange, setDateRange] = useState('01/01/2026 a 31/03/2026');
+
+            const handleProcessClick = (processo) => {
+                setSelectedProcess(processo);
+            };
+
+            const handleDonutClick = () => {
+                setSelectedProcess(processosVencidos[0]);
+            };
+
+            return (
+                <div className="min-h-screen bg-slate-100">
+                    {/* Header */}
+                    <header className="bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
+                        <div className="flex items-center gap-4">
+                            <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 hover:bg-slate-100 rounded-lg">
+                                <Icons.Menu />
+                            </button>
+                            <div className="flex items-center gap-3">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40'%3E%3Crect fill='%23004b87' width='100' height='40'/%3E%3Ctext x='50' y='25' fill='white' font-family='Arial' font-size='16' font-weight='bold' text-anchor='middle'%3EINEMA%3C/text%3E%3C/svg%3E" alt="INEMA" className="h-8" />
+                                <span className="text-slate-400">|</span>
+                                <span className="text-sm font-medium text-slate-600">SEIA</span>
+                            </div>
+                        </div>
+
+                        <div className="flex-1 max-w-xl mx-8">
+                            <div className="relative">
+                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                                    <Icons.Search />
+                                </span>
+                                <input
+                                    type="text"
+                                    placeholder="Buscar processos, requerentes, atos..."
+                                    className="w-full pl-10 pr-4 py-2 bg-slate-100 border border-transparent rounded-lg text-sm focus:bg-white focus:border-inema-primary focus:outline-none"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                            <button className="p-2 relative hover:bg-slate-100 rounded-lg">
+                                <Icons.Notifications />
+                                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                            </button>
+                            <button className="flex items-center gap-2 px-3 py-1.5 hover:bg-slate-100 rounded-lg">
+                                <div className="w-8 h-8 bg-inema-primary rounded-full flex items-center justify-center text-white text-sm font-medium">LM</div>
+                                <span className="text-sm font-medium text-slate-700">Lucas Manager</span>
+                            </button>
+                        </div>
+                    </header>
+
+                    <div className="flex">
+                        {/* Sidebar */}
+                        <aside className={`sidebar text-white transition-all duration-300 ${sidebarOpen ? 'w-64' : 'w-16'} min-h-[calc(100vh-64px)]`}>
+                            <nav className="py-4">
+                                <ul className="space-y-1 px-2">
+                                    <li>
+                                        <a href="index.html" className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition-colors">
+                                            <Icons.Home />
+                                            {sidebarOpen && <span>Início</span>}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="fiscalizacao.html" className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition-colors">
+                                            <Icons.Gavel />
+                                            {sidebarOpen && <span>Fiscalização</span>}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition-colors">
+                                            <Icons.Description />
+                                            {sidebarOpen && <span>Licenciamento</span>}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition-colors">
+                                            <Icons.AccountBalance />
+                                            {sidebarOpen && <span>Regulação/Outorga</span>}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white/20">
+                                            <Icons.Assessment />
+                                            {sidebarOpen && <span>Relatórios Gerenciais</span>}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition-colors">
+                                            <Icons.Map />
+                                            {sidebarOpen && <span>Geoprocessamento</span>}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition-colors">
+                                            <Icons.Settings />
+                                            {sidebarOpen && <span>Configurações</span>}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </aside>
+
+                        {/* Main Content */}
+                        <main className="flex-1 p-6">
+                            {/* Page Header */}
+                            <div className="mb-6">
+                                <div className="flex items-start justify-between">
+                                    <div>
+                                        <h1 className="text-2xl font-bold text-slate-800">Regulação – Dashboard Gerencial</h1>
+                                        <p className="text-slate-500 mt-1 max-w-2xl">
+                                            Acompanhamento em tempo real do desempenho dos processos de regulação, controle de prazos, produtividade, gargalos e apoio à decisão.
+                                        </p>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        {/* Date Range Picker */}
+                                        <div className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 rounded-lg">
+                                            <Icons.Calendar className="text-slate-400" />
+                                            <span className="text-sm text-slate-700">{dateRange}</span>
+                                        </div>
+
+                                        {/* Filters Button */}
+                                        <button
+                                            onClick={() => setFilterDrawerOpen(true)}
+                                            className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 text-slate-700"
+                                        >
+                                            <Icons.Filter /> Filtros
+                                        </button>
+
+                                        {/* Export Button */}
+                                        <ExportDropdown />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* KPI Cards */}
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+                                {kpiData.map((kpi, idx) => (
+                                    <KPICard key={idx} {...kpi} />
+                                ))}
+                            </div>
+
+                            {/* Charts Grid - Row 1 */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                                <LineChartComponent />
+                                <DonutChartComponent onClick={handleDonutClick} />
+                                <BarChartHorizontal data={unidadeData} title="Processos por Unidade" colors={['#004b87', '#0284c7', '#0369a1', '#075985', '#0c4a6e', '#082f49']} />
+                            </div>
+
+                            {/* Charts Grid - Row 2 */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                                <BarChartHorizontal data={agingData} title="Aging do Estoque (tempo de permanência)" />
+                                <BarChartHorizontal data={tempoAnaliseData} title="Tempo Médio de Análise (dias)" colors={['#059669', '#10b981', '#34d399', '#6ee7b7', '#a7f3d0']} />
+                                <BarChartHorizontal data={vencidosUnidadeData} title="Processos Vencidos por Unidade" colors={['#dc2626', '#ef4444', '#f87171', '#fca5a5', '#fecaca']} />
+                            </div>
+
+                            {/* Table */}
+                            <div className="mt-4">
+                                <ProcessTable onProcessClick={handleProcessClick} />
+                            </div>
+                        </main>
+                    </div>
+
+                    {/* Filter Drawer */}
+                    <FilterDrawer isOpen={filterDrawerOpen} onClose={() => setFilterDrawerOpen(false)} />
+
+                    {/* Process Detail Modal */}
+                    <ProcessDetailModal
+                        processo={selectedProcess}
+                        isOpen={!!selectedProcess}
+                        onClose={() => setSelectedProcess(null)}
+                    />
+
+                    {/* Overlay for drawer */}
+                    {filterDrawerOpen && (
+                        <div className="fixed inset-0 bg-black/30 z-40" onClick={() => setFilterDrawerOpen(false)}></div>
+                    )}
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
