@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal INEMA - Relatórios Gerenciais v2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface": "#f8f9fb", "surface-container-lowest": "#ffffff", "surface-container-low": "#f3f4f6",
+                        "surface-container": "#edeef0", "on-surface": "#191c1e", "on-surface-variant": "#404945",
+                        "primary": "#002f25", "primary-container": "#0a473a", "on-primary-container": "#7eb5a4",
+                        "secondary": "#2a6862", "error": "#ba1a1a", "background": "#f8f9fb",
+                        "text-muted": "#64748b", "border-subtle": "#e5e7eb", "sidebar-active": "#d1e1de",
+                        "inema": { "green": "#0F4C3A", "emerald": "#10B981", "amber": "#F59E0B", "rose": "#E11D48", "ocean": "#0284C7", "violet": "#8B5CF6" }
+                    },
+                    fontFamily: { "sans": ["Inter", "sans-serif"], "mono": ["JetBrains Mono", "monospace"] },
+                    boxShadow: { "card": "0 2px 8px rgba(0,0,0,0.04)", "cardHover": "0 8px 16px rgba(0,0,0,0.08)" }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .kpi-card { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        .kpi-card:hover { transform: translateY(-2px); }
+        .kpi-selected { border-color: #0F4C3A !important; box-shadow: 0 0 0 2px rgba(15, 76, 58, 0.2), 0 4px 12px rgba(0,0,0,0.06); }
+        /* Tooltip custom styling */
+        [data-tooltip] { position: relative; }
+        [data-tooltip]:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: #fff;
+            padding: 4px 8px;
+            font-size: 11px;
+            font-weight: 500;
+            border-radius: 6px;
+            white-space: nowrap;
+            z-index: 50;
+            pointer-events: none;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-background text-slate-800 antialiased">
+    <!-- Header -->
+    <header class="h-16 bg-primary-container fixed top-0 left-0 right-0 z-50 flex items-center px-4 gap-4">
+        <div class="flex items-center gap-3">
+            <button class="w-10 h-10 rounded-lg hover:bg-white/10 flex items-center justify-center text-white transition-colors" onclick="toggleSidebar()" aria-label="Menu principal">
+                <span class="material-symbols-outlined text-2xl">menu</span>
+            </button>
+            <img src="logo.svg" alt="INEMA" class="h-10">
+        </div>
+        <div class="flex items-center gap-3 ml-auto">
+            <div class="relative">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/60 text-xl cursor-pointer">search</span>
+                <input type="text" placeholder="Buscar no sistema..." class="w-80 pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 text-sm focus:outline-none focus:bg-white/15 transition-all">
+            </div>
+            <button class="w-10 h-10 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center text-white relative transition-colors" aria-label="Notificações">
+                <span class="material-symbols-outlined">notifications</span>
+                <span class="absolute -top-1 -right-1 w-5 h-5 bg-error rounded-full text-xs flex items-center justify-center font-semibold">3</span>
+            </button>
+            <button class="flex items-center gap-2 p-1.5 rounded-lg hover:bg-white/10 transition-colors">
+                <div class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center text-white font-semibold text-sm">LM</div>
+            </button>
+        </div>
+    </header>
+
+    <div class="flex pt-16">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="w-[280px] bg-surface-container-lowest border-r border-border-subtle flex flex-col fixed transition-transform z-40" style="top: 64px; bottom: 0; left: 0;">
+            <nav class="flex-1 py-4 px-3 overflow-y-auto">
+                <ul class="space-y-1">
+                    <li>
+                        <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors">
+                            <span class="material-symbols-outlined text-xl">home</span>
+                            <span class="text-sm font-medium">Início</span>
+                        </a>
+                    </li>
+                    <li>
+                        <button class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors" onclick="toggleSubmenu(this)">
+                            <span class="material-symbols-outlined text-xl">gavel</span>
+                            <span class="text-sm font-medium">Fiscalização</span>
+                            <span class="material-symbols-outlined text-lg ml-auto transition-transform duration-200">expand_more</span>
+                        </button>
+                        <ul class="ml-9 mt-1 space-y-1 hidden">
+                            <li><a href="fiscalizacao.html" class="flex items-center gap-2 px-2 py-1.5 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low transition-colors">Atendente (DOR001)</a></li>
+                            <li><a href="fiscalizacao.html?fluxo=externo" class="flex items-center gap-2 px-2 py-1.5 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low transition-colors">Cidadão (DOR002)</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="relatorios-v2.html" class="flex items-center gap-3 px-3 py-2 rounded-lg bg-sidebar-active text-primary-container font-semibold transition-colors">
+                            <span class="material-symbols-outlined text-xl">assessment</span>
+                            <span class="text-sm">Relatórios Gerenciais</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="p-4 border-t border-border-subtle mt-auto">
+                <button class="w-full flex items-center gap-3 px-4 py-3 bg-primary-container text-white rounded-xl hover:bg-primary/90 transition-all shadow-sm">
+                    <span class="material-symbols-outlined text-xl">auto_awesome</span>
+                    <span class="text-sm font-medium">Assistente INEMA</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 ml-[280px] p-8" id="mainContent">
+            <!-- Header Section -->
+            <div class="mb-6">
+                <div class="flex items-start justify-between flex-wrap gap-4">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Regulação – Dashboard Gerencial</h1>
+                            <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[11px] font-semibold rounded-full">v2 UX Enhanced</span>
+                        </div>
+                        <p class="text-sm text-slate-500 mt-1">Acompanhamento em tempo real do desempenho e gargalos dos processos de regulação.</p>
+                    </div>
+                    <div class="flex items-center gap-3 flex-wrap">
+                        <!-- Date Range Selector with dropdown affordance -->
+                        <div class="relative">
+                            <button onclick="toggleDateMenu()" class="flex items-center gap-2 px-3.5 py-2 bg-white border border-slate-200 rounded-lg hover:border-slate-300 hover:bg-slate-50 transition-colors shadow-sm text-left">
+                                <span class="material-symbols-outlined text-slate-500 text-lg">calendar_today</span>
+                                <span class="text-sm font-medium text-slate-700" id="selectedDateText">01/01/2026 a 31/03/2026</span>
+                                <span class="material-symbols-outlined text-slate-400 text-base ml-1">expand_more</span>
+                            </button>
+                            <div id="dateMenu" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-xl border border-slate-200 shadow-xl py-1.5 z-30">
+                                <button onclick="selectDateRange('Últimos 30 dias')" class="w-full text-left px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition-colors">Últimos 30 dias</button>
+                                <button onclick="selectDateRange('1º Trimestre 2026 (01/01 a 31/03)')" class="w-full text-left px-4 py-2 text-xs font-semibold text-emerald-800 bg-emerald-50/50 hover:bg-emerald-50 transition-colors">1º Trimestre 2026 (Atual)</button>
+                                <button onclick="selectDateRange('Ano de 2025')" class="w-full text-left px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition-colors">Ano de 2025</button>
+                                <hr class="my-1 border-slate-100">
+                                <button onclick="selectDateRange('Personalizado...')" class="w-full text-left px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition-colors">Personalizar período...</button>
+                            </div>
+                        </div>
+
+                        <!-- Filter Button with active badge -->
+                        <div class="relative">
+                            <button onclick="toggleFilterDrawer()" class="flex items-center gap-2 px-3.5 py-2 bg-white border border-slate-200 rounded-lg hover:border-slate-300 hover:bg-slate-50 transition-colors shadow-sm">
+                                <span class="material-symbols-outlined text-slate-500 text-lg">filter_list</span>
+                                <span class="text-sm font-medium text-slate-700">Filtros</span>
+                                <span id="activeFilterBadge" class="hidden px-1.5 py-0.2 text-[10px] bg-emerald-700 text-white rounded-full font-bold">1</span>
+                            </button>
+                        </div>
+
+                        <!-- Export Dropdown -->
+                        <div class="relative">
+                            <button onclick="toggleExportMenu()" class="flex items-center gap-2 px-3.5 py-2 bg-white border border-slate-200 rounded-lg hover:border-slate-300 hover:bg-slate-50 transition-colors shadow-sm">
+                                <span class="material-symbols-outlined text-slate-500 text-lg">download</span>
+                                <span class="text-sm font-medium text-slate-700">Exportar</span>
+                                <span class="material-symbols-outlined text-slate-400 text-base">expand_more</span>
+                            </button>
+                            <div id="exportMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-xl border border-slate-200 shadow-xl py-1.5 z-30">
+                                <button onclick="alert('Exportando Relatório em PDF...')" class="w-full flex items-center gap-2.5 px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition-colors">
+                                    <span class="material-symbols-outlined text-rose-600 text-base">picture_as_pdf</span> Relatório PDF (.pdf)
+                                </button>
+                                <button onclick="alert('Exportando Dados em Excel...')" class="w-full flex items-center gap-2.5 px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition-colors">
+                                    <span class="material-symbols-outlined text-emerald-600 text-base">table_view</span> Planilha Excel (.xlsx)
+                                </button>
+                                <button onclick="alert('Exportando Dados em CSV...')" class="w-full flex items-center gap-2.5 px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition-colors">
+                                    <span class="material-symbols-outlined text-slate-600 text-base">description</span> Dados CSV (.csv)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Filter Banner (Interactive Feedback) -->
+                <div id="activeFilterBanner" class="hidden mt-3 p-2.5 px-4 bg-emerald-50 border border-emerald-200 rounded-lg flex items-center justify-between text-xs text-emerald-900">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-base text-emerald-700">filter_alt</span>
+                        <span>Filtrando por: <strong id="filterCategoryName">Vencidos</strong></span>
+                    </div>
+                    <button onclick="clearKPIFilter()" class="font-semibold text-emerald-800 hover:underline flex items-center gap-1">
+                        Limpar filtro <span class="material-symbols-outlined text-sm">close</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- KPIs (Interactive Drill-down) -->
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6" id="kpis"></div>
+
+            <!-- Charts Row 1 -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <!-- Line Chart: Entrada x Saída -->
+                <div class="bg-white rounded-xl border border-slate-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] overflow-hidden h-[270px] flex flex-col">
+                    <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
+                        <div class="flex items-center gap-2.5">
+                            <span class="material-symbols-outlined text-xl text-slate-400">show_chart</span>
+                            <h3 class="text-[15px] font-bold text-slate-800 tracking-tight">Entrada x Saída de Processos</h3>
+                        </div>
+                        <div class="relative group">
+                            <span class="material-symbols-outlined text-lg text-slate-400 cursor-help">info</span>
+                            <div class="absolute right-0 top-6 w-48 bg-slate-800 text-white text-xs p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                                Evolução mensal de processos protocolados vs concluídos
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 flex-1 min-h-0 relative"><canvas id="lineChart"></canvas></div>
+                </div>
+
+                <!-- Donut Chart: Processos por Status -->
+                <div class="bg-white rounded-xl border border-slate-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] overflow-hidden h-[270px] flex flex-col">
+                    <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
+                        <div class="flex items-center gap-2.5">
+                            <span class="material-symbols-outlined text-xl text-slate-400">donut_large</span>
+                            <h3 class="text-[15px] font-bold text-slate-800 tracking-tight">Processos por Status</h3>
+                        </div>
+                        <div class="relative group">
+                            <span class="material-symbols-outlined text-lg text-slate-400 cursor-help">info</span>
+                            <div class="absolute right-0 top-6 w-48 bg-slate-800 text-white text-xs p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                                Distribuição atual de todos os processos
+                            </div>
+                        </div>
+                    </div>
+                    <div class="px-6 py-4 flex-1 min-h-0 flex items-center">
+                        <div class="flex-1 flex items-center justify-center">
+                            <div class="relative flex items-center justify-center flex-shrink-0" style="width: 140px; height: 140px;">
+                                <canvas id="donutChart"></canvas>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                                    <p class="text-2xl font-bold text-slate-800 leading-none tracking-tight">8.461</p>
+                                    <p class="text-xs text-slate-400 font-normal mt-1.5">Total</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-1 flex items-center justify-center pl-2">
+                            <div class="w-full max-w-[200px] flex flex-col justify-center gap-3">
+                                <div class="flex items-center justify-between cursor-pointer hover:opacity-80" onclick="filterByStatus('Em Análise')">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:#0F4C3A"></div>
+                                        <span class="text-xs font-medium text-slate-600">Em Análise</span>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-800">54%</span>
+                                </div>
+                                <div class="flex items-center justify-between cursor-pointer hover:opacity-80" onclick="filterByStatus('Pendentes')">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:#F59E0B"></div>
+                                        <span class="text-xs font-medium text-slate-600">Pendentes</span>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-800">20%</span>
+                                </div>
+                                <div class="flex items-center justify-between cursor-pointer hover:opacity-80" onclick="filterByStatus('Aguard. Pagamento')">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:#0284C7"></div>
+                                        <span class="text-xs font-medium text-slate-600">Aguard. Pagamento</span>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-800">8%</span>
+                                </div>
+                                <div class="flex items-center justify-between cursor-pointer hover:opacity-80" onclick="filterByStatus('Condicionantes')">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:#8B5CF6"></div>
+                                        <span class="text-xs font-medium text-slate-600">Condicionantes</span>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-800">6%</span>
+                                </div>
+                                <div class="flex items-center justify-between cursor-pointer hover:opacity-80" onclick="filterByStatus('Outros')">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:#94A3B8"></div>
+                                        <span class="text-xs font-medium text-slate-600">Outros</span>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-800">12%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bar Chart: Processos por Unidade (with Data Labels) -->
+                <div class="bg-white rounded-xl border border-slate-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] overflow-hidden h-[270px] flex flex-col">
+                    <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
+                        <div class="flex items-center gap-2.5">
+                            <span class="material-symbols-outlined text-xl text-slate-400">bar_chart</span>
+                            <h3 class="text-[15px] font-bold text-slate-800 tracking-tight">Processos por Unidade</h3>
+                        </div>
+                        <div class="relative group">
+                            <span class="material-symbols-outlined text-lg text-slate-400 cursor-help">info</span>
+                            <div class="absolute right-0 top-6 w-48 bg-slate-800 text-white text-xs p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                                Volume de processos por unidade organizacional
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 flex-1 min-h-0 relative"><canvas id="barChartUnidade"></canvas></div>
+                </div>
+            </div>
+
+            <!-- Charts Row 2 -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <!-- Bar Chart: Aging do Estoque (with Data Labels) -->
+                <div class="bg-white rounded-xl border border-slate-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] overflow-hidden h-[270px] flex flex-col">
+                    <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
+                        <div class="flex items-center gap-2.5">
+                            <span class="material-symbols-outlined text-xl text-slate-400">hourglass_top</span>
+                            <h3 class="text-[15px] font-bold text-slate-800 tracking-tight">Aging do Estoque</h3>
+                        </div>
+                        <div class="relative group">
+                            <span class="material-symbols-outlined text-lg text-slate-400 cursor-help">info</span>
+                            <div class="absolute right-0 top-6 w-48 bg-slate-800 text-white text-xs p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                                Tempo de permanência do estoque de processos
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 flex-1 min-h-0 relative"><canvas id="barChartAging"></canvas></div>
+                </div>
+
+                <!-- Bar Chart: Tempo Médio de Análise (Bottleneck Highlighted) -->
+                <div class="bg-white rounded-xl border border-slate-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] overflow-hidden h-[270px] flex flex-col">
+                    <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
+                        <div class="flex items-center gap-2.5">
+                            <span class="material-symbols-outlined text-xl text-slate-400">timer</span>
+                            <h3 class="text-[15px] font-bold text-slate-800 tracking-tight">Tempo Médio de Análise (dias)</h3>
+                        </div>
+                        <div class="relative group">
+                            <span class="material-symbols-outlined text-lg text-slate-400 cursor-help">info</span>
+                            <div class="absolute right-0 top-6 w-48 bg-slate-800 text-white text-xs p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                                Duração média por etapa do processo
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 flex-1 min-h-0 relative"><canvas id="barChartTempo"></canvas></div>
+                </div>
+
+                <!-- Bar Chart: Processos Vencidos por Unidade (Clean Red + Data Labels) -->
+                <div class="bg-white rounded-xl border border-slate-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] overflow-hidden h-[270px] flex flex-col">
+                    <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
+                        <div class="flex items-center gap-2.5">
+                            <span class="material-symbols-outlined text-xl text-rose-500">warning</span>
+                            <h3 class="text-[15px] font-bold text-slate-800 tracking-tight">Processos Vencidos por Unidade</h3>
+                        </div>
+                        <div class="relative group">
+                            <span class="material-symbols-outlined text-lg text-slate-400 cursor-help">info</span>
+                            <div class="absolute right-0 top-6 w-48 bg-slate-800 text-white text-xs p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                                Quantidade de processos vencidos por unidade
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 flex-1 min-h-0 relative"><canvas id="barChartVencidos"></canvas></div>
+                </div>
+            </div>
+
+            <!-- Table: Processos Vencidos (Top 5 com contexto e tooltips) -->
+            <div class="bg-white rounded-xl border border-slate-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] overflow-hidden">
+                <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                        <span class="material-symbols-outlined text-rose-600 text-xl">warning</span>
+                        <h3 class="text-[15px] font-bold text-slate-800 tracking-tight">Processos Vencidos (Top 5)</h3>
+                        <span class="text-xs font-medium text-slate-400">(Exibindo 5 de 198)</span>
+                    </div>
+                    <button onclick="alert('Abrindo listagem completa de 198 processos vencidos...')" class="text-xs text-emerald-800 font-semibold hover:underline flex items-center gap-1">
+                        Ver todos os 198 <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                    </button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-slate-50/80 text-[11px] font-semibold uppercase tracking-wider text-slate-500 border-b border-slate-200">
+                                <th class="text-left p-4">Processo</th>
+                                <th class="text-left p-4">Tipo</th>
+                                <th class="text-left p-4">Unidade</th>
+                                <th class="text-left p-4">Etapa</th>
+                                <th class="text-left p-4">Responsável</th>
+                                <th class="text-left p-4">Vencido há</th>
+                                <th class="text-center p-4">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody id="processosTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal de Detalhes do Processo (UX Interactivity) -->
+    <div id="processModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-200">
+            <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-emerald-800">description</span>
+                    <h4 class="font-bold text-slate-800 text-sm" id="modalProcessNumber">Processo</h4>
+                </div>
+                <button onclick="closeProcessModal()" class="w-8 h-8 rounded-lg hover:bg-slate-200/60 flex items-center justify-center text-slate-500">
+                    <span class="material-symbols-outlined text-lg">close</span>
+                </button>
+            </div>
+            <div class="p-6 space-y-4 text-sm" id="modalBody"></div>
+            <div class="px-6 py-3 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
+                <button onclick="closeProcessModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-200/50 rounded-lg">Fechar</button>
+                <button onclick="alert('Redirecionando para o SEIA...')" class="px-4 py-2 text-xs font-semibold text-white bg-primary-container hover:bg-primary rounded-lg">Abrir no SEIA</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Register DataLabels plugin globally
+        Chart.register(ChartDataLabels);
+
+        // Data
+        const kpiData = [
+            { id: 'protocolados', label: 'Protocolados', value: '1.245', change: 12, type: 'emerald' },
+            { id: 'analise', label: 'Em análise', value: '2.356', change: -3, type: 'slate' },
+            { id: 'pendentes', label: 'Pendentes', value: '873', change: 8, type: 'amber' },
+            { id: 'vencidos', label: 'Vencidos', value: '198', change: 15, type: 'rose', isBad: true },
+            { id: 'concluidos', label: 'Concluídos', value: '1.987', change: 18, type: 'emerald' },
+            { id: 'atos', label: 'Atos emitidos', value: '1.604', change: 20, type: 'emerald' },
+        ];
+
+        const unitDescriptions = {
+            'DIRRE': 'Diretoria de Recursos Hídricos e Saneamento',
+            'DIREC': 'Diretoria de Regulação e Controle',
+            'DIBA': 'Diretoria de Biodiversidade e Áreas Protegidas',
+            'DIBIO': 'Diretoria de Biodiversidade',
+            'DILIC': 'Diretoria de Licenciamento Ambiental',
+            'DISUC': 'Diretoria de Sustentabilidade e Unidades de Conservação',
+            'Outras': 'Outras Unidades e Polos Regionais'
+        };
+
+        const lineChartData = {
+            labels: ['Jan/26', 'Fev/26', 'Mar/26', 'Abr/26', 'Mai/26', 'Jun/26'],
+            entrada: [1245, 1356, 1189, 1423, 1567, 1678],
+            saida: [987, 1120, 1456, 1289, 1345, 1523]
+        };
+
+        const donutData = {
+            labels: ['Em Análise', 'Pendentes', 'Aguard. Pagamento', 'Condicionantes', 'Outros'],
+            values: [54, 20, 8, 6, 12],
+            colors: ['#0F4C3A', '#F59E0B', '#0284C7', '#8B5CF6', '#94A3B8']
+        };
+
+        const unidadeData = {
+            labels: ['DIRRE', 'DIREC', 'DIBA', 'DILIC', 'DISUC', 'Outras'],
+            values: [1254, 856, 642, 511, 309, 254]
+        };
+
+        const agingData = {
+            labels: ['0-15 dias', '16-30 dias', '31-60 dias', '61-90 dias', '91-180 dias', '> 180 dias'],
+            values: [412, 678, 945, 612, 403, 198],
+            colors: ['#10B981', '#0D9488', '#F59E0B', '#EA580C', '#E11D48', '#BE123C']
+        };
+
+        const tempoData = {
+            labels: ['Triagem', 'Análise Técnica', 'Coordenação', 'Diretoria', 'Publicação'],
+            values: [2.3, 18.7, 5.2, 8.1, 3.4],
+            // Highlight bottleneck "Análise Técnica"
+            colors: ['#2A6862', '#0A473A', '#2A6862', '#2A6862', '#2A6862']
+        };
+
+        const vencidosData = {
+            labels: ['DIRRE', 'DIBIO', 'DILIC', 'DIREC', 'DISUC'],
+            values: [78, 46, 34, 25, 15]
+        };
+
+        const processosVencidos = [
+            { processo: 'SEIA-REG-2024/001234', tipo: 'Licenciamento Ambiental', unidade: 'DIRRE', etapa: 'Análise Técnica', responsavel: 'João Silva', dias: 32 },
+            { processo: 'SEIA-REG-2024/001198', tipo: 'Autorização Ambiental', unidade: 'DIBIO', etapa: 'Análise Técnica', responsavel: 'Maria Santos', dias: 28 },
+            { processo: 'SEIA-REG-2024/001145', tipo: 'Licenciamento Ambiental', unidade: 'DILIC', etapa: 'Coordenação', responsavel: 'Carlos Lima', dias: 25 },
+            { processo: 'SEIA-REG-2024/001089', tipo: 'Outorga', unidade: 'DIRRE', etapa: 'Análise Técnica', responsavel: 'João Silva', dias: 22 },
+            { processo: 'SEIA-REG-2024/001077', tipo: 'Autorização Ambiental', unidade: 'DIREC', etapa: 'Diretoria', responsavel: 'Ana Paula', dias: 19 },
+        ];
+
+        let activeKPI = null;
+
+        // Render KPIs with Interactive Drill-down
+        function renderKPIs() {
+            const container = document.getElementById('kpis');
+            const colors = {
+                emerald: { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200', icon: 'bg-emerald-100', iconText: 'text-emerald-700' },
+                amber: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', icon: 'bg-amber-100', iconText: 'text-amber-700' },
+                rose: { bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-200', icon: 'bg-rose-100', iconText: 'text-rose-700' },
+                slate: { bg: 'bg-slate-100', text: 'text-slate-600', border: 'border-slate-200', icon: 'bg-slate-100', iconText: 'text-slate-600' }
+            };
+
+            container.innerHTML = kpiData.map(kpi => {
+                const c = colors[kpi.type];
+                const isPositive = kpi.change >= 0;
+                const isSelected = activeKPI === kpi.id;
+                
+                // Variation logic: If it's a bad metric (like vencidos), increase is bad (rose)
+                const variationBadge = kpi.isBad
+                    ? `<span class="inline-flex items-center text-xs font-semibold px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200">
+                         <span class="material-symbols-outlined text-xs">trending_up</span>
+                         <span class="ml-1">+${Math.abs(kpi.change)}%</span>
+                       </span>`
+                    : `<span class="inline-flex items-center text-xs font-semibold px-2 py-0.5 rounded-full ${c.bg} ${c.text} border ${c.border}">
+                         <span class="material-symbols-outlined text-xs">${isPositive ? 'trending_up' : 'trending_down'}</span>
+                         <span class="ml-1">${isPositive ? '+' : '-'}${Math.abs(kpi.change)}%</span>
+                       </span>`;
+
+                return `
+                    <div onclick="toggleKPIFilter('${kpi.id}', '${kpi.label}')" class="kpi-card bg-white rounded-xl border border-slate-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] p-5 relative overflow-hidden cursor-pointer ${isSelected ? 'kpi-selected' : 'hover:border-emerald-300'}">
+                        <div class="flex items-start justify-between">
+                            <div class="flex-1">
+                                <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">${kpi.label}</p>
+                                <p class="text-2xl font-bold tracking-tight text-slate-900 mt-2">${kpi.value}</p>
+                            </div>
+                            <div class="w-8 h-8 rounded-lg flex items-center justify-center ${c.icon}">
+                                <span class="material-symbols-outlined text-lg ${c.iconText}">
+                                    ${kpi.type === 'emerald' ? 'trending_up' : kpi.type === 'rose' ? 'warning' : kpi.type === 'amber' ? 'schedule' : 'hourglass_empty'}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="mt-3 flex items-center flex-wrap gap-1">
+                            ${variationBadge}
+                            <span class="text-slate-400 text-[11px] ml-1">vs. anterior</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Toggle KPI Filter
+        function toggleKPIFilter(kpiId, label) {
+            if (activeKPI === kpiId) {
+                clearKPIFilter();
+            } else {
+                activeKPI = kpiId;
+                document.getElementById('activeFilterBanner').classList.remove('hidden');
+                document.getElementById('filterCategoryName').textContent = label;
+                document.getElementById('activeFilterBadge').classList.remove('hidden');
+                renderKPIs();
+            }
+        }
+
+        function clearKPIFilter() {
+            activeKPI = null;
+            document.getElementById('activeFilterBanner').classList.add('hidden');
+            document.getElementById('activeFilterBadge').classList.add('hidden');
+            renderKPIs();
+        }
+
+        // Render Table with tooltips and detail triggers
+        function renderTable() {
+            const tbody = document.getElementById('processosTable');
+            tbody.innerHTML = processosVencidos.map((proc, index) => `
+                <tr class="border-b border-slate-100 hover:bg-slate-50/70 transition-colors">
+                    <td class="p-4">
+                        <span onclick="openProcessModal(${index})" class="font-mono text-xs font-semibold text-emerald-950 hover:text-emerald-700 hover:underline cursor-pointer flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-sm text-slate-400">description</span>
+                            ${proc.processo}
+                        </span>
+                    </td>
+                    <td class="p-4 text-slate-600">${proc.tipo}</td>
+                    <td class="p-4">
+                        <span class="cursor-help font-medium text-slate-700 underline decoration-dotted decoration-slate-300" title="${unitDescriptions[proc.unidade] || proc.unidade}">
+                            ${proc.unidade}
+                        </span>
+                    </td>
+                    <td class="p-4 text-slate-600">${proc.etapa}</td>
+                    <td class="p-4 text-slate-600">${proc.responsavel}</td>
+                    <td class="p-4">
+                        <span class="inline-flex items-center gap-1 font-semibold text-xs px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 border border-rose-200/60">
+                            <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                            ${proc.dias} dias
+                        </span>
+                    </td>
+                    <td class="p-4 text-center">
+                        <button onclick="openProcessModal(${index})" class="inline-flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-lg border border-slate-200 text-slate-700 hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-800 transition-all shadow-sm">
+                            Detalhes <span class="material-symbols-outlined text-sm">chevron_right</span>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Modal triggers
+        function openProcessModal(index) {
+            const proc = processosVencidos[index];
+            document.getElementById('modalProcessNumber').textContent = proc.processo;
+            document.getElementById('modalBody').innerHTML = `
+                <div class="grid grid-cols-2 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200/70">
+                    <div><span class="text-xs text-slate-400 uppercase font-semibold">Tipo</span><p class="font-medium text-slate-800 mt-0.5">${proc.tipo}</p></div>
+                    <div><span class="text-xs text-slate-400 uppercase font-semibold">Unidade</span><p class="font-medium text-slate-800 mt-0.5">${proc.unidade} - ${unitDescriptions[proc.unidade] || ''}</p></div>
+                    <div><span class="text-xs text-slate-400 uppercase font-semibold">Etapa Atual</span><p class="font-medium text-slate-800 mt-0.5">${proc.etapa}</p></div>
+                    <div><span class="text-xs text-slate-400 uppercase font-semibold">Responsável</span><p class="font-medium text-slate-800 mt-0.5">${proc.responsavel}</p></div>
+                </div>
+                <div class="p-3 bg-rose-50 border border-rose-200 rounded-xl flex items-center justify-between text-rose-900">
+                    <span class="text-xs font-semibold">Prazo excedido</span>
+                    <span class="text-sm font-bold text-rose-700">${proc.dias} dias em atraso</span>
+                </div>
+            `;
+            document.getElementById('processModal').classList.remove('hidden');
+        }
+
+        function closeProcessModal() {
+            document.getElementById('processModal').classList.add('hidden');
+        }
+
+        // Date selection
+        function toggleDateMenu() {
+            document.getElementById('dateMenu').classList.toggle('hidden');
+        }
+        function selectDateRange(range) {
+            document.getElementById('selectedDateText').textContent = range;
+            document.getElementById('dateMenu').classList.add('hidden');
+        }
+
+        // Export menu
+        function toggleExportMenu() {
+            document.getElementById('exportMenu').classList.toggle('hidden');
+        }
+
+        // Filter drawer dummy
+        function toggleFilterDrawer() {
+            alert('Painel lateral de filtros avançados aberto.');
+        }
+
+        // Render Charts with Data Labels & Semantic Highlights
+        function renderCharts() {
+            // 1. Line Chart: Entrada x Saída (Enhanced Contrast)
+            new Chart(document.getElementById('lineChart'), {
+                type: 'line',
+                data: {
+                    labels: lineChartData.labels,
+                    datasets: [
+                        {
+                            label: 'Entrada',
+                            data: lineChartData.entrada,
+                            borderColor: '#0F4C3A',
+                            backgroundColor: 'rgba(15, 76, 58, 0.08)',
+                            borderWidth: 2.5,
+                            pointBackgroundColor: '#0F4C3A',
+                            pointRadius: 4,
+                            fill: true,
+                            tension: 0.35
+                        },
+                        {
+                            label: 'Saída (Concluídos)',
+                            data: lineChartData.saida,
+                            borderColor: '#10B981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.12)',
+                            borderWidth: 2.5,
+                            borderDash: [5, 5],
+                            pointBackgroundColor: '#10B981',
+                            pointRadius: 4,
+                            fill: true,
+                            tension: 0.35
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { boxWidth: 12, font: { size: 11, family: 'Inter', weight: '600' } }
+                        },
+                        datalabels: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                            titleFont: { size: 12, weight: 'bold' },
+                            bodyFont: { size: 11 },
+                            padding: 10,
+                            cornerRadius: 8
+                        }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#F1F5F9' }, ticks: { font: { size: 10 } } },
+                        x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+                    }
+                }
+            });
+
+            // 2. Donut Chart
+            new Chart(document.getElementById('donutChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: donutData.labels,
+                    datasets: [{ data: donutData.values, backgroundColor: donutData.colors, borderWidth: 0 }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        datalabels: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                            titleFont: { size: 12, weight: 'bold' },
+                            bodyFont: { size: 11 },
+                            padding: 8,
+                            cornerRadius: 8,
+                            callbacks: {
+                                label: (ctx) => ` ${ctx.label}: ${ctx.raw}%`
+                            }
+                        }
+                    },
+                    cutout: '62%'
+                }
+            });
+
+            // 3. Processos por Unidade (with DataLabels)
+            new Chart(document.getElementById('barChartUnidade'), {
+                type: 'bar',
+                data: {
+                    labels: unidadeData.labels,
+                    datasets: [{
+                        data: unidadeData.values,
+                        backgroundColor: '#0F4C3A',
+                        borderRadius: 6,
+                        barPercentage: 0.7
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: { padding: { right: 45 } },
+                    plugins: {
+                        legend: { display: false },
+                        datalabels: {
+                            display: true,
+                            anchor: 'end',
+                            align: 'right',
+                            offset: 4,
+                            color: '#334155',
+                            font: { family: 'Inter', size: 11, weight: '600' },
+                            formatter: (val) => val.toLocaleString('pt-BR')
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                            callbacks: {
+                                title: (items) => {
+                                    const code = items[0].label;
+                                    return `${code} - ${unitDescriptions[code] || ''}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { color: '#F1F5F9' }, ticks: { font: { size: 10 } } },
+                        y: { grid: { display: false }, ticks: { font: { size: 10, weight: '600' } } }
+                    }
+                }
+            });
+
+            // 4. Aging do Estoque (with DataLabels)
+            new Chart(document.getElementById('barChartAging'), {
+                type: 'bar',
+                data: {
+                    labels: agingData.labels,
+                    datasets: [{
+                        data: agingData.values,
+                        backgroundColor: agingData.colors,
+                        borderRadius: 6,
+                        barPercentage: 0.7
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: { padding: { right: 35 } },
+                    plugins: {
+                        legend: { display: false },
+                        datalabels: {
+                            display: true,
+                            anchor: 'end',
+                            align: 'right',
+                            offset: 4,
+                            color: '#334155',
+                            font: { family: 'Inter', size: 11, weight: '600' },
+                            formatter: (val) => val.toLocaleString('pt-BR')
+                        }
+                    },
+                    scales: {
+                        x: { grid: { color: '#F1F5F9' }, ticks: { font: { size: 10 } } },
+                        y: { grid: { display: false }, ticks: { font: { size: 10, weight: '500' } } }
+                    }
+                }
+            });
+
+            // 5. Tempo Médio de Análise (Bottleneck Highlighted + DataLabels)
+            new Chart(document.getElementById('barChartTempo'), {
+                type: 'bar',
+                data: {
+                    labels: tempoData.labels,
+                    datasets: [{
+                        data: tempoData.values,
+                        backgroundColor: tempoData.colors,
+                        borderRadius: 6,
+                        barPercentage: 0.7
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: { padding: { right: 40 } },
+                    plugins: {
+                        legend: { display: false },
+                        datalabels: {
+                            display: true,
+                            anchor: 'end',
+                            align: 'right',
+                            offset: 4,
+                            color: (ctx) => ctx.dataIndex === 1 ? '#0F4C3A' : '#475569',
+                            font: (ctx) => ({ family: 'Inter', size: 11, weight: ctx.dataIndex === 1 ? '700' : '600' }),
+                            formatter: (val) => `${val}d`
+                        }
+                    },
+                    scales: {
+                        x: { grid: { color: '#F1F5F9' }, ticks: { font: { size: 10 } } },
+                        y: { grid: { display: false }, ticks: { font: { size: 10 } } }
+                    }
+                }
+            });
+
+            // 6. Processos Vencidos por Unidade (Clean Red + DataLabels)
+            new Chart(document.getElementById('barChartVencidos'), {
+                type: 'bar',
+                data: {
+                    labels: vencidosData.labels,
+                    datasets: [{
+                        data: vencidosData.values,
+                        backgroundColor: '#E11D48',
+                        borderRadius: 6,
+                        barPercentage: 0.7
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: { padding: { right: 30 } },
+                    plugins: {
+                        legend: { display: false },
+                        datalabels: {
+                            display: true,
+                            anchor: 'end',
+                            align: 'right',
+                            offset: 4,
+                            color: '#BE123C',
+                            font: { family: 'Inter', size: 11, weight: '700' },
+                            formatter: (val) => val
+                        }
+                    },
+                    scales: {
+                        x: { grid: { color: '#F1F5F9' }, ticks: { font: { size: 10 } } },
+                        y: { grid: { display: false }, ticks: { font: { size: 10, weight: '600' } } }
+                    }
+                }
+            });
+        }
+
+        // Toggle Sidebar
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const main = document.getElementById('mainContent');
+            sidebar.classList.toggle('-translate-x-full');
+            main.classList.toggle('ml-0');
+        }
+
+        // Toggle Submenu
+        function toggleSubmenu(btn) {
+            const submenu = btn.nextElementSibling;
+            const icon = btn.querySelector('.material-symbols-outlined:last-child');
+            submenu.classList.toggle('hidden');
+            if (icon) icon.classList.toggle('rotate-180');
+        }
+
+        // Close dropdowns on outside click
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('#dateMenu') && !e.target.closest('[onclick="toggleDateMenu()"]')) {
+                const dm = document.getElementById('dateMenu');
+                if (dm) dm.classList.add('hidden');
+            }
+            if (!e.target.closest('#exportMenu') && !e.target.closest('[onclick="toggleExportMenu()"]')) {
+                const em = document.getElementById('exportMenu');
+                if (em) em.classList.add('hidden');
+            }
+        });
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            renderKPIs();
+            renderTable();
+            renderCharts();
+        });
+    </script>
+</body>
+</html>
