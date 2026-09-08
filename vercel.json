@@ -1,5 +1,18 @@
 {
   "outputDirectory": "src",
-  "framework": null,
-  "buildCommand": null
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/fiscalizacao/emergencia-quimica/interna",
+      "destination": "/emergencia-quimica.html?fluxo=interna"
+    },
+    {
+      "source": "/fiscalizacao/emergencia-quimica/externa",
+      "destination": "/emergencia-quimica.html?fluxo=externa"
+    },
+    {
+      "source": "/fiscalizacao/emergencia-quimica/consulta",
+      "destination": "/emergencia-quimica.html?fluxo=consulta"
+    }
+  ]
 }

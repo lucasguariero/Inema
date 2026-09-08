@@ -194,6 +194,9 @@
                         <ul class="ml-9 mt-1 space-y-1 sidebar-text hidden">
                             <li><a href="fiscalizacao.html" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Atendente (DOR001)</a></li>
                             <li><a href="fiscalizacao.html?fluxo=externo" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Cidadão (DOR002)</a></li>
+                            <li><a href="emergencia-quimica.html?fluxo=interna" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Emergência Interna (DOR003)</a></li>
+                            <li><a href="emergencia-quimica.html?fluxo=externa" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Emergência Externa (DOR004)</a></li>
+                            <li><a href="emergencia-quimica.html?fluxo=consulta" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Consulta de Registros</a></li>
                         </ul>
                     </li>
                     <li>
@@ -256,6 +259,23 @@
                             </div>
                         </div>
                         <div class="mt-4 flex items-center text-secondary font-medium text-sm">
+                            <span>Acessar</span>
+                            <span class="material-symbols-outlined ml-1 text-lg">arrow_forward</span>
+                        </div>
+                    </a>
+
+                    <!-- Card: Emergência Química (DOR003 / DOR004) -->
+                    <a href="emergencia-quimica.html" class="bg-surface-container-lowest rounded-xl p-6 border border-border-subtle hover:shadow-lg hover:shadow-black/5 transition-all group cursor-pointer">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-amber-500/15 rounded-lg flex items-center justify-center">
+                                <span class="material-symbols-outlined text-amber-700 text-2xl">warning</span>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-on-surface group-hover:text-amber-800 transition-colors">Emergência Química</h4>
+                                <p class="text-sm text-text-muted mt-1">Acidentes químicos, vazamentos e plantão (DOR003 / DOR004)</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center text-amber-800 font-medium text-sm">
                             <span>Acessar</span>
                             <span class="material-symbols-outlined ml-1 text-lg">arrow_forward</span>
                         </div>
