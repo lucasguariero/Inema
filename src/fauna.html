@@ -152,9 +152,20 @@
                         <ul class="ml-4 mt-1.5 space-y-1 border-l-2 border-slate-200 pl-3 sidebar-text hidden">
                             <li><a href="fiscalizacao.html" class="flex items-center gap-2 px-2 py-1.5 rounded-lg text-xs text-on-surface-variant hover:bg-surface-container-low">Atendente (DOR001)</a></li>
                             <li><a href="fiscalizacao.html?fluxo=externo" class="flex items-center gap-2 px-2 py-1.5 rounded-lg text-xs text-on-surface-variant hover:bg-surface-container-low">Cidadão (DOR002)</a></li>
-                            <li><a href="emergencia-quimica.html?fluxo=interna" class="flex items-center gap-2 px-2 py-1.5 rounded-lg text-xs text-on-surface-variant hover:bg-surface-container-low">Emergência Interna</a></li>
-                            <li><a href="emergencia-quimica.html?fluxo=externa" class="flex items-center gap-2 px-2 py-1.5 rounded-lg text-xs text-on-surface-variant hover:bg-surface-container-low">Emergência Externa</a></li>
-                            <li><a href="emergencia-quimica.html?fluxo=consulta" class="flex items-center gap-2 px-2 py-1.5 rounded-lg text-xs text-on-surface-variant hover:bg-surface-container-low">Consulta Ocorrências</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Emergência Química -->
+                    <li>
+                        <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors" onclick="toggleSubmenu(this)">
+                            <span class="material-symbols-outlined text-xl text-amber-600">warning</span>
+                            <span class="text-sm font-medium sidebar-text">Emergência Química</span>
+                            <span class="material-symbols-outlined text-lg ml-auto transition-transform duration-200 sidebar-text">expand_more</span>
+                        </button>
+                        <ul class="ml-4 mt-1.5 space-y-1 border-l-2 border-slate-200 pl-3 sidebar-text hidden">
+                            <li><a href="emergencia-quimica.html?fluxo=interna" class="flex items-center gap-2 px-2 py-1.5 rounded-lg text-xs text-on-surface-variant hover:bg-surface-container-low">Visão Interna (DOR003)</a></li>
+                            <li><a href="emergencia-quimica.html?fluxo=externa" class="flex items-center gap-2 px-2 py-1.5 rounded-lg text-xs text-on-surface-variant hover:bg-surface-container-low">Visão Externa (DOR004)</a></li>
+                            <li><a href="emergencia-quimica.html?fluxo=consulta" class="flex items-center gap-2 px-2 py-1.5 rounded-lg text-xs text-on-surface-variant hover:bg-surface-container-low">Consulta & Plantão</a></li>
                         </ul>
                     </li>
 
@@ -204,11 +215,29 @@
                         </ul>
                     </li>
 
-                    <!-- Relatórios Gerenciais -->
+                    <!-- Outros módulos do SEIA -->
+                    <li>
+                        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors">
+                            <span class="material-symbols-outlined text-xl text-slate-500">description</span>
+                            <span class="text-sm font-medium sidebar-text">Licenciamento</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors">
+                            <span class="material-symbols-outlined text-xl text-slate-500">water_drop</span>
+                            <span class="text-sm font-medium sidebar-text">Regulação / Outorga</span>
+                        </a>
+                    </li>
                     <li>
                         <a href="relatorios.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors">
                             <span class="material-symbols-outlined text-xl text-slate-500">assessment</span>
                             <span class="text-sm font-medium sidebar-text">Relatórios Gerenciais</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors">
+                            <span class="material-symbols-outlined text-xl text-slate-500">public</span>
+                            <span class="text-sm font-medium sidebar-text">Geoprocessamento</span>
                         </a>
                     </li>
                 </ul>

@@ -136,16 +136,33 @@
                         <ul class="ml-9 mt-1 space-y-1 sidebar-text">
                             <li><a href="fiscalizacao.html" id="menu-atendente" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-primary-container font-semibold bg-sidebar-active">Atendente (DOR001)</a></li>
                             <li><a href="fiscalizacao.html?fluxo=externo" id="menu-cidadao" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Cidadão (DOR002)</a></li>
-                            <li><a href="emergencia-quimica.html?fluxo=interna" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Emergência Interna (DOR003)</a></li>
-                            <li><a href="emergencia-quimica.html?fluxo=externa" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Emergência Externa (DOR004)</a></li>
-                            <li><a href="emergencia-quimica.html?fluxo=consulta" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Consulta de Registros</a></li>
                         </ul>
                     </li>
                     <li>
-                        <a href="fauna.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low">
+                        <button class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors" onclick="toggleSubmenu(this)">
+                            <span class="material-symbols-outlined text-xl text-amber-600">warning</span>
+                            <span class="text-sm font-medium sidebar-text">Emergência Química</span>
+                            <span class="material-symbols-outlined text-lg ml-auto sidebar-text transition-transform duration-200">expand_more</span>
+                        </button>
+                        <ul class="ml-9 mt-1 space-y-1 sidebar-text hidden">
+                            <li><a href="emergencia-quimica.html?fluxo=interna" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Visão Interna (DOR003)</a></li>
+                            <li><a href="emergencia-quimica.html?fluxo=externa" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Visão Externa (DOR004)</a></li>
+                            <li><a href="emergencia-quimica.html?fluxo=consulta" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Consulta & Plantão</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <button class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low" onclick="toggleSubmenu(this)">
                             <span class="material-symbols-outlined text-xl">pets</span>
                             <span class="text-sm sidebar-text">Gestão de Fauna</span>
-                        </a>
+                            <span class="material-symbols-outlined text-lg ml-auto sidebar-text">expand_more</span>
+                        </button>
+                        <ul class="ml-9 mt-1 space-y-1 sidebar-text hidden">
+                            <li><a href="fauna.html" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Visão Geral & KPIs</a></li>
+                            <li><a href="fauna.html#prontuario" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Prontuário & RG Animal</a></li>
+                            <li><a href="fauna.html#admissao" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Nova Admissão / Triagem</a></li>
+                            <li><a href="fauna.html#clinica" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Clínica & Biometria</a></li>
+                            <li><a href="fauna.html#transversais" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Cadastros Transversais (CETAS, ASAS, Zoo)</a></li>
+                        </ul>
                     </li>
                     <li>
                         <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low">
