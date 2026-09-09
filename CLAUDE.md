@@ -7,10 +7,13 @@ Sistema institucional para gestão ambiental - INEMA.
 - Frontend: HTML + Tailwind CSS
 - Design: Baseado no DESIGN.md do projeto
 
-## Páginas
+## Páginas & Módulos
 
-- [x] Homepage - Portal inicial com dashboard
-- [ ] Módulo de Fiscalização
+- [x] Homepage - Portal inicial com dashboard (`src/index.html`)
+- [x] Módulo de Fiscalização - Atendente & Cidadão (`src/fiscalizacao.html`)
+- [x] Módulo de Emergência Química - DOR003 / DOR004 (`src/emergencia-quimica.html`)
+- [x] Módulo de Gestão de Fauna Silvestre - CETAS / ASAS / SEIA (`src/fauna.html`)
+- [x] Relatórios Gerenciais & Auditoria (`src/relatorios.html`)
 
 ## Estrutura
 

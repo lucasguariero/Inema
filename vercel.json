@@ -13,6 +13,14 @@
     {
       "source": "/fiscalizacao/emergencia-quimica/consulta",
       "destination": "/emergencia-quimica.html?fluxo=consulta"
+    },
+    {
+      "source": "/fauna",
+      "destination": "/fauna.html"
+    },
+    {
+      "source": "/gestao-fauna",
+      "destination": "/fauna.html"
     }
   ]
 }

@@ -200,6 +200,20 @@
                         </ul>
                     </li>
                     <li>
+                        <button class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low" onclick="toggleSubmenu(this)">
+                            <span class="material-symbols-outlined text-xl">pets</span>
+                            <span class="text-sm sidebar-text">Gestão de Fauna</span>
+                            <span class="material-symbols-outlined text-lg ml-auto sidebar-text">expand_more</span>
+                        </button>
+                        <ul class="ml-9 mt-1 space-y-1 sidebar-text hidden">
+                            <li><a href="fauna.html" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Visão Geral & KPIs</a></li>
+                            <li><a href="fauna.html#prontuario" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Prontuário & RG Animal</a></li>
+                            <li><a href="fauna.html#admissao" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Nova Admissão / Triagem</a></li>
+                            <li><a href="fauna.html#clinica" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Clínica & Biometria</a></li>
+                            <li><a href="fauna.html#transversais" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Cadastros Transversais (CETAS, ASAS, Zoo)</a></li>
+                        </ul>
+                    </li>
+                    <li>
                         <a href="relatorios.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low">
                             <span class="material-symbols-outlined text-xl">assessment</span>
                             <span class="text-sm sidebar-text">Relatórios Gerenciais</span>
@@ -277,6 +291,26 @@
                         </div>
                         <div class="mt-4 flex items-center text-amber-800 font-medium text-sm">
                             <span>Acessar</span>
+                            <span class="material-symbols-outlined ml-1 text-lg">arrow_forward</span>
+                        </div>
+                    </a>
+
+                    <!-- Card: Gestão de Fauna Silvestre (CETAS / ASAS / SEIA) -->
+                    <a href="fauna.html" class="bg-surface-container-lowest rounded-xl p-6 border border-border-subtle hover:shadow-lg hover:shadow-black/5 transition-all group cursor-pointer border-l-4 border-l-inema-green">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-emerald-600/15 rounded-lg flex items-center justify-center">
+                                <span class="material-symbols-outlined text-emerald-800 text-2xl">pets</span>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center gap-2">
+                                    <h4 class="font-semibold text-on-surface group-hover:text-emerald-800 transition-colors">Gestão de Fauna</h4>
+                                    <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded">NOVO</span>
+                                </div>
+                                <p class="text-sm text-text-muted mt-1">RG animal, CETAS, triagem, pesagens, ASAS, guardiões e cativeiro</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center text-emerald-800 font-medium text-sm">
+                            <span>Acessar Módulo</span>
                             <span class="material-symbols-outlined ml-1 text-lg">arrow_forward</span>
                         </div>
                     </a>
