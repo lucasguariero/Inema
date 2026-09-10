@@ -5,7 +5,7 @@
 - **Engineering Judgment**: When requirements have minor ambiguity, make sensible, industry-standard engineering decisions instead of stopping to ask clarifying questions. Document choices in the final summary.
 - **Autonomous Error Resolution**: When a command, test, or build fails, inspect the error output, diagnose the root cause, apply fixes, and re-run automatically until successful.
 - **Unattended / Overnight Execution**: Keep tests, scripts, and validations running continuously without blocking for user feedback until all tasks are accomplished.
-- **Concise Reporting**: Report back only when significant milestones are achieved or quando a tarefa for concluída, gerando o parecer final pronto para colar no card/Mattermost.
+- **Concise Reporting**: Report back only when significant milestones are achieved ou quando a tarefa for concluída, gerando o parecer final pronto para colar no card/Mattermost.
 
 ---
 
@@ -20,23 +20,34 @@
 
 ---
 
-# Padrão Oficial de Relatório de Teste / Comentário de Card (QA Acto/Inema)
+# Padrão Oficial de Organização de Pastas & Relatórios de QA (Acto/Inema)
 
-Ao finalizar a execução e validação de qualquer card, o resultado final DEVE SEMPRE ser apresentado no formato padrão adotado pelo time de QA no Mattermost/GitLab/Jira, pronto para copiar e colar:
+Para cada card/teste a ser executado, a estrutura de pastas e arquivos DEVE ser rigorosamente padronizada:
 
-```markdown
-Fala @[nome-do-dev]! Retestei o card completo hoje. Segue o resultado, item por item:
-Resolvido: [Ação executada com dados concretos (valores, CPFs, textos)] e confirmei que [comportamento observado], com a mensagem "[mensagem exata do sistema]" (Print 01).
-Resolvido: [Ponto 2 testado e validado] (Print 02).
-Não resolvido: [Caso algum ponto tenha falhado, descrever exatamente o que aconteceu e o que era esperado] (Print XX).
-Fora do escopo deste card: [Bugs periféricos ou comportamentos anômalos encontrados durante o teste que não pertencem ao escopo do card atual].
-Com isso, considero este card resolvido / [ou o parecer correspondente].
-Fico à disposição se precisar de mais detalhes de qualquer um desses pontos.
-Prints anexados: Print 01 a Print XX (zip em anexo).
+### 📁 Estrutura de Pastas por Card (`qa/cards/[identificador-do-card]/`):
+```text
+qa/cards/[identificador-do-card]/
+├── checklist.md             # Checklist interno com o mapeamento e validações (NÃO ANEXAR NO CARD)
+├── comentario-card.txt      # Texto pronto e formatado para copiar e colar no card/Mattermost
+├── anexos.zip               # Pacote zip contendo APENAS os prints necessários devidamente nomeados
+└── prints/                  # Capturas de tela (ex.: "Print 01 - Visualizar bloqueado.png")
 ```
 
-### Regras do Padrão:
-1. **Item por item**: Começar cada linha com `Resolvido:` ou `Não resolvido:`.
-2. **Dados concretos e literais**: Citar valores digitados, mensagens exatas entre aspas, nomes de botões e abas.
-3. **Mapeamento de Prints**: Cada item referenciado no texto deve ter seu respectivo `(Print XX)` correspondente.
-4. **Pacote Zip**: Gerar sempre um arquivo `.zip` com os prints renomeados sequencialmente (`Print 01.png`, `Print 02.png`, etc.) na pasta de saída.
+### 🖼️ Regra de Seleção de Prints (Evidências):
+- **O checklist NÃO é anexado no card**: fica apenas arquivado internamente na pasta do teste.
+- **Anexar apenas os prints estritamente necessários**: não anexar dezenas de telas triviais. Manter seleção cirúrgica (normalmente 4 a 6 prints relevantes, com contraste e comprovação clara).
+- **Se o teste NÃO passar**: anexar obrigatoriamente o print do erro, demonstrando a divergência com o requisito e o comportamento incorreto da tela.
+- **Nomenclatura descritiva dos prints**: Sempre no formato:
+  - `Print 01 - [Descrição curta do que está sendo comprovado].png`
+  - `Print 02 - [Descrição curta].png`
+
+### 📝 Padrão do Texto (`comentario-card.txt`):
+```markdown
+Fala @[nome-do-dev]! Retestei o card de "[Nome da Funcionalidade / Título do Card]". Segue o resultado:
+
+Resolvido: [Ação executada com dados concretos (valores, cadastros)] e confirmei que [comportamento observado], com a mensagem "[mensagem exata]" (Print 01). Pra contraste, testei [cenário de contraste] (Print 02).
+Não resolvido: [Caso algum ponto tenha falhado, descrever exatamente o que aconteceu e o que era esperado] (Print XX).
+Fora do escopo deste card: [Bugs periféricos encontrados que não impedem o fechamento do card atual].
+Com isso, considero este card resolvido / [ou parecer correspondente].
+Fico à disposição se precisar de mais detalhes de qualquer um desses pontos.
+```
