@@ -24,21 +24,26 @@ for (const p of pages) {
     const sidebar = page.locator('#sidebar');
     await expect(sidebar).toBeVisible();
 
-    // Validar itens obrigatórios do menu lateral unificado com arquitetura agrupada
+    // Validar itens obrigatórios do menu lateral com padrão Enterprise Navigation
     await expect(sidebar.getByText('Início')).toBeVisible();
     await expect(sidebar.getByText('Fiscalização')).toBeVisible();
-    await expect(sidebar.getByText('Denúncias Ambientais (RD)')).toBeVisible();
+    await expect(sidebar.getByText('Denúncias', { exact: true })).toBeVisible();
     await expect(sidebar.getByText('Atendente')).toBeVisible();
     await expect(sidebar.getByText('Formulário Cidadão')).toBeVisible();
-    await expect(sidebar.getByText('Emergências Químicas (RE)')).toBeVisible();
+    await expect(sidebar.getByText('Emergências Químicas', { exact: true })).toBeVisible();
     await expect(sidebar.getByText('Cadastro Interno')).toBeVisible();
     await expect(sidebar.getByText('Registro Externo')).toBeVisible();
-    await expect(sidebar.getByText('Consultas e Acompanhamento')).toBeVisible();
-    await expect(sidebar.getByText('Consulta Externa')).toBeVisible();
+    await expect(sidebar.getByText('Consultas', { exact: true })).toBeVisible();
+    await expect(sidebar.getByText('Consulta Cidadão')).toBeVisible();
     await expect(sidebar.getByText('Painel Interno DIFIS')).toBeVisible();
     await expect(sidebar.getByText('Relatórios Gerenciais')).toBeVisible();
     await expect(sidebar.getByText('Corporativo')).toBeVisible();
     await expect(sidebar.getByText('✦ Assistente INEMA')).toBeVisible();
+
+    // Validar ausência de ruídos: sem marcadores/bullets (• ou rounded-full dots) e sem tags "Em breve"
+    await expect(sidebar.locator('text=•')).toHaveCount(0);
+    await expect(sidebar.locator('text="Em breve"')).toHaveCount(0);
+    await expect(sidebar.locator('.rounded-full:not(#sidebarBadgeEmergencias)')).toHaveCount(0);
 
     expect(errors).toHaveLength(0);
   });

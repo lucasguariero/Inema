@@ -1,4 +1,4 @@
-﻿import os
+import os
 import re
 
 ROOT = r"c:\Users\lguar\projetos\Inema"
@@ -20,26 +20,26 @@ def generate_sidebar_html(active_item):
     relat_active = (active_item == 'relatorios')
     fisc_active = active_item in ['atendente', 'cidadao', 'emergencia-externa', 'emergencia-interna', 'consulta-externa', 'consulta-interna']
 
-    inicio_cls = "text-[#0F4C3A] bg-[#E2ECE9] font-semibold" if inicio_active else "text-slate-600 hover:bg-slate-100 font-medium"
+    inicio_cls = "text-[#0F4C3A] bg-[#E2ECE9] font-semibold" if inicio_active else "text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium"
     inicio_icon_cls = "text-[#0F4C3A]" if inicio_active else "text-slate-500"
 
-    fisc_btn_cls = "text-[#0F4C3A] bg-[#E2ECE9] font-semibold" if fisc_active else "text-slate-600 hover:bg-slate-100 font-semibold"
+    fisc_btn_cls = "text-[#0F4C3A] bg-[#E2ECE9] font-semibold" if fisc_active else "text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-semibold"
     fisc_icon_cls = "text-[#0F4C3A]" if fisc_active else "text-slate-500"
     fisc_rotate = "rotate-180"
 
     def item_classes(key):
         if active_item == key:
-            return ("bg-[#E2ECE9] text-[#0F4C3A] font-semibold rounded-xl", "bg-[#0F4C3A]")
-        return ("text-slate-600 hover:bg-slate-100 hover:text-slate-900 font-medium rounded-xl", "bg-slate-300")
+            return "bg-[#E2ECE9] text-[#0F4C3A] font-semibold rounded-lg"
+        return "text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg"
 
-    atendente_cls, atendente_dot = item_classes('atendente')
-    cidadao_cls, cidadao_dot = item_classes('cidadao')
-    emerg_int_cls, emerg_int_dot = item_classes('emergencia-interna')
-    emerg_ext_cls, emerg_ext_dot = item_classes('emergencia-externa')
-    cons_ext_cls, cons_ext_dot = item_classes('consulta-externa')
-    cons_int_cls, cons_int_dot = item_classes('consulta-interna')
+    atendente_cls = item_classes('atendente')
+    cidadao_cls = item_classes('cidadao')
+    emerg_int_cls = item_classes('emergencia-interna')
+    emerg_ext_cls = item_classes('emergencia-externa')
+    cons_ext_cls = item_classes('consulta-externa')
+    cons_int_cls = item_classes('consulta-interna')
 
-    relat_cls = "text-[#0F4C3A] bg-[#E2ECE9] font-semibold" if relat_active else "text-slate-600 hover:bg-slate-100 font-medium"
+    relat_cls = "text-[#0F4C3A] bg-[#E2ECE9] font-semibold" if relat_active else "text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium"
     relat_icon_cls = "text-[#0F4C3A]" if relat_active else "text-slate-500"
 
     return f'''        <!-- Overlay Mobile -->
@@ -49,14 +49,14 @@ def generate_sidebar_html(active_item):
         <aside id="sidebar" class="w-[280px] bg-white border-r border-[#E5E7EB] flex flex-col fixed top-[60px] bottom-0 left-0 z-40 transition-transform duration-200 -translate-x-full lg:translate-x-0">
             <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1">
                 <!-- 1. Item Principal: Início -->
-                <a href="index.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl {inicio_cls} transition-colors">
+                <a href="index.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg {inicio_cls} transition-colors duration-150">
                     <span class="material-symbols-outlined text-xl {inicio_icon_cls}">home</span>
-                    <span class="text-sm">Início</span>
+                    <span class="text-sm font-medium">Início</span>
                 </a>
 
                 <!-- 2. Módulo Principal (Expansível / Accordion Ativo): Fiscalização -->
                 <div class="pt-1">
-                    <button onclick="toggleSubmenu('subFiscalizacao', 'iconFiscalizacao')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl {fisc_btn_cls} transition-colors">
+                    <button onclick="toggleSubmenu('subFiscalizacao', 'iconFiscalizacao')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg {fisc_btn_cls} transition-colors duration-150">
                         <div class="flex items-center gap-3">
                             <span class="material-symbols-outlined text-xl {fisc_icon_cls}">fact_check</span>
                             <span class="text-sm font-semibold">Fiscalização</span>
@@ -64,78 +64,58 @@ def generate_sidebar_html(active_item):
                         <span id="iconFiscalizacao" class="material-symbols-outlined text-lg {fisc_icon_cls} transition-transform duration-200 {fisc_rotate}">expand_more</span>
                     </button>
                     
-                    <div id="subFiscalizacao" class="mt-1 pl-3 space-y-2 border-l border-slate-200 ml-3">
-                        <!-- Subgrupo: DENÚNCIAS AMBIENTAIS (RD) -->
-                        <div class="space-y-0.5">
-                            <div class="text-[10px] font-semibold uppercase tracking-wider text-slate-400 px-3 pt-2 pb-1">
-                                Denúncias Ambientais (RD)
+                    <div id="subFiscalizacao" class="mt-1 border-l-2 border-slate-200 ml-4 pl-3 space-y-1">
+                        <!-- Subgrupo: DENÚNCIAS -->
+                        <div class="space-y-1">
+                            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 px-3 pt-2 pb-1.5 flex items-center gap-2">
+                                Denúncias
                             </div>
-                            <ul class="space-y-0.5">
-                                <li>
-                                    <a href="fiscalizacao.html" id="menu-atendente" class="flex items-center gap-2.5 px-3 py-2 text-xs {atendente_cls} transition-colors">
-                                        <span class="w-1.5 h-1.5 rounded-full {atendente_dot}"></span>
-                                        <span>Atendente</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="fiscalizacao.html?fluxo=externo" id="menu-cidadao" class="flex items-center gap-2.5 px-3 py-2 text-xs {cidadao_cls} transition-colors">
-                                        <span class="w-1.5 h-1.5 rounded-full {cidadao_dot}"></span>
-                                        <span>Formulário Cidadão</span>
-                                    </a>
-                                </li>
-                            </ul>
+                            <div class="space-y-1">
+                                <a href="fiscalizacao.html" id="menu-atendente" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 {atendente_cls}">
+                                    <span>Atendente</span>
+                                </a>
+                                <a href="fiscalizacao.html?fluxo=externo" id="menu-cidadao" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 {cidadao_cls}">
+                                    <span>Formulário Cidadão</span>
+                                </a>
+                            </div>
                         </div>
 
-                        <!-- Subgrupo: EMERGÊNCIAS QUÍMICAS (RE) -->
-                        <div class="space-y-0.5 pt-1 border-t border-slate-100">
-                            <div class="text-[10px] font-semibold uppercase tracking-wider text-slate-400 px-3 pt-2 pb-1">
-                                Emergências Químicas (RE)
+                        <!-- Subgrupo: EMERGÊNCIAS QUÍMICAS -->
+                        <div class="space-y-1 border-t border-slate-100 mt-2 pt-2">
+                            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 px-3 pt-1.5 pb-1.5 flex items-center gap-2">
+                                Emergências Químicas
                             </div>
-                            <ul class="space-y-0.5">
-                                <li>
-                                    <a href="emergencia-quimica.html?fluxo=interna" id="menu-emerg-interna" class="flex items-center gap-2.5 px-3 py-2 text-xs {emerg_int_cls} transition-colors">
-                                        <span class="w-1.5 h-1.5 rounded-full {emerg_int_dot}"></span>
-                                        <span>Cadastro Interno</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="emergencia-quimica-externa.html" id="menu-emerg-externa" class="flex items-center gap-2.5 px-3 py-2 text-xs {emerg_ext_cls} transition-colors">
-                                        <span class="w-1.5 h-1.5 rounded-full {emerg_ext_dot}"></span>
-                                        <span>Registro Externo</span>
-                                    </a>
-                                </li>
-                            </ul>
+                            <div class="space-y-1">
+                                <a href="emergencia-quimica.html?fluxo=interna" id="menu-emerg-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 {emerg_int_cls}">
+                                    <span>Cadastro Interno</span>
+                                </a>
+                                <a href="emergencia-quimica-externa.html" id="menu-emerg-externa" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 {emerg_ext_cls}">
+                                    <span>Registro Externo</span>
+                                </a>
+                            </div>
                         </div>
 
-                        <!-- Subgrupo: CONSULTAS E ACOMPANHAMENTO -->
-                        <div class="space-y-0.5 pt-1 border-t border-slate-100">
-                            <div class="text-[10px] font-semibold uppercase tracking-wider text-slate-400 px-3 pt-2 pb-1">
-                                Consultas e Acompanhamento
+                        <!-- Subgrupo: CONSULTAS -->
+                        <div class="space-y-1 border-t border-slate-100 mt-2 pt-2">
+                            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 px-3 pt-1.5 pb-1.5 flex items-center gap-2">
+                                Consultas
                             </div>
-                            <ul class="space-y-0.5">
-                                <li>
-                                    <a href="consulta-externa.html" id="menu-consulta-externa" class="flex items-center gap-2.5 px-3 py-2 text-xs {cons_ext_cls} transition-colors">
-                                        <span class="w-1.5 h-1.5 rounded-full {cons_ext_dot}"></span>
-                                        <span>Consulta Externa</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="consulta-interna.html" id="menu-consulta-interna" class="flex items-center justify-between px-3 py-2 text-xs {cons_int_cls} transition-colors">
-                                        <div class="flex items-center gap-2.5">
-                                            <span class="w-1.5 h-1.5 rounded-full {cons_int_dot}"></span>
-                                            <span>Painel Interno DIFIS</span>
-                                        </div>
-                                        <span class="text-[10px] bg-red-600 text-white px-1.5 py-0.2 rounded-full font-bold animate-pulse" id="sidebarBadgeEmergencias">3</span>
-                                    </a>
-                                </li>
-                            </ul>
+                            <div class="space-y-1">
+                                <a href="consulta-externa.html" id="menu-consulta-externa" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 {cons_ext_cls}">
+                                    <span>Consulta Cidadão</span>
+                                </a>
+                                <a href="consulta-interna.html" id="menu-consulta-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 {cons_int_cls}">
+                                    <span>Painel Interno DIFIS</span>
+                                    <span class="bg-rose-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full" id="sidebarBadgeEmergencias">3</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- 3. Módulo: Relatórios Gerenciais -->
                 <div class="pt-1">
-                    <a href="relatorios.html" id="menu-relatorios" class="flex items-center gap-3 px-3 py-2.5 rounded-xl {relat_cls} transition-colors">
+                    <a href="relatorios.html" id="menu-relatorios" class="flex items-center gap-3 px-3 py-2.5 rounded-lg {relat_cls} transition-colors duration-150">
                         <span class="material-symbols-outlined text-xl {relat_icon_cls}">bar_chart</span>
                         <span class="text-sm font-medium">Relatórios Gerenciais</span>
                     </a>
@@ -143,37 +123,25 @@ def generate_sidebar_html(active_item):
 
                 <!-- 4. Módulos Corporativos Complementares (Links institucionais / Inativos) -->
                 <div class="pt-2">
-                    <div class="text-[10px] font-semibold uppercase tracking-wider text-slate-400 px-3 pt-2 pb-1">
+                    <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 px-3 mt-4 mb-1">
                         Corporativo
                     </div>
                     <div class="space-y-0.5">
-                        <a href="#" onclick="alert('Módulo de Licenciamento Ambiental em integração com o SEIA.'); return false;" class="flex items-center justify-between px-3 py-2 rounded-xl text-xs text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-colors group">
-                            <div class="flex items-center gap-2.5">
-                                <span class="material-symbols-outlined text-lg text-slate-400 group-hover:text-slate-600">description</span>
-                                <span>Licenciamento</span>
-                            </div>
-                            <span class="text-[9px] uppercase tracking-wider font-semibold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">Em breve</span>
+                        <a href="#" onclick="alert('Módulo de Licenciamento Ambiental em integração com o SEIA.'); return false;" class="flex items-center gap-3 px-3 py-2 rounded-lg text-xs md:text-sm text-slate-500 opacity-60 cursor-not-allowed hover:bg-transparent transition-colors">
+                            <span class="material-symbols-outlined text-lg text-slate-400">description</span>
+                            <span>Licenciamento</span>
                         </a>
-                        <a href="#" onclick="alert('Módulo de Monitoramento Ambiental em integração.'); return false;" class="flex items-center justify-between px-3 py-2 rounded-xl text-xs text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-colors group">
-                            <div class="flex items-center gap-2.5">
-                                <span class="material-symbols-outlined text-lg text-slate-400 group-hover:text-slate-600">radar</span>
-                                <span>Monitoramento</span>
-                            </div>
-                            <span class="text-[9px] uppercase tracking-wider font-semibold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">Em breve</span>
+                        <a href="#" onclick="alert('Módulo de Monitoramento Ambiental em integração.'); return false;" class="flex items-center gap-3 px-3 py-2 rounded-lg text-xs md:text-sm text-slate-500 opacity-60 cursor-not-allowed hover:bg-transparent transition-colors">
+                            <span class="material-symbols-outlined text-lg text-slate-400">radar</span>
+                            <span>Monitoramento</span>
                         </a>
-                        <a href="#" onclick="alert('Módulo de Geoprocessamento e Informações Espaciais.'); return false;" class="flex items-center justify-between px-3 py-2 rounded-xl text-xs text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-colors group">
-                            <div class="flex items-center gap-2.5">
-                                <span class="material-symbols-outlined text-lg text-slate-400 group-hover:text-slate-600">map</span>
-                                <span>Geoprocessamento</span>
-                            </div>
-                            <span class="text-[9px] uppercase tracking-wider font-semibold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">Em breve</span>
+                        <a href="#" onclick="alert('Módulo de Geoprocessamento e Informações Espaciais.'); return false;" class="flex items-center gap-3 px-3 py-2 rounded-lg text-xs md:text-sm text-slate-500 opacity-60 cursor-not-allowed hover:bg-transparent transition-colors">
+                            <span class="material-symbols-outlined text-lg text-slate-400">map</span>
+                            <span>Geoprocessamento</span>
                         </a>
-                        <a href="#" onclick="alert('Módulo de Gestão Laboratorial e Análises Químicas.'); return false;" class="flex items-center justify-between px-3 py-2 rounded-xl text-xs text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-colors group">
-                            <div class="flex items-center gap-2.5">
-                                <span class="material-symbols-outlined text-lg text-slate-400 group-hover:text-slate-600">science</span>
-                                <span>Laboratório</span>
-                            </div>
-                            <span class="text-[9px] uppercase tracking-wider font-semibold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">Em breve</span>
+                        <a href="#" onclick="alert('Módulo de Gestão Laboratorial e Análises Químicas.'); return false;" class="flex items-center gap-3 px-3 py-2 rounded-lg text-xs md:text-sm text-slate-500 opacity-60 cursor-not-allowed hover:bg-transparent transition-colors">
+                            <span class="material-symbols-outlined text-lg text-slate-400">science</span>
+                            <span>Laboratório</span>
                         </a>
                     </div>
                 </div>
@@ -212,7 +180,6 @@ def process_file(filename, active_item):
 
     # In fiscalizacao.html, dynamic check for ?fluxo=externo
     if filename == "fiscalizacao.html":
-        # Ensure correct active class change on ?fluxo=externo
         old_hook = re.compile(r'// Ajustar active state do menu caso seja \?fluxo=externo.*?\}\);', re.DOTALL)
         new_hook = '''// Ajustar active state do menu caso seja ?fluxo=externo
         document.addEventListener('DOMContentLoaded', () => {
@@ -220,13 +187,8 @@ def process_file(filename, active_item):
                 const linkAtendente = document.getElementById('menu-atendente');
                 const linkCidadao = document.getElementById('menu-cidadao');
                 if (linkAtendente && linkCidadao) {
-                    linkAtendente.className = 'flex items-center gap-2.5 px-3 py-2 text-xs text-slate-600 hover:bg-slate-100 hover:text-slate-900 font-medium rounded-xl transition-colors';
-                    const dotA = linkAtendente.querySelector('span');
-                    if (dotA) dotA.className = 'w-1.5 h-1.5 rounded-full bg-slate-300';
-
-                    linkCidadao.className = 'flex items-center gap-2.5 px-3 py-2 text-xs bg-[#E2ECE9] text-[#0F4C3A] font-semibold rounded-xl transition-colors';
-                    const dotC = linkCidadao.querySelector('span');
-                    if (dotC) dotC.className = 'w-1.5 h-1.5 rounded-full bg-[#0F4C3A]';
+                    linkAtendente.className = 'flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm font-medium text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 transition-colors duration-150';
+                    linkCidadao.className = 'flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm bg-[#E2ECE9] text-[#0F4C3A] font-semibold transition-colors duration-150';
                 }
             }
         });'''
