@@ -37,12 +37,14 @@ for (const p of pages) {
     await expect(sidebar.getByText('Consulta Cidadão')).toBeVisible();
     await expect(sidebar.getByText('Painel Interno DIFIS')).toBeVisible();
     await expect(sidebar.getByText('Relatórios Gerenciais')).toBeVisible();
-    await expect(sidebar.getByText('Corporativo')).toBeVisible();
-    await expect(sidebar.getByText('✦ Assistente INEMA')).toBeVisible();
+    await expect(sidebar.getByText('Assistente INEMA')).toBeVisible();
 
-    // Validar ausência de ruídos: sem marcadores/bullets (• ou rounded-full dots) e sem tags "Em breve"
+    // Validar ausência de ruídos: sem marcadores/bullets, sem tags "Em breve", sem caractere ✦ e sem bloco Corporativo
     await expect(sidebar.locator('text=•')).toHaveCount(0);
+    await expect(sidebar.locator('text=✦')).toHaveCount(0);
     await expect(sidebar.locator('text="Em breve"')).toHaveCount(0);
+    await expect(sidebar.getByText('Corporativo')).toHaveCount(0);
+    await expect(sidebar.getByText('Licenciamento')).toHaveCount(0);
     await expect(sidebar.locator('.rounded-full:not(#sidebarBadgeEmergencias)')).toHaveCount(0);
 
     expect(errors).toHaveLength(0);

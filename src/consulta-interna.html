@@ -129,7 +129,7 @@
     <!-- ========================================== -->
     <div class="flex flex-1 pt-[60px] h-full overflow-hidden">
         
-                                        <!-- Overlay Mobile -->
+                                                <!-- Overlay Mobile -->
         <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-30 hidden lg:hidden" style="top: 60px;"></div>
 
         <!-- Sidebar Lateral Padronizada (280px) -->
@@ -207,38 +207,19 @@
                         <span class="text-sm font-medium">Relatórios Gerenciais</span>
                     </a>
                 </div>
-
-                <!-- 4. Módulos Corporativos Complementares (Links institucionais / Inativos) -->
-                <div class="pt-2">
-                    <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 px-3 mt-4 mb-1">
-                        Corporativo
-                    </div>
-                    <div class="space-y-0.5">
-                        <a href="#" onclick="alert('Módulo de Licenciamento Ambiental em integração com o SEIA.'); return false;" class="flex items-center gap-3 px-3 py-2 rounded-lg text-xs md:text-sm text-slate-500 opacity-60 cursor-not-allowed hover:bg-transparent transition-colors">
-                            <span class="material-symbols-outlined text-lg text-slate-400">description</span>
-                            <span>Licenciamento</span>
-                        </a>
-                        <a href="#" onclick="alert('Módulo de Monitoramento Ambiental em integração.'); return false;" class="flex items-center gap-3 px-3 py-2 rounded-lg text-xs md:text-sm text-slate-500 opacity-60 cursor-not-allowed hover:bg-transparent transition-colors">
-                            <span class="material-symbols-outlined text-lg text-slate-400">radar</span>
-                            <span>Monitoramento</span>
-                        </a>
-                        <a href="#" onclick="alert('Módulo de Geoprocessamento e Informações Espaciais.'); return false;" class="flex items-center gap-3 px-3 py-2 rounded-lg text-xs md:text-sm text-slate-500 opacity-60 cursor-not-allowed hover:bg-transparent transition-colors">
-                            <span class="material-symbols-outlined text-lg text-slate-400">map</span>
-                            <span>Geoprocessamento</span>
-                        </a>
-                        <a href="#" onclick="alert('Módulo de Gestão Laboratorial e Análises Químicas.'); return false;" class="flex items-center gap-3 px-3 py-2 rounded-lg text-xs md:text-sm text-slate-500 opacity-60 cursor-not-allowed hover:bg-transparent transition-colors">
-                            <span class="material-symbols-outlined text-lg text-slate-400">science</span>
-                            <span>Laboratório</span>
-                        </a>
-                    </div>
-                </div>
             </nav>
 
-            <!-- 5. Rodapé Fixo da Sidebar: Assistente INEMA -->
+            <!-- Rodapé Fixo da Sidebar: Assistente INEMA -->
             <div class="p-3 border-t border-slate-200 bg-white">
-                <button onclick="alert('Assistente IA INEMA ativado. Em que posso auxiliá-lo com as demandas de Fiscalização e SEIA?')" class="w-full flex items-center justify-center gap-2 py-2.5 px-3 bg-[#0F4C3A] text-white text-xs font-semibold rounded-xl hover:bg-[#155d47] transition-all shadow-xs group">
-                    <span class="material-symbols-outlined text-base text-amber-300 group-hover:rotate-12 transition-transform">auto_awesome</span>
-                    <span>✦ Assistente INEMA</span>
+                <button onclick="alert('Assistente IA INEMA ativado. Em que posso auxiliá-lo com as demandas de Fiscalização e SEIA?')" class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#0F4C3A] text-white font-medium text-xs hover:bg-[#0c3d2e] transition-colors shadow-xs group">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-amber-300 group-hover:rotate-12 transition-transform shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+                        <path d="M5 3v4"/>
+                        <path d="M19 17v4"/>
+                        <path d="M3 5h4"/>
+                        <path d="M17 19h4"/>
+                    </svg>
+                    <span>Assistente INEMA</span>
                 </button>
             </div>
         </aside>
