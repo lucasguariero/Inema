@@ -20,7 +20,10 @@ test.describe('DOR005: Consulta de Registros Internos (DIFIS)', () => {
     await expect(page.locator('h1')).toHaveText('Consultar Registros');
     const indicador = page.locator('#indicadorEmergenciasContainer');
     await expect(indicador).toBeVisible();
-    await expect(page.locator('#contadorEmergencias')).toBeVisible();
+    await expect(indicador).toContainText('Emergências Registradas');
+    await expect(page.locator('#contadorEmergencias')).toHaveText('3');
+    await expect(indicador).not.toHaveClass(/animate-pulse/);
+    await expect(page.locator('text=crisis_alert')).toHaveCount(0);
 
     // Filtros
     await expect(page.locator('#filtroStatus')).toBeVisible();

@@ -80,7 +80,7 @@
         <!-- Direita: Perfil Cidadão / Gov.br -->
         <div class="flex items-center gap-3">
             <span class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-900/40 border border-emerald-400/30 rounded-full text-xs font-semibold text-emerald-200">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
                 Autenticado via Gov.br
             </span>
 
@@ -944,8 +944,8 @@
                 // Badge Status
                 let badgeStatus = '';
                 if (item.status === 'Emergência Registrada') {
-                    badgeStatus = `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-100 text-amber-900 border border-amber-300 font-bold rounded-md text-[11px]">
-                        <span class="material-symbols-outlined text-xs text-amber-700">crisis_alert</span>
+                    badgeStatus = `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-50 text-amber-800 border border-amber-200 font-semibold rounded-md text-[11px]">
+                        <span class="material-symbols-outlined text-xs text-amber-700">warning</span>
                         Emergência Registrada
                     </span>`;
                 } else if (item.status === 'Análise Técnica') {

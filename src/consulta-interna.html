@@ -46,13 +46,7 @@
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        .pulse-subtle {
-            animation: pulse-border 2s infinite;
-        }
-        @keyframes pulse-border {
-            0%, 100% { border-color: rgba(220, 38, 38, 0.4); box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.2); }
-            50% { border-color: rgba(220, 38, 38, 0.9); box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.15); }
-        }
+
         @media print {
             header, aside, #formFiltrosContainer, #paginacaoContainer, .no-print {
                 display: none !important;
@@ -242,14 +236,17 @@
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-slate-200">
                 <div>
                     <div class="flex items-center gap-3 flex-wrap">
-                        <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Consultar Registros</h1>
+                        <h1 class="text-xl font-bold text-slate-800 tracking-tight">Consultar Registros</h1>
                         
-                        <!-- Indicador de Emergências -->
-                        <div id="indicadorEmergenciasContainer" class="inline-flex items-center gap-2 px-3 py-1 bg-red-50 border border-red-200 rounded-full text-xs font-bold text-red-700 shadow-xs cursor-pointer hover:bg-red-100 transition-colors pulse-subtle" onclick="filtrarEmergenciasRegistradas()" title="Clique para filtrar apenas emergências que exigem resposta imediata">
-                            <span class="material-symbols-outlined text-base text-red-600 animate-pulse">crisis_alert</span>
-                            <span>Emergências Registradas:</span>
-                            <span id="contadorEmergencias" class="bg-red-600 text-white px-2 py-0.5 rounded-full text-[11px] font-extrabold shadow-xs">3</span>
-                        </div>
+                        <!-- Badge Institucional e Discreta de Emergências -->
+                        <span id="indicadorEmergenciasContainer" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200 cursor-pointer hover:bg-rose-100 transition-colors shadow-xs" onclick="filtrarEmergenciasRegistradas()" title="Clique para filtrar apenas emergências que exigem resposta imediata">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-rose-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                                <line x1="12" y1="9" x2="12" y2="13"/>
+                                <line x1="12" y1="17" x2="12.01" y2="17"/>
+                            </svg>
+                            <span><span id="contadorEmergencias">3</span> Emergências Registradas</span>
+                        </span>
                     </div>
                     <p class="text-xs sm:text-sm text-slate-500 mt-1">
                         Painel operacional integrado para triagem, tramitação e acompanhamento de denúncias ambientais e emergências químicas da DIFIS.
@@ -1248,10 +1245,8 @@
             if (container) {
                 if (qtd > 0) {
                     container.classList.remove('opacity-50');
-                    container.classList.add('pulse-subtle');
                 } else {
                     container.classList.add('opacity-50');
-                    container.classList.remove('pulse-subtle');
                 }
             }
         }
@@ -1445,8 +1440,8 @@
                 let badgeStatusClass = 'bg-slate-100 text-slate-800 border-slate-200';
                 let iconeStatus = 'schedule';
                 if (reg.status === 'Emergência Registrada') {
-                    badgeStatusClass = 'bg-red-100 text-red-800 border-red-300 font-extrabold animate-pulse';
-                    iconeStatus = 'crisis_alert';
+                    badgeStatusClass = 'bg-rose-50 text-rose-700 border-rose-200 font-semibold';
+                    iconeStatus = 'warning';
                 } else if (reg.status === 'Análise Técnica') {
                     badgeStatusClass = 'bg-orange-100 text-orange-800 border-orange-300 font-bold';
                     iconeStatus = 'manage_search';
