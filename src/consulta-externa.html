@@ -54,27 +54,13 @@
     <!-- ========================================== -->
     <header class="h-[60px] bg-[#0F4C3A] text-white flex items-center justify-between px-4 lg:px-6 fixed top-0 left-0 right-0 z-50 shadow-md">
         <!-- Esquerda: Menu Hambúrguer + Logo SEIA -->
-        <div class="flex items-center gap-3">
-            <button id="btnToggleSidebar" onclick="toggleSidebar()" class="p-2 hover:bg-white/10 rounded-lg text-white transition-colors focus:outline-none focus:ring-2 focus:ring-white/30" aria-label="Menu">
+                <div class="flex items-center gap-3">
+            <button class="w-10 h-10 rounded-lg hover:bg-white/10 flex items-center justify-center text-white transition-colors" onclick="toggleSidebar()" aria-label="Menu principal">
                 <span class="material-symbols-outlined text-2xl">menu</span>
             </button>
-            <a href="index.html" class="flex items-center gap-2.5">
-                <div class="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center font-bold text-lg text-white border border-white/20">
-                    S
-                </div>
-                <div class="flex flex-col leading-tight">
-                    <span class="font-bold tracking-wide text-base">SEIA</span>
-                    <span class="text-[10px] text-white/75 font-medium tracking-wider uppercase">Portal de Atendimento</span>
-                </div>
+            <a href="index.html" class="flex items-center">
+                <span class="text-2xl font-bold tracking-tight text-white lowercase">inema</span>
             </a>
-        </div>
-
-        <!-- Centro: Busca em Pílula -->
-        <div class="hidden md:flex items-center flex-1 max-w-md mx-8">
-            <div class="relative w-full">
-                <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-white/60 text-lg">search</span>
-                <input type="text" id="campoBuscaRapida" placeholder="Buscar por nº de registro, município..." class="w-full pl-10 pr-4 py-1.5 bg-white/10 hover:bg-white/15 focus:bg-white text-white focus:text-slate-800 placeholder:text-white/60 focus:placeholder:text-slate-400 rounded-full text-xs font-normal border border-white/15 focus:border-white focus:outline-none transition-all">
-            </div>
         </div>
 
         <!-- Direita: Perfil Cidadão / Gov.br -->
@@ -129,47 +115,47 @@
                         <span id="iconFiscalizacao" class="material-symbols-outlined text-lg text-[#0F4C3A] transition-transform duration-200 rotate-180">expand_more</span>
                     </button>
                     
-                    <div id="subFiscalizacao" class="mt-1 border-l-2 border-slate-200 ml-4 pl-3 space-y-1">
+                    <div id="subFiscalizacao" class="mt-2 border-l-2 border-slate-200 ml-4 pl-3 space-y-4">
                         <!-- Subgrupo: DENÚNCIAS -->
-                        <div class="space-y-1">
-                            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 px-3 pt-2 pb-1.5 flex items-center gap-2">
+                        <div>
+                            <div class="text-slate-400 font-semibold text-[11px] tracking-wider uppercase px-3 pt-1 pb-1">
                                 Denúncias
                             </div>
-                            <div class="space-y-1">
-                                <a href="fiscalizacao.html" id="menu-atendente" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                            <div class="space-y-1 mt-1">
+                                <a href="fiscalizacao.html" id="menu-atendente" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                                     <span>Atendente</span>
                                 </a>
-                                <a href="fiscalizacao.html?fluxo=externo" id="menu-cidadao" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                                <a href="fiscalizacao.html?fluxo=externo" id="menu-cidadao" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                                     <span>Formulário Cidadão</span>
                                 </a>
                             </div>
                         </div>
 
                         <!-- Subgrupo: EMERGÊNCIAS QUÍMICAS -->
-                        <div class="space-y-1 border-t border-slate-100 mt-2 pt-2">
-                            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 px-3 pt-1.5 pb-1.5 flex items-center gap-2">
+                        <div>
+                            <div class="text-slate-400 font-semibold text-[11px] tracking-wider uppercase px-3 pt-1 pb-1">
                                 Emergências Químicas
                             </div>
-                            <div class="space-y-1">
-                                <a href="emergencia-quimica.html?fluxo=interna" id="menu-emerg-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                            <div class="space-y-1 mt-1">
+                                <a href="emergencia-quimica.html" id="menu-emerg-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 bg-[#E2ECE9] text-[#0F4C3A] font-semibold">
                                     <span>Cadastro Interno</span>
                                 </a>
-                                <a href="emergencia-quimica-externa.html" id="menu-emerg-externa" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                                <a href="emergencia-quimica-externa.html" id="menu-emerg-externa" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                                     <span>Registro Externo</span>
                                 </a>
                             </div>
                         </div>
 
                         <!-- Subgrupo: CONSULTAS -->
-                        <div class="space-y-1 border-t border-slate-100 mt-2 pt-2">
-                            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 px-3 pt-1.5 pb-1.5 flex items-center gap-2">
+                        <div>
+                            <div class="text-slate-400 font-semibold text-[11px] tracking-wider uppercase px-3 pt-1 pb-1">
                                 Consultas
                             </div>
-                            <div class="space-y-1">
-                                <a href="consulta-externa.html" id="menu-consulta-externa" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 bg-[#E2ECE9] text-[#0F4C3A] font-semibold rounded-lg">
+                            <div class="space-y-1 mt-1">
+                                <a href="consulta-externa.html" id="menu-consulta-externa" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                                     <span>Consulta Cidadão</span>
                                 </a>
-                                <a href="consulta-interna.html" id="menu-consulta-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                                <a href="consulta-interna.html" id="menu-consulta-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                                     <span>Painel Interno DIFIS</span>
                                     <span class="bg-rose-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full" id="sidebarBadgeEmergencias">3</span>
                                 </a>
@@ -203,7 +189,7 @@
         </aside>
 
         <!-- ========================================== -->
-        <!-- CONTEÚDO PRINCIPAL (DOR005.1 DESPOLUÍDO)   -->
+        <!-- CONTEÚDO PRINCIPAL   -->
         <!-- ========================================== -->
         <main class="flex-1 lg:ml-[280px] p-4 lg:p-8 overflow-y-auto space-y-6">
             
@@ -236,11 +222,11 @@
                 <div class="flex items-center gap-3">
                     <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 text-center min-w-[110px]">
                         <span class="text-[10px] uppercase font-bold text-slate-400 block">Total Ativos</span>
-                        <span id="kpiTotalGeral" class="text-2xl font-bold text-inema-green font-mono">4</span>
+                        <span id="kpiTotalGeral" class="text-2xl font-bold text-inema-green ">4</span>
                     </div>
                     <div class="p-3 bg-amber-50 rounded-xl border border-amber-200 text-center min-w-[110px]">
                         <span class="text-[10px] uppercase font-bold text-amber-700 block">Emergências (RE)</span>
-                        <span id="kpiTotalRE" class="text-2xl font-bold text-amber-800 font-mono">2</span>
+                        <span id="kpiTotalRE" class="text-2xl font-bold text-amber-800 ">2</span>
                     </div>
                 </div>
             </div>
@@ -286,7 +272,7 @@
                             <label for="filtroNumero" class="block text-xs font-semibold text-slate-700 mb-1">
                                 Número do Registro
                             </label>
-                            <input type="text" id="filtroNumero" placeholder="Ex: 2026.000004/INEMA/RE" class="w-full text-xs rounded-lg border border-slate-300 px-3 py-2 focus:border-inema-green focus:ring-1 focus:ring-inema-green outline-none font-mono">
+                            <input type="text" id="filtroNumero" placeholder="Ex: 2026.000004/INEMA/RE" class="w-full text-xs rounded-lg border border-slate-300 px-3 py-2 focus:border-inema-green focus:ring-1 focus:ring-inema-green outline-none ">
                         </div>
 
                         <!-- Município -->
@@ -452,9 +438,9 @@
                         <div>
                             <div class="flex items-center gap-2">
                                 <span class="text-xs uppercase font-bold tracking-wider text-emerald-200" id="drawerTipoRotulo">Visualização Protegida</span>
-                                <span id="badgeProcessoVinculado" class="hidden text-[10px] bg-white/20 text-white font-mono px-2 py-0.5 rounded"></span>
+                                <span id="badgeProcessoVinculado" class="hidden text-[10px] bg-white/20 text-white px-2 py-0.5 rounded"></span>
                             </div>
-                            <h2 class="text-lg font-bold text-white font-mono" id="drawerNumeroRegistro">2026.000004/INEMA/RE</h2>
+                            <h2 class="text-lg font-bold text-white " id="drawerNumeroRegistro">2026.000004/INEMA/RE</h2>
                         </div>
                     </div>
                     <button type="button" onclick="fecharDrawer()" class="text-white/70 hover:text-white p-1 rounded-lg">
@@ -514,7 +500,7 @@
             <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 flex items-center justify-between">
                 <div>
                     <span class="text-[10px] uppercase font-bold text-slate-400 block">Registro Vinculado</span>
-                    <span id="modalAnexoNumeroReg" class="text-xs font-bold text-slate-800 font-mono">2026.000004/INEMA/RE</span>
+                    <span id="modalAnexoNumeroReg" class="text-xs font-bold text-slate-800 ">2026.000004/INEMA/RE</span>
                 </div>
                 <span id="modalAnexoTipoReg" class="text-xs px-2.5 py-1 bg-inema-sage text-inema-green font-semibold rounded-full">
                     Emergência Química (RE)
@@ -967,13 +953,13 @@
 
                 // Link Processo Formal
                 const linkProcesso = item.processoFormal 
-                    ? `<span class="text-[10px] text-slate-500 block font-mono">Proc: ${item.processoFormal}</span>` 
+                    ? `<span class="text-[10px] text-slate-500 block ">Proc: ${item.processoFormal}</span>` 
                     : '';
 
                 return `
                     <tr class="hover:bg-slate-50/80 transition-colors">
                         <td class="px-4 py-3.5 whitespace-nowrap">
-                            <button type="button" onclick="abrirDrawerVisualizacao('${item.numeroRegistro}')" class="font-mono font-bold text-inema-green hover:underline text-left">
+                            <button type="button" onclick="abrirDrawerVisualizacao('${item.numeroRegistro}')" class=" font-bold text-inema-green hover:underline text-left">
                                 ${item.numeroRegistro}
                             </button>
                             ${linkProcesso}
@@ -1157,7 +1143,7 @@
                                         </div>
                                         <div>
                                             <span class="font-bold text-slate-800 block">${r.tipo}</span>
-                                            <span class="text-[10px] text-slate-500 font-mono">${r.nomeArquivo} • ${r.dataHoraEnvio}</span>
+                                            <span class="text-[10px] text-slate-500 ">${r.nomeArquivo} • ${r.dataHoraEnvio}</span>
                                         </div>
                                     </div>
                                     <button type="button" onclick="alert('Download do arquivo ${r.nomeArquivo} iniciado.')" class="px-2.5 py-1 bg-white border border-slate-300 text-slate-700 rounded text-xs font-semibold hover:bg-slate-100">

@@ -65,27 +65,13 @@
     <!-- ========================================== -->
     <header class="h-[60px] bg-[#0F4C3A] text-white flex items-center justify-between px-4 lg:px-6 fixed top-0 left-0 right-0 z-50 shadow-md">
         <!-- Esquerda: Hambúrguer + Logo SEIA -->
-        <div class="flex items-center gap-3">
-            <button id="btnToggleSidebar" class="p-2 hover:bg-white/10 rounded-lg text-white transition-colors focus:outline-none focus:ring-2 focus:ring-white/30" aria-label="Abrir ou fechar menu">
+                <div class="flex items-center gap-3">
+            <button class="w-10 h-10 rounded-lg hover:bg-white/10 flex items-center justify-center text-white transition-colors" onclick="toggleSidebar()" aria-label="Menu principal">
                 <span class="material-symbols-outlined text-2xl">menu</span>
             </button>
-            <a href="index.html" class="flex items-center gap-2.5">
-                <div class="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center font-bold text-lg text-white border border-white/20">
-                    S
-                </div>
-                <div class="flex flex-col leading-tight">
-                    <span class="font-bold tracking-wide text-base">SEIA</span>
-                    <span class="text-[10px] text-white/75 font-medium tracking-wider uppercase">Módulo Fiscalização</span>
-                </div>
+            <a href="index.html" class="flex items-center">
+                <span class="text-2xl font-bold tracking-tight text-white lowercase">inema</span>
             </a>
-        </div>
-
-        <!-- Centro: Barra de Busca Rápida Estilizada -->
-        <div class="hidden md:flex items-center flex-1 max-w-md mx-8">
-            <div class="relative w-full">
-                <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-white/60 text-lg">search</span>
-                <input type="text" id="globalSearchInput" onkeyup="if(event.key==='Enter') executarBuscaRapida(this.value)" placeholder="Buscar por nº do registro, comunicante, processo..." class="w-full pl-10 pr-4 py-1.5 bg-white/10 hover:bg-white/15 focus:bg-white text-white focus:text-slate-800 placeholder:text-white/60 focus:placeholder:text-slate-400 rounded-full text-xs font-normal border border-white/15 focus:border-white focus:outline-none transition-all">
-            </div>
         </div>
 
         <!-- Direita: Perfil do Analista Interno & Notificações -->
@@ -145,47 +131,47 @@
                         <span id="iconFiscalizacao" class="material-symbols-outlined text-lg text-[#0F4C3A] transition-transform duration-200 rotate-180">expand_more</span>
                     </button>
                     
-                    <div id="subFiscalizacao" class="mt-1 border-l-2 border-slate-200 ml-4 pl-3 space-y-1">
+                    <div id="subFiscalizacao" class="mt-2 border-l-2 border-slate-200 ml-4 pl-3 space-y-4">
                         <!-- Subgrupo: DENÚNCIAS -->
-                        <div class="space-y-1">
-                            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 px-3 pt-2 pb-1.5 flex items-center gap-2">
+                        <div>
+                            <div class="text-slate-400 font-semibold text-[11px] tracking-wider uppercase px-3 pt-1 pb-1">
                                 Denúncias
                             </div>
-                            <div class="space-y-1">
-                                <a href="fiscalizacao.html" id="menu-atendente" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                            <div class="space-y-1 mt-1">
+                                <a href="fiscalizacao.html" id="menu-atendente" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                                     <span>Atendente</span>
                                 </a>
-                                <a href="fiscalizacao.html?fluxo=externo" id="menu-cidadao" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                                <a href="fiscalizacao.html?fluxo=externo" id="menu-cidadao" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                                     <span>Formulário Cidadão</span>
                                 </a>
                             </div>
                         </div>
 
                         <!-- Subgrupo: EMERGÊNCIAS QUÍMICAS -->
-                        <div class="space-y-1 border-t border-slate-100 mt-2 pt-2">
-                            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 px-3 pt-1.5 pb-1.5 flex items-center gap-2">
+                        <div>
+                            <div class="text-slate-400 font-semibold text-[11px] tracking-wider uppercase px-3 pt-1 pb-1">
                                 Emergências Químicas
                             </div>
-                            <div class="space-y-1">
-                                <a href="emergencia-quimica.html?fluxo=interna" id="menu-emerg-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                            <div class="space-y-1 mt-1">
+                                <a href="emergencia-quimica.html" id="menu-emerg-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 bg-[#E2ECE9] text-[#0F4C3A] font-semibold">
                                     <span>Cadastro Interno</span>
                                 </a>
-                                <a href="emergencia-quimica-externa.html" id="menu-emerg-externa" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                                <a href="emergencia-quimica-externa.html" id="menu-emerg-externa" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                                     <span>Registro Externo</span>
                                 </a>
                             </div>
                         </div>
 
                         <!-- Subgrupo: CONSULTAS -->
-                        <div class="space-y-1 border-t border-slate-100 mt-2 pt-2">
-                            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 px-3 pt-1.5 pb-1.5 flex items-center gap-2">
+                        <div>
+                            <div class="text-slate-400 font-semibold text-[11px] tracking-wider uppercase px-3 pt-1 pb-1">
                                 Consultas
                             </div>
-                            <div class="space-y-1">
-                                <a href="consulta-externa.html" id="menu-consulta-externa" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                            <div class="space-y-1 mt-1">
+                                <a href="consulta-externa.html" id="menu-consulta-externa" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                                     <span>Consulta Cidadão</span>
                                 </a>
-                                <a href="consulta-interna.html" id="menu-consulta-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 bg-[#E2ECE9] text-[#0F4C3A] font-semibold rounded-lg">
+                                <a href="consulta-interna.html" id="menu-consulta-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                                     <span>Painel Interno DIFIS</span>
                                     <span class="bg-rose-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full" id="sidebarBadgeEmergencias">3</span>
                                 </a>
@@ -616,11 +602,11 @@
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-[11px] font-bold text-slate-600 mb-0.5">Latitude</label>
-                        <input type="text" id="dwLatitude" readonly class="w-full text-xs font-mono py-1.5 px-2 bg-slate-100 border border-slate-200 rounded text-slate-700">
+                        <input type="text" id="dwLatitude" readonly class="w-full text-xs py-1.5 px-2 bg-slate-100 border border-slate-200 rounded text-slate-700">
                     </div>
                     <div>
                         <label class="block text-[11px] font-bold text-slate-600 mb-0.5">Longitude</label>
-                        <input type="text" id="dwLongitude" readonly class="w-full text-xs font-mono py-1.5 px-2 bg-slate-100 border border-slate-200 rounded text-slate-700">
+                        <input type="text" id="dwLongitude" readonly class="w-full text-xs py-1.5 px-2 bg-slate-100 border border-slate-200 rounded text-slate-700">
                     </div>
                 </div>
 
@@ -653,7 +639,7 @@
                         </div>
                         <div>
                             <span class="text-[10px] text-slate-400 uppercase font-bold block">CPF / Documento</span>
-                            <span id="dwComDoc" class="font-mono text-xs text-slate-700">842.195.304-12</span>
+                            <span id="dwComDoc" class=" text-xs text-slate-700">842.195.304-12</span>
                         </div>
                     </div>
                 </div>
@@ -670,7 +656,7 @@
                         </div>
                         <div>
                             <span class="text-[10px] text-slate-400 uppercase font-bold block">CNPJ</span>
-                            <span id="dwEmpCnpj" class="font-mono text-xs text-slate-700">03.489.123/0001-90</span>
+                            <span id="dwEmpCnpj" class=" text-xs text-slate-700">03.489.123/0001-90</span>
                         </div>
                     </div>
                 </div>
@@ -781,7 +767,7 @@
             <form id="formDesignarTecnico" onsubmit="event.preventDefault(); salvarDesignacaoTecnico();" class="p-5 space-y-4">
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">Registro Operacional</label>
-                    <input type="text" id="modalTecnicoNumRegistro" readonly class="w-full text-xs font-mono font-bold py-1.5 px-3 bg-slate-100 border border-slate-200 rounded-lg text-slate-700">
+                    <input type="text" id="modalTecnicoNumRegistro" readonly class="w-full text-xs font-bold py-1.5 px-3 bg-slate-100 border border-slate-200 rounded-lg text-slate-700">
                 </div>
 
                 <div>
@@ -854,7 +840,7 @@
             <form id="formUploadRelatorio" onsubmit="event.preventDefault(); confirmarEnvioRelatorio();" class="p-5 space-y-4">
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">Registro Selecionado</label>
-                    <input type="text" id="modalAnexoNumRegistro" readonly class="w-full text-xs font-mono font-bold py-1.5 px-3 bg-slate-100 border border-slate-200 rounded-lg text-slate-700">
+                    <input type="text" id="modalAnexoNumRegistro" readonly class="w-full text-xs font-bold py-1.5 px-3 bg-slate-100 border border-slate-200 rounded-lg text-slate-700">
                 </div>
 
                 <div>
@@ -1467,7 +1453,7 @@
 
                 return `
                     <tr class="transition-colors ${rowClass}">
-                        <td class="py-3 px-4 font-mono font-bold text-slate-800 whitespace-nowrap">
+                        <td class="py-3 px-4 font-bold text-slate-800 whitespace-nowrap">
                             <div class="flex items-center gap-1.5">
                                 ${isEmergenciaAtiva ? '<span class="material-symbols-outlined text-red-600 text-sm animate-bounce" title="Emergência Ativa!">priority_high</span>' : ''}
                                 <a href="javascript:void(0)" onclick="abrirDrawerDetalhes('${reg.numero}')" class="text-[#0F4C3A] hover:underline hover:text-[#155d47]">
@@ -1629,7 +1615,7 @@
                         </div>
                         <div>
                             <span class="text-xs font-bold text-slate-800 block">${rel.tipo}</span>
-                            <span class="text-[10px] text-slate-500 font-mono">${rel.arquivo} • ${rel.data} por ${rel.usuario}</span>
+                            <span class="text-[10px] text-slate-500 ">${rel.arquivo} • ${rel.data} por ${rel.usuario}</span>
                         </div>
                     </div>
                     <button onclick="baixarArquivoSimulado('${rel.arquivo}')" class="px-2.5 py-1 bg-white border border-slate-300 text-slate-700 rounded text-xs font-semibold hover:bg-slate-100 flex items-center gap-1">

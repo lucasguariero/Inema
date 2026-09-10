@@ -85,15 +85,12 @@
     <!-- ============================================ -->
     <header class="h-16 bg-inema-green fixed top-0 left-0 right-0 z-50 flex items-center px-4 gap-4 shadow-sm no-print">
         <!-- Esquerda: Hambúrguer + Logo INEMA / SEIA -->
-        <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3">
             <button class="w-10 h-10 rounded-lg hover:bg-white/10 flex items-center justify-center text-white transition-colors" onclick="toggleSidebar()" aria-label="Menu principal">
                 <span class="material-symbols-outlined text-2xl">menu</span>
             </button>
-            <a href="index.html" class="flex items-center gap-2.5">
-                <img src="logo.svg" alt="INEMA" class="h-10 w-auto">
-                <span class="hidden sm:inline-block pl-2 border-l border-white/20 text-xs text-white/80 font-medium tracking-wide">
-                    SEIA <span class="text-white/60 font-normal">| Gestão de Fauna Silvestre</span>
-                </span>
+            <a href="index.html" class="flex items-center">
+                <span class="text-2xl font-bold tracking-tight text-white lowercase">inema</span>
             </a>
         </div>
 
@@ -149,47 +146,47 @@
                         <span id="iconFiscalizacao" class="material-symbols-outlined text-lg text-slate-500 transition-transform duration-200 rotate-180">expand_more</span>
                     </button>
                     
-                    <div id="subFiscalizacao" class="mt-1 border-l-2 border-slate-200 ml-4 pl-3 space-y-1">
+                    <div id="subFiscalizacao" class="mt-2 border-l-2 border-slate-200 ml-4 pl-3 space-y-4">
                         <!-- Subgrupo: DENÚNCIAS -->
-                        <div class="space-y-1">
-                            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 px-3 pt-2 pb-1.5 flex items-center gap-2">
+                        <div>
+                            <div class="text-slate-400 font-semibold text-[11px] tracking-wider uppercase px-3 pt-1 pb-1">
                                 Denúncias
                             </div>
-                            <div class="space-y-1">
-                                <a href="fiscalizacao.html" id="menu-atendente" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                            <div class="space-y-1 mt-1">
+                                <a href="fiscalizacao.html" id="menu-atendente" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                                     <span>Atendente</span>
                                 </a>
-                                <a href="fiscalizacao.html?fluxo=externo" id="menu-cidadao" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                                <a href="fiscalizacao.html?fluxo=externo" id="menu-cidadao" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                                     <span>Formulário Cidadão</span>
                                 </a>
                             </div>
                         </div>
 
                         <!-- Subgrupo: EMERGÊNCIAS QUÍMICAS -->
-                        <div class="space-y-1 border-t border-slate-100 mt-2 pt-2">
-                            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 px-3 pt-1.5 pb-1.5 flex items-center gap-2">
+                        <div>
+                            <div class="text-slate-400 font-semibold text-[11px] tracking-wider uppercase px-3 pt-1 pb-1">
                                 Emergências Químicas
                             </div>
-                            <div class="space-y-1">
-                                <a href="emergencia-quimica.html?fluxo=interna" id="menu-emerg-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                            <div class="space-y-1 mt-1">
+                                <a href="emergencia-quimica.html" id="menu-emerg-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 bg-[#E2ECE9] text-[#0F4C3A] font-semibold">
                                     <span>Cadastro Interno</span>
                                 </a>
-                                <a href="emergencia-quimica-externa.html" id="menu-emerg-externa" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                                <a href="emergencia-quimica-externa.html" id="menu-emerg-externa" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                                     <span>Registro Externo</span>
                                 </a>
                             </div>
                         </div>
 
                         <!-- Subgrupo: CONSULTAS -->
-                        <div class="space-y-1 border-t border-slate-100 mt-2 pt-2">
-                            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 px-3 pt-1.5 pb-1.5 flex items-center gap-2">
+                        <div>
+                            <div class="text-slate-400 font-semibold text-[11px] tracking-wider uppercase px-3 pt-1 pb-1">
                                 Consultas
                             </div>
-                            <div class="space-y-1">
-                                <a href="consulta-externa.html" id="menu-consulta-externa" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                            <div class="space-y-1 mt-1">
+                                <a href="consulta-externa.html" id="menu-consulta-externa" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                                     <span>Consulta Cidadão</span>
                                 </a>
-                                <a href="consulta-interna.html" id="menu-consulta-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                                <a href="consulta-interna.html" id="menu-consulta-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                                     <span>Painel Interno DIFIS</span>
                                     <span class="bg-rose-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full" id="sidebarBadgeEmergencias">3</span>
                                 </a>
@@ -397,7 +394,7 @@
                                 <span class="material-symbols-outlined text-amber-600 text-xl shrink-0 mt-0.5">scale</span>
                                 <div>
                                     <p class="font-semibold text-slate-900">Pesagem de Retorno Pendente</p>
-                                    <p class="text-slate-600 mt-0.5">Arara-azul-de-lear (<span class="font-mono font-medium">FAUNA-BA-2026-00042</span>) completou 7 dias sem registro de curva ponderal.</p>
+                                    <p class="text-slate-600 mt-0.5">Arara-azul-de-lear (<span class=" font-medium">FAUNA-BA-2026-00042</span>) completou 7 dias sem registro de curva ponderal.</p>
                                     <button onclick="abrirModalPesagemComAnimal('FAUNA-BA-2026-00042')" class="mt-2 text-inema-green font-bold text-[11px] underline">Registrar Pesagem Agora &rarr;</button>
                                 </div>
                             </div>
@@ -640,7 +637,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-xs font-medium text-slate-700 mb-1">Nº B.O. / Termo de Apreensão / Ofício</label>
-                                    <input type="text" id="admNumeroDoc" placeholder="Ex: BO-BPAmb-2026-9481" class="w-full text-xs py-2 px-3 bg-slate-50 border border-slate-300 rounded-xl font-mono">
+                                    <input type="text" id="admNumeroDoc" placeholder="Ex: BO-BPAmb-2026-9481" class="w-full text-xs py-2 px-3 bg-slate-50 border border-slate-300 rounded-xl ">
                                 </div>
                                 <div>
                                     <label class="block text-xs font-medium text-slate-700 mb-1">Local Exato do Resgate / Apreensão</label>
@@ -692,7 +689,7 @@
 
                                 <div>
                                     <label class="block text-xs font-medium text-slate-700 mb-1">Nome Científico *</label>
-                                    <input type="text" id="admNomeCientifico" required placeholder="Ex: Amazona aestiva" class="w-full text-xs py-2 px-3 bg-slate-50 border border-slate-300 rounded-xl font-mono italic">
+                                    <input type="text" id="admNomeCientifico" required placeholder="Ex: Amazona aestiva" class="w-full text-xs py-2 px-3 bg-slate-50 border border-slate-300 rounded-xl italic">
                                 </div>
                             </div>
 
@@ -744,17 +741,17 @@
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
                                 <div>
                                     <label class="block text-xs font-medium text-slate-700 mb-1">Código da Marcação (Chip / Anilha)</label>
-                                    <input type="text" id="admCodigoMarcacao" placeholder="Ex: 981020002938192 ou BA-9481" class="w-full text-xs py-2 px-3 bg-slate-50 border border-slate-300 rounded-xl font-mono">
+                                    <input type="text" id="admCodigoMarcacao" placeholder="Ex: 981020002938192 ou BA-9481" class="w-full text-xs py-2 px-3 bg-slate-50 border border-slate-300 rounded-xl ">
                                 </div>
 
                                 <div>
                                     <label class="block text-xs font-medium text-slate-700 mb-1">RG Animal (Gerado pelo Sistema)</label>
-                                    <input type="text" id="admRgAnimal" readonly value="FAUNA-BA-2026-AUTO" class="w-full text-xs py-2 px-3 bg-emerald-50 text-emerald-800 border border-emerald-300 rounded-xl font-mono font-bold">
+                                    <input type="text" id="admRgAnimal" readonly value="FAUNA-BA-2026-AUTO" class="w-full text-xs py-2 px-3 bg-emerald-50 text-emerald-800 border border-emerald-300 rounded-xl font-bold">
                                 </div>
 
                                 <div>
                                     <label class="block text-xs font-medium text-slate-700 mb-1">Número CETAS (Gerado)</label>
-                                    <input type="text" id="admNumeroCetas" readonly value="CETAS-SSA-AUTO" class="w-full text-xs py-2 px-3 bg-teal-50 text-teal-800 border border-teal-300 rounded-xl font-mono font-bold">
+                                    <input type="text" id="admNumeroCetas" readonly value="CETAS-SSA-AUTO" class="w-full text-xs py-2 px-3 bg-teal-50 text-teal-800 border border-teal-300 rounded-xl font-bold">
                                 </div>
                             </div>
 
@@ -778,7 +775,7 @@
                             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                                 <div>
                                     <label class="block text-xs font-medium text-slate-700 mb-1">Peso Inicial (em gramas) *</label>
-                                    <input type="number" step="0.1" id="admPesoInicial" required placeholder="Ex: 850 (gramas)" class="w-full text-xs py-2 px-3 bg-slate-50 border border-slate-300 rounded-xl font-mono focus:ring-1 focus:ring-inema-green">
+                                    <input type="number" step="0.1" id="admPesoInicial" required placeholder="Ex: 850 (gramas)" class="w-full text-xs py-2 px-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-1 focus:ring-inema-green">
                                     <span class="text-[10px] text-slate-400">Ex: 850g = 0.85kg</span>
                                 </div>
 
@@ -908,7 +905,7 @@
                         <form id="formNovaPesagem" onsubmit="handleSalvarPesagem(event)" class="space-y-3 text-xs">
                             <div>
                                 <label class="block font-medium text-slate-700 mb-1">Selecione o Animal *</label>
-                                <select id="pesoSelectAnimal" required onchange="handleSelectAnimalPesagem()" class="w-full py-2 px-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-1 focus:ring-inema-green font-mono">
+                                <select id="pesoSelectAnimal" required onchange="handleSelectAnimalPesagem()" class="w-full py-2 px-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-1 focus:ring-inema-green ">
                                     <!-- Preenchido via JS -->
                                 </select>
                             </div>
@@ -916,7 +913,7 @@
                             <div class="grid grid-cols-2 gap-3">
                                 <div>
                                     <label class="block font-medium text-slate-700 mb-1">Peso Atual (g) *</label>
-                                    <input type="number" step="0.1" id="pesoInputGramas" required placeholder="Ex: 865.5" class="w-full py-2 px-3 bg-slate-50 border border-slate-300 rounded-xl font-mono">
+                                    <input type="number" step="0.1" id="pesoInputGramas" required placeholder="Ex: 865.5" class="w-full py-2 px-3 bg-slate-50 border border-slate-300 rounded-xl ">
                                 </div>
                                 <div>
                                     <label class="block font-medium text-slate-700 mb-1">Escore Corporal *</label>
@@ -971,7 +968,7 @@
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                                 <div>
                                     <label class="block font-medium text-slate-700 mb-1">Animal Paciente *</label>
-                                    <select id="consultaSelectAnimal" required class="w-full py-2 px-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-1 focus:ring-inema-green font-mono">
+                                    <select id="consultaSelectAnimal" required class="w-full py-2 px-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-1 focus:ring-inema-green ">
                                         <!-- Preenchido via JS -->
                                     </select>
                                 </div>
@@ -1044,7 +1041,7 @@
                     <form id="formObitoPesquisa" onsubmit="handleSalvarObitoPesquisa(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
                         <div>
                             <label class="block font-medium text-slate-700 mb-1">Animal *</label>
-                            <select id="obitoSelectAnimal" required class="w-full py-2 px-3 bg-slate-50 border border-slate-300 rounded-xl font-mono">
+                            <select id="obitoSelectAnimal" required class="w-full py-2 px-3 bg-slate-50 border border-slate-300 rounded-xl ">
                                 <!-- Preenchido via JS -->
                             </select>
                         </div>
@@ -1203,7 +1200,7 @@
                             <div class="grid grid-cols-2 gap-2 text-left">
                                 <div>
                                     <label class="block text-[11px] font-medium text-slate-600 mb-0.5">Vincular ao Animal:</label>
-                                    <select id="uploadDocAnimal" class="w-full py-1.5 px-2 bg-white border border-slate-300 rounded-lg text-xs font-mono">
+                                    <select id="uploadDocAnimal" class="w-full py-1.5 px-2 bg-white border border-slate-300 rounded-lg text-xs ">
                                         <!-- Preenchido via JS -->
                                     </select>
                                 </div>
@@ -1267,7 +1264,7 @@
                                     <th class="py-2.5 px-3">Responsável Técnico</th>
                                 </tr>
                             </thead>
-                            <tbody id="livroRegistroTableBody" class="divide-y divide-slate-100 font-mono text-[11px]">
+                            <tbody id="livroRegistroTableBody" class="divide-y divide-slate-100 text-[11px]">
                                 <!-- Preenchido via JS -->
                             </tbody>
                         </table>
@@ -1291,7 +1288,7 @@
                     </div>
                     <div>
                         <div class="flex items-center gap-2">
-                            <span class="font-mono text-xs font-bold bg-white/20 px-2 py-0.5 rounded" id="drawerAnimalRg">FAUNA-BA-2026-00042</span>
+                            <span class=" text-xs font-bold bg-white/20 px-2 py-0.5 rounded" id="drawerAnimalRg">FAUNA-BA-2026-00042</span>
                             <span class="text-xs bg-emerald-400/30 text-emerald-100 px-2 py-0.5 rounded font-semibold" id="drawerAnimalStatus">Quarentena</span>
                         </div>
                         <h2 class="text-base font-bold mt-0.5" id="drawerAnimalEspecie">Arara-azul-de-lear (Anodorhynchus leari)</h2>
@@ -1306,11 +1303,11 @@
             <div class="bg-slate-50 border-b border-slate-200 p-4 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs shrink-0">
                 <div>
                     <span class="text-slate-500 block text-[10px] uppercase font-semibold">Número CETAS</span>
-                    <span class="font-mono font-bold text-slate-800" id="drawerAnimalCetas">CETAS-SSA-10492</span>
+                    <span class=" font-bold text-slate-800" id="drawerAnimalCetas">CETAS-SSA-10492</span>
                 </div>
                 <div>
                     <span class="text-slate-500 block text-[10px] uppercase font-semibold">Marcação / Chip</span>
-                    <span class="font-mono font-bold text-inema-green" id="drawerAnimalChip">981020002938192</span>
+                    <span class=" font-bold text-inema-green" id="drawerAnimalChip">981020002938192</span>
                 </div>
                 <div>
                     <span class="text-slate-500 block text-[10px] uppercase font-semibold">Origem de Admissão</span>
@@ -1371,7 +1368,7 @@
                                     <th class="py-2 px-3">Responsável</th>
                                 </tr>
                             </thead>
-                            <tbody id="drawerPesagensTableBody" class="divide-y divide-slate-100 font-mono text-[11px]">
+                            <tbody id="drawerPesagensTableBody" class="divide-y divide-slate-100 text-[11px]">
                                 <!-- Preenchido via JS -->
                             </tbody>
                         </table>
@@ -1423,7 +1420,7 @@
             <form id="formPopupPesagem" onsubmit="handleSalvarPesagemPopup(event)" class="space-y-3 text-xs">
                 <div>
                     <label class="block font-medium text-slate-700 mb-1">Animal *</label>
-                    <select id="popupPesoAnimalSelect" required class="w-full py-2 px-3 bg-slate-50 border border-slate-300 rounded-xl font-mono text-xs">
+                    <select id="popupPesoAnimalSelect" required class="w-full py-2 px-3 bg-slate-50 border border-slate-300 rounded-xl text-xs">
                         <!-- Preenchido via JS -->
                     </select>
                 </div>
@@ -1431,7 +1428,7 @@
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block font-medium text-slate-700 mb-1">Peso (em gramas) *</label>
-                        <input type="number" step="0.1" id="popupPesoGramas" required placeholder="Ex: 920.0" class="w-full py-2 px-3 bg-slate-50 border border-slate-300 rounded-xl font-mono text-xs">
+                        <input type="number" step="0.1" id="popupPesoGramas" required placeholder="Ex: 920.0" class="w-full py-2 px-3 bg-slate-50 border border-slate-300 rounded-xl text-xs">
                     </div>
                     <div>
                         <label class="block font-medium text-slate-700 mb-1">Escore Corporal (1-5)</label>
@@ -1501,14 +1498,14 @@
                     </div>
                     <div>
                         <label class="block font-medium text-slate-700 mb-1">Área (Hectares) *</label>
-                        <input type="number" id="asasArea" required placeholder="Ex: 450" class="w-full py-2 px-3 bg-slate-50 border border-slate-300 rounded-xl font-mono">
+                        <input type="number" id="asasArea" required placeholder="Ex: 450" class="w-full py-2 px-3 bg-slate-50 border border-slate-300 rounded-xl ">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block font-medium text-slate-700 mb-1">Número do CAR *</label>
-                        <input type="text" id="asasCar" required placeholder="Ex: BA-2919302-CAR-2024" class="w-full py-2 px-3 bg-slate-50 border border-slate-300 rounded-xl font-mono">
+                        <input type="text" id="asasCar" required placeholder="Ex: BA-2919302-CAR-2024" class="w-full py-2 px-3 bg-slate-50 border border-slate-300 rounded-xl ">
                     </div>
                     <div>
                         <label class="block font-medium text-slate-700 mb-1">Tipo de Propriedade *</label>
@@ -1979,8 +1976,8 @@
 
                 tr.innerHTML = `
                     <td class="py-2.5 px-3">
-                        <span class="font-mono font-bold text-slate-800">${animal.rgAnimal}</span>
-                        <span class="block text-[10px] text-slate-400 font-mono">${animal.numeroCetas}</span>
+                        <span class=" font-bold text-slate-800">${animal.rgAnimal}</span>
+                        <span class="block text-[10px] text-slate-400 ">${animal.numeroCetas}</span>
                     </td>
                     <td class="py-2.5 px-3">
                         <span class="font-semibold text-slate-900">${animal.nomePopular}</span>
@@ -1993,7 +1990,7 @@
                     <td class="py-2.5 px-3">
                         ${getStatusBadge(animal.status)}
                     </td>
-                    <td class="py-2.5 px-3 text-right font-mono font-semibold text-slate-700">
+                    <td class="py-2.5 px-3 text-right font-semibold text-slate-700">
                         ${lastPeso}
                     </td>
                     <td class="py-2.5 px-3 text-center">
@@ -2128,15 +2125,15 @@
 
                 tr.innerHTML = `
                     <td class="py-3 px-4">
-                        <span class="font-mono font-bold text-slate-900 block">${animal.rgAnimal}</span>
-                        <span class="font-mono text-[11px] text-slate-400">${animal.numeroCetas}</span>
+                        <span class=" font-bold text-slate-900 block">${animal.rgAnimal}</span>
+                        <span class=" text-[11px] text-slate-400">${animal.numeroCetas}</span>
                     </td>
                     <td class="py-3 px-4">
                         <div class="font-semibold text-slate-900">${animal.nomePopular}</div>
                         <div class="text-[11px] text-slate-500 italic">${animal.nomeCientifico} &bull; <span class="not-italic text-slate-400">${animal.classe} (${animal.sexo})</span></div>
                     </td>
                     <td class="py-3 px-4">
-                        <span class="inline-flex items-center gap-1 font-mono text-[11px] font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded">
+                        <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded">
                             <span class="material-symbols-outlined text-xs text-inema-green">qr_code_2</span>
                             ${animal.codigoMarcacao || 'Sem chip'}
                         </span>
@@ -2152,7 +2149,7 @@
                     <td class="py-3 px-4">
                         ${getStatusBadge(animal.status)}
                     </td>
-                    <td class="py-3 px-4 font-mono font-semibold text-slate-700">
+                    <td class="py-3 px-4 font-semibold text-slate-700">
                         ${lastPeso}
                     </td>
                     <td class="py-3 px-4 text-center">
@@ -2274,7 +2271,7 @@
                     <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
                         <div class="flex items-center justify-between text-xs mb-1">
                             <span class="font-bold text-slate-800">${evt.titulo}</span>
-                            <span class="text-[11px] text-slate-400 font-mono">${evt.dataHora}</span>
+                            <span class="text-[11px] text-slate-400 ">${evt.dataHora}</span>
                         </div>
                         <p class="text-xs text-slate-600 leading-relaxed">${evt.descricao}</p>
                         <div class="mt-2 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] text-slate-500">
@@ -2344,7 +2341,7 @@
                 card.innerHTML = `
                     <div class="flex items-center justify-between border-b border-slate-200 pb-2">
                         <span class="font-bold text-inema-green">${c.tipoAtendimento}</span>
-                        <span class="text-slate-400 font-mono text-[11px]">${c.dataHora}</span>
+                        <span class="text-slate-400 text-[11px]">${c.dataHora}</span>
                     </div>
                     <div>
                         <span class="font-semibold text-slate-700">Veterinário(a):</span> ${c.veterinarioNome}
@@ -2641,7 +2638,7 @@
                 item.className = 'flex items-center justify-between text-[11px] py-1 border-b border-slate-200/50';
                 item.innerHTML = `
                     <span class="text-slate-600">${p.dataHora}</span>
-                    <span class="font-bold font-mono text-slate-900">${p.pesoGramas} g (Escore ${p.escoreCorporal}/5)</span>
+                    <span class="font-bold text-slate-900">${p.pesoGramas} g (Escore ${p.escoreCorporal}/5)</span>
                 `;
                 list.appendChild(item);
             });
@@ -2883,7 +2880,7 @@
                     card.innerHTML = `
                         <div class="flex items-center justify-between">
                             <span class="font-bold text-slate-900 text-sm">${a.nomePropriedade}</span>
-                            <span class="text-[10px] font-mono bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold">${a.codigoASAS}</span>
+                            <span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold">${a.codigoASAS}</span>
                         </div>
                         <div class="text-slate-600">
                             <strong>${a.municipio}</strong> &bull; Bioma: ${a.bioma} (${a.areaTotalHectares} ha)
@@ -2891,7 +2888,7 @@
                         <div class="p-2.5 bg-emerald-50/70 rounded-xl border border-emerald-200/70 space-y-1 text-[11px]">
                             <div><strong class="text-emerald-900">Espécies Aptas:</strong> ${a.classesAptasSoltura}</div>
                             <div><strong class="text-emerald-900">Solturas Realizadas:</strong> ${a.totalSolturasRealizadas} animais reintroduzidos</div>
-                            <div><strong class="text-emerald-900">CAR:</strong> <span class="font-mono">${a.numeroCar}</span></div>
+                            <div><strong class="text-emerald-900">CAR:</strong> <span class="">${a.numeroCar}</span></div>
                         </div>
                         <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
                             <span>Última vistoria: ${a.ultimaVistoria}</span>
@@ -2910,7 +2907,7 @@
                     const tr = document.createElement('tr');
                     tr.className = 'hover:bg-slate-50 transition-colors';
                     tr.innerHTML = `
-                        <td class="py-3 px-4 font-mono font-bold text-slate-800">${g.numeroTDG}</td>
+                        <td class="py-3 px-4 font-bold text-slate-800">${g.numeroTDG}</td>
                         <td class="py-3 px-4">
                             <div class="font-semibold text-slate-900">${g.nomeRazaoSocial}</div>
                             <div class="text-[10px] text-slate-400">CPF: ${g.cpfCnpj}</div>
@@ -2920,7 +2917,7 @@
                         <td class="py-3 px-4">
                             <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">${g.statusGuarda}</span>
                         </td>
-                        <td class="py-3 px-4 font-mono text-slate-700">${g.proximaVistoria}</td>
+                        <td class="py-3 px-4 text-slate-700">${g.proximaVistoria}</td>
                         <td class="py-3 px-4 text-center">
                             <button class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[11px] font-semibold">Vistoriar</button>
                         </td>
@@ -3032,7 +3029,7 @@
                             <span class="w-8 h-8 rounded-lg bg-inema-green/10 text-inema-green flex items-center justify-center">
                                 <span class="material-symbols-outlined text-base">description</span>
                             </span>
-                            <span class="text-[10px] font-mono bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-bold">${doc.animalRg}</span>
+                            <span class="text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-bold">${doc.animalRg}</span>
                         </div>
                         <h4 class="font-bold text-slate-800 line-clamp-1">${doc.nomeArquivo}</h4>
                         <p class="text-[11px] text-inema-green font-medium">${doc.categoria}</p>

@@ -65,15 +65,12 @@
     <!-- ============================================ -->
     <header class="h-16 bg-inema-green fixed top-0 left-0 right-0 z-50 flex items-center px-4 gap-4 shadow-sm">
         <!-- Esquerda: Hambúrguer + Logo INEMA / SEIA -->
-        <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3">
             <button class="w-10 h-10 rounded-lg hover:bg-white/10 flex items-center justify-center text-white transition-colors" onclick="toggleSidebar()" aria-label="Menu principal">
                 <span class="material-symbols-outlined text-2xl">menu</span>
             </button>
-            <a href="index.html" class="flex items-center gap-2.5">
-                <img src="logo.svg" alt="INEMA" class="h-10 w-auto">
-                <span class="hidden sm:inline-block pl-2 border-l border-white/20 text-xs text-white/80 font-medium tracking-wide">
-                    SEIA <span class="text-white/60 font-normal">| Fiscalização</span>
-                </span>
+            <a href="index.html" class="flex items-center">
+                <span class="text-2xl font-bold tracking-tight text-white lowercase">inema</span>
             </a>
         </div>
 
@@ -132,47 +129,47 @@
                         <span id="iconFiscalizacao" class="material-symbols-outlined text-lg text-[#0F4C3A] transition-transform duration-200 rotate-180">expand_more</span>
                     </button>
                     
-                    <div id="subFiscalizacao" class="mt-1 border-l-2 border-slate-200 ml-4 pl-3 space-y-1">
+                    <div id="subFiscalizacao" class="mt-2 border-l-2 border-slate-200 ml-4 pl-3 space-y-4">
                         <!-- Subgrupo: DENÚNCIAS -->
-                        <div class="space-y-1">
-                            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 px-3 pt-2 pb-1.5 flex items-center gap-2">
+                        <div>
+                            <div class="text-slate-400 font-semibold text-[11px] tracking-wider uppercase px-3 pt-1 pb-1">
                                 Denúncias
                             </div>
-                            <div class="space-y-1">
-                                <a href="fiscalizacao.html" id="menu-atendente" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                            <div class="space-y-1 mt-1">
+                                <a href="fiscalizacao.html" id="menu-atendente" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                                     <span>Atendente</span>
                                 </a>
-                                <a href="fiscalizacao.html?fluxo=externo" id="menu-cidadao" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                                <a href="fiscalizacao.html?fluxo=externo" id="menu-cidadao" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                                     <span>Formulário Cidadão</span>
                                 </a>
                             </div>
                         </div>
 
                         <!-- Subgrupo: EMERGÊNCIAS QUÍMICAS -->
-                        <div class="space-y-1 border-t border-slate-100 mt-2 pt-2">
-                            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 px-3 pt-1.5 pb-1.5 flex items-center gap-2">
+                        <div>
+                            <div class="text-slate-400 font-semibold text-[11px] tracking-wider uppercase px-3 pt-1 pb-1">
                                 Emergências Químicas
                             </div>
-                            <div class="space-y-1">
-                                <a href="emergencia-quimica.html?fluxo=interna" id="menu-emerg-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 bg-[#E2ECE9] text-[#0F4C3A] font-semibold rounded-lg">
+                            <div class="space-y-1 mt-1">
+                                <a href="emergencia-quimica.html" id="menu-emerg-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 bg-[#E2ECE9] text-[#0F4C3A] font-semibold">
                                     <span>Cadastro Interno</span>
                                 </a>
-                                <a href="emergencia-quimica-externa.html" id="menu-emerg-externa" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                                <a href="emergencia-quimica-externa.html" id="menu-emerg-externa" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                                     <span>Registro Externo</span>
                                 </a>
                             </div>
                         </div>
 
                         <!-- Subgrupo: CONSULTAS -->
-                        <div class="space-y-1 border-t border-slate-100 mt-2 pt-2">
-                            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 px-3 pt-1.5 pb-1.5 flex items-center gap-2">
+                        <div>
+                            <div class="text-slate-400 font-semibold text-[11px] tracking-wider uppercase px-3 pt-1 pb-1">
                                 Consultas
                             </div>
-                            <div class="space-y-1">
-                                <a href="consulta-externa.html" id="menu-consulta-externa" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                            <div class="space-y-1 mt-1">
+                                <a href="consulta-externa.html" id="menu-consulta-externa" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                                     <span>Consulta Cidadão</span>
                                 </a>
-                                <a href="consulta-interna.html" id="menu-consulta-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                                <a href="consulta-interna.html" id="menu-consulta-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                                     <span>Painel Interno DIFIS</span>
                                     <span class="bg-rose-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full" id="sidebarBadgeEmergencias">3</span>
                                 </a>
@@ -246,7 +243,7 @@
                 </div>
             </div>
 
-            <!-- Tabs removidas para padrão de Produção (DOR003) -->
+            <!-- Tabs removidas para padrão de Produção -->
             <div class="hidden" id="tab-interna"></div>
             <div class="hidden" id="tab-externa"></div>
             <div class="hidden" id="tab-consulta"></div>
@@ -266,7 +263,7 @@
                             </div>
                         </div>
                         <div class="flex items-center gap-2">
-                            <span class="bg-emerald-50 text-emerald-800 border border-emerald-200 font-mono text-xs px-2.5 py-1 rounded-md font-semibold flex items-center gap-1.5">
+                            <span class="bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs px-2.5 py-1 rounded-md font-semibold flex items-center gap-1.5">
                                 <span class="material-symbols-outlined text-sm text-emerald-700">tag</span>
                                 Nº Previsto do RE: <span id="internaNumeroRE">2026.000004/INEMA/RE</span>
                             </span>
@@ -409,7 +406,7 @@
                             <div class="relative">
                                 <textarea id="internaDescricao" maxlength="7000" rows="4" oninput="atualizarContador(this, 'internaContadorDescricao', 7000)" placeholder="Descreva em detalhes a ocorrência química..." class="w-full text-xs font-medium text-slate-800 bg-white border border-slate-200 rounded-lg p-3 pb-7 focus:border-inema-green focus:ring-1 focus:ring-inema-green transition-all" required></textarea>
                                 <div class="absolute bottom-2 right-3 pointer-events-none">
-                                    <span class="text-[10px] text-slate-400 font-mono" id="internaContadorDescricao">0 / 7.000</span>
+                                    <span class="text-[10px] text-slate-400 " id="internaContadorDescricao">0 / 7.000</span>
                                 </div>
                             </div>
                         </div>
@@ -516,7 +513,7 @@
                                 <label class="block text-xs font-bold text-slate-700">
                                     Ponto de referência <span class="text-rose-500">*</span>
                                 </label>
-                                <span class="text-[11px] text-slate-400 font-mono" id="internaContadorRef">0 / 1.000</span>
+                                <span class="text-[11px] text-slate-400 " id="internaContadorRef">0 / 1.000</span>
                             </div>
                             <textarea id="internaPontoReferencia" maxlength="1000" rows="2" oninput="atualizarContador(this, 'internaContadorRef', 1000)" placeholder="Próximo ao trevo de acesso à refinaria, em frente ao posto de combustível..." class="w-full text-xs font-medium text-slate-800 bg-white border border-slate-200 rounded-lg p-2.5 focus:border-inema-green focus:ring-1 focus:ring-inema-green transition-all" required></textarea>
                         </div>
@@ -652,7 +649,7 @@
                             <div class="relative">
                                 <textarea id="internaDescricaoCenario" maxlength="1000" rows="2" oninput="atualizarContador(this, 'internaContadorCenario', 1000)" placeholder="Detalhes adicionais sobre o terreno, condições climáticas, proximidade de mananciais..." class="w-full text-xs font-medium text-slate-800 bg-white border border-slate-200 rounded-lg p-2.5 pb-6 focus:border-inema-green focus:ring-1 focus:ring-inema-green transition-all"></textarea>
                                 <div class="absolute bottom-2 right-3 pointer-events-none">
-                                    <span class="text-[10px] text-slate-400 font-mono" id="internaContadorCenario">0 / 1.000</span>
+                                    <span class="text-[10px] text-slate-400 " id="internaContadorCenario">0 / 1.000</span>
                                 </div>
                             </div>
                         </div>
@@ -818,7 +815,7 @@
             </div>
 
             <!-- ========================================================= -->
-            <!-- SEÇÃO 2: FLUXO EXTERNO (DOR004 - CIDADÃO / COMUNICANTE)  -->
+            <!-- SEÇÃO 2: FLUXO EXTERNO  -->
             <!-- ========================================================= -->
             <div id="view-externa" class="hidden space-y-6">
                 <!-- Banner Informativo Gov.br -->
@@ -835,12 +832,12 @@
                             <p class="text-xs text-slate-600">Seus dados básicos foram importados com segurança da sua conta cidadã.</p>
                         </div>
                     </div>
-                    <span class="text-xs font-mono font-bold text-emerald-800 bg-white px-3 py-1 rounded-lg border border-emerald-200">
+                    <span class="text-xs font-bold text-emerald-800 bg-white px-3 py-1 rounded-lg border border-emerald-200">
                         Sessão Gov.br Ativa
                     </span>
                 </div>
 
-                <!-- Card 1: Vínculo Empresarial (RN003, RN004, RN005) -->
+                <!-- Card 1: Vínculo Empresarial -->
                 <div class="bg-white rounded-xl border border-slate-200/80 shadow-xs p-6">
                     <div class="flex items-center gap-2.5 pb-4 mb-5 border-b border-slate-100">
                         <span class="w-8 h-8 rounded-lg bg-emerald-50 text-inema-green flex items-center justify-center font-bold text-sm">1</span>
@@ -875,14 +872,14 @@
                                         Nome da empresa em que você trabalha <span class="text-rose-500">*</span>
                                     </label>
                                     <input type="text" id="externaNomeEmpresaTrabalho" maxlength="500" placeholder="Razão social ou nome fantasia..." class="w-full text-xs font-medium text-slate-800 bg-white border border-emerald-300 rounded-lg p-2.5 focus:border-inema-green focus:ring-1 focus:ring-inema-green transition-all">
-                                    <p class="text-[11px] text-emerald-700 mt-1">LEG009: Descreva o nome da empresa em que você trabalha.</p>
+                                    <p class="text-[11px] text-emerald-700 mt-1">Descreva o nome da empresa em que você trabalha.</p>
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-emerald-950 mb-1">
                                         Cargo exercido <span class="text-rose-500">*</span>
                                     </label>
                                     <input type="text" id="externaCargoTrabalho" maxlength="200" placeholder="Engenheiro Químico, Técnico em Meio Ambiente..." class="w-full text-xs font-medium text-slate-800 bg-white border border-emerald-300 rounded-lg p-2.5 focus:border-inema-green focus:ring-1 focus:ring-inema-green transition-all">
-                                    <p class="text-[11px] text-emerald-700 mt-1">LEG010: Descreva o cargo atual que você exerce.</p>
+                                    <p class="text-[11px] text-emerald-700 mt-1">Descreva o cargo atual que você exerce.</p>
                                 </div>
                             </div>
                         </div>
@@ -905,7 +902,7 @@
                                         Nome da Instituição <span class="text-rose-500">*</span>
                                     </label>
                                     <input type="text" id="externaOutrasInstituicoesNome" maxlength="500" placeholder="Defesa Civil Municipal, ONG, IBAMA..." class="w-full text-xs font-medium text-slate-800 bg-white border border-slate-200 rounded-lg p-2.5 focus:border-inema-green focus:ring-1 focus:ring-inema-green transition-all">
-                                    <p class="text-[11px] text-slate-400 mt-1">LEG011: Descreva o nome da instituição.</p>
+                                    <p class="text-[11px] text-slate-400 mt-1">Descreva o nome da instituição.</p>
                                 </div>
                             </div>
 
@@ -977,7 +974,7 @@
                                     Data e hora da constatação <span class="text-rose-500">*</span>
                                 </label>
                                 <input type="datetime-local" id="externaDataHoraConstatacao" class="w-full text-xs font-medium text-slate-800 bg-white border border-slate-200 rounded-lg p-2.5 focus:border-inema-green focus:ring-1 focus:ring-inema-green transition-all" required>
-                                <p class="text-[11px] text-slate-400 mt-1">LEG001: Registre aqui a data e hora em que foi observada a emergência.</p>
+                                <p class="text-[11px] text-slate-400 mt-1">Registre aqui a data e hora em que foi observada a emergência.</p>
                             </div>
 
                             <!-- Tipo da Emergência Química (OBR - 15 itens RN023) -->
@@ -1006,7 +1003,7 @@
                             </div>
                         </div>
 
-                        <!-- Descrição do tipo Outros (RN024) -->
+                        <!-- Descrição do tipo Outros -->
                         <div id="externaBoxTipoOutros" class="hidden p-3.5 bg-amber-50/60 border border-amber-200 rounded-xl">
                             <label class="block text-xs font-bold text-amber-900 mb-1">
                                 Descrição do tipo Outros <span class="text-rose-500">*</span>
@@ -1020,10 +1017,10 @@
                                 <label class="block text-xs font-bold text-slate-700">
                                     Descrição <span class="text-rose-500">*</span>
                                 </label>
-                                <span class="text-[11px] text-slate-400 font-mono" id="externaContadorDescricao">0 / 7.000 caracteres</span>
+                                <span class="text-[11px] text-slate-400 " id="externaContadorDescricao">0 / 7.000 caracteres</span>
                             </div>
                             <textarea id="externaDescricao" maxlength="7000" rows="4" oninput="atualizarContador(this, 'externaContadorDescricao', 7000)" placeholder="Descreva aqui seu relato em detalhes sobre a emergência..." class="w-full text-xs font-medium text-slate-800 bg-white border border-slate-200 rounded-lg p-3 focus:border-inema-green focus:ring-1 focus:ring-inema-green transition-all" required></textarea>
-                            <p class="text-[11px] text-slate-400 mt-1">LEG005: Descreva aqui seu relato em detalhes sobre a emergência.</p>
+                            <p class="text-[11px] text-slate-400 mt-1">Descreva aqui seu relato em detalhes sobre a emergência.</p>
                         </div>
 
                         <!-- Anexos Iniciais (OPC - até 50MB - LEG006 / MSG005) -->
@@ -1034,7 +1031,7 @@
                             <div class="border-2 border-dashed border-slate-200 hover:border-inema-green rounded-xl p-5 text-center bg-slate-50/50 hover:bg-emerald-50/20 transition-all cursor-pointer relative" onclick="document.getElementById('externaFileInput').click()">
                                 <input type="file" id="externaFileInput" multiple onchange="adicionarAnexos(this, 'externaListaAnexos')" class="hidden">
                                 <span class="material-symbols-outlined text-3xl text-inema-green/70 mb-1">attach_file</span>
-                                <p class="text-xs font-semibold text-slate-700">Anexe aqui arquivos para complementar o relato do comunicado de emergência (LEG006)</p>
+                                <p class="text-xs font-semibold text-slate-700">Anexe aqui arquivos para complementar o relato do comunicado de emergência</p>
                                 <p class="text-[11px] text-slate-500 mt-1">MSG005: São aceitos documentos de texto (.pdf, .doc, .docx, .txt), imagens (.jpeg, .jpg, .png, .bmp), planilhas (.xls, .xlsx), multimídia (.mp3, .mp4), shape (.shp, .shx, .dbf, .prj), .kml, .kmz e .zip.</p>
                             </div>
                             <div id="externaListaAnexos" class="flex flex-wrap gap-2 mt-2"></div>
@@ -1079,7 +1076,7 @@
                                 </select>
                             </div>
 
-                            <!-- CEP com busca automática (RN026) -->
+                            <!-- CEP com busca automática -->
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 mb-1.5">
                                     CEP <span class="text-slate-400 font-normal">(Opcional)</span>
@@ -1125,7 +1122,7 @@
                                 <label class="block text-xs font-bold text-slate-700">
                                     Ponto de referência <span class="text-rose-500">*</span>
                                 </label>
-                                <span class="text-[11px] text-slate-400 font-mono" id="externaContadorRef">0 / 1.000 caracteres</span>
+                                <span class="text-[11px] text-slate-400 " id="externaContadorRef">0 / 1.000 caracteres</span>
                             </div>
                             <textarea id="externaPontoReferencia" maxlength="1000" rows="2" oninput="atualizarContador(this, 'externaContadorRef', 1000)" placeholder="Indique marcos geográficos, pontes, comércios, postes de referência..." class="w-full text-xs font-medium text-slate-800 bg-white border border-slate-200 rounded-lg p-2.5 focus:border-inema-green focus:ring-1 focus:ring-inema-green transition-all" required></textarea>
                         </div>
@@ -1181,7 +1178,7 @@
                                         <span>Com. Tradicional ⓘ</span>
                                     </label>
                                     <div class="tooltip-box absolute bottom-full left-0 mb-1 z-20 w-48 p-2 bg-slate-900 text-white text-[10px] rounded-lg shadow-lg pointer-events-none">
-                                        Ribeirinha, Quilombo, Pescadores e outros... (LEG013)
+                                        Ribeirinha, Quilombo, Pescadores e outros...
                                     </div>
                                 </div>
                                 <!-- 9. Povoado -->
@@ -1216,7 +1213,7 @@
                                         <span>Unid. Conserv. ⓘ</span>
                                     </label>
                                     <div class="tooltip-box absolute bottom-full left-0 mb-1 z-20 w-48 p-2 bg-slate-900 text-white text-[10px] rounded-lg shadow-lg pointer-events-none">
-                                        Parques, APA entre outros... (LEG014)
+                                        Parques, APA entre outros...
                                     </div>
                                 </div>
                             </div>
@@ -1228,10 +1225,10 @@
                                 <label class="block text-xs font-bold text-slate-700">
                                     Descrição do cenário <span class="text-slate-400 font-normal">(Opcional)</span>
                                 </label>
-                                <span class="text-[11px] text-slate-400 font-mono" id="externaContadorCenario">0 / 1.000 caracteres</span>
+                                <span class="text-[11px] text-slate-400 " id="externaContadorCenario">0 / 1.000 caracteres</span>
                             </div>
                             <textarea id="externaDescricaoCenario" maxlength="1000" rows="2" oninput="atualizarContador(this, 'externaContadorCenario', 1000)" placeholder="Detalhes adicionais sobre a área ou o cenário da área atingida..." class="w-full text-xs font-medium text-slate-800 bg-white border border-slate-200 rounded-lg p-2.5 focus:border-inema-green focus:ring-1 focus:ring-inema-green transition-all"></textarea>
-                            <p class="text-[11px] text-slate-400 mt-1">LEG012: Descreva a área ou o cenário da área atingida.</p>
+                            <p class="text-[11px] text-slate-400 mt-1">Descreva a área ou o cenário da área atingida.</p>
                         </div>
 
                         <!-- Coordenadas Geográficas no Externo (Permite '0' - LEG007, BOT002) -->
@@ -1242,7 +1239,7 @@
                                         <span class="material-symbols-outlined text-base text-inema-green">pin_drop</span>
                                         Coordenadas Geográficas <span class="text-slate-400 font-normal">(Opcional)</span>
                                     </h4>
-                                    <p class="text-[11px] text-slate-500">LEG007: Caso não saiba as coordenadas, preencha o campo com zero.</p>
+                                    <p class="text-[11px] text-slate-500">Caso não saiba as coordenadas, preencha o campo com zero.</p>
                                 </div>
                                 <button type="button" onclick="abrirModalCoordenada('externa')" class="px-3 py-1.5 bg-white border border-inema-green text-inema-green hover:bg-inema-sage/40 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all shadow-2xs">
                                     <span class="material-symbols-outlined text-base">add</span>
@@ -1273,7 +1270,7 @@
                     </div>
                 </div>
 
-                <!-- Card 5: Upload de Relatórios Regulatórios (RN023, RN024, RN025) -->
+                <!-- Card 5: Upload de Relatórios Regulatórios -->
                 <div class="bg-white rounded-xl border border-slate-200/80 shadow-xs p-6">
                     <div class="flex items-center gap-2.5 pb-4 mb-4 border-b border-slate-100">
                         <span class="w-8 h-8 rounded-lg bg-emerald-50 text-inema-green flex items-center justify-center font-bold text-sm">5</span>
@@ -1291,7 +1288,7 @@
                                 <span id="rpeqBadgeStatus" class="text-[10px] px-2 py-0.5 rounded bg-slate-200 text-slate-600 font-semibold">Vínculo OBR</span>
                             </div>
                             <p class="text-[11px] text-slate-500 mb-3 leading-relaxed">
-                                Relatório Preliminar de Emergência Química. Habilitado exclusivamente quando houver vínculo com a empresa responsável (RN023).
+                                Relatório Preliminar de Emergência Química. Habilitado exclusivamente quando houver vínculo com a empresa responsável.
                             </p>
                             <input type="file" id="rpeqFileInput" class="hidden" onchange="notificarEnvioRelatorio('RPEQ')">
                             <button type="button" id="btnUploadRpeq" disabled onclick="document.getElementById('rpeqFileInput').click()" class="w-full py-2 bg-slate-200 text-slate-500 rounded-lg text-xs font-semibold flex items-center justify-center gap-1 cursor-not-allowed">
@@ -1307,7 +1304,7 @@
                                 <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-semibold">Livre</span>
                             </div>
                             <p class="text-[11px] text-slate-500 mb-3 leading-relaxed">
-                                Documento final com causas apuradas, medidas de remediação e destinação de resíduos. Disponível em qualquer status (RN024).
+                                Documento final com causas apuradas, medidas de remediação e destinação de resíduos. Disponível em qualquer status.
                             </p>
                             <input type="file" id="conclusivoFileInput" class="hidden" onchange="notificarEnvioRelatorio('Relatório Conclusivo')">
                             <button type="button" onclick="document.getElementById('conclusivoFileInput').click()" class="w-full py-2 bg-inema-sage text-inema-green hover:bg-inema-sage-dark rounded-lg text-xs font-semibold flex items-center justify-center gap-1 transition-all">
@@ -1323,7 +1320,7 @@
                                 <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-semibold">Livre</span>
                             </div>
                             <p class="text-[11px] text-slate-500 mb-3 leading-relaxed">
-                                Atualizações periódicas, análises laboratoriais de água/solo e shapefiles de pluma. Disponível a qualquer momento (RN025).
+                                Atualizações periódicas, análises laboratoriais de água/solo e shapefiles de pluma. Disponível a qualquer momento.
                             </p>
                             <input type="file" id="complementarFileInput" class="hidden" onchange="notificarEnvioRelatorio('Relatório Complementar')">
                             <button type="button" onclick="document.getElementById('complementarFileInput').click()" class="w-full py-2 bg-inema-sage text-inema-green hover:bg-inema-sage-dark rounded-lg text-xs font-semibold flex items-center justify-center gap-1 transition-all">
@@ -1466,7 +1463,7 @@
     </div>
 
     <!-- ========================================================= -->
-    <!-- MODAL 1: INCLUIR COORDENADA GEOGRÁFICA (BOT002)          -->
+    <!-- MODAL 1: INCLUIR COORDENADA GEOGRÁFICA          -->
     <!-- ========================================================= -->
     <div id="modalCoordenada" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-200">
@@ -1574,7 +1571,7 @@
                 
                 <div class="p-3.5 bg-emerald-50 border border-emerald-200 rounded-xl mb-4">
                     <span class="block text-[11px] uppercase tracking-wider font-bold text-emerald-800">Número do Registro (RE)</span>
-                    <span id="sucessoNumeroRE" class="font-mono text-base font-extrabold text-inema-green">2026.000001/INEMA/RE</span>
+                    <span id="sucessoNumeroRE" class=" text-base font-extrabold text-inema-green">2026.000001/INEMA/RE</span>
                 </div>
 
                 <p class="text-[11px] text-slate-500 leading-relaxed">
@@ -1887,8 +1884,8 @@
                 if (titleEl) titleEl.innerHTML = `<span class="p-2 rounded-xl bg-inema-sage text-inema-green flex items-center justify-center"><span class="material-symbols-outlined text-2xl">warning</span></span> Cadastro de Emergência Química`;
                 if (subTitleEl) subTitleEl.textContent = "Registro e tramitação de ocorrências químicas operadas pela equipe da Fiscalização e Call Center.";
             } else if (viewName === 'externa') {
-                breadcrumb.textContent = "Emergência Externa (DOR004)";
-                titleEl.innerHTML = `<span class="p-2 rounded-xl bg-inema-sage text-inema-green flex items-center justify-center"><span class="material-symbols-outlined text-2xl">public</span></span> Comunicação Cidadã de Emergência Química (DOR004)`;
+                breadcrumb.textContent = "Emergência Externa";
+                titleEl.innerHTML = `<span class="p-2 rounded-xl bg-inema-sage text-inema-green flex items-center justify-center"><span class="material-symbols-outlined text-2xl">public</span></span> Comunicação Cidadã de Emergência Química`;
                 subTitleEl.textContent = "Canal de autoatendimento para o cidadão e empresas com autenticação Gov.br.";
             } else if (viewName === 'consulta') {
                 breadcrumb.textContent = "Consulta de Registros / Call Center";
@@ -2039,7 +2036,7 @@
                 boxNao.classList.add('hidden');
                 document.getElementById('externaNomeEmpresaTrabalho').setAttribute('required', 'true');
                 document.getElementById('externaCargoTrabalho').setAttribute('required', 'true');
-                // Habilita RPEQ (RN023)
+                // Habilita RPEQ
                 boxRpeq.classList.remove('opacity-60');
                 btnRpeq.removeAttribute('disabled');
                 btnRpeq.className = "w-full py-2 bg-inema-sage text-inema-green hover:bg-inema-sage-dark rounded-lg text-xs font-semibold flex items-center justify-center gap-1 transition-all cursor-pointer";
@@ -2086,7 +2083,7 @@
         }
 
         // ==========================================
-        // GESTÃO DE COORDENADAS GEOGRÁFICAS (BOT002)
+        // GESTÃO DE COORDENADAS GEOGRÁFICAS
         // ==========================================
         function abrirModalCoordenada(fluxo) {
             modalCoordFluxoAlvo = fluxo;
@@ -2109,7 +2106,7 @@
                 return;
             }
 
-            // Tratamento especial para zero no externo (LEG007)
+            // Tratamento especial para zero no externo
             let latDec = parseFloat(lat.replace(',', '.'));
             let lngDec = parseFloat(lng.replace(',', '.'));
             if (isNaN(latDec)) latDec = 0.0;
@@ -2163,9 +2160,9 @@
             tbody.innerHTML = lista.map((c, i) => `
                 <tr class="border-b border-slate-100 hover:bg-slate-50/50">
                     <td class="p-2.5 font-medium text-slate-800">${c.tipo}</td>
-                    <td class="p-2.5 font-mono text-slate-700">${c.latitude}</td>
-                    <td class="p-2.5 font-mono text-slate-700">${c.longitude}</td>
-                    <td class="p-2.5 font-mono font-bold text-inema-green">${c.latDecimal}, ${c.lngDecimal}</td>
+                    <td class="p-2.5 text-slate-700">${c.latitude}</td>
+                    <td class="p-2.5 text-slate-700">${c.longitude}</td>
+                    <td class="p-2.5 font-bold text-inema-green">${c.latDecimal}, ${c.lngDecimal}</td>
                     <td class="p-2.5 text-center">
                         <button type="button" onclick="removerCoordenada('${c.id}', '${fluxo}')" class="text-rose-600 hover:text-rose-800 p-1" title="Remover coordenada">
                             <span class="material-symbols-outlined text-base">delete</span>
@@ -2392,7 +2389,7 @@
         }
 
         // ==========================================
-        // CALL CENTER: ASSOCIAÇÃO DE PLANTONISTA (RN027 / MSG006)
+        // CALL CENTER: ASSOCIAÇÃO DE PLANTONISTA
         // ==========================================
         function abrirModalAssociarPlantonista(numeroRE) {
             reSelecionadoParaPlantonista = listaRegistros.find(r => r.numeroRE === numeroRE);
@@ -2400,8 +2397,7 @@
 
             document.getElementById('subtituloAssociarRE').textContent = `Registro: ${numeroRE} - Município da Ocorrência: ${reSelecionadoParaPlantonista.municipio}`;
 
-            // Ordenação RN027:
-            // 1º plantonistas na escala da data cujo município seja o da ocorrência
+            // Ordenação // 1º plantonistas na escala da data cujo município seja o da ocorrência
             // 2º demais plantonistas com escala aplicável
             const munOcorrencia = reSelecionadoParaPlantonista.municipio.toLowerCase();
             
@@ -2426,7 +2422,7 @@
                                 ${coincide ? '<span class="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">1º Prioridade - Escala Local</span>' : '<span class="text-[10px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded">2º Prioridade - Geral</span>'}
                             </div>
                             <p class="text-[11px] text-slate-500 mt-0.5">${p.cargo} • Matrícula: ${p.matricula} • Polo: ${p.municipioEscala}</p>
-                            <p class="text-[11px] font-mono text-emerald-800 mt-0.5 flex items-center gap-1">
+                            <p class="text-[11px] text-emerald-800 mt-0.5 flex items-center gap-1">
                                 <span class="material-symbols-outlined text-xs">call</span> Plantão: ${p.telefonePlantao}
                             </p>
                         </div>
@@ -2537,11 +2533,11 @@
                 return `
                     <tr class="border-b border-slate-100 hover:bg-slate-50/70 transition-colors">
                         <td class="p-3.5">
-                            <button onclick="verEspelhoRE('${re.numeroRE}')" class="font-mono font-bold text-inema-green hover:underline flex items-center gap-1 text-left">
+                            <button onclick="verEspelhoRE('${re.numeroRE}')" class=" font-bold text-inema-green hover:underline flex items-center gap-1 text-left">
                                 <span class="material-symbols-outlined text-sm text-slate-400">description</span>
                                 ${re.numeroRE}
                             </button>
-                            ${re.processoFormal ? `<span class="block font-mono text-[10px] text-slate-400 mt-0.5">Proc: ${re.processoFormal}</span>` : ''}
+                            ${re.processoFormal ? `<span class="block text-[10px] text-slate-400 mt-0.5">Proc: ${re.processoFormal}</span>` : ''}
                         </td>
                         <td class="p-3.5 text-slate-600 text-[11px] whitespace-nowrap">${re.dataCriacao}</td>
                         <td class="p-3.5 text-slate-700 max-w-[200px] truncate" title="${re.tipoEmergencia}">${re.tipoEmergencia}</td>
@@ -2582,13 +2578,13 @@
                 <div class="p-4 bg-emerald-50/60 border border-emerald-200 rounded-xl flex items-center justify-between flex-wrap gap-2">
                     <div>
                         <span class="text-[10px] text-emerald-800 uppercase font-bold tracking-wider">Protocolo de Emergência</span>
-                        <h4 class="font-mono text-base font-extrabold text-inema-green">${re.numeroRE}</h4>
+                        <h4 class=" text-base font-extrabold text-inema-green">${re.numeroRE}</h4>
                         <p class="text-[11px] text-slate-500">Cadastrado em: ${re.dataCriacao} • Canal: ${re.origem}</p>
                     </div>
                     <div class="text-right">
                         <span class="text-[10px] text-slate-400 block font-medium">Status Atual</span>
                         <span class="font-bold text-xs text-inema-green">${re.status}</span>
-                        ${re.processoFormal ? `<span class="block text-[11px] font-mono text-slate-600">Proc. SEIA: ${re.processoFormal}</span>` : ''}
+                        ${re.processoFormal ? `<span class="block text-[11px] text-slate-600">Proc. SEIA: ${re.processoFormal}</span>` : ''}
                     </div>
                 </div>
 
@@ -2691,7 +2687,7 @@
                 if (areaPosto) areaPosto.checked = true;
                 verificarLimiteAreas(areaUrbana, 'externa');
 
-                alert('Dados de exemplo carregados no formulário do Fluxo Externo (DOR004).');
+                alert('Dados de exemplo carregados no formulário do Fluxo Externo.');
             }
         }
 

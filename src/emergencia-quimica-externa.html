@@ -49,15 +49,12 @@
     <!-- ============================================ -->
     <header class="h-16 bg-inema-green fixed top-0 left-0 right-0 z-50 flex items-center px-4 gap-4 shadow-sm">
         <!-- Esquerda: Hambúrguer + Logo INEMA / SEIA -->
-        <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3">
             <button class="w-10 h-10 rounded-lg hover:bg-white/10 flex items-center justify-center text-white transition-colors" onclick="toggleSidebar()" aria-label="Menu principal">
                 <span class="material-symbols-outlined text-2xl">menu</span>
             </button>
-            <a href="index.html" class="flex items-center gap-2.5">
-                <img src="logo.svg" alt="INEMA" class="h-10 w-auto">
-                <span class="hidden sm:inline-block pl-2 border-l border-white/20 text-xs text-white/80 font-medium tracking-wide">
-                    SEIA <span class="text-white/60 font-normal">| Fiscalização</span>
-                </span>
+            <a href="index.html" class="flex items-center">
+                <span class="text-2xl font-bold tracking-tight text-white lowercase">inema</span>
             </a>
         </div>
 
@@ -113,47 +110,47 @@
                         <span id="iconFiscalizacao" class="material-symbols-outlined text-lg text-[#0F4C3A] transition-transform duration-200 rotate-180">expand_more</span>
                     </button>
                     
-                    <div id="subFiscalizacao" class="mt-1 border-l-2 border-slate-200 ml-4 pl-3 space-y-1">
+                    <div id="subFiscalizacao" class="mt-2 border-l-2 border-slate-200 ml-4 pl-3 space-y-4">
                         <!-- Subgrupo: DENÚNCIAS -->
-                        <div class="space-y-1">
-                            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 px-3 pt-2 pb-1.5 flex items-center gap-2">
+                        <div>
+                            <div class="text-slate-400 font-semibold text-[11px] tracking-wider uppercase px-3 pt-1 pb-1">
                                 Denúncias
                             </div>
-                            <div class="space-y-1">
-                                <a href="fiscalizacao.html" id="menu-atendente" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                            <div class="space-y-1 mt-1">
+                                <a href="fiscalizacao.html" id="menu-atendente" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                                     <span>Atendente</span>
                                 </a>
-                                <a href="fiscalizacao.html?fluxo=externo" id="menu-cidadao" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                                <a href="fiscalizacao.html?fluxo=externo" id="menu-cidadao" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                                     <span>Formulário Cidadão</span>
                                 </a>
                             </div>
                         </div>
 
                         <!-- Subgrupo: EMERGÊNCIAS QUÍMICAS -->
-                        <div class="space-y-1 border-t border-slate-100 mt-2 pt-2">
-                            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 px-3 pt-1.5 pb-1.5 flex items-center gap-2">
+                        <div>
+                            <div class="text-slate-400 font-semibold text-[11px] tracking-wider uppercase px-3 pt-1 pb-1">
                                 Emergências Químicas
                             </div>
-                            <div class="space-y-1">
-                                <a href="emergencia-quimica.html?fluxo=interna" id="menu-emerg-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                            <div class="space-y-1 mt-1">
+                                <a href="emergencia-quimica.html" id="menu-emerg-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 bg-[#E2ECE9] text-[#0F4C3A] font-semibold">
                                     <span>Cadastro Interno</span>
                                 </a>
-                                <a href="emergencia-quimica-externa.html" id="menu-emerg-externa" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 bg-[#E2ECE9] text-[#0F4C3A] font-semibold rounded-lg">
+                                <a href="emergencia-quimica-externa.html" id="menu-emerg-externa" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                                     <span>Registro Externo</span>
                                 </a>
                             </div>
                         </div>
 
                         <!-- Subgrupo: CONSULTAS -->
-                        <div class="space-y-1 border-t border-slate-100 mt-2 pt-2">
-                            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 px-3 pt-1.5 pb-1.5 flex items-center gap-2">
+                        <div>
+                            <div class="text-slate-400 font-semibold text-[11px] tracking-wider uppercase px-3 pt-1 pb-1">
                                 Consultas
                             </div>
-                            <div class="space-y-1">
-                                <a href="consulta-externa.html" id="menu-consulta-externa" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                            <div class="space-y-1 mt-1">
+                                <a href="consulta-externa.html" id="menu-consulta-externa" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                                     <span>Consulta Cidadão</span>
                                 </a>
-                                <a href="consulta-interna.html" id="menu-consulta-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                                <a href="consulta-interna.html" id="menu-consulta-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                                     <span>Painel Interno DIFIS</span>
                                     <span class="bg-rose-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full" id="sidebarBadgeEmergencias">3</span>
                                 </a>
@@ -225,7 +222,7 @@
                 </div>
                 <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-right shrink-0">
                     <span class="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Número do Registro (RE)</span>
-                    <span id="badgeNumeroRE" class="text-base font-bold text-emerald-800 font-mono">
+                    <span id="badgeNumeroRE" class="text-base font-bold text-emerald-800 ">
                         A gerar na finalização
                     </span>
                     <span class="block text-[11px] text-slate-500 mt-0.5">
@@ -234,8 +231,8 @@
                 </div>
             </div>
 
-            <!-- Card Gov.br do Comunicante (RN002) -->
-            <div class="bg-emerald-50/70 border border-emerald-200 rounded-xl p-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
+            <!-- Card Gov.br do Comunicante -->
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-full bg-inema-green text-white flex items-center justify-center font-bold text-sm shadow-xs">
                         GS
@@ -245,12 +242,12 @@
                             <span class="font-bold text-slate-800 text-sm">Giovani Silva</span>
                             <span class="px-2 py-0.5 bg-blue-100 text-blue-800 text-[10px] font-bold rounded-full">Gov.br Ouro</span>
                         </div>
-                        <span class="text-xs text-slate-500 font-mono">CPF: 529.982.247-25 | giovani.silva@exemplo.com.br</span>
+                        <span class="text-xs text-slate-500 ">CPF: 529.982.247-25 | giovani.silva@exemplo.com.br</span>
                     </div>
                 </div>
                 <div class="text-xs text-slate-600 flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-lg border border-emerald-200/60">
                     <span class="material-symbols-outlined text-base text-emerald-700">verified_user</span>
-                    <span>Identidade Gov.br validada (RN002)</span>
+                    <span>Identidade Gov.br validada</span>
                 </div>
             </div>
 
@@ -281,7 +278,7 @@
                             </div>
                         </div>
 
-                        <!-- Condicional SIM: Nome da Empresa e Cargo (RN003) -->
+                        <!-- Condicional SIM: Nome da Empresa e Cargo -->
                         <div id="blocoVinculoSim" class="hidden grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
                             <div>
                                 <label class="block text-xs font-semibold text-slate-700 mb-1">
@@ -299,7 +296,7 @@
                             </div>
                         </div>
 
-                        <!-- Condicional NÃO: Combobox Cidadão comum, Força Policial, Outras instituições (RN004) -->
+                        <!-- Condicional NÃO: Combobox Cidadão comum, Força Policial, Outras instituições -->
                         <div id="blocoVinculoNao" class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
                             <div>
                                 <label class="block text-xs font-semibold text-slate-700 mb-1">
@@ -320,7 +317,7 @@
                             </div>
                         </div>
 
-                        <!-- Campo Permanente: Empresa Responsável Informada (RN005) -->
+                        <!-- Campo Permanente: Empresa Responsável Informada -->
                         <div>
                             <label class="block text-xs font-medium text-slate-700 mb-1">
                                 Sabe informar o nome da empresa responsável pela emergência química? (Opcional)
@@ -331,7 +328,7 @@
                     </div>
                 </div>
 
-                <!-- SEÇÃO 2: Dados do Comunicante (RN002) -->
+                <!-- SEÇÃO 2: Dados do Comunicante -->
                 <div class="p-6 space-y-4">
                     <div class="flex items-center gap-2.5 text-inema-green font-bold text-base border-b pb-2">
                         <span class="material-symbols-outlined text-xl">person</span>
@@ -343,11 +340,11 @@
                             <label class="block text-xs font-semibold text-slate-700 mb-1">
                                 Nome / Razão Social <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" disabled value="Giovani Silva" class="w-full text-xs bg-slate-100 text-slate-600 rounded-lg border-slate-200 cursor-not-allowed font-medium">
+                            <input type="text" disabled value="Giovani Silva" class="w-full text-xs bg-slate-50 text-slate-700 rounded-lg border-slate-200 cursor-not-allowed font-medium">
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-700 mb-1">CPF / CNPJ</label>
-                            <input type="text" disabled value="529.982.247-25" class="w-full text-xs bg-slate-100 text-slate-600 rounded-lg border-slate-200 cursor-not-allowed font-mono">
+                            <input type="text" disabled value="529.982.247-25" class="w-full text-xs bg-slate-50 text-slate-700 rounded-lg border-slate-200 cursor-not-allowed ">
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-700 mb-1">
@@ -361,12 +358,12 @@
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-slate-700 mb-1">E-mail</label>
-                            <input type="email" disabled value="giovani.silva@exemplo.com.br" class="w-full text-xs bg-slate-100 text-slate-600 rounded-lg border-slate-200 cursor-not-allowed">
+                            <input type="email" disabled value="giovani.silva@exemplo.com.br" class="w-full text-xs bg-slate-50 text-slate-700 rounded-lg border-slate-200 cursor-not-allowed">
                         </div>
                     </div>
                 </div>
 
-                <!-- SEÇÃO 3: Detalhes da Emergência Química (RN008, RN027, RN028) -->
+                <!-- SEÇÃO 3: Detalhes da Emergência Química -->
                 <div class="p-6 space-y-4">
                     <div class="flex items-center gap-2.5 text-inema-green font-bold text-base border-b pb-2">
                         <span class="material-symbols-outlined text-xl">warning</span>
@@ -386,7 +383,7 @@
                                 Tipo da Emergência Química <span class="text-red-500">*</span>
                             </label>
                             <select id="campoTipoEmergencia" onchange="handleTipoEmergenciaChange(this.value)" class="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green">
-                                <option value="">-- Selecione o Tipo no Catálogo Oficial (RN027) --</option>
+                                <option value="">-- Selecione o Tipo no Catálogo Oficial --</option>
                                 <option value="Acidente no transporte rodoviário de produtos químicos">Acidente no transporte rodoviário de produtos químicos</option>
                                 <option value="Acidente em via férrea">Acidente em via férrea</option>
                                 <option value="Acidente industrial em planta química ou petroquímica">Acidente industrial em planta química ou petroquímica</option>
@@ -406,7 +403,7 @@
                         </div>
                     </div>
 
-                    <!-- Condicional Outros (RN028) -->
+                    <!-- Condicional Outros -->
                     <div id="blocoDescricaoOutros" class="hidden">
                         <label class="block text-xs font-semibold text-slate-700 mb-1">
                             Descrição do tipo <span class="text-red-500">*</span>
@@ -420,19 +417,19 @@
                             <label class="block text-xs font-semibold text-slate-700">
                                 Descrição do Fato <span class="text-red-500">*</span>
                             </label>
-                            <span id="charCountDescricao" class="text-[11px] text-slate-400 font-mono">0 / 7.000 caracteres</span>
+                            <span id="charCountDescricao" class="text-[11px] text-slate-400 ">0 / 7.000 caracteres</span>
                         </div>
                         <textarea id="campoDescricao" rows="4" maxlength="7000" oninput="atualizarContadorDescricao(this)" placeholder="Descreva aqui seu relato em detalhes sobre a emergência, substâncias envolvidas, impactos aparentes e providências adotadas..." class="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green"></textarea>
                         <span class="text-[10px] text-slate-400 mt-0.5 block">LEG002 - Descreva aqui seu relato em detalhes sobre a emergência</span>
                     </div>
 
-                    <!-- Upload de Anexos (RN009 / MSG005) -->
+                    <!-- Upload de Anexos -->
                     <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
                         <label class="block text-xs font-semibold text-slate-700 mb-1">
                             Anexos da Emergência (Opcional)
                         </label>
                         <p class="text-[11px] text-slate-500 mb-2">
-                            Adicione arquivos que complementem ou documentem a demanda ou o fato, como capturas de conversas, vídeos e fotos (LEG003).
+                            Adicione arquivos que complementem ou documentem a demanda ou o fato, como capturas de conversas, vídeos e fotos.
                         </p>
                         <input type="file" id="inputAnexosIniciais" multiple class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-inema-sage file:text-inema-green hover:file:bg-inema-sage-dark">
                         <div class="mt-2 p-2.5 bg-white rounded-lg border border-slate-200 text-[10px] text-slate-600">
@@ -441,7 +438,7 @@
                     </div>
                 </div>
 
-                <!-- SEÇÃO 4: Localização e Áreas Atingidas (RN010, RN011, RN012, RN013) -->
+                <!-- SEÇÃO 4: Localização e Áreas Atingidas -->
                 <div class="p-6 space-y-4">
                     <div class="flex items-center gap-2.5 text-inema-green font-bold text-base border-b pb-2">
                         <span class="material-symbols-outlined text-xl">pin_drop</span>
@@ -472,8 +469,8 @@
 
                         <div>
                             <label class="block text-xs font-medium text-slate-700 mb-1">CEP (Auto-preenchimento)</label>
-                            <input type="text" id="campoCep" oninput="buscarCepSimulado(this.value)" placeholder="40020-000" class="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green font-mono">
-                            <span class="text-[10px] text-slate-400 mt-0.5 block">Ex: 40020-000 preenche Salvador Centro (RN026)</span>
+                            <input type="text" id="campoCep" oninput="buscarCepSimulado(this.value)" placeholder="40020-000" class="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green ">
+                            <span class="text-[10px] text-slate-400 mt-0.5 block">Ex: 40020-000 preenche Salvador Centro</span>
                         </div>
 
                         <div class="sm:col-span-2">
@@ -503,7 +500,7 @@
                         </div>
                     </div>
 
-                    <!-- ÁREAS ATINGIDAS (RN012 / RN013 / RN031) -->
+                    <!-- ÁREAS ATINGIDAS -->
                     <div class="pt-3">
                         <div class="flex items-center justify-between mb-2">
                             <label class="block text-xs font-semibold text-slate-700">
@@ -524,17 +521,17 @@
                         <label class="block text-xs font-medium text-slate-700 mb-1">
                             Descrição do Cenário (Opcional)
                         </label>
-                        <textarea id="campoDescricaoCenario" rows="2" maxlength="1000" placeholder="Descreva a área ou o cenário da área atingida (LEG012)" class="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green"></textarea>
+                        <textarea id="campoDescricaoCenario" rows="2" maxlength="1000" placeholder="Descreva a área ou o cenário da área atingida" class="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green"></textarea>
                     </div>
 
-                    <!-- COORDENADAS GEOGRÁFICAS (RN011, BOT002) -->
+                    <!-- COORDENADAS GEOGRÁFICAS -->
                     <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">
                                 <span class="material-symbols-outlined text-lg text-inema-green">explore</span>
                                 <span class="text-xs font-bold text-slate-800">Coordenadas Geográficas (Opcional)</span>
                             </div>
-                            <span class="text-[11px] text-slate-500">Caso não saiba as coordenadas, pode preencher com zero (LEG007)</span>
+                            <span class="text-[11px] text-slate-500">Caso não saiba as coordenadas, pode preencher com zero</span>
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -544,9 +541,9 @@
                                 <option value="UTM 23">UTM 23</option>
                                 <option value="UTM 24">UTM 24</option>
                             </select>
-                            <input type="text" id="inputCoordLatitude" maxlength="10" placeholder="Latitude (ex: -12.9714)" class="text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green font-mono">
+                            <input type="text" id="inputCoordLatitude" maxlength="10" placeholder="Latitude (ex: -12.9714)" class="text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green ">
                             <div class="flex gap-2">
-                                <input type="text" id="inputCoordLongitude" maxlength="10" placeholder="Longitude (ex: -38.5014)" class="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green font-mono">
+                                <input type="text" id="inputCoordLongitude" maxlength="10" placeholder="Longitude (ex: -38.5014)" class="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green ">
                                 <button type="button" onclick="adicionarCoordenada()" class="px-3 py-1.5 bg-inema-green text-white text-xs font-semibold rounded-lg hover:bg-inema-green-hover shrink-0">
                                     + Incluir
                                 </button>
@@ -558,10 +555,10 @@
                     </div>
                 </div>
 
-                <!-- SEÇÃO 5: Tratamento Interno (RN030) -->
-                <!-- REGRA RN030: O campo "Técnico indicado" NÃO é apresentado ao usuário externo durante o cadastro -->
+                <!-- SEÇÃO 5: Tratamento Interno -->
+                <!-- REGRA O campo "Técnico indicado" NÃO é apresentado ao usuário externo durante o cadastro -->
 
-                <!-- SEÇÃO PÓS-FINALIZAÇÃO: Relatórios Regulatórios (RN023, RN024, RN025) -->
+                <!-- SEÇÃO PÓS-FINALIZAÇÃO: Relatórios Regulatórios -->
                 <div id="secaoRelatoriosPosFinalizacao" class="hidden p-6 space-y-4 bg-slate-50/50">
                     <div class="flex items-center gap-2.5 text-inema-green font-bold text-base border-b pb-2">
                         <span class="material-symbols-outlined text-xl">folder_shared</span>
@@ -573,7 +570,7 @@
                     </p>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
-                        <!-- RPEQ (RN023) -->
+                        <!-- RPEQ -->
                         <div id="cardRpeq" class="p-4 bg-white rounded-xl border border-slate-200 space-y-2">
                             <div class="flex items-center justify-between">
                                 <span class="font-bold text-xs text-slate-800">Relatório Preliminar (RPEQ)</span>
@@ -588,14 +585,14 @@
                             </button>
                         </div>
 
-                        <!-- Relatório Conclusivo (RN024) -->
+                        <!-- Relatório Conclusivo -->
                         <div class="p-4 bg-white rounded-xl border border-slate-200 space-y-2">
                             <div class="flex items-center justify-between">
                                 <span class="font-bold text-xs text-slate-800">Relatório Conclusivo</span>
                                 <span class="material-symbols-outlined text-inema-green text-lg">task_alt</span>
                             </div>
                             <p class="text-[11px] text-slate-500">
-                                Disponível para envio a qualquer momento e em qualquer status (RN024).
+                                Disponível para envio a qualquer momento e em qualquer status.
                             </p>
                             <button type="button" onclick="abrirModalUpload('Conclusivo')" class="w-full py-1.5 bg-inema-green text-white text-xs font-semibold rounded-lg hover:bg-inema-green-hover flex items-center justify-center gap-1">
                                 <span class="material-symbols-outlined text-sm">upload_file</span>
@@ -603,14 +600,14 @@
                             </button>
                         </div>
 
-                        <!-- Relatório Complementar (RN025) -->
+                        <!-- Relatório Complementar -->
                         <div class="p-4 bg-white rounded-xl border border-slate-200 space-y-2">
                             <div class="flex items-center justify-between">
                                 <span class="font-bold text-xs text-slate-800">Relatório Complementar</span>
                                 <span class="material-symbols-outlined text-inema-green text-lg">note_add</span>
                             </div>
                             <p class="text-[11px] text-slate-500">
-                                Adicione laudos adicionais, análises físico-químicas e dados de campo (RN025).
+                                Adicione laudos adicionais, análises físico-químicas e dados de campo.
                             </p>
                             <button type="button" onclick="abrirModalUpload('Complementar')" class="w-full py-1.5 bg-inema-green text-white text-xs font-semibold rounded-lg hover:bg-inema-green-hover flex items-center justify-center gap-1">
                                 <span class="material-symbols-outlined text-sm">upload_file</span>
@@ -626,11 +623,11 @@
                     </div>
                 </div>
 
-                <!-- RODAPÉ DE AÇÕES (BOT001 e BOT003) -->
+                <!-- RODAPÉ DE AÇÕES -->
                 <div id="rodapeAcoes" class="p-6 bg-slate-50 flex items-center justify-between rounded-b-xl gap-3">
                     <button type="button" onclick="abrirModalExclusao()" class="px-4 py-2 border border-red-300 text-red-600 rounded-lg text-xs font-semibold hover:bg-red-50 transition-colors flex items-center gap-1.5">
                         <span class="material-symbols-outlined text-base">delete</span>
-                        <span>Excluir Emergência (BOT003)</span>
+                        <span>Excluir Emergência</span>
                     </button>
 
                     <div class="flex items-center gap-3">
@@ -639,7 +636,7 @@
                         </button>
                         <button type="submit" class="px-6 py-2 bg-inema-green text-white rounded-lg text-xs font-bold hover:bg-inema-green-hover transition-colors shadow-sm flex items-center gap-2">
                             <span class="material-symbols-outlined text-base">check_circle</span>
-                            <span>Finalizar Emergência (BOT001)</span>
+                            <span>Finalizar Emergência</span>
                         </button>
                     </div>
                 </div>
@@ -731,7 +728,7 @@
                 <p class="text-xs text-slate-600">
                     Registro de Emergência Química cadastrado com sucesso!
                 </p>
-                <div id="textoNumeroREGerado" class="p-3 bg-slate-50 rounded-lg border border-slate-200 mt-2 font-mono font-bold text-inema-green text-sm">
+                <div id="textoNumeroREGerado" class="p-3 bg-slate-50 rounded-lg border border-slate-200 mt-2 font-bold text-inema-green text-sm">
                     Nº de Registro: 2026.000004/INEMA/RE
                 </div>
                 <p class="text-[11px] text-slate-500 mt-1">
@@ -749,7 +746,7 @@
         </div>
     </div>
 
-    <!-- Modal MSG007: Exclusão Definitiva (BOT003) -->
+    <!-- Modal MSG007: Exclusão Definitiva -->
     <div id="modalMsg007" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-xs">
         <div class="bg-white rounded-xl max-w-md w-full p-6 space-y-4 shadow-xl border border-slate-200">
             <div class="w-12 h-12 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto">
@@ -772,7 +769,7 @@
         </div>
     </div>
 
-    <!-- Modal de Upload de Relatório (DOR005.1 / RN012) -->
+    <!-- Modal de Upload de Relatório -->
     <div id="modalUploadRelatorio" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-xs">
         <div class="bg-white rounded-xl max-w-md w-full p-6 space-y-4 shadow-xl border border-slate-200">
             <div class="flex items-center justify-between border-b pb-2">
@@ -813,7 +810,7 @@
         const CHAVE_STORAGE = 'INEMA_SEIA_REGISTROS_EXTERNOS';
         const CHAVE_RASCUNHO = 'INEMA_DOR004_RASCUNHO';
 
-        // Catálogo das 14 Áreas Atingidas (RN013)
+        // Catálogo das 14 Áreas Atingidas
         const CATALOGO_AREAS = [
             { nome: 'Área Urbana', tooltip: null },
             { nome: 'Distrito', tooltip: null },
@@ -822,13 +819,13 @@
             { nome: 'Área Industrial', tooltip: null },
             { nome: 'Dutovia', tooltip: null },
             { nome: 'Colônia de Pescadores', tooltip: null },
-            { nome: 'Comunidade Tradicional', tooltip: 'LEG013: Ribeirinha, Quilombo, Pescadores e outros...' },
+            { nome: 'Comunidade Tradicional', tooltip: 'Ribeirinha, Quilombo, Pescadores e outros...' },
             { nome: 'Povoado', tooltip: null },
             { nome: 'Posto de Combustível', tooltip: null },
             { nome: 'Recurso Hídrico', tooltip: null },
             { nome: 'Rodovia', tooltip: null },
             { nome: 'Área de Marinha', tooltip: null },
-            { nome: 'Unidade de Conservação', tooltip: 'LEG014: Parques, APA entre outros...' }
+            { nome: 'Unidade de Conservação', tooltip: 'Parques, APA entre outros...' }
         ];
 
         let areasSelecionadas = [];
@@ -873,7 +870,7 @@
             }
         }
 
-        // Renderiza Checkboxes das Áreas Atingidas com Tooltips (RN012, RN013, RN031)
+        // Renderiza Checkboxes das Áreas Atingidas com Tooltips
         function renderizarGridAreas() {
             const grid = document.getElementById('gridAreasAtingidas');
             grid.innerHTML = CATALOGO_AREAS.map(item => `
@@ -891,7 +888,7 @@
             if (chk.checked) {
                 if (areasSelecionadas.length >= 3) {
                     chk.checked = false;
-                    alert('Você pode selecionar no máximo 3 áreas atingidas (RN012).');
+                    alert('Você pode selecionar no máximo 3 áreas atingidas.');
                     return;
                 }
                 areasSelecionadas.push(chk.value);
@@ -920,7 +917,7 @@
             });
         }
 
-        // Vínculo Empresa SIM/NÃO (RN003 e RN004)
+        // Vínculo Empresa SIM/NÃO
         function toggleVinculoEmpresa(val) {
             const blocoSim = document.getElementById('blocoVinculoSim');
             const blocoNao = document.getElementById('blocoVinculoNao');
@@ -942,7 +939,7 @@
             }
         }
 
-        // Tipo Emergência: Condicional Outros (RN028)
+        // Tipo Emergência: Condicional Outros
         function handleTipoEmergenciaChange(val) {
             const blocoOutros = document.getElementById('blocoDescricaoOutros');
             if (val === 'Outros') {
@@ -956,7 +953,7 @@
             document.getElementById('charCountDescricao').innerText = `${el.value.length} / 7.000 caracteres`;
         }
 
-        // Busca CEP simulada (RN026)
+        // Busca CEP simulada
         function buscarCepSimulado(val) {
             const clean = val.replace(/\D/g, '');
             if (clean === '40020000') {
@@ -971,14 +968,14 @@
             }
         }
 
-        // Adicionar Coordenada (BOT002 / RN011)
+        // Adicionar Coordenada
         function adicionarCoordenada() {
             const tipo = document.getElementById('selectTipoCoordenada').value;
             const lat = document.getElementById('inputCoordLatitude').value.trim();
             const lng = document.getElementById('inputCoordLongitude').value.trim();
 
             if (!lat && !lng) {
-                alert('Informe latitude e longitude ou zero (LEG007).');
+                alert('Informe latitude e longitude ou zero.');
                 return;
             }
 
@@ -993,7 +990,7 @@
             const box = document.getElementById('listaCoordenadasAdicionadas');
             box.innerHTML = coordenadasAdicionadas.map((c, i) => `
                 <div class="flex items-center justify-between text-xs bg-white p-2 rounded-lg border border-slate-200">
-                    <span class="font-mono text-slate-700">
+                    <span class=" text-slate-700">
                         #${i + 1} [${c.tipo}]: Lat ${c.lat}, Long ${c.lng}
                     </span>
                     <button type="button" onclick="removerCoordenada(${c.id})" class="text-red-600 hover:text-red-800 text-xs font-bold">
@@ -1019,7 +1016,7 @@
             if (el) el.classList.add('hidden');
         }
 
-        // Validação e Finalização (BOT001)
+        // Validação e Finalização
         function handleFinalizarEmergencia() {
             const vinculo = document.querySelector('input[name="vinculoEmpresa"]:checked').value;
             const nomeEmpresa = document.getElementById('campoNomeEmpresa').value.trim();
@@ -1037,7 +1034,7 @@
             const endereco = document.getElementById('campoEndereco').value.trim();
             const pontoRef = document.getElementById('campoPontoReferencia').value.trim();
 
-            // Validação de Obrigatórios (RN002, RN003, RN004, RN008, RN010, RN012, RN028 -> MSG001)
+            // Validação de Obrigatórios
             let erros = [];
             if (!telefone) erros.push('Telefone / Celular');
             if (vinculo === 'SIM') {
@@ -1061,7 +1058,7 @@
                 return;
             }
 
-            // Validação de Coordenadas (RN011 -> MSG002)
+            // Validação de Coordenadas
             if (coordenadasAdicionadas.length === 0) {
                 abrirModal('modalMsg002');
                 return;
@@ -1071,7 +1068,7 @@
             abrirModal('modalMsg003');
         }
 
-        // Concluir Registro Definitivo (RN006, RN007, RN015)
+        // Concluir Registro Definitivo
         function concluirRegistroDefinitivo() {
             fecharModal('modalMsg003');
 
@@ -1168,7 +1165,7 @@
             const secaoRelatorios = document.getElementById('secaoRelatoriosPosFinalizacao');
             secaoRelatorios.classList.remove('hidden');
 
-            // RN023: se declarou vínculo = SIM, habilita RPEQ; se NÃO, desabilita
+            // se declarou vínculo = SIM, habilita RPEQ; se NÃO, desabilita
             const btnRpeq = document.getElementById('btnUploadRpeq');
             const msgRpeq = document.getElementById('msgRpeqCondicional');
             if (vinculo === 'SIM') {
@@ -1249,7 +1246,7 @@
                             <span class="material-symbols-outlined text-base text-inema-green">description</span>
                             <div>
                                 <span class="font-bold text-slate-800">${r.tipo}: ${r.nomeArquivo}</span>
-                                <span class="text-[10px] text-slate-400 block font-mono">Enviado em ${r.dataHoraEnvio}</span>
+                                <span class="text-[10px] text-slate-400 block ">Enviado em ${r.dataHoraEnvio}</span>
                             </div>
                         </div>
                         <span class="px-2 py-0.5 bg-emerald-50 text-emerald-800 rounded text-[10px] font-bold">Anexado</span>
@@ -1336,7 +1333,7 @@
             }
         }
 
-        // Exclusão Definitiva (BOT003 / MSG007)
+        // Exclusão Definitiva
         function abrirModalExclusao() {
             abrirModal('modalMsg007');
         }
