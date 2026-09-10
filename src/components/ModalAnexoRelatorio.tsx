@@ -129,7 +129,7 @@ export const ModalAnexoRelatorio: React.FC<ModalAnexoRelatorioProps> = ({
         <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 flex items-center justify-between">
           <div>
             <span className="text-[10px] uppercase font-bold text-slate-400 block">Registro Vinculado</span>
-            <span className="text-xs font-bold text-slate-800 font-mono">{registro.numeroRegistro}</span>
+            <span className="text-xs font-bold text-slate-800">{registro.numeroRegistro}</span>
           </div>
           <span className="text-xs px-2.5 py-1 bg-inema-sage text-inema-green font-semibold rounded-full">
             {registro.tipoRegistro}
@@ -182,7 +182,7 @@ export const ModalAnexoRelatorio: React.FC<ModalAnexoRelatorioProps> = ({
             />
             {arquivo && (
               <div className="mt-1.5 p-2 bg-emerald-50 text-emerald-800 rounded border border-emerald-200 text-[11px] flex items-center justify-between">
-                <span className="truncate font-mono">{arquivo.name}</span>
+                <span className="truncate">{arquivo.name}</span>
                 <span className="text-[10px] text-emerald-600 font-bold shrink-0 ml-2">
                   {(arquivo.size / (1024 * 1024)).toFixed(2)} MB
                 </span>

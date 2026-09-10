@@ -162,7 +162,7 @@ export const FiltrosConsulta: React.FC<FiltrosConsultaProps> = ({
               value={filtros.numeroRegistro || ''}
               onChange={(e) => onChange({ ...filtros, numeroRegistro: e.target.value })}
               placeholder="Ex: 2026.000004/INEMA/RE"
-              className="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green font-mono"
+              className="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green"
             />
           </div>
 

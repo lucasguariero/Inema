@@ -12,9 +12,8 @@ test.describe('DOR005: Consulta de Registros Internos (DIFIS)', () => {
     await page.goto(fileUrl, { waitUntil: 'domcontentloaded' });
     await page.setViewportSize({ width: 1400, height: 900 });
 
-    // Header institucional
-    await expect(page.locator('header')).toContainText('SEIA');
-    await expect(page.locator('header')).toContainText('Módulo Fiscalização');
+    // Header institucional com logo oficial
+    await expect(page.locator('header img[alt="INEMA"]')).toBeVisible();
 
     // Título e indicador de emergências (RN011 / LEG012)
     await expect(page.locator('h1')).toHaveText('Consultar Registros');

@@ -64,13 +64,13 @@ def generate_sidebar_html(active_item):
                         <span id="iconFiscalizacao" class="material-symbols-outlined text-lg {fisc_icon_cls} transition-transform duration-200 {fisc_rotate}">expand_more</span>
                     </button>
                     
-                    <div id="subFiscalizacao" class="mt-1 border-l-2 border-slate-200 ml-4 pl-3 space-y-1">
+                    <div id="subFiscalizacao" class="mt-2 border-l-2 border-slate-200 ml-4 pl-3 space-y-4">
                         <!-- Subgrupo: DENÚNCIAS -->
-                        <div class="space-y-1">
-                            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 px-3 pt-2 pb-1.5 flex items-center gap-2">
+                        <div>
+                            <div class="text-slate-400 font-semibold text-[11px] tracking-wider uppercase px-3 pt-2 pb-1">
                                 Denúncias
                             </div>
-                            <div class="space-y-1">
+                            <div class="space-y-1 mt-1">
                                 <a href="fiscalizacao.html" id="menu-atendente" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 {atendente_cls}">
                                     <span>Atendente</span>
                                 </a>
@@ -81,11 +81,11 @@ def generate_sidebar_html(active_item):
                         </div>
 
                         <!-- Subgrupo: EMERGÊNCIAS QUÍMICAS -->
-                        <div class="space-y-1 border-t border-slate-100 mt-2 pt-2">
-                            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 px-3 pt-1.5 pb-1.5 flex items-center gap-2">
+                        <div>
+                            <div class="text-slate-400 font-semibold text-[11px] tracking-wider uppercase px-3 pt-2 pb-1">
                                 Emergências Químicas
                             </div>
-                            <div class="space-y-1">
+                            <div class="space-y-1 mt-1">
                                 <a href="emergencia-quimica.html?fluxo=interna" id="menu-emerg-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 {emerg_int_cls}">
                                     <span>Cadastro Interno</span>
                                 </a>
@@ -96,11 +96,11 @@ def generate_sidebar_html(active_item):
                         </div>
 
                         <!-- Subgrupo: CONSULTAS -->
-                        <div class="space-y-1 border-t border-slate-100 mt-2 pt-2">
-                            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 px-3 pt-1.5 pb-1.5 flex items-center gap-2">
+                        <div>
+                            <div class="text-slate-400 font-semibold text-[11px] tracking-wider uppercase px-3 pt-2 pb-1">
                                 Consultas
                             </div>
-                            <div class="space-y-1">
+                            <div class="space-y-1 mt-1">
                                 <a href="consulta-externa.html" id="menu-consulta-externa" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 {cons_ext_cls}">
                                     <span>Consulta Cidadão</span>
                                 </a>
@@ -158,6 +158,15 @@ def process_file(filename, active_item):
     else:
         print(f"[WARN] Could not find sidebar in {filename}")
         return
+
+    # Substituir texto inema por logo.svg oficial no header
+    header_logo_pattern = re.compile(
+        r'<span class="text-2xl font-bold tracking-tight text-white lowercase">\s*inema\s*</span>',
+        re.IGNORECASE
+    )
+    if header_logo_pattern.search(content):
+        content = header_logo_pattern.sub('<img src="logo.svg" alt="INEMA" class="h-10 w-auto">', content)
+        print(f"[OK] Updated header logo to official logo.svg in {filename}")
 
     # In fiscalizacao.html, dynamic check for ?fluxo=externo
     if filename == "fiscalizacao.html":

@@ -43,7 +43,7 @@ export const DrawerVisualizacaoProtegida: React.FC<DrawerVisualizacaoProtegidaPr
                 <span className="material-symbols-outlined text-amber-400 text-xl">
                   {isRE ? 'warning' : 'report'}
                 </span>
-                <span className="font-mono font-bold text-base tracking-wide">
+                <span className="font-bold text-base tracking-wide">
                   {registro.numeroRegistro}
                 </span>
               </div>
@@ -220,7 +220,7 @@ export const DrawerVisualizacaoProtegida: React.FC<DrawerVisualizacaoProtegidaPr
                     <span className="font-bold text-slate-700 text-xs block">Coordenadas Registradas (RN011):</span>
                     <div className="space-y-1">
                       {registro.coordenadas.map((c, i) => (
-                        <div key={c.id || i} className="p-2 bg-slate-50 rounded border border-slate-200 font-mono text-[11px] text-slate-700">
+                        <div key={c.id || i} className="p-2 bg-slate-50 rounded border border-slate-200 text-[11px] text-slate-700">
                           #{i + 1} [{c.tipo}]: Lat {c.latitude}, Long {c.longitude}
                         </div>
                       ))}
@@ -242,7 +242,7 @@ export const DrawerVisualizacaoProtegida: React.FC<DrawerVisualizacaoProtegidaPr
                     </div>
                     <div>
                       <span className="text-[10px] text-slate-400 block">CPF / CNPJ:</span>
-                      <span className="font-mono text-slate-800">{registro.comunicante.cpfCnpj || 'Não informado'}</span>
+                      <span className="text-slate-800">{registro.comunicante.cpfCnpj || 'Não informado'}</span>
                     </div>
                     <div>
                       <span className="text-[10px] text-slate-400 block">Telefone de Contato:</span>
@@ -326,11 +326,11 @@ export const DrawerVisualizacaoProtegida: React.FC<DrawerVisualizacaoProtegidaPr
                           <div>
                             <div className="flex items-center gap-2">
                               <span className="font-bold text-slate-800">{rel.tipo}</span>
-                              <span className="text-[10px] px-2 py-0.5 bg-slate-200 text-slate-700 rounded-full font-mono">
+                              <span className="text-[10px] px-2 py-0.5 bg-slate-200 text-slate-700 rounded-full">
                                 {(rel.tamanhoBytes / (1024 * 1024)).toFixed(2)} MB
                               </span>
                             </div>
-                            <span className="text-xs text-slate-600 block font-mono">{rel.nomeArquivo}</span>
+                            <span className="text-xs text-slate-600 block">{rel.nomeArquivo}</span>
                             <span className="text-[10px] text-slate-400">
                               Enviado em {rel.dataHoraEnvio} por {rel.usuarioEnvio}
                             </span>
@@ -362,7 +362,7 @@ export const DrawerVisualizacaoProtegida: React.FC<DrawerVisualizacaoProtegidaPr
                       <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
                         <div className="flex items-center justify-between">
                           <span className="font-bold text-slate-800 text-xs">{ev.acao}</span>
-                          <span className="text-[10px] text-slate-400 font-mono">{ev.dataHora}</span>
+                          <span className="text-[10px] text-slate-400">{ev.dataHora}</span>
                         </div>
                         <p className="text-xs text-slate-600">{ev.detalhes}</p>
                         <span className="text-[10px] text-slate-400 block">Responsável: {ev.usuario}</span>

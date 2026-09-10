@@ -271,7 +271,7 @@ export const FormCadastroEmergencia: React.FC<FormCadastroEmergenciaProps> = ({
         </div>
         <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 text-right">
           <span className="text-[11px] uppercase font-bold text-slate-400 block tracking-wider">Nº de Registro</span>
-          <span className="text-base font-bold text-emerald-800 font-mono">
+          <span className="text-base font-bold text-emerald-800">
             {registroFinalizado ? registroFinalizado.numeroRegistro : 'A gerar na finalização'}
           </span>
           <span className="block text-[11px] text-slate-500">
@@ -291,7 +291,7 @@ export const FormCadastroEmergencia: React.FC<FormCadastroEmergenciaProps> = ({
               <span className="font-bold text-slate-800 text-sm">{nomeRazaoSocial}</span>
               <span className="px-2 py-0.5 bg-blue-100 text-blue-800 text-[10px] font-bold rounded-full">Gov.br Ouro</span>
             </div>
-            <span className="text-xs text-slate-500 font-mono">CPF: {cpfCnpj} | {email}</span>
+            <span className="text-xs text-slate-500">CPF: {cpfCnpj} | {email}</span>
           </div>
         </div>
         <div className="text-xs text-slate-500 flex items-center gap-1.5">
@@ -451,7 +451,7 @@ export const FormCadastroEmergencia: React.FC<FormCadastroEmergenciaProps> = ({
                 type="text"
                 disabled
                 value={cpfCnpj}
-                className="w-full text-xs bg-slate-100 text-slate-600 rounded-lg border-slate-200 cursor-not-allowed font-mono"
+                className="w-full text-xs bg-slate-100 text-slate-600 rounded-lg border-slate-200 cursor-not-allowed"
               />
             </div>
             <div>
@@ -548,7 +548,7 @@ export const FormCadastroEmergencia: React.FC<FormCadastroEmergenciaProps> = ({
               <label className="block text-xs font-semibold text-slate-700">
                 Descrição do Fato <span className="text-red-500">*</span>
               </label>
-              <span className="text-[11px] text-slate-400 font-mono">{descricao.length} / 7.000 caracteres</span>
+              <span className="text-[11px] text-slate-400">{descricao.length} / 7.000 caracteres</span>
             </div>
             <textarea
               rows={4}
@@ -623,7 +623,7 @@ export const FormCadastroEmergencia: React.FC<FormCadastroEmergenciaProps> = ({
                 value={cep}
                 onChange={(e) => handleCepChange(e.target.value)}
                 placeholder="40020-000"
-                className="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green font-mono"
+                className="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green"
               />
               <span className="text-[10px] text-slate-400 mt-0.5 block">Ex: 40020-000 preenche Salvador Centro</span>
             </div>
@@ -760,7 +760,7 @@ export const FormCadastroEmergencia: React.FC<FormCadastroEmergenciaProps> = ({
                 value={novaCoordLat}
                 onChange={(e) => setNovaCoordLat(e.target.value)}
                 placeholder="Latitude (ex: -12.9714)"
-                className="text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green font-mono"
+                className="text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green"
               />
               <div className="flex gap-2">
                 <input
@@ -769,7 +769,7 @@ export const FormCadastroEmergencia: React.FC<FormCadastroEmergenciaProps> = ({
                   value={novaCoordLng}
                   onChange={(e) => setNovaCoordLng(e.target.value)}
                   placeholder="Longitude (ex: -38.5014)"
-                  className="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green font-mono"
+                  className="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green"
                 />
                 <button
                   type="button"
@@ -786,7 +786,7 @@ export const FormCadastroEmergencia: React.FC<FormCadastroEmergenciaProps> = ({
               <div className="space-y-1 pt-2">
                 {coordenadas.map((c, i) => (
                   <div key={c.id} className="flex items-center justify-between text-xs bg-white p-2 rounded border border-slate-200">
-                    <span className="font-mono text-slate-700">
+                    <span className="text-slate-700">
                       #{i + 1} [{c.tipo}]: Lat {c.latitude}, Long {c.longitude}
                     </span>
                     <button
@@ -944,7 +944,7 @@ export const FormCadastroEmergencia: React.FC<FormCadastroEmergenciaProps> = ({
               <p className="text-xs text-slate-600">
                 Registro de Emergência Química cadastrado com sucesso!
               </p>
-              <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 mt-2 font-mono font-bold text-inema-green text-sm">
+              <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 mt-2 font-bold text-inema-green text-sm">
                 Nº de Registro: {registroFinalizado.numeroRegistro}
               </div>
               <p className="text-[11px] text-slate-500 mt-1">

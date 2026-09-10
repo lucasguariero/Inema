@@ -70,7 +70,7 @@
                 <span class="material-symbols-outlined text-2xl">menu</span>
             </button>
             <a href="index.html" class="flex items-center">
-                <span class="text-2xl font-bold tracking-tight text-white lowercase">inema</span>
+                <img src="logo.svg" alt="INEMA" class="h-10 w-auto">
             </a>
         </div>
 
@@ -107,7 +107,7 @@
     <!-- CASCA PRINCIPAL (Sidebar + Conteúdo) -->
     <!-- ============================================ -->
     <div class="flex pt-16 min-h-screen">
-                                                <!-- Overlay Mobile -->
+                                                        <!-- Overlay Mobile -->
         <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-30 hidden lg:hidden" style="top: 60px;"></div>
 
         <!-- Sidebar Lateral Padronizada (280px) -->
@@ -132,14 +132,14 @@
                     <div id="subFiscalizacao" class="mt-2 border-l-2 border-slate-200 ml-4 pl-3 space-y-4">
                         <!-- Subgrupo: DENÚNCIAS -->
                         <div>
-                            <div class="text-slate-400 font-semibold text-[11px] tracking-wider uppercase px-3 pt-1 pb-1">
+                            <div class="text-slate-400 font-semibold text-[11px] tracking-wider uppercase px-3 pt-2 pb-1">
                                 Denúncias
                             </div>
                             <div class="space-y-1 mt-1">
-                                <a href="fiscalizacao.html" id="menu-atendente" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                                <a href="fiscalizacao.html" id="menu-atendente" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
                                     <span>Atendente</span>
                                 </a>
-                                <a href="fiscalizacao.html?fluxo=externo" id="menu-cidadao" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                                <a href="fiscalizacao.html?fluxo=externo" id="menu-cidadao" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
                                     <span>Formulário Cidadão</span>
                                 </a>
                             </div>
@@ -147,14 +147,14 @@
 
                         <!-- Subgrupo: EMERGÊNCIAS QUÍMICAS -->
                         <div>
-                            <div class="text-slate-400 font-semibold text-[11px] tracking-wider uppercase px-3 pt-1 pb-1">
+                            <div class="text-slate-400 font-semibold text-[11px] tracking-wider uppercase px-3 pt-2 pb-1">
                                 Emergências Químicas
                             </div>
                             <div class="space-y-1 mt-1">
-                                <a href="emergencia-quimica.html" id="menu-emerg-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 bg-[#E2ECE9] text-[#0F4C3A] font-semibold">
+                                <a href="emergencia-quimica.html?fluxo=interna" id="menu-emerg-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 bg-[#E2ECE9] text-[#0F4C3A] font-semibold rounded-lg">
                                     <span>Cadastro Interno</span>
                                 </a>
-                                <a href="emergencia-quimica-externa.html" id="menu-emerg-externa" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                                <a href="emergencia-quimica-externa.html" id="menu-emerg-externa" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
                                     <span>Registro Externo</span>
                                 </a>
                             </div>
@@ -162,14 +162,14 @@
 
                         <!-- Subgrupo: CONSULTAS -->
                         <div>
-                            <div class="text-slate-400 font-semibold text-[11px] tracking-wider uppercase px-3 pt-1 pb-1">
+                            <div class="text-slate-400 font-semibold text-[11px] tracking-wider uppercase px-3 pt-2 pb-1">
                                 Consultas
                             </div>
                             <div class="space-y-1 mt-1">
-                                <a href="consulta-externa.html" id="menu-consulta-externa" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                                <a href="consulta-externa.html" id="menu-consulta-externa" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
                                     <span>Consulta Cidadão</span>
                                 </a>
-                                <a href="consulta-interna.html" id="menu-consulta-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                                <a href="consulta-interna.html" id="menu-consulta-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
                                     <span>Painel Interno DIFIS</span>
                                     <span class="bg-rose-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full" id="sidebarBadgeEmergencias">3</span>
                                 </a>
@@ -2473,11 +2473,17 @@
             const analise = listaRegistros.filter(r => r.status === 'Análise Técnica').length;
             const concl = listaRegistros.filter(r => r.status === 'Concluída').length;
 
-            document.getElementById('kpiTotalREs').textContent = total;
-            document.getElementById('kpiRegistradas').textContent = reg;
-            document.getElementById('kpiAnalise').textContent = analise;
-            document.getElementById('kpiConcluidas').textContent = concl;
-            document.getElementById('badgeTotalREs').textContent = `${total} REs`;
+            const elTotal = document.getElementById('kpiTotalREs');
+            const elReg = document.getElementById('kpiRegistradas');
+            const elAnalise = document.getElementById('kpiAnalise');
+            const elConcl = document.getElementById('kpiConcluidas');
+            const elBadge = document.getElementById('badgeTotalREs');
+
+            if (elTotal) elTotal.textContent = total;
+            if (elReg) elReg.textContent = reg;
+            if (elAnalise) elAnalise.textContent = analise;
+            if (elConcl) elConcl.textContent = concl;
+            if (elBadge) elBadge.textContent = `${total} REs`;
         }
 
         function atualizarTabelaConsulta() {

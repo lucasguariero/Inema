@@ -135,7 +135,7 @@ export const TabelaRegistros: React.FC<TabelaRegistrosProps> = ({
                 return (
                   <tr key={reg.id} className="hover:bg-slate-50/80 transition-colors">
                     {/* Número do Registro com link Meus Processos (RN022) */}
-                    <td className="px-4 py-3 font-mono font-semibold text-slate-800">
+                    <td className="px-4 py-3 font-semibold text-slate-800">
                       <div>
                         {temProcesso ? (
                           <button
