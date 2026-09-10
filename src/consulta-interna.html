@@ -129,16 +129,16 @@
     <!-- ========================================== -->
     <div class="flex flex-1 pt-[60px] h-full overflow-hidden">
         
-        <!-- Overlay Mobile -->
-        <div id="sidebarOverlay" class="fixed inset-0 bg-slate-900/40 z-30 hidden lg:hidden backdrop-blur-xs transition-opacity"></div>
+                        <!-- Overlay Mobile -->
+        <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-30 hidden lg:hidden" style="top: 60px;"></div>
 
         <!-- Sidebar Lateral Padronizada (280px) -->
-        <aside id="sidebar" class="w-[280px] bg-white border-r border-slate-200 flex flex-col fixed top-[60px] bottom-0 left-0 z-40 transition-transform duration-200 lg:translate-x-0 -translate-x-full">
+        <aside id="sidebar" class="w-[280px] bg-white border-r border-slate-200 flex flex-col fixed top-[60px] bottom-0 left-0 z-40 transition-transform duration-200 -translate-x-full lg:translate-x-0">
             <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1">
                 <!-- Início -->
-                <a href="index.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors">
+                <a href="index.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 font-medium transition-colors">
                     <span class="material-symbols-outlined text-xl text-slate-500">home</span>
-                    <span class="text-sm font-medium">Início</span>
+                    <span class="text-sm">Início</span>
                 </a>
 
                 <!-- Fiscalização (Accordion) -->
@@ -152,37 +152,37 @@
                     </button>
                     <ul id="subFiscalizacao" class="mt-1 pl-3 space-y-1">
                         <li>
-                            <a href="fiscalizacao.html" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">
+                            <a href="fiscalizacao.html" id="menu-atendente" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">
                                 <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
                                 Atendente
                             </a>
                         </li>
                         <li>
-                            <a href="fiscalizacao.html?fluxo=externo" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">
+                            <a href="fiscalizacao.html?fluxo=externo" id="menu-cidadao" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">
                                 <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
                                 Denúncia - Cidadão
                             </a>
                         </li>
                         <li>
-                            <a href="emergencia-quimica-externa.html" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">
+                            <a href="emergencia-quimica-externa.html" id="menu-emerg-externa" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">
                                 <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
                                 Emergência Externa
                             </a>
                         </li>
                         <li>
-                            <a href="emergencia-quimica.html?fluxo=interna" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">
+                            <a href="emergencia-quimica.html?fluxo=interna" id="menu-emerg-interna" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">
                                 <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
                                 Emergência Interna
                             </a>
                         </li>
                         <li>
-                            <a href="consulta-externa.html" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">
+                            <a href="consulta-externa.html" id="menu-consulta-externa" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">
                                 <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
                                 Consulta Externa
                             </a>
                         </li>
                         <li>
-                            <a href="consulta-interna.html" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold text-[#0F4C3A] bg-[#E2ECE9] transition-colors">
+                            <a href="consulta-interna.html" id="menu-consulta-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold text-[#0F4C3A] bg-[#E2ECE9] transition-colors">
                                 <div class="flex items-center gap-2.5">
                                     <span class="w-1.5 h-1.5 rounded-full bg-[#0F4C3A]"></span>
                                     <span>Consulta Interna DIFIS</span>
@@ -195,7 +195,7 @@
 
                 <!-- Relatórios Gerenciais -->
                 <div class="pt-1">
-                    <a href="relatorios.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors">
+                    <a href="relatorios.html" id="menu-relatorios" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 font-medium transition-colors">
                         <span class="material-symbols-outlined text-xl text-slate-500">assessment</span>
                         <span class="text-sm font-medium">Relatórios Gerenciais</span>
                     </a>
@@ -204,7 +204,7 @@
 
             <!-- Rodapé fixo da Sidebar: Assistente INEMA -->
             <div class="p-3 border-t border-slate-200 bg-white">
-                <button onclick="alert('Assistente IA INEMA ativado. Em que posso auxiliá-lo com as consultas operacionais da DIFIS?')" class="w-full flex items-center justify-center gap-2 py-2.5 px-3 bg-[#0F4C3A] text-white text-xs font-semibold rounded-lg hover:bg-[#155d47] transition-all shadow-xs group">
+                <button onclick="alert('Assistente IA INEMA ativado. Em que posso auxiliá-lo?')" class="w-full flex items-center justify-center gap-2 py-2.5 px-3 bg-[#0F4C3A] text-white text-xs font-semibold rounded-lg hover:bg-[#155d47] transition-all shadow-xs group">
                     <span class="material-symbols-outlined text-base text-amber-300 group-hover:rotate-12 transition-transform">auto_awesome</span>
                     <span>✦ Assistente INEMA</span>
                 </button>
@@ -1873,13 +1873,18 @@
             }, 4000);
         }
 
-        function toggleSubmenu(submenuId, iconId) {
-            const sub = document.getElementById(submenuId);
-            const icon = document.getElementById(iconId);
-            if (!sub) return;
-            const isHidden = sub.classList.toggle('hidden');
-            if (icon) {
-                icon.style.transform = isHidden ? 'rotate(0deg)' : 'rotate(180deg)';
+        function toggleSubmenu(param1, param2) {
+            if (typeof param1 === 'string') {
+                const el = document.getElementById(param1);
+                const icon = param2 ? document.getElementById(param2) : null;
+                if (el) el.classList.toggle('hidden');
+                if (icon) icon.classList.toggle('rotate-180');
+            } else if (param1 && param1.nodeType) {
+                const parent = param1.closest('li') || param1.parentElement;
+                const ul = parent ? parent.querySelector('ul') : null;
+                const icon = param1.querySelector('.material-symbols-outlined:last-child');
+                if (ul) ul.classList.toggle('hidden');
+                if (icon) icon.classList.toggle('rotate-180');
             }
         }
 
