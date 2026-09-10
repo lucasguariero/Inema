@@ -1,0 +1,422 @@
+=== PAGE 1 ===
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR005.1– Módulo Fiscalização– Consulta de Registros Externos   Página 1 de 8 
+Acto Soluções em Tecnologia Ltda   
+  
+Documento de Requisitos 
+DOR005.1 – Módulo Fiscalização – Consulta de Registros Externos 
+PONTO FOCAL E-MAIL 
+Paula Maiana Santana Martins  Paula.martins@inema.ba.gov.br 
+ 
+Este documento especifica a consulta externa de denúncias ambientais e emergências químicas, 
+incluindo autenticação, filtros, listagem, visualização protegida, PDF e anexação de relatórios. Seu 
+objetivo é apoiar a validação dos usuários e orientar o desenvolvimento e os testes. 
+ 
+ATUALIZAÇÕES: 
+DATA AUTOR EMAIL DESCRIÇÃO VERSÃO 
+03/09/2026 Naiane Biset Santos Naiane.biset@acto.com.br Criação  1.0 
+ 
+
+=== PAGE 2 ===
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR005.1– Módulo Fiscalização– Consulta de Registros Externos   Página 2 de 8 
+Acto Soluções em Tecnologia Ltda   
+  
+SUMÁRIO 
+ 
+INTRODUÇÃO AO CASO DE USO ............................................................................................................ 3 
+DOCUMENTOS RELACIONADOS ............................................................................................................. 3 
+DICIONÁRIO DE SIGLAS E ABREVIAÇÕES ................................................................................................ 3 
+MAPEAMENTO DO FLUXO DE PROCESSO .............................................................................................. 3 
+ATORES ............................................................................................................................................... 3 
+CASOS DE USO ....................................................................................................................................... 3 
+REGRAS DE NEGÓCIO GERAIS ............................................................................................................ 4 
+LISTA DE MENSAGENS ....................................................................................................................... 5 
+LISTA DE LEGENDAS ........................................................................................................................... 6 
+ESPECIFICAÇÃO DE INTERFACE (UI/UX) ............................................................................................. 7 
+PROTOTIPAÇAO DE TELAS ...................................................................................................................... 7 
+TL001 – Tela de registro da Emergência ............................................................................................ 7 
+OBSERVAÇÕES ........................................................................................................................................ 8 
+CONCLUSÃO ........................................................................................................................................... 8 
+ASSINATURA E TERMO DE ACEITE ......................................................................................................... 8 
+ 
+ 
+
+=== PAGE 3 ===
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR005.1– Módulo Fiscalização– Consulta de Registros Externos   Página 3 de 8 
+Acto Soluções em Tecnologia Ltda   
+  
+INTRODUÇÃO AO CASO DE USO 
+O usuário externo autenticado, ou portador de protocolo e credencial válidos, consulta somente os RD e 
+RE aos quais possua acesso. A funcionalidade protege dados pessoais e internos, permite acompanhar o 
+status, baixar o formulário permitido e anexar relatórios de emergência quando autorizado. 
+DOCUMENTOS RELACIONADOS 
+ TR - Anexo I 
+ Contrato nº 035/2025 – INEMA / ACTO BR Soluções em Tecnologia LTDA 
+DICIONÁRIO DE SIGLAS E ABREVIAÇÕES 
+DICIONÁRIO DE SIGLAS E ABREVIAÇÕES 
+DOR  Documento de Requisitos RD Registro de Denúncia Ambiental 
+RE Registro de Emergência Química PDF Portable Document Format 
+UI/UX Interface e Experiência do Usuário   
+ 
+MAPEAMENTO DO FLUXO DE PROCESSO 
+ATORES 
+LISTA DE ATORES 
+Núm. Ator Descrição Pré-requisitos Tipo 
+AT001 Usuário externo 
+autenticado 
+Consulta e acompanha somente os RD 
+e RE aos quais esteja vinculado. 
+Possuir conta válida, sessão ativa e 
+vínculo com o registro. Externo 
+AT002 Usuário externo 
+com protocolo 
+Consulta registro expressamente 
+liberado por protocolo e credencial 
+segura. 
+Possuir protocolo e credencial de acesso 
+válidos. Externo 
+AT003 Sistema de 
+Fiscalização 
+Valida acesso, aplica filtros, protege 
+dados e registra operações auditáveis. Serviços e cadastros ativos. Interno 
+Usuário Externo autenticado ou portador de credencial válida que consulta e acompanha somente registros próprios ou 
+expressamente liberados. 
+CASOS DE USO 
+Cenários  
+
+=== PAGE 4 ===
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR005.1– Módulo Fiscalização– Consulta de Registros Externos   Página 4 de 8 
+Acto Soluções em Tecnologia Ltda   
+  
+Dado que Ação Resposta sistema  
+O usuário possui autenticação 
+ou credencial válida. 
+Acessa a Consulta de Registros 
+Externos. Exibe somente os registros vinculados e os filtros permitidos.  
+A tela está disponível. Preenche filtros e aciona 
+Consultar. 
+Valida o período, combina os filtros e lista os resultados em 
+ordem decrescente. 
+O tipo selecionado é Emergência 
+Química. 
+Acessa Tipo da Emergência 
+Química. Habilita o catálogo de tipos de emergência ativos. 
+Existem filtros preenchidos. Aciona Limpar filtros. Restaura os filtros e apresenta todos os registros acessíveis. 
+Há um registro na listagem. Aciona Visualizar. Abre somente os dados liberados, sem permitir edição. 
+Há um registro autorizado. Aciona Baixar PDF. Gera o PDF apenas com os dados permitidos ao usuário 
+externo. 
+O registro é um RE elegível. Seleciona uma ação de relatório.  Valida permissão, prazo/status, tipo, formato e tamanho do 
+arquivo. 
+Os dados do anexo são válidos. Confirma o envio. Vincula o relatório ao RE e registra usuário, data e hora na 
+auditoria. 
+Nenhum registro atende aos 
+filtros. Aciona Consultar. Mantém os filtros e apresenta MSG004. 
+A sessão está expirada ou o 
+acesso não é permitido. 
+Tenta abrir registro ou executar 
+uma ação. Bloqueia a operação e apresenta MSG011 ou MSG012. 
+ 
+REGRAS DE NEGÓCIO GERAIS 
+Num. Nome Descrição  
+RN001 Acesso externo A consulta deve exigir autenticação ou validação segura do protocolo e da 
+credencial de acesso. O sistema não deve expor registros de terceiros. 
+RN002 Escopo dos resultados Devem ser exibidos somente RD e RE vinculados ao usuário externo ou 
+expressamente acessíveis pela credencial informada. 
+RN003 Aplicação dos filtros Os filtros preenchidos devem ser combinados. Campos não informados 
+não devem restringir o resultado. 
+RN004 Tipo da Emergência Química 
+O filtro deve ser habilitado apenas quando o Tipo de registro for 
+Emergência Química e limpo quando essa condição deixar de ser 
+atendida. 
+RN005 Período do registro A data inicial não pode ser posteri or à data final, e datas futuras não 
+devem ser aceitas. 
+RN006 Ordenação Os registros devem ser exibidos do mais recente para o mais antigo, salvo 
+ordenação selecionada pelo usuário. 
+
+=== PAGE 5 ===
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR005.1– Módulo Fiscalização– Consulta de Registros Externos   Página 5 de 8 
+Acto Soluções em Tecnologia Ltda   
+  
+Num. Nome Descrição  
+RN007 Listagem A listagem deve apresentar número, data e hora, tipo do registro, 
+município, status/situação e ações disponíveis. 
+RN008 Paginação e totalização O sistema deve informar o total encontrado e paginar os resultados, 
+preservando filtros e ordenação durante a navegação. 
+RN009 Consulta sem filtros Sem filtros, devem ser exibidos todos os registros acessíveis ao usuário, 
+respeitando a ordenação definida na RN006. 
+RN010 Visualização protegida 
+A visualização deve ocultar dados pessoais, internos ou sigilosos não 
+destinados ao usuário externo e não deve permitir edição pela tela de 
+consulta. 
+RN011 Download em PDF O PDF deve conter o número e os dados vigentes que podem ser 
+apresentados ao usuário externo, respeitando as restrições de acesso. 
+RN012 Anexação de relatórios 
+As opções Preliminar, Conclusivo e Complementar d evem ser exibidas 
+somente para RE, dentro do prazo ou status permitido e para usuário 
+autorizado. 
+RN013 Arquivos permitidos Devem ser aceitos JPEG, JPG, PNG, BMP, MP3, MP4, PDF, DOC, DOCX, 
+TXT, XLS, XLSX, SHP, SHX, DBF, PRJ, KML, KMZ e ZIP. 
+RN014 Validação do anexo O sistema deve exigir tipo de relatório e arquivo válido, verificar tamanho 
+e formato e solicitar confirmação antes do envio. 
+RN015 Registro do envio Após o sucesso, o arquivo deve ser vinculado ao RE com identificação do 
+usuário, data e hora, mantendo trilha de auditoria. 
+RN016 Limpeza dos filtros Limpar filtros deve restaurar os campos e executar novamente a consulta 
+sem filtros. 
+RN017 Ausência de resultados Quando não houver registros, os filtros devem ser mantidos e a MSG004 
+apresentada. 
+RN018 Catálogos Status, municípios, tipos de registro e tipos de emergência devem ser 
+carregados dos respectivos cadastros ativos. 
+RN019 Segurança e privacidade 
+A consulta, o download e a anexação devem usar conexão segura, 
+controle de sessã o e auditoria, em conformidade com as regras de 
+proteção de dados. 
+RN020 Tratamento de falhas Em caso de falha, o sistema deve evitar duplicidade, preservar os dados 
+informados e apresentar a mensagem correspondente. 
+ 
+LISTA DE MENSAGENS 
+Num. Ação Tipo Regra de Negócio Texto 
+MSG001 Período inválido Alerta RN005 A data inicial não pode ser posterior à 
+data final. 
+
+=== PAGE 6 ===
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR005.1– Módulo Fiscalização– Consulta de Registros Externos   Página 6 de 8 
+Acto Soluções em Tecnologia Ltda   
+  
+Num. Ação Tipo Regra de Negócio Texto 
+MSG002 Data futura Alerta RN005 O período do registro não pode conter 
+data futura. 
+MSG003 Falha na consulta Erro RN020 Não foi possível consultar os registros. 
+Tente novamente. 
+ 
+MSG004 
+Consulta sem resultados Informativa RN017 Nenhum registro foi encontrado para os 
+filtros informados. 
+MSG005 Arquivo inválido Alerta RN013 e RN014 O arquivo selecionado possui formato ou 
+tamanho não permitido. 
+MSG006 Dados obrigatórios Alerta RN014 Selecione o tipo de relatório e um arquivo 
+para continuar. 
+MSG007 Confirmação do envio Confirmação RN014 Deseja anexar este relatório ao registro? 
+MSG008 Anexação concluída Sucesso RN015 Relatório anexado com sucesso. 
+MSG009 Falha na anexação Erro RN020 Não foi possível anexar o relatório. Tente 
+novamente. 
+MSG010 Falha no download Erro RN011 e RN020 Não foi possível gerar o PDF do registro. 
+Tente novamente. 
+MSG011 Acesso não autorizado Alerta RN001, RN002, RN010 
+e RN019 
+Você não possui permissão para acessar 
+este registro ou realizar esta ação. 
+MSG012 Sessão expirada Alerta RN001 e RN019 Sua sessão expirou. Autentique- se 
+novamente para continuar. 
+ 
+LISTA DE LEGENDAS 
+Codigo Campo  Texto 
+LEG001 Status Selecione a situação atual do registro. 
+LEG002 Número do registro Informe o número do protocolo do RD ou RE. 
+LEG003 Município Selecione o município da ocorrência. 
+LEG004 Tipo de registro Selecione Denúncia Ambiental ou Emergência Química. 
+LEG005 Tipo da Emergência Química Disponível somente quando o tipo de registro for Emergência Química. 
+LEG006 Período do registro Informe as datas inicial e final de cadastramento no sistema. 
+LEG007 Status/Situação Indica a etapa atual do atendimento. 
+LEG008 Ações Apresenta somente as operações permitidas para o registro e o usuário. 
+LEG009 Arquivo Selecione um arquivo em formato permitido e dentro do limite definido pelo 
+sistema. 
+LEG010 Tipo de relatório Selecione Preliminar, Conclusivo ou Complementar, conforme disponibilidade. 
+
+=== PAGE 7 ===
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR005.1– Módulo Fiscalização– Consulta de Registros Externos   Página 7 de 8 
+Acto Soluções em Tecnologia Ltda   
+  
+ESPECIFICAÇÃO DE INTERFACE (UI/UX) 
+Seção Campo/ Elemento UI Tipo de 
+componente 
+Obrigatório Regra/Comportamento 
+Acesso Autenticação/credencial Controle de 
+acesso 
+Sim Validar vínculo, protocolo, credencial e sessão 
+conforme RN001, RN002 e RN019. 
+Filtros Status Lista Não Carregar status permitidos conforme RN018 e 
+LEG001. 
+Filtros Número do registro Texto Não Pesquisar protocolo RD ou RE conforme LEG002. 
+Filtros Município Lista pesquisável Não Carregar municípios ativos conforme RN018 e 
+LEG003. 
+Filtros Tipo de registro Lista Não Denúncia Ambiental ou Emergência Química. 
+LEG004. 
+Filtros Tipo da Emergência 
+Química 
+Lista Condicional Habilitar apenas para RE conforme RN004 e 
+LEG005. 
+Filtros Data inicial / Data final Data Não Validar intervalo conforme RN005 e LEG006. 
+Resultados Total de registros Texto Não se aplica  Exibir total encontrado conforme RN008. 
+Resultados Lista de registros Tabela paginada Não se aplica  Exibir somente registros acessíveis e dados da 
+RN007. 
+Resultados Status/Situação Texto Não se aplica  Indicar etapa atual conforme LEG007. 
+Resultados Ações Menu por linha Condicional Mostrar somente operações autorizadas 
+conforme LEG008 e RN019. 
+Detalhes Registro externo Visualização Não se aplica  Somente leitura, com ocultação de dados 
+restritos conforme RN010. 
+Anexo Tipo de relatório Lista Sim Preliminar, Conclusivo ou Complementar 
+conforme RN012 e LEG010. 
+Anexo Arquivo Upload Sim Validar formato e tamanho conforme RN013, 
+RN014 e LEG009. 
+Paginação Anterior / Próxima Navegação Não se aplica  Preservar filtros e ordenação conforme RN008. 
+PROTOTIPAÇAO DE TELAS 
+TL001 – Tela de Consulta de Registros Externos 
+*Imagens meramente ilustrativas para apresentação de campos e botões. Pode haver divergências de layout com o sistema. 
+ 
+Cod  Campo Descrição Regra de Negócio Texto 
+(máscara) Tipo 
+BOT001 Filtros Aplicar os filtros e Validar o período e exibir MSG003 em Consultar Botão/ 
+
+=== PAGE 8 ===
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR005.1– Módulo Fiscalização– Consulta de Registros Externos   Página 8 de 8 
+Acto Soluções em Tecnologia Ltda   
+  
+ 
+OBSERVAÇÕES  
+Prazos de anexação, limites de tamanho, paginação, critérios de vínculo e dados liberados devem seguir as 
+definições corporativas. A ausência de permissão deve impedir inclusive o acesso direto por endereço 
+eletrônico conhecido. 
+ 
+CONCLUSÃO  
+A consulta externa deverá assegurar acompanhamento simples e rastreável dos registros, sem expor 
+informações de terceiros ou dados internos, mantendo coerência entre acesso, filtros, ações e auditoria. 
+ASSINATURA E TERMO DE ACEITE 
+ 
+ 
+______________________________ 
+Assinatura 
+Coordenação de Tecnologia da Informação e Comunicação - COTIC 
+INEMA - Instituto do Meio Ambiente e Recursos Hídricos 
+atualizar a listagem. caso de falha. Ação 
+BOT002 Filtros Restaurar os filtros 
+ao estado inicial. 
+Executar novamente a consulta sem 
+filtros. 
+Limpar filtros Botão/ 
+Ação 
+BOT003 
+Ações do 
+registro 
+Abrir os detalhes 
+permitidos do 
+registro. 
+Exibir em modo somente leitura e 
+proteger dados restritos. 
+Visualizar Botão/ 
+Ação 
+BOT004 
+Ações do 
+registro 
+Gerar o formulário 
+permitido do RD ou 
+RE. 
+Exibir MSG010 em caso de falha. Baixar PDF Botão/ 
+Ação 
+BOT005 
+Ações do 
+registro 
+Iniciar o envio do 
+relatório 
+preliminar. 
+Disponível somente para RE e quando 
+autorizado. 
+Anexar 
+relatório 
+preliminar 
+Botão/ 
+Ação 
+BOT006 
+Ações do 
+registro 
+Iniciar o envio do 
+relatório 
+conclusivo. 
+Disponível somente para RE e quando 
+autorizado. 
+Anexar 
+relatório 
+conclusivo 
+Botão/ 
+Ação 
+BOT007 
+Ações do 
+registro 
+Iniciar o envio de 
+relatório 
+complementar. 
+Disponível somente para RE e quando 
+autorizado. 
+Anexar 
+relatório 
+complementar 
+Botão/ 
+Ação 
+BOT008 Modal de 
+anexo 
+Confirmar e 
+concluir o envio. 
+Validar os campos, apresentar MSG007 e 
+registrar o envio. 
+Anexar Botão/ 
+Ação 
+BOT009 
+Modal de 
+anexo 
+Fechar a janela de 
+anexação. 
+Não salvar arquivo nem alterar o registro. Cancelar  
+Botão/ 
+Ação 
+BOT010 Paginação Navegar entre 
+páginas. 
+Preservar filtros e ordenação. Anterior / 
+Próxima 
+Botão/ 
+Ação 

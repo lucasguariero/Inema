@@ -3,16 +3,24 @@
   "cleanUrls": true,
   "rewrites": [
     {
+      "source": "/fiscalizacao/emergencia-quimica-externa",
+      "destination": "/emergencia-quimica-externa.html"
+    },
+    {
+      "source": "/fiscalizacao/consulta-externa",
+      "destination": "/consulta-externa.html"
+    },
+    {
       "source": "/fiscalizacao/emergencia-quimica/interna",
       "destination": "/emergencia-quimica.html?fluxo=interna"
     },
     {
       "source": "/fiscalizacao/emergencia-quimica/externa",
-      "destination": "/emergencia-quimica.html?fluxo=externa"
+      "destination": "/emergencia-quimica-externa.html"
     },
     {
       "source": "/fiscalizacao/emergencia-quimica/consulta",
-      "destination": "/emergencia-quimica.html?fluxo=consulta"
+      "destination": "/consulta-externa.html"
     },
     {
       "source": "/fauna",
