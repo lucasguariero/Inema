@@ -194,6 +194,7 @@
                         <ul class="ml-9 mt-1 space-y-1 sidebar-text hidden">
                             <li><a href="fiscalizacao.html" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Atendente (DOR001)</a></li>
                             <li><a href="fiscalizacao.html?fluxo=externo" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Cidadão (DOR002)</a></li>
+                            <li><a href="consulta-interna.html" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Consulta Interna (DOR005)</a></li>
                         </ul>
                     </li>
                     <li>
@@ -205,16 +206,11 @@
                         <ul class="ml-9 mt-1 space-y-1 sidebar-text hidden">
                             <li><a href="emergencia-quimica.html?fluxo=interna" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Visão Interna (DOR003)</a></li>
                             <li><a href="emergencia-quimica-externa.html" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Visão Externa (DOR004)</a></li>
-                            <li><a href="consulta-externa.html" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Consulta de Registros (DOR005.1)</a></li>
+                            <li><a href="consulta-interna.html" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Consulta Interna (DOR005)</a></li>
+                            <li><a href="consulta-externa.html" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Consulta Externa (DOR005.1)</a></li>
                         </ul>
                     </li>
 
-                    <li>
-                        <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low">
-                            <span class="material-symbols-outlined text-xl">description</span>
-                            <span class="text-sm sidebar-text">Licenciamento</span>
-                        </a>
-                    </li>
                     <li>
                         <a href="relatorios.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low">
                             <span class="material-symbols-outlined text-xl">assessment</span>
@@ -299,53 +295,36 @@
 
 
 
-                    <!-- Card: Licenciamento -->
-                    <a href="#" class="bg-surface-container-lowest rounded-xl p-6 border border-border-subtle hover:shadow-lg hover:shadow-black/5 transition-all group cursor-pointer">
+                    <!-- Card: Consulta de Registros Internos (DOR005) -->
+                    <a href="consulta-interna.html" class="bg-surface-container-lowest rounded-xl p-6 border border-border-subtle hover:shadow-lg hover:shadow-black/5 transition-all group cursor-pointer">
                         <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-secondary rounded-lg flex items-center justify-center">
-                                <span class="material-symbols-outlined text-white text-2xl">description</span>
+                            <div class="w-12 h-12 bg-inema-green/10 rounded-lg flex items-center justify-center">
+                                <span class="material-symbols-outlined text-inema-green text-2xl">manage_search</span>
                             </div>
                             <div class="flex-1">
-                                <h4 class="font-semibold text-on-surface group-hover:text-secondary transition-colors">Licenciamento</h4>
-                                <p class="text-sm text-text-muted mt-1">Processos de licenciamento ambiental</p>
+                                <h4 class="font-semibold text-on-surface group-hover:text-inema-green transition-colors">Consulta Interna (DOR005)</h4>
+                                <p class="text-sm text-text-muted mt-1">Acompanhamento unificado de RD e RE para equipe interna</p>
                             </div>
                         </div>
-                        <div class="mt-4 flex items-center text-secondary font-medium text-sm">
-                            <span>Acessar</span>
+                        <div class="mt-4 flex items-center text-inema-green font-medium text-sm">
+                            <span>Acessar Consulta</span>
                             <span class="material-symbols-outlined ml-1 text-lg">arrow_forward</span>
                         </div>
                     </a>
 
-                    <!-- Card: Monitoramento -->
-                    <a href="#" class="bg-surface-container-lowest rounded-xl p-6 border border-border-subtle hover:shadow-lg hover:shadow-black/5 transition-all group cursor-pointer">
+                    <!-- Card: Consulta de Registros Externos (DOR005.1) -->
+                    <a href="consulta-externa.html" class="bg-surface-container-lowest rounded-xl p-6 border border-border-subtle hover:shadow-lg hover:shadow-black/5 transition-all group cursor-pointer">
                         <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-tertiary-container rounded-lg flex items-center justify-center">
-                                <span class="material-symbols-outlined text-white text-2xl">monitor_heart</span>
+                            <div class="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center">
+                                <span class="material-symbols-outlined text-blue-700 text-2xl">search</span>
                             </div>
                             <div class="flex-1">
-                                <h4 class="font-semibold text-on-surface group-hover:text-tertiary-container transition-colors">Monitoramento</h4>
-                                <p class="text-sm text-text-muted mt-1">Monitoramento de áreas e empreendimentos</p>
+                                <h4 class="font-semibold text-on-surface group-hover:text-blue-700 transition-colors">Consulta Cidadão (DOR005.1)</h4>
+                                <p class="text-sm text-text-muted mt-1">Acompanhamento e relatórios regulatórios do comunicante</p>
                             </div>
                         </div>
-                        <div class="mt-4 flex items-center text-tertiary-container font-medium text-sm">
-                            <span>Acessar</span>
-                            <span class="material-symbols-outlined ml-1 text-lg">arrow_forward</span>
-                        </div>
-                    </a>
-
-                    <!-- Card: Laboratório -->
-                    <a href="#" class="bg-surface-container-lowest rounded-xl p-6 border border-border-subtle hover:shadow-lg hover:shadow-black/5 transition-all group cursor-pointer">
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-secondary-container rounded-lg flex items-center justify-center">
-                                <span class="material-symbols-outlined text-on-secondary-container text-2xl">science</span>
-                            </div>
-                            <div class="flex-1">
-                                <h4 class="font-semibold text-on-surface group-hover:text-on-secondary-container transition-colors">Laboratório</h4>
-                                <p class="text-sm text-text-muted mt-1">Resultados de análises laboratoriais</p>
-                            </div>
-                        </div>
-                        <div class="mt-4 flex items-center text-on-secondary-container font-medium text-sm">
-                            <span>Acessar</span>
+                        <div class="mt-4 flex items-center text-blue-700 font-medium text-sm">
+                            <span>Acessar Consulta</span>
                             <span class="material-symbols-outlined ml-1 text-lg">arrow_forward</span>
                         </div>
                     </a>

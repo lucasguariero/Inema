@@ -11,6 +11,10 @@
       "destination": "/consulta-externa.html"
     },
     {
+      "source": "/fiscalizacao/consulta-interna",
+      "destination": "/consulta-interna.html"
+    },
+    {
       "source": "/fiscalizacao/emergencia-quimica/interna",
       "destination": "/emergencia-quimica.html?fluxo=interna"
     },

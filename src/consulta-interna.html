@@ -1,0 +1,1837 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Registros Internos (DOR005) - INEMA / SEIA</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'inema-green': '#0F4C3A',
+                        'inema-green-hover': '#155d47',
+                        'inema-green-dark': '#0a3629',
+                        'inema-green-light': '#E8F5E9',
+                        'inema-gold': '#D4A017',
+                        'sidebar-bg': '#FFFFFF',
+                        'sidebar-active': '#E2ECE9',
+                        'surface': '#F8FAF9',
+                        'border-subtle': '#E2E8F0',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts & Material Symbols -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+            line-height: 1;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .pulse-subtle {
+            animation: pulse-border 2s infinite;
+        }
+        @keyframes pulse-border {
+            0%, 100% { border-color: rgba(220, 38, 38, 0.4); box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.2); }
+            50% { border-color: rgba(220, 38, 38, 0.9); box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.15); }
+        }
+    </style>
+</head>
+<body class="bg-[#F8FAF9] text-slate-800 h-full flex flex-col antialiased">
+
+    <!-- ========================================== -->
+    <!-- 1. HEADER INSTITUCIONAL INEMA / SEIA       -->
+    <!-- ========================================== -->
+    <header class="h-[60px] bg-[#0F4C3A] text-white flex items-center justify-between px-4 lg:px-6 fixed top-0 left-0 right-0 z-50 shadow-md">
+        <!-- Esquerda: Hambúrguer + Logo SEIA -->
+        <div class="flex items-center gap-3">
+            <button id="btnToggleSidebar" class="p-2 hover:bg-white/10 rounded-lg text-white transition-colors focus:outline-none focus:ring-2 focus:ring-white/30" aria-label="Abrir ou fechar menu">
+                <span class="material-symbols-outlined text-2xl">menu</span>
+            </button>
+            <a href="index.html" class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center font-bold text-lg text-white border border-white/20">
+                    S
+                </div>
+                <div class="flex flex-col leading-tight">
+                    <span class="font-bold tracking-wide text-base">SEIA</span>
+                    <span class="text-[10px] text-white/75 font-medium tracking-wider uppercase">Módulo Fiscalização</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- Centro: Barra de Busca Rápida Estilizada -->
+        <div class="hidden md:flex items-center flex-1 max-w-md mx-8">
+            <div class="relative w-full">
+                <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-white/60 text-lg">search</span>
+                <input type="text" id="globalSearchInput" placeholder="Buscar por nº do registro, comunicante, processo..." class="w-full pl-10 pr-4 py-1.5 bg-white/10 hover:bg-white/15 focus:bg-white text-white focus:text-slate-800 placeholder:text-white/60 focus:placeholder:text-slate-400 rounded-full text-xs font-normal border border-white/15 focus:border-white focus:outline-none transition-all">
+            </div>
+        </div>
+
+        <!-- Direita: Perfil do Analista Interno & Notificações -->
+        <div class="flex items-center gap-2.5">
+            <!-- Badge Ambiente Interno -->
+            <span class="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/20 text-emerald-200 border border-emerald-400/30">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                Ambiente Interno DIFIS
+            </span>
+
+            <!-- Botão Notificações -->
+            <button class="relative p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors">
+                <span class="material-symbols-outlined text-xl">notifications</span>
+                <span class="absolute top-1 right-1 w-4 h-4 bg-red-500 text-[10px] font-bold text-white rounded-full flex items-center justify-center">3</span>
+            </button>
+
+            <!-- Separador -->
+            <div class="h-6 w-px bg-white/20 mx-1"></div>
+
+            <!-- Avatar & Dados do Usuário Interno -->
+            <div class="flex items-center gap-2 pl-1">
+                <div class="w-8 h-8 rounded-full bg-white text-[#0F4C3A] font-bold text-xs flex items-center justify-center shadow-xs">
+                    LM
+                </div>
+                <div class="hidden lg:flex flex-col text-left leading-tight">
+                    <span class="text-xs font-semibold">Lucas Manager</span>
+                    <span class="text-[10px] text-white/70">DIFIS / Coordenação</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ========================================== -->
+    <!-- 2. LAYOUT PRINCIPAL: SIDEBAR + CONTEÚDO    -->
+    <!-- ========================================== -->
+    <div class="flex flex-1 pt-[60px] h-full overflow-hidden">
+        
+        <!-- Overlay Mobile -->
+        <div id="sidebarOverlay" class="fixed inset-0 bg-slate-900/40 z-30 hidden lg:hidden backdrop-blur-xs transition-opacity"></div>
+
+        <!-- Sidebar Lateral (280px, padronizada) -->
+        <aside id="sidebar" class="w-[280px] bg-white border-r border-slate-200 flex flex-col fixed top-[60px] bottom-0 left-0 z-40 transition-transform duration-200 lg:translate-x-0 -translate-x-full">
+            <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+                <!-- Início -->
+                <a href="index.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors">
+                    <span class="material-symbols-outlined text-xl text-slate-500">home</span>
+                    <span class="text-sm font-medium">Início</span>
+                </a>
+
+                <!-- Fiscalização -->
+                <div class="pt-1">
+                    <button onclick="toggleSubmenu('subFiscalizacao', 'iconFiscalizacao')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-xl text-slate-500">gavel</span>
+                            <span class="text-sm font-medium">Fiscalização</span>
+                        </div>
+                        <span id="iconFiscalizacao" class="material-symbols-outlined text-lg text-slate-400 transition-transform duration-200 rotate-180">expand_more</span>
+                    </button>
+                    <ul id="subFiscalizacao" class="mt-1 pl-4 space-y-1">
+                        <li>
+                            <a href="fiscalizacao.html" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">
+                                <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+                                Atendente (DOR001)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="fiscalizacao.html?fluxo=externo" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">
+                                <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+                                Cidadão (DOR002)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="consulta-interna.html" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold text-[#0F4C3A] bg-[#E2ECE9] transition-colors">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-[#0F4C3A]"></span>
+                                    Consulta Interna (DOR005)
+                                </div>
+                                <span class="text-[9px] bg-[#0F4C3A] text-white px-1.5 py-0.2 rounded-full font-bold" id="sidebarBadgeEmergencias">0</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Emergência Química -->
+                <div class="pt-1">
+                    <button onclick="toggleSubmenu('subEmergencia', 'iconEmergencia')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-[#0F4C3A] bg-[#E2ECE9] font-semibold transition-colors">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-xl text-amber-600 fill">warning</span>
+                            <span class="text-sm">Emergência Química</span>
+                        </div>
+                        <span id="iconEmergencia" class="material-symbols-outlined text-lg text-[#0F4C3A] transition-transform duration-200 rotate-180">expand_more</span>
+                    </button>
+                    <ul id="subEmergencia" class="mt-1 pl-4 space-y-1">
+                        <li>
+                            <a href="emergencia-quimica.html?fluxo=interna" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">
+                                <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+                                Visão Interna (DOR003)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="emergencia-quimica-externa.html" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">
+                                <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+                                Visão Externa (DOR004)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="consulta-interna.html" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold text-[#0F4C3A] bg-white border border-[#0F4C3A]/20 shadow-xs">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-[#0F4C3A]"></span>
+                                    Consulta Interna (DOR005)
+                                </div>
+                                <span class="text-[9px] bg-red-600 text-white px-1.5 py-0.5 rounded-full font-bold animate-pulse" id="sidebarBadgeEmergencias2">0</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="consulta-externa.html" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">
+                                <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+                                Consulta Externa (DOR005.1)
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Relatórios Gerenciais -->
+                <a href="relatorios.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors">
+                    <span class="material-symbols-outlined text-xl text-slate-500">assessment</span>
+                    <span class="text-sm font-medium">Relatórios Gerenciais</span>
+                </a>
+            </nav>
+
+            <!-- Rodapé fixo da Sidebar: Assistente INEMA -->
+            <div class="p-3 border-t border-slate-200 bg-white">
+                <button onclick="alert('Assistente IA INEMA ativado. Em que posso auxiliá-lo com as consultas de fiscalização?')" class="w-full flex items-center justify-center gap-2 py-2.5 px-3 bg-[#0F4C3A] text-white text-xs font-semibold rounded-lg hover:bg-[#155d47] transition-all shadow-xs group">
+                    <span class="material-symbols-outlined text-base text-amber-300 group-hover:rotate-12 transition-transform">auto_awesome</span>
+                    <span>✦ Assistente INEMA</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- ========================================== -->
+        <!-- 3. ÁREA DE CONTEÚDO PRINCIPAL (DOR005)     -->
+        <!-- ========================================== -->
+        <main class="flex-1 lg:ml-[280px] overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-6">
+            
+            <!-- Breadcrumbs -->
+            <nav class="flex items-center gap-2 text-xs text-slate-500 font-medium">
+                <a href="index.html" class="hover:text-slate-700">Início</a>
+                <span class="material-symbols-outlined text-sm">chevron_right</span>
+                <span>Fiscalização</span>
+                <span class="material-symbols-outlined text-sm">chevron_right</span>
+                <span class="text-[#0F4C3A] font-bold">Consulta de Registros Internos (DOR005)</span>
+            </nav>
+
+            <!-- Cabeçalho da Página + Indicador de Emergências (RN011 / LEG012) -->
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-slate-200">
+                <div>
+                    <div class="flex items-center gap-3 flex-wrap">
+                        <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Consultar Registros</h1>
+                        
+                        <!-- Indicador de Emergências (RN011 / LEG012) -->
+                        <div id="indicadorEmergenciasContainer" class="inline-flex items-center gap-2 px-3 py-1 bg-red-50 border border-red-200 rounded-full text-xs font-bold text-red-700 shadow-xs cursor-pointer hover:bg-red-100 transition-colors" onclick="filtrarEmergenciasRegistradas()" title="Clique para filtrar apenas emergências que exigem resposta imediata">
+                            <span class="material-symbols-outlined text-base text-red-600 animate-pulse">crisis_alert</span>
+                            <span>Emergências Registradas:</span>
+                            <span id="contadorEmergencias" class="bg-red-600 text-white px-2 py-0.5 rounded-full text-[11px] font-extrabold shadow-xs">0</span>
+                        </div>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-500 mt-1">
+                        Consulta integrada e rastreável de Registros de Denúncia Ambiental (RD) e Registros de Emergência Química (RE) da DIFIS.
+                    </p>
+                </div>
+
+                <!-- Botões de Ação Rápida Superior -->
+                <div class="flex items-center gap-2">
+                    <a href="emergencia-quimica.html?fluxo=interna" class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-lg shadow-xs transition-colors">
+                        <span class="material-symbols-outlined text-sm">add_alert</span>
+                        Nova Emergência (DOR003)
+                    </a>
+                    <a href="fiscalizacao.html" class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#0F4C3A] hover:bg-[#155d47] text-white text-xs font-bold rounded-lg shadow-xs transition-colors">
+                        <span class="material-symbols-outlined text-sm">add_circle</span>
+                        Nova Denúncia (DOR001)
+                    </a>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- CARD DE FILTROS DE PESQUISA (RN003-RN006)  -->
+            <!-- ========================================== -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
+                <div class="px-5 py-3.5 bg-slate-50/80 border-b border-slate-200 flex items-center justify-between">
+                    <div class="flex items-center gap-2 text-slate-800 font-bold text-sm">
+                        <span class="material-symbols-outlined text-[#0F4C3A] text-lg">filter_alt</span>
+                        <span>Filtros de Pesquisa Avançada</span>
+                    </div>
+                    <button onclick="toggleFiltrosPanel()" class="text-xs text-[#0F4C3A] hover:underline font-semibold flex items-center gap-1">
+                        <span id="toggleFiltrosText">Recolher Filtros</span>
+                        <span id="toggleFiltrosIcon" class="material-symbols-outlined text-base">expand_less</span>
+                    </button>
+                </div>
+
+                <form id="formFiltros" onsubmit="event.preventDefault(); executarConsulta();" class="p-5 space-y-4">
+                    <!-- Linha 1: Status, Tipo de registro, Tipo da Emergência Química -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- LEG001: Status -->
+                        <div>
+                            <label for="filtroStatus" class="block text-xs font-bold text-slate-700 mb-1">
+                                Status / Situação
+                            </label>
+                            <select id="filtroStatus" class="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none">
+                                <option value="">Todos os status</option>
+                                <option value="Emergência Registrada">Emergência Registrada</option>
+                                <option value="Em Atendimento">Em Atendimento</option>
+                                <option value="Notificada">Notificada</option>
+                                <option value="Em Análise">Em Análise</option>
+                                <option value="Concluída">Concluída</option>
+                                <option value="Arquivada">Arquivada</option>
+                            </select>
+                            <span class="text-[10px] text-slate-400 mt-0.5 block">Selecione a situação atual do registro. (LEG001)</span>
+                        </div>
+
+                        <!-- LEG004: Tipo de registro -->
+                        <div>
+                            <label for="filtroTipoRegistro" class="block text-xs font-bold text-slate-700 mb-1">
+                                Tipo de registro
+                            </label>
+                            <select id="filtroTipoRegistro" onchange="tratarMudancaTipoRegistro()" class="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none font-medium">
+                                <option value="">Todos (RD e RE)</option>
+                                <option value="Emergência Química (RE)">Emergência Química (RE)</option>
+                                <option value="Denúncia Ambiental (RD)">Denúncia Ambiental (RD)</option>
+                            </select>
+                            <span class="text-[10px] text-slate-400 mt-0.5 block">Selecione Denúncia Ambiental ou Emergência Química. (LEG004)</span>
+                        </div>
+
+                        <!-- LEG005 / RN004: Tipo da Emergência Química (Condicional) -->
+                        <div>
+                            <label for="filtroTipoEmergencia" class="block text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+                                <span>Tipo da Emergência Química</span>
+                                <span id="badgeDependente" class="text-[9px] bg-slate-100 text-slate-500 font-semibold px-1.5 py-0.2 rounded">Requer RE</span>
+                            </label>
+                            <select id="filtroTipoEmergencia" disabled class="w-full text-xs py-2 px-3 bg-slate-100 border border-slate-300 rounded-lg text-slate-400 cursor-not-allowed focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none">
+                                <option value="">Selecione o tipo de emergência...</option>
+                                <option value="Vazamento de combustíveis/inflamáveis">1. Vazamento de combustíveis/inflamáveis</option>
+                                <option value="Derramamento de produtos químicos em rodovia/ferrovia">2. Derramamento de produtos químicos em rodovia/ferrovia</option>
+                                <option value="Emissão atmosférica de gases tóxicos">3. Emissão atmosférica de gases tóxicos</option>
+                                <option value="Explosão com substâncias perigosas">4. Explosão com substâncias perigosas</option>
+                                <option value="Incêndio florestal envolvendo defensivos agrícolas">5. Incêndio florestal envolvendo defensivos agrícolas</option>
+                                <option value="Incêndio em instalação química/industrial">6. Incêndio em instalação química/industrial</option>
+                                <option value="Contaminação de curso d'água por efluente industrial">7. Contaminação de curso d'água por efluente industrial</option>
+                                <option value="Despejo clandestino de resíduos perigosos">8. Despejo clandestino de resíduos perigosos</option>
+                                <option value="Vazamento em duto / oleoduto / gasoduto">9. Vazamento em duto / oleoduto / gasoduto</option>
+                                <option value="Acidente com carga perigosa em transporte marítimo/portuário">10. Acidente com carga perigosa em transporte marítimo/portuário</option>
+                                <option value="Mortandade de peixes ou fauna aquática por contaminação química">11. Mortandade de peixes ou fauna aquática por contaminação química</option>
+                                <option value="Rompimento de barragem de rejeito químico/industrial">12. Rompimento de barragem de rejeito químico/industrial</option>
+                                <option value="Acidente radiológico ou substância controlada">13. Acidente radiológico ou substância controlada</option>
+                                <option value="Intoxicação humana coletiva por exposição química">14. Intoxicação humana coletiva por exposição química</option>
+                                <option value="Outros acidentes químicos com impacto ambiental">15. Outros acidentes químicos com impacto ambiental</option>
+                            </select>
+                            <span class="text-[10px] text-slate-400 mt-0.5 block">Habilitado apenas para RE. (RN004 / LEG005)</span>
+                        </div>
+                    </div>
+
+                    <!-- Linha 2: Número do registro, Município, Período do registro (Data inicial e final) -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <!-- LEG002: Número do registro -->
+                        <div>
+                            <label for="filtroNumero" class="block text-xs font-bold text-slate-700 mb-1">
+                                Número do registro
+                            </label>
+                            <input type="text" id="filtroNumero" placeholder="Ex: 2026.000004 ou 000889" class="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none">
+                            <span class="text-[10px] text-slate-400 mt-0.5 block">Número completo ou parte do RD/RE. (LEG002)</span>
+                        </div>
+
+                        <!-- LEG003: Município -->
+                        <div>
+                            <label for="filtroMunicipio" class="block text-xs font-bold text-slate-700 mb-1">
+                                Município
+                            </label>
+                            <select id="filtroMunicipio" class="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none">
+                                <option value="">Todos os municípios da Bahia</option>
+                                <option value="Camaçari">Camaçari (Polo Petroquímico)</option>
+                                <option value="Candeias">Candeias</option>
+                                <option value="Dias d'Ávila">Dias d'Ávila</option>
+                                <option value="Feira de Santana">Feira de Santana</option>
+                                <option value="Ilhéus">Ilhéus</option>
+                                <option value="Itabuna">Itabuna</option>
+                                <option value="Jequié">Jequié</option>
+                                <option value="Juazeiro">Juazeiro</option>
+                                <option value="Lauro de Freitas">Lauro de Freitas</option>
+                                <option value="Luís Eduardo Magalhães">Luís Eduardo Magalhães</option>
+                                <option value="Madre de Deus">Madre de Deus (Terminal Portuário)</option>
+                                <option value="Porto Seguro">Porto Seguro</option>
+                                <option value="Salvador">Salvador</option>
+                                <option value="São Francisco do Conde">São Francisco do Conde (Refinaria)</option>
+                                <option value="Simões Filho">Simões Filho (CIA)</option>
+                                <option value="Vitória da Conquista">Vitória da Conquista</option>
+                            </select>
+                            <span class="text-[10px] text-slate-400 mt-0.5 block">Município da ocorrência. (LEG003)</span>
+                        </div>
+
+                        <!-- LEG006 / RN005: Data Inicial -->
+                        <div>
+                            <label for="filtroDataInicio" class="block text-xs font-bold text-slate-700 mb-1">
+                                Data Inicial
+                            </label>
+                            <input type="date" id="filtroDataInicio" class="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none">
+                            <span class="text-[10px] text-slate-400 mt-0.5 block">Cadastramento inicial. (LEG006)</span>
+                        </div>
+
+                        <!-- LEG006 / RN005: Data Final -->
+                        <div>
+                            <label for="filtroDataFim" class="block text-xs font-bold text-slate-700 mb-1">
+                                Data Final
+                            </label>
+                            <input type="date" id="filtroDataFim" class="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none">
+                            <span class="text-[10px] text-slate-400 mt-0.5 block">Cadastramento final. (LEG006)</span>
+                        </div>
+                    </div>
+
+                    <!-- Linha 3: Eixo Temático, Técnico Plantonista, Unidade, Comunicante, Palavra-chave -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 pt-1">
+                        <!-- LEG008 / RN021: Eixo Temático (Pauta do Gestor) -->
+                        <div>
+                            <label for="filtroEixo" class="block text-xs font-bold text-slate-700 mb-1">
+                                Eixo Temático
+                            </label>
+                            <select id="filtroEixo" class="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none">
+                                <option value="">Todos os eixos</option>
+                                <option value="Indústria Química & Petroquímica">Indústria Química & Petroquímica</option>
+                                <option value="Mineração & Barragens">Mineração & Barragens</option>
+                                <option value="Transporte de Produtos Perigosos">Transporte de Produtos Perigosos</option>
+                                <option value="Recursos Hídricos & Efluentes">Recursos Hídricos & Efluentes</option>
+                                <option value="Postos de Combustíveis">Postos de Combustíveis</option>
+                                <option value="Agroquímica & Defensivos">Agroquímica & Defensivos</option>
+                            </select>
+                            <span class="text-[10px] text-slate-400 mt-0.5 block">Pauta do Gestor. (LEG008)</span>
+                        </div>
+
+                        <!-- LEG009 / RN021: Técnico Plantonista associado -->
+                        <div>
+                            <label for="filtroTecnico" class="block text-xs font-bold text-slate-700 mb-1">
+                                Técnico Plantonista
+                            </label>
+                            <select id="filtroTecnico" class="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none">
+                                <option value="">Todos os técnicos</option>
+                                <option value="Ana Beatriz Rocha">Ana Beatriz Rocha</option>
+                                <option value="Bruno Carvalho">Bruno Carvalho</option>
+                                <option value="Carla Mendes">Carla Mendes</option>
+                                <option value="Carlos Souza">Carlos Souza</option>
+                                <option value="Diego Nunes">Diego Nunes</option>
+                                <option value="Elias Ferreira">Elias Ferreira</option>
+                                <option value="Fernanda Lopes">Fernanda Lopes</option>
+                                <option value="Juan Joaquin Madeira Sobrinho">Juan Joaquin Madeira Sobrinho</option>
+                                <option value="Maria Santos">Maria Santos</option>
+                            </select>
+                            <span class="text-[10px] text-slate-400 mt-0.5 block">Técnico vinculado. (LEG009)</span>
+                        </div>
+
+                        <!-- LEG011 / RN023: Unidade de Encaminhamento -->
+                        <div>
+                            <label for="filtroUnidade" class="block text-xs font-bold text-slate-700 mb-1">
+                                Unidade de Destino
+                            </label>
+                            <select id="filtroUnidade" class="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none">
+                                <option value="">Todas as unidades</option>
+                                <option value="DIFIS">DIFIS - Diretoria de Fiscalização</option>
+                                <option value="DIRRE">DIRRE - Reg. Recôncavo</option>
+                                <option value="DIREX">DIREX - Reg. Extremo Sul</option>
+                                <option value="UR Feira de Santana">UR Feira de Santana</option>
+                                <option value="UR Ilhéus">UR Ilhéus</option>
+                                <option value="UR Barreiras">UR Barreiras</option>
+                                <option value="COTIC">COTIC - Coordenação TI</option>
+                            </select>
+                            <span class="text-[10px] text-slate-400 mt-0.5 block">Destino do processo. (LEG011)</span>
+                        </div>
+
+                        <!-- LEG010 / RN022: Comunicante -->
+                        <div>
+                            <label for="filtroComunicante" class="block text-xs font-bold text-slate-700 mb-1">
+                                Comunicante
+                            </label>
+                            <input type="text" id="filtroComunicante" placeholder="Nome, Razão Social ou CPF/CNPJ" class="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none">
+                            <span class="text-[10px] text-slate-400 mt-0.5 block">Nome ou documento. (LEG010)</span>
+                        </div>
+
+                        <!-- LEG007 / RN022: Palavra-chave -->
+                        <div>
+                            <label for="filtroPalavraChave" class="block text-xs font-bold text-slate-700 mb-1">
+                                Palavra-chave
+                            </label>
+                            <input type="text" id="filtroPalavraChave" placeholder="Substância, local, descrição..." class="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none">
+                            <span class="text-[10px] text-slate-400 mt-0.5 block">Busca textual ampla. (LEG007)</span>
+                        </div>
+                    </div>
+
+                    <!-- Mensagem de Alerta Inline de Validação (MSG001 / MSG002) -->
+                    <div id="alertaPeriodo" class="hidden p-3 bg-red-50 border-l-4 border-red-500 rounded-r-lg text-xs text-red-700 font-medium flex items-center gap-2">
+                        <span class="material-symbols-outlined text-base text-red-600">error</span>
+                        <span id="alertaPeriodoTexto">A data inicial não pode ser posterior à data final.</span>
+                    </div>
+
+                    <!-- Botões de Ação de Filtros (BOT001 e BOT002) -->
+                    <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
+                        <button type="button" onclick="limparFiltros()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition-colors flex items-center gap-1.5 shadow-2xs">
+                            <span class="material-symbols-outlined text-sm">restart_alt</span>
+                            Limpar filtros (BOT002)
+                        </button>
+                        <button type="submit" class="px-5 py-2 bg-[#0F4C3A] hover:bg-[#155d47] text-white text-xs font-bold rounded-lg transition-colors flex items-center gap-1.5 shadow-xs">
+                            <span class="material-symbols-outlined text-sm">search</span>
+                            Consultar (BOT001)
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- TOTALIZADOR E LISTAGEM DE RESULTADOS       -->
+            <!-- ========================================== -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
+                <!-- Barra de Totalização e Ordenação (RN010) -->
+                <div class="px-5 py-3.5 bg-slate-50/80 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-[#0F4C3A] text-xl">table_chart</span>
+                        <div>
+                            <span class="text-xs font-bold text-slate-700" id="totalRegistrosTexto">Total: 0 registros encontrados (RN010)</span>
+                            <span class="text-[11px] text-slate-500 block">Ordenação padrão: RE em Emergência Registrada prioritários no topo (RN007)</span>
+                        </div>
+                    </div>
+
+                    <!-- Opções de visualização / ordenação -->
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs text-slate-500 font-medium">Ordenar por:</span>
+                        <select id="selectOrdenacao" onchange="alterarOrdenacao()" class="text-xs py-1.5 px-2.5 bg-white border border-slate-300 rounded-lg font-medium text-slate-700 focus:ring-1 focus:ring-[#0F4C3A] outline-none">
+                            <option value="padrao">Padrão SEIA (Emergências Ativas primeiro)</option>
+                            <option value="dataDesc">Data mais recente</option>
+                            <option value="dataAsc">Data mais antiga</option>
+                            <option value="tipo">Tipo de registro (RE / RD)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Tabela de Registros (RN009 / LEG007) -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-100/75 border-b border-slate-200 text-slate-600 font-semibold uppercase text-[10px] tracking-wider">
+                            <tr>
+                                <th class="py-3 px-4">Número do Registro</th>
+                                <th class="py-3 px-4">Data e Hora</th>
+                                <th class="py-3 px-4">Tipo do Registro</th>
+                                <th class="py-3 px-4">Tipo da Entrada</th>
+                                <th class="py-3 px-4">Município</th>
+                                <th class="py-3 px-4">Técnico / Unidade</th>
+                                <th class="py-3 px-4">Status / Situação</th>
+                                <th class="py-3 px-4 text-center">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaRegistrosCorpo" class="divide-y divide-slate-200">
+                            <!-- Inserido dinamicamente via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Mensagem de Sem Resultados (MSG004 / RN019) -->
+                <div id="msgSemResultados" class="hidden py-12 px-4 text-center">
+                    <div class="w-14 h-14 mx-auto mb-3 rounded-full bg-amber-50 border border-amber-200 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-amber-600 text-2xl">search_off</span>
+                    </div>
+                    <h3 class="text-sm font-bold text-slate-800 mb-1">Nenhum registro foi encontrado para os filtros informados. (MSG004)</h3>
+                    <p class="text-xs text-slate-500 max-w-md mx-auto">
+                        Tente ajustar os critérios de busca ou acione o botão "Limpar filtros" para restaurar a consulta padrão.
+                    </p>
+                    <button onclick="limparFiltros()" class="mt-4 px-4 py-2 bg-[#0F4C3A] text-white rounded-lg text-xs font-bold hover:bg-[#155d47] transition-colors inline-flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-sm">restart_alt</span>
+                        Restaurar Consulta Padrão
+                    </button>
+                </div>
+
+                <!-- Paginação (RN010 / BOT011) -->
+                <div id="paginacaoContainer" class="px-5 py-3 border-t border-slate-200 bg-slate-50/50 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600">
+                    <div id="paginacaoInfo">
+                        Exibindo <span class="font-bold" id="pagInicio">1</span>-<span class="font-bold" id="pagFim">10</span> de <span class="font-bold" id="pagTotal">0</span> registros
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <button id="btnPagAnterior" onclick="mudarPagina(-1)" class="px-3 py-1.5 bg-white border border-slate-300 rounded-md font-semibold text-slate-700 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex items-center gap-1 shadow-2xs">
+                            <span class="material-symbols-outlined text-sm">chevron_left</span>
+                            Anterior
+                        </button>
+                        <span class="px-3 py-1 bg-[#0F4C3A] text-white font-bold rounded-md" id="numPaginaAtual">1</span>
+                        <button id="btnPagProxima" onclick="mudarPagina(1)" class="px-3 py-1.5 bg-white border border-slate-300 rounded-md font-semibold text-slate-700 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex items-center gap-1 shadow-2xs">
+                            Próxima
+                            <span class="material-symbols-outlined text-sm">chevron_right</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 4. DRAWER LATERAL DE VISUALIZAÇÃO INTERNA  -->
+    <!-- (RN012 / RN024 / BOT003)                   -->
+    <!-- ========================================== -->
+    <div id="drawerOverlay" onclick="fecharDrawer()" class="fixed inset-0 bg-slate-900/50 z-50 hidden backdrop-blur-xs transition-opacity"></div>
+    
+    <div id="drawerVisualizacao" class="fixed top-0 right-0 bottom-0 w-full sm:w-[580px] lg:w-[680px] bg-white shadow-2xl z-50 translate-x-full transition-transform duration-300 flex flex-col">
+        <!-- Header do Drawer -->
+        <div class="px-6 py-4 bg-[#0F4C3A] text-white flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-2xl text-amber-300" id="drawerIcone">warning</span>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h2 class="text-base font-bold text-white tracking-tight" id="drawerTituloRegistro">RE-2026-000004</h2>
+                        <span id="drawerBadgeTipo" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/20 text-white">RE</span>
+                    </div>
+                    <p class="text-xs text-white/75" id="drawerSubtitulo">Detalhes completos do registro para equipe interna</p>
+                </div>
+            </div>
+            <button onclick="fecharDrawer()" class="p-1.5 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors">
+                <span class="material-symbols-outlined text-xl">close</span>
+            </button>
+        </div>
+
+        <!-- Abas de Navegação do Drawer -->
+        <div class="flex border-b border-slate-200 bg-slate-50 px-4 gap-1 overflow-x-auto">
+            <button onclick="switchDrawerTab('tabGeral')" id="btnTabGeral" class="py-2.5 px-3 text-xs font-bold border-b-2 border-[#0F4C3A] text-[#0F4C3A] whitespace-nowrap flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">info</span>
+                Dados Gerais
+            </button>
+            <button onclick="switchDrawerTab('tabComunicante')" id="btnTabComunicante" class="py-2.5 px-3 text-xs font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">person</span>
+                Comunicante / Empresa
+            </button>
+            <button onclick="switchDrawerTab('tabEquipe')" id="btnTabEquipe" class="py-2.5 px-3 text-xs font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">badge</span>
+                Equipe & Pauta
+            </button>
+            <button onclick="switchDrawerTab('tabRelatorios')" id="btnTabRelatorios" class="py-2.5 px-3 text-xs font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">description</span>
+                Relatórios Regulatórios
+            </button>
+            <button onclick="switchDrawerTab('tabHistorico')" id="btnTabHistorico" class="py-2.5 px-3 text-xs font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">history</span>
+                Histórico & Auditoria
+            </button>
+        </div>
+
+        <!-- Conteúdo do Drawer com Scroll -->
+        <div class="flex-1 overflow-y-auto p-6 space-y-5 text-xs text-slate-700">
+            
+            <!-- Aba 1: Dados Gerais -->
+            <div id="tabGeral" class="space-y-4">
+                <div class="grid grid-cols-2 gap-3 bg-slate-50 p-3.5 rounded-lg border border-slate-200">
+                    <div>
+                        <span class="text-[10px] text-slate-400 uppercase font-bold block">Status Atual</span>
+                        <span id="dwStatus" class="font-bold text-xs text-slate-800">Em Atendimento</span>
+                    </div>
+                    <div>
+                        <span class="text-[10px] text-slate-400 uppercase font-bold block">Data / Hora de Entrada</span>
+                        <span id="dwDataHora" class="font-bold text-xs text-slate-800">09/09/2026 14:32</span>
+                    </div>
+                    <div>
+                        <span class="text-[10px] text-slate-400 uppercase font-bold block">Canal de Entrada</span>
+                        <span id="dwCanalEntrada" class="font-semibold text-xs text-slate-800">Call Center</span>
+                    </div>
+                    <div>
+                        <span class="text-[10px] text-slate-400 uppercase font-bold block">Município / UF</span>
+                        <span id="dwMunicipio" class="font-semibold text-xs text-slate-800">Camaçari / BA</span>
+                    </div>
+                </div>
+
+                <div>
+                    <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Tipo da Emergência / Classificação</span>
+                    <p id="dwTipoEmergencia" class="p-2.5 bg-amber-50/70 border border-amber-200 rounded-lg text-amber-900 font-semibold">
+                        Vazamento de combustíveis/inflamáveis
+                    </p>
+                </div>
+
+                <div>
+                    <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Localização & Ponto de Referência</span>
+                    <p id="dwLocalizacao" class="p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-700 font-normal">
+                        BA-535 (Via Parafuso), Km 14, próximo ao entroncamento do Polo Industrial de Camaçari.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Latitude</span>
+                        <input type="text" id="dwLatitude" readonly value="-12.697500" class="w-full font-mono text-xs py-1.5 px-2.5 bg-slate-100 border border-slate-200 rounded text-slate-600">
+                    </div>
+                    <div>
+                        <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Longitude</span>
+                        <input type="text" id="dwLongitude" readonly value="-38.324100" class="w-full font-mono text-xs py-1.5 px-2.5 bg-slate-100 border border-slate-200 rounded text-slate-600">
+                    </div>
+                </div>
+
+                <div>
+                    <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Áreas Atingidas / Impactadas</span>
+                    <div id="dwAreasAtingidas" class="flex flex-wrap gap-1.5">
+                        <span class="px-2 py-0.5 bg-slate-100 border border-slate-300 rounded text-[11px] font-medium text-slate-700">Recursos Hídricos</span>
+                        <span class="px-2 py-0.5 bg-slate-100 border border-slate-300 rounded text-[11px] font-medium text-slate-700">Solo / Subsolo</span>
+                    </div>
+                </div>
+
+                <div>
+                    <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Descrição Detalhada dos Fatos</span>
+                    <p id="dwDescricaoFatos" class="p-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-700 leading-relaxed">
+                        Tombamento de carreta tanque transportando diesel marítimo. Houve ruptura de escotilha superior com escorrimento em direção a vala de drenagem pluvial.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Aba 2: Comunicante & Empresa -->
+            <div id="tabComunicante" class="space-y-4 hidden">
+                <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200 space-y-2.5">
+                    <h3 class="text-xs font-bold text-slate-800 border-b border-slate-200 pb-1.5">Identificação do Comunicante</h3>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <span class="text-[10px] text-slate-400 block font-bold">Nome / Razão Social</span>
+                            <span id="dwComNome" class="font-semibold text-slate-800">Carlos Alberto Santana</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-slate-400 block font-bold">CPF / CNPJ</span>
+                            <span id="dwComDoc" class="font-mono text-slate-700">842.195.304-12</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-slate-400 block font-bold">Telefone de Contato</span>
+                            <span id="dwComTel" class="text-slate-700">(71) 98842-1209</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-slate-400 block font-bold">E-mail</span>
+                            <span id="dwComEmail" class="text-slate-700">carlos.santana@empresa.com.br</span>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="text-[10px] text-slate-400 block font-bold">Vínculo Declarado com a Ocorrência</span>
+                        <span id="dwComVinculo" class="inline-block mt-0.5 px-2 py-0.5 rounded font-bold text-[10px] bg-emerald-100 text-emerald-800">
+                            SIM - Representante da Empresa Responsável
+                        </span>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200 space-y-2.5">
+                    <h3 class="text-xs font-bold text-slate-800 border-b border-slate-200 pb-1.5">Empresa Responsável / Poluidora</h3>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <span class="text-[10px] text-slate-400 block font-bold">Razão Social / Nome Fantasia</span>
+                            <span id="dwEmpNome" class="font-semibold text-slate-800">TransQuímica Bahia Logística Ltda</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-slate-400 block font-bold">CNPJ</span>
+                            <span id="dwEmpCnpj" class="font-mono text-slate-700">03.489.123/0001-90</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Aba 3: Equipe & Pauta do Gestor -->
+            <div id="tabEquipe" class="space-y-4 hidden">
+                <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200 space-y-2.5">
+                    <h3 class="text-xs font-bold text-slate-800 border-b border-slate-200 pb-1.5">Distribuição & Plantão</h3>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <span class="text-[10px] text-slate-400 block font-bold">Técnico Plantonista Associado</span>
+                            <span id="dwTecnico" class="font-bold text-emerald-800 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-sm">person_check</span>
+                                Ana Beatriz Rocha
+                            </span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-slate-400 block font-bold">Unidade de Encaminhamento</span>
+                            <span id="dwUnidade" class="font-bold text-slate-800">DIFIS / COTIC</span>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="text-[10px] text-slate-400 block font-bold">Eixo Temático (Pauta do Gestor)</span>
+                        <span id="dwEixo" class="inline-block mt-0.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-blue-50 text-blue-800 border border-blue-200">
+                            Transporte de Produtos Perigosos
+                        </span>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200 space-y-2">
+                    <h3 class="text-xs font-bold text-slate-800 border-b border-slate-200 pb-1.5">Despacho Interno / Orientações da DIFIS</h3>
+                    <p id="dwDespacho" class="p-2 bg-white rounded border border-slate-200 text-slate-600 leading-relaxed">
+                        Equipe de plantão acionada no local. Notificar a transportadora para instalação imediata de barreiras de contenção e apresentação do Relatório Preliminar em até 48 horas.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Aba 4: Relatórios Regulatórios -->
+            <div id="tabRelatorios" class="space-y-4 hidden">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-800">Relatórios e Anexos Vinculados</span>
+                    <button onclick="abrirModalAnexoComRegistroAtual()" class="px-2.5 py-1 bg-[#0F4C3A] text-white rounded text-xs font-semibold hover:bg-[#155d47] transition-colors flex items-center gap-1 shadow-2xs">
+                        <span class="material-symbols-outlined text-xs">attach_file</span>
+                        Anexar Novo Relatório
+                    </button>
+                </div>
+
+                <div id="dwListaRelatorios" class="space-y-2">
+                    <!-- Lista dinâmica de relatórios -->
+                </div>
+            </div>
+
+            <!-- Aba 5: Histórico & Auditoria (RN017 e RN024) -->
+            <div id="tabHistorico" class="space-y-3 hidden">
+                <span class="text-xs font-bold text-slate-800 block">Trilha de Eventos e Auditoria (Ordem Decrescente)</span>
+                <div id="dwListaHistorico" class="space-y-3 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
+                    <!-- Eventos de auditoria -->
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer do Drawer: Botões de Ação -->
+        <div class="px-6 py-3.5 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+            <button onclick="baixarPdfAtual()" class="px-3.5 py-2 bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-bold rounded-lg transition-colors flex items-center gap-1.5 shadow-2xs">
+                <span class="material-symbols-outlined text-base text-red-600">picture_as_pdf</span>
+                Baixar PDF Oficial (BOT004)
+            </button>
+            <button onclick="fecharDrawer()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold rounded-lg transition-colors">
+                Fechar
+            </button>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 5. MODAL DE ANEXAÇÃO DE RELATÓRIO          -->
+    <!-- (RN014 - RN016, MSG005 - MSG008)           -->
+    <!-- ========================================== -->
+    <div id="modalAnexo" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+        <div class="bg-white rounded-xl max-w-lg w-full shadow-2xl overflow-hidden border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
+            <div class="px-5 py-4 bg-[#0F4C3A] text-white flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-xl text-amber-300">upload_file</span>
+                    <h3 class="font-bold text-sm">Anexar Relatório Regulatório (RN014)</h3>
+                </div>
+                <button onclick="fecharModalAnexo()" class="p-1 hover:bg-white/10 rounded-lg text-white transition-colors">
+                    <span class="material-symbols-outlined text-lg">close</span>
+                </button>
+            </div>
+
+            <form id="formUploadRelatorio" onsubmit="event.preventDefault(); confirmarEnvioRelatorio();" class="p-5 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Registro Selecionado</label>
+                    <input type="text" id="modalAnexoNumRegistro" readonly class="w-full text-xs font-mono font-bold py-1.5 px-3 bg-slate-100 border border-slate-200 rounded-lg text-slate-700">
+                </div>
+
+                <div>
+                    <label for="modalTipoRelatorio" class="block text-xs font-bold text-slate-700 mb-1">
+                        Tipo de Relatório <span class="text-red-500">*</span>
+                    </label>
+                    <select id="modalTipoRelatorio" required class="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] outline-none">
+                        <option value="">Selecione o tipo de relatório...</option>
+                        <option value="Relatório Preliminar (RPEQ)">Relatório Preliminar (RPEQ) - Prazo 48h</option>
+                        <option value="Relatório Conclusivo">Relatório Conclusivo - Conclusão do Atendimento</option>
+                        <option value="Relatório Complementar">Relatório Complementar - Dados Adicionais</option>
+                        <option value="Laudo Técnico de Vistoria">Laudo Técnico de Vistoria DIFIS</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">
+                        Arquivo para Envio <span class="text-red-500">*</span>
+                    </label>
+                    <div class="border-2 border-dashed border-slate-300 hover:border-[#0F4C3A] rounded-xl p-4 text-center cursor-pointer transition-colors bg-slate-50/50" onclick="document.getElementById('modalArquivoInput').click()">
+                        <input type="file" id="modalArquivoInput" onchange="tratarArquivoSelecionado(this)" class="hidden">
+                        <span class="material-symbols-outlined text-3xl text-slate-400">cloud_upload</span>
+                        <p class="text-xs font-semibold text-slate-700 mt-1" id="modalNomeArquivoTexto">Clique para selecionar ou arraste o arquivo</p>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Tamanho máximo: 50MB</p>
+                    </div>
+                    <p class="text-[10px] text-slate-500 mt-1.5 leading-tight">
+                        <strong>Formatos aceitos (MSG012):</strong> JPEG, JPG, PNG, BMP, MP3, MP4, PDF, DOC, DOCX, TXT, XLS, XLSX, SHP, SHX, DBF, PRJ, KML, KMZ e ZIP.
+                    </p>
+                </div>
+
+                <!-- Alerta de Validação de Arquivo (MSG005 ou MSG006) -->
+                <div id="modalAlertaErro" class="hidden p-2.5 bg-red-50 border-l-4 border-red-500 text-xs text-red-700 font-semibold rounded-r">
+                    <!-- Texto de erro dinâmico -->
+                </div>
+
+                <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-200">
+                    <button type="button" onclick="fecharModalAnexo()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition-colors">
+                        Cancelar (BOT010)
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-[#0F4C3A] hover:bg-[#155d47] text-white text-xs font-bold rounded-lg transition-colors flex items-center gap-1.5 shadow-xs">
+                        <span class="material-symbols-outlined text-sm">send</span>
+                        Anexar Relatório (BOT009)
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 6. MODAL DE CONFIRMAÇÃO (MSG007)           -->
+    <!-- ========================================== -->
+    <div id="modalConfirmacao" class="fixed inset-0 z-60 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+        <div class="bg-white rounded-xl max-w-sm w-full shadow-2xl p-5 border border-slate-200 text-center animate-in fade-in zoom-in-95">
+            <div class="w-12 h-12 rounded-full bg-amber-50 border border-amber-200 mx-auto flex items-center justify-center text-amber-600 mb-3">
+                <span class="material-symbols-outlined text-2xl">help_outline</span>
+            </div>
+            <h4 class="text-sm font-bold text-slate-900 mb-1">Confirmar Envio</h4>
+            <p class="text-xs text-slate-600 mb-4" id="modalConfirmacaoTexto">
+                Deseja anexar este relatório ao registro? (MSG007)
+            </p>
+            <div class="flex items-center justify-center gap-2">
+                <button onclick="fecharModalConfirmacao()" class="px-4 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition-colors">
+                    Não
+                </button>
+                <button onclick="executarEnvioRelatorioConfirmado()" class="px-4 py-1.5 bg-[#0F4C3A] hover:bg-[#155d47] text-white text-xs font-bold rounded-lg transition-colors">
+                    Sim, Anexar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 7. TOAST NOTIFICAÇÕES (MSG008)             -->
+    <!-- ========================================== -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-70 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- ========================================== -->
+    <!-- 8. SCRIPT DE COMPORTAMENTO DOR005          -->
+    <!-- ========================================== -->
+    <script>
+        // Chave de armazenamento compartilhado com DOR003 e DOR004
+        const STORAGE_KEY_INTERNO = 'INEMA_SEIA_REGISTROS_INTERNOS';
+        const STORAGE_KEY_EXTERNO = 'INEMA_SEIA_REGISTROS_EXTERNOS';
+
+        // Registros iniciais mockados realistas para o Módulo de Fiscalização Interno
+        const REGISTROS_INICIAIS = [
+            {
+                numero: '2026.000004/INEMA/RE',
+                dataHora: '10/09/2026 09:15',
+                tipoRegistro: 'Emergência Química (RE)',
+                tipoEntrada: 'Call Center',
+                municipio: 'Camaçari',
+                tipoEmergencia: 'Vazamento de combustíveis/inflamáveis',
+                status: 'Emergência Registrada',
+                tecnico: 'Ana Beatriz Rocha',
+                unidade: 'DIFIS',
+                eixo: 'Indústria Química & Petroquímica',
+                comunicante: 'Carlos Alberto Santana (842.195.304-12)',
+                empresa: 'TransQuímica Bahia Logística Ltda (03.489.123/0001-90)',
+                descricao: 'Tombamento de carreta tanque com 35 mil litros de diesel. Risco iminente de contaminação de corpo hídrico.',
+                localizacao: 'BA-535, Km 14 - Camaçari/BA',
+                latitude: '-12.697500',
+                longitude: '-38.324100',
+                areasAtingidas: ['Recursos Hídricos', 'Solo / Subsolo'],
+                relatorios: [],
+                historico: [
+                    { data: '10/09/2026 09:15', usuario: 'Lucas Manager (Call Center)', acao: 'Cadastro de Emergência Química via Call Center (DOR003)' },
+                    { data: '10/09/2026 09:18', usuario: 'Sistema Automático', acao: 'Técnico plantonista associado: Ana Beatriz Rocha (RN027)' }
+                ]
+            },
+            {
+                numero: '2026.000003/INEMA/RE',
+                dataHora: '09/09/2026 16:40',
+                tipoRegistro: 'Emergência Química (RE)',
+                tipoEntrada: 'Portal Externo / Cidadão',
+                municipio: 'Candeias',
+                tipoEmergencia: 'Emissão atmosférica de gases tóxicos',
+                status: 'Emergência Registrada',
+                tecnico: 'Carla Mendes',
+                unidade: 'DIFIS',
+                eixo: 'Indústria Química & Petroquímica',
+                comunicante: 'Marcos Vinícius Cunha (331.902.445-88)',
+                empresa: 'PetroSulf Indústria Química (14.280.912/0001-34)',
+                descricao: 'Nuvem de gás esbranquiçada com forte odor de amônia atingindo bairros circunvizinhos.',
+                localizacao: 'Rodovia Candeias-Madre de Deus, Km 06',
+                latitude: '-12.668900',
+                longitude: '-38.542100',
+                areasAtingidas: ['Ar / Atmosfera', 'Saúde Pública / População'],
+                relatorios: [],
+                historico: [
+                    { data: '09/09/2026 16:40', usuario: 'Cidadão Externo (Gov.br)', acao: 'Registro de Emergência Química Externa (DOR004)' }
+                ]
+            },
+            {
+                numero: '2026.000012/INEMA/RD',
+                dataHora: '08/09/2026 11:20',
+                tipoRegistro: 'Denúncia Ambiental (RD)',
+                tipoEntrada: 'Formulário DIFIS',
+                municipio: 'Feira de Santana',
+                tipoEmergencia: '',
+                status: 'Em Atendimento',
+                tecnico: 'Diego Nunes',
+                unidade: 'UR Feira de Santana',
+                eixo: 'Recursos Hídricos & Efluentes',
+                comunicante: 'Associação de Moradores do Rio Jacuípe',
+                empresa: 'Curtume Central Ltda (01.884.209/0001-10)',
+                descricao: 'Despejo contínuo de efluentes com coloração azulada sem tratamento no leito do rio.',
+                localizacao: 'Distrito de Humildes - Feira de Santana/BA',
+                latitude: '-12.266700',
+                longitude: '-38.966700',
+                areasAtingidas: ['Recursos Hídricos'],
+                relatorios: [],
+                historico: [
+                    { data: '08/09/2026 11:20', usuario: 'Atendente DIFIS', acao: 'Abertura de RD (DOR001)' }
+                ]
+            },
+            {
+                numero: '2026.000008/INEMA/RE',
+                dataHora: '07/09/2026 14:05',
+                tipoRegistro: 'Emergência Química (RE)',
+                tipoEntrada: 'Call Center',
+                municipio: 'Simões Filho',
+                tipoEmergencia: 'Incêndio em instalação química/industrial',
+                status: 'Em Atendimento',
+                tecnico: 'Bruno Carvalho',
+                unidade: 'DIFIS',
+                eixo: 'Indústria Química & Petroquímica',
+                comunicante: 'Corpo de Bombeiros Militar (193)',
+                empresa: 'Resinas da Bahia S/A (05.120.340/0001-22)',
+                descricao: 'Incêndio em galpão de armazenamento de solventes orgânicos no CIA.',
+                localizacao: 'Centro Industrial de Aratu (CIA) Sul - Simões Filho/BA',
+                latitude: '-12.783300',
+                longitude: '-38.400000',
+                areasAtingidas: ['Ar / Atmosfera', 'Solo / Subsolo'],
+                relatorios: [
+                    { tipo: 'Relatório Preliminar (RPEQ)', arquivo: 'RPEQ_ResinasBahia_07092026.pdf', data: '08/09/2026 09:12', usuario: 'Bruno Carvalho' }
+                ],
+                historico: [
+                    { data: '07/09/2026 14:05', usuario: 'Call Center', acao: 'Cadastro Emergência Química (DOR003)' },
+                    { data: '08/09/2026 09:12', usuario: 'Bruno Carvalho', acao: 'Anexação de Relatório Preliminar (RPEQ)' }
+                ]
+            },
+            {
+                numero: '2026.000007/INEMA/RD',
+                dataHora: '05/09/2026 08:30',
+                tipoRegistro: 'Denúncia Ambiental (RD)',
+                tipoEntrada: 'Ofício',
+                municipio: 'Vitória da Conquista',
+                tipoEmergencia: '',
+                status: 'Em Análise',
+                tecnico: 'Fernanda Lopes',
+                unidade: 'DIRRE',
+                eixo: 'Mineração & Barragens',
+                comunicante: 'Ministério Público Estadual (Ofício nº 441/2026)',
+                empresa: 'Mineração Serra do Ouro Ltda',
+                descricao: 'Vistoria técnica requisitada em área de extração mineral por suspeita de assoreamento.',
+                localizacao: 'Zona Rural - Vitória da Conquista/BA',
+                latitude: '-14.866700',
+                longitude: '-40.833300',
+                areasAtingidas: ['Solo / Subsolo'],
+                relatorios: [],
+                historico: [
+                    { data: '05/09/2026 08:30', usuario: 'Protocolo Central', acao: 'Registro de RD originado por Ofício' }
+                ]
+            },
+            {
+                numero: '2026.000002/INEMA/RE',
+                dataHora: '03/09/2026 19:10',
+                tipoRegistro: 'Emergência Química (RE)',
+                tipoEntrada: 'Portal Externo / Cidadão',
+                municipio: 'Madre de Deus',
+                tipoEmergencia: 'Acidente com carga perigosa em transporte marítimo/portuário',
+                status: 'Notificada',
+                tecnico: 'Carlos Souza',
+                unidade: 'DIFIS',
+                eixo: 'Transporte de Produtos Perigosos',
+                comunicante: 'Autoridade Portuária TEMADRE',
+                empresa: 'Transpetro Logística Portuária',
+                descricao: 'Pequeno vazamento de nafta em mangote de transferência durante atracação de navio tanque.',
+                localizacao: 'Terminal Portuário de Madre de Deus/BA',
+                latitude: '-12.741700',
+                longitude: '-38.619400',
+                areasAtingidas: ['Recursos Hídricos / Marítimo'],
+                relatorios: [
+                    { tipo: 'Relatório Preliminar (RPEQ)', arquivo: 'RPEQ_Temadre_04092026.pdf', data: '04/09/2026 10:00', usuario: 'Carlos Souza' }
+                ],
+                historico: [
+                    { data: '03/09/2026 19:10', usuario: 'Comunicante Externo', acao: 'Cadastro de Emergência Química (DOR004)' },
+                    { data: '04/09/2026 10:00', usuario: 'Carlos Souza', acao: 'Anexação de Relatório Preliminar (RPEQ)' },
+                    { data: '04/09/2026 14:00', usuario: 'DIFIS Fiscalização', acao: 'Emissão de Notificação Formal' }
+                ]
+            },
+            {
+                numero: '2026.000001/INEMA/RE',
+                dataHora: '01/09/2026 07:45',
+                tipoRegistro: 'Emergência Química (RE)',
+                tipoEntrada: 'Call Center',
+                municipio: 'Jequié',
+                tipoEmergencia: 'Derramamento de produtos químicos em rodovia/ferrovia',
+                status: 'Concluída',
+                tecnico: 'Elias Ferreira',
+                unidade: 'DIRRE',
+                eixo: 'Transporte de Produtos Perigosos',
+                comunicante: 'Polícia Rodoviária Federal (PRF)',
+                empresa: 'LogBahia Cargas Perigosas',
+                descricao: 'Vazamento contido de ácido clorídrico na BR-116. Pista neutralizada e liberada.',
+                localizacao: 'BR-116, Km 670 - Jequié/BA',
+                latitude: '-13.856900',
+                longitude: '-40.084400',
+                areasAtingidas: ['Solo / Subsolo'],
+                relatorios: [
+                    { tipo: 'Relatório Conclusivo', arquivo: 'Relatorio_Conclusivo_BR116_Jequie.pdf', data: '03/09/2026 17:00', usuario: 'Elias Ferreira' }
+                ],
+                historico: [
+                    { data: '01/09/2026 07:45', usuario: 'Call Center', acao: 'Cadastro Emergência Química (DOR003)' },
+                    { data: '03/09/2026 17:00', usuario: 'Elias Ferreira', acao: 'Anexação do Relatório Conclusivo e Encerramento' }
+                ]
+            }
+        ];
+
+        // Estado da aplicação em memória
+        let registros = [];
+        let registrosFiltrados = [];
+        let paginaAtual = 1;
+        const ITENS_POR_PAGINA = 10;
+        let registroSelecionado = null;
+        let arquivoAnexoPendente = null;
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            carregarRegistros();
+            executarConsulta();
+            configurarSidebarMobile();
+        });
+
+        // Carregar registros do localStorage + mock inicial
+        function carregarRegistros() {
+            try {
+                const salvoInterno = localStorage.getItem(STORAGE_KEY_INTERNO);
+                const salvoExterno = localStorage.getItem(STORAGE_KEY_EXTERNO);
+                
+                let base = [...REGISTROS_INICIAIS];
+                
+                // Mesclar emergências externas se houver
+                if (salvoExterno) {
+                    const ext = JSON.parse(salvoExterno);
+                    if (Array.isArray(ext)) {
+                        ext.forEach(e => {
+                            if (!base.some(b => b.numero === e.numero)) {
+                                base.unshift({
+                                    numero: e.numero,
+                                    dataHora: e.dataHora || '10/09/2026 10:00',
+                                    tipoRegistro: 'Emergência Química (RE)',
+                                    tipoEntrada: 'Portal Externo / Cidadão',
+                                    municipio: e.municipio || 'Camaçari',
+                                    tipoEmergencia: e.tipoEmergencia || 'Outros acidentes químicos com impacto ambiental',
+                                    status: e.status || 'Emergência Registrada',
+                                    tecnico: e.tecnico || 'Não associado',
+                                    unidade: 'DIFIS',
+                                    eixo: 'Transporte de Produtos Perigosos',
+                                    comunicante: e.comunicante || 'Giovani Silva',
+                                    empresa: e.empresa || 'Empresa Informada',
+                                    descricao: e.descricao || 'Ocorrência registrada pelo portal do cidadão',
+                                    localizacao: e.localizacao || 'Bahia',
+                                    latitude: e.latitude || '-12.9714',
+                                    longitude: e.longitude || '-38.5014',
+                                    areasAtingidas: e.areasAtingidas || ['Solo / Subsolo'],
+                                    relatorios: e.relatorios || [],
+                                    historico: e.historico || [
+                                        { data: e.dataHora || '10/09/2026 10:00', usuario: 'Comunicante Externo (Gov.br)', acao: 'Cadastro inicial (DOR004)' }
+                                    ]
+                                });
+                            }
+                        });
+                    }
+                }
+
+                registros = base;
+                atualizarIndicadorEmergencias();
+            } catch (err) {
+                console.error('Erro ao carregar registros:', err);
+                registros = [...REGISTROS_INICIAIS];
+                atualizarIndicadorEmergencias();
+            }
+        }
+
+        // RN011 / LEG012: Atualizar indicador de emergências no topo
+        function atualizarIndicadorEmergencias() {
+            const qtd = registros.filter(r => 
+                r.tipoRegistro.includes('RE') && r.status === 'Emergência Registrada'
+            ).length;
+
+            const badgeTop = document.getElementById('contadorEmergencias');
+            const badgeSide = document.getElementById('sidebarBadgeEmergencias');
+            const badgeSide2 = document.getElementById('sidebarBadgeEmergencias2');
+
+            if (badgeTop) badgeTop.textContent = qtd;
+            if (badgeSide) badgeSide.textContent = qtd;
+            if (badgeSide2) badgeSide2.textContent = qtd;
+
+            const container = document.getElementById('indicadorEmergenciasContainer');
+            if (container) {
+                if (qtd > 0) {
+                    container.classList.remove('opacity-50');
+                    container.classList.add('pulse-subtle');
+                } else {
+                    container.classList.add('opacity-50');
+                    container.classList.remove('pulse-subtle');
+                }
+            }
+        }
+
+        // Filtrar emergências registradas pelo clique no badge superior
+        function filtrarEmergenciasRegistradas() {
+            document.getElementById('formFiltros').reset();
+            document.getElementById('filtroTipoRegistro').value = 'Emergência Química (RE)';
+            tratarMudancaTipoRegistro();
+            document.getElementById('filtroStatus').value = 'Emergência Registrada';
+            executarConsulta();
+        }
+
+        // RN004: Dependência do tipo de emergência
+        function tratarMudancaTipoRegistro() {
+            const tipoReg = document.getElementById('filtroTipoRegistro').value;
+            const campoEmergencia = document.getElementById('filtroTipoEmergencia');
+            const badgeDep = document.getElementById('badgeDependente');
+
+            if (tipoReg === 'Emergência Química (RE)') {
+                campoEmergencia.disabled = false;
+                campoEmergencia.classList.remove('bg-slate-100', 'text-slate-400', 'cursor-not-allowed');
+                campoEmergencia.classList.add('bg-white', 'text-slate-700');
+                if (badgeDep) {
+                    badgeDep.textContent = 'Habilitado';
+                    badgeDep.className = 'text-[9px] bg-emerald-100 text-emerald-800 font-semibold px-1.5 py-0.2 rounded';
+                }
+            } else {
+                campoEmergencia.disabled = true;
+                campoEmergencia.value = '';
+                campoEmergencia.classList.remove('bg-white', 'text-slate-700');
+                campoEmergencia.classList.add('bg-slate-100', 'text-slate-400', 'cursor-not-allowed');
+                if (badgeDep) {
+                    badgeDep.textContent = 'Requer RE';
+                    badgeDep.className = 'text-[9px] bg-slate-100 text-slate-500 font-semibold px-1.5 py-0.2 rounded';
+                }
+            }
+        }
+
+        // Executar a pesquisa combinada (RN003 a RN009)
+        function executarConsulta() {
+            const status = document.getElementById('filtroStatus').value.trim();
+            const tipoRegistro = document.getElementById('filtroTipoRegistro').value.trim();
+            const tipoEmergencia = document.getElementById('filtroTipoEmergencia').value.trim();
+            const numero = document.getElementById('filtroNumero').value.trim().toLowerCase();
+            const municipio = document.getElementById('filtroMunicipio').value.trim();
+            const dataInicio = document.getElementById('filtroDataInicio').value;
+            const dataFim = document.getElementById('filtroDataFim').value;
+            const eixo = document.getElementById('filtroEixo').value.trim();
+            const tecnico = document.getElementById('filtroTecnico').value.trim();
+            const unidade = document.getElementById('filtroUnidade').value.trim();
+            const comunicante = document.getElementById('filtroComunicante').value.trim().toLowerCase();
+            const palavraChave = document.getElementById('filtroPalavraChave').value.trim().toLowerCase();
+
+            const alerta = document.getElementById('alertaPeriodo');
+            const alertaTexto = document.getElementById('alertaPeriodoTexto');
+
+            // Validação de Período (RN005 / MSG001 e MSG002)
+            const hoje = new Date().toISOString().split('T')[0];
+            if (dataInicio && dataFim && dataInicio > dataFim) {
+                alerta.classList.remove('hidden');
+                alertaTexto.textContent = 'A data inicial não pode ser posterior à data final. (MSG001)';
+                return;
+            }
+            if ((dataInicio && dataInicio > hoje) || (dataFim && dataFim > hoje)) {
+                alerta.classList.remove('hidden');
+                alertaTexto.textContent = 'O período do registro não pode conter data futura. (MSG002)';
+                return;
+            }
+            alerta.classList.add('hidden');
+
+            const hasFiltros = status || tipoRegistro || tipoEmergencia || numero || municipio || dataInicio || dataFim || eixo || tecnico || unidade || comunicante || palavraChave;
+
+            // Filtragem combinada (RN006)
+            let filtrados = registros.filter(reg => {
+                if (status && reg.status !== status) return false;
+                if (tipoRegistro && reg.tipoRegistro !== tipoRegistro) return false;
+                if (tipoEmergencia && reg.tipoEmergencia !== tipoEmergencia) return false;
+                if (numero && !reg.numero.toLowerCase().includes(numero)) return false;
+                if (municipio && reg.municipio !== municipio) return false;
+                if (eixo && reg.eixo !== eixo) return false;
+                if (tecnico && reg.tecnico !== tecnico) return false;
+                if (unidade && reg.unidade !== unidade) return false;
+                if (comunicante) {
+                    const com = (reg.comunicante + ' ' + reg.empresa).toLowerCase();
+                    if (!com.includes(comunicante)) return false;
+                }
+                if (palavraChave) {
+                    const textoCompleto = `${reg.numero} ${reg.municipio} ${reg.tipoEmergencia} ${reg.descricao} ${reg.localizacao}`.toLowerCase();
+                    if (!textoCompleto.includes(palavraChave)) return false;
+                }
+                if (dataInicio) {
+                    const dataReg = converterParaIso(reg.dataHora);
+                    if (dataReg < dataInicio) return false;
+                }
+                if (dataFim) {
+                    const dataReg = converterParaIso(reg.dataHora);
+                    if (dataReg > dataFim) return false;
+                }
+                return true;
+            });
+
+            // Ordenação (RN007 e RN008)
+            const criterioOrdenacao = document.getElementById('selectOrdenacao').value;
+
+            if (criterioOrdenacao === 'padrao' && !hasFiltros) {
+                // RN007: Consulta Padrão
+                // Primeiro os RE com status "Emergência Registrada", depois os demais ordenados por data decrescente
+                const prioritarios = filtrados.filter(r => r.tipoRegistro.includes('RE') && r.status === 'Emergência Registrada');
+                const demais = filtrados.filter(r => !(r.tipoRegistro.includes('RE') && r.status === 'Emergência Registrada'));
+                
+                prioritarios.sort((a, b) => converterParaTimestamp(b.dataHora) - converterParaTimestamp(a.dataHora));
+                demais.sort((a, b) => converterParaTimestamp(b.dataHora) - converterParaTimestamp(a.dataHora));
+                
+                registrosFiltrados = [...prioritarios, ...demais];
+            } else if (criterioOrdenacao === 'dataAsc') {
+                registrosFiltrados = filtrados.sort((a, b) => converterParaTimestamp(a.dataHora) - converterParaTimestamp(b.dataHora));
+            } else if (criterioOrdenacao === 'tipo') {
+                // RN008: Por tipo e data decrescente
+                registrosFiltrados = filtrados.sort((a, b) => {
+                    if (a.tipoRegistro === b.tipoRegistro) {
+                        return converterParaTimestamp(b.dataHora) - converterParaTimestamp(a.dataHora);
+                    }
+                    return a.tipoRegistro.localeCompare(b.tipoRegistro);
+                });
+            } else {
+                // Padrão filtrado: data mais recente primeiro
+                registrosFiltrados = filtrados.sort((a, b) => converterParaTimestamp(b.dataHora) - converterParaTimestamp(a.dataHora));
+            }
+
+            paginaAtual = 1;
+            renderizarTabela();
+        }
+
+        // RN018: Limpar filtros e restaurar consulta padrão
+        function limparFiltros() {
+            document.getElementById('formFiltros').reset();
+            tratarMudancaTipoRegistro();
+            document.getElementById('alertaPeriodo').classList.add('hidden');
+            document.getElementById('selectOrdenacao').value = 'padrao';
+            executarConsulta();
+            mostrarToast('Filtros restaurados para a consulta padrão (RN018)', 'info');
+        }
+
+        function alterarOrdenacao() {
+            executarConsulta();
+        }
+
+        // Renderizar a tabela de resultados com paginação (RN009 e RN010)
+        function renderizarTabela() {
+            const corpo = document.getElementById('tabelaRegistrosCorpo');
+            const totalTexto = document.getElementById('totalRegistrosTexto');
+            const msgVazia = document.getElementById('msgSemResultados');
+            const pagContainer = document.getElementById('paginacaoContainer');
+
+            const total = registrosFiltrados.length;
+            totalTexto.textContent = `Total: ${total} registro${total === 1 ? '' : 's'} encontrado${total === 1 ? '' : 's'} (RN010)`;
+
+            if (total === 0) {
+                corpo.innerHTML = '';
+                msgVazia.classList.remove('hidden');
+                pagContainer.classList.add('hidden');
+                return;
+            }
+
+            msgVazia.classList.add('hidden');
+            pagContainer.classList.remove('hidden');
+
+            const inicio = (paginaAtual - 1) * ITENS_POR_PAGINA;
+            const fim = Math.min(inicio + ITENS_POR_PAGINA, total);
+            const itensPagina = registrosFiltrados.slice(inicio, fim);
+
+            document.getElementById('pagInicio').textContent = total === 0 ? 0 : inicio + 1;
+            document.getElementById('pagFim').textContent = fim;
+            document.getElementById('pagTotal').textContent = total;
+            document.getElementById('numPaginaAtual').textContent = paginaAtual;
+            document.getElementById('btnPagAnterior').disabled = paginaAtual === 1;
+            document.getElementById('btnPagProxima').disabled = fim >= total;
+
+            corpo.innerHTML = itensPagina.map(reg => {
+                const isEmergenciaAtiva = reg.tipoRegistro.includes('RE') && reg.status === 'Emergência Registrada';
+                const rowClass = isEmergenciaAtiva ? 'bg-red-50/40 hover:bg-red-50/70' : 'hover:bg-slate-50/80';
+                
+                // Badge de tipo
+                const badgeTipo = reg.tipoRegistro.includes('RE')
+                    ? '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-900 border border-amber-300"><span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span>Emergência Química (RE)</span>'
+                    : '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-100 text-blue-900 border border-blue-300"><span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>Denúncia Ambiental (RD)</span>';
+
+                // Badge de status
+                let badgeStatusClass = 'bg-slate-100 text-slate-800 border-slate-200';
+                let iconeStatus = 'schedule';
+                if (reg.status === 'Emergência Registrada') {
+                    badgeStatusClass = 'bg-red-100 text-red-800 border-red-300 font-extrabold animate-pulse';
+                    iconeStatus = 'crisis_alert';
+                } else if (reg.status === 'Em Atendimento') {
+                    badgeStatusClass = 'bg-amber-100 text-amber-800 border-amber-300 font-bold';
+                    iconeStatus = 'sync';
+                } else if (reg.status === 'Concluída') {
+                    badgeStatusClass = 'bg-emerald-100 text-emerald-800 border-emerald-300 font-bold';
+                    iconeStatus = 'check_circle';
+                } else if (reg.status === 'Notificada') {
+                    badgeStatusClass = 'bg-purple-100 text-purple-800 border-purple-300 font-bold';
+                    iconeStatus = 'outgoing_mail';
+                }
+
+                const badgeStatus = `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] border ${badgeStatusClass}"><span class="material-symbols-outlined text-xs">${iconeStatus}</span>${reg.status}</span>`;
+
+                return `
+                    <tr class="transition-colors ${rowClass}">
+                        <td class="py-3 px-4 font-mono font-bold text-slate-800 whitespace-nowrap">
+                            <div class="flex items-center gap-1.5">
+                                ${isEmergenciaAtiva ? '<span class="material-symbols-outlined text-red-600 text-sm animate-bounce" title="Prioridade Alta">priority_high</span>' : ''}
+                                <a href="javascript:void(0)" onclick="abrirDrawerDetalhes('${reg.numero}')" class="text-[#0F4C3A] hover:underline hover:text-[#155d47]">
+                                    ${reg.numero}
+                                </a>
+                            </div>
+                        </td>
+                        <td class="py-3 px-4 text-slate-600 whitespace-nowrap">
+                            <span class="block font-medium text-slate-700">${reg.dataHora.split(' ')[0]}</span>
+                            <span class="text-[10px] text-slate-400">${reg.dataHora.split(' ')[1] || ''}</span>
+                        </td>
+                        <td class="py-3 px-4 whitespace-nowrap">
+                            ${badgeTipo}
+                        </td>
+                        <td class="py-3 px-4 text-slate-600 font-medium">
+                            ${reg.tipoEntrada}
+                        </td>
+                        <td class="py-3 px-4 font-medium text-slate-700">
+                            ${reg.municipio}
+                        </td>
+                        <td class="py-3 px-4 text-slate-600">
+                            <span class="font-semibold text-slate-800 block">${reg.tecnico || 'Não associado'}</span>
+                            <span class="text-[10px] text-slate-400">${reg.unidade}</span>
+                        </td>
+                        <td class="py-3 px-4 whitespace-nowrap">
+                            ${badgeStatus}
+                        </td>
+                        <td class="py-3 px-4 text-center whitespace-nowrap">
+                            <div class="inline-flex items-center gap-1">
+                                <!-- BOT003: Visualizar -->
+                                <button onclick="abrirDrawerDetalhes('${reg.numero}')" class="p-1.5 text-slate-600 hover:text-[#0F4C3A] hover:bg-slate-100 rounded transition-colors" title="Visualizar Detalhes (BOT003)">
+                                    <span class="material-symbols-outlined text-base">visibility</span>
+                                </button>
+                                <!-- BOT004: Baixar PDF -->
+                                <button onclick="baixarPdfDireto('${reg.numero}')" class="p-1.5 text-slate-600 hover:text-red-600 hover:bg-slate-100 rounded transition-colors" title="Baixar PDF Oficial (BOT004)">
+                                    <span class="material-symbols-outlined text-base">picture_as_pdf</span>
+                                </button>
+                                <!-- BOT005/BOT006/BOT007: Anexar Relatório (Apenas para RE) -->
+                                ${reg.tipoRegistro.includes('RE') ? `
+                                <button onclick="abrirModalAnexo('${reg.numero}')" class="p-1.5 text-slate-600 hover:text-emerald-700 hover:bg-slate-100 rounded transition-colors" title="Anexar Relatório (BOT005-007)">
+                                    <span class="material-symbols-outlined text-base">attach_file</span>
+                                </button>
+                                ` : ''}
+                                <!-- BOT008: Histórico Rápido -->
+                                <button onclick="abrirHistoricoDireto('${reg.numero}')" class="p-1.5 text-slate-600 hover:text-blue-600 hover:bg-slate-100 rounded transition-colors" title="Histórico de Eventos (BOT008)">
+                                    <span class="material-symbols-outlined text-base">history</span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function mudarPagina(delta) {
+            paginaAtual += delta;
+            renderizarTabela();
+        }
+
+        // ==========================================
+        // DRAWER LATERAL: Visualização Interna (RN012)
+        // ==========================================
+        function abrirDrawerDetalhes(numeroRegistro) {
+            const reg = registros.find(r => r.numero === numeroRegistro);
+            if (!reg) return;
+            registroSelecionado = reg;
+
+            document.getElementById('drawerTituloRegistro').textContent = reg.numero;
+            document.getElementById('drawerBadgeTipo').textContent = reg.tipoRegistro.includes('RE') ? 'RE' : 'RD';
+            document.getElementById('drawerIcone').textContent = reg.tipoRegistro.includes('RE') ? 'warning' : 'gavel';
+            
+            // Preencher campos gerais
+            document.getElementById('dwStatus').textContent = reg.status;
+            document.getElementById('dwDataHora').textContent = reg.dataHora;
+            document.getElementById('dwCanalEntrada').textContent = reg.tipoEntrada;
+            document.getElementById('dwMunicipio').textContent = `${reg.municipio} / BA`;
+            document.getElementById('dwTipoEmergencia').textContent = reg.tipoEmergencia || 'Denúncia Ambiental Regular';
+            document.getElementById('dwLocalizacao').textContent = reg.localizacao;
+            document.getElementById('dwLatitude').value = reg.latitude || '-';
+            document.getElementById('dwLongitude').value = reg.longitude || '-';
+            document.getElementById('dwDescricaoFatos').textContent = reg.descricao;
+
+            // Áreas atingidas
+            const containerAreas = document.getElementById('dwAreasAtingidas');
+            if (reg.areasAtingidas && reg.areasAtingidas.length > 0) {
+                containerAreas.innerHTML = reg.areasAtingidas.map(a => 
+                    `<span class="px-2 py-0.5 bg-slate-100 border border-slate-300 rounded text-[11px] font-medium text-slate-700">${a}</span>`
+                ).join('');
+            } else {
+                containerAreas.innerHTML = '<span class="text-slate-400 italic">Nenhuma área crítica registrada</span>';
+            }
+
+            // Comunicante e Empresa
+            document.getElementById('dwComNome').textContent = reg.comunicante.split('(')[0].trim();
+            document.getElementById('dwComDoc').textContent = reg.comunicante.includes('(') ? reg.comunicante.split('(')[1].replace(')', '') : '-';
+            document.getElementById('dwEmpNome').textContent = reg.empresa ? reg.empresa.split('(')[0].trim() : 'Não informada';
+            document.getElementById('dwEmpCnpj').textContent = reg.empresa && reg.empresa.includes('(') ? reg.empresa.split('(')[1].replace(')', '') : '-';
+
+            // Equipe
+            document.getElementById('dwTecnico').innerHTML = `
+                <span class="material-symbols-outlined text-sm">person_check</span>
+                ${reg.tecnico || 'Técnico Não Associado'}
+            `;
+            document.getElementById('dwUnidade').textContent = reg.unidade || 'DIFIS';
+            document.getElementById('dwEixo').textContent = reg.eixo || 'Não classificado';
+
+            // Relatórios
+            renderizarListaRelatoriosDrawer(reg);
+
+            // Histórico
+            renderizarHistoricoDrawer(reg);
+
+            // Abrir Drawer
+            switchDrawerTab('tabGeral');
+            document.getElementById('drawerOverlay').classList.remove('hidden');
+            document.getElementById('drawerVisualizacao').classList.remove('translate-x-full');
+        }
+
+        function fecharDrawer() {
+            document.getElementById('drawerOverlay').classList.add('hidden');
+            document.getElementById('drawerVisualizacao').classList.add('translate-x-full');
+        }
+
+        function switchDrawerTab(tabId) {
+            const tabs = ['tabGeral', 'tabComunicante', 'tabEquipe', 'tabRelatorios', 'tabHistorico'];
+            const buttons = ['btnTabGeral', 'btnTabComunicante', 'btnTabEquipe', 'btnTabRelatorios', 'btnTabHistorico'];
+
+            tabs.forEach(t => {
+                const el = document.getElementById(t);
+                if (el) el.classList.toggle('hidden', t !== tabId);
+            });
+
+            buttons.forEach(b => {
+                const el = document.getElementById(b);
+                const active = b.toLowerCase().includes(tabId.toLowerCase().replace('tab', ''));
+                if (el) {
+                    if (active) {
+                        el.className = 'py-2.5 px-3 text-xs font-bold border-b-2 border-[#0F4C3A] text-[#0F4C3A] whitespace-nowrap flex items-center gap-1.5';
+                    } else {
+                        el.className = 'py-2.5 px-3 text-xs font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap flex items-center gap-1.5';
+                    }
+                }
+            });
+        }
+
+        function renderizarListaRelatoriosDrawer(reg) {
+            const container = document.getElementById('dwListaRelatorios');
+            if (!reg.relatorios || reg.relatorios.length === 0) {
+                container.innerHTML = `
+                    <div class="p-6 text-center bg-slate-50 border border-slate-200 rounded-lg text-slate-400">
+                        <span class="material-symbols-outlined text-3xl mb-1">folder_open</span>
+                        <p class="text-xs font-medium">Nenhum relatório regulatório anexado até o momento.</p>
+                        <p class="text-[10px] text-slate-400 mt-1">Utilize o botão "Anexar Novo Relatório" para incluir arquivos técnicos.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = reg.relatorios.map((rel, idx) => `
+                <div class="p-3 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded bg-red-100 text-red-700 flex items-center justify-center font-bold text-xs">
+                            <span class="material-symbols-outlined text-base">picture_as_pdf</span>
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold text-slate-800 block">${rel.tipo}</span>
+                            <span class="text-[10px] text-slate-500 font-mono">${rel.arquivo} • ${rel.data} por ${rel.usuario}</span>
+                        </div>
+                    </div>
+                    <button onclick="baixarArquivoSimulado('${rel.arquivo}')" class="px-2.5 py-1 bg-white border border-slate-300 text-slate-700 rounded text-xs font-semibold hover:bg-slate-100 flex items-center gap-1">
+                        <span class="material-symbols-outlined text-xs">download</span>
+                        Baixar
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function renderizarHistoricoDrawer(reg) {
+            const container = document.getElementById('dwListaHistorico');
+            if (!reg.historico || reg.historico.length === 0) {
+                container.innerHTML = '<p class="text-xs text-slate-400 italic">Nenhum evento registrado.</p>';
+                return;
+            }
+
+            container.innerHTML = reg.historico.map(evt => `
+                <div class="relative pl-7 pb-2">
+                    <div class="absolute left-1.5 top-1 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-[#0F4C3A] border-2 border-white shadow-xs"></div>
+                    <div class="p-3 bg-slate-50 border border-slate-200 rounded-lg">
+                        <div class="flex items-center justify-between text-[11px] text-slate-400 mb-1">
+                            <span class="font-bold text-slate-700">${evt.usuario}</span>
+                            <span>${evt.data}</span>
+                        </div>
+                        <p class="text-xs text-slate-700 font-medium">${evt.acao}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ==========================================
+        // MODAL DE ANEXO DE RELATÓRIO (RN014 - RN016)
+        // ==========================================
+        function abrirModalAnexo(numeroRegistro) {
+            const reg = registros.find(r => r.numero === numeroRegistro);
+            if (!reg) return;
+            registroSelecionado = reg;
+            abrirModalAnexoComRegistroAtual();
+        }
+
+        function abrirModalAnexoComRegistroAtual() {
+            if (!registroSelecionado) return;
+            document.getElementById('modalAnexoNumRegistro').value = `${registroSelecionado.numero} - ${registroSelecionado.tipoRegistro}`;
+            document.getElementById('formUploadRelatorio').reset();
+            document.getElementById('modalNomeArquivoTexto').textContent = 'Clique para selecionar ou arraste o arquivo';
+            document.getElementById('modalAlertaErro').classList.add('hidden');
+            arquivoAnexoPendente = null;
+            document.getElementById('modalAnexo').classList.remove('hidden');
+        }
+
+        function fecharModalAnexo() {
+            document.getElementById('modalAnexo').classList.add('hidden');
+        }
+
+        function tratarArquivoSelecionado(input) {
+            if (!input.files || input.files.length === 0) return;
+            const file = input.files[0];
+
+            // RN015: Formatos aceitos
+            const extensoesValidas = ['jpeg', 'jpg', 'png', 'bmp', 'mp3', 'mp4', 'pdf', 'doc', 'docx', 'txt', 'xls', 'xlsx', 'shp', 'shx', 'dbf', 'prj', 'kml', 'kmz', 'zip'];
+            const ext = file.name.split('.').pop().toLowerCase();
+
+            if (!extensoesValidas.includes(ext)) {
+                const alerta = document.getElementById('modalAlertaErro');
+                alerta.textContent = 'O arquivo selecionado possui formato não permitido. (MSG005)';
+                alerta.classList.remove('hidden');
+                input.value = '';
+                arquivoAnexoPendente = null;
+                return;
+            }
+
+            // Limite de 50MB
+            if (file.size > 50 * 1024 * 1024) {
+                const alerta = document.getElementById('modalAlertaErro');
+                alerta.textContent = 'O arquivo excede o limite máximo permitido de 50MB.';
+                alerta.classList.remove('hidden');
+                input.value = '';
+                arquivoAnexoPendente = null;
+                return;
+            }
+
+            document.getElementById('modalAlertaErro').classList.add('hidden');
+            document.getElementById('modalNomeArquivoTexto').textContent = `Arquivo selecionado: ${file.name} (${(file.size / (1024 * 1024)).toFixed(2)} MB)`;
+            arquivoAnexoPendente = file;
+        }
+
+        // RN016: Confirmação prévia de envio (MSG007)
+        function confirmarEnvioRelatorio() {
+            const tipo = document.getElementById('modalTipoRelatorio').value;
+            if (!tipo || !arquivoAnexoPendente) {
+                const alerta = document.getElementById('modalAlertaErro');
+                alerta.textContent = 'Selecione um arquivo para continuar. (MSG006)';
+                alerta.classList.remove('hidden');
+                return;
+            }
+
+            document.getElementById('modalConfirmacaoTexto').textContent = `Deseja anexar este relatório ao registro ${registroSelecionado.numero}? (MSG007)`;
+            document.getElementById('modalConfirmacao').classList.remove('hidden');
+        }
+
+        function fecharModalConfirmacao() {
+            document.getElementById('modalConfirmacao').classList.add('hidden');
+        }
+
+        // RN016 e RN017: Conclusão do anexo com sucesso (MSG008)
+        function executarEnvioRelatorioConfirmado() {
+            fecharModalConfirmacao();
+            fecharModalAnexo();
+
+            const tipo = document.getElementById('modalTipoRelatorio').value;
+            const nomeArquivo = arquivoAnexoPendente ? arquivoAnexoPendente.name : 'relatorio_anexado.pdf';
+            const agoraFormatado = formatarDataHoraAgora();
+
+            // Adicionar ao registro
+            if (!registroSelecionado.relatorios) registroSelecionado.relatorios = [];
+            registroSelecionado.relatorios.push({
+                tipo: tipo,
+                arquivo: nomeArquivo,
+                data: agoraFormatado,
+                usuario: 'Lucas Manager (DIFIS)'
+            });
+
+            // Atualizar histórico auditável (RN017 e RN024)
+            if (!registroSelecionado.historico) registroSelecionado.historico = [];
+            registroSelecionado.historico.unshift({
+                data: agoraFormatado,
+                usuario: 'Lucas Manager (DIFIS)',
+                acao: `Anexação do documento "${tipo}" (${nomeArquivo})`
+            });
+
+            // Salvar no localStorage
+            try {
+                localStorage.setItem(STORAGE_KEY_INTERNO, JSON.stringify(registros));
+            } catch (e) {
+                console.warn('Falha ao salvar localStorage:', e);
+            }
+
+            mostrarToast('Relatório anexado com sucesso. (MSG008)', 'success');
+            
+            // Re-renderizar
+            renderizarTabela();
+            if (!document.getElementById('drawerVisualizacao').classList.contains('translate-x-full')) {
+                renderizarListaRelatoriosDrawer(registroSelecionado);
+                renderizarHistoricoDrawer(registroSelecionado);
+            }
+        }
+
+        // ==========================================
+        // HISTÓRICO RÁPIDO E PDF
+        // ==========================================
+        function abrirHistoricoDireto(numeroRegistro) {
+            abrirDrawerDetalhes(numeroRegistro);
+            switchDrawerTab('tabHistorico');
+        }
+
+        // BOT004 / RN013: Baixar PDF
+        function baixarPdfDireto(numeroRegistro) {
+            const reg = registros.find(r => r.numero === numeroRegistro);
+            if (!reg) return;
+            mostrarToast(`Gerando formulário oficial em PDF para ${reg.numero}...`, 'info');
+            setTimeout(() => {
+                window.print();
+            }, 500);
+        }
+
+        function baixarPdfAtual() {
+            if (registroSelecionado) {
+                baixarPdfDireto(registroSelecionado.numero);
+            }
+        }
+
+        function baixarArquivoSimulado(nomeArquivo) {
+            mostrarToast(`Download do anexo "${nomeArquivo}" concluído.`, 'success');
+        }
+
+        // ==========================================
+        // UTILITÁRIOS E TOASTS
+        // ==========================================
+        function mostrarToast(mensagem, tipo = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            
+            let bgClass = 'bg-slate-800 text-white';
+            let icon = 'info';
+            if (tipo === 'success') {
+                bgClass = 'bg-[#0F4C3A] text-white border border-emerald-400/40 shadow-lg';
+                icon = 'check_circle';
+            } else if (tipo === 'error') {
+                bgClass = 'bg-red-600 text-white shadow-lg';
+                icon = 'error';
+            }
+
+            toast.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-xl text-xs font-semibold shadow-xl transition-all transform translate-y-2 opacity-0 ${bgClass}`;
+            toast.innerHTML = `
+                <span class="material-symbols-outlined text-base">${icon}</span>
+                <span>${mensagem}</span>
+            `;
+
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        function toggleSubmenu(submenuId, iconId) {
+            const sub = document.getElementById(submenuId);
+            const icon = document.getElementById(iconId);
+            if (!sub) return;
+            const isHidden = sub.classList.toggle('hidden');
+            if (icon) {
+                icon.style.transform = isHidden ? 'rotate(0deg)' : 'rotate(180deg)';
+            }
+        }
+
+        function toggleFiltrosPanel() {
+            const form = document.getElementById('formFiltros');
+            const text = document.getElementById('toggleFiltrosText');
+            const icon = document.getElementById('toggleFiltrosIcon');
+            const isHidden = form.classList.toggle('hidden');
+            text.textContent = isHidden ? 'Expandir Filtros' : 'Recolher Filtros';
+            icon.textContent = isHidden ? 'expand_more' : 'expand_less';
+        }
+
+        function configurarSidebarMobile() {
+            const btnToggle = document.getElementById('btnToggleSidebar');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+
+            if (btnToggle && sidebar && overlay) {
+                btnToggle.addEventListener('click', () => {
+                    const isOpen = !sidebar.classList.contains('-translate-x-full');
+                    if (isOpen) {
+                        sidebar.classList.add('-translate-x-full');
+                        overlay.classList.add('hidden');
+                    } else {
+                        sidebar.classList.remove('-translate-x-full');
+                        overlay.classList.remove('hidden');
+                    }
+                });
+
+                overlay.addEventListener('click', () => {
+                    sidebar.classList.add('-translate-x-full');
+                    overlay.classList.add('hidden');
+                });
+            }
+        }
+
+        function converterParaIso(dataHoraStr) {
+            if (!dataHoraStr) return '';
+            const partes = dataHoraStr.split(' ')[0].split('/');
+            if (partes.length === 3) {
+                return `${partes[2]}-${partes[1]}-${partes[0]}`;
+            }
+            return dataHoraStr;
+        }
+
+        function converterParaTimestamp(dataHoraStr) {
+            if (!dataHoraStr) return 0;
+            const [data, hora] = dataHoraStr.split(' ');
+            const [dia, mes, ano] = data.split('/');
+            const [h, m] = (hora || '00:00').split(':');
+            return new Date(ano, mes - 1, dia, h, m).getTime();
+        }
+
+        function formatarDataHoraAgora() {
+            const d = new Date();
+            const dia = String(d.getDate()).padStart(2, '0');
+            const mes = String(d.getMonth() + 1).padStart(2, '0');
+            const ano = d.getFullYear();
+            const h = String(d.getHours()).padStart(2, '0');
+            const m = String(d.getMinutes()).padStart(2, '0');
+            return `${dia}/${mes}/${ano} ${h}:${m}`;
+        }
+    </script>
+</body>
+</html>
