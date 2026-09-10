@@ -40,12 +40,12 @@ test.describe('DOR005: Consulta de Registros Internos (DIFIS)', () => {
     // Validação de período inválido (RN005 / MSG001)
     await page.fill('#filtroDataInicio', '2026-09-10');
     await page.fill('#filtroDataFim', '2026-09-01');
-    await page.locator('button:has-text("Consultar (BOT001)")').click();
+    await page.locator('button:has-text("Consultar")').first().click();
     await expect(page.locator('#alertaPeriodo')).toBeVisible();
     await expect(page.locator('#alertaPeriodoTexto')).toContainText('A data inicial não pode ser posterior à data final');
 
     // Limpar filtros (RN018)
-    await page.locator('button:has-text("Limpar filtros (BOT002)")').click();
+    await page.locator('button:has-text("Limpar filtros")').first().click();
     await expect(page.locator('#alertaPeriodo')).toBeHidden();
     await expect(page.locator('#filtroTipoEmergencia')).toBeDisabled();
 

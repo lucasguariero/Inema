@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consulta de Registros Internos (DOR005) - INEMA / SEIA</title>
+    <title>Consulta de Registros Internos - DIFIS - INEMA / SEIA</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -53,6 +53,15 @@
             0%, 100% { border-color: rgba(220, 38, 38, 0.4); box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.2); }
             50% { border-color: rgba(220, 38, 38, 0.9); box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.15); }
         }
+        @media print {
+            header, aside, #formFiltrosContainer, #paginacaoContainer, .no-print {
+                display: none !important;
+            }
+            main {
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+        }
     </style>
 </head>
 <body class="bg-[#F8FAF9] text-slate-800 h-full flex flex-col antialiased">
@@ -81,20 +90,20 @@
         <div class="hidden md:flex items-center flex-1 max-w-md mx-8">
             <div class="relative w-full">
                 <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-white/60 text-lg">search</span>
-                <input type="text" id="globalSearchInput" placeholder="Buscar por nº do registro, comunicante, processo..." class="w-full pl-10 pr-4 py-1.5 bg-white/10 hover:bg-white/15 focus:bg-white text-white focus:text-slate-800 placeholder:text-white/60 focus:placeholder:text-slate-400 rounded-full text-xs font-normal border border-white/15 focus:border-white focus:outline-none transition-all">
+                <input type="text" id="globalSearchInput" onkeyup="if(event.key==='Enter') executarBuscaRapida(this.value)" placeholder="Buscar por nº do registro, comunicante, processo..." class="w-full pl-10 pr-4 py-1.5 bg-white/10 hover:bg-white/15 focus:bg-white text-white focus:text-slate-800 placeholder:text-white/60 focus:placeholder:text-slate-400 rounded-full text-xs font-normal border border-white/15 focus:border-white focus:outline-none transition-all">
             </div>
         </div>
 
         <!-- Direita: Perfil do Analista Interno & Notificações -->
         <div class="flex items-center gap-2.5">
             <!-- Badge Ambiente Interno -->
-            <span class="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/20 text-emerald-200 border border-emerald-400/30">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/20 text-emerald-200 border border-emerald-400/30">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                 Ambiente Interno DIFIS
             </span>
 
             <!-- Botão Notificações -->
-            <button class="relative p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors">
+            <button class="relative p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors" title="Notificações pendentes">
                 <span class="material-symbols-outlined text-xl">notifications</span>
                 <span class="absolute top-1 right-1 w-4 h-4 bg-red-500 text-[10px] font-bold text-white rounded-full flex items-center justify-center">3</span>
             </button>
@@ -123,7 +132,7 @@
         <!-- Overlay Mobile -->
         <div id="sidebarOverlay" class="fixed inset-0 bg-slate-900/40 z-30 hidden lg:hidden backdrop-blur-xs transition-opacity"></div>
 
-        <!-- Sidebar Lateral (280px, padronizada) -->
+        <!-- Sidebar Lateral Padronizada (280px) -->
         <aside id="sidebar" class="w-[280px] bg-white border-r border-slate-200 flex flex-col fixed top-[60px] bottom-0 left-0 z-40 transition-transform duration-200 lg:translate-x-0 -translate-x-full">
             <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1">
                 <!-- Início -->
@@ -132,90 +141,70 @@
                     <span class="text-sm font-medium">Início</span>
                 </a>
 
-                <!-- Fiscalização -->
+                <!-- Fiscalização (Accordion) -->
                 <div class="pt-1">
-                    <button onclick="toggleSubmenu('subFiscalizacao', 'iconFiscalizacao')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors">
+                    <button onclick="toggleSubmenu('subFiscalizacao', 'iconFiscalizacao')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-[#0F4C3A] bg-[#E2ECE9] font-semibold transition-colors">
                         <div class="flex items-center gap-3">
-                            <span class="material-symbols-outlined text-xl text-slate-500">gavel</span>
-                            <span class="text-sm font-medium">Fiscalização</span>
+                            <span class="material-symbols-outlined text-xl text-[#0F4C3A]">gavel</span>
+                            <span class="text-sm font-semibold">Fiscalização</span>
                         </div>
-                        <span id="iconFiscalizacao" class="material-symbols-outlined text-lg text-slate-400 transition-transform duration-200 rotate-180">expand_more</span>
+                        <span id="iconFiscalizacao" class="material-symbols-outlined text-lg text-[#0F4C3A] transition-transform duration-200 rotate-180">expand_more</span>
                     </button>
-                    <ul id="subFiscalizacao" class="mt-1 pl-4 space-y-1">
+                    <ul id="subFiscalizacao" class="mt-1 pl-3 space-y-1">
                         <li>
                             <a href="fiscalizacao.html" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">
                                 <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
-                                Atendente (DOR001)
+                                Atendente
                             </a>
                         </li>
                         <li>
                             <a href="fiscalizacao.html?fluxo=externo" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">
                                 <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
-                                Cidadão (DOR002)
+                                Denúncia - Cidadão
+                            </a>
+                        </li>
+                        <li>
+                            <a href="emergencia-quimica-externa.html" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">
+                                <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+                                Emergência Externa
+                            </a>
+                        </li>
+                        <li>
+                            <a href="emergencia-quimica.html?fluxo=interna" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">
+                                <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+                                Emergência Interna
+                            </a>
+                        </li>
+                        <li>
+                            <a href="consulta-externa.html" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">
+                                <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+                                Consulta Externa
                             </a>
                         </li>
                         <li>
                             <a href="consulta-interna.html" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold text-[#0F4C3A] bg-[#E2ECE9] transition-colors">
                                 <div class="flex items-center gap-2.5">
                                     <span class="w-1.5 h-1.5 rounded-full bg-[#0F4C3A]"></span>
-                                    Consulta Interna (DOR005)
+                                    <span>Consulta Interna DIFIS</span>
                                 </div>
-                                <span class="text-[9px] bg-[#0F4C3A] text-white px-1.5 py-0.2 rounded-full font-bold" id="sidebarBadgeEmergencias">0</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Emergência Química -->
-                <div class="pt-1">
-                    <button onclick="toggleSubmenu('subEmergencia', 'iconEmergencia')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-[#0F4C3A] bg-[#E2ECE9] font-semibold transition-colors">
-                        <div class="flex items-center gap-3">
-                            <span class="material-symbols-outlined text-xl text-amber-600 fill">warning</span>
-                            <span class="text-sm">Emergência Química</span>
-                        </div>
-                        <span id="iconEmergencia" class="material-symbols-outlined text-lg text-[#0F4C3A] transition-transform duration-200 rotate-180">expand_more</span>
-                    </button>
-                    <ul id="subEmergencia" class="mt-1 pl-4 space-y-1">
-                        <li>
-                            <a href="emergencia-quimica.html?fluxo=interna" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">
-                                <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
-                                Visão Interna (DOR003)
-                            </a>
-                        </li>
-                        <li>
-                            <a href="emergencia-quimica-externa.html" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">
-                                <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
-                                Visão Externa (DOR004)
-                            </a>
-                        </li>
-                        <li>
-                            <a href="consulta-interna.html" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold text-[#0F4C3A] bg-white border border-[#0F4C3A]/20 shadow-xs">
-                                <div class="flex items-center gap-2.5">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-[#0F4C3A]"></span>
-                                    Consulta Interna (DOR005)
-                                </div>
-                                <span class="text-[9px] bg-red-600 text-white px-1.5 py-0.5 rounded-full font-bold animate-pulse" id="sidebarBadgeEmergencias2">0</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="consulta-externa.html" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">
-                                <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
-                                Consulta Externa (DOR005.1)
+                                <span class="text-[10px] bg-red-600 text-white px-1.5 py-0.2 rounded-full font-bold animate-pulse" id="sidebarBadgeEmergencias">3</span>
                             </a>
                         </li>
                     </ul>
                 </div>
 
                 <!-- Relatórios Gerenciais -->
-                <a href="relatorios.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors">
-                    <span class="material-symbols-outlined text-xl text-slate-500">assessment</span>
-                    <span class="text-sm font-medium">Relatórios Gerenciais</span>
-                </a>
+                <div class="pt-1">
+                    <a href="relatorios.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors">
+                        <span class="material-symbols-outlined text-xl text-slate-500">assessment</span>
+                        <span class="text-sm font-medium">Relatórios Gerenciais</span>
+                    </a>
+                </div>
             </nav>
 
             <!-- Rodapé fixo da Sidebar: Assistente INEMA -->
             <div class="p-3 border-t border-slate-200 bg-white">
-                <button onclick="alert('Assistente IA INEMA ativado. Em que posso auxiliá-lo com as consultas de fiscalização?')" class="w-full flex items-center justify-center gap-2 py-2.5 px-3 bg-[#0F4C3A] text-white text-xs font-semibold rounded-lg hover:bg-[#155d47] transition-all shadow-xs group">
+                <button onclick="alert('Assistente IA INEMA ativado. Em que posso auxiliá-lo com as consultas operacionais da DIFIS?')" class="w-full flex items-center justify-center gap-2 py-2.5 px-3 bg-[#0F4C3A] text-white text-xs font-semibold rounded-lg hover:bg-[#155d47] transition-all shadow-xs group">
                     <span class="material-symbols-outlined text-base text-amber-300 group-hover:rotate-12 transition-transform">auto_awesome</span>
                     <span>✦ Assistente INEMA</span>
                 </button>
@@ -223,7 +212,7 @@
         </aside>
 
         <!-- ========================================== -->
-        <!-- 3. ÁREA DE CONTEÚDO PRINCIPAL (DOR005)     -->
+        <!-- 3. ÁREA DE CONTEÚDO PRINCIPAL              -->
         <!-- ========================================== -->
         <main class="flex-1 lg:ml-[280px] overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-6">
             
@@ -231,46 +220,46 @@
             <nav class="flex items-center gap-2 text-xs text-slate-500 font-medium">
                 <a href="index.html" class="hover:text-slate-700">Início</a>
                 <span class="material-symbols-outlined text-sm">chevron_right</span>
-                <span>Fiscalização</span>
+                <a href="fiscalizacao.html" class="hover:text-slate-700">Fiscalização</a>
                 <span class="material-symbols-outlined text-sm">chevron_right</span>
-                <span class="text-[#0F4C3A] font-bold">Consulta de Registros Internos (DOR005)</span>
+                <span class="text-[#0F4C3A] font-bold">Consulta de Registros Internos</span>
             </nav>
 
-            <!-- Cabeçalho da Página + Indicador de Emergências (RN011 / LEG012) -->
+            <!-- Cabeçalho da Página + Indicador de Emergências -->
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-slate-200">
                 <div>
                     <div class="flex items-center gap-3 flex-wrap">
                         <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Consultar Registros</h1>
                         
-                        <!-- Indicador de Emergências (RN011 / LEG012) -->
-                        <div id="indicadorEmergenciasContainer" class="inline-flex items-center gap-2 px-3 py-1 bg-red-50 border border-red-200 rounded-full text-xs font-bold text-red-700 shadow-xs cursor-pointer hover:bg-red-100 transition-colors" onclick="filtrarEmergenciasRegistradas()" title="Clique para filtrar apenas emergências que exigem resposta imediata">
+                        <!-- Indicador de Emergências -->
+                        <div id="indicadorEmergenciasContainer" class="inline-flex items-center gap-2 px-3 py-1 bg-red-50 border border-red-200 rounded-full text-xs font-bold text-red-700 shadow-xs cursor-pointer hover:bg-red-100 transition-colors pulse-subtle" onclick="filtrarEmergenciasRegistradas()" title="Clique para filtrar apenas emergências que exigem resposta imediata">
                             <span class="material-symbols-outlined text-base text-red-600 animate-pulse">crisis_alert</span>
                             <span>Emergências Registradas:</span>
-                            <span id="contadorEmergencias" class="bg-red-600 text-white px-2 py-0.5 rounded-full text-[11px] font-extrabold shadow-xs">0</span>
+                            <span id="contadorEmergencias" class="bg-red-600 text-white px-2 py-0.5 rounded-full text-[11px] font-extrabold shadow-xs">3</span>
                         </div>
                     </div>
                     <p class="text-xs sm:text-sm text-slate-500 mt-1">
-                        Consulta integrada e rastreável de Registros de Denúncia Ambiental (RD) e Registros de Emergência Química (RE) da DIFIS.
+                        Painel operacional integrado para triagem, tramitação e acompanhamento de denúncias ambientais e emergências químicas da DIFIS.
                     </p>
                 </div>
 
                 <!-- Botões de Ação Rápida Superior -->
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2.5">
                     <a href="emergencia-quimica.html?fluxo=interna" class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-lg shadow-xs transition-colors">
                         <span class="material-symbols-outlined text-sm">add_alert</span>
-                        Nova Emergência (DOR003)
+                        + Nova Emergência
                     </a>
                     <a href="fiscalizacao.html" class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#0F4C3A] hover:bg-[#155d47] text-white text-xs font-bold rounded-lg shadow-xs transition-colors">
                         <span class="material-symbols-outlined text-sm">add_circle</span>
-                        Nova Denúncia (DOR001)
+                        + Nova Denúncia
                     </a>
                 </div>
             </div>
 
             <!-- ========================================== -->
-            <!-- CARD DE FILTROS DE PESQUISA (RN003-RN006)  -->
+            <!-- CARD DE FILTROS DE PESQUISA AVANÇADA       -->
             <!-- ========================================== -->
-            <div class="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
+            <div id="formFiltrosContainer" class="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
                 <div class="px-5 py-3.5 bg-slate-50/80 border-b border-slate-200 flex items-center justify-between">
                     <div class="flex items-center gap-2 text-slate-800 font-bold text-sm">
                         <span class="material-symbols-outlined text-[#0F4C3A] text-lg">filter_alt</span>
@@ -283,78 +272,63 @@
                 </div>
 
                 <form id="formFiltros" onsubmit="event.preventDefault(); executarConsulta();" class="p-5 space-y-4">
-                    <!-- Linha 1: Status, Tipo de registro, Tipo da Emergência Química -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <!-- LEG001: Status -->
+                    <!-- Linha 1: Tipo de Registro, Número, Canal de Entrada, Situação / Status -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <!-- Tipo de registro -->
+                        <div>
+                            <label for="filtroTipoRegistro" class="block text-xs font-bold text-slate-700 mb-1">
+                                Tipo de Registro
+                            </label>
+                            <select id="filtroTipoRegistro" onchange="tratarMudancaTipoRegistro(this.value)" class="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none font-medium">
+                                <option value="">Todos (RD e RE)</option>
+                                <option value="Emergência Química (RE)">Emergência Química (RE)</option>
+                                <option value="Denúncia Ambiental (RD)">Denúncia Ambiental (RD)</option>
+                            </select>
+                        </div>
+
+                        <!-- Número do registro -->
+                        <div>
+                            <label for="filtroNumero" class="block text-xs font-bold text-slate-700 mb-1">
+                                Número do Registro
+                            </label>
+                            <input type="text" id="filtroNumero" placeholder="Ex: 2026.000004 ou 000889" class="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none">
+                        </div>
+
+                        <!-- Canal de Entrada -->
+                        <div>
+                            <label for="filtroCanal" class="block text-xs font-bold text-slate-700 mb-1">
+                                Canal de Entrada
+                            </label>
+                            <select id="filtroCanal" class="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none">
+                                <option value="">Todos os canais</option>
+                                <option value="Call Center">Call Center</option>
+                                <option value="Formulário DIFIS">Formulário DIFIS</option>
+                                <option value="Portal Externo / Cidadão">Portal Externo / Cidadão</option>
+                                <option value="Ofício">Ofício</option>
+                            </select>
+                        </div>
+
+                        <!-- Status / Situação -->
                         <div>
                             <label for="filtroStatus" class="block text-xs font-bold text-slate-700 mb-1">
-                                Status / Situação
+                                Situação / Status
                             </label>
                             <select id="filtroStatus" class="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none">
                                 <option value="">Todos os status</option>
                                 <option value="Emergência Registrada">Emergência Registrada</option>
+                                <option value="Análise Técnica">Análise Técnica</option>
                                 <option value="Em Atendimento">Em Atendimento</option>
                                 <option value="Notificada">Notificada</option>
                                 <option value="Em Análise">Em Análise</option>
                                 <option value="Concluída">Concluída</option>
                                 <option value="Arquivada">Arquivada</option>
                             </select>
-                            <span class="text-[10px] text-slate-400 mt-0.5 block">Selecione a situação atual do registro. (LEG001)</span>
-                        </div>
-
-                        <!-- LEG004: Tipo de registro -->
-                        <div>
-                            <label for="filtroTipoRegistro" class="block text-xs font-bold text-slate-700 mb-1">
-                                Tipo de registro
-                            </label>
-                            <select id="filtroTipoRegistro" onchange="tratarMudancaTipoRegistro()" class="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none font-medium">
-                                <option value="">Todos (RD e RE)</option>
-                                <option value="Emergência Química (RE)">Emergência Química (RE)</option>
-                                <option value="Denúncia Ambiental (RD)">Denúncia Ambiental (RD)</option>
-                            </select>
-                            <span class="text-[10px] text-slate-400 mt-0.5 block">Selecione Denúncia Ambiental ou Emergência Química. (LEG004)</span>
-                        </div>
-
-                        <!-- LEG005 / RN004: Tipo da Emergência Química (Condicional) -->
-                        <div>
-                            <label for="filtroTipoEmergencia" class="block text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
-                                <span>Tipo da Emergência Química</span>
-                                <span id="badgeDependente" class="text-[9px] bg-slate-100 text-slate-500 font-semibold px-1.5 py-0.2 rounded">Requer RE</span>
-                            </label>
-                            <select id="filtroTipoEmergencia" disabled class="w-full text-xs py-2 px-3 bg-slate-100 border border-slate-300 rounded-lg text-slate-400 cursor-not-allowed focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none">
-                                <option value="">Selecione o tipo de emergência...</option>
-                                <option value="Vazamento de combustíveis/inflamáveis">1. Vazamento de combustíveis/inflamáveis</option>
-                                <option value="Derramamento de produtos químicos em rodovia/ferrovia">2. Derramamento de produtos químicos em rodovia/ferrovia</option>
-                                <option value="Emissão atmosférica de gases tóxicos">3. Emissão atmosférica de gases tóxicos</option>
-                                <option value="Explosão com substâncias perigosas">4. Explosão com substâncias perigosas</option>
-                                <option value="Incêndio florestal envolvendo defensivos agrícolas">5. Incêndio florestal envolvendo defensivos agrícolas</option>
-                                <option value="Incêndio em instalação química/industrial">6. Incêndio em instalação química/industrial</option>
-                                <option value="Contaminação de curso d'água por efluente industrial">7. Contaminação de curso d'água por efluente industrial</option>
-                                <option value="Despejo clandestino de resíduos perigosos">8. Despejo clandestino de resíduos perigosos</option>
-                                <option value="Vazamento em duto / oleoduto / gasoduto">9. Vazamento em duto / oleoduto / gasoduto</option>
-                                <option value="Acidente com carga perigosa em transporte marítimo/portuário">10. Acidente com carga perigosa em transporte marítimo/portuário</option>
-                                <option value="Mortandade de peixes ou fauna aquática por contaminação química">11. Mortandade de peixes ou fauna aquática por contaminação química</option>
-                                <option value="Rompimento de barragem de rejeito químico/industrial">12. Rompimento de barragem de rejeito químico/industrial</option>
-                                <option value="Acidente radiológico ou substância controlada">13. Acidente radiológico ou substância controlada</option>
-                                <option value="Intoxicação humana coletiva por exposição química">14. Intoxicação humana coletiva por exposição química</option>
-                                <option value="Outros acidentes químicos com impacto ambiental">15. Outros acidentes químicos com impacto ambiental</option>
-                            </select>
-                            <span class="text-[10px] text-slate-400 mt-0.5 block">Habilitado apenas para RE. (RN004 / LEG005)</span>
                         </div>
                     </div>
 
-                    <!-- Linha 2: Número do registro, Município, Período do registro (Data inicial e final) -->
+                    <!-- Linha 2: Município, Técnico Plantonista, Período Inicial e Período Final -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <!-- LEG002: Número do registro -->
-                        <div>
-                            <label for="filtroNumero" class="block text-xs font-bold text-slate-700 mb-1">
-                                Número do registro
-                            </label>
-                            <input type="text" id="filtroNumero" placeholder="Ex: 2026.000004 ou 000889" class="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none">
-                            <span class="text-[10px] text-slate-400 mt-0.5 block">Número completo ou parte do RD/RE. (LEG002)</span>
-                        </div>
-
-                        <!-- LEG003: Município -->
+                        <!-- Município -->
                         <div>
                             <label for="filtroMunicipio" class="block text-xs font-bold text-slate-700 mb-1">
                                 Município
@@ -378,54 +352,16 @@
                                 <option value="Simões Filho">Simões Filho (CIA)</option>
                                 <option value="Vitória da Conquista">Vitória da Conquista</option>
                             </select>
-                            <span class="text-[10px] text-slate-400 mt-0.5 block">Município da ocorrência. (LEG003)</span>
                         </div>
 
-                        <!-- LEG006 / RN005: Data Inicial -->
-                        <div>
-                            <label for="filtroDataInicio" class="block text-xs font-bold text-slate-700 mb-1">
-                                Data Inicial
-                            </label>
-                            <input type="date" id="filtroDataInicio" class="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none">
-                            <span class="text-[10px] text-slate-400 mt-0.5 block">Cadastramento inicial. (LEG006)</span>
-                        </div>
-
-                        <!-- LEG006 / RN005: Data Final -->
-                        <div>
-                            <label for="filtroDataFim" class="block text-xs font-bold text-slate-700 mb-1">
-                                Data Final
-                            </label>
-                            <input type="date" id="filtroDataFim" class="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none">
-                            <span class="text-[10px] text-slate-400 mt-0.5 block">Cadastramento final. (LEG006)</span>
-                        </div>
-                    </div>
-
-                    <!-- Linha 3: Eixo Temático, Técnico Plantonista, Unidade, Comunicante, Palavra-chave -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 pt-1">
-                        <!-- LEG008 / RN021: Eixo Temático (Pauta do Gestor) -->
-                        <div>
-                            <label for="filtroEixo" class="block text-xs font-bold text-slate-700 mb-1">
-                                Eixo Temático
-                            </label>
-                            <select id="filtroEixo" class="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none">
-                                <option value="">Todos os eixos</option>
-                                <option value="Indústria Química & Petroquímica">Indústria Química & Petroquímica</option>
-                                <option value="Mineração & Barragens">Mineração & Barragens</option>
-                                <option value="Transporte de Produtos Perigosos">Transporte de Produtos Perigosos</option>
-                                <option value="Recursos Hídricos & Efluentes">Recursos Hídricos & Efluentes</option>
-                                <option value="Postos de Combustíveis">Postos de Combustíveis</option>
-                                <option value="Agroquímica & Defensivos">Agroquímica & Defensivos</option>
-                            </select>
-                            <span class="text-[10px] text-slate-400 mt-0.5 block">Pauta do Gestor. (LEG008)</span>
-                        </div>
-
-                        <!-- LEG009 / RN021: Técnico Plantonista associado -->
+                        <!-- Técnico Plantonista / Responsável -->
                         <div>
                             <label for="filtroTecnico" class="block text-xs font-bold text-slate-700 mb-1">
-                                Técnico Plantonista
+                                Técnico Plantonista / Responsável
                             </label>
                             <select id="filtroTecnico" class="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none">
                                 <option value="">Todos os técnicos</option>
+                                <option value="Não associado">Não associado (DIFIS)</option>
                                 <option value="Ana Beatriz Rocha">Ana Beatriz Rocha</option>
                                 <option value="Bruno Carvalho">Bruno Carvalho</option>
                                 <option value="Carla Mendes">Carla Mendes</option>
@@ -436,62 +372,64 @@
                                 <option value="Juan Joaquin Madeira Sobrinho">Juan Joaquin Madeira Sobrinho</option>
                                 <option value="Maria Santos">Maria Santos</option>
                             </select>
-                            <span class="text-[10px] text-slate-400 mt-0.5 block">Técnico vinculado. (LEG009)</span>
                         </div>
 
-                        <!-- LEG011 / RN023: Unidade de Encaminhamento -->
+                        <!-- Data Inicial -->
                         <div>
-                            <label for="filtroUnidade" class="block text-xs font-bold text-slate-700 mb-1">
-                                Unidade de Destino
+                            <label for="filtroDataInicio" class="block text-xs font-bold text-slate-700 mb-1">
+                                Período Inicial
                             </label>
-                            <select id="filtroUnidade" class="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none">
-                                <option value="">Todas as unidades</option>
-                                <option value="DIFIS">DIFIS - Diretoria de Fiscalização</option>
-                                <option value="DIRRE">DIRRE - Reg. Recôncavo</option>
-                                <option value="DIREX">DIREX - Reg. Extremo Sul</option>
-                                <option value="UR Feira de Santana">UR Feira de Santana</option>
-                                <option value="UR Ilhéus">UR Ilhéus</option>
-                                <option value="UR Barreiras">UR Barreiras</option>
-                                <option value="COTIC">COTIC - Coordenação TI</option>
-                            </select>
-                            <span class="text-[10px] text-slate-400 mt-0.5 block">Destino do processo. (LEG011)</span>
+                            <input type="date" id="filtroDataInicio" class="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none">
                         </div>
 
-                        <!-- LEG010 / RN022: Comunicante -->
+                        <!-- Data Final -->
                         <div>
-                            <label for="filtroComunicante" class="block text-xs font-bold text-slate-700 mb-1">
-                                Comunicante
+                            <label for="filtroDataFim" class="block text-xs font-bold text-slate-700 mb-1">
+                                Período Final
                             </label>
-                            <input type="text" id="filtroComunicante" placeholder="Nome, Razão Social ou CPF/CNPJ" class="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none">
-                            <span class="text-[10px] text-slate-400 mt-0.5 block">Nome ou documento. (LEG010)</span>
-                        </div>
-
-                        <!-- LEG007 / RN022: Palavra-chave -->
-                        <div>
-                            <label for="filtroPalavraChave" class="block text-xs font-bold text-slate-700 mb-1">
-                                Palavra-chave
-                            </label>
-                            <input type="text" id="filtroPalavraChave" placeholder="Substância, local, descrição..." class="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none">
-                            <span class="text-[10px] text-slate-400 mt-0.5 block">Busca textual ampla. (LEG007)</span>
+                            <input type="date" id="filtroDataFim" class="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none">
                         </div>
                     </div>
 
-                    <!-- Mensagem de Alerta Inline de Validação (MSG001 / MSG002) -->
+                    <!-- Linha 3: Subtipo / Tipologia e Botões de Consulta -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end pt-1">
+                        <div class="lg:col-span-8">
+                            <label for="filtroTipoEmergencia" class="block text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+                                <span>Subtipo / Tipologia da Emergência Química</span>
+                                <span id="badgeDependente" class="text-[9px] bg-slate-100 text-slate-500 font-semibold px-1.5 py-0.2 rounded">Requer RE</span>
+                            </label>
+                            <select id="filtroTipoEmergencia" disabled class="w-full text-xs py-2 px-3 bg-slate-100 border border-slate-300 rounded-lg text-slate-400 cursor-not-allowed focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none">
+                                <option value="">Todas as tipologias de emergência...</option>
+                                <option value="Vazamento de combustíveis/inflamáveis">1. Vazamento de combustíveis/inflamáveis</option>
+                                <option value="Derramamento de produtos químicos em rodovia/ferrovia">2. Derramamento de produtos químicos em rodovia/ferrovia</option>
+                                <option value="Emissão atmosférica de gases tóxicos">3. Emissão atmosférica de gases tóxicos</option>
+                                <option value="Explosão com substâncias perigosas">4. Explosão com substâncias perigosas</option>
+                                <option value="Incêndio em instalação química/industrial">5. Incêndio em instalação química/industrial</option>
+                                <option value="Contaminação de curso d'água por efluente industrial">6. Contaminação de curso d'água por efluente industrial</option>
+                                <option value="Despejo clandestino de resíduos perigosos">7. Despejo clandestino de resíduos perigosos</option>
+                                <option value="Vazamento em duto / oleoduto / gasoduto">8. Vazamento em duto / oleoduto / gasoduto</option>
+                                <option value="Acidente com carga perigosa em transporte marítimo/portuário">9. Acidente com carga perigosa em transporte marítimo/portuário</option>
+                                <option value="Outros acidentes químicos com impacto ambiental">10. Outros acidentes químicos com impacto ambiental</option>
+                            </select>
+                        </div>
+
+                        <!-- Botões de Ação de Filtros -->
+                        <div class="lg:col-span-4 flex items-center justify-end gap-2.5">
+                            <button type="button" onclick="limparFiltros()" class="w-1/2 sm:w-auto px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-2xs">
+                                <span class="material-symbols-outlined text-sm">restart_alt</span>
+                                Limpar filtros
+                            </button>
+                            <button type="submit" class="w-1/2 sm:w-auto px-5 py-2 bg-[#0F4C3A] hover:bg-[#155d47] text-white text-xs font-bold rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-xs">
+                                <span class="material-symbols-outlined text-sm">search</span>
+                                Consultar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Mensagem de Alerta Inline de Validação de Datas -->
                     <div id="alertaPeriodo" class="hidden p-3 bg-red-50 border-l-4 border-red-500 rounded-r-lg text-xs text-red-700 font-medium flex items-center gap-2">
                         <span class="material-symbols-outlined text-base text-red-600">error</span>
                         <span id="alertaPeriodoTexto">A data inicial não pode ser posterior à data final.</span>
-                    </div>
-
-                    <!-- Botões de Ação de Filtros (BOT001 e BOT002) -->
-                    <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
-                        <button type="button" onclick="limparFiltros()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition-colors flex items-center gap-1.5 shadow-2xs">
-                            <span class="material-symbols-outlined text-sm">restart_alt</span>
-                            Limpar filtros (BOT002)
-                        </button>
-                        <button type="submit" class="px-5 py-2 bg-[#0F4C3A] hover:bg-[#155d47] text-white text-xs font-bold rounded-lg transition-colors flex items-center gap-1.5 shadow-xs">
-                            <span class="material-symbols-outlined text-sm">search</span>
-                            Consultar (BOT001)
-                        </button>
                     </div>
                 </form>
             </div>
@@ -500,13 +438,13 @@
             <!-- TOTALIZADOR E LISTAGEM DE RESULTADOS       -->
             <!-- ========================================== -->
             <div class="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-                <!-- Barra de Totalização e Ordenação (RN010) -->
+                <!-- Barra de Totalização e Ordenação -->
                 <div class="px-5 py-3.5 bg-slate-50/80 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div class="flex items-center gap-3">
                         <span class="material-symbols-outlined text-[#0F4C3A] text-xl">table_chart</span>
                         <div>
-                            <span class="text-xs font-bold text-slate-700" id="totalRegistrosTexto">Total: 0 registros encontrados (RN010)</span>
-                            <span class="text-[11px] text-slate-500 block">Ordenação padrão: RE em Emergência Registrada prioritários no topo (RN007)</span>
+                            <span class="text-xs font-bold text-slate-700" id="totalRegistrosTexto">Total: 9 registros encontrados</span>
+                            <span class="text-[11px] text-slate-500 block">Ordenação padrão: RE em Emergência Registrada prioritários no topo</span>
                         </div>
                     </div>
 
@@ -522,33 +460,33 @@
                     </div>
                 </div>
 
-                <!-- Tabela de Registros (RN009 / LEG007) -->
+                <!-- Tabela Operacional DIFIS -->
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs">
                         <thead class="bg-slate-100/75 border-b border-slate-200 text-slate-600 font-semibold uppercase text-[10px] tracking-wider">
                             <tr>
-                                <th class="py-3 px-4">Número do Registro</th>
-                                <th class="py-3 px-4">Data e Hora</th>
-                                <th class="py-3 px-4">Tipo do Registro</th>
-                                <th class="py-3 px-4">Tipo da Entrada</th>
+                                <th class="py-3 px-4">Nº Registro</th>
+                                <th class="py-3 px-4">Data / Hora</th>
+                                <th class="py-3 px-4">Tipo</th>
+                                <th class="py-3 px-4">Canal</th>
                                 <th class="py-3 px-4">Município</th>
-                                <th class="py-3 px-4">Técnico / Unidade</th>
-                                <th class="py-3 px-4">Status / Situação</th>
+                                <th class="py-3 px-4">Técnico Associado</th>
+                                <th class="py-3 px-4">Situação</th>
                                 <th class="py-3 px-4 text-center">Ações</th>
                             </tr>
                         </thead>
                         <tbody id="tabelaRegistrosCorpo" class="divide-y divide-slate-200">
-                            <!-- Inserido dinamicamente via JavaScript -->
+                            <!-- Preenchido via JavaScript -->
                         </tbody>
                     </table>
                 </div>
 
-                <!-- Mensagem de Sem Resultados (MSG004 / RN019) -->
+                <!-- Mensagem de Sem Resultados -->
                 <div id="msgSemResultados" class="hidden py-12 px-4 text-center">
                     <div class="w-14 h-14 mx-auto mb-3 rounded-full bg-amber-50 border border-amber-200 flex items-center justify-center">
                         <span class="material-symbols-outlined text-amber-600 text-2xl">search_off</span>
                     </div>
-                    <h3 class="text-sm font-bold text-slate-800 mb-1">Nenhum registro foi encontrado para os filtros informados. (MSG004)</h3>
+                    <h3 class="text-sm font-bold text-slate-800 mb-1">Nenhum registro foi encontrado para os filtros informados.</h3>
                     <p class="text-xs text-slate-500 max-w-md mx-auto">
                         Tente ajustar os critérios de busca ou acione o botão "Limpar filtros" para restaurar a consulta padrão.
                     </p>
@@ -558,10 +496,10 @@
                     </button>
                 </div>
 
-                <!-- Paginação (RN010 / BOT011) -->
+                <!-- Paginação -->
                 <div id="paginacaoContainer" class="px-5 py-3 border-t border-slate-200 bg-slate-50/50 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600">
                     <div id="paginacaoInfo">
-                        Exibindo <span class="font-bold" id="pagInicio">1</span>-<span class="font-bold" id="pagFim">10</span> de <span class="font-bold" id="pagTotal">0</span> registros
+                        Exibindo <span class="font-bold" id="pagInicio">1</span>-<span class="font-bold" id="pagFim">9</span> de <span class="font-bold" id="pagTotal">9</span> registros
                     </div>
                     <div class="flex items-center gap-1.5">
                         <button id="btnPagAnterior" onclick="mudarPagina(-1)" class="px-3 py-1.5 bg-white border border-slate-300 rounded-md font-semibold text-slate-700 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex items-center gap-1 shadow-2xs">
@@ -582,7 +520,6 @@
 
     <!-- ========================================== -->
     <!-- 4. DRAWER LATERAL DE VISUALIZAÇÃO INTERNA  -->
-    <!-- (RN012 / RN024 / BOT003)                   -->
     <!-- ========================================== -->
     <div id="drawerOverlay" onclick="fecharDrawer()" class="fixed inset-0 bg-slate-900/50 z-50 hidden backdrop-blur-xs transition-opacity"></div>
     
@@ -593,10 +530,10 @@
                 <span class="material-symbols-outlined text-2xl text-amber-300" id="drawerIcone">warning</span>
                 <div>
                     <div class="flex items-center gap-2">
-                        <h2 class="text-base font-bold text-white tracking-tight" id="drawerTituloRegistro">RE-2026-000004</h2>
+                        <h2 class="text-base font-bold text-white tracking-tight" id="drawerTituloRegistro">2026.000004/INEMA/RE</h2>
                         <span id="drawerBadgeTipo" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/20 text-white">RE</span>
                     </div>
-                    <p class="text-xs text-white/75" id="drawerSubtitulo">Detalhes completos do registro para equipe interna</p>
+                    <p class="text-xs text-white/75" id="drawerSubtitulo">Detalhes operacionais completos e tramitação interna</p>
                 </div>
             </div>
             <button onclick="fecharDrawer()" class="p-1.5 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors">
@@ -624,7 +561,7 @@
             </button>
             <button onclick="switchDrawerTab('tabHistorico')" id="btnTabHistorico" class="py-2.5 px-3 text-xs font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap flex items-center gap-1.5">
                 <span class="material-symbols-outlined text-sm">history</span>
-                Histórico & Auditoria
+                Histórico & Tramitação
             </button>
         </div>
 
@@ -640,7 +577,7 @@
                     </div>
                     <div>
                         <span class="text-[10px] text-slate-400 uppercase font-bold block">Data / Hora de Entrada</span>
-                        <span id="dwDataHora" class="font-bold text-xs text-slate-800">09/09/2026 14:32</span>
+                        <span id="dwDataHora" class="font-bold text-xs text-slate-800">10/09/2026 09:15</span>
                     </div>
                     <div>
                         <span class="text-[10px] text-slate-400 uppercase font-bold block">Canal de Entrada</span>
@@ -653,120 +590,115 @@
                 </div>
 
                 <div>
-                    <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Tipo da Emergência / Classificação</span>
-                    <p id="dwTipoEmergencia" class="p-2.5 bg-amber-50/70 border border-amber-200 rounded-lg text-amber-900 font-semibold">
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Subtipo / Tipologia da Ocorrência</label>
+                    <p id="dwTipoEmergencia" class="text-xs bg-slate-50 p-2.5 rounded-lg border border-slate-200 font-medium text-slate-800">
                         Vazamento de combustíveis/inflamáveis
                     </p>
                 </div>
 
                 <div>
-                    <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Localização & Ponto de Referência</span>
-                    <p id="dwLocalizacao" class="p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-700 font-normal">
-                        BA-535 (Via Parafuso), Km 14, próximo ao entroncamento do Polo Industrial de Camaçari.
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Localização e Ponto de Referência</label>
+                    <p id="dwLocalizacao" class="text-xs bg-slate-50 p-2.5 rounded-lg border border-slate-200 text-slate-700">
+                        BA-535, Km 14 - Camaçari/BA
                     </p>
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Latitude</span>
-                        <input type="text" id="dwLatitude" readonly value="-12.697500" class="w-full font-mono text-xs py-1.5 px-2.5 bg-slate-100 border border-slate-200 rounded text-slate-600">
+                        <label class="block text-[11px] font-bold text-slate-600 mb-0.5">Latitude</label>
+                        <input type="text" id="dwLatitude" readonly class="w-full text-xs font-mono py-1.5 px-2 bg-slate-100 border border-slate-200 rounded text-slate-700">
                     </div>
                     <div>
-                        <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Longitude</span>
-                        <input type="text" id="dwLongitude" readonly value="-38.324100" class="w-full font-mono text-xs py-1.5 px-2.5 bg-slate-100 border border-slate-200 rounded text-slate-600">
+                        <label class="block text-[11px] font-bold text-slate-600 mb-0.5">Longitude</label>
+                        <input type="text" id="dwLongitude" readonly class="w-full text-xs font-mono py-1.5 px-2 bg-slate-100 border border-slate-200 rounded text-slate-700">
                     </div>
                 </div>
 
                 <div>
-                    <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Áreas Atingidas / Impactadas</span>
-                    <div id="dwAreasAtingidas" class="flex flex-wrap gap-1.5">
-                        <span class="px-2 py-0.5 bg-slate-100 border border-slate-300 rounded text-[11px] font-medium text-slate-700">Recursos Hídricos</span>
-                        <span class="px-2 py-0.5 bg-slate-100 border border-slate-300 rounded text-[11px] font-medium text-slate-700">Solo / Subsolo</span>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Descrição dos Fatos</label>
+                    <div id="dwDescricaoFatos" class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-xs text-slate-700 leading-relaxed max-h-36 overflow-y-auto">
+                        Tombamento de carreta tanque com 35 mil litros de diesel. Risco iminente de contaminação de corpo hídrico.
                     </div>
                 </div>
 
                 <div>
-                    <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Descrição Detalhada dos Fatos</span>
-                    <p id="dwDescricaoFatos" class="p-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-700 leading-relaxed">
-                        Tombamento de carreta tanque transportando diesel marítimo. Houve ruptura de escotilha superior com escorrimento em direção a vala de drenagem pluvial.
-                    </p>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Áreas Críticas Atingidas</label>
+                    <div id="dwAreasAtingidas" class="flex flex-wrap gap-1.5 pt-0.5">
+                        <!-- badges de áreas -->
+                    </div>
                 </div>
             </div>
 
-            <!-- Aba 2: Comunicante & Empresa -->
+            <!-- Aba 2: Comunicante / Empresa -->
             <div id="tabComunicante" class="space-y-4 hidden">
-                <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200 space-y-2.5">
-                    <h3 class="text-xs font-bold text-slate-800 border-b border-slate-200 pb-1.5">Identificação do Comunicante</h3>
-                    <div class="grid grid-cols-2 gap-2">
+                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 space-y-3">
+                    <h4 class="font-bold text-xs text-[#0F4C3A] uppercase tracking-wide flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-sm">person</span>
+                        Dados do Comunicante
+                    </h4>
+                    <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <span class="text-[10px] text-slate-400 block font-bold">Nome / Razão Social</span>
-                            <span id="dwComNome" class="font-semibold text-slate-800">Carlos Alberto Santana</span>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold block">Nome / Razão Social</span>
+                            <span id="dwComNome" class="font-bold text-xs text-slate-800">Carlos Alberto Santana</span>
                         </div>
                         <div>
-                            <span class="text-[10px] text-slate-400 block font-bold">CPF / CNPJ</span>
-                            <span id="dwComDoc" class="font-mono text-slate-700">842.195.304-12</span>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold block">CPF / Documento</span>
+                            <span id="dwComDoc" class="font-mono text-xs text-slate-700">842.195.304-12</span>
                         </div>
-                        <div>
-                            <span class="text-[10px] text-slate-400 block font-bold">Telefone de Contato</span>
-                            <span id="dwComTel" class="text-slate-700">(71) 98842-1209</span>
-                        </div>
-                        <div>
-                            <span class="text-[10px] text-slate-400 block font-bold">E-mail</span>
-                            <span id="dwComEmail" class="text-slate-700">carlos.santana@empresa.com.br</span>
-                        </div>
-                    </div>
-                    <div>
-                        <span class="text-[10px] text-slate-400 block font-bold">Vínculo Declarado com a Ocorrência</span>
-                        <span id="dwComVinculo" class="inline-block mt-0.5 px-2 py-0.5 rounded font-bold text-[10px] bg-emerald-100 text-emerald-800">
-                            SIM - Representante da Empresa Responsável
-                        </span>
                     </div>
                 </div>
 
-                <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200 space-y-2.5">
-                    <h3 class="text-xs font-bold text-slate-800 border-b border-slate-200 pb-1.5">Empresa Responsável / Poluidora</h3>
-                    <div class="grid grid-cols-2 gap-2">
+                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 space-y-3">
+                    <h4 class="font-bold text-xs text-[#0F4C3A] uppercase tracking-wide flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-sm">business</span>
+                        Empresa / Empreendimento Envolvido
+                    </h4>
+                    <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <span class="text-[10px] text-slate-400 block font-bold">Razão Social / Nome Fantasia</span>
-                            <span id="dwEmpNome" class="font-semibold text-slate-800">TransQuímica Bahia Logística Ltda</span>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold block">Razão Social</span>
+                            <span id="dwEmpNome" class="font-bold text-xs text-slate-800">TransQuímica Bahia Logística Ltda</span>
                         </div>
                         <div>
-                            <span class="text-[10px] text-slate-400 block font-bold">CNPJ</span>
-                            <span id="dwEmpCnpj" class="font-mono text-slate-700">03.489.123/0001-90</span>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold block">CNPJ</span>
+                            <span id="dwEmpCnpj" class="font-mono text-xs text-slate-700">03.489.123/0001-90</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Aba 3: Equipe & Pauta do Gestor -->
+            <!-- Aba 3: Equipe & Pauta -->
             <div id="tabEquipe" class="space-y-4 hidden">
-                <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200 space-y-2.5">
-                    <h3 class="text-xs font-bold text-slate-800 border-b border-slate-200 pb-1.5">Distribuição & Plantão</h3>
-                    <div class="grid grid-cols-2 gap-2">
+                <div class="p-4 bg-emerald-50/50 border border-emerald-200 rounded-lg space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h4 class="font-bold text-xs text-[#0F4C3A] uppercase tracking-wide flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-sm">badge</span>
+                            Técnico Responsável Designado
+                        </h4>
+                        <button onclick="abrirModalDesignarTecnico()" class="text-xs font-bold text-[#0F4C3A] hover:underline flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm">person_add</span>
+                            Alterar Técnico
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 pt-1">
                         <div>
-                            <span class="text-[10px] text-slate-400 block font-bold">Técnico Plantonista Associado</span>
-                            <span id="dwTecnico" class="font-bold text-emerald-800 flex items-center gap-1">
-                                <span class="material-symbols-outlined text-sm">person_check</span>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold block">Técnico Plantonista</span>
+                            <span id="dwTecnico" class="font-bold text-xs text-slate-900 flex items-center gap-1 mt-0.5">
                                 Ana Beatriz Rocha
                             </span>
                         </div>
                         <div>
-                            <span class="text-[10px] text-slate-400 block font-bold">Unidade de Encaminhamento</span>
-                            <span id="dwUnidade" class="font-bold text-slate-800">DIFIS / COTIC</span>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold block">Unidade de Encaminhamento</span>
+                            <span id="dwUnidade" class="font-bold text-xs text-slate-900 block mt-0.5">
+                                DIFIS - Diretoria de Fiscalização
+                            </span>
                         </div>
-                    </div>
-                    <div>
-                        <span class="text-[10px] text-slate-400 block font-bold">Eixo Temático (Pauta do Gestor)</span>
-                        <span id="dwEixo" class="inline-block mt-0.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-blue-50 text-blue-800 border border-blue-200">
-                            Transporte de Produtos Perigosos
-                        </span>
                     </div>
                 </div>
 
-                <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200 space-y-2">
-                    <h3 class="text-xs font-bold text-slate-800 border-b border-slate-200 pb-1.5">Despacho Interno / Orientações da DIFIS</h3>
-                    <p id="dwDespacho" class="p-2 bg-white rounded border border-slate-200 text-slate-600 leading-relaxed">
-                        Equipe de plantão acionada no local. Notificar a transportadora para instalação imediata de barreiras de contenção e apresentação do Relatório Preliminar em até 48 horas.
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Eixo Temático de Fiscalização</label>
+                    <p id="dwEixo" class="text-xs bg-slate-50 p-2.5 rounded-lg border border-slate-200 font-medium text-slate-800">
+                        Indústria Química & Petroquímica
                     </p>
                 </div>
             </div>
@@ -774,34 +706,47 @@
             <!-- Aba 4: Relatórios Regulatórios -->
             <div id="tabRelatorios" class="space-y-4 hidden">
                 <div class="flex items-center justify-between">
-                    <span class="text-xs font-bold text-slate-800">Relatórios e Anexos Vinculados</span>
-                    <button onclick="abrirModalAnexoComRegistroAtual()" class="px-2.5 py-1 bg-[#0F4C3A] text-white rounded text-xs font-semibold hover:bg-[#155d47] transition-colors flex items-center gap-1 shadow-2xs">
-                        <span class="material-symbols-outlined text-xs">attach_file</span>
-                        Anexar Novo Relatório
+                    <div>
+                        <h4 class="font-bold text-xs text-slate-800">Documentos e Peças Técnicas Anexadas</h4>
+                        <p class="text-[11px] text-slate-500">Relatórios preliminares, conclusivos e laudos técnicos</p>
+                    </div>
+                    <button onclick="abrirModalAnexoComRegistroAtual()" class="px-3 py-1.5 bg-[#0F4C3A] hover:bg-[#155d47] text-white text-xs font-bold rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+                        <span class="material-symbols-outlined text-sm">upload_file</span>
+                        Anexar Relatório
                     </button>
                 </div>
 
-                <div id="dwListaRelatorios" class="space-y-2">
-                    <!-- Lista dinâmica de relatórios -->
+                <div id="dwListaRelatorios" class="space-y-2 pt-1">
+                    <!-- Lista de relatórios renderizada aqui -->
                 </div>
             </div>
 
-            <!-- Aba 5: Histórico & Auditoria (RN017 e RN024) -->
-            <div id="tabHistorico" class="space-y-3 hidden">
-                <span class="text-xs font-bold text-slate-800 block">Trilha de Eventos e Auditoria (Ordem Decrescente)</span>
-                <div id="dwListaHistorico" class="space-y-3 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
-                    <!-- Eventos de auditoria -->
+            <!-- Aba 5: Histórico & Tramitação -->
+            <div id="tabHistorico" class="space-y-4 hidden">
+                <div>
+                    <h4 class="font-bold text-xs text-slate-800">Linha do Tempo e Tramitação Operacional</h4>
+                    <p class="text-[11px] text-slate-500">Registro completo de eventos, despachos e auditoria técnica</p>
+                </div>
+
+                <div id="dwListaHistorico" class="relative pl-2 pt-2 border-l-2 border-slate-200 ml-3 space-y-4">
+                    <!-- Timeline renderizada aqui -->
                 </div>
             </div>
 
         </div>
 
-        <!-- Footer do Drawer: Botões de Ação -->
+        <!-- Rodapé do Drawer com Ações -->
         <div class="px-6 py-3.5 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
-            <button onclick="baixarPdfAtual()" class="px-3.5 py-2 bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-bold rounded-lg transition-colors flex items-center gap-1.5 shadow-2xs">
-                <span class="material-symbols-outlined text-base text-red-600">picture_as_pdf</span>
-                Baixar PDF Oficial (BOT004)
-            </button>
+            <div class="flex items-center gap-2">
+                <button onclick="baixarPdfAtual()" class="px-3.5 py-2 bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-bold rounded-lg transition-colors flex items-center gap-1.5 shadow-2xs">
+                    <span class="material-symbols-outlined text-base text-red-600">picture_as_pdf</span>
+                    Baixar Espelho PDF
+                </button>
+                <button onclick="abrirModalDesignarTecnico()" class="px-3.5 py-2 bg-white border border-slate-300 hover:bg-slate-100 text-[#0F4C3A] text-xs font-bold rounded-lg transition-colors flex items-center gap-1.5 shadow-2xs">
+                    <span class="material-symbols-outlined text-base text-[#0F4C3A]">person_add</span>
+                    Associar Técnico
+                </button>
+            </div>
             <button onclick="fecharDrawer()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold rounded-lg transition-colors">
                 Fechar
             </button>
@@ -809,15 +754,87 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- 5. MODAL DE ANEXAÇÃO DE RELATÓRIO          -->
-    <!-- (RN014 - RN016, MSG005 - MSG008)           -->
+    <!-- 5. MODAL DE DESIGNAÇÃO DE TÉCNICO DIFIS    -->
     <!-- ========================================== -->
-    <div id="modalAnexo" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+    <div id="modalDesignarTecnico" class="fixed inset-0 z-60 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+        <div class="bg-white rounded-xl max-w-md w-full shadow-2xl overflow-hidden border border-slate-200">
+            <div class="px-5 py-4 bg-[#0F4C3A] text-white flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-xl text-amber-300">person_add</span>
+                    <h3 class="font-bold text-sm">Associar Técnico Plantonista</h3>
+                </div>
+                <button onclick="fecharModalDesignarTecnico()" class="p-1 hover:bg-white/10 rounded-lg text-white transition-colors">
+                    <span class="material-symbols-outlined text-lg">close</span>
+                </button>
+            </div>
+
+            <form id="formDesignarTecnico" onsubmit="event.preventDefault(); salvarDesignacaoTecnico();" class="p-5 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Registro Operacional</label>
+                    <input type="text" id="modalTecnicoNumRegistro" readonly class="w-full text-xs font-mono font-bold py-1.5 px-3 bg-slate-100 border border-slate-200 rounded-lg text-slate-700">
+                </div>
+
+                <div>
+                    <label for="modalTecnicoSelect" class="block text-xs font-bold text-slate-700 mb-1">
+                        Selecione o Técnico Responsável <span class="text-red-500">*</span>
+                    </label>
+                    <select id="modalTecnicoSelect" required class="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] outline-none">
+                        <option value="">Selecione um analista da DIFIS...</option>
+                        <option value="Ana Beatriz Rocha">Ana Beatriz Rocha (DIFIS)</option>
+                        <option value="Bruno Carvalho">Bruno Carvalho (DIFIS)</option>
+                        <option value="Carla Mendes">Carla Mendes (DIFIS)</option>
+                        <option value="Carlos Souza">Carlos Souza (DIFIS)</option>
+                        <option value="Diego Nunes">Diego Nunes (UR Feira de Santana)</option>
+                        <option value="Elias Ferreira">Elias Ferreira (DIRRE)</option>
+                        <option value="Fernanda Lopes">Fernanda Lopes (DIRRE)</option>
+                        <option value="Juan Joaquin Madeira Sobrinho">Juan Joaquin Madeira Sobrinho (DIFIS)</option>
+                        <option value="Maria Santos">Maria Santos (DIFIS)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="modalTecnicoUnidade" class="block text-xs font-bold text-slate-700 mb-1">
+                        Unidade de Encaminhamento
+                    </label>
+                    <select id="modalTecnicoUnidade" class="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] outline-none">
+                        <option value="DIFIS">DIFIS - Diretoria de Fiscalização</option>
+                        <option value="DIRRE">DIRRE - Diretoria Regional Recôncavo</option>
+                        <option value="DIREX">DIREX - Diretoria Regional Extremo Sul</option>
+                        <option value="UR Feira de Santana">UR Feira de Santana</option>
+                        <option value="UR Ilhéus">UR Ilhéus</option>
+                        <option value="UR Barreiras">UR Barreiras</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="modalTecnicoObs" class="block text-xs font-bold text-slate-700 mb-1">
+                        Despacho / Justificativa da Designação
+                    </label>
+                    <textarea id="modalTecnicoObs" rows="3" placeholder="Insira as orientações iniciais para o técnico responsável..." class="w-full text-xs p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] outline-none"></textarea>
+                </div>
+
+                <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-200">
+                    <button type="button" onclick="fecharModalDesignarTecnico()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-[#0F4C3A] hover:bg-[#155d47] text-white text-xs font-bold rounded-lg transition-colors flex items-center gap-1.5 shadow-xs">
+                        <span class="material-symbols-outlined text-sm">check</span>
+                        Confirmar Designação
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 6. MODAL DE ANEXAÇÃO DE RELATÓRIO          -->
+    <!-- ========================================== -->
+    <div id="modalAnexo" class="fixed inset-0 z-60 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
         <div class="bg-white rounded-xl max-w-lg w-full shadow-2xl overflow-hidden border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
             <div class="px-5 py-4 bg-[#0F4C3A] text-white flex items-center justify-between">
                 <div class="flex items-center gap-2">
                     <span class="material-symbols-outlined text-xl text-amber-300">upload_file</span>
-                    <h3 class="font-bold text-sm">Anexar Relatório Regulatório (RN014)</h3>
+                    <h3 class="font-bold text-sm">Anexar Relatório Regulatório</h3>
                 </div>
                 <button onclick="fecharModalAnexo()" class="p-1 hover:bg-white/10 rounded-lg text-white transition-colors">
                     <span class="material-symbols-outlined text-lg">close</span>
@@ -854,22 +871,22 @@
                         <p class="text-[10px] text-slate-400 mt-0.5">Tamanho máximo: 50MB</p>
                     </div>
                     <p class="text-[10px] text-slate-500 mt-1.5 leading-tight">
-                        <strong>Formatos aceitos (MSG012):</strong> JPEG, JPG, PNG, BMP, MP3, MP4, PDF, DOC, DOCX, TXT, XLS, XLSX, SHP, SHX, DBF, PRJ, KML, KMZ e ZIP.
+                        <strong>Formatos aceitos:</strong> JPEG, JPG, PNG, BMP, MP3, MP4, PDF, DOC, DOCX, TXT, XLS, XLSX, SHP, SHX, DBF, PRJ, KML, KMZ e ZIP.
                     </p>
                 </div>
 
-                <!-- Alerta de Validação de Arquivo (MSG005 ou MSG006) -->
+                <!-- Alerta de Validação de Arquivo -->
                 <div id="modalAlertaErro" class="hidden p-2.5 bg-red-50 border-l-4 border-red-500 text-xs text-red-700 font-semibold rounded-r">
                     <!-- Texto de erro dinâmico -->
                 </div>
 
                 <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-200">
                     <button type="button" onclick="fecharModalAnexo()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition-colors">
-                        Cancelar (BOT010)
+                        Cancelar
                     </button>
                     <button type="submit" class="px-4 py-2 bg-[#0F4C3A] hover:bg-[#155d47] text-white text-xs font-bold rounded-lg transition-colors flex items-center gap-1.5 shadow-xs">
                         <span class="material-symbols-outlined text-sm">send</span>
-                        Anexar Relatório (BOT009)
+                        Anexar Relatório
                     </button>
                 </div>
             </form>
@@ -877,16 +894,16 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- 6. MODAL DE CONFIRMAÇÃO (MSG007)           -->
+    <!-- 7. MODAL DE CONFIRMAÇÃO DE ANEXO           -->
     <!-- ========================================== -->
-    <div id="modalConfirmacao" class="fixed inset-0 z-60 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+    <div id="modalConfirmacao" class="fixed inset-0 z-70 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
         <div class="bg-white rounded-xl max-w-sm w-full shadow-2xl p-5 border border-slate-200 text-center animate-in fade-in zoom-in-95">
             <div class="w-12 h-12 rounded-full bg-amber-50 border border-amber-200 mx-auto flex items-center justify-center text-amber-600 mb-3">
                 <span class="material-symbols-outlined text-2xl">help_outline</span>
             </div>
             <h4 class="text-sm font-bold text-slate-900 mb-1">Confirmar Envio</h4>
             <p class="text-xs text-slate-600 mb-4" id="modalConfirmacaoTexto">
-                Deseja anexar este relatório ao registro? (MSG007)
+                Deseja anexar este relatório ao registro selecionado?
             </p>
             <div class="flex items-center justify-center gap-2">
                 <button onclick="fecharModalConfirmacao()" class="px-4 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition-colors">
@@ -900,20 +917,66 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- 7. TOAST NOTIFICAÇÕES (MSG008)             -->
+    <!-- 8. TOAST NOTIFICAÇÕES                      -->
     <!-- ========================================== -->
     <div id="toastContainer" class="fixed bottom-5 right-5 z-70 flex flex-col gap-2 pointer-events-none"></div>
 
     <!-- ========================================== -->
-    <!-- 8. SCRIPT DE COMPORTAMENTO DOR005          -->
+    <!-- 9. SCRIPT OPERACIONAL DA CONSULTA INTERNA  -->
     <!-- ========================================== -->
     <script>
-        // Chave de armazenamento compartilhado com DOR003 e DOR004
         const STORAGE_KEY_INTERNO = 'INEMA_SEIA_REGISTROS_INTERNOS';
         const STORAGE_KEY_EXTERNO = 'INEMA_SEIA_REGISTROS_EXTERNOS';
 
-        // Registros iniciais mockados realistas para o Módulo de Fiscalização Interno
-        const REGISTROS_INICIAIS = [
+        // Os 9 Registros Oficiais Consistentes da DIFIS
+        const REGISTROS_BASE = [
+            {
+                numero: '2026.000006/INEMA/RE',
+                dataHora: '10/09/2026 10:00',
+                tipoRegistro: 'Emergência Química (RE)',
+                tipoEntrada: 'Portal Externo / Cidadão',
+                municipio: 'Salvador',
+                tipoEmergencia: "Contaminação de curso d'água por efluente industrial",
+                status: 'Emergência Registrada',
+                tecnico: 'Não associado',
+                unidade: 'DIFIS',
+                eixo: 'Recursos Hídricos & Efluentes',
+                comunicante: 'Associação de Moradores do Rio Pituaçu',
+                empresa: 'Não informada',
+                descricao: 'Mancha oleosa densa com forte odor químico avistada no leito do rio próximo ao Parque de Pituaçu.',
+                localizacao: 'Avenida Paralela, próximo à entrada do Parque de Pituaçu - Salvador/BA',
+                latitude: '-12.946700',
+                longitude: '-38.423900',
+                areasAtingidas: ['Recursos Hídricos', 'Área de Preservação Permanente'],
+                relatorios: [],
+                historico: [
+                    { data: '10/09/2026 10:00', usuario: 'Portal Cidadão (Gov.br)', acao: 'Abertura de Emergência Química Externa' }
+                ]
+            },
+            {
+                numero: '2026.000005/INEMA/RE',
+                dataHora: '10/09/2026 10:00',
+                tipoRegistro: 'Emergência Química (RE)',
+                tipoEntrada: 'Portal Externo / Cidadão',
+                municipio: 'Camaçari',
+                tipoEmergencia: 'Emissão atmosférica de gases tóxicos',
+                status: 'Análise Técnica',
+                tecnico: 'Não associado',
+                unidade: 'DIFIS',
+                eixo: 'Indústria Química & Petroquímica',
+                comunicante: 'Giovani Silva (529.982.247-25)',
+                empresa: 'QuimBahia Indústria Química S/A (12.345.678/0001-90)',
+                descricao: 'Fumaça densa com cheiro forte de enxofre em Camaçari na área periférica do polo petroquímico.',
+                localizacao: 'Via Atlântica, Km 08 - Camaçari/BA',
+                latitude: '-12.700100',
+                longitude: '-38.320000',
+                areasAtingidas: ['Ar / Atmosfera', 'Área Industrial'],
+                relatorios: [],
+                historico: [
+                    { data: '10/09/2026 10:00', usuario: 'Giovani Silva (Gov.br)', acao: 'Registro de Emergência Externa' },
+                    { data: '10/09/2026 10:15', usuario: 'Lucas Manager (DIFIS)', acao: 'Encaminhado para triagem técnica preliminar' }
+                ]
+            },
             {
                 numero: '2026.000004/INEMA/RE',
                 dataHora: '10/09/2026 09:15',
@@ -934,13 +997,13 @@
                 areasAtingidas: ['Recursos Hídricos', 'Solo / Subsolo'],
                 relatorios: [],
                 historico: [
-                    { data: '10/09/2026 09:15', usuario: 'Lucas Manager (Call Center)', acao: 'Cadastro de Emergência Química via Call Center (DOR003)' },
-                    { data: '10/09/2026 09:18', usuario: 'Sistema Automático', acao: 'Técnico plantonista associado: Ana Beatriz Rocha (RN027)' }
+                    { data: '10/09/2026 09:15', usuario: 'Lucas Manager (Call Center)', acao: 'Cadastro de Emergência Química via Call Center' },
+                    { data: '10/09/2026 09:18', usuario: 'Sistema Automático', acao: 'Técnico plantonista associado: Ana Beatriz Rocha' }
                 ]
             },
             {
                 numero: '2026.000003/INEMA/RE',
-                dataHora: '09/09/2026 16:40',
+                dataHora: '09/09/2026 14:40',
                 tipoRegistro: 'Emergência Química (RE)',
                 tipoEntrada: 'Portal Externo / Cidadão',
                 municipio: 'Candeias',
@@ -958,12 +1021,12 @@
                 areasAtingidas: ['Ar / Atmosfera', 'Saúde Pública / População'],
                 relatorios: [],
                 historico: [
-                    { data: '09/09/2026 16:40', usuario: 'Cidadão Externo (Gov.br)', acao: 'Registro de Emergência Química Externa (DOR004)' }
+                    { data: '09/09/2026 14:40', usuario: 'Cidadão Externo (Gov.br)', acao: 'Registro de Emergência Química Externa' }
                 ]
             },
             {
                 numero: '2026.000012/INEMA/RD',
-                dataHora: '08/09/2026 11:20',
+                dataHora: '08/09/2026 11:30',
                 tipoRegistro: 'Denúncia Ambiental (RD)',
                 tipoEntrada: 'Formulário DIFIS',
                 municipio: 'Feira de Santana',
@@ -981,7 +1044,7 @@
                 areasAtingidas: ['Recursos Hídricos'],
                 relatorios: [],
                 historico: [
-                    { data: '08/09/2026 11:20', usuario: 'Atendente DIFIS', acao: 'Abertura de RD (DOR001)' }
+                    { data: '08/09/2026 11:30', usuario: 'Atendente DIFIS', acao: 'Abertura de Registro de Denúncia Ambiental' }
                 ]
             },
             {
@@ -1006,13 +1069,13 @@
                     { tipo: 'Relatório Preliminar (RPEQ)', arquivo: 'RPEQ_ResinasBahia_07092026.pdf', data: '08/09/2026 09:12', usuario: 'Bruno Carvalho' }
                 ],
                 historico: [
-                    { data: '07/09/2026 14:05', usuario: 'Call Center', acao: 'Cadastro Emergência Química (DOR003)' },
+                    { data: '07/09/2026 14:05', usuario: 'Call Center', acao: 'Cadastro Emergência Química' },
                     { data: '08/09/2026 09:12', usuario: 'Bruno Carvalho', acao: 'Anexação de Relatório Preliminar (RPEQ)' }
                 ]
             },
             {
                 numero: '2026.000007/INEMA/RD',
-                dataHora: '05/09/2026 08:30',
+                dataHora: '05/09/2026 08:50',
                 tipoRegistro: 'Denúncia Ambiental (RD)',
                 tipoEntrada: 'Ofício',
                 municipio: 'Vitória da Conquista',
@@ -1030,12 +1093,12 @@
                 areasAtingidas: ['Solo / Subsolo'],
                 relatorios: [],
                 historico: [
-                    { data: '05/09/2026 08:30', usuario: 'Protocolo Central', acao: 'Registro de RD originado por Ofício' }
+                    { data: '05/09/2026 08:50', usuario: 'Protocolo Central', acao: 'Registro de RD originado por Ofício' }
                 ]
             },
             {
                 numero: '2026.000002/INEMA/RE',
-                dataHora: '03/09/2026 19:10',
+                dataHora: '03/09/2026 16:10',
                 tipoRegistro: 'Emergência Química (RE)',
                 tipoEntrada: 'Portal Externo / Cidadão',
                 municipio: 'Madre de Deus',
@@ -1055,7 +1118,7 @@
                     { tipo: 'Relatório Preliminar (RPEQ)', arquivo: 'RPEQ_Temadre_04092026.pdf', data: '04/09/2026 10:00', usuario: 'Carlos Souza' }
                 ],
                 historico: [
-                    { data: '03/09/2026 19:10', usuario: 'Comunicante Externo', acao: 'Cadastro de Emergência Química (DOR004)' },
+                    { data: '03/09/2026 16:10', usuario: 'Comunicante Externo', acao: 'Cadastro de Emergência Química' },
                     { data: '04/09/2026 10:00', usuario: 'Carlos Souza', acao: 'Anexação de Relatório Preliminar (RPEQ)' },
                     { data: '04/09/2026 14:00', usuario: 'DIFIS Fiscalização', acao: 'Emissão de Notificação Formal' }
                 ]
@@ -1082,13 +1145,12 @@
                     { tipo: 'Relatório Conclusivo', arquivo: 'Relatorio_Conclusivo_BR116_Jequie.pdf', data: '03/09/2026 17:00', usuario: 'Elias Ferreira' }
                 ],
                 historico: [
-                    { data: '01/09/2026 07:45', usuario: 'Call Center', acao: 'Cadastro Emergência Química (DOR003)' },
+                    { data: '01/09/2026 07:45', usuario: 'Call Center', acao: 'Cadastro Emergência Química' },
                     { data: '03/09/2026 17:00', usuario: 'Elias Ferreira', acao: 'Anexação do Relatório Conclusivo e Encerramento' }
                 ]
             }
         ];
 
-        // Estado da aplicação em memória
         let registros = [];
         let registrosFiltrados = [];
         let paginaAtual = 1;
@@ -1098,25 +1160,28 @@
 
         // Inicialização
         document.addEventListener('DOMContentLoaded', () => {
+            const selTipo = document.getElementById('filtroTipoRegistro');
+            if (selTipo) {
+                selTipo.addEventListener('change', (e) => tratarMudancaTipoRegistro(e.target.value));
+            }
             carregarRegistros();
             executarConsulta();
             configurarSidebarMobile();
         });
 
-        // Carregar registros do localStorage + mock inicial
+        // Carregar e sanitizar registros
         function carregarRegistros() {
             try {
-                const salvoInterno = localStorage.getItem(STORAGE_KEY_INTERNO);
+                let base = [...REGISTROS_BASE];
                 const salvoExterno = localStorage.getItem(STORAGE_KEY_EXTERNO);
                 
-                let base = [...REGISTROS_INICIAIS];
-                
-                // Mesclar emergências externas se houver
+                // Mesclar novos cadastros externos válidos
                 if (salvoExterno) {
                     const ext = JSON.parse(salvoExterno);
                     if (Array.isArray(ext)) {
                         ext.forEach(e => {
-                            if (!base.some(b => b.numero === e.numero)) {
+                            // Sanitizar: só incluir números válidos contendo /INEMA/
+                            if (e.numero && e.numero.includes('/INEMA/') && !base.some(b => b.numero === e.numero)) {
                                 base.unshift({
                                     numero: e.numero,
                                     dataHora: e.dataHora || '10/09/2026 10:00',
@@ -1132,12 +1197,12 @@
                                     empresa: e.empresa || 'Empresa Informada',
                                     descricao: e.descricao || 'Ocorrência registrada pelo portal do cidadão',
                                     localizacao: e.localizacao || 'Bahia',
-                                    latitude: e.latitude || '-12.9714',
-                                    longitude: e.longitude || '-38.5014',
+                                    latitude: e.latitude || '-12.7000',
+                                    longitude: e.longitude || '-38.3000',
                                     areasAtingidas: e.areasAtingidas || ['Solo / Subsolo'],
                                     relatorios: e.relatorios || [],
                                     historico: e.historico || [
-                                        { data: e.dataHora || '10/09/2026 10:00', usuario: 'Comunicante Externo (Gov.br)', acao: 'Cadastro inicial (DOR004)' }
+                                        { data: e.dataHora || '10/09/2026 10:00', usuario: 'Comunicante Externo (Gov.br)', acao: 'Cadastro inicial do registro' }
                                     ]
                                 });
                             }
@@ -1149,12 +1214,12 @@
                 atualizarIndicadorEmergencias();
             } catch (err) {
                 console.error('Erro ao carregar registros:', err);
-                registros = [...REGISTROS_INICIAIS];
+                registros = [...REGISTROS_BASE];
                 atualizarIndicadorEmergencias();
             }
         }
 
-        // RN011 / LEG012: Atualizar indicador de emergências no topo
+        // Atualizar contador de emergências ativas
         function atualizarIndicadorEmergencias() {
             const qtd = registros.filter(r => 
                 r.tipoRegistro.includes('RE') && r.status === 'Emergência Registrada'
@@ -1162,11 +1227,9 @@
 
             const badgeTop = document.getElementById('contadorEmergencias');
             const badgeSide = document.getElementById('sidebarBadgeEmergencias');
-            const badgeSide2 = document.getElementById('sidebarBadgeEmergencias2');
 
             if (badgeTop) badgeTop.textContent = qtd;
             if (badgeSide) badgeSide.textContent = qtd;
-            if (badgeSide2) badgeSide2.textContent = qtd;
 
             const container = document.getElementById('indicadorEmergenciasContainer');
             if (container) {
@@ -1180,23 +1243,27 @@
             }
         }
 
-        // Filtrar emergências registradas pelo clique no badge superior
+        // Filtrar emergências ativas ao clicar no contador superior
         function filtrarEmergenciasRegistradas() {
             document.getElementById('formFiltros').reset();
             document.getElementById('filtroTipoRegistro').value = 'Emergência Química (RE)';
-            tratarMudancaTipoRegistro();
+            tratarMudancaTipoRegistro('Emergência Química (RE)');
             document.getElementById('filtroStatus').value = 'Emergência Registrada';
             executarConsulta();
+            mostrarToast('Filtrando emergências químicas ativas com prioridade', 'info');
         }
 
-        // RN004: Dependência do tipo de emergência
-        function tratarMudancaTipoRegistro() {
-            const tipoReg = document.getElementById('filtroTipoRegistro').value;
+        // Dependência visual entre Tipo de Registro e Subtipo da Emergência
+        function tratarMudancaTipoRegistro(val) {
+            const selectEl = document.getElementById('filtroTipoRegistro');
+            const tipoReg = val || (selectEl ? selectEl.value : '');
             const campoEmergencia = document.getElementById('filtroTipoEmergencia');
             const badgeDep = document.getElementById('badgeDependente');
+            if (!campoEmergencia) return;
 
             if (tipoReg === 'Emergência Química (RE)') {
                 campoEmergencia.disabled = false;
+                campoEmergencia.removeAttribute('disabled');
                 campoEmergencia.classList.remove('bg-slate-100', 'text-slate-400', 'cursor-not-allowed');
                 campoEmergencia.classList.add('bg-white', 'text-slate-700');
                 if (badgeDep) {
@@ -1205,6 +1272,7 @@
                 }
             } else {
                 campoEmergencia.disabled = true;
+                campoEmergencia.setAttribute('disabled', 'disabled');
                 campoEmergencia.value = '';
                 campoEmergencia.classList.remove('bg-white', 'text-slate-700');
                 campoEmergencia.classList.add('bg-slate-100', 'text-slate-400', 'cursor-not-allowed');
@@ -1215,57 +1283,55 @@
             }
         }
 
-        // Executar a pesquisa combinada (RN003 a RN009)
+        // Busca rápida no header
+        function executarBuscaRapida(termo) {
+            if (!termo) return;
+            document.getElementById('filtroNumero').value = termo;
+            executarConsulta();
+        }
+
+        // Executar a pesquisa combinada
         function executarConsulta() {
             const status = document.getElementById('filtroStatus').value.trim();
             const tipoRegistro = document.getElementById('filtroTipoRegistro').value.trim();
+            const canal = document.getElementById('filtroCanal').value.trim();
             const tipoEmergencia = document.getElementById('filtroTipoEmergencia').value.trim();
             const numero = document.getElementById('filtroNumero').value.trim().toLowerCase();
             const municipio = document.getElementById('filtroMunicipio').value.trim();
+            const tecnico = document.getElementById('filtroTecnico').value.trim();
             const dataInicio = document.getElementById('filtroDataInicio').value;
             const dataFim = document.getElementById('filtroDataFim').value;
-            const eixo = document.getElementById('filtroEixo').value.trim();
-            const tecnico = document.getElementById('filtroTecnico').value.trim();
-            const unidade = document.getElementById('filtroUnidade').value.trim();
-            const comunicante = document.getElementById('filtroComunicante').value.trim().toLowerCase();
-            const palavraChave = document.getElementById('filtroPalavraChave').value.trim().toLowerCase();
 
             const alerta = document.getElementById('alertaPeriodo');
             const alertaTexto = document.getElementById('alertaPeriodoTexto');
 
-            // Validação de Período (RN005 / MSG001 e MSG002)
+            // Validação de Período
             const hoje = new Date().toISOString().split('T')[0];
             if (dataInicio && dataFim && dataInicio > dataFim) {
                 alerta.classList.remove('hidden');
-                alertaTexto.textContent = 'A data inicial não pode ser posterior à data final. (MSG001)';
+                alertaTexto.textContent = 'A data inicial não pode ser posterior à data final.';
                 return;
             }
             if ((dataInicio && dataInicio > hoje) || (dataFim && dataFim > hoje)) {
                 alerta.classList.remove('hidden');
-                alertaTexto.textContent = 'O período do registro não pode conter data futura. (MSG002)';
+                alertaTexto.textContent = 'O período do registro não pode conter data futura.';
                 return;
             }
             alerta.classList.add('hidden');
 
-            const hasFiltros = status || tipoRegistro || tipoEmergencia || numero || municipio || dataInicio || dataFim || eixo || tecnico || unidade || comunicante || palavraChave;
+            const hasFiltros = status || tipoRegistro || canal || tipoEmergencia || numero || municipio || tecnico || dataInicio || dataFim;
 
-            // Filtragem combinada (RN006)
+            // Filtragem combinada
             let filtrados = registros.filter(reg => {
                 if (status && reg.status !== status) return false;
                 if (tipoRegistro && reg.tipoRegistro !== tipoRegistro) return false;
+                if (canal && reg.tipoEntrada !== canal) return false;
                 if (tipoEmergencia && reg.tipoEmergencia !== tipoEmergencia) return false;
                 if (numero && !reg.numero.toLowerCase().includes(numero)) return false;
                 if (municipio && reg.municipio !== municipio) return false;
-                if (eixo && reg.eixo !== eixo) return false;
-                if (tecnico && reg.tecnico !== tecnico) return false;
-                if (unidade && reg.unidade !== unidade) return false;
-                if (comunicante) {
-                    const com = (reg.comunicante + ' ' + reg.empresa).toLowerCase();
-                    if (!com.includes(comunicante)) return false;
-                }
-                if (palavraChave) {
-                    const textoCompleto = `${reg.numero} ${reg.municipio} ${reg.tipoEmergencia} ${reg.descricao} ${reg.localizacao}`.toLowerCase();
-                    if (!textoCompleto.includes(palavraChave)) return false;
+                if (tecnico) {
+                    if (tecnico === 'Não associado' && reg.tecnico && reg.tecnico !== 'Não associado') return false;
+                    if (tecnico !== 'Não associado' && reg.tecnico !== tecnico) return false;
                 }
                 if (dataInicio) {
                     const dataReg = converterParaIso(reg.dataHora);
@@ -1278,12 +1344,11 @@
                 return true;
             });
 
-            // Ordenação (RN007 e RN008)
+            // Ordenação
             const criterioOrdenacao = document.getElementById('selectOrdenacao').value;
 
             if (criterioOrdenacao === 'padrao' && !hasFiltros) {
-                // RN007: Consulta Padrão
-                // Primeiro os RE com status "Emergência Registrada", depois os demais ordenados por data decrescente
+                // Padrão SEIA: RE em Emergência Registrada prioritários no topo, depois cronológico decrescente
                 const prioritarios = filtrados.filter(r => r.tipoRegistro.includes('RE') && r.status === 'Emergência Registrada');
                 const demais = filtrados.filter(r => !(r.tipoRegistro.includes('RE') && r.status === 'Emergência Registrada'));
                 
@@ -1294,7 +1359,6 @@
             } else if (criterioOrdenacao === 'dataAsc') {
                 registrosFiltrados = filtrados.sort((a, b) => converterParaTimestamp(a.dataHora) - converterParaTimestamp(b.dataHora));
             } else if (criterioOrdenacao === 'tipo') {
-                // RN008: Por tipo e data decrescente
                 registrosFiltrados = filtrados.sort((a, b) => {
                     if (a.tipoRegistro === b.tipoRegistro) {
                         return converterParaTimestamp(b.dataHora) - converterParaTimestamp(a.dataHora);
@@ -1302,7 +1366,7 @@
                     return a.tipoRegistro.localeCompare(b.tipoRegistro);
                 });
             } else {
-                // Padrão filtrado: data mais recente primeiro
+                // Data mais recente
                 registrosFiltrados = filtrados.sort((a, b) => converterParaTimestamp(b.dataHora) - converterParaTimestamp(a.dataHora));
             }
 
@@ -1310,21 +1374,21 @@
             renderizarTabela();
         }
 
-        // RN018: Limpar filtros e restaurar consulta padrão
+        // Limpar filtros
         function limparFiltros() {
             document.getElementById('formFiltros').reset();
-            tratarMudancaTipoRegistro();
+            tratarMudancaTipoRegistro('');
             document.getElementById('alertaPeriodo').classList.add('hidden');
             document.getElementById('selectOrdenacao').value = 'padrao';
             executarConsulta();
-            mostrarToast('Filtros restaurados para a consulta padrão (RN018)', 'info');
+            mostrarToast('Filtros limpos. Exibindo todos os registros.', 'info');
         }
 
         function alterarOrdenacao() {
             executarConsulta();
         }
 
-        // Renderizar a tabela de resultados com paginação (RN009 e RN010)
+        // Renderizar Tabela
         function renderizarTabela() {
             const corpo = document.getElementById('tabelaRegistrosCorpo');
             const totalTexto = document.getElementById('totalRegistrosTexto');
@@ -1332,7 +1396,7 @@
             const pagContainer = document.getElementById('paginacaoContainer');
 
             const total = registrosFiltrados.length;
-            totalTexto.textContent = `Total: ${total} registro${total === 1 ? '' : 's'} encontrado${total === 1 ? '' : 's'} (RN010)`;
+            totalTexto.textContent = `Total: ${total} registro${total === 1 ? '' : 's'} encontrado${total === 1 ? '' : 's'}`;
 
             if (total === 0) {
                 corpo.innerHTML = '';
@@ -1364,15 +1428,21 @@
                     ? '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-900 border border-amber-300"><span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span>Emergência Química (RE)</span>'
                     : '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-100 text-blue-900 border border-blue-300"><span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>Denúncia Ambiental (RD)</span>';
 
-                // Badge de status
+                // Badge de status com cores limpas do DS
                 let badgeStatusClass = 'bg-slate-100 text-slate-800 border-slate-200';
                 let iconeStatus = 'schedule';
                 if (reg.status === 'Emergência Registrada') {
                     badgeStatusClass = 'bg-red-100 text-red-800 border-red-300 font-extrabold animate-pulse';
                     iconeStatus = 'crisis_alert';
+                } else if (reg.status === 'Análise Técnica') {
+                    badgeStatusClass = 'bg-orange-100 text-orange-800 border-orange-300 font-bold';
+                    iconeStatus = 'manage_search';
                 } else if (reg.status === 'Em Atendimento') {
                     badgeStatusClass = 'bg-amber-100 text-amber-800 border-amber-300 font-bold';
                     iconeStatus = 'sync';
+                } else if (reg.status === 'Em Análise') {
+                    badgeStatusClass = 'bg-sky-100 text-sky-800 border-sky-300 font-bold';
+                    iconeStatus = 'rule';
                 } else if (reg.status === 'Concluída') {
                     badgeStatusClass = 'bg-emerald-100 text-emerald-800 border-emerald-300 font-bold';
                     iconeStatus = 'check_circle';
@@ -1383,11 +1453,15 @@
 
                 const badgeStatus = `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] border ${badgeStatusClass}"><span class="material-symbols-outlined text-xs">${iconeStatus}</span>${reg.status}</span>`;
 
+                const tecnicoFormatado = reg.tecnico && reg.tecnico !== 'Não associado' 
+                    ? `<span class="font-semibold text-slate-800 block">${reg.tecnico}</span><span class="text-[10px] text-slate-400">${reg.unidade}</span>`
+                    : `<span class="font-medium text-amber-700 italic block">Não associado</span><span class="text-[10px] text-slate-400">${reg.unidade}</span>`;
+
                 return `
                     <tr class="transition-colors ${rowClass}">
                         <td class="py-3 px-4 font-mono font-bold text-slate-800 whitespace-nowrap">
                             <div class="flex items-center gap-1.5">
-                                ${isEmergenciaAtiva ? '<span class="material-symbols-outlined text-red-600 text-sm animate-bounce" title="Prioridade Alta">priority_high</span>' : ''}
+                                ${isEmergenciaAtiva ? '<span class="material-symbols-outlined text-red-600 text-sm animate-bounce" title="Emergência Ativa!">priority_high</span>' : ''}
                                 <a href="javascript:void(0)" onclick="abrirDrawerDetalhes('${reg.numero}')" class="text-[#0F4C3A] hover:underline hover:text-[#155d47]">
                                     ${reg.numero}
                                 </a>
@@ -1400,37 +1474,34 @@
                         <td class="py-3 px-4 whitespace-nowrap">
                             ${badgeTipo}
                         </td>
-                        <td class="py-3 px-4 text-slate-600 font-medium">
+                        <td class="py-3 px-4 text-slate-600 font-medium whitespace-nowrap">
                             ${reg.tipoEntrada}
                         </td>
-                        <td class="py-3 px-4 font-medium text-slate-700">
+                        <td class="py-3 px-4 font-medium text-slate-700 whitespace-nowrap">
                             ${reg.municipio}
                         </td>
-                        <td class="py-3 px-4 text-slate-600">
-                            <span class="font-semibold text-slate-800 block">${reg.tecnico || 'Não associado'}</span>
-                            <span class="text-[10px] text-slate-400">${reg.unidade}</span>
+                        <td class="py-3 px-4 whitespace-nowrap">
+                            ${tecnicoFormatado}
                         </td>
                         <td class="py-3 px-4 whitespace-nowrap">
                             ${badgeStatus}
                         </td>
                         <td class="py-3 px-4 text-center whitespace-nowrap">
                             <div class="inline-flex items-center gap-1">
-                                <!-- BOT003: Visualizar -->
-                                <button onclick="abrirDrawerDetalhes('${reg.numero}')" class="p-1.5 text-slate-600 hover:text-[#0F4C3A] hover:bg-slate-100 rounded transition-colors" title="Visualizar Detalhes (BOT003)">
+                                <!-- Visualizar Completo -->
+                                <button onclick="abrirDrawerDetalhes('${reg.numero}')" class="p-1.5 text-slate-600 hover:text-[#0F4C3A] hover:bg-slate-100 rounded transition-colors" title="Visualizar Completo">
                                     <span class="material-symbols-outlined text-base">visibility</span>
                                 </button>
-                                <!-- BOT004: Baixar PDF -->
-                                <button onclick="baixarPdfDireto('${reg.numero}')" class="p-1.5 text-slate-600 hover:text-red-600 hover:bg-slate-100 rounded transition-colors" title="Baixar PDF Oficial (BOT004)">
+                                <!-- Baixar Espelho PDF -->
+                                <button onclick="baixarPdfDireto('${reg.numero}')" class="p-1.5 text-slate-600 hover:text-red-600 hover:bg-slate-100 rounded transition-colors" title="Baixar Espelho PDF">
                                     <span class="material-symbols-outlined text-base">picture_as_pdf</span>
                                 </button>
-                                <!-- BOT005/BOT006/BOT007: Anexar Relatório (Apenas para RE) -->
-                                ${reg.tipoRegistro.includes('RE') ? `
-                                <button onclick="abrirModalAnexo('${reg.numero}')" class="p-1.5 text-slate-600 hover:text-emerald-700 hover:bg-slate-100 rounded transition-colors" title="Anexar Relatório (BOT005-007)">
-                                    <span class="material-symbols-outlined text-base">attach_file</span>
+                                <!-- Associar Técnico Plantonista -->
+                                <button onclick="abrirModalDesignarTecnicoDireto('${reg.numero}')" class="p-1.5 text-slate-600 hover:text-amber-700 hover:bg-slate-100 rounded transition-colors" title="Associar Técnico Plantonista">
+                                    <span class="material-symbols-outlined text-base">person_add</span>
                                 </button>
-                                ` : ''}
-                                <!-- BOT008: Histórico Rápido -->
-                                <button onclick="abrirHistoricoDireto('${reg.numero}')" class="p-1.5 text-slate-600 hover:text-blue-600 hover:bg-slate-100 rounded transition-colors" title="Histórico de Eventos (BOT008)">
+                                <!-- Histórico / Tramitação -->
+                                <button onclick="abrirHistoricoDireto('${reg.numero}')" class="p-1.5 text-slate-600 hover:text-blue-600 hover:bg-slate-100 rounded transition-colors" title="Histórico / Tramitação">
                                     <span class="material-symbols-outlined text-base">history</span>
                                 </button>
                             </div>
@@ -1446,7 +1517,7 @@
         }
 
         // ==========================================
-        // DRAWER LATERAL: Visualização Interna (RN012)
+        // DRAWER LATERAL: Detalhes Internos
         // ==========================================
         function abrirDrawerDetalhes(numeroRegistro) {
             const reg = registros.find(r => r.numero === numeroRegistro);
@@ -1457,7 +1528,7 @@
             document.getElementById('drawerBadgeTipo').textContent = reg.tipoRegistro.includes('RE') ? 'RE' : 'RD';
             document.getElementById('drawerIcone').textContent = reg.tipoRegistro.includes('RE') ? 'warning' : 'gavel';
             
-            // Preencher campos gerais
+            // Dados gerais
             document.getElementById('dwStatus').textContent = reg.status;
             document.getElementById('dwDataHora').textContent = reg.dataHora;
             document.getElementById('dwCanalEntrada').textContent = reg.tipoEntrada;
@@ -1475,12 +1546,12 @@
                     `<span class="px-2 py-0.5 bg-slate-100 border border-slate-300 rounded text-[11px] font-medium text-slate-700">${a}</span>`
                 ).join('');
             } else {
-                containerAreas.innerHTML = '<span class="text-slate-400 italic">Nenhuma área crítica registrada</span>';
+                containerAreas.innerHTML = '<span class="text-slate-400 italic">Nenhuma área crítica selecionada</span>';
             }
 
             // Comunicante e Empresa
-            document.getElementById('dwComNome').textContent = reg.comunicante.split('(')[0].trim();
-            document.getElementById('dwComDoc').textContent = reg.comunicante.includes('(') ? reg.comunicante.split('(')[1].replace(')', '') : '-';
+            document.getElementById('dwComNome').textContent = reg.comunicante ? reg.comunicante.split('(')[0].trim() : 'Não informado';
+            document.getElementById('dwComDoc').textContent = reg.comunicante && reg.comunicante.includes('(') ? reg.comunicante.split('(')[1].replace(')', '') : '-';
             document.getElementById('dwEmpNome').textContent = reg.empresa ? reg.empresa.split('(')[0].trim() : 'Não informada';
             document.getElementById('dwEmpCnpj').textContent = reg.empresa && reg.empresa.includes('(') ? reg.empresa.split('(')[1].replace(')', '') : '-';
 
@@ -1492,13 +1563,11 @@
             document.getElementById('dwUnidade').textContent = reg.unidade || 'DIFIS';
             document.getElementById('dwEixo').textContent = reg.eixo || 'Não classificado';
 
-            // Relatórios
+            // Relatórios e Histórico
             renderizarListaRelatoriosDrawer(reg);
-
-            // Histórico
             renderizarHistoricoDrawer(reg);
 
-            // Abrir Drawer
+            // Exibir drawer
             switchDrawerTab('tabGeral');
             document.getElementById('drawerOverlay').classList.remove('hidden');
             document.getElementById('drawerVisualizacao').classList.remove('translate-x-full');
@@ -1538,13 +1607,13 @@
                     <div class="p-6 text-center bg-slate-50 border border-slate-200 rounded-lg text-slate-400">
                         <span class="material-symbols-outlined text-3xl mb-1">folder_open</span>
                         <p class="text-xs font-medium">Nenhum relatório regulatório anexado até o momento.</p>
-                        <p class="text-[10px] text-slate-400 mt-1">Utilize o botão "Anexar Novo Relatório" para incluir arquivos técnicos.</p>
+                        <p class="text-[10px] text-slate-400 mt-1">Utilize o botão "Anexar Relatório" para incluir novos arquivos.</p>
                     </div>
                 `;
                 return;
             }
 
-            container.innerHTML = reg.relatorios.map((rel, idx) => `
+            container.innerHTML = reg.relatorios.map((rel) => `
                 <div class="p-3 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between gap-3">
                     <div class="flex items-center gap-3">
                         <div class="w-8 h-8 rounded bg-red-100 text-red-700 flex items-center justify-center font-bold text-xs">
@@ -1571,8 +1640,8 @@
             }
 
             container.innerHTML = reg.historico.map(evt => `
-                <div class="relative pl-7 pb-2">
-                    <div class="absolute left-1.5 top-1 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-[#0F4C3A] border-2 border-white shadow-xs"></div>
+                <div class="relative pl-6 pb-2">
+                    <div class="absolute -left-[5px] top-1.5 w-3 h-3 rounded-full bg-[#0F4C3A] border-2 border-white shadow-xs"></div>
                     <div class="p-3 bg-slate-50 border border-slate-200 rounded-lg">
                         <div class="flex items-center justify-between text-[11px] text-slate-400 mb-1">
                             <span class="font-bold text-slate-700">${evt.usuario}</span>
@@ -1585,7 +1654,63 @@
         }
 
         // ==========================================
-        // MODAL DE ANEXO DE RELATÓRIO (RN014 - RN016)
+        // MODAL: ASSOCIAR TÉCNICO PLANTONISTA
+        // ==========================================
+        function abrirModalDesignarTecnicoDireto(numeroRegistro) {
+            const reg = registros.find(r => r.numero === numeroRegistro);
+            if (!reg) return;
+            registroSelecionado = reg;
+            abrirModalDesignarTecnico();
+        }
+
+        function abrirModalDesignarTecnico() {
+            if (!registroSelecionado) return;
+            document.getElementById('modalTecnicoNumRegistro').value = `${registroSelecionado.numero} (${registroSelecionado.tipoRegistro})`;
+            document.getElementById('modalTecnicoSelect').value = registroSelecionado.tecnico && registroSelecionado.tecnico !== 'Não associado' ? registroSelecionado.tecnico : '';
+            document.getElementById('modalTecnicoUnidade').value = registroSelecionado.unidade || 'DIFIS';
+            document.getElementById('modalTecnicoObs').value = '';
+            document.getElementById('modalDesignarTecnico').classList.remove('hidden');
+        }
+
+        function fecharModalDesignarTecnico() {
+            document.getElementById('modalDesignarTecnico').classList.add('hidden');
+        }
+
+        function salvarDesignacaoTecnico() {
+            const novoTecnico = document.getElementById('modalTecnicoSelect').value;
+            const novaUnidade = document.getElementById('modalTecnicoUnidade').value;
+            const obs = document.getElementById('modalTecnicoObs').value.trim();
+
+            if (!novoTecnico) return;
+
+            registroSelecionado.tecnico = novoTecnico;
+            registroSelecionado.unidade = novaUnidade;
+
+            const agoraFormatado = formatarDataHoraAgora();
+            if (!registroSelecionado.historico) registroSelecionado.historico = [];
+            registroSelecionado.historico.unshift({
+                data: agoraFormatado,
+                usuario: 'Lucas Manager (DIFIS / Coordenação)',
+                acao: `Designação técnica para "${novoTecnico}" (${novaUnidade}). ${obs ? 'Obs: ' + obs : ''}`
+            });
+
+            fecharModalDesignarTecnico();
+            renderizarTabela();
+
+            if (!document.getElementById('drawerVisualizacao').classList.contains('translate-x-full')) {
+                document.getElementById('dwTecnico').innerHTML = `
+                    <span class="material-symbols-outlined text-sm">person_check</span>
+                    ${novoTecnico}
+                `;
+                document.getElementById('dwUnidade').textContent = novaUnidade;
+                renderizarHistoricoDrawer(registroSelecionado);
+            }
+
+            mostrarToast(`Técnico ${novoTecnico} associado ao registro com sucesso.`, 'success');
+        }
+
+        // ==========================================
+        // MODAL: ANEXAR RELATÓRIO REGULATÓRIO
         // ==========================================
         function abrirModalAnexo(numeroRegistro) {
             const reg = registros.find(r => r.numero === numeroRegistro);
@@ -1612,20 +1737,18 @@
             if (!input.files || input.files.length === 0) return;
             const file = input.files[0];
 
-            // RN015: Formatos aceitos
             const extensoesValidas = ['jpeg', 'jpg', 'png', 'bmp', 'mp3', 'mp4', 'pdf', 'doc', 'docx', 'txt', 'xls', 'xlsx', 'shp', 'shx', 'dbf', 'prj', 'kml', 'kmz', 'zip'];
             const ext = file.name.split('.').pop().toLowerCase();
 
             if (!extensoesValidas.includes(ext)) {
                 const alerta = document.getElementById('modalAlertaErro');
-                alerta.textContent = 'O arquivo selecionado possui formato não permitido. (MSG005)';
+                alerta.textContent = 'O arquivo selecionado possui formato não permitido.';
                 alerta.classList.remove('hidden');
                 input.value = '';
                 arquivoAnexoPendente = null;
                 return;
             }
 
-            // Limite de 50MB
             if (file.size > 50 * 1024 * 1024) {
                 const alerta = document.getElementById('modalAlertaErro');
                 alerta.textContent = 'O arquivo excede o limite máximo permitido de 50MB.';
@@ -1640,17 +1763,16 @@
             arquivoAnexoPendente = file;
         }
 
-        // RN016: Confirmação prévia de envio (MSG007)
         function confirmarEnvioRelatorio() {
             const tipo = document.getElementById('modalTipoRelatorio').value;
             if (!tipo || !arquivoAnexoPendente) {
                 const alerta = document.getElementById('modalAlertaErro');
-                alerta.textContent = 'Selecione um arquivo para continuar. (MSG006)';
+                alerta.textContent = 'Selecione um arquivo para continuar.';
                 alerta.classList.remove('hidden');
                 return;
             }
 
-            document.getElementById('modalConfirmacaoTexto').textContent = `Deseja anexar este relatório ao registro ${registroSelecionado.numero}? (MSG007)`;
+            document.getElementById('modalConfirmacaoTexto').textContent = `Deseja anexar este relatório ao registro ${registroSelecionado.numero}?`;
             document.getElementById('modalConfirmacao').classList.remove('hidden');
         }
 
@@ -1658,16 +1780,14 @@
             document.getElementById('modalConfirmacao').classList.add('hidden');
         }
 
-        // RN016 e RN017: Conclusão do anexo com sucesso (MSG008)
         function executarEnvioRelatorioConfirmado() {
             fecharModalConfirmacao();
             fecharModalAnexo();
 
             const tipo = document.getElementById('modalTipoRelatorio').value;
-            const nomeArquivo = arquivoAnexoPendente ? arquivoAnexoPendente.name : 'relatorio_anexado.pdf';
+            const nomeArquivo = arquivoAnexoPendente ? arquivoAnexoPendente.name : 'relatorio_tecnico.pdf';
             const agoraFormatado = formatarDataHoraAgora();
 
-            // Adicionar ao registro
             if (!registroSelecionado.relatorios) registroSelecionado.relatorios = [];
             registroSelecionado.relatorios.push({
                 tipo: tipo,
@@ -1676,24 +1796,15 @@
                 usuario: 'Lucas Manager (DIFIS)'
             });
 
-            // Atualizar histórico auditável (RN017 e RN024)
             if (!registroSelecionado.historico) registroSelecionado.historico = [];
             registroSelecionado.historico.unshift({
                 data: agoraFormatado,
                 usuario: 'Lucas Manager (DIFIS)',
-                acao: `Anexação do documento "${tipo}" (${nomeArquivo})`
+                acao: `Anexação de relatório técnico: "${tipo}" (${nomeArquivo})`
             });
 
-            // Salvar no localStorage
-            try {
-                localStorage.setItem(STORAGE_KEY_INTERNO, JSON.stringify(registros));
-            } catch (e) {
-                console.warn('Falha ao salvar localStorage:', e);
-            }
-
-            mostrarToast('Relatório anexado com sucesso. (MSG008)', 'success');
+            mostrarToast('Relatório regulatório anexado com sucesso.', 'success');
             
-            // Re-renderizar
             renderizarTabela();
             if (!document.getElementById('drawerVisualizacao').classList.contains('translate-x-full')) {
                 renderizarListaRelatoriosDrawer(registroSelecionado);
@@ -1702,18 +1813,17 @@
         }
 
         // ==========================================
-        // HISTÓRICO RÁPIDO E PDF
+        // PDF & HISTÓRICO RÁPIDO
         // ==========================================
         function abrirHistoricoDireto(numeroRegistro) {
             abrirDrawerDetalhes(numeroRegistro);
             switchDrawerTab('tabHistorico');
         }
 
-        // BOT004 / RN013: Baixar PDF
         function baixarPdfDireto(numeroRegistro) {
             const reg = registros.find(r => r.numero === numeroRegistro);
             if (!reg) return;
-            mostrarToast(`Gerando formulário oficial em PDF para ${reg.numero}...`, 'info');
+            mostrarToast(`Gerando espelho PDF para o registro ${reg.numero}...`, 'info');
             setTimeout(() => {
                 window.print();
             }, 500);

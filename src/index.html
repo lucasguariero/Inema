@@ -192,9 +192,9 @@
                             <span class="material-symbols-outlined text-lg ml-auto sidebar-text">expand_more</span>
                         </button>
                         <ul class="ml-9 mt-1 space-y-1 sidebar-text hidden">
-                            <li><a href="fiscalizacao.html" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Atendente (DOR001)</a></li>
-                            <li><a href="fiscalizacao.html?fluxo=externo" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Cidadão (DOR002)</a></li>
-                            <li><a href="consulta-interna.html" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Consulta Interna (DOR005)</a></li>
+                            <li><a href="fiscalizacao.html" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Atendente</a></li>
+                            <li><a href="fiscalizacao.html?fluxo=externo" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Denúncia - Cidadão</a></li>
+                            <li><a href="consulta-interna.html" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Consulta Interna DIFIS</a></li>
                         </ul>
                     </li>
                     <li>
@@ -204,10 +204,10 @@
                             <span class="material-symbols-outlined text-lg ml-auto sidebar-text transition-transform duration-200">expand_more</span>
                         </button>
                         <ul class="ml-9 mt-1 space-y-1 sidebar-text hidden">
-                            <li><a href="emergencia-quimica.html?fluxo=interna" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Visão Interna (DOR003)</a></li>
-                            <li><a href="emergencia-quimica-externa.html" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Visão Externa (DOR004)</a></li>
-                            <li><a href="consulta-interna.html" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Consulta Interna (DOR005)</a></li>
-                            <li><a href="consulta-externa.html" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Consulta Externa (DOR005.1)</a></li>
+                            <li><a href="emergencia-quimica.html?fluxo=interna" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Emergência Interna</a></li>
+                            <li><a href="emergencia-quimica-externa.html" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Emergência Externa</a></li>
+                            <li><a href="consulta-interna.html" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Consulta Interna DIFIS</a></li>
+                            <li><a href="consulta-externa.html" onclick="closeSidebar()" class="flex items-center gap-2 px-2 py-1 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-low">Consulta Externa</a></li>
                         </ul>
                     </li>
 
@@ -284,7 +284,7 @@
                             </div>
                             <div class="flex-1">
                                 <h4 class="font-semibold text-on-surface group-hover:text-amber-800 transition-colors">Emergência Química</h4>
-                                <p class="text-sm text-text-muted mt-1">Acidentes químicos, vazamentos e plantão (DOR003 / DOR004)</p>
+                                <p class="text-sm text-text-muted mt-1">Acidentes químicos, vazamentos e plantão</p>
                             </div>
                         </div>
                         <div class="mt-4 flex items-center text-amber-800 font-medium text-sm">
@@ -295,14 +295,14 @@
 
 
 
-                    <!-- Card: Consulta de Registros Internos (DOR005) -->
+                    <!-- Card: Consulta de Registros Internos -->
                     <a href="consulta-interna.html" class="bg-surface-container-lowest rounded-xl p-6 border border-border-subtle hover:shadow-lg hover:shadow-black/5 transition-all group cursor-pointer">
                         <div class="flex items-start gap-4">
                             <div class="w-12 h-12 bg-inema-green/10 rounded-lg flex items-center justify-center">
                                 <span class="material-symbols-outlined text-inema-green text-2xl">manage_search</span>
                             </div>
                             <div class="flex-1">
-                                <h4 class="font-semibold text-on-surface group-hover:text-inema-green transition-colors">Consulta Interna (DOR005)</h4>
+                                <h4 class="font-semibold text-on-surface group-hover:text-inema-green transition-colors">Consulta Interna DIFIS</h4>
                                 <p class="text-sm text-text-muted mt-1">Acompanhamento unificado de RD e RE para equipe interna</p>
                             </div>
                         </div>
@@ -312,14 +312,14 @@
                         </div>
                     </a>
 
-                    <!-- Card: Consulta de Registros Externos (DOR005.1) -->
+                    <!-- Card: Consulta de Registros Externos -->
                     <a href="consulta-externa.html" class="bg-surface-container-lowest rounded-xl p-6 border border-border-subtle hover:shadow-lg hover:shadow-black/5 transition-all group cursor-pointer">
                         <div class="flex items-start gap-4">
                             <div class="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center">
                                 <span class="material-symbols-outlined text-blue-700 text-2xl">search</span>
                             </div>
                             <div class="flex-1">
-                                <h4 class="font-semibold text-on-surface group-hover:text-blue-700 transition-colors">Consulta Cidadão (DOR005.1)</h4>
+                                <h4 class="font-semibold text-on-surface group-hover:text-blue-700 transition-colors">Consulta Cidadão</h4>
                                 <p class="text-sm text-text-muted mt-1">Acompanhamento e relatórios regulatórios do comunicante</p>
                             </div>
                         </div>

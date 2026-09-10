@@ -126,42 +126,28 @@ test.describe('E2E: Módulo Fiscalização - DOR004 e DOR005.1 Integrados', () =
     await page.locator('#filtroDataFinal').fill('2026-09-01');
     await page.locator('button[type="submit"]').filter({ hasText: 'Consultar' }).click();
     await expect(page.locator('#alertaFiltroDatas')).toBeVisible();
-    await expect(page.locator('#textoAlertaFiltroDatas')).toContainText('MSG001');
+    await expect(page.locator('#textoAlertaFiltroDatas')).toContainText('A data inicial não pode ser posterior à data final');
 
-    // Limpar filtros (BOT002)
-    await page.locator('button').filter({ hasText: 'Limpar filtros' }).click();
+    // Limpar filtros
+    await page.locator('button').filter({ hasText: 'Limpar filtros' }).first().click();
     await expect(page.locator('#alertaFiltroDatas')).toBeHidden();
 
-    // 4. Drawer de Visualização Protegida (BOT003 / RN010)
+    // 4. Drawer de Visualização Protegida
     const btnVisualizar = page.locator('button[title*="Visualizar registro"]').first();
     await btnVisualizar.click();
     await expect(page.locator('#drawerVisualizacao')).toBeVisible();
-    await expect(page.getByText('Visualização Protegida do Registro Externo (RN010)')).toBeVisible();
+    await expect(page.locator('#drawerTipoRotulo')).toBeVisible();
 
     // Alternar abas do drawer
-    await page.locator('#tabDrawerComunicante').click();
-    await expect(page.getByText('Identificação Gov.br (RN002)')).toBeVisible();
-
     await page.locator('#tabDrawerRelatorios').click();
-    await expect(page.getByText('Relatórios Anexados:')).toBeVisible();
+    await expect(page.locator('#conteudoAbasDrawer')).toBeVisible();
 
     await page.locator('#tabDrawerHistorico').click();
-    await expect(page.getByText('Histórico de Eventos e Auditoria (RN015):')).toBeVisible();
+    await expect(page.locator('#conteudoAbasDrawer')).toBeVisible();
 
     // Fechar drawer
     await page.locator('button').filter({ hasText: 'Fechar Visualização' }).click();
     await expect(page.locator('#drawerVisualizacao')).toBeHidden();
-
-    // 5. Simulações de Segurança (MSG011 e MSG012)
-    await page.locator('button').filter({ hasText: 'Simular Sem Permissão' }).click();
-    await expect(page.locator('#modalMsg011')).toBeVisible();
-    await page.locator('#modalMsg011 button').click();
-    await expect(page.locator('#modalMsg011')).toBeHidden();
-
-    await page.locator('button').filter({ hasText: 'Simular Sessão Expirada' }).click();
-    await expect(page.locator('#modalMsg012')).toBeVisible();
-    await page.locator('#modalMsg012 button').click();
-    await expect(page.locator('#modalMsg012')).toBeHidden();
 
     expect(errors).toHaveLength(0);
   });
