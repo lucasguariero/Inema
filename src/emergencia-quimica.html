@@ -216,7 +216,7 @@
                 <span class="material-symbols-outlined text-xs">chevron_right</span>
                 <span class="text-slate-600">Fiscalização</span>
                 <span class="material-symbols-outlined text-xs">chevron_right</span>
-                <span class="font-semibold text-inema-green" id="breadcrumbCurrent">Emergência Química (DOR003)</span>
+                <span class="font-semibold text-inema-green" id="breadcrumbCurrent">Emergência Química</span>
             </nav>
 
             <!-- Header do Módulo + Título Dinâmico -->
@@ -229,7 +229,7 @@
                         Cadastro de Emergência Química
                     </h1>
                     <p class="text-sm text-slate-500 mt-1" id="pageMainSubtitle">
-                        Registro oficial de acidentes e ocorrências químicas para mobilização do plantão INEMA.
+                        Registro e tramitação de ocorrências químicas operadas pela equipe da Fiscalização e Call Center.
                     </p>
                 </div>
 
@@ -246,29 +246,13 @@
                 </div>
             </div>
 
-            <!-- ============================================ -->
-            <!-- BARRA DE ALTERNÂNCIA RÁPIDA (Tabs / Switcher) -->
-            <!-- ============================================ -->
-            <div class="bg-white p-1.5 rounded-2xl border border-slate-200 shadow-sm mb-6 flex flex-col sm:flex-row gap-1.5">
-                <button onclick="switchView('interna')" id="tab-interna" class="flex-1 py-3 px-4 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 bg-inema-green text-white shadow-xs">
-                    <span class="material-symbols-outlined text-lg">badge</span>
-                    <span>Visão Interna - DOR003</span>
-                    <span class="px-2 py-0.5 rounded-full text-[10px] bg-white/20 text-white font-normal">Call Center / Técnico</span>
-                </button>
-                <button onclick="switchView('externa')" id="tab-externa" class="flex-1 py-3 px-4 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all flex items-center justify-center gap-2">
-                    <span class="material-symbols-outlined text-lg">public</span>
-                    <span>Visão Externa - DOR004</span>
-                    <span class="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 text-slate-600 font-normal">Cidadão / Empresa</span>
-                </button>
-                <button onclick="switchView('consulta')" id="tab-consulta" class="flex-1 py-3 px-4 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all flex items-center justify-center gap-2">
-                    <span class="material-symbols-outlined text-lg">table_view</span>
-                    <span>Consulta / Call Center</span>
-                    <span id="badgeTotalREs" class="px-2 py-0.5 rounded-full text-[10px] bg-emerald-100 text-emerald-800 font-bold">3 REs</span>
-                </button>
-            </div>
+            <!-- Tabs removidas para padrão de Produção (DOR003) -->
+            <div class="hidden" id="tab-interna"></div>
+            <div class="hidden" id="tab-externa"></div>
+            <div class="hidden" id="tab-consulta"></div>
 
             <!-- ========================================================= -->
-            <!-- SEÇÃO 1: FLUXO INTERNO (DOR003)                          -->
+            <!-- SEÇÃO 1: FLUXO INTERNO                          -->
             <!-- ========================================================= -->
             <div id="view-interna" class="space-y-6">
                 <!-- Card 1: Detalhes do Registro -->
@@ -282,9 +266,9 @@
                             </div>
                         </div>
                         <div class="flex items-center gap-2">
-                            <span class="text-xs text-slate-500 font-medium">Nº Previsto do RE:</span>
-                            <span id="internaNumeroRE" class="font-mono text-xs font-bold text-inema-green bg-inema-sage px-2.5 py-1 rounded-md border border-inema-green/20">
-                                2026.000001/INEMA/RE
+                            <span class="bg-emerald-50 text-emerald-800 border border-emerald-200 font-mono text-xs px-2.5 py-1 rounded-md font-semibold flex items-center gap-1.5">
+                                <span class="material-symbols-outlined text-sm text-emerald-700">tag</span>
+                                Nº Previsto do RE: <span id="internaNumeroRE">2026.000004/INEMA/RE</span>
                             </span>
                             <span class="text-[11px] px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 font-semibold border border-blue-200">
                                 Rascunho
@@ -293,13 +277,13 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-4">
-                        <!-- Origem (OBR - LEG001) -->
+                        <!-- Origem -->
                         <div>
                             <label class="block text-xs font-bold text-slate-700 mb-1.5">
                                 Origem <span class="text-rose-500">*</span>
                             </label>
                             <select id="internaOrigem" class="w-full text-xs font-medium text-slate-800 bg-white border border-slate-200 rounded-lg p-2.5 focus:border-inema-green focus:ring-1 focus:ring-inema-green transition-all" required>
-                                <option value="">Selecione o local de recebimento da emergência...</option>
+                                <option value="">Selecione a origem...</option>
                                 <option value="Call center (empresa oficial)">Call center (empresa oficial)</option>
                                 <option value="Correspondência">Correspondência</option>
                                 <option value="E-mail">E-mail</option>
@@ -309,29 +293,29 @@
                                 <option value="SEI">SEI</option>
                                 <option value="Telefone (interno INEMA)">Telefone (interno INEMA)</option>
                             </select>
-                            <p class="text-[11px] text-slate-400 mt-1">LEG001: Selecione o local de recebimento da emergência</p>
+                            
                         </div>
 
-                        <!-- Data e Hora do comunicado (OBR - LEG002) -->
+                        <!-- Data e Hora do comunicado -->
                         <div>
                             <label class="block text-xs font-bold text-slate-700 mb-1.5">
                                 Data e Hora do comunicado <span class="text-rose-500">*</span>
                             </label>
                             <input type="datetime-local" id="internaDataHoraComunicado" class="w-full text-xs font-medium text-slate-800 bg-white border border-slate-200 rounded-lg p-2.5 focus:border-inema-green focus:ring-1 focus:ring-inema-green transition-all" required>
-                            <p class="text-[11px] text-slate-400 mt-1">LEG002: Registre aqui a data e hora do comunicado da emergência ao INEMA</p>
+                            
                         </div>
 
-                        <!-- Número original (OPC - LEG003 - até 500 caracteres) -->
+                        <!-- Número original -->
                         <div>
                             <label class="block text-xs font-bold text-slate-700 mb-1.5">
                                 Número original <span class="text-slate-400 font-normal">(Opcional)</span>
                             </label>
-                            <input type="text" id="internaNumeroOriginal" maxlength="500" placeholder="Ex: Ofício nº 124/2026, Chamado #9821..." class="w-full text-xs font-medium text-slate-800 bg-white border border-slate-200 rounded-lg p-2.5 focus:border-inema-green focus:ring-1 focus:ring-inema-green transition-all">
-                            <p class="text-[11px] text-slate-400 mt-1">LEG003: Número do ofício, número da manifestação, número do registro, número do protocolo e outros</p>
+                            <input type="text" id="internaNumeroOriginal" maxlength="500" placeholder="Ex: Ofício 124/2026, Manifestação SEI..." class="w-full text-xs font-medium text-slate-800 bg-white border border-slate-200 rounded-lg p-2.5 focus:border-inema-green focus:ring-1 focus:ring-inema-green transition-all">
+                            
                         </div>
                     </div>
 
-                    <!-- Campos Condicionais da Etapa de Associação (DOR003 pág. 11 - RN005, RN027) -->
+                    <!-- Campos Condicionais da Etapa de Associação -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-3 border-t border-slate-100 bg-slate-50/50 p-3 rounded-lg">
                         <div>
                             <div class="flex items-center justify-between mb-1.5">
@@ -349,7 +333,7 @@
                                 <option value="p3">Téc. Marcos Silveira (INEMA-5410) - Polo Candeias</option>
                                 <option value="p4">Eng. Fabiana Diniz (INEMA-9011) - Polo Feira de Santana</option>
                             </select>
-                            <p class="text-[11px] text-slate-400 mt-1">LEG010: Selecione o técnico plantonista para análise da emergência</p>
+                            
                         </div>
 
                         <div>
@@ -357,7 +341,7 @@
                                 Data e Hora do Contato com o Técnico <span class="text-xs font-normal text-amber-700">(Condicional)</span>
                             </label>
                             <input type="datetime-local" id="internaDataHoraContatoTecnico" class="w-full text-xs font-medium text-slate-800 bg-white border border-slate-200 rounded-lg p-2.5 focus:border-inema-green focus:ring-1 focus:ring-inema-green transition-all">
-                            <p class="text-[11px] text-slate-400 mt-1">Preencher durante a associação ou contato com o técnico plantonista.</p>
+                            
                         </div>
                     </div>
                 </div>
@@ -374,16 +358,16 @@
 
                     <div class="space-y-5">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                            <!-- Período da ocorrência (OBR - LEG004) -->
+                            <!-- Período da ocorrência -->
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 mb-1.5">
                                     Período da ocorrência <span class="text-rose-500">*</span>
                                 </label>
                                 <input type="datetime-local" id="internaDataHoraOcorrencia" class="w-full text-xs font-medium text-slate-800 bg-white border border-slate-200 rounded-lg p-2.5 focus:border-inema-green focus:ring-1 focus:ring-inema-green transition-all" required>
-                                <p class="text-[11px] text-slate-400 mt-1">LEG004: Registre aqui a data e hora da ocorrência</p>
+                                
                             </div>
 
-                            <!-- Tipo da Emergência Química (15 itens catálogo - RN023) -->
+                            <!-- Tipo da Emergência Química -->
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 mb-1.5">
                                     Tipo da Emergência Química <span class="text-rose-500">*</span>
@@ -404,12 +388,12 @@
                                     <option value="Pluma de contaminação">Pluma de contaminação</option>
                                     <option value="Mancha de origem desconhecida">Mancha de origem desconhecida</option>
                                     <option value="Afloramento de contaminantes">Afloramento de contaminantes</option>
-                                    <option value="Outros">Outros (habilitar campo para digitação)</option>
+                                    <option value="Outros">Outros (especificar)</option>
                                 </select>
                             </div>
                         </div>
 
-                        <!-- Campo condicional para Outros (RN024) -->
+                        <!-- Campo condicional para Outros -->
                         <div id="internaBoxTipoOutros" class="hidden p-3.5 bg-amber-50/60 border border-amber-200 rounded-xl">
                             <label class="block text-xs font-bold text-amber-900 mb-1">
                                 Descrição do tipo Outros <span class="text-rose-500">*</span>
@@ -417,19 +401,20 @@
                             <input type="text" id="internaDescricaoTipoOutros" maxlength="500" placeholder="Especifique a tipologia do incidente químico..." class="w-full text-xs font-medium text-slate-800 bg-white border border-amber-300 rounded-lg p-2.5 focus:border-inema-green focus:ring-1 focus:ring-inema-green transition-all">
                         </div>
 
-                        <!-- Descrição (OBR - até 7.000 caracteres com contador - LEG005) -->
+                        <!-- Descrição -->
                         <div>
-                            <div class="flex items-center justify-between mb-1.5">
-                                <label class="block text-xs font-bold text-slate-700">
-                                    Descrição <span class="text-rose-500">*</span>
-                                </label>
-                                <span class="text-[11px] text-slate-400 font-mono" id="internaContadorDescricao">0 / 7.000 caracteres</span>
+                            <label class="block text-xs font-bold text-slate-700 mb-1.5">
+                                Descrição <span class="text-rose-500">*</span>
+                            </label>
+                            <div class="relative">
+                                <textarea id="internaDescricao" maxlength="7000" rows="4" oninput="atualizarContador(this, 'internaContadorDescricao', 7000)" placeholder="Descreva em detalhes a ocorrência química..." class="w-full text-xs font-medium text-slate-800 bg-white border border-slate-200 rounded-lg p-3 pb-7 focus:border-inema-green focus:ring-1 focus:ring-inema-green transition-all" required></textarea>
+                                <div class="absolute bottom-2 right-3 pointer-events-none">
+                                    <span class="text-[10px] text-slate-400 font-mono" id="internaContadorDescricao">0 / 7.000</span>
+                                </div>
                             </div>
-                            <textarea id="internaDescricao" maxlength="7000" rows="4" oninput="atualizarContador(this, 'internaContadorDescricao', 7000)" placeholder="Descreva aqui seu relato em detalhes sobre a emergência química..." class="w-full text-xs font-medium text-slate-800 bg-white border border-slate-200 rounded-lg p-3 focus:border-inema-green focus:ring-1 focus:ring-inema-green transition-all" required></textarea>
-                            <p class="text-[11px] text-slate-400 mt-1">LEG005: Descreva aqui seu relato em detalhes sobre a emergência</p>
                         </div>
 
-                        <!-- Anexos (RN007 - LEG006 - MSG005) -->
+                        <!-- Anexos -->
                         <div>
                             <label class="block text-xs font-bold text-slate-700 mb-1.5">
                                 Anexos <span class="text-slate-400 font-normal">(Opcional)</span>
@@ -438,11 +423,8 @@
                                 <input type="file" id="internaFileInput" multiple onchange="adicionarAnexos(this, 'internaListaAnexos')" class="hidden">
                                 <span class="material-symbols-outlined text-3xl text-inema-green/70 mb-1">upload_file</span>
                                 <p class="text-xs font-semibold text-slate-700">Clique para selecionar ou arraste arquivos até aqui</p>
-                                <p class="text-[11px] text-slate-500 mt-1 font-normal">
-                                    LEG006: Adicione arquivos que complementem ou documentem a demanda ou o fato, como capturas de conversas, vídeos e fotos
-                                </p>
-                                <p class="text-[10px] text-slate-400 mt-1 font-mono">
-                                    MSG005: São aceitos documentos de texto (.pdf, .doc, .docx, .txt), imagens (.jpeg, .jpg, .png, .bmp), planilhas (.xls, .xlsx), multimídia (.mp3, .mp4), shape (.shp, .shx, .dbf, .prj), .kml, .kmz e .zip.
+                                <p class="text-[11px] text-slate-500 mt-1.5 font-normal">
+                                    Formatos aceitos: Documentos (.pdf, .doc, .docx, .txt), imagens (.jpeg, .jpg, .png, .bmp), planilhas (.xls, .xlsx), multimídia (.mp3, .mp4), shapefiles (.shp, .shx, .dbf, .prj), .kml, .kmz e .zip.
                                 </p>
                             </div>
                             <!-- Lista de arquivos anexados -->
@@ -539,131 +521,162 @@
                             <textarea id="internaPontoReferencia" maxlength="1000" rows="2" oninput="atualizarContador(this, 'internaContadorRef', 1000)" placeholder="Próximo ao trevo de acesso à refinaria, em frente ao posto de combustível..." class="w-full text-xs font-medium text-slate-800 bg-white border border-slate-200 rounded-lg p-2.5 focus:border-inema-green focus:ring-1 focus:ring-inema-green transition-all" required></textarea>
                         </div>
 
-                        <!-- Catálogo de Área Atingida (1 a 3 opções + Tooltips) -->
+                        <!-- Catálogo de Área Atingida (Chips / Cards de Seleção) -->
                         <div>
                             <div class="flex items-center justify-between mb-2">
-                                <label class="block text-xs font-bold text-slate-700">
-                                    Área Atingida <span class="text-rose-500">*</span> <span class="text-xs font-normal text-slate-500">(Selecione de 1 a 3 opções)</span>
-                                </label>
-                                <span id="internaContadorAreas" class="text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded">0 de 3 selecionadas</span>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700">
+                                        Áreas Atingidas <span class="text-rose-500">*</span>
+                                    </label>
+                                    <span class="text-[11px] text-slate-500">Selecione de 1 a 3 opções que melhor descrevem a área do incidente</span>
+                                </div>
+                                <span id="internaContadorAreas" class="text-[11px] font-medium text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full transition-colors">0 de 3 selecionadas</span>
                             </div>
                             
-                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2" id="internaAreasGrid">
+                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2" id="internaAreasGrid">
                                 <!-- Área Urbana -->
-                                <label class="flex items-center gap-1.5 p-2 rounded-lg border border-slate-200 text-[11px] font-medium text-slate-700 hover:bg-slate-50 cursor-pointer transition-colors">
-                                    <input type="checkbox" value="Área Urbana" onchange="verificarLimiteAreas(this, 'interna')" class="rounded text-inema-green focus:ring-inema-green">
-                                    <span>Área Urbana</span>
+                                <label class="area-chip border border-slate-200 bg-white hover:border-slate-300 text-slate-700 text-xs py-2 px-3 rounded-lg flex items-center justify-between cursor-pointer transition-all has-[:checked]:border-[#0F4C3A] has-[:checked]:bg-[#E2ECE9]/50 has-[:checked]:text-[#0F4C3A] has-[:checked]:font-semibold">
+                                    <span class="truncate">Área Urbana</span>
+                                    <input type="checkbox" value="Área Urbana" onchange="verificarLimiteAreas(this, 'interna')" class="hidden peer">
+                                    <span class="material-symbols-outlined text-sm text-slate-300 peer-checked:text-[#0F4C3A] transition-colors shrink-0">check_circle</span>
                                 </label>
+
                                 <!-- Distrito -->
-                                <label class="flex items-center gap-1.5 p-2 rounded-lg border border-slate-200 text-[11px] font-medium text-slate-700 hover:bg-slate-50 cursor-pointer transition-colors">
-                                    <input type="checkbox" value="Distrito" onchange="verificarLimiteAreas(this, 'interna')" class="rounded text-inema-green focus:ring-inema-green">
-                                    <span>Distrito</span>
+                                <label class="area-chip border border-slate-200 bg-white hover:border-slate-300 text-slate-700 text-xs py-2 px-3 rounded-lg flex items-center justify-between cursor-pointer transition-all has-[:checked]:border-[#0F4C3A] has-[:checked]:bg-[#E2ECE9]/50 has-[:checked]:text-[#0F4C3A] has-[:checked]:font-semibold">
+                                    <span class="truncate">Distrito</span>
+                                    <input type="checkbox" value="Distrito" onchange="verificarLimiteAreas(this, 'interna')" class="hidden peer">
+                                    <span class="material-symbols-outlined text-sm text-slate-300 peer-checked:text-[#0F4C3A] transition-colors shrink-0">check_circle</span>
                                 </label>
+
                                 <!-- Assentamento Rural -->
-                                <label class="flex items-center gap-1.5 p-2 rounded-lg border border-slate-200 text-[11px] font-medium text-slate-700 hover:bg-slate-50 cursor-pointer transition-colors">
-                                    <input type="checkbox" value="Assentamento Rural" onchange="verificarLimiteAreas(this, 'interna')" class="rounded text-inema-green focus:ring-inema-green">
-                                    <span>Assent. Rural</span>
+                                <label class="area-chip border border-slate-200 bg-white hover:border-slate-300 text-slate-700 text-xs py-2 px-3 rounded-lg flex items-center justify-between cursor-pointer transition-all has-[:checked]:border-[#0F4C3A] has-[:checked]:bg-[#E2ECE9]/50 has-[:checked]:text-[#0F4C3A] has-[:checked]:font-semibold">
+                                    <span class="truncate">Assent. Rural</span>
+                                    <input type="checkbox" value="Assentamento Rural" onchange="verificarLimiteAreas(this, 'interna')" class="hidden peer">
+                                    <span class="material-symbols-outlined text-sm text-slate-300 peer-checked:text-[#0F4C3A] transition-colors shrink-0">check_circle</span>
                                 </label>
+
                                 <!-- Comunidade Indígena -->
-                                <label class="flex items-center gap-1.5 p-2 rounded-lg border border-slate-200 text-[11px] font-medium text-slate-700 hover:bg-slate-50 cursor-pointer transition-colors">
-                                    <input type="checkbox" value="Comunidade Indígena" onchange="verificarLimiteAreas(this, 'interna')" class="rounded text-inema-green focus:ring-inema-green">
-                                    <span>Com. Indígena</span>
+                                <label class="area-chip border border-slate-200 bg-white hover:border-slate-300 text-slate-700 text-xs py-2 px-3 rounded-lg flex items-center justify-between cursor-pointer transition-all has-[:checked]:border-[#0F4C3A] has-[:checked]:bg-[#E2ECE9]/50 has-[:checked]:text-[#0F4C3A] has-[:checked]:font-semibold">
+                                    <span class="truncate">Com. Indígena</span>
+                                    <input type="checkbox" value="Comunidade Indígena" onchange="verificarLimiteAreas(this, 'interna')" class="hidden peer">
+                                    <span class="material-symbols-outlined text-sm text-slate-300 peer-checked:text-[#0F4C3A] transition-colors shrink-0">check_circle</span>
                                 </label>
+
                                 <!-- Área Industrial -->
-                                <label class="flex items-center gap-1.5 p-2 rounded-lg border border-slate-200 text-[11px] font-medium text-slate-700 hover:bg-slate-50 cursor-pointer transition-colors">
-                                    <input type="checkbox" value="Área Industrial" onchange="verificarLimiteAreas(this, 'interna')" class="rounded text-inema-green focus:ring-inema-green">
-                                    <span>Área Industrial</span>
+                                <label class="area-chip border border-slate-200 bg-white hover:border-slate-300 text-slate-700 text-xs py-2 px-3 rounded-lg flex items-center justify-between cursor-pointer transition-all has-[:checked]:border-[#0F4C3A] has-[:checked]:bg-[#E2ECE9]/50 has-[:checked]:text-[#0F4C3A] has-[:checked]:font-semibold">
+                                    <span class="truncate">Área Industrial</span>
+                                    <input type="checkbox" value="Área Industrial" onchange="verificarLimiteAreas(this, 'interna')" class="hidden peer">
+                                    <span class="material-symbols-outlined text-sm text-slate-300 peer-checked:text-[#0F4C3A] transition-colors shrink-0">check_circle</span>
                                 </label>
+
                                 <!-- Dutovia -->
-                                <label class="flex items-center gap-1.5 p-2 rounded-lg border border-slate-200 text-[11px] font-medium text-slate-700 hover:bg-slate-50 cursor-pointer transition-colors">
-                                    <input type="checkbox" value="Dutovia" onchange="verificarLimiteAreas(this, 'interna')" class="rounded text-inema-green focus:ring-inema-green">
-                                    <span>Dutovia</span>
+                                <label class="area-chip border border-slate-200 bg-white hover:border-slate-300 text-slate-700 text-xs py-2 px-3 rounded-lg flex items-center justify-between cursor-pointer transition-all has-[:checked]:border-[#0F4C3A] has-[:checked]:bg-[#E2ECE9]/50 has-[:checked]:text-[#0F4C3A] has-[:checked]:font-semibold">
+                                    <span class="truncate">Dutovia</span>
+                                    <input type="checkbox" value="Dutovia" onchange="verificarLimiteAreas(this, 'interna')" class="hidden peer">
+                                    <span class="material-symbols-outlined text-sm text-slate-300 peer-checked:text-[#0F4C3A] transition-colors shrink-0">check_circle</span>
                                 </label>
+
                                 <!-- Colônia de Pescadores -->
-                                <label class="flex items-center gap-1.5 p-2 rounded-lg border border-slate-200 text-[11px] font-medium text-slate-700 hover:bg-slate-50 cursor-pointer transition-colors">
-                                    <input type="checkbox" value="Colônia de Pescadores" onchange="verificarLimiteAreas(this, 'interna')" class="rounded text-inema-green focus:ring-inema-green">
-                                    <span>Col. Pescadores</span>
+                                <label class="area-chip border border-slate-200 bg-white hover:border-slate-300 text-slate-700 text-xs py-2 px-3 rounded-lg flex items-center justify-between cursor-pointer transition-all has-[:checked]:border-[#0F4C3A] has-[:checked]:bg-[#E2ECE9]/50 has-[:checked]:text-[#0F4C3A] has-[:checked]:font-semibold">
+                                    <span class="truncate">Col. Pescadores</span>
+                                    <input type="checkbox" value="Colônia de Pescadores" onchange="verificarLimiteAreas(this, 'interna')" class="hidden peer">
+                                    <span class="material-symbols-outlined text-sm text-slate-300 peer-checked:text-[#0F4C3A] transition-colors shrink-0">check_circle</span>
                                 </label>
-                                <!-- Comunidade Tradicional (Tooltip Obrigatório) -->
+
+                                <!-- Comunidade Tradicional (Tooltip) -->
                                 <div class="relative has-tooltip">
-                                    <label class="flex items-center gap-1.5 p-2 rounded-lg border border-slate-200 text-[11px] font-medium text-slate-700 hover:bg-slate-50 cursor-pointer transition-colors w-full">
-                                        <input type="checkbox" value="Comunidade Tradicional" onchange="verificarLimiteAreas(this, 'interna')" class="rounded text-inema-green focus:ring-inema-green">
-                                        <span>Com. Tradicional ⓘ</span>
+                                    <label class="area-chip border border-slate-200 bg-white hover:border-slate-300 text-slate-700 text-xs py-2 px-3 rounded-lg flex items-center justify-between cursor-pointer transition-all has-[:checked]:border-[#0F4C3A] has-[:checked]:bg-[#E2ECE9]/50 has-[:checked]:text-[#0F4C3A] has-[:checked]:font-semibold w-full">
+                                        <span class="truncate">Com. Tradicional</span>
+                                        <input type="checkbox" value="Comunidade Tradicional" onchange="verificarLimiteAreas(this, 'interna')" class="hidden peer">
+                                        <span class="material-symbols-outlined text-sm text-slate-400 peer-checked:text-[#0F4C3A] transition-colors shrink-0 ml-1">info</span>
                                     </label>
-                                    <div class="tooltip-box absolute bottom-full left-0 mb-1 z-20 w-48 p-2 bg-slate-900 text-white text-[10px] rounded-lg shadow-lg pointer-events-none">
-                                        Ribeirinha, Quilombo, Pescadores e outros... (LEG011)
+                                    <div class="tooltip-box absolute bottom-full left-0 mb-1.5 z-20 w-52 p-2 bg-slate-900 text-white text-[11px] rounded-lg shadow-lg pointer-events-none">
+                                        Ribeirinha, Quilombo, Pescadores e outros...
                                     </div>
                                 </div>
+
                                 <!-- Povoado -->
-                                <label class="flex items-center gap-1.5 p-2 rounded-lg border border-slate-200 text-[11px] font-medium text-slate-700 hover:bg-slate-50 cursor-pointer transition-colors">
-                                    <input type="checkbox" value="Povoado" onchange="verificarLimiteAreas(this, 'interna')" class="rounded text-inema-green focus:ring-inema-green">
-                                    <span>Povoado</span>
+                                <label class="area-chip border border-slate-200 bg-white hover:border-slate-300 text-slate-700 text-xs py-2 px-3 rounded-lg flex items-center justify-between cursor-pointer transition-all has-[:checked]:border-[#0F4C3A] has-[:checked]:bg-[#E2ECE9]/50 has-[:checked]:text-[#0F4C3A] has-[:checked]:font-semibold">
+                                    <span class="truncate">Povoado</span>
+                                    <input type="checkbox" value="Povoado" onchange="verificarLimiteAreas(this, 'interna')" class="hidden peer">
+                                    <span class="material-symbols-outlined text-sm text-slate-300 peer-checked:text-[#0F4C3A] transition-colors shrink-0">check_circle</span>
                                 </label>
+
                                 <!-- Posto de Combustível -->
-                                <label class="flex items-center gap-1.5 p-2 rounded-lg border border-slate-200 text-[11px] font-medium text-slate-700 hover:bg-slate-50 cursor-pointer transition-colors">
-                                    <input type="checkbox" value="Posto de Combustível" onchange="verificarLimiteAreas(this, 'interna')" class="rounded text-inema-green focus:ring-inema-green">
-                                    <span>Posto Combust.</span>
+                                <label class="area-chip border border-slate-200 bg-white hover:border-slate-300 text-slate-700 text-xs py-2 px-3 rounded-lg flex items-center justify-between cursor-pointer transition-all has-[:checked]:border-[#0F4C3A] has-[:checked]:bg-[#E2ECE9]/50 has-[:checked]:text-[#0F4C3A] has-[:checked]:font-semibold">
+                                    <span class="truncate">Posto Combustível</span>
+                                    <input type="checkbox" value="Posto de Combustível" onchange="verificarLimiteAreas(this, 'interna')" class="hidden peer">
+                                    <span class="material-symbols-outlined text-sm text-slate-300 peer-checked:text-[#0F4C3A] transition-colors shrink-0">check_circle</span>
                                 </label>
+
                                 <!-- Recurso Hídrico -->
-                                <label class="flex items-center gap-1.5 p-2 rounded-lg border border-slate-200 text-[11px] font-medium text-slate-700 hover:bg-slate-50 cursor-pointer transition-colors">
-                                    <input type="checkbox" value="Recurso Hídrico" onchange="verificarLimiteAreas(this, 'interna')" class="rounded text-inema-green focus:ring-inema-green">
-                                    <span>Recurso Hídrico</span>
+                                <label class="area-chip border border-slate-200 bg-white hover:border-slate-300 text-slate-700 text-xs py-2 px-3 rounded-lg flex items-center justify-between cursor-pointer transition-all has-[:checked]:border-[#0F4C3A] has-[:checked]:bg-[#E2ECE9]/50 has-[:checked]:text-[#0F4C3A] has-[:checked]:font-semibold">
+                                    <span class="truncate">Recurso Hídrico</span>
+                                    <input type="checkbox" value="Recurso Hídrico" onchange="verificarLimiteAreas(this, 'interna')" class="hidden peer">
+                                    <span class="material-symbols-outlined text-sm text-slate-300 peer-checked:text-[#0F4C3A] transition-colors shrink-0">check_circle</span>
                                 </label>
+
                                 <!-- Rodovia -->
-                                <label class="flex items-center gap-1.5 p-2 rounded-lg border border-slate-200 text-[11px] font-medium text-slate-700 hover:bg-slate-50 cursor-pointer transition-colors">
-                                    <input type="checkbox" value="Rodovia" onchange="verificarLimiteAreas(this, 'interna')" class="rounded text-inema-green focus:ring-inema-green">
-                                    <span>Rodovia</span>
+                                <label class="area-chip border border-slate-200 bg-white hover:border-slate-300 text-slate-700 text-xs py-2 px-3 rounded-lg flex items-center justify-between cursor-pointer transition-all has-[:checked]:border-[#0F4C3A] has-[:checked]:bg-[#E2ECE9]/50 has-[:checked]:text-[#0F4C3A] has-[:checked]:font-semibold">
+                                    <span class="truncate">Rodovia</span>
+                                    <input type="checkbox" value="Rodovia" onchange="verificarLimiteAreas(this, 'interna')" class="hidden peer">
+                                    <span class="material-symbols-outlined text-sm text-slate-300 peer-checked:text-[#0F4C3A] transition-colors shrink-0">check_circle</span>
                                 </label>
+
                                 <!-- Área de Marinha -->
-                                <label class="flex items-center gap-1.5 p-2 rounded-lg border border-slate-200 text-[11px] font-medium text-slate-700 hover:bg-slate-50 cursor-pointer transition-colors">
-                                    <input type="checkbox" value="Área de Marinha" onchange="verificarLimiteAreas(this, 'interna')" class="rounded text-inema-green focus:ring-inema-green">
-                                    <span>Área Marinha</span>
+                                <label class="area-chip border border-slate-200 bg-white hover:border-slate-300 text-slate-700 text-xs py-2 px-3 rounded-lg flex items-center justify-between cursor-pointer transition-all has-[:checked]:border-[#0F4C3A] has-[:checked]:bg-[#E2ECE9]/50 has-[:checked]:text-[#0F4C3A] has-[:checked]:font-semibold">
+                                    <span class="truncate">Área de Marinha</span>
+                                    <input type="checkbox" value="Área de Marinha" onchange="verificarLimiteAreas(this, 'interna')" class="hidden peer">
+                                    <span class="material-symbols-outlined text-sm text-slate-300 peer-checked:text-[#0F4C3A] transition-colors shrink-0">check_circle</span>
                                 </label>
-                                <!-- Unidade de Conservação (Tooltip Obrigatório) -->
+
+                                <!-- Unidade de Conservação (Tooltip) -->
                                 <div class="relative has-tooltip">
-                                    <label class="flex items-center gap-1.5 p-2 rounded-lg border border-slate-200 text-[11px] font-medium text-slate-700 hover:bg-slate-50 cursor-pointer transition-colors w-full">
-                                        <input type="checkbox" value="Unidade de Conservação" onchange="verificarLimiteAreas(this, 'interna')" class="rounded text-inema-green focus:ring-inema-green">
-                                        <span>Unid. Conserv. ⓘ</span>
+                                    <label class="area-chip border border-slate-200 bg-white hover:border-slate-300 text-slate-700 text-xs py-2 px-3 rounded-lg flex items-center justify-between cursor-pointer transition-all has-[:checked]:border-[#0F4C3A] has-[:checked]:bg-[#E2ECE9]/50 has-[:checked]:text-[#0F4C3A] has-[:checked]:font-semibold w-full">
+                                        <span class="truncate">Unid. Conservação</span>
+                                        <input type="checkbox" value="Unidade de Conservação" onchange="verificarLimiteAreas(this, 'interna')" class="hidden peer">
+                                        <span class="material-symbols-outlined text-sm text-slate-400 peer-checked:text-[#0F4C3A] transition-colors shrink-0 ml-1">info</span>
                                     </label>
-                                    <div class="tooltip-box absolute bottom-full left-0 mb-1 z-20 w-48 p-2 bg-slate-900 text-white text-[10px] rounded-lg shadow-lg pointer-events-none">
-                                        Parques, APA entre outros... (LEG012)
+                                    <div class="tooltip-box absolute bottom-full left-0 mb-1.5 z-20 w-52 p-2 bg-slate-900 text-white text-[11px] rounded-lg shadow-lg pointer-events-none">
+                                        Parques, APA entre outros...
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Descrição do cenário (OPC - até 1.000 caracteres - LEG013) -->
+                        <!-- Descrição do cenário -->
                         <div>
-                            <div class="flex items-center justify-between mb-1.5">
-                                <label class="block text-xs font-bold text-slate-700">
-                                    Descrição do cenário <span class="text-slate-400 font-normal">(Opcional)</span>
-                                </label>
-                                <span class="text-[11px] text-slate-400 font-mono" id="internaContadorCenario">0 / 1.000 caracteres</span>
+                            <label class="block text-xs font-bold text-slate-700 mb-1.5">
+                                Descrição do cenário <span class="text-slate-400 font-normal">(Opcional)</span>
+                            </label>
+                            <div class="relative">
+                                <textarea id="internaDescricaoCenario" maxlength="1000" rows="2" oninput="atualizarContador(this, 'internaContadorCenario', 1000)" placeholder="Detalhes adicionais sobre o terreno, condições climáticas, proximidade de mananciais..." class="w-full text-xs font-medium text-slate-800 bg-white border border-slate-200 rounded-lg p-2.5 pb-6 focus:border-inema-green focus:ring-1 focus:ring-inema-green transition-all"></textarea>
+                                <div class="absolute bottom-2 right-3 pointer-events-none">
+                                    <span class="text-[10px] text-slate-400 font-mono" id="internaContadorCenario">0 / 1.000</span>
+                                </div>
                             </div>
-                            <textarea id="internaDescricaoCenario" maxlength="1000" rows="2" oninput="atualizarContador(this, 'internaContadorCenario', 1000)" placeholder="Detalhes adicionais sobre o terreno, condições climáticas, proximidade de mananciais..." class="w-full text-xs font-medium text-slate-800 bg-white border border-slate-200 rounded-lg p-2.5 focus:border-inema-green focus:ring-1 focus:ring-inema-green transition-all"></textarea>
-                            <p class="text-[11px] text-slate-400 mt-1">LEG013: Descreva a área ou o cenário da área atingida.</p>
                         </div>
 
-                        <!-- Coordenadas Geográficas (BOT002 - LEG007) -->
-                        <div class="p-4 bg-slate-50/70 border border-slate-200 rounded-xl">
+                        <!-- Coordenadas Geográficas -->
+                        <div class="p-4 bg-[#F8FAFC] border border-slate-200 rounded-xl">
                             <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
                                 <div>
                                     <h4 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
                                         <span class="material-symbols-outlined text-base text-inema-green">pin_drop</span>
                                         Coordenadas Geográficas <span class="text-slate-400 font-normal">(Opcional)</span>
                                     </h4>
-                                    <p class="text-[11px] text-slate-500">LEG007: Caso não saiba as coordenadas, preencha o campo com zero.</p>
+                                    <p class="text-[11px] text-slate-500">Caso não saiba as coordenadas, preencha o campo com zero.</p>
                                 </div>
-                                <button type="button" onclick="abrirModalCoordenada('interna')" class="px-3 py-1.5 bg-white border border-inema-green text-inema-green hover:bg-inema-sage/40 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all shadow-2xs">
+                                <button type="button" onclick="abrirModalCoordenada('interna')" class="px-3.5 py-1.5 bg-white border border-slate-300 hover:border-inema-green text-inema-green hover:bg-emerald-50 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all shadow-2xs">
                                     <span class="material-symbols-outlined text-base">add</span>
-                                    + Incluir nova coordenada
+                                    + Adicionar Coordenada
                                 </button>
                             </div>
 
                             <!-- Tabela de coordenadas adicionadas -->
-                            <div class="overflow-x-auto">
-                                <table class="w-full text-left text-xs bg-white rounded-lg border border-slate-200">
-                                    <thead class="bg-slate-100 text-slate-600 font-semibold border-b border-slate-200">
+                            <div class="overflow-x-auto rounded-lg border border-slate-200 bg-white">
+                                <table class="w-full text-left text-xs bg-white">
+                                    <thead class="bg-[#F8FAFC] text-slate-600 font-semibold border-b border-slate-200">
                                         <tr>
                                             <th class="p-2.5">Sistema / Tipo</th>
                                             <th class="p-2.5">Latitude</th>
@@ -672,10 +685,10 @@
                                             <th class="p-2.5 text-center">Ações</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="internaTabelaCoordenadas">
+                                    <tbody id="internaTabelaCoordenadas" class="divide-y divide-slate-100">
                                         <tr>
                                             <td colspan="5" class="p-4 text-center text-slate-400">
-                                                Nenhuma coordenada cadastrada. Clique em "+ Incluir nova coordenada".
+                                                Nenhuma coordenada cadastrada. Clique em "+ Adicionar Coordenada".
                                             </td>
                                         </tr>
                                     </tbody>
@@ -767,40 +780,38 @@
                     </div>
                 </div>
 
-                <!-- Card 5: Informações Adicionais (RN018 - Desabilitado antes de salvar) -->
-                <div class="bg-white rounded-xl border border-slate-200/80 shadow-xs p-6 opacity-60 relative" id="cardInfoAdicionalInterna">
-                    <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-100 flex-wrap gap-2">
+                <!-- Card 5: Informações Adicionais -->
+                <div class="bg-slate-50 border border-dashed border-slate-200 rounded-xl p-4" id="cardInfoAdicionalInterna">
+                    <div class="flex items-center justify-between pb-3 mb-2 border-b border-slate-200/60 flex-wrap gap-2">
                         <div class="flex items-center gap-2.5">
-                            <span class="w-8 h-8 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-sm">5</span>
+                            <span class="w-7 h-7 rounded-lg bg-slate-200 text-slate-600 flex items-center justify-center font-bold text-xs">5</span>
                             <div>
-                                <h2 class="text-base font-bold text-slate-700">Informações Adicionais (RN018)</h2>
-                                <p class="text-xs text-slate-400">Adição de desdobramentos, dados de contenção ou laudos complementares</p>
+                                <h2 class="text-sm font-bold text-slate-700">Informações Adicionais</h2>
                             </div>
                         </div>
-                        <span class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 font-medium">
+                        <span class="text-[11px] px-2.5 py-0.5 rounded-full bg-slate-200/70 text-slate-600 font-medium">
                             Disponível após registro do RE
                         </span>
                     </div>
-                    <p class="text-xs text-slate-500 mb-3">
-                        Esta seção permanece bloqueada durante a triagem inicial. Ficará habilitada para novos apontamentos técnicos e anexos complementares assim que o RE for finalizado.
+                    <p class="text-xs text-slate-500">
+                        Esta seção será habilitada para inclusão de notas e anexos complementares após a finalização do registro.
                     </p>
-                    <textarea disabled rows="2" placeholder="Seção bloqueada até a finalização do registro..." class="w-full text-xs bg-slate-100 border border-slate-200 rounded-lg p-2.5 cursor-not-allowed text-slate-400"></textarea>
                 </div>
 
-                <!-- Barra de Ações do Fluxo Interno -->
-                <div class="flex items-center justify-between pt-4 border-t border-slate-200 flex-wrap gap-3">
-                    <button type="button" onclick="confirmarExclusao()" class="px-4 py-2.5 text-xs font-semibold text-rose-700 hover:bg-rose-50 rounded-xl border border-rose-200 transition-all flex items-center gap-1.5">
+                <!-- Rodapé de Ações (Barra Inferior) -->
+                <div class="sticky bottom-0 bg-white/95 backdrop-blur-sm p-4 rounded-2xl border border-slate-200 shadow-md flex items-center justify-between flex-wrap gap-3 z-10">
+                    <button type="button" onclick="confirmarExclusao()" class="px-4 py-2.5 text-xs font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-xl border border-rose-200 transition-all flex items-center gap-1.5">
                         <span class="material-symbols-outlined text-base">delete</span>
-                        Excluir Emergência (BOT003)
+                        Excluir Emergência
                     </button>
                     <div class="flex items-center gap-3">
-                        <button type="button" onclick="salvarRascunhoInterno()" class="px-5 py-2.5 text-xs font-semibold text-slate-700 hover:bg-slate-100 rounded-xl border border-slate-200 transition-all flex items-center gap-1.5 shadow-2xs">
+                        <button type="button" onclick="salvarRascunhoInterno()" class="px-5 py-2.5 text-xs font-semibold text-slate-700 hover:bg-slate-100 rounded-xl border border-slate-300 transition-all flex items-center gap-1.5 shadow-2xs">
                             <span class="material-symbols-outlined text-base text-slate-500">save</span>
                             Salvar Rascunho
                         </button>
-                        <button type="button" onclick="validarEFinalizar('interna')" class="px-6 py-2.5 text-xs font-bold text-white bg-inema-green hover:bg-inema-green-hover rounded-xl transition-all flex items-center gap-2 shadow-sm">
-                            <span class="material-symbols-outlined text-base">check_circle</span>
-                            Finalizar Emergência (BOT001)
+                        <button type="button" onclick="validarEFinalizar('interna')" class="px-6 py-2.5 text-xs font-bold text-white bg-[#0F4C3A] hover:bg-[#0c3d2e] rounded-xl transition-all flex items-center gap-2 shadow-sm">
+                            <span class="material-symbols-outlined text-base">check</span>
+                            Finalizar Emergência
                         </button>
                     </div>
                 </div>
@@ -1252,7 +1263,7 @@
                                     <tbody id="externaTabelaCoordenadas">
                                         <tr>
                                             <td colspan="5" class="p-4 text-center text-slate-400">
-                                                Nenhuma coordenada cadastrada. Clique em "+ Incluir nova coordenada".
+                                                Nenhuma coordenada cadastrada. Clique em "+ Adicionar Coordenada".
                                             </td>
                                         </tr>
                                     </tbody>
@@ -1327,7 +1338,7 @@
                 <div class="flex items-center justify-between pt-4 border-t border-slate-200 flex-wrap gap-3">
                     <button type="button" onclick="confirmarExclusao()" class="px-4 py-2.5 text-xs font-semibold text-rose-700 hover:bg-rose-50 rounded-xl border border-rose-200 transition-all flex items-center gap-1.5">
                         <span class="material-symbols-outlined text-base">delete</span>
-                        Excluir Emergência (BOT003)
+                        Excluir Emergência
                     </button>
                     <div class="flex items-center gap-3">
                         <button type="button" onclick="salvarRascunhoExterno()" class="px-5 py-2.5 text-xs font-semibold text-slate-700 hover:bg-slate-100 rounded-xl border border-slate-200 transition-all flex items-center gap-1.5 shadow-2xs">
@@ -1336,7 +1347,7 @@
                         </button>
                         <button type="button" onclick="validarEFinalizar('externa')" class="px-6 py-2.5 text-xs font-bold text-white bg-inema-green hover:bg-inema-green-hover rounded-xl transition-all flex items-center gap-2 shadow-sm">
                             <span class="material-symbols-outlined text-base">check_circle</span>
-                            Finalizar Emergência (BOT001)
+                            Finalizar Emergência
                         </button>
                     </div>
                 </div>
@@ -1440,7 +1451,7 @@
                 </div>
                 <h3 class="font-bold text-slate-900 text-base mb-1">Atenção</h3>
                 <p class="text-xs font-bold text-rose-700 leading-relaxed">
-                    Preencher campos obrigatórios! (MSG001)
+                    Preencher campos obrigatórios
                 </p>
                 <p class="text-[11px] text-slate-500 mt-2 leading-relaxed">
                     Por favor, verifique todos os campos sinalizados com asterisco vermelho (*) antes de finalizar a emergência química.
@@ -1489,12 +1500,12 @@
                     </div>
                 </div>
                 <p class="text-[11px] text-slate-500 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
-                    <strong>LEG007:</strong> Caso não saiba as coordenadas, preencha o campo com zero. As coordenadas são salvas internamente em Grau Decimal.
+                    Caso não saiba as coordenadas, preencha o campo com zero. As coordenadas são salvas internamente no formato padrão SIRGAS 2000.
                 </p>
             </div>
             <div class="px-5 py-3 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
                 <button onclick="fecharModalCoordenada()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-200 rounded-lg">Cancelar</button>
-                <button onclick="confirmarInclusaoCoordenada()" class="px-4 py-2 text-xs font-bold text-white bg-inema-green hover:bg-inema-green-hover rounded-lg shadow-sm">Incluir Coordenada (BOT002)</button>
+                <button onclick="confirmarInclusaoCoordenada()" class="px-4 py-2 text-xs font-bold text-white bg-inema-green hover:bg-inema-green-hover rounded-lg shadow-sm">Incluir Coordenada</button>
             </div>
         </div>
     </div>
@@ -1585,7 +1596,7 @@
         <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-200">
             <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
                 <div>
-                    <h3 class="font-bold text-slate-800 text-sm">Associar Técnico Plantonista (RN027)</h3>
+                    <h3 class="font-bold text-slate-800 text-sm">Associar Técnico Plantonista</h3>
                     <p class="text-[11px] text-slate-500" id="subtituloAssociarRE">Registro: 2026.000001/INEMA/RE</p>
                 </div>
                 <button onclick="fecharModalPlantonista()" class="w-8 h-8 rounded-lg hover:bg-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-700">
@@ -1872,9 +1883,9 @@
             const breadcrumb = document.getElementById('breadcrumbCurrent');
 
             if (viewName === 'interna') {
-                breadcrumb.textContent = "Emergência Interna (DOR003)";
-                titleEl.innerHTML = `<span class="p-2 rounded-xl bg-inema-sage text-inema-green flex items-center justify-center"><span class="material-symbols-outlined text-2xl">badge</span></span> Cadastro Interno de Emergência Química (DOR003)`;
-                subTitleEl.textContent = "Canal de registro utilizado pela equipe do Call Center e servidores do INEMA.";
+                if (breadcrumb) breadcrumb.textContent = "Emergência Química";
+                if (titleEl) titleEl.innerHTML = `<span class="p-2 rounded-xl bg-inema-sage text-inema-green flex items-center justify-center"><span class="material-symbols-outlined text-2xl">warning</span></span> Cadastro de Emergência Química`;
+                if (subTitleEl) subTitleEl.textContent = "Registro e tramitação de ocorrências químicas operadas pela equipe da Fiscalização e Call Center.";
             } else if (viewName === 'externa') {
                 breadcrumb.textContent = "Emergência Externa (DOR004)";
                 titleEl.innerHTML = `<span class="p-2 rounded-xl bg-inema-sage text-inema-green flex items-center justify-center"><span class="material-symbols-outlined text-2xl">public</span></span> Comunicação Cidadã de Emergência Química (DOR004)`;
@@ -1940,7 +1951,7 @@
         function atualizarContador(textarea, contadorId, max) {
             const atual = textarea.value.length;
             const el = document.getElementById(contadorId);
-            if (el) el.textContent = `${atual} / ${max.toLocaleString('pt-BR')} caracteres`;
+            if (el) el.textContent = `${atual.toLocaleString('pt-BR')} / ${max.toLocaleString('pt-BR')}`;
         }
 
         function verificarTipoOutros(fluxo) {
@@ -1957,17 +1968,54 @@
 
         function verificarLimiteAreas(checkbox, fluxo) {
             const grid = document.getElementById(`${fluxo}AreasGrid`);
+            if (!grid) return;
             const marcados = grid.querySelectorAll('input[type="checkbox"]:checked');
             const contadorEl = document.getElementById(`${fluxo}ContadorAreas`);
 
             if (marcados.length > 3) {
-                checkbox.checked = false;
-                alert('Atenção: Conforme as normas DOR003/DOR004, selecione no máximo 3 áreas atingidas!');
+                if (checkbox) checkbox.checked = false;
+                alert('Atenção: Selecione no máximo 3 áreas atingidas!');
+                atualizarChipsEstilo(grid);
                 return;
             }
+
             if (contadorEl) {
-                contadorEl.textContent = `${marcados.length} de 3 selecionadas`;
+                const total = marcados.length;
+                contadorEl.textContent = `${total} de 3 selecionadas`;
+                if (total >= 1 && total <= 3) {
+                    contadorEl.className = "text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full transition-colors";
+                } else if (total > 3) {
+                    contadorEl.className = "text-[11px] font-bold text-rose-700 bg-rose-50 border border-rose-200 px-2.5 py-0.5 rounded-full transition-colors";
+                } else {
+                    contadorEl.className = "text-[11px] font-medium text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full transition-colors";
+                }
             }
+
+            atualizarChipsEstilo(grid);
+        }
+
+        function atualizarChipsEstilo(grid) {
+            if (!grid) return;
+            const labels = grid.querySelectorAll('label.area-chip');
+            labels.forEach(label => {
+                const input = label.querySelector('input[type="checkbox"]');
+                const checkIcon = label.querySelector('.material-symbols-outlined');
+                if (input && input.checked) {
+                    label.classList.add('border-[#0F4C3A]', 'bg-[#E2ECE9]/50', 'text-[#0F4C3A]', 'font-semibold');
+                    label.classList.remove('border-slate-200', 'bg-white', 'text-slate-700');
+                    if (checkIcon && !checkIcon.textContent.includes('info')) {
+                        checkIcon.classList.add('text-[#0F4C3A]');
+                        checkIcon.classList.remove('text-slate-300');
+                    }
+                } else {
+                    label.classList.remove('border-[#0F4C3A]', 'bg-[#E2ECE9]/50', 'text-[#0F4C3A]', 'font-semibold');
+                    label.classList.add('border-slate-200', 'bg-white', 'text-slate-700');
+                    if (checkIcon && !checkIcon.textContent.includes('info')) {
+                        checkIcon.classList.remove('text-[#0F4C3A]');
+                        checkIcon.classList.add('text-slate-300');
+                    }
+                }
+            });
         }
 
         function toggleVinculoEmpresaInterna(valor) {
@@ -2105,7 +2153,7 @@
                 tbody.innerHTML = `
                     <tr>
                         <td colspan="5" class="p-4 text-center text-slate-400">
-                            Nenhuma coordenada cadastrada. Clique em "+ Incluir nova coordenada".
+                            Nenhuma coordenada cadastrada. Clique em "+ Adicionar Coordenada".
                         </td>
                     </tr>
                 `;
@@ -2619,7 +2667,7 @@
                 }];
                 renderTabelaCoordenadas('interna');
 
-                alert('Dados de exemplo carregados no formulário do Fluxo Interno (DOR003).');
+                alert('Dados de exemplo carregados no formulário de Emergência Química.');
 
             } else if (viewAtiva === 'externa') {
                 document.getElementById('externaTipoEmergencia').value = 'Vazamento em sistema subterrâneo de armazenamento de combustíveis';
@@ -2667,6 +2715,10 @@
                 document.getElementById('internaOutroTelefone').value = '';
                 document.getElementById('internaEmail').value = '';
                 document.querySelectorAll('#internaAreasGrid input[type="checkbox"]').forEach(c => c.checked = false);
+                verificarLimiteAreas(null, 'interna');
+                atualizarContador(document.getElementById('internaDescricao'), 'internaContadorDescricao', 7000);
+                atualizarContador(document.getElementById('internaPontoReferencia'), 'internaContadorRef', 1000);
+                atualizarContador(document.getElementById('internaDescricaoCenario'), 'internaContadorCenario', 1000);
                 coordenadasInterna = [];
                 renderTabelaCoordenadas('interna');
             } else if (viewAtiva === 'externa') {
