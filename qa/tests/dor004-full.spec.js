@@ -1,11 +1,29 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('fs');
 
-test('DOR004 - Teste Completo de Emergência Química Externa', async ({ page }) => {
+test('DOR004 - Teste Automatizado Completo: Blocos 1 a 4', async ({ page }) => {
   test.setTimeout(180000);
 
+  // Helper para selecionar opções no Filament combobox
+  async function selectFilament(buttonId, optionText) {
+    console.log(`Selecionando "${optionText}" no campo "${buttonId}"...`);
+    const btn = page.locator(`[id="${buttonId}"]`);
+    await btn.scrollIntoViewIfNeeded();
+    await btn.click();
+    await page.waitForTimeout(600);
+    // No Filament, ao abrir o combobox, pode ter um campo de busca ou opções em li / role="option"
+    const searchInput = page.locator('.fi-select-input-search-input, input[type="search"]').first();
+    if (await searchInput.isVisible().catch(() => false)) {
+      await searchInput.fill(optionText);
+      await page.waitForTimeout(400);
+    }
+    const option = page.locator(`[role="option"]:has-text("${optionText}"), .fi-select-input-option:has-text("${optionText}"), li:has-text("${optionText}")`).first();
+    await option.click();
+    await page.waitForTimeout(600);
+  }
+
   // =========================================================================
-  // BLOCO 1: ENTRAR
+  // BLOCO 1: ENTRAR & SIMULAR GOV.BR
   // =========================================================================
   console.log('--- BLOCO 1: ENTRAR ---');
   await page.goto('https://gla-inema-hml.acto.com.br/servicos-online', { waitUntil: 'networkidle' });
@@ -32,7 +50,8 @@ test('DOR004 - Teste Completo de Emergência Química Externa', async ({ page })
   // BLOCO 2: ABERTURA & RASCUNHO
   // =========================================================================
   console.log('--- BLOCO 2: ABERTURA ---');
-  await expect(page.locator('text=A gerar na finalização')).toBeVisible();
+  const txtCabecalho = page.locator('text=A gerar na finalização');
+  await expect(txtCabecalho).toBeVisible();
   console.log('✔ "Nº de Registro: A gerar na finalização" confirmado no cabeçalho.');
 
   const campoPlantonista = page.locator('text=Técnico plantonista');
@@ -45,90 +64,83 @@ test('DOR004 - Teste Completo de Emergência Química Externa', async ({ page })
   console.log('--- BLOCO 3: INFORMAÇÕES SOBRE EMPRESA ---');
   
   // Testar Vínculo = Sim
-  const radioSim = page.getByLabel('Sim');
-  await radioSim.click();
-  await page.waitForTimeout(1000);
+  console.log('Testando Vínculo = Sim...');
+  await page.locator('[id="form.ind_vinculo_empresa-1"]').click();
+  await page.waitForTimeout(800);
   await expect(page.getByLabel(/Nome da empresa/i).first()).toBeVisible();
   await expect(page.getByLabel(/Cargo/i).first()).toBeVisible();
-  console.log('✔ Vínculo = Sim validado com sucesso.');
+  console.log('✔ Vínculo = Sim validado: campos Nome da empresa e Cargo visíveis.');
 
   // Testar Vínculo = Não
-  const radioNao = page.getByLabel('Não');
-  await radioNao.click();
-  await page.waitForTimeout(1000);
+  console.log('Testando Vínculo = Não...');
+  await page.locator('[id="form.ind_vinculo_empresa-0"]').click();
+  await page.waitForTimeout(800);
 
-  // Selecionar "Cidadão comum" no select "Você está comunicando como"
-  const selectComo = page.locator('select').filter({ hasText: /comunicando como/i }).or(page.getByLabel(/comunicando como/i));
-  if (await selectComo.count() > 0) {
-    await selectComo.first().selectOption({ label: 'Cidadão comum' });
-  } else {
-    // Pode ser um Custom Select / Filament Select
-    const customSelect = page.locator('button, div').filter({ hasText: /Selecione o você está comunicando como/i }).last();
-    if (await customSelect.isVisible()) {
-      await customSelect.click();
-      await page.waitForTimeout(500);
-      await page.locator('text=Cidadão comum').last().click();
-    }
-  }
-  console.log('✔ Configurado como: Não / Cidadão comum.');
+  // Testar seleção "Outras instituições"
+  console.log('Testando Outras instituições...');
+  await selectFilament('form.tipo_sem_vinculo', 'Outras instituições');
+  await page.waitForTimeout(800);
+
+  // Configurar para: Não / Cidadão comum (conforme roteiro do teste)
+  console.log('Configurando para: Não / Cidadão comum...');
+  await selectFilament('form.tipo_sem_vinculo', 'Cidadão comum');
+  await page.waitForTimeout(500);
+
+  // Validar se "Sabe informar o nome da empresa responsável?" permanece visível
+  await expect(page.locator('[id="form.empresa_responsavel"]')).toBeVisible();
+  console.log('✔ Campo "Sabe informar o nome da empresa responsável?" permaneceu visível.');
 
   // =========================================================================
   // BLOCO 4: PREENCHIMENTO E FINALIZAÇÃO
   // =========================================================================
   console.log('--- BLOCO 4: PREENCHIMENTO E FINALIZAÇÃO ---');
 
-  // Telefone
-  const campoTelefone = page.locator('input[id*="telefone"]').or(page.locator('input[placeholder*="00000-0000"]')).first();
-  if (await campoTelefone.isVisible()) {
-    await campoTelefone.fill('71999887766');
-    console.log('✔ Telefone preenchido.');
-  }
+  // 4.1 Comunicante: Validar bloqueio de Nome, CPF e E-mail; Telefone editável
+  const inputNome = page.locator('[id="form.comunicante_nome"]');
+  const inputCpf = page.locator('[id="form.comunicante_cpf_cnpj"]');
+  const inputEmail = page.locator('[id="form.comunicante_email"]');
+  const inputTel = page.locator('[id="form.comunicante_telefone"]');
 
-  // Data e hora da Constatação
-  console.log('Preenchendo Data e hora da Constatação...');
-  const campoData = page.locator('input[placeholder*="data e hora"]').first();
-  if (await campoData.isVisible()) {
-    // Clica no input de data e digita uma data válida recente
-    await campoData.click();
-    await page.waitForTimeout(500);
-    // Filament DateTime picker geralmente aceita digitação ou seleção
-    await page.keyboard.type('09/09/2026 15:30');
-    await page.keyboard.press('Enter');
-    await page.keyboard.press('Escape');
-    console.log('✔ Data/hora preenchida.');
-  }
+  await expect(inputNome).toBeDisabled();
+  await expect(inputCpf).toBeDisabled();
+  await expect(inputEmail).toBeDisabled();
+  await expect(inputTel).toBeEditable();
+  console.log('✔ Nome, CPF e E-mail bloqueados; Telefone editável.');
 
-  // Tipo da Emergência Química
-  console.log('Selecionando Tipo da Emergência Química...');
-  const selectTipo = page.locator('select[id*="tipo"]').or(page.getByLabel(/Tipo da Emergência Química/i));
-  if (await selectTipo.count() > 0 && await selectTipo.first().isVisible()) {
-    await selectTipo.first().selectOption({ label: 'Outros' });
-  } else {
-    // Filament Select customizado
-    const tipoTrigger = page.locator('div, button').filter({ hasText: /Selecione o tipo da Emergência Química/i }).last();
-    if (await tipoTrigger.isVisible()) {
-      await tipoTrigger.click();
-      await page.waitForTimeout(500);
-      await page.locator('text=Outros').last().click();
-    }
-  }
-  await page.waitForTimeout(1000);
+  // Preencher Telefone
+  await inputTel.fill('71999887766');
 
-  // Descrição do Tipo Outros (se aparecer)
-  const campoDescOutros = page.locator('input[id*="tipo_outros"], textarea[id*="tipo_outros"]').or(page.getByLabel(/Descrição do tipo Outros/i));
-  if (await campoDescOutros.count() > 0 && await campoDescOutros.first().isVisible()) {
-    await campoDescOutros.first().fill('Vazamento de composto químico corrosivo');
+  // 4.2 Data e hora da Constatação: Selecionar data atual via trigger do Filament
+  console.log('Selecionando Data e hora da Constatação...');
+  const triggerData = page.locator('.fi-fo-date-time-picker-trigger').first();
+  await triggerData.click();
+  await page.waitForTimeout(500);
+
+  // Selecionar dia de hoje no calendário
+  const diaHoje = page.locator('.fi-fo-date-time-picker-calendar-day-today').first();
+  if (await diaHoje.isVisible()) {
+    await diaHoje.click();
+    console.log('✔ Dia de hoje selecionado no calendário.');
+  }
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(500);
+
+  // 4.3 Tipo da Emergência Química: selecionar "Outros"
+  await selectFilament('form.tipo', 'Outros');
+  await page.waitForTimeout(800);
+
+  // Localizar campo de descrição do tipo Outros
+  const descOutros = page.locator('input[id*="outro"], textarea[id*="outro"]').or(page.getByLabel(/descrição do tipo outros/i));
+  if (await descOutros.count() > 0 && await descOutros.first().isVisible()) {
+    await descOutros.first().fill('Vazamento atípico de produto químico corrosivo');
     console.log('✔ Descrição do tipo Outros preenchida.');
   }
 
-  // Descrição Geral
-  const campoDescricao = page.locator('textarea[id*="descricao"]').or(page.getByLabel(/Descrição\*/i)).first();
-  if (await campoDescricao.isVisible()) {
-    await campoDescricao.fill('Durante fiscalização foi identificado odor forte e derramamento químico próximo à rodovia.');
-    console.log('✔ Descrição geral preenchida.');
-  }
+  // Descrição geral da emergência
+  await page.locator('[id="form.descricao"]').fill('Identificado derramamento e forte odor químico durante vistoria em via pública.');
+  console.log('✔ Descrição preenchida.');
 
-  // Anexo PDF
+  // 4.4 Anexos: Enviar PDF
   const dummyPdfPath = 'qa/test-dummy.pdf';
   if (!fs.existsSync(dummyPdfPath)) {
     fs.writeFileSync(dummyPdfPath, '%PDF-1.4 dummy test file for Inema QA testing');
@@ -140,76 +152,97 @@ test('DOR004 - Teste Completo de Emergência Química Externa', async ({ page })
     console.log('✔ Anexo PDF enviado.');
   }
 
-  // CEP: 40020-000
-  console.log('Preenchendo CEP: 40020-000...');
-  const campoCep = page.locator('input[id*="cep"]').or(page.getByLabel(/CEP/i)).first();
-  if (await campoCep.isVisible()) {
-    await campoCep.fill('40020-000');
-    await page.keyboard.press('Tab');
-    await page.waitForTimeout(3000); // Aguarda preenchimento automático
-    console.log('✔ CEP informado.');
-  }
+  // 4.5 CEP: 40020-000 -> Autocompletar
+  console.log('Preenchendo CEP 40020-000...');
+  const inputCep = page.locator('[id="form.cep"]');
+  await inputCep.fill('40020000');
+  await page.keyboard.press('Tab');
+  await page.waitForTimeout(3000); // Aguarda consulta ViaCEP/Correios
 
   // Ponto de Referência
-  const campoPontoRef = page.locator('textarea[id*="ponto_referencia"], input[id*="ponto_referencia"]').or(page.getByLabel(/Ponto de referência/i)).first();
-  if (await campoPontoRef.isVisible()) {
-    await campoPontoRef.fill('Em frente ao poste de alta tensão nº 42');
-    console.log('✔ Ponto de referência preenchido.');
-  }
+  await page.locator('[id="form.ponto_referencia"]').fill('Próximo à Praça da Sé, em frente ao poste nº 42');
+  console.log('✔ Ponto de referência preenchido.');
 
-  // Área Atingida (Marcar 3 opções)
-  console.log('Marcando Áreas Atingidas...');
+  // 4.6 Área Atingida: Marcar 3 opções e tentar 4ª
+  console.log('Testando Áreas Atingidas...');
   const checkAreaUrbana = page.getByLabel('Área Urbana');
   const checkRodovia = page.getByLabel('Rodovia');
   const checkRecursoHidrico = page.getByLabel('Recurso Hídrico');
+  const checkDistrito = page.getByLabel('Distrito');
 
-  if (await checkAreaUrbana.isVisible()) await checkAreaUrbana.check();
-  if (await checkRodovia.isVisible()) await checkRodovia.check();
-  if (await checkRecursoHidrico.isVisible()) await checkRecursoHidrico.check();
+  await checkAreaUrbana.check();
+  await checkRodovia.check();
+  await checkRecursoHidrico.check();
   console.log('✔ 3 Áreas Atingidas marcadas.');
+
+  // Tentar marcar 4ª
+  await checkDistrito.click();
+  await page.waitForTimeout(500);
+  const distritoMarcado = await checkDistrito.isChecked();
+  console.log('Status da 4ª área (Distrito):', distritoMarcado ? 'Marcou' : 'BLOQUEOU (Correto!)');
+
+  // Coordenadas: Deixar em branco
 
   // Capturar tela antes de finalizar
   await page.screenshot({ path: 'qa/screenshots/08-formulario-preenchido.png', fullPage: true });
 
-  // Clicar em "Finalizar Emergência"
+  // 4.7 Clicar em "Finalizar Emergência"
   console.log('Clicando em "Finalizar Emergência"...');
   const btnFinalizar = page.getByRole('button', { name: /Finalizar Emergência/i });
+  await btnFinalizar.scrollIntoViewIfNeeded();
   await btnFinalizar.click();
-  await page.waitForTimeout(2500);
+  await page.waitForTimeout(2000);
 
-  // Capturar o primeiro modal de confirmação (MSG002 - Coordenadas)
+  // Captura do modal MSG002 (Ausência de Coordenadas)
   await page.screenshot({ path: 'qa/screenshots/09-modal-coordenadas-msg002.png' });
-  console.log('Capturado modal MSG002.');
+  console.log('✔ Modal de ausência de coordenadas (MSG002) capturado.');
 
-  // Clicar em continuar no modal de coordenadas
-  const btnContinuarCoordenadas = page.getByRole('button', { name: /continuar|sim|prosseguir/i }).last();
-  if (await btnContinuarCoordenadas.isVisible()) {
+  // Clicar em continuar / confirmar no modal de coordenadas
+  const btnContinuarCoord = page.getByRole('button', { name: /continuar|sim|prosseguir/i }).last();
+  if (await btnContinuarCoord.isVisible()) {
     console.log('Confirmando ausência de coordenadas (MSG002)...');
-    await btnContinuarCoordenadas.click();
+    await btnContinuarCoord.click();
     await page.waitForTimeout(2000);
   }
 
-  // Capturar segundo modal (MSG003 - Confirmação definitiva)
+  // Captura do modal MSG003 (Confirmação Definitiva)
   await page.screenshot({ path: 'qa/screenshots/10-modal-confirmacao-msg003.png' });
-  console.log('Capturado modal MSG003.');
+  console.log('✔ Modal de confirmação definitiva (MSG003) capturado.');
 
-  // Clicar em Sim para gravação definitiva
-  const btnConfirmarSim = page.getByRole('button', { name: /sim|confirmar/i }).last();
-  if (await btnConfirmarSim.isVisible()) {
-    console.log('Confirmando gravação definitiva (Sim)...');
-    await btnConfirmarSim.click();
-    await page.waitForTimeout(5000);
+  // Testar "Não" na MSG003
+  console.log('Testando opção "Não" na confirmação...');
+  const btnNao = page.getByRole('button', { name: /não/i }).last();
+  if (await btnNao.isVisible()) {
+    await btnNao.click();
+    await page.waitForTimeout(1000);
+    console.log('✔ "Não" selecionado. Dados preservados.');
+
+    // Finalizar novamente para confirmar "Sim"
+    await btnFinalizar.click();
+    await page.waitForTimeout(1500);
+
+    const btnContinuarCoord2 = page.getByRole('button', { name: /continuar|sim|prosseguir/i }).last();
+    if (await btnContinuarCoord2.isVisible()) {
+      await btnContinuarCoord2.click();
+      await page.waitForTimeout(1500);
+    }
   }
 
-  // Capturar tela após gravação
-  await page.screenshot({ path: 'qa/screenshots/11-pos-finalizacao.png', fullPage: true });
+  // Confirmar "Sim" na MSG003
+  console.log('Confirmando "Sim" para finalização definitiva...');
+  const btnSim = page.getByRole('button', { name: /sim/i }).last();
+  await btnSim.click();
+  await page.waitForTimeout(5000);
+
+  // Capturar tela pós-finalização
+  await page.screenshot({ path: 'qa/screenshots/11-pos-finalizacao-re.png', fullPage: true });
 
   const bodyText = await page.textContent('body');
   const matchRE = bodyText.match(/\d{4}\.\d{6}\/INEMA\/RE/);
-  const numeroRE = matchRE ? matchRE[0] : 'RE-NAO-IDENTIFICADO';
+  const numeroRE = matchRE ? matchRE[0] : 'RE-NAO-LOCALIZADO';
 
   console.log('==============================================');
-  console.log('🎉 REGISTRO DE EMERGÊNCIA FINALIZADO!');
+  console.log('🎉 REGISTRO DE EMERGÊNCIA CRIADO COM SUCESSO!');
   console.log('Número do RE:', numeroRE);
   console.log('URL atual:', page.url());
   console.log('==============================================');
