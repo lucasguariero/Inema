@@ -108,10 +108,11 @@
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
     </style>
+    <link rel="stylesheet" href="css/design-system.css">
 </head>
 <body class="bg-background">
     <!-- Topbar - Full width -->
-    <header class="h-header-height bg-[#0F4C3A] fixed top-0 left-0 right-0 z-50 flex items-center px-4 gap-4">
+    <header class="h-[60px] bg-[#0F4C3A] text-white fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 lg:px-6 shadow-xs">
         <!-- Hamburger + Logo -->
                 <div class="flex items-center gap-3">
             <button class="w-10 h-10 rounded-lg hover:bg-white/10 flex items-center justify-center text-white transition-colors" onclick="toggleSidebar()" aria-label="Menu principal">
@@ -173,8 +174,8 @@
         </div>
     </header>
 
-    <div class="flex min-h-screen pt-header-height">
-                                                        <!-- Overlay Mobile -->
+    <div class="flex flex-1 pt-[60px] min-h-screen bg-[#F8FAFC]">
+                                                                <!-- Overlay Mobile -->
         <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-30 hidden lg:hidden" style="top: 60px;"></div>
 
         <!-- Sidebar Lateral Padronizada (280px) -->
@@ -272,121 +273,186 @@
         <!-- Main Content -->
         <div class="flex-1 lg:ml-[280px] transition-all duration-300" id="mainContent">
             <!-- Content -->
-            <main class="p-8">
-                <!-- Welcome -->
-                <div class="mb-8">
-                    <h2 class="text-headline-xl text-on-surface">Bem-vindo, Lucas</h2>
-                    <p class="text-body-md text-text-muted mt-1">Acompanhe as atividades e acessos rápidos do sistema</p>
+            <main class="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-8">
+                <!-- Hero Banner Institucional -->
+                <div class="bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 shadow-xs relative overflow-hidden">
+                    <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                        <div class="space-y-2">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-[#0F4C3A] border border-emerald-200/70 text-xs font-semibold">
+                                <span class="w-2 h-2 rounded-full bg-[#0F4C3A]"></span>
+                                <span>Portal Unificado de Fiscalização Ambiental</span>
+                            </div>
+                            <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">Bem-vindo, Lucas</h1>
+                            <p class="text-xs sm:text-sm text-slate-500 max-w-2xl leading-relaxed">
+                                Plataforma integrada para recepção, triagem técnica, tramitação e despacho de denúncias ambientais e emergências químicas do Estado da Bahia.
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-3 shrink-0 flex-wrap">
+                            <div class="px-4 py-3 bg-slate-50/80 rounded-xl border border-slate-200/80 text-left">
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Status Operacional</span>
+                                <span class="text-xs font-bold text-emerald-700 flex items-center gap-1.5 mt-0.5">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                    Sistemas Operando Normalmente
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Quick Access -->
-                <h3 class="text-headline-lg text-on-surface mb-4">Acesso Rápido</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Card: Fiscalização Atendente -->
-                    <a href="fiscalizacao.html" onclick="closeSidebar()" class="bg-surface-container-lowest rounded-xl p-6 border border-border-subtle hover:shadow-lg hover:shadow-black/5 transition-all group cursor-pointer">
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-primary-container rounded-lg flex items-center justify-center">
-                                <span class="material-symbols-outlined text-white text-2xl">fact_check</span>
-                            </div>
-                            <div class="flex-1">
-                                <h4 class="font-semibold text-on-surface group-hover:text-primary-container transition-colors">Fiscalização - Atendente</h4>
-                                <p class="text-sm text-text-muted mt-1">Cadastro manual de denúncias</p>
-                            </div>
+                <!-- Seção: Acesso Rápido -->
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-lg font-bold text-slate-900 tracking-tight">Módulos de Acesso Rápido</h2>
+                            <p class="text-xs text-slate-500">Selecione o canal ou ferramenta correspondente ao seu perfil</p>
                         </div>
-                        <div class="mt-4 flex items-center text-primary-container font-medium text-sm">
-                            <span>Acessar</span>
-                            <span class="material-symbols-outlined ml-1 text-lg">arrow_forward</span>
-                        </div>
-                    </a>
+                    </div>
 
-                    <!-- Card: Fiscalização Cidadão -->
-                    <a href="fiscalizacao.html?fluxo=externo" class="bg-surface-container-lowest rounded-xl p-6 border border-border-subtle hover:shadow-lg hover:shadow-black/5 transition-all group cursor-pointer">
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-secondary rounded-lg flex items-center justify-center">
-                                <span class="material-symbols-outlined text-white text-2xl">person</span>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                        <!-- Card 1: Fiscalização Atendente -->
+                        <a href="fiscalizacao.html" onclick="closeSidebar()" class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs hover:shadow-md hover:border-emerald-700/40 transition-all duration-200 group flex flex-col justify-between cursor-pointer">
+                            <div>
+                                <div class="flex items-start justify-between gap-4 mb-4">
+                                    <div class="w-12 h-12 rounded-xl bg-emerald-50 text-[#0F4C3A] border border-emerald-100 flex items-center justify-center group-hover:scale-105 transition-transform">
+                                        <span class="material-symbols-outlined text-2xl">fact_check</span>
+                                    </div>
+                                    <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-[11px] font-semibold">
+                                        Triagem Interna
+                                    </span>
+                                </div>
+                                <h3 class="font-bold text-slate-900 group-hover:text-[#0F4C3A] transition-colors text-base">
+                                    Fiscalização - Atendente
+                                </h3>
+                                <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                                    Recepção presencial, telefônica, ofícios e manifestações de denúncias ambientais no sistema interno.
+                                </p>
                             </div>
-                            <div class="flex-1">
-                                <h4 class="font-semibold text-on-surface group-hover:text-secondary transition-colors">Denúncia - Cidadão</h4>
-                                <p class="text-sm text-text-muted mt-1">Portal de autoatendimento</p>
+                            <div class="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-[#0F4C3A]">
+                                <span>Acessar Atendimento</span>
+                                <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
                             </div>
-                        </div>
-                        <div class="mt-4 flex items-center text-secondary font-medium text-sm">
-                            <span>Acessar</span>
-                            <span class="material-symbols-outlined ml-1 text-lg">arrow_forward</span>
-                        </div>
-                    </a>
+                        </a>
 
-                    <!-- Card: Emergência Química -->
-                    <a href="emergencia-quimica.html" class="bg-surface-container-lowest rounded-xl p-6 border border-border-subtle hover:shadow-lg hover:shadow-black/5 transition-all group cursor-pointer">
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-amber-500/15 rounded-lg flex items-center justify-center">
-                                <span class="material-symbols-outlined text-amber-700 text-2xl">warning</span>
+                        <!-- Card 2: Fiscalização Cidadão -->
+                        <a href="fiscalizacao.html?fluxo=externo" class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs hover:shadow-md hover:border-teal-700/40 transition-all duration-200 group flex flex-col justify-between cursor-pointer">
+                            <div>
+                                <div class="flex items-start justify-between gap-4 mb-4">
+                                    <div class="w-12 h-12 rounded-xl bg-teal-50 text-teal-700 border border-teal-100 flex items-center justify-center group-hover:scale-105 transition-transform">
+                                        <span class="material-symbols-outlined text-2xl">person</span>
+                                    </div>
+                                    <span class="px-2.5 py-1 rounded-full bg-teal-50 text-teal-700 text-[11px] font-semibold border border-teal-100">
+                                        Canal Cidadão
+                                    </span>
+                                </div>
+                                <h3 class="font-bold text-slate-900 group-hover:text-teal-700 transition-colors text-base">
+                                    Denúncia - Cidadão
+                                </h3>
+                                <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                                    Portal externo de autoatendimento para registro público de denúncias ambientais (identificadas ou anônimas).
+                                </p>
                             </div>
-                            <div class="flex-1">
-                                <h4 class="font-semibold text-on-surface group-hover:text-amber-800 transition-colors">Emergência Química</h4>
-                                <p class="text-sm text-text-muted mt-1">Acidentes químicos, vazamentos e plantão</p>
+                            <div class="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-teal-700">
+                                <span>Acessar Formulário</span>
+                                <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
                             </div>
-                        </div>
-                        <div class="mt-4 flex items-center text-amber-800 font-medium text-sm">
-                            <span>Acessar</span>
-                            <span class="material-symbols-outlined ml-1 text-lg">arrow_forward</span>
-                        </div>
-                    </a>
+                        </a>
 
-
-
-                    <!-- Card: Consulta de Registros Internos -->
-                    <a href="consulta-interna.html" class="bg-surface-container-lowest rounded-xl p-6 border border-border-subtle hover:shadow-lg hover:shadow-black/5 transition-all group cursor-pointer">
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-inema-green/10 rounded-lg flex items-center justify-center">
-                                <span class="material-symbols-outlined text-inema-green text-2xl">manage_search</span>
+                        <!-- Card 3: Emergência Química -->
+                        <a href="emergencia-quimica.html" class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs hover:shadow-md hover:border-amber-700/40 transition-all duration-200 group flex flex-col justify-between cursor-pointer">
+                            <div>
+                                <div class="flex items-start justify-between gap-4 mb-4">
+                                    <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-700 border border-amber-200/70 flex items-center justify-center group-hover:scale-105 transition-transform">
+                                        <span class="material-symbols-outlined text-2xl">warning</span>
+                                    </div>
+                                    <span class="px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 text-[11px] font-semibold border border-amber-200/80">
+                                        Plantão 24h
+                                    </span>
+                                </div>
+                                <h3 class="font-bold text-slate-900 group-hover:text-amber-800 transition-colors text-base">
+                                    Emergência Química
+                                </h3>
+                                <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                                    Ocorrências críticas com produtos perigosos, acidentes de transporte, vazamentos e acionamento de plantonistas.
+                                </p>
                             </div>
-                            <div class="flex-1">
-                                <h4 class="font-semibold text-on-surface group-hover:text-inema-green transition-colors">Consulta Interna DIFIS</h4>
-                                <p class="text-sm text-text-muted mt-1">Acompanhamento unificado de RD e RE para equipe interna</p>
+                            <div class="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-amber-800">
+                                <span>Cadastrar Emergência</span>
+                                <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
                             </div>
-                        </div>
-                        <div class="mt-4 flex items-center text-inema-green font-medium text-sm">
-                            <span>Acessar Consulta</span>
-                            <span class="material-symbols-outlined ml-1 text-lg">arrow_forward</span>
-                        </div>
-                    </a>
+                        </a>
 
-                    <!-- Card: Consulta de Registros Externos -->
-                    <a href="consulta-externa.html" class="bg-surface-container-lowest rounded-xl p-6 border border-border-subtle hover:shadow-lg hover:shadow-black/5 transition-all group cursor-pointer">
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center">
-                                <span class="material-symbols-outlined text-blue-700 text-2xl">search</span>
+                        <!-- Card 4: Consulta Interna DIFIS -->
+                        <a href="consulta-interna.html" class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs hover:shadow-md hover:border-[#0F4C3A]/50 transition-all duration-200 group flex flex-col justify-between cursor-pointer">
+                            <div>
+                                <div class="flex items-start justify-between gap-4 mb-4">
+                                    <div class="w-12 h-12 rounded-xl bg-[#E2ECE9] text-[#0F4C3A] border border-[#CBDED8] flex items-center justify-center group-hover:scale-105 transition-transform">
+                                        <span class="material-symbols-outlined text-2xl">manage_search</span>
+                                    </div>
+                                    <span class="px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 text-[11px] font-semibold border border-rose-200">
+                                        3 Emergências Ativas
+                                    </span>
+                                </div>
+                                <h3 class="font-bold text-slate-900 group-hover:text-[#0F4C3A] transition-colors text-base">
+                                    Consulta Interna DIFIS
+                                </h3>
+                                <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                                    Painel operacional centralizado com filtros avançados, exportação, histórico de auditoria e tramitação.
+                                </p>
                             </div>
-                            <div class="flex-1">
-                                <h4 class="font-semibold text-on-surface group-hover:text-blue-700 transition-colors">Consulta Cidadão</h4>
-                                <p class="text-sm text-text-muted mt-1">Acompanhamento e relatórios regulatórios do comunicante</p>
+                            <div class="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-[#0F4C3A]">
+                                <span>Abrir Painel DIFIS</span>
+                                <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
                             </div>
-                        </div>
-                        <div class="mt-4 flex items-center text-blue-700 font-medium text-sm">
-                            <span>Acessar Consulta</span>
-                            <span class="material-symbols-outlined ml-1 text-lg">arrow_forward</span>
-                        </div>
-                    </a>
+                        </a>
 
-
-
-                    <!-- Card: Relatórios -->
-                    <a href="relatorios.html" class="bg-surface-container-lowest rounded-xl p-6 border border-border-subtle hover:shadow-lg hover:shadow-black/5 transition-all group cursor-pointer">
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-surface-container rounded-lg flex items-center justify-center">
-                                <span class="material-symbols-outlined text-on-surface-variant text-2xl">assessment</span>
+                        <!-- Card 5: Consulta Cidadão -->
+                        <a href="consulta-externa.html" class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs hover:shadow-md hover:border-blue-600/40 transition-all duration-200 group flex flex-col justify-between cursor-pointer">
+                            <div>
+                                <div class="flex items-start justify-between gap-4 mb-4">
+                                    <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-700 border border-blue-100 flex items-center justify-center group-hover:scale-105 transition-transform">
+                                        <span class="material-symbols-outlined text-2xl">search</span>
+                                    </div>
+                                    <span class="px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 text-[11px] font-semibold border border-blue-100">
+                                        Transparência
+                                    </span>
+                                </div>
+                                <h3 class="font-bold text-slate-900 group-hover:text-blue-700 transition-colors text-base">
+                                    Consulta Cidadão
+                                </h3>
+                                <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                                    Acompanhamento público de denúncias e emergências com upload e download de relatórios regulatórios.
+                                </p>
                             </div>
-                            <div class="flex-1">
-                                <h4 class="font-semibold text-on-surface group-hover:text-on-surface-variant transition-colors">Relatórios Gerenciais</h4>
-                                <p class="text-sm text-text-muted mt-1">Relatórios e estatísticas do sistema</p>
+                            <div class="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-blue-700">
+                                <span>Acessar Consulta</span>
+                                <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
                             </div>
-                        </div>
-                        <div class="mt-4 flex items-center text-on-surface-variant font-medium text-sm">
-                            <span>Acessar</span>
-                            <span class="material-symbols-outlined ml-1 text-lg">arrow_forward</span>
-                        </div>
-                    </a>
+                        </a>
+
+                        <!-- Card 6: Relatórios Gerenciais -->
+                        <a href="relatorios.html" class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs hover:shadow-md hover:border-slate-400 transition-all duration-200 group flex flex-col justify-between cursor-pointer">
+                            <div>
+                                <div class="flex items-start justify-between gap-4 mb-4">
+                                    <div class="w-12 h-12 rounded-xl bg-slate-100 text-slate-700 border border-slate-200 flex items-center justify-center group-hover:scale-105 transition-transform">
+                                        <span class="material-symbols-outlined text-2xl">assessment</span>
+                                    </div>
+                                    <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 text-[11px] font-semibold border border-slate-200">
+                                        BI & Gráficos
+                                    </span>
+                                </div>
+                                <h3 class="font-bold text-slate-900 group-hover:text-slate-700 transition-colors text-base">
+                                    Relatórios Gerenciais
+                                </h3>
+                                <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                                    Indicadores quantitativos, distribuição geográfica por polo regional e métricas de desempenho institucional.
+                                </p>
+                            </div>
+                            <div class="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-slate-700">
+                                <span>Ver Relatórios</span>
+                                <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </main>
         </div>

@@ -53,10 +53,11 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
     </style>
+    <link rel="stylesheet" href="css/design-system.css">
 </head>
-<body class="bg-background text-slate-800 antialiased">
+<body class="bg-[#F8FAFC] text-slate-800 antialiased min-h-screen">
     <!-- Header -->
-    <header class="h-16 bg-[#0F4C3A] fixed top-0 left-0 right-0 z-50 flex items-center px-4 gap-4">
+    <header class="h-[60px] bg-[#0F4C3A] text-white fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 lg:px-6 shadow-xs">
                 <div class="flex items-center gap-3">
             <button class="w-10 h-10 rounded-lg hover:bg-white/10 flex items-center justify-center text-white transition-colors" onclick="toggleSidebar()" aria-label="Menu principal">
                 <span class="material-symbols-outlined text-2xl">menu</span>
@@ -80,8 +81,8 @@
         </div>
     </header>
 
-    <div class="flex pt-16 min-h-screen">
-                                                        <!-- Overlay Mobile -->
+    <div class="flex pt-[60px] min-h-screen bg-[#F8FAFC]">
+                                                                <!-- Overlay Mobile -->
         <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-30 hidden lg:hidden" style="top: 60px;"></div>
 
         <!-- Sidebar Lateral Padronizada (280px) -->

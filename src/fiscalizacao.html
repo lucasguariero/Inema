@@ -34,8 +34,9 @@
         body { font-family: 'Inter', sans-serif; }
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
     </style>
+    <link rel="stylesheet" href="css/design-system.css">
 </head>
-<body class="bg-white min-h-screen">
+<body class="bg-[#F8FAFC] text-slate-800 min-h-screen antialiased">
     <!-- ============================================ -->
     <!-- MODAL DE ESCOLHA (Apenas Externo) -->
     <!-- ============================================ -->
@@ -81,7 +82,7 @@
     </div>
 
     <!-- Topbar -->
-    <header class="h-16 bg-[#0F4C3A] fixed top-0 left-0 right-0 z-50 flex items-center px-4 gap-4">
+    <header class="h-[60px] bg-[#0F4C3A] text-white fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 lg:px-6 shadow-xs">
                 <div class="flex items-center gap-3">
             <button class="w-10 h-10 rounded-lg hover:bg-white/10 flex items-center justify-center text-white transition-colors" onclick="toggleSidebar()" aria-label="Menu principal">
                 <span class="material-symbols-outlined text-2xl">menu</span>
@@ -117,8 +118,8 @@
         </div>
     </header>
 
-    <div class="flex min-h-screen pt-16">
-                                                        <!-- Overlay Mobile -->
+    <div class="flex min-h-screen pt-[60px] bg-[#F8FAFC]">
+                                                                <!-- Overlay Mobile -->
         <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-30 hidden lg:hidden" style="top: 60px;"></div>
 
         <!-- Sidebar Lateral Padronizada (280px) -->
@@ -231,7 +232,7 @@
                 <!-- ============================================ -->
                 <form id="form-denuncia" class="space-y-6">
                     <!-- CARD 1: Detalhes do Registro (Apenas Interno) -->
-                    <div id="card-detalhes-registro" class="bg-white border border-gray-200 rounded-xl p-6">
+                    <div id="card-detalhes-registro" class="bg-white border border-slate-200/90 rounded-2xl p-6 sm:p-7 shadow-xs">
                         <h2 class="text-lg font-semibold text-on-surface mb-4 flex items-center gap-2">
                             <span class="material-symbols-outlined text-stepper-teal">description</span>
                             Detalhes do Registro
@@ -276,7 +277,7 @@
                     </div>
 
                     <!-- CARD 2: Ocorrência -->
-                    <div class="bg-white border border-gray-200 rounded-xl p-6">
+                    <div class="bg-white border border-slate-200/90 rounded-2xl p-6 sm:p-7 shadow-xs">
                         <h2 class="text-lg font-semibold text-on-surface mb-4 flex items-center gap-2">
                             <span class="material-symbols-outlined text-stepper-teal">event_note</span>
                             Ocorrência
@@ -305,7 +306,7 @@
                     </div>
 
                     <!-- CARD 3: Localização -->
-                    <div class="bg-white border border-gray-200 rounded-xl p-6">
+                    <div class="bg-white border border-slate-200/90 rounded-2xl p-6 sm:p-7 shadow-xs">
                         <h2 class="text-lg font-semibold text-on-surface mb-4 flex items-center gap-2">
                             <span class="material-symbols-outlined text-stepper-teal">location_on</span>
                             Localização
@@ -406,7 +407,7 @@
                     </div>
 
                     <!-- CARD 4: Denunciante (Com Variantes) -->
-                    <div class="bg-white border border-gray-200 rounded-xl p-6">
+                    <div class="bg-white border border-slate-200/90 rounded-2xl p-6 sm:p-7 shadow-xs">
                         <h2 class="text-lg font-semibold text-on-surface mb-4 flex items-center gap-2">
                             <span class="material-symbols-outlined text-stepper-teal">person</span>
                             Denunciante
@@ -500,10 +501,10 @@
                     </div>
 
                     <!-- RODAPÉ DE AÇÕES -->
-                    <div class="flex justify-end gap-2 pt-4 border-t border-gray-200">
-                        <button type="button" class="px-4 py-2 text-sm font-medium text-red-500 border border-red-500 rounded-lg hover:bg-red-50">Excluir rascunho</button>
-                        <button type="button" class="px-4 py-2 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-white">Salvar Rascunho</button>
-                        <button type="submit" class="px-6 py-2 text-sm font-medium text-white bg-stepper-teal rounded-lg hover:opacity-90">Finalizar Denúncia</button>
+                    <div class="flex items-center justify-end gap-3 pt-6 border-t border-slate-200/80">
+                        <button type="button" class="px-4 py-2.5 text-xs sm:text-sm font-semibold text-rose-600 border border-rose-200 bg-rose-50/50 rounded-xl hover:bg-rose-100/70 hover:border-rose-300 transition-all cursor-pointer">Excluir rascunho</button>
+                        <button type="button" class="inema-btn-secondary cursor-pointer">Salvar Rascunho</button>
+                        <button type="submit" class="inema-btn-primary shadow-xs cursor-pointer">Finalizar Denúncia</button>
                     </div>
                 </form>
             </main>

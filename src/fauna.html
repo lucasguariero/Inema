@@ -77,13 +77,14 @@
             #mainContent { margin-left: 0 !important; padding: 0 !important; }
         }
     </style>
+    <link rel="stylesheet" href="css/design-system.css">
 </head>
-<body class="bg-surface text-slate-800 antialiased min-h-screen flex flex-col">
+<body class="bg-[#F8FAFC] text-slate-800 antialiased min-h-screen flex flex-col">
 
     <!-- ============================================ -->
     <!-- HEADER SUPERIOR (Design System INEMA) -->
     <!-- ============================================ -->
-    <header class="h-16 bg-inema-green fixed top-0 left-0 right-0 z-50 flex items-center px-4 gap-4 shadow-sm no-print">
+    <header class="h-[60px] bg-[#0F4C3A] text-white fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 lg:px-6 shadow-xs no-print">
         <!-- Esquerda: Hambúrguer + Logo INEMA / SEIA -->
                 <div class="flex items-center gap-3">
             <button class="w-10 h-10 rounded-lg hover:bg-white/10 flex items-center justify-center text-white transition-colors" onclick="toggleSidebar()" aria-label="Menu principal">
@@ -123,8 +124,8 @@
     <!-- ============================================ -->
     <!-- CASCA PRINCIPAL (Sidebar + Conteúdo) -->
     <!-- ============================================ -->
-    <div class="flex pt-16 min-h-screen">
-                                                        <!-- Overlay Mobile -->
+    <div class="flex pt-[60px] min-h-screen bg-[#F8FAFC]">
+                                                                <!-- Overlay Mobile -->
         <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-30 hidden lg:hidden" style="top: 60px;"></div>
 
         <!-- Sidebar Lateral Padronizada (280px) -->
