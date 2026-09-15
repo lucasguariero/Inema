@@ -29,9 +29,11 @@ export const AppShell: React.FC<AppShellProps> = ({
           onNavigate={onNavigate}
         />
 
-        {/* Área de conteúdo: margem esquerda desktop de 280px */}
-        <main className="flex-1 lg:ml-[280px] p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full transition-all duration-200">
-          {children}
+        {/* Área de conteúdo: ocupa toda a largura disponível ao lado da sidebar */}
+        <main className="flex-1 w-full min-w-0 overflow-y-auto lg:ml-[280px] transition-all duration-200">
+          <div className="w-full max-w-[1600px] mx-auto px-6 lg:px-8 py-6 pb-16">
+            {children}
+          </div>
         </main>
       </div>
     </div>

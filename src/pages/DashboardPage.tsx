@@ -159,7 +159,7 @@ export const DashboardPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="w-full space-y-6">
       {/* 1. Barra de Ações Superior & Filtros */}
       <Toolbar
         selectedPeriod={selectedPeriod}
@@ -169,7 +169,7 @@ export const DashboardPage: React.FC = () => {
       />
 
       {/* 2. Banner de Alerta Gerencial com Ação Imediata */}
-      <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-500/10 via-rose-500/10 to-transparent border border-amber-300/40 backdrop-blur-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xs">
+      <div className="w-full p-4 rounded-2xl bg-gradient-to-r from-amber-500/10 via-rose-500/10 to-transparent border border-amber-300/40 backdrop-blur-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xs">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-sm shadow-amber-500/20">
             <AlertCircle className="w-5 h-5" />
@@ -200,7 +200,7 @@ export const DashboardPage: React.FC = () => {
       </div>
 
       {/* 3. Grid de 6 KPIs Executivos */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         <KpiCard
           title="Protocolados"
           value={kpis.protocolados}
@@ -246,21 +246,21 @@ export const DashboardPage: React.FC = () => {
       </div>
 
       {/* 4. Grid Principal de Gráficos (Linha 1) */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <EntradaSaidaChart />
         <StatusDonutChart />
         <UnidadeBarChart />
       </div>
 
       {/* 5. Grid Secundário de Gráficos (Linha 2) */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <AgingBarChart />
         <TempoAnaliseChart />
         <VencidosBarChart />
       </div>
 
       {/* 6. Tabela de Casos Prioritários com Busca e Filtros Vivos */}
-      <Card id="tabela-prioridades" className="overflow-hidden hover:border-slate-300/80 transition-all duration-300">
+      <Card id="tabela-prioridades" className="w-full overflow-hidden hover:border-slate-300/80 transition-all duration-300">
         <CardHeader className="flex flex-col lg:flex-row lg:items-center justify-between pb-4 gap-4">
           <div>
             <div className="flex items-center gap-2.5">

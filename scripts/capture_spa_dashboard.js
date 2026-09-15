@@ -3,7 +3,7 @@ const path = require('path');
 
 async function main() {
   const browser = await chromium.launch({ channel: 'chrome' });
-  const page = await browser.newPage({ viewport: { width: 1440, height: 950 } });
+  const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } });
 
   // Acessa o build do SPA via preview local
   console.log('Acessando SPA em http://localhost:3000...');
