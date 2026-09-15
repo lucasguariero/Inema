@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+@theme {
+  --color-inema-green: #0F4C3A;
+  --color-inema-green-hover: #145A45;
+  --color-inema-green-dark: #0A3528;
+  --color-inema-green-light: #E8F5E9;
+  --color-inema-sage: #E2ECE9;
+  --color-inema-sage-dark: #C8DED8;
+  --color-inema-sage-light: #F0F6F4;
+  --color-inema-gold: #D4A017;
+  --color-inema-mint: #10B981;
+}
+
+:root {
+  --inema-primary: #0F4C3A;
+  --inema-primary-hover: #145A45;
+  --inema-primary-dark: #0A3528;
+  --inema-sage: #E2ECE9;
+  --inema-sage-dark: #C8DED8;
+  --inema-surface: #F8FAFC;
+  --inema-border: #E2E8F0;
+}
+
+body {
+  background-color: #F8FAFC;
+  color: #0F172A;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Tipografia de números tabulares para dashboards */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Glassmorphism & Brilho sutil */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.glass-dropdown {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.1), 0 4px 12px -2px rgba(15, 23, 42, 0.05);
+}
+
+/* Efeito de Shimmer / Brilho suave */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite;
+}
+
+/* Scrollbar ultra-fina moderna */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}

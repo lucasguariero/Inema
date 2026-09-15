@@ -219,7 +219,7 @@ export const DrawerVisualizacaoProtegida: React.FC<DrawerVisualizacaoProtegidaPr
                   <div className="space-y-1.5">
                     <span className="font-bold text-slate-700 text-xs block">Coordenadas Registradas (RN011):</span>
                     <div className="space-y-1">
-                      {registro.coordenadas.map((c, i) => (
+                      {registro.coordenadas.map((c: any, i: number) => (
                         <div key={c.id || i} className="p-2 bg-slate-50 rounded border border-slate-200 text-[11px] text-slate-700">
                           #{i + 1} [{c.tipo}]: Lat {c.latitude}, Long {c.longitude}
                         </div>
