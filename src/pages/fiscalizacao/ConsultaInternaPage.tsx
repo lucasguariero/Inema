@@ -159,9 +159,8 @@ export const ConsultaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
       {/* Topo Oficial (Breadcrumb está exclusivamente na Topbar) */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-1">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight flex flex-wrap items-center gap-2">
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
             Painel de Operações DIFIS
-            <Badge variant="emerald">Ambiente Técnico</Badge>
           </h1>
           <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
             Pauta técnica centralizada de denúncias ambientais, emergências químicas e distribuição de vistorias.

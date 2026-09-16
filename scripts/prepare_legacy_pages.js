@@ -71,7 +71,7 @@ function generateLegacyNavHtml(config, activeId = 'relatorios') {
     html += `                        </div>\n`;
     html += `                        <span id="${iconId}" class="material-symbols-outlined text-lg text-slate-500 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}">expand_more</span>\n`;
     html += `                    </button>\n`;
-    html += `                    <div id="${subId}" class="${isOpen ? '' : 'hidden '}mt-1 border-l-2 border-slate-200 ml-4 pl-3 space-y-${isFiscalizacao ? '3' : '1'}">\n`;
+    html += `                    <div id="${subId}" class="${isOpen ? '' : 'hidden '}mt-1 border-l-2 border-slate-200 ml-4 pl-3 space-y-1">\n`;
 
     // Items
     let currentSubgroup = null;

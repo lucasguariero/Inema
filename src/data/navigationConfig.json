@@ -52,47 +52,14 @@
       "label": "Fiscalização",
       "icon": "ShieldAlert",
       "materialIcon": "fact_check",
-      "defaultOpen": true,
+      "defaultOpen": false,
       "htmlId": "subFiscalizacao",
       "items": [
-        {
-          "id": "fisc-atendente",
-          "label": "Atendente",
-          "href": "/?rota=atendente",
-          "route": "atendente",
-          "subgroup": "DENÚNCIAS",
-          "htmlId": "menu-atendente"
-        },
-        {
-          "id": "fisc-cidadao",
-          "label": "Formulário Cidadão",
-          "href": "/?rota=cidadao",
-          "route": "cidadao",
-          "subgroup": "DENÚNCIAS",
-          "htmlId": "menu-cidadao"
-        },
-        {
-          "id": "fisc-emerg-interna",
-          "label": "Cadastro Interno",
-          "href": "/?rota=emergencia-interna",
-          "route": "emergencia-interna",
-          "subgroup": "EMERGÊNCIAS QUÍMICAS",
-          "htmlId": "menu-emerg-interna"
-        },
-        {
-          "id": "fisc-emerg-externa",
-          "label": "Registro Externo",
-          "href": "/?rota=emergencia-externa",
-          "route": "emergencia-externa",
-          "subgroup": "EMERGÊNCIAS QUÍMICAS",
-          "htmlId": "menu-emerg-externa"
-        },
         {
           "id": "fisc-consulta-cidadao",
           "label": "Consulta Cidadão",
           "href": "/?rota=consulta-externa",
           "route": "consulta-externa",
-          "subgroup": "CONSULTAS",
           "htmlId": "menu-consulta-externa"
         },
         {
@@ -100,7 +67,6 @@
           "label": "Painel Interno DIFIS",
           "href": "/?rota=consulta-interna",
           "route": "consulta-interna",
-          "subgroup": "CONSULTAS",
           "badge": "3",
           "badgeVariant": "rose",
           "htmlId": "menu-consulta-interna"
