@@ -8,9 +8,11 @@ import {
   Tooltip,
   ResponsiveContainer,
   Cell,
+  LabelList,
 } from 'recharts';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { Info, Building2 } from 'lucide-react';
+import { useTheme } from '@/context/ThemeContext';
+import { cn } from '@/lib/utils';
 
 const data = [
   { unidade: 'DIRRE', quantidade: 1254, percent: '33%', descricao: 'Diretoria de Regulação' },
@@ -18,7 +20,7 @@ const data = [
   { unidade: 'DIBA', quantidade: 642, percent: '17%', descricao: 'Biodiversidade' },
   { unidade: 'DILIC', quantidade: 511, percent: '13%', descricao: 'Licenciamento' },
   { unidade: 'DISUC', quantidade: 309, percent: '8%', descricao: 'Sustentabilidade' },
-  { unidade: 'Outras', quantidade: 254, percent: '7%', descricao: 'Outras Unidades' },
+  { unidade: 'Outras', quantidade: 254, percent: '7%', descricao: 'Demais Diretorias' },
 ];
 
 const CustomTooltip = ({ active, payload }: any) => {
@@ -46,51 +48,40 @@ const CustomTooltip = ({ active, payload }: any) => {
 };
 
 export const UnidadeBarChart: React.FC = () => {
+  const { themeConfig } = useTheme();
+  const primaryColor = themeConfig.tokens.chartColors.primary;
+  const secondaryColor = themeConfig.tokens.chartColors.secondary;
+
   return (
-    <Card className="flex flex-col justify-between hover:border-slate-300/80 transition-all duration-300">
-      <CardHeader className="flex flex-row items-center justify-between pb-2">
+    <Card className={cn("flex flex-col justify-between hover:border-slate-300/80 transition-all duration-300 shadow-2xs", themeConfig.tokens.cardBorder)}>
+      <CardHeader className="flex flex-row items-start justify-between pb-3">
         <div>
-          <div className="flex items-center gap-2">
-            <CardTitle className="text-sm font-bold text-slate-800">
-              Processos por Unidade
-            </CardTitle>
-            <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-emerald-50 text-[#0F4C3A] border border-emerald-200/70">
-              DIRRE lidera
-            </span>
-          </div>
-          <CardDescription className="text-xs">Carga de trabalho distribuída pelas diretorias</CardDescription>
+          <CardTitle className="text-sm font-semibold text-slate-900">
+            Processos por Unidade
+          </CardTitle>
+          <CardDescription className="text-xs text-slate-500 mt-0.5">
+            Carga de trabalho distribuída pelas diretorias
+          </CardDescription>
         </div>
-        <button
-          className="text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
-          title="Processos sob responsabilidade técnica ativa de cada diretoria."
-        >
-          <Info className="w-3.5 h-3.5" />
-        </button>
+        <span className={cn("text-xs font-semibold px-2 py-0.5 rounded-full border", themeConfig.tokens.accentPillBg, themeConfig.tokens.accentPillText, themeConfig.tokens.accentPillBorder)}>
+          DIRRE lidera
+        </span>
       </CardHeader>
 
-      <CardContent className="pt-2">
-        <div className="h-64 w-full">
+      <CardContent className="pt-0 pb-4 pr-4">
+        <div className="h-[250px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={data}
               layout="vertical"
-              margin={{ top: 10, right: 30, left: 10, bottom: 0 }}
+              margin={{ top: 5, right: 55, left: -10, bottom: 0 }}
             >
-              <defs>
-                <linearGradient id="barGradientForest" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="#0A3528" />
-                  <stop offset="100%" stopColor="#145A45" />
-                </linearGradient>
-                <linearGradient id="barGradientTeal" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="#0F4C3A" />
-                  <stop offset="100%" stopColor="#10B981" />
-                </linearGradient>
-              </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" horizontal={false} />
               <XAxis
                 type="number"
-                stroke="#94A3B8"
-                fontSize={11}
+                domain={[0, 1500]}
+                stroke="#64748B"
+                tick={{ fill: '#64748B', fontSize: 11 }}
                 tickLine={false}
                 axisLine={false}
                 tickFormatter={(val) => val.toLocaleString('pt-BR')}
@@ -98,23 +89,28 @@ export const UnidadeBarChart: React.FC = () => {
               <YAxis
                 type="category"
                 dataKey="unidade"
-                stroke="#64748B"
-                fontSize={11}
-                fontWeight={600}
+                stroke="#334155"
+                tick={{ fill: '#0F172A', fontSize: 11, fontWeight: 600 }}
                 tickLine={false}
                 axisLine={false}
               />
               <Tooltip content={<CustomTooltip />} />
               <Bar
                 dataKey="quantidade"
-                radius={[0, 6, 6, 0]}
+                radius={[0, 4, 4, 0]}
                 barSize={18}
-                fill="url(#barGradientForest)"
+                fill={primaryColor}
               >
+                <LabelList
+                  dataKey="quantidade"
+                  position="right"
+                  formatter={(val: any) => Number(val).toLocaleString('pt-BR')}
+                  style={{ fill: '#334155', fontSize: 11, fontWeight: 600 }}
+                />
                 {data.map((_, index) => (
                   <Cell
                     key={`cell-${index}`}
-                    fill={index === 0 ? 'url(#barGradientTeal)' : 'url(#barGradientForest)'}
+                    fill={index === 0 ? primaryColor : secondaryColor}
                   />
                 ))}
               </Bar>
@@ -125,4 +121,3 @@ export const UnidadeBarChart: React.FC = () => {
     </Card>
   );
 };
-

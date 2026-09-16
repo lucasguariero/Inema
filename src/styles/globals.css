@@ -1,25 +1,117 @@
 @import "tailwindcss";
 
-@theme {
-  --color-inema-green: #0F4C3A;
-  --color-inema-green-hover: #145A45;
-  --color-inema-green-dark: #0A3528;
-  --color-inema-green-light: #E8F5E9;
-  --color-inema-sage: #E2ECE9;
-  --color-inema-sage-dark: #C8DED8;
-  --color-inema-sage-light: #F0F6F4;
-  --color-inema-gold: #D4A017;
-  --color-inema-mint: #10B981;
-}
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --inema-primary: #0F4C3A;
-  --inema-primary-hover: #145A45;
-  --inema-primary-dark: #0A3528;
-  --inema-sage: #E2ECE9;
-  --inema-sage-dark: #C8DED8;
-  --inema-surface: #F8FAFC;
-  --inema-border: #E2E8F0;
+  /* INEMA Azul (Recursos Hídricos - Baseado no texto) */
+  --blue-50: #eff6ff;
+  --blue-100: #dbeafe;
+  --blue-200: #bfdbfe;
+  --blue-300: #93c5fd;
+  --blue-400: #60a5fa;
+  --blue-500: #0073C4;
+  --blue-600: #005ea3;
+  --blue-700: #004a82;
+  --blue-800: #003e6b;
+  --blue-900: #003358;
+
+  /* INEMA Verde (Meio Ambiente - Baseado no pingo do 'i') */
+  --green-50: #f4fbf0;
+  --green-100: #e5f5da;
+  --green-200: #cdebb9;
+  --green-300: #aedc91;
+  --green-400: #8cc668;
+  --green-500: #78C043;
+  --green-600: #5e9c31;
+  --green-700: #487a24;
+  --green-800: #355c1a;
+  --green-900: #234010;
+
+  /* Dark Forest (Apenas para Sidebars Escuras e fundos pesados) */
+  --forest-800: #0a2720; 
+  --forest-900: #061814;
+  --forest-950: #020b09;
+
+  /* Slate Neutros */
+  --slate-50: #f8fafc;
+  --slate-100: #f1f5f9;
+  --slate-200: #e2e8f0;
+  --slate-300: #cbd5e1;
+  --slate-400: #94a3b8;
+  --slate-500: #64748b;
+  --slate-600: #475569;
+  --slate-700: #334155;
+  --slate-800: #1e293b;
+  --slate-900: #0f172a;
+
+  /* Ações e Superfícies */
+  --bg-page: var(--slate-50);
+  --bg-card: #ffffff;
+  --border-color: var(--slate-200);
+  --text-primary: var(--slate-900);
+  --text-secondary: var(--slate-500);
+  --primary-default: var(--blue-600);
+  --primary-hover: var(--blue-700);
+  --accent-default: var(--green-500);
+
+  /* Retrocompatibilidade com variáveis legadas */
+  --inema-primary: var(--blue-600);
+  --inema-primary-hover: var(--blue-700);
+  --inema-primary-dark: var(--blue-900);
+  --inema-sage: var(--green-100);
+  --inema-sage-dark: var(--green-200);
+  --inema-surface: var(--slate-50);
+  --inema-border: var(--slate-200);
+}
+
+@theme {
+  --color-inema-blue-50: #eff6ff;
+  --color-inema-blue-100: #dbeafe;
+  --color-inema-blue-200: #bfdbfe;
+  --color-inema-blue-300: #93c5fd;
+  --color-inema-blue-400: #60a5fa;
+  --color-inema-blue-500: #0073C4;
+  --color-inema-blue-600: #005ea3;
+  --color-inema-blue-700: #004a82;
+  --color-inema-blue-800: #003e6b;
+  --color-inema-blue-900: #003358;
+
+  --color-inema-green-50: #f4fbf0;
+  --color-inema-green-100: #e5f5da;
+  --color-inema-green-200: #cdebb9;
+  --color-inema-green-300: #aedc91;
+  --color-inema-green-400: #8cc668;
+  --color-inema-green-500: #78C043;
+  --color-inema-green-600: #5e9c31;
+  --color-inema-green-700: #487a24;
+  --color-inema-green-800: #355c1a;
+  --color-inema-green-900: #234010;
+
+  --color-forest-800: #0a2720;
+  --color-forest-900: #061814;
+  --color-forest-950: #020b09;
+
+  --color-blue-50: #eff6ff;
+  --color-blue-100: #dbeafe;
+  --color-blue-200: #bfdbfe;
+  --color-blue-300: #93c5fd;
+  --color-blue-400: #60a5fa;
+  --color-blue-500: #0073C4;
+  --color-blue-600: #005ea3;
+  --color-blue-700: #004a82;
+  --color-blue-800: #003e6b;
+  --color-blue-900: #003358;
+
+  --color-green-50: #f4fbf0;
+  --color-green-100: #e5f5da;
+  --color-green-200: #cdebb9;
+  --color-green-300: #aedc91;
+  --color-green-400: #8cc668;
+  --color-green-500: #78C043;
+  --color-green-600: #5e9c31;
+  --color-green-700: #487a24;
+  --color-green-800: #355c1a;
+  --color-green-900: #234010;
 }
 
 body {

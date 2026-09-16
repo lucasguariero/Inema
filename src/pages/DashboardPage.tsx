@@ -2,35 +2,30 @@ import React, { useState, useMemo } from 'react';
 import {
   FileText,
   Clock,
-  AlertOctagon,
+  Hourglass,
+  AlertTriangle,
   CheckCircle2,
   Award,
-  Hourglass,
-  ArrowUpRight,
+  ChevronRight,
   ExternalLink,
-  Search,
+  X,
   Copy,
   Check,
-  Eye,
-  AlertCircle,
-  Filter,
   Building,
-  MapPin,
   Calendar,
-  UserCheck,
-  ShieldCheck,
-  FileCheck,
+  User,
+  AlertCircle,
 } from 'lucide-react';
 import { Toolbar } from '@/components/dashboard/Toolbar';
 import { KpiCard } from '@/components/dashboard/KpiCard';
 import { EntradaSaidaChart } from '@/components/dashboard/EntradaSaidaChart';
-import { StatusDonutChart } from '@/components/dashboard/StatusDonutChart';
+import { StatusDonutChart } from '@/components/dashboard/StatusDistributionList';
 import { UnidadeBarChart } from '@/components/dashboard/UnidadeBarChart';
 import { AgingBarChart } from '@/components/dashboard/AgingBarChart';
 import { TempoAnaliseChart } from '@/components/dashboard/TempoAnaliseChart';
 import { VencidosBarChart } from '@/components/dashboard/VencidosBarChart';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { FilterDrawer, FilterState } from '@/components/dashboard/FilterDrawer';
+import { Card, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -40,503 +35,509 @@ import {
   DialogDescription,
   DialogFooter,
 } from '@/components/ui/dialog';
+import { useTheme } from '@/context/ThemeContext';
+import { cn } from '@/lib/utils';
 
-interface ProcessoPrioritario {
-  numero: string;
-  interessado: string;
+interface ProcessoVencido {
+  processo: string;
   tipo: string;
   unidade: string;
-  municipio: string;
-  cnpj: string;
-  dataProtocolo: string;
-  analista: string;
-  diasRestantes: number;
-  urgencia: 'Crítico' | 'Atenção' | 'Normal';
-  resumo: string;
+  etapa: string;
+  responsavel: string;
+  dias: number;
 }
 
-const prioridadesIniciais: ProcessoPrioritario[] = [
+const unitDescriptions: Record<string, string> = {
+  DIRRE: 'Diretoria de Recursos Hídricos e Saneamento',
+  DIREC: 'Diretoria de Regulação e Controle',
+  DIBA: 'Diretoria de Biodiversidade e Áreas Protegidas',
+  DIBIO: 'Diretoria de Biodiversidade',
+  DILIC: 'Diretoria de Licenciamento Ambiental',
+  DISUC: 'Diretoria de Sustentabilidade e Unidades de Conservação',
+};
+
+const processosVencidosIniciais: ProcessoVencido[] = [
   {
-    numero: '2026.000189/INEMA/REG',
-    interessado: 'Consórcio Eólico Chapada Diamantina S.A.',
-    tipo: 'Licença de Instalação (LI)',
-    unidade: 'DILIC',
-    municipio: 'Morro do Chapéu / BA',
-    cnpj: '18.942.301/0001-92',
-    dataProtocolo: '14/01/2026',
-    analista: 'Eng. Marcelo Albuquerque (DILIC)',
-    diasRestantes: 2,
-    urgencia: 'Crítico',
-    resumo: 'Complexo com 48 aerogeradores. Aguardando validação final de supressão vegetal autorizada.',
-  },
-  {
-    numero: '2026.000142/INEMA/RE',
-    interessado: 'Polo Petroquímico de Camaçari S.A.',
-    tipo: 'Emergência Química - Contenção',
-    unidade: 'DIRRE / DIFIS',
-    municipio: 'Camaçari / BA',
-    cnpj: '04.120.485/0001-44',
-    dataProtocolo: '28/02/2026',
-    analista: 'Bióloga Fernanda Souza (DIFIS)',
-    diasRestantes: 1,
-    urgencia: 'Crítico',
-    resumo: 'Relatório técnico conclusivo sobre neutralização de efluente orgânico em canal de drenagem.',
-  },
-  {
-    numero: '2026.000098/INEMA/OUT',
-    interessado: 'Agropecuária Vale do São Francisco Ltda.',
-    tipo: 'Outorga Subterrânea de Água',
-    unidade: 'DIREC',
-    municipio: 'Juazeiro / BA',
-    cnpj: '09.832.110/0002-18',
-    dataProtocolo: '05/02/2026',
-    analista: 'Hidrólogo Ricardo Neves (DIREC)',
-    diasRestantes: 5,
-    urgencia: 'Atenção',
-    resumo: 'Captação tubular profunda para irrigação de fruticultura irrigada (vazão requerida: 120 m³/h).',
-  },
-  {
-    numero: '2026.000045/INEMA/ASL',
-    interessado: 'Cooperativa Agrícola de Barreiras',
-    tipo: 'ANSLA Silos e Armazéns Graneleiros',
+    processo: 'SEIA-REG-2024/001234',
+    tipo: 'Licenciamento Ambiental',
     unidade: 'DIRRE',
-    municipio: 'Barreiras / BA',
-    cnpj: '12.441.982/0001-70',
-    dataProtocolo: '10/02/2026',
-    analista: 'Eng. Roberto Antunes (DIRRE)',
-    diasRestantes: 8,
-    urgencia: 'Normal',
-    resumo: 'Regularização e ampliação de capacidade estática de estocagem de soja e milho.',
+    etapa: 'Análise Técnica',
+    responsavel: 'João Silva',
+    dias: 32,
+  },
+  {
+    processo: 'SEIA-REG-2024/001198',
+    tipo: 'Autorização Ambiental',
+    unidade: 'DIBIO',
+    etapa: 'Análise Técnica',
+    responsavel: 'Maria Santos',
+    dias: 28,
+  },
+  {
+    processo: 'SEIA-REG-2024/001145',
+    tipo: 'Licenciamento Ambiental',
+    unidade: 'DILIC',
+    etapa: 'Coordenação',
+    responsavel: 'Carlos Lima',
+    dias: 25,
+  },
+  {
+    processo: 'SEIA-REG-2024/001089',
+    tipo: 'Outorga',
+    unidade: 'DIRRE',
+    etapa: 'Análise Técnica',
+    responsavel: 'João Silva',
+    dias: 22,
+  },
+  {
+    processo: 'SEIA-REG-2024/001077',
+    tipo: 'Autorização Ambiental',
+    unidade: 'DIREC',
+    etapa: 'Diretoria',
+    responsavel: 'Ana Paula',
+    dias: 19,
   },
 ];
 
 export const DashboardPage: React.FC = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState('Q1-2026');
+  const { themeConfig, isDarkMode } = useTheme();
+
+  const [selectedPeriod, setSelectedPeriod] = useState('30d');
   const [selectedUnit, setSelectedUnit] = useState('Todas as Unidades');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [urgencyFilter, setUrgencyFilter] = useState<'Todos' | 'Crítico' | 'Atenção' | 'Normal'>('Todos');
+  const [activeKpiFilter, setActiveKpiFilter] = useState<string | null>(null);
+  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
+  const [activeModalProcess, setActiveModalProcess] = useState<ProcessoVencido | null>(null);
   const [copiedNumero, setCopiedNumero] = useState<string | null>(null);
-  const [activeProcessModal, setActiveProcessModal] = useState<ProcessoPrioritario | null>(null);
 
-  // Filtro reativo de processos
-  const processosFiltrados = useMemo(() => {
-    return prioridadesIniciais.filter((item) => {
-      const matchSearch =
-        item.numero.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.interessado.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.tipo.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.municipio.toLowerCase().includes(searchQuery.toLowerCase());
+  const [filters, setFilters] = useState<FilterState>({
+    unidades: [],
+    tipos: [],
+    status: [],
+    prazo: 'todos',
+    etapa: '',
+  });
 
-      const matchUrgency = urgencyFilter === 'Todos' || item.urgencia === urgencyFilter;
-      return matchSearch && matchUrgency;
+  const activeFilterCount = useMemo(() => {
+    let count = 0;
+    count += filters.unidades.length;
+    count += filters.tipos.length;
+    count += filters.status.length;
+    if (filters.prazo !== 'todos') count += 1;
+    if (filters.etapa) count += 1;
+    if (activeKpiFilter) count += 1;
+    return count;
+  }, [filters, activeKpiFilter]);
+
+  const clearAllFilters = () => {
+    setFilters({
+      unidades: [],
+      tipos: [],
+      status: [],
+      prazo: 'todos',
+      etapa: '',
     });
-  }, [searchQuery, urgencyFilter]);
+    setActiveKpiFilter(null);
+  };
 
-  // Cópia elegante do número do processo
-  const handleCopy = (numero: string, e: React.MouseEvent) => {
+  const handleToggleKpi = (kpiKey: string) => {
+    if (activeKpiFilter === kpiKey) {
+      setActiveKpiFilter(null);
+    } else {
+      setActiveKpiFilter(kpiKey);
+    }
+  };
+
+  const handleCopy = (num: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    navigator.clipboard.writeText(numero);
-    setCopiedNumero(numero);
+    navigator.clipboard.writeText(num);
+    setCopiedNumero(num);
     setTimeout(() => setCopiedNumero(null), 1800);
   };
 
-  // KPIs dinâmicos reativos ao período selecionado
-  const kpiMultipliers: Record<string, number> = {
-    'Q1-2026': 1,
-    '30d': 0.35,
-    '7d': 0.09,
-    '2026': 1.15,
-  };
-  const mult = kpiMultipliers[selectedPeriod] || 1;
-
-  const kpis = {
-    protocolados: Math.round(1245 * mult).toLocaleString('pt-BR'),
-    emAnalise: Math.round(2356 * mult).toLocaleString('pt-BR'),
-    pendentes: Math.round(873 * mult).toLocaleString('pt-BR'),
-    vencidos: Math.round(198 * mult).toLocaleString('pt-BR'),
-    concluidos: Math.round(1987 * mult).toLocaleString('pt-BR'),
-    atosEmitidos: Math.round(1604 * mult).toLocaleString('pt-BR'),
-  };
+  // Filtragem da tabela
+  const processosFiltrados = useMemo(() => {
+    return processosVencidosIniciais.filter((proc) => {
+      if (filters.unidades.length > 0 && !filters.unidades.includes(proc.unidade)) {
+        return false;
+      }
+      if (filters.tipos.length > 0 && !filters.tipos.some((t) => proc.tipo.includes(t))) {
+        return false;
+      }
+      if (filters.etapa && proc.etapa !== filters.etapa) {
+        return false;
+      }
+      return true;
+    });
+  }, [filters]);
 
   return (
     <div className="w-full space-y-6">
-      {/* 1. Barra de Ações Superior & Filtros */}
+      {/* 1. Barra de Ações Superior */}
       <Toolbar
         selectedPeriod={selectedPeriod}
         onSelectPeriod={setSelectedPeriod}
         selectedUnit={selectedUnit}
         onSelectUnit={setSelectedUnit}
+        onOpenFilters={() => setIsFilterDrawerOpen(true)}
+        activeFilterCount={activeFilterCount}
       />
 
-      {/* 2. Banner de Alerta Gerencial com Ação Imediata */}
-      <div className="w-full p-4 rounded-2xl bg-gradient-to-r from-amber-500/10 via-rose-500/10 to-transparent border border-amber-300/40 backdrop-blur-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xs">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-sm shadow-amber-500/20">
-            <AlertCircle className="w-5 h-5" />
+      {/* Banner de Filtros Ativos */}
+      {activeFilterCount > 0 && (
+        <div className="p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 rounded-xl flex items-center justify-between text-xs text-emerald-950 dark:text-emerald-200 flex-wrap gap-2 animate-in fade-in">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="font-semibold flex items-center gap-1 text-[#0F4C3A] dark:text-emerald-400">
+              Filtros ativos:
+            </span>
+            {activeKpiFilter && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 text-xs">
+                Métrica: {activeKpiFilter}
+                <X className="w-3 h-3 cursor-pointer" onClick={() => setActiveKpiFilter(null)} />
+              </span>
+            )}
+            {filters.unidades.map((u) => (
+              <span key={u} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 text-xs">
+                Unidade: {u}
+                <X
+                  className="w-3 h-3 cursor-pointer"
+                  onClick={() => setFilters({ ...filters, unidades: filters.unidades.filter((x) => x !== u) })}
+                />
+              </span>
+            ))}
+            {filters.tipos.map((t) => (
+              <span key={t} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 text-xs">
+                Tipo: {t}
+                <X
+                  className="w-3 h-3 cursor-pointer"
+                  onClick={() => setFilters({ ...filters, tipos: filters.tipos.filter((x) => x !== t) })}
+                />
+              </span>
+            ))}
+            {filters.status.map((s) => (
+              <span key={s} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 text-xs">
+                Status: {s}
+                <X
+                  className="w-3 h-3 cursor-pointer"
+                  onClick={() => setFilters({ ...filters, status: filters.status.filter((x) => x !== s) })}
+                />
+              </span>
+            ))}
+            {filters.prazo !== 'todos' && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 text-xs">
+                Prazo: {filters.prazo}
+                <X
+                  className="w-3 h-3 cursor-pointer"
+                  onClick={() => setFilters({ ...filters, prazo: 'todos' })}
+                />
+              </span>
+            )}
+            {filters.etapa && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 text-xs">
+                Etapa: {filters.etapa}
+                <X
+                  className="w-3 h-3 cursor-pointer"
+                  onClick={() => setFilters({ ...filters, etapa: '' })}
+                />
+              </span>
+            )}
           </div>
-          <div>
-            <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-              <span>Atenção Executiva: 2 processos com prazo fatal nas próximas 48h</span>
-              <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
-            </h2>
-            <p className="text-xs text-slate-600">
-              Demandas com prioridade de despacho na DIRRE e DIFIS exigem homologação do gestor.
-            </p>
-          </div>
+          <button
+            onClick={clearAllFilters}
+            className="font-semibold text-emerald-800 dark:text-emerald-400 hover:underline flex items-center gap-1 ml-auto cursor-pointer"
+          >
+            Limpar todos <X className="w-3.5 h-3.5" />
+          </button>
         </div>
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={() => {
-            setUrgencyFilter('Crítico');
-            const el = document.getElementById('tabela-prioridades');
-            if (el) el.scrollIntoView({ behavior: 'smooth' });
-          }}
-          className="bg-white hover:bg-amber-50 text-amber-900 border-amber-300 text-xs font-bold shadow-2xs shrink-0 cursor-pointer"
-        >
-          <span>Filtrar Casos Críticos</span>
-          <ArrowUpRight className="w-3.5 h-3.5 ml-1 text-amber-700" />
-        </Button>
-      </div>
+      )}
 
-      {/* 3. Grid de 6 KPIs Executivos */}
+      {/* 2. Grid de 6 KPIs Oficiais com Cores de Requisito */}
       <div className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         <KpiCard
           title="Protocolados"
-          value={kpis.protocolados}
-          trend={{ value: "+12%", isPositive: true }}
+          value="1.245"
+          trend={{ value: '+12%', isPositive: true }}
           icon={FileText}
-          themeColor="emerald"
+          variant="emerald"
+          sparklineData={[10, 14, 12, 19, 17, 24, 28]}
+          isSelected={activeKpiFilter === 'Protocolados'}
+          onClick={() => handleToggleKpi('Protocolados')}
         />
         <KpiCard
           title="Em Análise"
-          value={kpis.emAnalise}
-          trend={{ value: "-3%", isPositive: false }}
+          value="2.356"
+          trend={{ value: '-3%', isPositive: false }}
           icon={Clock}
-          themeColor="blue"
+          variant="slate"
+          sparklineData={[25, 22, 24, 18, 20, 16, 15]}
+          isSelected={activeKpiFilter === 'Em Análise'}
+          onClick={() => handleToggleKpi('Em Análise')}
         />
         <KpiCard
           title="Pendentes"
-          value={kpis.pendentes}
-          trend={{ value: "+8%", isPositive: false }}
+          value="873"
+          trend={{ value: '+8%', isPositive: false }}
           icon={Hourglass}
-          themeColor="amber"
+          variant="amber"
+          sparklineData={[8, 10, 9, 13, 11, 15, 16]}
+          isSelected={activeKpiFilter === 'Pendentes'}
+          onClick={() => handleToggleKpi('Pendentes')}
         />
         <KpiCard
           title="Vencidos"
-          value={kpis.vencidos}
-          trend={{ value: "+15%", isPositive: false }}
-          icon={AlertOctagon}
-          themeColor="rose"
+          value="198"
+          trend={{ value: '+15%', isPositive: false }}
+          icon={AlertTriangle}
+          variant="rose"
+          sparklineData={[5, 8, 7, 10, 9, 12, 14]}
+          isSelected={activeKpiFilter === 'Vencidos'}
+          onClick={() => handleToggleKpi('Vencidos')}
         />
         <KpiCard
           title="Concluídos"
-          value={kpis.concluidos}
-          trend={{ value: "+18%", isPositive: true }}
+          value="1.987"
+          trend={{ value: '+18%', isPositive: true }}
           icon={CheckCircle2}
-          themeColor="emerald"
+          variant="emerald"
+          sparklineData={[12, 15, 18, 20, 22, 26, 30]}
+          isSelected={activeKpiFilter === 'Concluídos'}
+          onClick={() => handleToggleKpi('Concluídos')}
         />
         <KpiCard
           title="Atos Emitidos"
-          value={kpis.atosEmitidos}
-          trend={{ value: "+20%", isPositive: true }}
+          value="1.604"
+          trend={{ value: '+20%', isPositive: true }}
           icon={Award}
-          themeColor="teal"
+          variant="emerald"
+          sparklineData={[10, 12, 16, 19, 21, 25, 29]}
+          isSelected={activeKpiFilter === 'Atos Emitidos'}
+          onClick={() => handleToggleKpi('Atos Emitidos')}
         />
       </div>
 
-      {/* 4. Grid Principal de Gráficos (Linha 1) */}
-      <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* 3. Linha 1 de Gráficos (3 Colunas) */}
+      <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6">
         <EntradaSaidaChart />
         <StatusDonutChart />
         <UnidadeBarChart />
       </div>
 
-      {/* 5. Grid Secundário de Gráficos (Linha 2) */}
-      <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* 4. Linha 2 de Gráficos (3 Colunas) */}
+      <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6">
         <AgingBarChart />
         <TempoAnaliseChart />
         <VencidosBarChart />
       </div>
 
-      {/* 6. Tabela de Casos Prioritários com Busca e Filtros Vivos */}
-      <Card id="tabela-prioridades" className="w-full overflow-hidden hover:border-slate-300/80 transition-all duration-300">
-        <CardHeader className="flex flex-col lg:flex-row lg:items-center justify-between pb-4 gap-4">
-          <div>
-            <div className="flex items-center gap-2.5">
-              <CardTitle className="text-sm font-bold text-slate-800 flex items-center gap-2">
-                <span>Processos Prioritários com Limite de Prazo Imediato</span>
-              </CardTitle>
-              <Badge variant="rose" dot={true}>
-                {processosFiltrados.length} em pauta
-              </Badge>
+      {/* 5. Tabela Oficial: Processos Vencidos (Top 5) */}
+      <Card className="w-full overflow-hidden shadow-2xs border border-slate-200 dark:border-slate-800 dark:bg-slate-900 transition-all">
+        <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between flex-wrap gap-2">
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-lg bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 flex items-center justify-center border border-rose-200 dark:border-rose-900/60 shadow-2xs">
+              <AlertTriangle className="w-3.5 h-3.5" />
             </div>
-            <CardDescription className="text-xs mt-0.5">
-              Processos com necessidade de despacho ou intervenção técnica urgente
-            </CardDescription>
-          </div>
-
-          {/* Controles de Busca e Filtro da Tabela */}
-          <div className="flex flex-wrap items-center gap-2.5">
-            {/* Input de Busca */}
-            <div className="relative w-full sm:w-64">
-              <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Filtrar por processo, interessado..."
-                className="w-full pl-8 pr-3 py-1.5 bg-slate-50 hover:bg-white focus:bg-white border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#0F4C3A] focus:ring-1 focus:ring-[#0F4C3A] transition-all shadow-2xs"
-              />
-            </div>
-
-            {/* Segmented Filtro por Urgência */}
-            <div className="flex items-center bg-slate-100/90 p-0.5 rounded-xl border border-slate-200/60">
-              {(['Todos', 'Crítico', 'Atenção', 'Normal'] as const).map((urg) => {
-                const isActive = urgencyFilter === urg;
-                return (
-                  <button
-                    key={urg}
-                    onClick={() => setUrgencyFilter(urg)}
-                    className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg transition-all cursor-pointer ${
-                      isActive
-                        ? 'bg-white text-[#0F4C3A] shadow-2xs font-bold'
-                        : 'text-slate-500 hover:text-slate-900'
-                    }`}
-                  >
-                    {urg}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </CardHeader>
-
-        <CardContent className="pt-0 p-0">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50/90 text-slate-500 font-semibold uppercase text-[10px] tracking-wider border-y border-slate-100">
-                <tr>
-                  <th className="py-3 px-4">Número do Processo</th>
-                  <th className="py-3 px-4">Interessado / Município</th>
-                  <th className="py-3 px-4">Tipo do Ato</th>
-                  <th className="py-3 px-4">Diretoria</th>
-                  <th className="py-3 px-4">Prazo Restante</th>
-                  <th className="py-3 px-4 text-right">Ações</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {processosFiltrados.length === 0 ? (
-                  <tr>
-                    <td colSpan={6} className="py-8 text-center text-slate-400 text-xs">
-                      Nenhum processo encontrado para o filtro aplicado.
-                    </td>
-                  </tr>
-                ) : (
-                  processosFiltrados.map((item) => (
-                    <tr
-                      key={item.numero}
-                      onClick={() => setActiveProcessModal(item)}
-                      className="hover:bg-slate-50/80 transition-colors group cursor-pointer"
-                    >
-                      {/* Número com botão de copiar */}
-                      <td className="py-3 px-4">
-                        <div className="flex items-center gap-2">
-                          <span
-                            className={`w-2 h-2 rounded-full shrink-0 ${
-                              item.urgencia === 'Crítico'
-                                ? 'bg-rose-500 animate-pulse'
-                                : item.urgencia === 'Atenção'
-                                ? 'bg-amber-500'
-                                : 'bg-emerald-500'
-                            }`}
-                          />
-                          <span className="font-mono font-bold text-slate-900 text-xs">
-                            {item.numero}
-                          </span>
-                          <button
-                            onClick={(e) => handleCopy(item.numero, e)}
-                            className="p-1 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 transition-all cursor-pointer opacity-0 group-hover:opacity-100"
-                            title="Copiar número do processo"
-                          >
-                            {copiedNumero === item.numero ? (
-                              <Check className="w-3 h-3 text-emerald-600" />
-                            ) : (
-                              <Copy className="w-3 h-3" />
-                            )}
-                          </button>
-                        </div>
-                      </td>
-
-                      {/* Interessado + Município */}
-                      <td className="py-3 px-4">
-                        <div className="flex flex-col">
-                          <span className="text-slate-800 font-semibold">{item.interessado}</span>
-                          <span className="text-[11px] text-slate-400 flex items-center gap-1 mt-0.5">
-                            <MapPin className="w-2.5 h-2.5 text-slate-400" />
-                            {item.municipio}
-                          </span>
-                        </div>
-                      </td>
-
-                      {/* Tipo do Ato */}
-                      <td className="py-3 px-4 text-slate-600 font-medium">{item.tipo}</td>
-
-                      {/* Unidade */}
-                      <td className="py-3 px-4">
-                        <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 font-bold text-[11px]">
-                          {item.unidade}
-                        </span>
-                      </td>
-
-                      {/* Prazo */}
-                      <td className="py-3 px-4">
-                        <Badge
-                          variant={
-                            item.urgencia === 'Crítico'
-                              ? 'rose'
-                              : item.urgencia === 'Atenção'
-                              ? 'amber'
-                              : 'secondary'
-                          }
-                          dot={item.urgencia === 'Crítico'}
-                        >
-                          {item.diasRestantes} {item.diasRestantes === 1 ? 'dia restante' : 'dias restantes'}
-                        </Badge>
-                      </td>
-
-                      {/* Ações */}
-                      <td className="py-3 px-4 text-right">
-                        <div className="flex items-center justify-end gap-1">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setActiveProcessModal(item);
-                            }}
-                            className="p-1.5 rounded-lg text-slate-500 hover:text-[#0F4C3A] hover:bg-emerald-50 transition-colors cursor-pointer"
-                            title="Visualizar detalhes da pauta"
-                          >
-                            <Eye className="w-4 h-4" />
-                          </button>
-                          <a
-                            href="/src/fiscalizacao.html"
-                            onClick={(e) => e.stopPropagation()}
-                            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
-                            title="Abrir no módulo SEIA"
-                          >
-                            <ExternalLink className="w-4 h-4" />
-                          </a>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* 7. Modal de Detalhes Rápidos do Processo */}
-      <Dialog
-        open={activeProcessModal !== null}
-        onOpenChange={(open) => {
-          if (!open) setActiveProcessModal(null);
-        }}
-      >
-        {activeProcessModal && (
-          <DialogContent className="max-w-xl">
-            <DialogHeader>
-              <div className="flex items-center gap-2 mb-1">
-                <Badge
-                  variant={
-                    activeProcessModal.urgencia === 'Crítico'
-                      ? 'rose'
-                      : activeProcessModal.urgencia === 'Atenção'
-                      ? 'amber'
-                      : 'secondary'
-                  }
-                  dot={true}
-                >
-                  Urgência: {activeProcessModal.urgencia}
-                </Badge>
-                <span className="text-[11px] font-mono text-slate-400">
-                  Protocolo: {activeProcessModal.dataProtocolo}
+            <div>
+              <div className="flex items-center gap-2">
+                <CardTitle className="text-sm font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+                  Processos Vencidos (Top 5)
+                </CardTitle>
+                <span className="text-xs font-medium text-slate-400 dark:text-slate-500">
+                  (Exibindo {processosFiltrados.length} de 198)
                 </span>
               </div>
-              <DialogTitle className="text-base font-bold text-slate-900">
-                {activeProcessModal.numero}
-              </DialogTitle>
-              <DialogDescription>
-                {activeProcessModal.tipo} – {activeProcessModal.unidade}
-              </DialogDescription>
+            </div>
+          </div>
+          <button
+            onClick={() => alert('Abrindo listagem completa de todos os 198 processos vencidos...')}
+            className="text-xs font-semibold text-emerald-800 dark:text-emerald-400 hover:underline flex items-center gap-1 cursor-pointer"
+          >
+            Ver todos os 198 <ChevronRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-xs text-left">
+            <thead>
+              <tr className="bg-slate-50/80 dark:bg-slate-800/40 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">
+                <th className="p-4">Processo</th>
+                <th className="p-4">Tipo</th>
+                <th className="p-4">Unidade</th>
+                <th className="p-4">Etapa</th>
+                <th className="p-4">Responsável</th>
+                <th className="p-4">Vencido há</th>
+                <th className="p-4 text-center">Ação</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              {processosFiltrados.map((proc) => (
+                <tr
+                  key={proc.processo}
+                  className="hover:bg-slate-50/70 dark:hover:bg-slate-800/50 transition-colors"
+                >
+                  <td className="p-4">
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setActiveModalProcess(proc)}
+                        className="font-semibold text-slate-900 dark:text-slate-100 hover:text-emerald-700 dark:hover:text-emerald-400 hover:underline flex items-center gap-1.5 cursor-pointer"
+                      >
+                        <FileText className="w-3.5 h-3.5 text-slate-400" />
+                        <span>{proc.processo}</span>
+                      </button>
+                      <button
+                        onClick={(e) => handleCopy(proc.processo, e)}
+                        className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 p-1 rounded transition-colors"
+                        title="Copiar número"
+                      >
+                        {copiedNumero === proc.processo ? (
+                          <Check className="w-3 h-3 text-emerald-600" />
+                        ) : (
+                          <Copy className="w-3 h-3" />
+                        )}
+                      </button>
+                    </div>
+                  </td>
+                  <td className="p-4 text-slate-600 dark:text-slate-300 font-medium">
+                    {proc.tipo}
+                  </td>
+                  <td className="p-4">
+                    <span
+                      className="cursor-help font-semibold text-slate-700 dark:text-slate-200 underline decoration-dotted decoration-slate-300 dark:decoration-slate-600"
+                      title={unitDescriptions[proc.unidade] || proc.unidade}
+                    >
+                      {proc.unidade}
+                    </span>
+                  </td>
+                  <td className="p-4 text-slate-600 dark:text-slate-300">
+                    {proc.etapa}
+                  </td>
+                  <td className="p-4 text-slate-600 dark:text-slate-300">
+                    {proc.responsavel}
+                  </td>
+                  <td className="p-4">
+                    <span className="inline-flex items-center gap-1 font-bold text-xs px-2.5 py-0.5 rounded-full bg-rose-50 dark:bg-rose-950/50 text-rose-700 dark:text-rose-400 border border-rose-200/80 dark:border-rose-900/60 shadow-2xs">
+                      <span className="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0" />
+                      {proc.dias} dias
+                    </span>
+                  </td>
+                  <td className="p-4 text-center">
+                    <button
+                      onClick={() => setActiveModalProcess(proc)}
+                      className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-slate-800 hover:border-emerald-300 dark:hover:border-emerald-600 hover:text-emerald-800 dark:hover:text-emerald-300 transition-all shadow-2xs cursor-pointer"
+                    >
+                      Detalhes
+                      <ChevronRight className="w-3 h-3" />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Card>
+
+      {/* Drawer de Filtros Avançados (Lateral Direita) */}
+      <FilterDrawer
+        isOpen={isFilterDrawerOpen}
+        onClose={() => setIsFilterDrawerOpen(false)}
+        filters={filters}
+        onFiltersChange={setFilters}
+        onApply={() => {}}
+        onClear={clearAllFilters}
+      />
+
+      {/* Modal de Detalhes do Processo Vencido */}
+      {activeModalProcess && (
+        <Dialog open={!!activeModalProcess} onOpenChange={() => setActiveModalProcess(null)}>
+          <DialogContent className="max-w-lg bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100 rounded-2xl shadow-2xl">
+            <DialogHeader className="border-b border-slate-100 dark:border-slate-800 pb-3">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-[#0F4C3A] dark:text-emerald-300 flex items-center justify-center border border-emerald-200/60 dark:border-emerald-800/60">
+                  <FileText className="w-4 h-4" />
+                </div>
+                <div>
+                  <DialogTitle className="text-sm font-bold text-slate-900 dark:text-slate-100">
+                    {activeModalProcess.processo}
+                  </DialogTitle>
+                  <DialogDescription className="text-xs text-slate-500 dark:text-slate-400">
+                    Detalhes do processo regulatório em atraso
+                  </DialogDescription>
+                </div>
+              </div>
             </DialogHeader>
 
             <div className="space-y-4 py-2 text-xs">
-              {/* Card de Dados Cadastrais */}
-              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-500">Interessado:</span>
-                  <strong className="text-slate-900">{activeProcessModal.interessado}</strong>
+              <div className="grid grid-cols-2 gap-3 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200/70 dark:border-slate-700">
+                <div>
+                  <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-bold tracking-wider">
+                    Tipo do Requerimento
+                  </span>
+                  <p className="font-semibold text-slate-800 dark:text-slate-200 mt-0.5">
+                    {activeModalProcess.tipo}
+                  </p>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-500">CNPJ / CPF:</span>
-                  <span className="font-mono text-slate-700">{activeProcessModal.cnpj}</span>
+                <div>
+                  <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-bold tracking-wider">
+                    Diretoria Responsável
+                  </span>
+                  <p className="font-semibold text-slate-800 dark:text-slate-200 mt-0.5">
+                    {activeModalProcess.unidade}
+                  </p>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-500">Município / Localização:</span>
-                  <span className="text-slate-700">{activeProcessModal.municipio}</span>
+                <div>
+                  <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-bold tracking-wider">
+                    Etapa Atual (Gargalo)
+                  </span>
+                  <p className="font-semibold text-slate-800 dark:text-slate-200 mt-0.5">
+                    {activeModalProcess.etapa}
+                  </p>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-500">Técnico Responsável:</span>
-                  <span className="text-emerald-800 font-semibold">{activeProcessModal.analista}</span>
+                <div>
+                  <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-bold tracking-wider">
+                    Técnico / Analista
+                  </span>
+                  <p className="font-semibold text-slate-800 dark:text-slate-200 mt-0.5">
+                    {activeModalProcess.responsavel}
+                  </p>
                 </div>
               </div>
 
-              {/* Resumo do Objeto */}
-              <div>
-                <span className="font-bold text-slate-700 block mb-1">Resumo do Parecer Técnico:</span>
-                <p className="text-slate-600 bg-white p-3 rounded-xl border border-slate-200/60 leading-relaxed">
-                  {activeProcessModal.resumo}
-                </p>
-              </div>
-
-              {/* Alerta de Prazo Fatal */}
-              <div className="p-3 rounded-xl bg-rose-50 border border-rose-200/70 text-rose-800 flex items-center gap-2.5">
-                <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
-                <span className="text-[11px] leading-tight font-medium">
-                  Este processo atinge o prazo legal máximo de permanência em{' '}
-                  <strong>{activeProcessModal.diasRestantes} dia(s)</strong>.
+              <div className="p-3.5 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 rounded-xl flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0" />
+                  <span className="font-semibold text-rose-900 dark:text-rose-200 text-xs">
+                    Vencimento ultrapassado em
+                  </span>
+                </div>
+                <span className="font-bold text-rose-700 dark:text-rose-300 text-sm tabular-nums">
+                  {activeModalProcess.dias} dias
                 </span>
               </div>
             </div>
 
-            <DialogFooter>
+            <DialogFooter className="border-t border-slate-100 dark:border-slate-800 pt-3 flex justify-end gap-2">
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setActiveProcessModal(null)}
-                className="cursor-pointer"
+                onClick={() => setActiveModalProcess(null)}
+                className="text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
               >
                 Fechar
               </Button>
               <Button
-                variant="default"
                 size="sm"
-                onClick={() => {
-                  alert(`Despacho iniciado com sucesso para o processo ${activeProcessModal.numero}!`);
-                  setActiveProcessModal(null);
-                }}
-                className="bg-[#0F4C3A] hover:bg-[#145A45] text-white cursor-pointer"
+                onClick={() => alert('Redirecionando para o SEIA...')}
+                className={cn(
+                  "text-xs font-semibold text-white shadow-2xs gap-1 cursor-pointer",
+                  themeConfig.tokens.brandPrimary,
+                  themeConfig.tokens.brandPrimaryHover
+                )}
               >
-                <FileCheck className="w-3.5 h-3.5 mr-1.5" />
-                <span>Emitir Despacho</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+                <span>Abrir no SEIA</span>
               </Button>
             </DialogFooter>
           </DialogContent>
-        )}
-      </Dialog>
+        </Dialog>
+      )}
     </div>
   );
 };
-

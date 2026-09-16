@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Header } from './Header';
 import { Sidebar } from './Sidebar';
+import { useTheme } from '@/context/ThemeContext';
+import { cn } from '@/lib/utils';
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -13,25 +15,41 @@ export const AppShell: React.FC<AppShellProps> = ({
   activeRoute = 'relatorios',
   onNavigate,
 }) => {
+  const { themeConfig, isDarkMode } = useTheme();
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+
+  const handleToggleSidebar = () => {
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      setIsMobileSidebarOpen((prev) => !prev);
+    } else {
+      setIsSidebarCollapsed((prev) => !prev);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex flex-col antialiased">
-      {/* Header fixo 60px */}
-      <Header onToggleSidebar={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)} />
+    <div className={cn('h-screen w-screen overflow-hidden flex antialiased transition-colors duration-200', isDarkMode ? 'dark bg-slate-950 text-slate-100' : themeConfig.tokens.canvasBg)}>
+      {/* Sidebar: h-screen fixa à esquerda com suporte a colapso */}
+      <Sidebar
+        activeRoute={activeRoute}
+        isCollapsed={isSidebarCollapsed}
+        isOpenMobile={isMobileSidebarOpen}
+        onCloseMobile={() => setIsMobileSidebarOpen(false)}
+        onNavigate={onNavigate}
+        onToggleCollapse={handleToggleSidebar}
+      />
 
-      {/* Casca principal: pt-[60px] */}
-      <div className="flex pt-[60px] flex-1">
-        <Sidebar
-          activeRoute={activeRoute}
-          isOpenMobile={isMobileSidebarOpen}
-          onCloseMobile={() => setIsMobileSidebarOpen(false)}
-          onNavigate={onNavigate}
+      {/* Coluna flexível à direita: Topbar + Conteúdo (expande dinamicamente) */}
+      <div className={cn("flex-1 flex flex-col h-screen min-w-0 overflow-hidden transition-all duration-200 ease-in-out", isDarkMode ? "bg-slate-950" : "bg-transparent")}>
+        {/* Topbar: 100% da largura horizontal da coluna à direita */}
+        <Header
+          isSidebarCollapsed={isSidebarCollapsed}
+          onToggleSidebar={handleToggleSidebar}
         />
 
-        {/* Área de conteúdo: ocupa toda a largura disponível ao lado da sidebar */}
-        <main className="flex-1 w-full min-w-0 overflow-y-auto lg:ml-[280px] transition-all duration-200">
-          <div className="w-full max-w-[1600px] mx-auto px-6 lg:px-8 py-6 pb-16">
+        {/* Miolo principal com overflow-y-auto e padding confortável */}
+        <main className={cn("flex-1 w-full min-w-0 overflow-y-auto", isDarkMode ? "bg-slate-950 text-slate-100" : "")}>
+          <div className="w-full max-w-[2000px] mx-auto p-6 lg:p-8 pb-20">
             {children}
           </div>
         </main>

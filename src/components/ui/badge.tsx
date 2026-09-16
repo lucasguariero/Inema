@@ -8,14 +8,14 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
 
 function Badge({ className, variant = 'default', dot = false, children, ...props }: BadgeProps) {
   const variantStyles = {
-    default: 'bg-[#0F4C3A] text-white border-transparent shadow-2xs',
-    secondary: 'bg-[#E2ECE9] text-[#0F4C3A] border-[#CBDED8]/70 font-semibold',
-    outline: 'border-slate-200 bg-white text-slate-700 shadow-2xs',
-    emerald: 'bg-emerald-50/90 text-emerald-800 border-emerald-200/80 shadow-2xs',
-    amber: 'bg-amber-50/90 text-amber-800 border-amber-200/80 shadow-2xs',
-    rose: 'bg-rose-50/90 text-rose-700 border-rose-200/80 shadow-2xs',
-    blue: 'bg-sky-50/90 text-sky-800 border-sky-200/80 shadow-2xs',
-    purple: 'bg-purple-50/90 text-purple-800 border-purple-200/80 shadow-2xs',
+    default: 'bg-[#0F4C3A] text-white border-transparent shadow-2xs dark:bg-emerald-900/80 dark:text-emerald-200 dark:border-emerald-700/50',
+    secondary: 'bg-[#E2ECE9] text-[#0F4C3A] border-[#CBDED8]/70 font-semibold dark:bg-slate-800 dark:text-emerald-300 dark:border-slate-700',
+    outline: 'border-slate-200 bg-white text-slate-700 shadow-2xs dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-300',
+    emerald: 'bg-emerald-50/90 text-emerald-800 border-emerald-200/80 shadow-2xs dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800/60',
+    amber: 'bg-amber-50/90 text-amber-800 border-amber-200/80 shadow-2xs dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800/60',
+    rose: 'bg-rose-50/90 text-rose-700 border-rose-200/80 shadow-2xs dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-800/60',
+    blue: 'bg-sky-50/90 text-sky-800 border-sky-200/80 shadow-2xs dark:bg-sky-950/60 dark:text-sky-300 dark:border-sky-800/60',
+    purple: 'bg-purple-50/90 text-purple-800 border-purple-200/80 shadow-2xs dark:bg-purple-950/60 dark:text-purple-300 dark:border-purple-800/60',
   };
 
   const dotColors = {
@@ -39,12 +39,7 @@ function Badge({ className, variant = 'default', dot = false, children, ...props
       {...props}
     >
       {dot && (
-        <span className="relative flex h-1.5 w-1.5 shrink-0">
-          <span
-            className={cn('absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping', dotColors[variant])}
-          />
-          <span className={cn('relative inline-flex rounded-full h-1.5 w-1.5', dotColors[variant])} />
-        </span>
+        <span className={cn('h-1.5 w-1.5 rounded-full shrink-0', dotColors[variant])} />
       )}
       <span>{children}</span>
     </div>

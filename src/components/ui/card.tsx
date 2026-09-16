@@ -6,7 +6,7 @@ const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElemen
     <div
       ref={ref}
       className={cn(
-        'rounded-2xl border border-slate-200/80 bg-white/95 backdrop-blur-xs text-slate-800 shadow-[0_1px_3px_rgba(15,23,42,0.03),0_6px_16px_rgba(15,23,42,0.03)] hover:shadow-[0_2px_8px_rgba(15,23,42,0.04),0_12px_24px_rgba(15,23,42,0.05)] hover:border-slate-300/80 transition-all duration-300',
+        'rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white/95 dark:bg-slate-900/90 backdrop-blur-xs text-slate-800 dark:text-slate-100 shadow-[0_1px_3px_rgba(15,23,42,0.03),0_6px_16px_rgba(15,23,42,0.03)] dark:shadow-none hover:shadow-[0_2px_8px_rgba(15,23,42,0.04),0_12px_24px_rgba(15,23,42,0.05)] hover:border-slate-300/80 dark:hover:border-slate-700 transition-all duration-300',
         className
       )}
       {...props}
@@ -30,7 +30,7 @@ const CardTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HT
   ({ className, ...props }, ref) => (
     <h3
       ref={ref}
-      className={cn('font-bold text-slate-900 leading-none tracking-tight text-sm sm:text-base', className)}
+      className={cn('font-bold text-slate-900 dark:text-slate-100 leading-none tracking-tight text-sm sm:text-base', className)}
       {...props}
     />
   )
@@ -41,7 +41,7 @@ const CardDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttribu
   ({ className, ...props }, ref) => (
     <p
       ref={ref}
-      className={cn('text-xs text-slate-500 leading-relaxed font-normal', className)}
+      className={cn('text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-medium', className)}
       {...props}
     />
   )
@@ -59,7 +59,7 @@ const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDiv
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn('flex items-center p-5 sm:p-6 pt-0 border-t border-slate-100', className)}
+      className={cn('flex items-center p-5 sm:p-6 pt-0 border-t border-slate-100 dark:border-slate-800', className)}
       {...props}
     />
   )

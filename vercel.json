@@ -1,30 +1,86 @@
 {
-  "outputDirectory": "src",
+  "outputDirectory": "dist",
   "cleanUrls": true,
   "rewrites": [
     {
-      "source": "/fiscalizacao/emergencia-quimica-externa",
-      "destination": "/emergencia-quimica-externa.html"
+      "source": "/layout-antigo",
+      "destination": "/relatorios-antigo.html"
     },
     {
-      "source": "/fiscalizacao/consulta-externa",
-      "destination": "/consulta-externa.html"
+      "source": "/conceito-01",
+      "destination": "/index.html"
     },
     {
-      "source": "/fiscalizacao/consulta-interna",
-      "destination": "/consulta-interna.html"
+      "source": "/conceito-02",
+      "destination": "/index.html"
     },
     {
-      "source": "/fiscalizacao/emergencia-quimica/interna",
-      "destination": "/emergencia-quimica.html?fluxo=interna"
+      "source": "/conceito-03",
+      "destination": "/index.html"
     },
     {
-      "source": "/fiscalizacao/emergencia-quimica/externa",
-      "destination": "/emergencia-quimica-externa.html"
+      "source": "/proposta-01",
+      "destination": "/index.html"
     },
     {
-      "source": "/fiscalizacao/emergencia-quimica/consulta",
-      "destination": "/consulta-externa.html"
+      "source": "/proposta-02",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/inema-light",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/inema-forest",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/proposta-verde-azul",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/proposta-verde",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/sidebar-verde-azul",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/sidebar-verde",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/fiscalizacao/(.*)",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/fiscalizacao",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/atendente",
+      "destination": "/index.html?rota=atendente"
+    },
+    {
+      "source": "/cidadao",
+      "destination": "/index.html?rota=cidadao"
+    },
+    {
+      "source": "/emergencia-interna",
+      "destination": "/index.html?rota=emergencia-interna"
+    },
+    {
+      "source": "/emergencia-externa",
+      "destination": "/index.html?rota=emergencia-externa"
+    },
+    {
+      "source": "/consulta-externa",
+      "destination": "/index.html?rota=consulta-externa"
+    },
+    {
+      "source": "/consulta-interna",
+      "destination": "/index.html?rota=consulta-interna"
     },
     {
       "source": "/fauna",
