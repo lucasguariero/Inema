@@ -15,7 +15,11 @@ import {
   ChevronRight,
   ShieldAlert,
   HelpCircle,
-  FileCheck
+  FileCheck,
+  Lock,
+  UploadCloud,
+  FileText,
+  AlertTriangle
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -30,23 +34,44 @@ import {
 } from '@/components/ui/dialog';
 import { MUNICIPIOS_BAHIA, SUBSTANCIAS_QUIMICAS } from '@/data/fiscalizacaoMock';
 import { useTheme } from '@/context/ThemeContext';
+import { cn } from '@/lib/utils';
+
+const AREAS_ATINGIDAS_EXTERNA = [
+  { id: 'urbana', label: 'Área Urbana' },
+  { id: 'rural', label: 'Área Rural' },
+  { id: 'hidrico', label: 'Recurso Hídrico / Rio / Mar' },
+  { id: 'rodovia', label: 'Rodovia' },
+  { id: 'uc', label: 'Unidade de Conservação' },
+  { id: 'tradicional', label: 'Comunidade Tradicional' }
+];
 
 export const EmergenciaExternaPage: React.FC<{ onNavigate?: (route: string) => void }> = ({ onNavigate }) => {
   const { isDarkMode } = useTheme();
 
-  // Dados do Comunicante / Empresa
-  const [razaoSocial, setRazaoSocial] = useState('Petrobras Distribuidora / Transpetro');
-  const [cnpj, setCnpj] = useState('33.000.167/0001-01');
-  const [nomeContato, setNomeContato] = useState('Rodrigo Alencar');
-  const [telefone24h, setTelefone24h] = useState('(71) 98144-8800');
-  const [email, setEmail] = useState('plantao.emergencia@empresa.com.br');
+  // Pós-finalização
+  const [registroFinalizado, setRegistroFinalizado] = useState(false);
+  const [protocoloGerado, setProtocoloGerado] = useState('');
 
-  // Dados do Acidente
+  // Bloco 2: Comunicante Gov.br (Nome, CPF e Email bloqueados para edição; Telefone editável)
+  const [nomeComunicante] = useState('Giovani Santana de Oliveira');
+  const [cpfComunicante] = useState('529.982.247-25');
+  const [emailComunicante] = useState('giovani.santana@empresa.com.br');
+  const [telefoneComunicante, setTelefoneComunicante] = useState('(71) 98842-1090');
+
+  // Bloco 3: Informações sobre Empresa & Vínculo (DOR004)
+  const [vinculoEmpresa, setVinculoEmpresa] = useState<'Sim' | 'Não'>('Sim');
+  const [empresaNome, setEmpresaNome] = useState('Petroquímica Camaçari S.A.');
+  const [cargoEmpresa, setCargoEmpresa] = useState('Gerente de Operações Químicas');
+  const [comunicandoComo, setComunicandoComo] = useState<'Cidadão comum' | 'Força Policial' | 'Outras instituições'>('Cidadão comum');
+  const [outraInstituicao, setOutraInstituicao] = useState('');
+  const [sabeEmpresaResponsavel, setSabeEmpresaResponsavel] = useState<'Sim' | 'Não'>('Sim');
+
+  // Bloco 4: Dados do Acidente
   const [dataHoraAcidente, setDataHoraAcidente] = useState(
     new Date().toISOString().slice(0, 16)
   );
-  const [tipoModal, setTipoModal] = useState('Transporte Rodoviário (Caminhão/Carreta)');
-  const [placas, setPlacas] = useState('OKY-3921 / Tanque');
+  const [tipoEmergencia, setTipoEmergencia] = useState('Tombamento de Carga Perigosa em Rodovia');
+  const [descricaoTipoOutros, setDescricaoTipoOutros] = useState('');
 
   // Produto Químico
   const [substancia, setSubstancia] = useState(SUBSTANCIAS_QUIMICAS[0].nome);
@@ -54,15 +79,24 @@ export const EmergenciaExternaPage: React.FC<{ onNavigate?: (route: string) => v
   const [volumeVazado, setVolumeVazado] = useState('5.000 Litros');
   const [houveVazamentoAgua, setHouveVazamentoAgua] = useState<'SIM' | 'NÃO'>('NÃO');
 
-  // Localização
+  // Localização & Área Atingida (Máx 3 opções, RN012)
   const [municipio, setMunicipio] = useState('Simões Filho');
+  const [cep, setCep] = useState('43700-000');
   const [localidade, setLocalidade] = useState('BR-324, Km 598 - Sentido Salvador');
   const [pontoReferencia, setPontoReferencia] = useState('Próximo ao pedágio da Viabahia');
-  const [empresaResposta, setEmpresaResposta] = useState('Ambipar Response (Acionada no local)');
+  const [areasAtingidas, setAreasAtingidas] = useState<string[]>(['urbana', 'rodovia']);
+  const [erroAreas, setErroAreas] = useState<string | null>(null);
+  const [latitude, setLatitude] = useState('-12.7845');
+  const [longitude, setLongitude] = useState('-38.4021');
 
-  // Modal
+  // Relatórios pós-finalização enviados
+  const [conclusivoEnviado, setConclusivoEnviado] = useState(false);
+  const [rpeqEnviado, setRpeqEnviado] = useState(false);
+
+  // Modais
+  const [isMsg002ModalOpen, setIsMsg002ModalOpen] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
-  const [protocoloGerado, setProtocoloGerado] = useState('');
   const [copiado, setCopiado] = useState(false);
 
   const handleSubstanciaChange = (nome: string) => {
@@ -71,39 +105,73 @@ export const EmergenciaExternaPage: React.FC<{ onNavigate?: (route: string) => v
     if (found) setOnu(found.onu);
   };
 
+  const handleToggleArea = (id: string) => {
+    if (registroFinalizado) return;
+    setErroAreas(null);
+    if (areasAtingidas.includes(id)) {
+      setAreasAtingidas(areasAtingidas.filter((a) => a !== id));
+    } else {
+      // RN012: Máximo 3 áreas
+      if (areasAtingidas.length >= 3) {
+        setErroAreas('Limite atingido: você pode selecionar no máximo 3 áreas atingidas (RN012).');
+        return;
+      }
+      setAreasAtingidas([...areasAtingidas, id]);
+    }
+  };
+
   const handlePreencherExemplo = () => {
-    setRazaoSocial('Bahia Química Logística Integrada S.A.');
-    setCnpj('08.441.921/0001-34');
-    setNomeContato('Eng. Marcelo Fonseca');
-    setTelefone24h('(71) 99123-5566');
-    setEmail('emergencias@bahiaquimica.com.br');
+    setTelefoneComunicante('(71) 99123-5566');
+    setVinculoEmpresa('Sim');
+    setEmpresaNome('Bahia Química Logística Integrada S.A.');
+    setCargoEmpresa('Gerente de Logística e Cargas Perigosas');
     setDataHoraAcidente(new Date().toISOString().slice(0, 16));
-    setTipoModal('Transporte Rodoviário (Caminhão/Carreta)');
-    setPlacas('PLQ-4B12 / Carreta RQK-1190');
+    setTipoEmergencia('Tombamento de Carga Perigosa em Rodovia');
     handleSubstanciaChange('Gasolina Comum / Aditivada');
     setVolumeVazado('4.200 Litros');
     setHouveVazamentoAgua('NÃO');
     setMunicipio('Simões Filho');
+    setCep('43700-000');
     setLocalidade('BR-324, Km 602 - Perto da entrada do CIA Sul');
     setPontoReferencia('Acostamento logo após a passarela de pedestres');
-    setEmpresaResposta('WGRA Gerenciamento de Riscos Ambientais');
+    setAreasAtingidas(['urbana', 'rodovia', 'hidrico']);
+    setLatitude('-12.784512');
+    setLongitude('-38.402194');
   };
 
   const handleLimpar = () => {
-    setRazaoSocial('');
-    setCnpj('');
-    setNomeContato('');
-    setTelefone24h('');
+    setTelefoneComunicante('');
     setLocalidade('');
     setPontoReferencia('');
     setVolumeVazado('');
+    setAreasAtingidas([]);
+    setLatitude('');
+    setLongitude('');
   };
 
   const handleFinalizar = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (areasAtingidas.length === 0) {
+      setErroAreas('Selecione ao menos 1 área atingida (RN012).');
+      return;
+    }
+
+    if (!latitude || !longitude) {
+      setIsMsg002ModalOpen(true);
+      return;
+    }
+
+    setIsConfirmModalOpen(true);
+  };
+
+  const handleConfirmarFinalizacao = () => {
+    setIsConfirmModalOpen(false);
+    setIsMsg002ModalOpen(false);
     const seq = Math.floor(100000 + Math.random() * 900000);
     const num = `2026.${seq}/INEMA/RE`;
     setProtocoloGerado(num);
+    setRegistroFinalizado(true);
     setIsSuccessModalOpen(true);
   };
 
@@ -115,142 +183,139 @@ export const EmergenciaExternaPage: React.FC<{ onNavigate?: (route: string) => v
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto pb-12">
-      {/* Topo Oficial (Breadcrumb está exclusivamente na Topbar) */}
+      {/* Topo Oficial (DOR004: Nº de Registro a gerar na finalização) */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-1">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
-            Comunicação de Emergência Química (DOR004)
-          </h1>
-          <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-            Canal oficial para empresas transportadoras, indústrias e operadores comunicarem acidentes com produtos químicos.
+          <div className="flex items-center gap-3 flex-wrap">
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+              Comunicação de Emergência Química Externa (DOR004)
+            </h1>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-mono font-bold shadow-2xs">
+              <span>
+                {registroFinalizado ? `Nº de Registro: ${protocoloGerado}` : 'Nº de Registro: A gerar na finalização'}
+              </span>
+            </div>
+          </div>
+          <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 mt-1">
+            Canal oficial para empresas transportadoras, indústrias e cidadãos comunicarem acidentes químicos ao INEMA.
           </p>
         </div>
 
         <div className="flex items-center gap-2 flex-wrap shrink-0">
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={handlePreencherExemplo}
-            className="gap-1.5 text-xs font-semibold whitespace-nowrap cursor-pointer shadow-2xs"
-          >
-            <Wand2 className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-            Preencher Exemplo
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={handleLimpar}
-            className="gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 whitespace-nowrap cursor-pointer shadow-2xs"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            Limpar
-          </Button>
+          {!registroFinalizado && (
+            <>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handlePreencherExemplo}
+                className="gap-1.5 text-xs font-semibold whitespace-nowrap cursor-pointer shadow-2xs"
+              >
+                <Wand2 className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                Preencher Exemplo
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleLimpar}
+                className="gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 whitespace-nowrap cursor-pointer shadow-2xs"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                Limpar
+              </Button>
+            </>
+          )}
+
+          {registroFinalizado && (
+            <Badge color="success" dot className="text-xs py-1 px-3">
+              Status: Emergência Registrada
+            </Badge>
+          )}
         </div>
       </div>
 
-      {/* Alerta de Obrigatoriedade Legal */}
-      <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/60 flex items-start gap-3">
-        <ShieldAlert className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
-        <div className="text-xs text-amber-900 dark:text-amber-300 leading-relaxed">
-          <strong>Aviso Regulatório Obrigatório:</strong> De acordo com a Lei Estadual nº 10.431/06 e regulamentações do
-          CEPRAM, acidentes ambientais com produtos químicos perigosos devem ser informados <strong>imediatamente</strong> ao
-          INEMA. A omissão de comunicação sujeita a empresa infratora a sanções gravíssimas e agravamento de multas.
-        </div>
-      </div>
-
-      {/* Formulário */}
+      {/* Formulário Principal */}
       <form onSubmit={handleFinalizar} className="space-y-6">
-        {/* Bloco 1: Dados da Empresa Comunicante */}
+        {/* CARD 1: Dados do Comunicante (Gov.br - Bloqueados para edição exceto telefone) */}
         <Card className="border-slate-200/90 dark:border-slate-800">
           <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">
-            <div className="flex items-center gap-2.5">
-              <span className="w-7 h-7 rounded-lg bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/60 text-xs font-bold flex items-center justify-center shadow-2xs">
-                1
-              </span>
-              <div>
-                <CardTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
-                  Identificação da Empresa e Contato de Plantão
-                </CardTitle>
-                <CardDescription className="text-xs">
-                  Dados da transportadora ou geradora do produto para contato imediato pelos técnicos do INEMA.
-                </CardDescription>
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <div className="flex items-center gap-2.5">
+                <span className="w-7 h-7 rounded-lg bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/60 text-xs font-bold flex items-center justify-center shadow-2xs">
+                  1
+                </span>
+                <div>
+                  <CardTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
+                    Dados do Comunicante (Gov.br)
+                  </CardTitle>
+                  <CardDescription className="text-xs">
+                    Identificação autenticada. Nome, CPF e E-mail são protegidos contra alteração (DOR004).
+                  </CardDescription>
+                </div>
               </div>
+              <Badge color="gray" className="gap-1 text-[11px]">
+                <Lock className="w-3 h-3" />
+                Autenticado via Gov.br
+              </Badge>
             </div>
           </CardHeader>
 
-          <CardContent className="pt-5 grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="md:col-span-2">
+          <CardContent className="pt-5 grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                Razão Social da Empresa Responsável <span className="text-rose-500">*</span>
+                Nome Completo
               </label>
               <input
                 type="text"
-                value={razaoSocial}
-                onChange={(e) => setRazaoSocial(e.target.value)}
-                required
-                className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none"
+                value={nomeComunicante}
+                readOnly
+                className="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/60 px-3 py-2.5 text-slate-700 dark:text-slate-300 cursor-not-allowed opacity-80"
               />
             </div>
 
             <div>
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                CNPJ da Empresa <span className="text-rose-500">*</span>
+                CPF
               </label>
               <input
                 type="text"
-                value={cnpj}
-                onChange={(e) => setCnpj(e.target.value)}
-                required
-                placeholder="00.000.000/0000-00"
-                className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none"
+                value={cpfComunicante}
+                readOnly
+                className="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/60 px-3 py-2.5 font-mono text-slate-700 dark:text-slate-300 cursor-not-allowed opacity-80"
               />
             </div>
 
             <div>
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                Nome do Responsável / Plantonista <span className="text-rose-500">*</span>
-              </label>
-              <input
-                type="text"
-                value={nomeContato}
-                onChange={(e) => setNomeContato(e.target.value)}
-                required
-                className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                Telefone de Emergência 24h <span className="text-rose-500">*</span>
-              </label>
-              <input
-                type="text"
-                value={telefone24h}
-                onChange={(e) => setTelefone24h(e.target.value)}
-                required
-                placeholder="(00) 00000-0000"
-                className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                E-mail Corporativo <span className="text-rose-500">*</span>
+                E-mail
               </label>
               <input
                 type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={emailComunicante}
+                readOnly
+                className="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/60 px-3 py-2.5 text-slate-700 dark:text-slate-300 cursor-not-allowed opacity-80"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                Telefone para Contato <span className="text-rose-500">*</span>
+              </label>
+              <input
+                type="tel"
+                value={telefoneComunicante}
+                disabled={registroFinalizado}
+                onChange={(e) => setTelefoneComunicante(e.target.value)}
                 required
-                className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none"
+                placeholder="(71) 90000-0000"
+                className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
               />
             </div>
           </CardContent>
         </Card>
 
-        {/* Bloco 2: Produto e Acidente */}
+        {/* CARD 2: Vínculo com a Empresa Responsável (DOR004 - Bloco 3) */}
         <Card className="border-slate-200/90 dark:border-slate-800">
           <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">
             <div className="flex items-center gap-2.5">
@@ -259,10 +324,10 @@ export const EmergenciaExternaPage: React.FC<{ onNavigate?: (route: string) => v
               </span>
               <div>
                 <CardTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
-                  Caracterização do Acidente e Produto Químico
+                  Informações sobre a Empresa & Vínculo
                 </CardTitle>
                 <CardDescription className="text-xs">
-                  Detalhes técnicos da carga perigosa e momento da ocorrência.
+                  Declaração de vínculo empregatício e dados da instituição responsável (DOR004).
                 </CardDescription>
               </div>
             </div>
@@ -272,99 +337,115 @@ export const EmergenciaExternaPage: React.FC<{ onNavigate?: (route: string) => v
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                  Data e Hora do Acidente <span className="text-rose-500">*</span>
-                </label>
-                <input
-                  type="datetime-local"
-                  value={dataHoraAcidente}
-                  onChange={(e) => setDataHoraAcidente(e.target.value)}
-                  required
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                  Modal de Transporte
+                  Possui vínculo com a empresa responsável? <span className="text-rose-500">*</span>
                 </label>
                 <select
-                  value={tipoModal}
-                  onChange={(e) => setTipoModal(e.target.value)}
+                  value={vinculoEmpresa}
+                  disabled={registroFinalizado}
+                  onChange={(e) => setVinculoEmpresa(e.target.value as any)}
                   className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
                 >
-                  <option value="Transporte Rodoviário (Caminhão/Carreta)">Transporte Rodoviário (Caminhão/Carreta)</option>
-                  <option value="Indústria / Planta Fabril">Indústria / Planta Fabril</option>
-                  <option value="Duto / Oleoduto / Gasoduto">Duto / Oleoduto / Gasoduto</option>
-                  <option value="Transporte Aquaviário / Porto">Transporte Aquaviário / Porto</option>
-                  <option value="Ferroviário">Ferroviário</option>
+                  <option value="Sim">Sim (Funcionário / Contratado)</option>
+                  <option value="Não">Não</option>
                 </select>
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                  Identificação do Veículo / Placas
-                </label>
-                <input
-                  type="text"
-                  value={placas}
-                  onChange={(e) => setPlacas(e.target.value)}
-                  placeholder="Ex: ABC-1234 / Tanque 02"
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
-                />
-              </div>
+              {/* Vínculo = Sim */}
+              {vinculoEmpresa === 'Sim' && (
+                <>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                      Nome da Empresa (máx. 500 carac.) <span className="text-rose-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={empresaNome}
+                      disabled={registroFinalizado}
+                      maxLength={500}
+                      onChange={(e) => setEmpresaNome(e.target.value)}
+                      required
+                      placeholder="Razão Social da empresa responsável"
+                      className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                      Cargo / Função (máx. 200 carac.) <span className="text-rose-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={cargoEmpresa}
+                      disabled={registroFinalizado}
+                      maxLength={200}
+                      onChange={(e) => setCargoEmpresa(e.target.value)}
+                      required
+                      placeholder="Ex: Gerente de Operações / Motorista"
+                      className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
+                    />
+                  </div>
+                </>
+              )}
+
+              {/* Vínculo = Não */}
+              {vinculoEmpresa === 'Não' && (
+                <>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                      Você está comunicando como: <span className="text-rose-500">*</span>
+                    </label>
+                    <select
+                      value={comunicandoComo}
+                      disabled={registroFinalizado}
+                      onChange={(e) => setComunicandoComo(e.target.value as any)}
+                      className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
+                    >
+                      <option value="Cidadão comum">Cidadão comum</option>
+                      <option value="Força Policial">Força Policial (PM / PRF / CBMBA)</option>
+                      <option value="Outras instituições">Outras instituições</option>
+                    </select>
+                  </div>
+
+                  {comunicandoComo === 'Outras instituições' && (
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                        Instituição (máx. 500 carac.) <span className="text-rose-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={outraInstituicao}
+                        disabled={registroFinalizado}
+                        maxLength={500}
+                        onChange={(e) => setOutraInstituicao(e.target.value)}
+                        required
+                        placeholder="Nome do órgão ou entidade"
+                        className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
+                      />
+                    </div>
+                  )}
+                </>
+              )}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-1">
-              <div className="md:col-span-2">
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                  Substância Química Transportada <span className="text-rose-500">*</span>
-                </label>
-                <select
-                  value={substancia}
-                  onChange={(e) => handleSubstanciaChange(e.target.value)}
-                  required
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none font-medium"
-                >
-                  {SUBSTANCIAS_QUIMICAS.map((s) => (
-                    <option key={s.onu} value={s.nome}>
-                      {s.nome} (ONU {s.onu})
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                  Volume Estimado Liberado <span className="text-rose-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  value={volumeVazado}
-                  onChange={(e) => setVolumeVazado(e.target.value)}
-                  required
-                  placeholder="Ex: 2.000 Litros"
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none font-bold text-rose-600"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                  Atingiu Curso d'Água?
-                </label>
-                <select
-                  value={houveVazamentoAgua}
-                  onChange={(e) => setHouveVazamentoAgua(e.target.value as 'SIM' | 'NÃO')}
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
-                >
-                  <option value="NÃO">NÃO (Solo / Asfalto)</option>
-                  <option value="SIM">SIM (Rio / Lagoa / Galeria)</option>
-                </select>
-              </div>
+            {/* Pergunta permanente visível em ambos os cenários (RN005) */}
+            <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                Sabe informar o nome da empresa responsável pela emergência química? (RN005)
+              </label>
+              <select
+                value={sabeEmpresaResponsavel}
+                disabled={registroFinalizado}
+                onChange={(e) => setSabeEmpresaResponsavel(e.target.value as any)}
+                className="w-full md:w-1/3 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-slate-800 dark:text-slate-100 outline-none"
+              >
+                <option value="Sim">Sim</option>
+                <option value="Não">Não</option>
+              </select>
             </div>
           </CardContent>
         </Card>
 
-        {/* Bloco 3: Local do Acidente e Resposta */}
+        {/* CARD 3: Detalhes do Sinistro & Produto Químico */}
         <Card className="border-slate-200/90 dark:border-slate-800">
           <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">
             <div className="flex items-center gap-2.5">
@@ -373,25 +454,158 @@ export const EmergenciaExternaPage: React.FC<{ onNavigate?: (route: string) => v
               </span>
               <div>
                 <CardTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
-                  Local do Acidente & Empresa de Contenção Emergencial
+                  Caracterização do Evento Químico
                 </CardTitle>
                 <CardDescription className="text-xs">
-                  Localização exata para deslocamento da equipe pericial do INEMA.
+                  Tipologia, substâncias envolvidas, volume derramado e risco hídrico.
                 </CardDescription>
               </div>
             </div>
           </CardHeader>
 
-          <CardContent className="pt-5 space-y-4">
+          <CardContent className="pt-5 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                Data e Hora da Constatação <span className="text-rose-500">*</span>
+              </label>
+              <input
+                type="datetime-local"
+                value={dataHoraAcidente}
+                disabled={registroFinalizado}
+                onChange={(e) => setDataHoraAcidente(e.target.value)}
+                max={new Date().toISOString().slice(0, 16)}
+                required
+                className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                Tipo da Emergência Química <span className="text-rose-500">*</span>
+              </label>
+              <select
+                value={tipoEmergencia}
+                disabled={registroFinalizado}
+                onChange={(e) => setTipoEmergencia(e.target.value)}
+                required
+                className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
+              >
+                <option value="Tombamento de Carga Perigosa em Rodovia">Tombamento de Carga Perigosa em Rodovia</option>
+                <option value="Vazamento em Instalação Industrial / Polo">Vazamento em Instalação Industrial / Polo</option>
+                <option value="Explosão / Incêndio com Produtos Químicos">Explosão / Incêndio com Produtos Químicos</option>
+                <option value="Derrame em Rio, Lagoa, Estuário ou Mar">Derrame em Rio, Lagoa, Estuário ou Mar</option>
+                <option value="Ruptura ou Furo em Duto / Oleoduto">Ruptura ou Furo em Duto / Oleoduto</option>
+                <option value="Outros">Outros</option>
+              </select>
+            </div>
+
+            {tipoEmergencia === 'Outros' && (
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                  Descrição do Tipo (RN028) <span className="text-rose-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={descricaoTipoOutros}
+                  disabled={registroFinalizado}
+                  onChange={(e) => setDescricaoTipoOutros(e.target.value)}
+                  required
+                  placeholder="Especifique a tipologia do sinistro..."
+                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
+                />
+              </div>
+            )}
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                Produto Químico / Substância <span className="text-rose-500">*</span>
+              </label>
+              <select
+                value={substancia}
+                disabled={registroFinalizado}
+                onChange={(e) => handleSubstanciaChange(e.target.value)}
+                className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
+              >
+                {SUBSTANCIAS_QUIMICAS.map((s) => (
+                  <option key={s.nome} value={s.nome}>
+                    {s.nome} (ONU {s.onu})
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                Número ONU
+              </label>
+              <input
+                type="text"
+                value={onu}
+                readOnly
+                className="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/60 px-3 py-2.5 font-mono text-slate-700 dark:text-slate-300"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                Volume Vazado / Derramado <span className="text-rose-500">*</span>
+              </label>
+              <input
+                type="text"
+                value={volumeVazado}
+                disabled={registroFinalizado}
+                onChange={(e) => setVolumeVazado(e.target.value)}
+                required
+                placeholder="Ex: 5.000 Litros"
+                className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                Atingiu curso d'água / manancial? <span className="text-rose-500">*</span>
+              </label>
+              <select
+                value={houveVazamentoAgua}
+                disabled={registroFinalizado}
+                onChange={(e) => setHouveVazamentoAgua(e.target.value as any)}
+                className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
+              >
+                <option value="NÃO">Não</option>
+                <option value="SIM">Sim (Risco Crítico a Recursos Hídricos)</option>
+              </select>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* CARD 4: Localização e Áreas Atingidas (Máx 3 opções, RN012) */}
+        <Card className="border-slate-200/90 dark:border-slate-800">
+          <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">
+            <div className="flex items-center gap-2.5">
+              <span className="w-7 h-7 rounded-lg bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/60 text-xs font-bold flex items-center justify-center shadow-2xs">
+                4
+              </span>
+              <div>
+                <CardTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
+                  Localização Geográfica e Áreas Atingidas
+                </CardTitle>
+                <CardDescription className="text-xs">
+                  Município, logradouro e restrição de até 3 áreas afetadas (RN012).
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+
+          <CardContent className="pt-5 space-y-5">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                  Município da Bahia <span className="text-rose-500">*</span>
+                  Município <span className="text-rose-500">*</span>
                 </label>
                 <select
                   value={municipio}
+                  disabled={registroFinalizado}
                   onChange={(e) => setMunicipio(e.target.value)}
-                  required
                   className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
                 >
                   {MUNICIPIOS_BAHIA.map((m) => (
@@ -402,13 +616,28 @@ export const EmergenciaExternaPage: React.FC<{ onNavigate?: (route: string) => v
                 </select>
               </div>
 
-              <div className="md:col-span-2">
+              <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                  Rodovia, Km ou Logradouro <span className="text-rose-500">*</span>
+                  CEP (busca automática Correios)
+                </label>
+                <input
+                  type="text"
+                  value={cep}
+                  disabled={registroFinalizado}
+                  onChange={(e) => setCep(e.target.value)}
+                  placeholder="40020-000"
+                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                  Rodovia / KM ou Endereço <span className="text-rose-500">*</span>
                 </label>
                 <input
                   type="text"
                   value={localidade}
+                  disabled={registroFinalizado}
                   onChange={(e) => setLocalidade(e.target.value)}
                   required
                   placeholder="Ex: BR-324, Km 598"
@@ -417,69 +646,282 @@ export const EmergenciaExternaPage: React.FC<{ onNavigate?: (route: string) => v
               </div>
             </div>
 
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                Ponto de Referência <span className="text-rose-500">*</span>
+              </label>
+              <input
+                type="text"
+                value={pontoReferencia}
+                disabled={registroFinalizado}
+                onChange={(e) => setPontoReferencia(e.target.value)}
+                required
+                placeholder="Ex: Próximo à praça de pedágio, sentido Salvador"
+                className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
+              />
+            </div>
+
+            {/* Áreas Atingidas: Máximo 3 opções (RN012) */}
+            <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 space-y-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <label className="block text-xs font-bold text-slate-800 dark:text-slate-200">
+                    Áreas Atingidas (RN012) <span className="text-rose-500">*</span>
+                  </label>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Selecione no máximo 3 áreas afetadas pelo acidente.
+                  </p>
+                </div>
+                <Badge color={areasAtingidas.length === 3 ? 'warning' : 'primary'}>
+                  {areasAtingidas.length} / 3 selecionadas
+                </Badge>
+              </div>
+
+              {erroAreas && (
+                <div className="p-2.5 rounded-lg bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-900 text-rose-700 dark:text-rose-300 text-xs font-medium">
+                  {erroAreas}
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 pt-1">
+                {AREAS_ATINGIDAS_EXTERNA.map((area) => {
+                  const isChecked = areasAtingidas.includes(area.id);
+                  return (
+                    <button
+                      key={area.id}
+                      type="button"
+                      disabled={registroFinalizado}
+                      onClick={() => handleToggleArea(area.id)}
+                      className={cn(
+                        "p-2.5 rounded-xl text-left border transition-all flex items-center justify-between cursor-pointer",
+                        isChecked
+                          ? "bg-blue-50 dark:bg-blue-950/50 border-blue-500 text-blue-900 dark:text-blue-200 shadow-2xs font-semibold"
+                          : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-blue-300"
+                      )}
+                    >
+                      <span className="text-xs">{area.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Coordenadas */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                  Ponto de Referência <span className="text-rose-500">*</span>
+                  Latitude (SIRGAS 2000)
                 </label>
                 <input
                   type="text"
-                  value={pontoReferencia}
-                  onChange={(e) => setPontoReferencia(e.target.value)}
-                  required
-                  placeholder="Ex: Próximo à praça de pedágio ou posto de gasolina"
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
+                  value={latitude}
+                  disabled={registroFinalizado}
+                  onChange={(e) => setLatitude(e.target.value)}
+                  placeholder="-12.7845"
+                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 font-mono text-slate-800 dark:text-slate-100 outline-none"
                 />
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                  Empresa Especializada de Resposta Acionada
+                  Longitude (SIRGAS 2000)
                 </label>
                 <input
                   type="text"
-                  value={empresaResposta}
-                  onChange={(e) => setEmpresaResposta(e.target.value)}
-                  placeholder="Ex: Ambipar, WGRA, SOS Emergências..."
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
+                  value={longitude}
+                  disabled={registroFinalizado}
+                  onChange={(e) => setLongitude(e.target.value)}
+                  placeholder="-38.4021"
+                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 font-mono text-slate-800 dark:text-slate-100 outline-none"
                 />
               </div>
             </div>
           </CardContent>
 
-          <CardFooter className="pt-4 pb-5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between flex-wrap gap-3">
-            <span className="text-xs text-slate-500 dark:text-slate-400">
-              A emissão deste formulário formaliza a comunicação prevista em lei.
-            </span>
-            <Button
-              type="submit"
-              className="bg-rose-700 hover:bg-rose-800 text-white font-bold text-xs shadow-sm px-7 flex items-center gap-2 cursor-pointer"
-            >
-              <AlertOctagon className="w-4 h-4" />
-              Comunicar Acidente / Emergência (RE)
-            </Button>
-          </CardFooter>
+          {!registroFinalizado && (
+            <CardFooter className="pt-4 pb-5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between flex-wrap gap-3">
+              <div className="text-xs text-slate-500 dark:text-slate-400">
+                O número oficial do Registro de Emergência (RE) será gerado após a confirmação.
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleLimpar}
+                  className="text-xs font-semibold"
+                >
+                  Limpar
+                </Button>
+                <Button
+                  type="submit"
+                  variant="primary"
+                  className="font-bold text-xs shadow-sm px-6 bg-rose-600 hover:bg-rose-700 text-white"
+                >
+                  Finalizar Comunicação de Emergência (MSG003)
+                </Button>
+              </div>
+            </CardFooter>
+          )}
         </Card>
       </form>
 
-      {/* Modal de Sucesso */}
+      {/* BLOCO 5: Seção Relatórios Pós-Finalização (DOR004 - Bloco 5) */}
+      {registroFinalizado && (
+        <Card className="border-slate-200/90 dark:border-slate-800 animate-in fade-in">
+          <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">
+            <div className="flex items-center gap-2.5">
+              <FileCheck className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              <div>
+                <CardTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
+                  Relatórios Técnicos da Emergência (Bloco 5)
+                </CardTitle>
+                <CardDescription className="text-xs">
+                  Envio de relatórios técnicos obrigatórios para instrução processual do sinistro.
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+
+          <CardContent className="pt-5 space-y-4">
+            {/* Relatório Conclusivo */}
+            <div className="p-4 rounded-xl border border-slate-200/80 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/40 flex items-center justify-between flex-wrap gap-3">
+              <div>
+                <h4 className="text-xs font-bold text-slate-900 dark:text-slate-100">
+                  Relatório Conclusivo de Atendimento
+                </h4>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                  Relatório com o encerramento das medidas mitigadoras e destinação dos resíduos.
+                </p>
+              </div>
+              <Button
+                size="sm"
+                variant={conclusivoEnviado ? 'outline' : 'primary'}
+                onClick={() => {
+                  setConclusivoEnviado(true);
+                  alert('Relatório Conclusivo em PDF anexado com sucesso!');
+                }}
+                className="gap-1.5 text-xs font-semibold"
+              >
+                {conclusivoEnviado ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <UploadCloud className="w-3.5 h-3.5" />}
+                {conclusivoEnviado ? 'Relatório Enviado' : 'Enviar Relatório Conclusivo'}
+              </Button>
+            </div>
+
+            {/* RPEQ: Condicionado a Vínculo = Sim */}
+            <div className="p-4 rounded-xl border border-slate-200/80 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/40 flex items-center justify-between flex-wrap gap-3">
+              <div>
+                <h4 className="text-xs font-bold text-slate-900 dark:text-slate-100">
+                  Relatório Preliminar de Emergência Química (RPEQ)
+                </h4>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                  {vinculoEmpresa === 'Sim'
+                    ? 'Obrigatório para empresa transportadora ou geradora em até 48 horas.'
+                    : 'O Relatório Preliminar de Emergência Química (RPEQ) é solicitado apenas a quem declarou vínculo com a empresa responsável.'}
+                </p>
+              </div>
+
+              {vinculoEmpresa === 'Sim' ? (
+                <Button
+                  size="sm"
+                  variant={rpeqEnviado ? 'outline' : 'primary'}
+                  onClick={() => {
+                    setRpeqEnviado(true);
+                    alert('RPEQ em PDF anexado com sucesso!');
+                  }}
+                  className="gap-1.5 text-xs font-semibold"
+                >
+                  {rpeqEnviado ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <UploadCloud className="w-3.5 h-3.5" />}
+                  {rpeqEnviado ? 'RPEQ Enviado' : 'Enviar RPEQ'}
+                </Button>
+              ) : (
+                <Badge color="gray">Bloqueado (Sem Vínculo Declarado)</Badge>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Modal MSG002: Alerta Sem Coordenadas */}
+      <Dialog open={isMsg002ModalOpen} onOpenChange={setIsMsg002ModalOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-slate-900 dark:text-slate-100">
+              <AlertTriangle className="w-5 h-5 text-amber-500" />
+              Alerta de Coordenadas (MSG002)
+            </DialogTitle>
+            <DialogDescription className="text-xs text-slate-600 dark:text-slate-300 pt-1 leading-relaxed">
+              A ausência de coordenadas em rodovia ou área rural pode atrasar o direcionamento das equipes de plantão do INEMA. Deseja prosseguir sem informar as coordenadas?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2 sm:gap-0">
+            <Button variant="outline" size="sm" onClick={() => setIsMsg002ModalOpen(false)}>
+              Voltar e Preencher
+            </Button>
+            <Button
+              size="sm"
+              variant="primary"
+              onClick={() => {
+                setIsMsg002ModalOpen(false);
+                setIsConfirmModalOpen(true);
+              }}
+            >
+              Continuar Mesmo Assim
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Modal MSG003: Confirmação Definitiva */}
+      <Dialog open={isConfirmModalOpen} onOpenChange={setIsConfirmModalOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-slate-900 dark:text-slate-100">
+              <ShieldAlert className="w-5 h-5 text-rose-600" />
+              Finalizar Comunicação de Emergência (MSG003)
+            </DialogTitle>
+            <DialogDescription className="text-xs text-slate-500 dark:text-slate-400 pt-1 leading-relaxed">
+              Após confirmar, a ocorrência será protocolada formalmente no INEMA e não será mais possível alterar os dados informados. Deseja finalizar?
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-2 text-xs space-y-1.5 text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl border border-slate-100 dark:border-slate-800">
+            <p><strong>Município:</strong> {municipio}</p>
+            <p><strong>Substância:</strong> {substancia} (ONU {onu})</p>
+            <p><strong>Volume:</strong> {volumeVazado}</p>
+          </div>
+          <DialogFooter className="gap-2 sm:gap-0">
+            <Button variant="outline" size="sm" onClick={() => setIsConfirmModalOpen(false)}>
+              Revisar Dados
+            </Button>
+            <Button
+              size="sm"
+              variant="primary"
+              className="bg-rose-600 hover:bg-rose-700 text-white"
+              onClick={handleConfirmarFinalizacao}
+            >
+              Sim, Finalizar Comunicação
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Modal MSG004: Sucesso com RE Gerado */}
       <Dialog open={isSuccessModalOpen} onOpenChange={setIsSuccessModalOpen}>
         <DialogContent className="sm:max-w-lg text-center">
-          <div className="w-14 h-14 rounded-full bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300 mx-auto flex items-center justify-center mb-2 shadow-sm">
-            <CheckCircle2 className="w-8 h-8" />
+          <div className="w-14 h-14 rounded-full bg-rose-100 dark:bg-rose-950 text-rose-600 dark:text-rose-400 mx-auto flex items-center justify-center mb-2 shadow-sm">
+            <Flame className="w-8 h-8" />
           </div>
           <DialogHeader className="text-center">
             <DialogTitle className="text-xl font-bold text-slate-900 dark:text-slate-100">
-              Comunicação Protocolada com Sucesso!
+              Emergência Química Registrada com Sucesso! (MSG004)
             </DialogTitle>
             <DialogDescription className="text-xs text-slate-500 dark:text-slate-400 pt-1">
-              O INEMA foi notificado oficialmente. Guarde o número de protocolo abaixo para apresentação aos fiscais.
+              O sinistro foi formalmente comunicado e encaminhado com prioridade ao plantão DIFIS/INEMA.
             </DialogDescription>
           </DialogHeader>
 
           <div className="p-4 my-2 rounded-2xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 text-center space-y-2">
             <span className="text-[11px] uppercase font-bold text-rose-800 dark:text-rose-300 tracking-wider">
-              Número de Protocolo Oficial (RE)
+              Número Oficial do Registro (RE)
             </span>
             <div className="flex items-center justify-center gap-2">
               <span className="text-xl md:text-2xl font-mono font-extrabold text-slate-900 dark:text-white">
@@ -494,7 +936,7 @@ export const EmergenciaExternaPage: React.FC<{ onNavigate?: (route: string) => v
                 {copiado ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
               </button>
             </div>
-            {copiado && <p className="text-[10px] text-emerald-600 font-semibold">Copiado com sucesso!</p>}
+            {copiado && <p className="text-[10px] text-rose-600 font-semibold">Protocolo copiado para a área de transferência!</p>}
           </div>
 
           <DialogFooter className="flex-col sm:flex-row gap-2 justify-center pt-2">
@@ -503,20 +945,17 @@ export const EmergenciaExternaPage: React.FC<{ onNavigate?: (route: string) => v
               size="sm"
               onClick={() => {
                 setIsSuccessModalOpen(false);
-                handleLimpar();
+                onNavigate?.('consulta-externa');
               }}
             >
-              Nova Comunicação
+              Ir para Meus Registros
             </Button>
             <Button
               size="sm"
-              onClick={() => {
-                setIsSuccessModalOpen(false);
-                onNavigate?.('consulta-externa');
-              }}
-              className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold"
+              variant="primary"
+              onClick={() => setIsSuccessModalOpen(false)}
             >
-              Acompanhar no Portal Cidadão
+              Permanecer no Registro (Modo Leitura)
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -16,7 +16,8 @@ import {
   Plus,
   Trash2,
   ExternalLink,
-  Info
+  Info,
+  AlertTriangle
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -31,6 +32,7 @@ import {
 } from '@/components/ui/dialog';
 import { MUNICIPIOS_BAHIA } from '@/data/fiscalizacaoMock';
 import { useTheme } from '@/context/ThemeContext';
+import { cn } from '@/lib/utils';
 
 interface CoordenadaItem {
   id: string;
@@ -39,31 +41,45 @@ interface CoordenadaItem {
   lng: string;
 }
 
+const OPCOES_COMPLEMENTO = [
+  'Área Urbana / Residencial',
+  'Área Rural / Povoado',
+  'Área de Preservação Permanente (APP)',
+  'Reserva Legal',
+  'Unidade de Conservação Estadual / Federal',
+  'Terra Indígena ou Comunidade Tradicional',
+  'Corpo Hídrico / Rio / Manancial'
+];
+
 export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => void }> = ({ onNavigate }) => {
   const { isDarkMode } = useTheme();
 
-  // Seção 1: Detalhes do Registro
+  // Seção 1: Detalhes do Registro (DOR001)
   const [origem, setOrigem] = useState('');
   const [orgaoInterveniente, setOrgaoInterveniente] = useState('');
+  const [outrosOrgao, setOutrosOrgao] = useState('');
   const [numeroOriginal, setNumeroOriginal] = useState('');
   const [dataHoraComunicado, setDataHoraComunicado] = useState(
     new Date().toISOString().slice(0, 16)
   );
 
-  // Seção 2: Ocorrência
+  // Seção 2: Ocorrência (DOR001)
   const [dataInicio, setDataInicio] = useState('2026-09-15');
   const [dataFim, setDataFim] = useState('2026-09-16');
   const [tipologiaDano, setTipologiaDano] = useState('Desmatamento não autorizado');
   const [descricao, setDescricao] = useState('');
   const [arquivos, setArquivos] = useState<{ nome: string; tamanho: string }[]>([]);
 
-  // Seção 3: Localização
+  // Seção 3: Localização (DOR001)
   const [municipio, setMunicipio] = useState('Salvador');
   const [cep, setCep] = useState('');
   const [endereco, setEndereco] = useState('');
   const [bairro, setBairro] = useState('');
   const [pontoReferencia, setPontoReferencia] = useState('');
-  const [complementoLocal, setComplementoLocal] = useState('');
+  const [complementos, setComplementos] = useState<string[]>(['Área de Preservação Permanente (APP)']);
+  const [descricaoComplemento, setDescricaoComplemento] = useState(
+    'Mata ciliar degradada na margem esquerda da nascente do riacho.'
+  );
   const [coordenadas, setCoordenadas] = useState<CoordenadaItem[]>([
     { id: '1', tipo: 'Geográfica / Grau Decimal', lat: '-12.9714', lng: '-38.5014' }
   ]);
@@ -71,7 +87,7 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
   const [novaCoordLat, setNovaCoordLat] = useState('');
   const [novaCoordLng, setNovaCoordLng] = useState('');
 
-  // Seção 4: Denunciante
+  // Seção 4: Denunciante (DOR001)
   const [identificado, setIdentificado] = useState<'SIM' | 'NÃO'>('NÃO');
   const [cpfCnpj, setCpfCnpj] = useState('');
   const [nomeDenunciante, setNomeDenunciante] = useState('');
@@ -79,11 +95,13 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
   const [email, setEmail] = useState('');
 
   // Modais de Controle
+  const [isMsg002ModalOpen, setIsMsg002ModalOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [numeroRDGerado, setNumeroRDGerado] = useState('');
   const [copiado, setCopiado] = useState(false);
   const [rascunhoSalvo, setRascunhoSalvo] = useState(false);
+  const [erroComplemento, setErroComplemento] = useState<string | null>(null);
 
   // Preencher Exemplo
   const handlePreencherExemplo = () => {
@@ -105,7 +123,8 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
     setEndereco('Estrada Velha de Angical, Km 14');
     setBairro('Zona Rural - Bacia do Rio Branco');
     setPontoReferencia('Próximo à ponte de madeira sobre o Riacho Fundo, entrada à direita da cerca branca.');
-    setComplementoLocal('Área de Preservação Permanente (APP)');
+    setComplementos(['Área Rural / Povoado', 'Área de Preservação Permanente (APP)']);
+    setDescricaoComplemento('Área de preservação permanente com nascentes e mata ciliar.');
     setCoordenadas([
       { id: '1', tipo: 'Geográfica / Grau Decimal', lat: '-12.145821', lng: '-45.002341' }
     ]);
@@ -119,6 +138,7 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
   const handleLimpar = () => {
     setOrigem('');
     setOrgaoInterveniente('');
+    setOutrosOrgao('');
     setNumeroOriginal('');
     setDescricao('');
     setArquivos([]);
@@ -126,12 +146,28 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
     setBairro('');
     setPontoReferencia('');
     setCep('');
-    setComplementoLocal('');
+    setComplementos([]);
+    setDescricaoComplemento('');
+    setCoordenadas([]);
     setIdentificado('NÃO');
     setCpfCnpj('');
     setNomeDenunciante('');
     setTelefone('');
     setEmail('');
+  };
+
+  const handleToggleComplemento = (op: string) => {
+    setErroComplemento(null);
+    if (complementos.includes(op)) {
+      setComplementos(complementos.filter((c) => c !== op));
+    } else {
+      // RN009: Máximo 3 itens
+      if (complementos.length >= 3) {
+        setErroComplemento('Limite atingido: selecione no máximo 3 complementos (RN009).');
+        return;
+      }
+      setComplementos([...complementos, op]);
+    }
   };
 
   const handleAddCoordenada = () => {
@@ -160,11 +196,25 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
 
   const handleFinalizar = (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validação RN009: Pelo menos 1 complemento obrigatório
+    if (complementos.length === 0) {
+      setErroComplemento('Selecione ao menos um complemento de localização (RN009).');
+      return;
+    }
+
+    // Validação MSG002: Alerta quando sem coordenadas
+    if (coordenadas.length === 0) {
+      setIsMsg002ModalOpen(true);
+      return;
+    }
+
     setIsConfirmModalOpen(true);
   };
 
   const handleConfirmarEnvio = () => {
     setIsConfirmModalOpen(false);
+    setIsMsg002ModalOpen(false);
     const seq = Math.floor(100000 + Math.random() * 900000);
     const num = `2026.${seq}/INEMA/RD`;
     setNumeroRDGerado(num);
@@ -219,7 +269,7 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
             onClick={handleSalvarRascunho}
             className="gap-1.5 text-xs font-semibold whitespace-nowrap cursor-pointer shadow-2xs"
           >
-            Salvar Rascunho
+            Salvar Rascunho (MSG003)
           </Button>
         </div>
       </div>
@@ -228,13 +278,13 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
       {rascunhoSalvo && (
         <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 flex items-center gap-3 text-emerald-800 dark:text-emerald-300 text-sm animate-in fade-in duration-300">
           <CheckCircle2 className="w-5 h-5 shrink-0" />
-          <span>Rascunho salvo com sucesso! As informações permanecerão retidas por 24 horas no sistema.</span>
+          <span>Rascunho salvo com sucesso! As informações permanecerão retidas por 24 horas no sistema (MSG003 / RN004).</span>
         </div>
       )}
 
       {/* Formulário Principal */}
       <form onSubmit={handleFinalizar} className="space-y-6">
-        {/* CARD 1: Detalhes do Registro */}
+        {/* CARD 1: Detalhes do Registro (DOR001) */}
         <Card className="border-slate-200/90 dark:border-slate-800">
           <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">
             <div className="flex items-center justify-between flex-wrap gap-2">
@@ -247,11 +297,11 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                     Detalhes do Registro
                   </CardTitle>
                   <CardDescription className="text-xs">
-                    Canais formais de entrada e dados do comunicado recebido pelo INEMA.
+                    Canais formais de entrada e dados do comunicado recebido pelo INEMA (DOR001).
                   </CardDescription>
                 </div>
               </div>
-              <Badge variant="emerald" dot>
+              <Badge color="primary" dot>
                 Nº Previsto: 2026.XXXXXX/INEMA/RD
               </Badge>
             </div>
@@ -266,7 +316,7 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                 value={origem}
                 onChange={(e) => setOrigem(e.target.value)}
                 required
-                className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none"
+                className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
               >
                 <option value="">Selecione a origem...</option>
                 <option value="Call center">Call center</option>
@@ -289,7 +339,7 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                   value={orgaoInterveniente}
                   onChange={(e) => setOrgaoInterveniente(e.target.value)}
                   required
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none"
+                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
                 >
                   <option value="">Selecione o órgão...</option>
                   <option value="IBAMA">IBAMA</option>
@@ -302,17 +352,33 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
               </div>
             )}
 
+            {origem === 'Ofício' && orgaoInterveniente === 'Outros' && (
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                  Outros – Especificar Órgão <span className="text-rose-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={outrosOrgao}
+                  onChange={(e) => setOutrosOrgao(e.target.value)}
+                  required
+                  placeholder="Nome do órgão solicitante"
+                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
+                />
+              </div>
+            )}
+
             <div>
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                Número Original do Documento {origem === 'Ofício' && <span className="text-rose-500">*</span>}
+                Número Original do Documento {(origem === 'Ofício' || origem === 'Call center') && <span className="text-rose-500">*</span>}
               </label>
               <input
                 type="text"
                 value={numeroOriginal}
                 onChange={(e) => setNumeroOriginal(e.target.value)}
                 placeholder="Ex: OF-2026/0491 ou OUV-9812"
-                required={origem === 'Ofício'}
-                className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none"
+                required={origem === 'Ofício' || origem === 'Call center'}
+                className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
               />
             </div>
 
@@ -325,13 +391,13 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                 value={dataHoraComunicado}
                 onChange={(e) => setDataHoraComunicado(e.target.value)}
                 required
-                className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none"
+                className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
               />
             </div>
           </CardContent>
         </Card>
 
-        {/* CARD 2: Ocorrência */}
+        {/* CARD 2: Ocorrência Ambiental */}
         <Card className="border-slate-200/90 dark:border-slate-800">
           <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">
             <div className="flex items-center gap-2.5">
@@ -343,7 +409,7 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                   Ocorrência Ambiental
                 </CardTitle>
                 <CardDescription className="text-xs">
-                  Tipologia do dano, datas de constatação, narrativa dos fatos e evidências.
+                  Tipologia do dano, período dos fatos, narrativa circunstanciada e anexos.
                 </CardDescription>
               </div>
             </div>
@@ -360,7 +426,7 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                   value={dataInicio}
                   onChange={(e) => setDataInicio(e.target.value)}
                   required
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none"
+                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
                 />
               </div>
 
@@ -372,7 +438,7 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                   type="date"
                   value={dataFim}
                   onChange={(e) => setDataFim(e.target.value)}
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none"
+                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
                 />
               </div>
 
@@ -384,7 +450,7 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                   value={tipologiaDano}
                   onChange={(e) => setTipologiaDano(e.target.value)}
                   required
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none"
+                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
                 >
                   <option value="Desmatamento não autorizado">Desmatamento não autorizado</option>
                   <option value="Poluição Hídrica / Lançamento de Efluentes">Poluição Hídrica / Lançamento de Efluentes</option>
@@ -398,12 +464,13 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
               </div>
             </div>
 
+            {/* Descrição Circunstanciada (Limite 7.000 caracteres, DOR001) */}
             <div>
               <div className="flex items-center justify-between mb-1.5">
                 <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
                   Descrição Circunstanciada dos Fatos <span className="text-rose-500">*</span>
                 </label>
-                <span className="text-[11px] text-slate-400">
+                <span className="text-[11px] text-slate-400 font-mono">
                   {descricao.length} / 7.000 caracteres
                 </span>
               </div>
@@ -414,22 +481,22 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                 required
                 rows={4}
                 placeholder="Descreva minuciosamente o que foi presenciado, autores presumíveis, dimensões da área afetada, equipamentos utilizados e danos visíveis..."
-                className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 p-3 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none leading-relaxed"
+                className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 p-3 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none leading-relaxed"
               />
             </div>
 
-            {/* Anexos e Evidências */}
+            {/* Anexos e Legenda Informativa Fixa (MSG009 / RN007) */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">
-                Anexos e Evidências (.pdf, .jpg, .png, .mp4, .kml, .kmz, .zip)
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                Anexos e Registros (.pdf, .doc, .docx, .jpg, .png, .mp4, .kml, .kmz, .zip)
               </label>
-              <div className="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl p-5 text-center hover:border-emerald-500 dark:hover:border-emerald-600 transition-colors bg-slate-50/50 dark:bg-slate-800/40">
-                <UploadCloud className="w-8 h-8 mx-auto text-emerald-700 dark:text-emerald-400 mb-2" />
+              <div className="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl p-5 text-center hover:border-blue-500 dark:hover:border-blue-600 transition-colors bg-slate-50/50 dark:bg-slate-800/40">
+                <UploadCloud className="w-8 h-8 mx-auto text-blue-600 dark:text-blue-400 mb-2" />
                 <p className="text-xs font-semibold text-slate-700 dark:text-slate-200">
                   Arraste arquivos aqui ou clique para selecionar
                 </p>
-                <p className="text-[11px] text-slate-400 mt-1">
-                  Limite máximo de 50MB por arquivo. Fotos geolocalizadas facilitam a fiscalização.
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+                  <strong>Orientação de formatos (MSG009):</strong> Formatos aceitos: JPEG, JPG, PNG, BMP, MP3, MP4, PDF, DOC, DOCX, TXT, XLS, XLSX, SHP, SHX, DBF, PRJ, KML, KMZ e ZIP.
                 </p>
               </div>
 
@@ -441,7 +508,7 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                       className="flex items-center justify-between p-2.5 rounded-lg bg-slate-100 dark:bg-slate-800/80 text-xs border border-slate-200/80 dark:border-slate-700"
                     >
                       <div className="flex items-center gap-2 text-slate-700 dark:text-slate-200">
-                        <FileText className="w-4 h-4 text-emerald-600" />
+                        <FileText className="w-4 h-4 text-blue-600" />
                         <span className="font-medium">{arq.nome}</span>
                         <span className="text-[10px] text-slate-400">({arq.tamanho})</span>
                       </div>
@@ -460,7 +527,7 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
           </CardContent>
         </Card>
 
-        {/* CARD 3: Localização */}
+        {/* CARD 3: Localização Geográfica e Complementos (DOR001) */}
         <Card className="border-slate-200/90 dark:border-slate-800">
           <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">
             <div className="flex items-center gap-2.5">
@@ -472,7 +539,7 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                   Localização Geográfica
                 </CardTitle>
                 <CardDescription className="text-xs">
-                  Município, logradouro, coordenadas geográficas e referências terrestres.
+                  Município, logradouro, coordenadas geográficas e complementos territoriais.
                 </CardDescription>
               </div>
             </div>
@@ -488,7 +555,7 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                   value={municipio}
                   onChange={(e) => setMunicipio(e.target.value)}
                   required
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none"
+                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
                 >
                   {MUNICIPIOS_BAHIA.map((m) => (
                     <option key={m} value={m}>
@@ -500,14 +567,14 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
 
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                  CEP (opcional)
+                  CEP (busca automática Correios)
                 </label>
                 <input
                   type="text"
                   value={cep}
                   onChange={(e) => setCep(e.target.value)}
                   placeholder="00000-000"
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none"
+                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
                 />
               </div>
 
@@ -520,7 +587,7 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                   value={bairro}
                   onChange={(e) => setBairro(e.target.value)}
                   placeholder="Ex: Zona Rural / Povoado de Lagoa Clara"
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none"
+                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
                 />
               </div>
             </div>
@@ -536,30 +603,96 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                   onChange={(e) => setEndereco(e.target.value)}
                   required
                   placeholder="Ex: Rodovia BA-099, Km 42 ou Rua das Palmeiras, nº 10"
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none"
+                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
                 />
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                  Ponto de Referência <span className="text-rose-500">*</span>
+                  Ponto de Referência <span className="text-rose-500">*</span> (máx. 1.000 carac.)
                 </label>
                 <input
                   type="text"
                   value={pontoReferencia}
                   onChange={(e) => setPontoReferencia(e.target.value)}
                   required
+                  maxLength={1000}
                   placeholder="Ex: Atrás da cerâmica São Francisco, entrada à esquerda da ponte"
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none"
+                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
                 />
               </div>
             </div>
 
-            {/* Coordenadas Geográficas */}
+            {/* Complemento de Localização (Multisseleção, máx. 3 itens - RN009) */}
+            <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 space-y-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <label className="block text-xs font-bold text-slate-800 dark:text-slate-200">
+                    Complemento do Local (RN009) <span className="text-rose-500">*</span>
+                  </label>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                    Selecione no máximo 3 itens aplicáveis à área afetada.
+                  </p>
+                </div>
+                <Badge color={complementos.length === 3 ? 'warning' : 'primary'}>
+                  {complementos.length} / 3 selecionados
+                </Badge>
+              </div>
+
+              {erroComplemento && (
+                <div className="p-2.5 rounded-lg bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-900 text-rose-700 dark:text-rose-300 text-xs font-medium">
+                  {erroComplemento}
+                </div>
+              )}
+
+              <div className="flex flex-wrap gap-2 pt-1">
+                {OPCOES_COMPLEMENTO.map((op) => {
+                  const isChecked = complementos.includes(op);
+                  return (
+                    <button
+                      key={op}
+                      type="button"
+                      onClick={() => handleToggleComplemento(op)}
+                      className={cn(
+                        "px-3 py-1.5 rounded-lg text-xs font-medium border transition-all cursor-pointer",
+                        isChecked
+                          ? "bg-blue-600 text-white border-blue-600 shadow-2xs"
+                          : "bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700 hover:border-blue-400"
+                      )}
+                    >
+                      {op}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Descrição do Complemento (Obrigatório, máx 1.000 caracteres, DOR001) */}
+              <div className="pt-2">
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                    Descrição do Complemento <span className="text-rose-500">*</span>
+                  </label>
+                  <span className="text-[10px] text-slate-400 font-mono">
+                    {descricaoComplemento.length} / 1.000 caracteres
+                  </span>
+                </div>
+                <textarea
+                  value={descricaoComplemento}
+                  onChange={(e) => setDescricaoComplemento(e.target.value)}
+                  required
+                  maxLength={1000}
+                  rows={2}
+                  placeholder="Detalhes específicos sobre o relevo, hidrografia ou regime de proteção da área..."
+                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-slate-800 dark:text-slate-100 outline-none"
+                />
+              </div>
+            </div>
+
+            {/* Coordenadas Geográficas (RN008, MSG002) */}
             <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                  <MapPin className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                   <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200">
                     Coordenadas Geográficas (Permite múltiplos pontos)
                   </h4>
@@ -567,7 +700,6 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                 <span className="text-[11px] text-slate-400">RN008: Aceita valor zero se rural</span>
               </div>
 
-              {/* Lista de Coordenadas */}
               {coordenadas.map((c) => (
                 <div
                   key={c.id}
@@ -586,7 +718,6 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                 </div>
               ))}
 
-              {/* Inserção de nova coordenada */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-3 pt-2">
                 <div>
                   <select
@@ -635,7 +766,7 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
           </CardContent>
         </Card>
 
-        {/* CARD 4: Denunciante */}
+        {/* CARD 4: Identificação do Denunciante (DOR001) */}
         <Card className="border-slate-200/90 dark:border-slate-800">
           <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">
             <div className="flex items-center justify-between flex-wrap gap-2">
@@ -648,7 +779,7 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                     Identificação do Denunciante
                   </CardTitle>
                   <CardDescription className="text-xs">
-                    Opção de sigilo garantida pela Lei de Acesso à Informação (LAI).
+                    Opção de identificação formal ou sigilo total garantido por lei (DOR001 / RN010).
                   </CardDescription>
                 </div>
               </div>
@@ -686,9 +817,7 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
               <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200/80 dark:border-blue-800 flex items-start gap-3">
                 <Info className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
                 <div className="text-xs text-blue-800 dark:text-blue-300 leading-relaxed">
-                  <strong>Garantia de Anonimato:</strong> A denúncia foi assinalada como anônima. Os dados do
-                  denunciante não constarão em nenhum relatório público ou despacho técnico. A fiscalização
-                  apurará os fatos com base exclusiva nas coordenadas e descrição fornecidas.
+                  <strong>Aviso de Anonimato (MSG007):</strong> A identificação do denunciante garante maior celeridade na apuração e permite o recebimento de notificações sobre as diligências do INEMA. Caso opte por não se identificar, a fiscalização apurará os fatos com base exclusiva nas coordenadas e descrição fornecidas.
                 </div>
               </div>
             ) : (
@@ -702,7 +831,7 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                     value={cpfCnpj}
                     onChange={(e) => setCpfCnpj(e.target.value)}
                     placeholder="000.000.000-00"
-                    className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none"
+                    className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
                   />
                 </div>
 
@@ -716,7 +845,7 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                     onChange={(e) => setNomeDenunciante(e.target.value)}
                     required
                     placeholder="Nome do denunciante"
-                    className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none"
+                    className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
                   />
                 </div>
 
@@ -730,7 +859,7 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                     onChange={(e) => setTelefone(e.target.value)}
                     required
                     placeholder="(00) 00000-0000"
-                    className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none"
+                    className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
                   />
                 </div>
 
@@ -743,7 +872,7 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="denunciante@exemplo.com"
-                    className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none"
+                    className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
                   />
                 </div>
               </div>
@@ -752,7 +881,7 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
 
           <CardFooter className="pt-4 pb-5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between flex-wrap gap-3">
             <div className="text-xs text-slate-500 dark:text-slate-400">
-              Ao finalizar, um número oficial de Registro de Denúncia (RD) será gerado.
+              Ao finalizar, um número oficial de Registro de Denúncia (RD) será gerado (RN001).
             </div>
             <div className="flex items-center gap-2">
               <Button
@@ -765,7 +894,8 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
               </Button>
               <Button
                 type="submit"
-                className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs shadow-sm px-6"
+                variant="primary"
+                className="font-bold text-xs shadow-sm px-6"
               >
                 Finalizar e Tramitar Denúncia
               </Button>
@@ -774,23 +904,52 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
         </Card>
       </form>
 
-      {/* Modal de Confirmação de Finalização */}
+      {/* Modal MSG002: Alerta de Ausência de Coordenadas */}
+      <Dialog open={isMsg002ModalOpen} onOpenChange={setIsMsg002ModalOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-slate-900 dark:text-slate-100">
+              <AlertTriangle className="w-5 h-5 text-amber-500" />
+              Alerta de Coordenadas (MSG002)
+            </DialogTitle>
+            <DialogDescription className="text-xs text-slate-600 dark:text-slate-300 pt-1 leading-relaxed">
+              A ausência de coordenadas em área rural compromete a apuração dos fatos e dificulta a localização exata pela equipe de fiscalização. Deseja prosseguir sem informar coordenadas geográficas?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2 sm:gap-0">
+            <Button variant="outline" size="sm" onClick={() => setIsMsg002ModalOpen(false)}>
+              Voltar e Preencher
+            </Button>
+            <Button
+              size="sm"
+              variant="primary"
+              onClick={() => {
+                setIsMsg002ModalOpen(false);
+                setIsConfirmModalOpen(true);
+              }}
+            >
+              Continuar Mesmo Assim
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Modal MSG004: Confirmação de Finalização */}
       <Dialog open={isConfirmModalOpen} onOpenChange={setIsConfirmModalOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-slate-900 dark:text-slate-100">
-              <ShieldAlert className="w-5 h-5 text-amber-500" />
-              Confirmar Finalização de Denúncia
+              <ShieldAlert className="w-5 h-5 text-blue-600" />
+              Confirmar Finalização de Denúncia (MSG004)
             </DialogTitle>
             <DialogDescription className="text-xs text-slate-500 dark:text-slate-400 pt-1 leading-relaxed">
-              Após a confirmação, o Registro de Denúncia (RD) será emitido formalmente e encaminhado
-              à pauta da Diretoria de Fiscalização (DIFIS). Não será possível alterar os dados principais após o envio.
+              Após finalizar não será possível alterar os dados informados! O Registro de Denúncia (RD) será emitido formalmente e encaminhado à pauta da Diretoria de Fiscalização (DIFIS).
             </DialogDescription>
           </DialogHeader>
-          <div className="py-2 text-xs space-y-1.5 text-slate-600 dark:text-slate-300">
+          <div className="py-2 text-xs space-y-1.5 text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl border border-slate-100 dark:border-slate-800">
             <p><strong>Município:</strong> {municipio}</p>
             <p><strong>Tipologia:</strong> {tipologiaDano}</p>
-            <p><strong>Denunciante:</strong> {identificado === 'SIM' ? nomeDenunciante : 'Anônimo (Sigilo Total)'}</p>
+            <p><strong>Denunciante:</strong> {identificado === 'SIM' ? nomeDenunciante : 'Anônimo (Sigilo Assegurado)'}</p>
           </div>
           <DialogFooter className="gap-2 sm:gap-0">
             <Button variant="outline" size="sm" onClick={() => setIsConfirmModalOpen(false)}>
@@ -798,8 +957,8 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
             </Button>
             <Button
               size="sm"
+              variant="primary"
               onClick={handleConfirmarEnvio}
-              className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold"
             >
               Confirmar e Gerar RD
             </Button>
@@ -807,7 +966,7 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
         </DialogContent>
       </Dialog>
 
-      {/* Modal de Sucesso */}
+      {/* Modal MSG005: Sucesso de Finalização */}
       <Dialog open={isSuccessModalOpen} onOpenChange={setIsSuccessModalOpen}>
         <DialogContent className="sm:max-w-lg text-center">
           <div className="w-14 h-14 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 mx-auto flex items-center justify-center mb-2 shadow-sm">
@@ -815,15 +974,15 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
           </div>
           <DialogHeader className="text-center">
             <DialogTitle className="text-xl font-bold text-slate-900 dark:text-slate-100">
-              Denúncia Cadastrada com Sucesso!
+              RD Cadastrado com Sucesso! (MSG005)
             </DialogTitle>
             <DialogDescription className="text-xs text-slate-500 dark:text-slate-400 pt-1">
               O comunicado foi protocolado e encaminhado automaticamente para triagem da equipe técnica DIFIS.
             </DialogDescription>
           </DialogHeader>
 
-          <div className="p-4 my-2 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-center space-y-2">
-            <span className="text-[11px] uppercase font-bold text-emerald-800 dark:text-emerald-300 tracking-wider">
+          <div className="p-4 my-2 rounded-2xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-center space-y-2">
+            <span className="text-[11px] uppercase font-bold text-blue-800 dark:text-blue-300 tracking-wider">
               Número Oficial do Protocolo (RD)
             </span>
             <div className="flex items-center justify-center gap-2">
@@ -839,7 +998,7 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                 {copiado ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
               </button>
             </div>
-            {copiado && <p className="text-[10px] text-emerald-600 font-semibold">Protocolo copiado para a área de transferência!</p>}
+            {copiado && <p className="text-[10px] text-blue-600 font-semibold">Protocolo copiado para a área de transferência!</p>}
           </div>
 
           <DialogFooter className="flex-col sm:flex-row gap-2 justify-center pt-2">
@@ -855,11 +1014,11 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
             </Button>
             <Button
               size="sm"
+              variant="primary"
               onClick={() => {
                 setIsSuccessModalOpen(false);
                 onNavigate?.('consulta-interna');
               }}
-              className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold"
             >
               Ver na Pauta DIFIS
             </Button>
