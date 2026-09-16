@@ -74,11 +74,13 @@ export const TableToolbar: React.FC<TableToolbarProps> = ({
 export interface TableContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   toolbar?: React.ReactNode;
   pagination?: React.ReactNode;
+  noScroll?: boolean;
 }
 
 export const TableContainer: React.FC<TableContainerProps> = ({
   toolbar,
   pagination,
+  noScroll = false,
   children,
   className,
   ...props
@@ -92,7 +94,7 @@ export const TableContainer: React.FC<TableContainerProps> = ({
       {...props}
     >
       {toolbar}
-      <div className="overflow-x-auto">{children}</div>
+      <div className={noScroll ? 'w-full' : 'overflow-x-auto'}>{children}</div>
       {pagination && (
         <div className="fi-ta-pagination px-4 py-3 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20 flex items-center justify-between">
           {pagination}
