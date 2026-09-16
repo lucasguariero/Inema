@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal INEMA - Início</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface": "#f8f9fb",
+                        "surface-dim": "#d9dadc",
+                        "surface-bright": "#f8f9fb",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f3f4f6",
+                        "surface-container": "#edeef0",
+                        "surface-container-high": "#e7e8ea",
+                        "surface-container-highest": "#e1e2e4",
+                        "on-surface": "#191c1e",
+                        "on-surface-variant": "#404945",
+                        "inverse-surface": "#2e3132",
+                        "inverse-on-surface": "#f0f1f3",
+                        "outline": "#707975",
+                        "outline-variant": "#bfc9c4",
+                        "surface-tint": "#326859",
+                        "primary": "#002f25",
+                        "on-primary": "#ffffff",
+                        "primary-container": "#0a473a",
+                        "on-primary-container": "#7eb5a4",
+                        "inverse-primary": "#9ad2c0",
+                        "secondary": "#2a6862",
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#aeebe4",
+                        "on-secondary-container": "#2f6c66",
+                        "tertiary": "#461c13",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-container": "#613127",
+                        "on-tertiary-container": "#dd998b",
+                        "error": "#ba1a1a",
+                        "on-error": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-error-container": "#93000a",
+                        "primary-fixed": "#b6eedc",
+                        "primary-fixed-dim": "#9ad2c0",
+                        "on-primary-fixed": "#002019",
+                        "on-primary-fixed-variant": "#175042",
+                        "secondary-fixed": "#b1eee7",
+                        "secondary-fixed-dim": "#95d2cb",
+                        "on-secondary-fixed": "#00201d",
+                        "on-secondary-fixed-variant": "#09504b",
+                        "tertiary-fixed": "#ffdad3",
+                        "tertiary-fixed-dim": "#fdb5a6",
+                        "on-tertiary-fixed": "#350f08",
+                        "on-tertiary-fixed-variant": "#6b392f",
+                        "background": "#f8f9fb",
+                        "on-background": "#191c1e",
+                        "surface-variant": "#e1e2e4",
+                        "sidebar-active": "#d1e1de",
+                        "text-main": "#111827",
+                        "text-muted": "#6b7280",
+                        "border-subtle": "#e5e7eb"
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        full: "9999px"
+                    },
+                    spacing: {
+                        gutter: "1.5rem",
+                        "container-padding": "2rem",
+                        "header-height": "64px",
+                        "sidebar-width": "280px",
+                        "stack-gap": "1rem"
+                    },
+                    fontFamily: {
+                        "headline-xl": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"]
+                    },
+                    fontSize: {
+                        "headline-xl": ["32px", { lineHeight: "1.2", fontWeight: "700" }],
+                        "label-sm": ["12px", { lineHeight: "1.2", fontWeight: "500" }],
+                        "body-md": ["14px", { lineHeight: "1.5", fontWeight: "400" }],
+                        "headline-lg": ["24px", { lineHeight: "1.3", fontWeight: "600" }],
+                        "label-md": ["14px", { lineHeight: "1.2", fontWeight: "600" }],
+                        "body-lg": ["16px", { lineHeight: "1.5", fontWeight: "400" }],
+                        "headline-lg-mobile": ["20px", { lineHeight: "1.3", fontWeight: "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+    <link rel="stylesheet" href="css/design-system.css">
+</head>
+<body class="bg-background">
+    <!-- Topbar - Full width -->
+    <header class="h-[60px] bg-[#0F4C3A] text-white fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 lg:px-6 shadow-xs">
+        <!-- Hamburger + Logo -->
+                <div class="flex items-center gap-3">
+            <button class="w-10 h-10 rounded-lg hover:bg-white/10 flex items-center justify-center text-white transition-colors" onclick="toggleSidebar()" aria-label="Menu principal">
+                <span class="material-symbols-outlined text-2xl">menu</span>
+            </button>
+            <a href="index.html" class="flex items-center">
+                <img src="logo.svg" alt="INEMA" class="h-10 w-auto">
+            </a>
+        </div>
+
+        <!-- Right side: Search, Notifications, Profile -->
+        <div class="flex items-center gap-3 ml-auto">
+            <!-- Search -->
+            <div class="relative w-10 md:w-auto" id="searchContainer">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/60 cursor-pointer text-xl" onclick="toggleSearch()" id="searchIcon">search</span>
+                <input
+                    type="text"
+                    placeholder="Buscar no sistema..."
+                    class="hidden md:inline w-full md:w-80 pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 text-sm focus:outline-none focus:border-white/40"
+                    id="searchInput"
+                >
+            </div>
+
+            <!-- Notifications -->
+            <button class="w-10 h-10 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors relative">
+                <span class="material-symbols-outlined">notifications</span>
+                <span class="absolute -top-1 -right-1 w-5 h-5 bg-error rounded-full text-xs flex items-center justify-center font-semibold">3</span>
+            </button>
+
+            <!-- Profile Dropdown -->
+            <div class="relative">
+                <button id="profileBtn" class="flex items-center gap-2 p-1.5 rounded-lg hover:bg-white/10 transition-colors">
+                    <div class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                        LM
+                    </div>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div id="profileDropdown" class="hidden absolute right-0 top-12 w-48 bg-surface-container-lowest rounded-xl border border-border-subtle shadow-lg py-2">
+                    <div class="px-4 py-2 border-b border-border-subtle">
+                        <p class="text-sm font-semibold text-on-surface">Lucas Manager</p>
+                        <p class="text-xs text-text-muted">Administrador</p>
+                    </div>
+                    <a href="#" class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-low transition-colors">
+                        <span class="material-symbols-outlined text-lg">person</span>
+                        <span class="text-sm">Perfil</span>
+                    </a>
+                    <a href="#" class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-low transition-colors">
+                        <span class="material-symbols-outlined text-lg">settings</span>
+                        <span class="text-sm">Configurações</span>
+                    </a>
+                    <hr class="my-2 border-border-subtle">
+                    <a href="#" class="flex items-center gap-3 px-4 py-2 text-error hover:bg-error/10 transition-colors">
+                        <span class="material-symbols-outlined text-lg">logout</span>
+                        <span class="text-sm">Sair</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex flex-1 pt-[60px] min-h-screen bg-[#F8FAFC]">
+                                                                <!-- Overlay Mobile -->
+        <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-30 hidden lg:hidden" style="top: 60px;"></div>
+
+        <!-- Sidebar Lateral Padronizada (280px) -->
+        <aside id="sidebar" class="w-[280px] bg-white border-r border-[#E5E7EB] flex flex-col fixed top-[60px] bottom-0 left-0 z-40 transition-transform duration-200 -translate-x-full lg:translate-x-0">
+            <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+                <!-- 1. Item Principal: Início -->
+                <a href="index.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#0F4C3A] bg-[#E2ECE9] font-semibold transition-colors duration-150">
+                    <span class="material-symbols-outlined text-xl text-[#0F4C3A]">home</span>
+                    <span class="text-sm font-medium">Início</span>
+                </a>
+
+                <!-- 2. Módulo Principal (Expansível / Accordion Ativo): Fiscalização -->
+                <div class="pt-1">
+                    <button onclick="toggleSubmenu('subFiscalizacao', 'iconFiscalizacao')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-semibold transition-colors duration-150">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-xl text-slate-500">fact_check</span>
+                            <span class="text-sm font-semibold">Fiscalização</span>
+                        </div>
+                        <span id="iconFiscalizacao" class="material-symbols-outlined text-lg text-slate-500 transition-transform duration-200 rotate-180">expand_more</span>
+                    </button>
+                    
+                    <div id="subFiscalizacao" class="mt-2 border-l-2 border-slate-200 ml-4 pl-3 space-y-4">
+                        <!-- Subgrupo: DENÚNCIAS -->
+                        <div>
+                            <div class="text-slate-400 font-semibold text-[11px] tracking-wider uppercase px-3 pt-2 pb-1">
+                                Denúncias
+                            </div>
+                            <div class="space-y-1 mt-1">
+                                <a href="fiscalizacao.html" id="menu-atendente" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                                    <span>Atendente</span>
+                                </a>
+                                <a href="fiscalizacao.html?fluxo=externo" id="menu-cidadao" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                                    <span>Formulário Cidadão</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Subgrupo: EMERGÊNCIAS QUÍMICAS -->
+                        <div>
+                            <div class="text-slate-400 font-semibold text-[11px] tracking-wider uppercase px-3 pt-2 pb-1">
+                                Emergências Químicas
+                            </div>
+                            <div class="space-y-1 mt-1">
+                                <a href="emergencia-quimica.html?fluxo=interna" id="menu-emerg-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                                    <span>Cadastro Interno</span>
+                                </a>
+                                <a href="emergencia-quimica-externa.html" id="menu-emerg-externa" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                                    <span>Registro Externo</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Subgrupo: CONSULTAS -->
+                        <div>
+                            <div class="text-slate-400 font-semibold text-[11px] tracking-wider uppercase px-3 pt-2 pb-1">
+                                Consultas
+                            </div>
+                            <div class="space-y-1 mt-1">
+                                <a href="consulta-externa.html" id="menu-consulta-externa" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                                    <span>Consulta Cidadão</span>
+                                </a>
+                                <a href="consulta-interna.html" id="menu-consulta-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                                    <span>Painel Interno DIFIS</span>
+                                    <span class="bg-rose-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full" id="sidebarBadgeEmergencias">3</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Módulo: Relatórios Gerenciais -->
+                <div class="pt-1">
+                    <a href="relatorios.html" id="menu-relatorios" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium transition-colors duration-150">
+                        <span class="material-symbols-outlined text-xl text-slate-500">bar_chart</span>
+                        <span class="text-sm font-medium">Relatórios Gerenciais</span>
+                    </a>
+                </div>
+            </nav>
+
+            <!-- Rodapé Fixo da Sidebar: Assistente INEMA -->
+            <div class="p-3 border-t border-slate-200 bg-white">
+                <button onclick="alert('Assistente IA INEMA ativado. Em que posso auxiliá-lo com as demandas de Fiscalização e SEIA?')" class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#0F4C3A] text-white font-medium text-xs hover:bg-[#0c3d2e] transition-colors shadow-xs group">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-amber-300 group-hover:rotate-12 transition-transform shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+                        <path d="M5 3v4"/>
+                        <path d="M19 17v4"/>
+                        <path d="M3 5h4"/>
+                        <path d="M17 19h4"/>
+                    </svg>
+                    <span>Assistente INEMA</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 lg:ml-[280px] transition-all duration-300" id="mainContent">
+            <!-- Content -->
+            <main class="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-8">
+                <!-- Hero Banner Institucional -->
+                <div class="bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 shadow-xs relative overflow-hidden">
+                    <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                        <div class="space-y-2">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-[#0F4C3A] border border-emerald-200/70 text-xs font-semibold">
+                                <span class="w-2 h-2 rounded-full bg-[#0F4C3A]"></span>
+                                <span>Portal Unificado de Fiscalização Ambiental</span>
+                            </div>
+                            <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">Bem-vindo, Lucas</h1>
+                            <p class="text-xs sm:text-sm text-slate-500 max-w-2xl leading-relaxed">
+                                Plataforma integrada para recepção, triagem técnica, tramitação e despacho de denúncias ambientais e emergências químicas do Estado da Bahia.
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-3 shrink-0 flex-wrap">
+                            <div class="px-4 py-3 bg-slate-50/80 rounded-xl border border-slate-200/80 text-left">
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Status Operacional</span>
+                                <span class="text-xs font-bold text-emerald-700 flex items-center gap-1.5 mt-0.5">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                    Sistemas Operando Normalmente
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seção: Acesso Rápido -->
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-lg font-bold text-slate-900 tracking-tight">Módulos de Acesso Rápido</h2>
+                            <p class="text-xs text-slate-500">Selecione o canal ou ferramenta correspondente ao seu perfil</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                        <!-- Card 1: Fiscalização Atendente -->
+                        <a href="fiscalizacao.html" onclick="closeSidebar()" class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs hover:shadow-md hover:border-emerald-700/40 transition-all duration-200 group flex flex-col justify-between cursor-pointer">
+                            <div>
+                                <div class="flex items-start justify-between gap-4 mb-4">
+                                    <div class="w-12 h-12 rounded-xl bg-emerald-50 text-[#0F4C3A] border border-emerald-100 flex items-center justify-center group-hover:scale-105 transition-transform">
+                                        <span class="material-symbols-outlined text-2xl">fact_check</span>
+                                    </div>
+                                    <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-[11px] font-semibold">
+                                        Triagem Interna
+                                    </span>
+                                </div>
+                                <h3 class="font-bold text-slate-900 group-hover:text-[#0F4C3A] transition-colors text-base">
+                                    Fiscalização - Atendente
+                                </h3>
+                                <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                                    Recepção presencial, telefônica, ofícios e manifestações de denúncias ambientais no sistema interno.
+                                </p>
+                            </div>
+                            <div class="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-[#0F4C3A]">
+                                <span>Acessar Atendimento</span>
+                                <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                            </div>
+                        </a>
+
+                        <!-- Card 2: Fiscalização Cidadão -->
+                        <a href="fiscalizacao.html?fluxo=externo" class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs hover:shadow-md hover:border-teal-700/40 transition-all duration-200 group flex flex-col justify-between cursor-pointer">
+                            <div>
+                                <div class="flex items-start justify-between gap-4 mb-4">
+                                    <div class="w-12 h-12 rounded-xl bg-teal-50 text-teal-700 border border-teal-100 flex items-center justify-center group-hover:scale-105 transition-transform">
+                                        <span class="material-symbols-outlined text-2xl">person</span>
+                                    </div>
+                                    <span class="px-2.5 py-1 rounded-full bg-teal-50 text-teal-700 text-[11px] font-semibold border border-teal-100">
+                                        Canal Cidadão
+                                    </span>
+                                </div>
+                                <h3 class="font-bold text-slate-900 group-hover:text-teal-700 transition-colors text-base">
+                                    Denúncia - Cidadão
+                                </h3>
+                                <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                                    Portal externo de autoatendimento para registro público de denúncias ambientais (identificadas ou anônimas).
+                                </p>
+                            </div>
+                            <div class="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-teal-700">
+                                <span>Acessar Formulário</span>
+                                <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                            </div>
+                        </a>
+
+                        <!-- Card 3: Emergência Química -->
+                        <a href="emergencia-quimica.html" class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs hover:shadow-md hover:border-amber-700/40 transition-all duration-200 group flex flex-col justify-between cursor-pointer">
+                            <div>
+                                <div class="flex items-start justify-between gap-4 mb-4">
+                                    <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-700 border border-amber-200/70 flex items-center justify-center group-hover:scale-105 transition-transform">
+                                        <span class="material-symbols-outlined text-2xl">warning</span>
+                                    </div>
+                                    <span class="px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 text-[11px] font-semibold border border-amber-200/80">
+                                        Plantão 24h
+                                    </span>
+                                </div>
+                                <h3 class="font-bold text-slate-900 group-hover:text-amber-800 transition-colors text-base">
+                                    Emergência Química
+                                </h3>
+                                <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                                    Ocorrências críticas com produtos perigosos, acidentes de transporte, vazamentos e acionamento de plantonistas.
+                                </p>
+                            </div>
+                            <div class="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-amber-800">
+                                <span>Cadastrar Emergência</span>
+                                <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                            </div>
+                        </a>
+
+                        <!-- Card 4: Consulta Interna DIFIS -->
+                        <a href="consulta-interna.html" class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs hover:shadow-md hover:border-[#0F4C3A]/50 transition-all duration-200 group flex flex-col justify-between cursor-pointer">
+                            <div>
+                                <div class="flex items-start justify-between gap-4 mb-4">
+                                    <div class="w-12 h-12 rounded-xl bg-[#E2ECE9] text-[#0F4C3A] border border-[#CBDED8] flex items-center justify-center group-hover:scale-105 transition-transform">
+                                        <span class="material-symbols-outlined text-2xl">manage_search</span>
+                                    </div>
+                                    <span class="px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 text-[11px] font-semibold border border-rose-200">
+                                        3 Emergências Ativas
+                                    </span>
+                                </div>
+                                <h3 class="font-bold text-slate-900 group-hover:text-[#0F4C3A] transition-colors text-base">
+                                    Consulta Interna DIFIS
+                                </h3>
+                                <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                                    Painel operacional centralizado com filtros avançados, exportação, histórico de auditoria e tramitação.
+                                </p>
+                            </div>
+                            <div class="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-[#0F4C3A]">
+                                <span>Abrir Painel DIFIS</span>
+                                <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                            </div>
+                        </a>
+
+                        <!-- Card 5: Consulta Cidadão -->
+                        <a href="consulta-externa.html" class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs hover:shadow-md hover:border-blue-600/40 transition-all duration-200 group flex flex-col justify-between cursor-pointer">
+                            <div>
+                                <div class="flex items-start justify-between gap-4 mb-4">
+                                    <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-700 border border-blue-100 flex items-center justify-center group-hover:scale-105 transition-transform">
+                                        <span class="material-symbols-outlined text-2xl">search</span>
+                                    </div>
+                                    <span class="px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 text-[11px] font-semibold border border-blue-100">
+                                        Transparência
+                                    </span>
+                                </div>
+                                <h3 class="font-bold text-slate-900 group-hover:text-blue-700 transition-colors text-base">
+                                    Consulta Cidadão
+                                </h3>
+                                <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                                    Acompanhamento público de denúncias e emergências com upload e download de relatórios regulatórios.
+                                </p>
+                            </div>
+                            <div class="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-blue-700">
+                                <span>Acessar Consulta</span>
+                                <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                            </div>
+                        </a>
+
+                        <!-- Card 6: Relatórios Gerenciais -->
+                        <a href="relatorios.html" class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs hover:shadow-md hover:border-slate-400 transition-all duration-200 group flex flex-col justify-between cursor-pointer">
+                            <div>
+                                <div class="flex items-start justify-between gap-4 mb-4">
+                                    <div class="w-12 h-12 rounded-xl bg-slate-100 text-slate-700 border border-slate-200 flex items-center justify-center group-hover:scale-105 transition-transform">
+                                        <span class="material-symbols-outlined text-2xl">assessment</span>
+                                    </div>
+                                    <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 text-[11px] font-semibold border border-slate-200">
+                                        BI & Gráficos
+                                    </span>
+                                </div>
+                                <h3 class="font-bold text-slate-900 group-hover:text-slate-700 transition-colors text-base">
+                                    Relatórios Gerenciais
+                                </h3>
+                                <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                                    Indicadores quantitativos, distribuição geográfica por polo regional e métricas de desempenho institucional.
+                                </p>
+                            </div>
+                            <div class="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-slate-700">
+                                <span>Ver Relatórios</span>
+                                <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Toggle submenu
+        function toggleSubmenu(param1, param2) {
+            if (typeof param1 === 'string') {
+                const el = document.getElementById(param1);
+                const icon = param2 ? document.getElementById(param2) : null;
+                if (el) el.classList.toggle('hidden');
+                if (icon) icon.classList.toggle('rotate-180');
+            } else if (param1 && param1.nodeType) {
+                const parent = param1.closest('li') || param1.parentElement;
+                const ul = parent ? parent.querySelector('ul') : null;
+                const icon = param1.querySelector('.material-symbols-outlined:last-child');
+                if (ul) ul.classList.toggle('hidden');
+                if (icon) icon.classList.toggle('rotate-180');
+            }
+        }
+
+        // Sidebar toggle for mobile
+        let sidebarCollapsed = false;
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const isMobile = window.innerWidth < 1024;
+
+            if (isMobile) {
+                // Mobile: abre/fecha sidebar com slide
+                const overlay = document.getElementById('sidebarOverlay');
+                const isOpen = sidebar.style.transform === 'translateX(0)';
+                if (isOpen) {
+                    sidebar.style.transform = 'translateX(-100%)';
+                    overlay.classList.add('hidden');
+                } else {
+                    sidebar.style.transform = 'translateX(0)';
+                    overlay.classList.remove('hidden');
+                }
+            } else {
+                // Desktop: colapsar/expandir (só ícones / com texto)
+                sidebarCollapsed = !sidebarCollapsed;
+
+                if (sidebarCollapsed) {
+                    // Colapsar: só ícones (72px)
+                    sidebar.style.width = '72px';
+                    mainContent.classList.remove('lg:ml-[280px]');
+                    mainContent.classList.add('lg:ml-[72px]');
+                    // Ocultar textos
+                    document.querySelectorAll('#sidebar .sidebar-text').forEach(el => el.style.display = 'none');
+                } else {
+                    // Expandir: mostrar texto (280px)
+                    sidebar.style.width = '280px';
+                    mainContent.classList.remove('lg:ml-[72px]');
+                    mainContent.classList.add('lg:ml-[280px]');
+                    // Mostrar textos
+                    document.querySelectorAll('#sidebar .sidebar-text').forEach(el => el.style.display = '');
+                }
+            }
+        }
+
+        // Close sidebar when clicking on overlay or a link
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.style.transform = 'translateX(-100%)';
+            if (overlay) overlay.classList.add('hidden');
+        }
+
+        // Handle resize
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            if (window.innerWidth >= 1024) {
+                // Desktop: garante sidebar visível
+                sidebar.style.transform = 'translateX(0)';
+                sidebar.classList.remove('collapsed');
+                overlay.classList.add('hidden');
+            } else {
+                // Mobile: garante sidebar oculta
+                sidebar.style.transform = 'translateX(-100%)';
+            }
+        });
+
+        // Fechar sidebar ao clicar em um link (mobile)
+        document.querySelectorAll('#sidebar a').forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth < 1024) {
+                    closeSidebar();
+                }
+            });
+        });
+
+        // Search toggle for mobile
+        function toggleSearch() {
+            const icon = document.getElementById('searchIcon');
+            const input = document.getElementById('searchInput');
+            if (icon.classList.contains('hidden')) {
+                icon.classList.remove('hidden');
+                input.classList.add('hidden');
+                input.classList.remove('inline');
+            } else {
+                icon.classList.add('hidden');
+                input.classList.remove('hidden');
+                input.classList.add('inline');
+                input.focus();
+            }
+        }
+
+        // Profile dropdown toggle
+        const profileBtn = document.getElementById('profileBtn');
+        const profileDropdown = document.getElementById('profileDropdown');
+
+        profileBtn.addEventListener('click', () => {
+            profileDropdown.classList.toggle('hidden');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
+                profileDropdown.classList.add('hidden');
+            }
+        });
+
+        // Inicializar sidebar no desktop (aberta)
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth >= 1024) {
+                sidebar.style.transform = 'translateX(0)';
+            }
+        });
+    </script>
+</body>
+</html>
