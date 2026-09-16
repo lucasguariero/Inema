@@ -3,6 +3,7 @@ import {
   RegistroFiscalizacaoExterno, 
   TipoRelatorioRegulatorio 
 } from '../types/fiscalizacao-externa';
+import { FilamentSelect } from './filament';
 
 interface ModalAnexoRelatorioProps {
   isOpen: boolean;
@@ -159,15 +160,15 @@ export const ModalAnexoRelatorio: React.FC<ModalAnexoRelatorioProps> = ({
             <label className="block text-xs font-semibold text-slate-700 mb-1" title="LEG010: Selecione Preliminar, Conclusivo ou Complementar">
               Tipo de Relatório (LEG010) <span className="text-red-500">*</span>
             </label>
-            <select
+            <FilamentSelect
               value={tipoRelatorio}
-              onChange={(e) => setTipoRelatorio(e.target.value as TipoRelatorioRegulatorio)}
-              className="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green"
-            >
-              <option value="Preliminar">Preliminar (RPEQ)</option>
-              <option value="Conclusivo">Conclusivo</option>
-              <option value="Complementar">Complementar</option>
-            </select>
+              onChange={(val) => setTipoRelatorio(val as TipoRelatorioRegulatorio)}
+              options={[
+                { value: 'Preliminar', label: 'Preliminar (RPEQ)' },
+                { value: 'Conclusivo', label: 'Conclusivo' },
+                { value: 'Complementar', label: 'Complementar' },
+              ]}
+            />
           </div>
 
           {/* Arquivo para Upload (LEG009 / RN013) */}

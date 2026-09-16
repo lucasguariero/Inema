@@ -2,6 +2,7 @@ import React from 'react';
 import { X, Filter, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useTheme } from '@/context/ThemeContext';
+import { FilamentSelect } from '@/components/filament';
 
 export interface FilterState {
   unidades: string[];
@@ -289,17 +290,11 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
             <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2.5">
               Etapa Atual
             </label>
-            <select
+            <FilamentSelect
               value={filters.etapa}
-              onChange={(e) => onFiltersChange({ ...filters, etapa: e.target.value })}
-              className="w-full px-3.5 py-2.5 text-xs font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all"
-            >
-              {availableEtapas.map((et) => (
-                <option key={et.id} value={et.id}>
-                  {et.label}
-                </option>
-              ))}
-            </select>
+              onChange={(val) => onFiltersChange({ ...filters, etapa: val })}
+              options={availableEtapas.map((et) => ({ value: et.id, label: et.label }))}
+            />
           </div>
         </div>
 

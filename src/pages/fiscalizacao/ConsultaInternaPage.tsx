@@ -38,6 +38,7 @@ import {
   TableContainer,
   TableToolbar,
   InputWrapper,
+  FilamentSelect,
 } from '@/components/filament';
 import {
   Dialog,
@@ -449,20 +450,20 @@ export const ConsultaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                 <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   Status / Situação (LEG001)
                 </label>
-                <select
+                <FilamentSelect
                   value={filtroStatus}
-                  onChange={(e) => setFiltroStatus(e.target.value)}
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
-                >
-                  <option value="TODOS">Todos os Status</option>
-                  <option value="Registrado">Emergência Registrada</option>
-                  <option value="Em Triagem">Em Triagem</option>
-                  <option value="Em Análise">Em Análise</option>
-                  <option value="Vistoria Agendada">Vistoria Agendada</option>
-                  <option value="Notificado">Notificado</option>
-                  <option value="Auto de Infração">Auto de Infração</option>
-                  <option value="Concluído">Concluído</option>
-                </select>
+                  onChange={setFiltroStatus}
+                  options={[
+                    { value: 'TODOS', label: 'Todos os Status' },
+                    { value: 'Registrado', label: 'Emergência Registrada' },
+                    { value: 'Em Triagem', label: 'Em Triagem' },
+                    { value: 'Em Análise', label: 'Em Análise' },
+                    { value: 'Vistoria Agendada', label: 'Vistoria Agendada' },
+                    { value: 'Notificado', label: 'Notificado' },
+                    { value: 'Auto de Infração', label: 'Auto de Infração' },
+                    { value: 'Concluído', label: 'Concluído' },
+                  ]}
+                />
               </div>
 
               {/* 2. Número do Registro (LEG002) */}
@@ -475,7 +476,7 @@ export const ConsultaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                   value={filtroNumeroRegistro}
                   onChange={(e) => setFiltroNumeroRegistro(e.target.value)}
                   placeholder="Ex: 2026.000001/INEMA/RD"
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
+                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none shadow-2xs"
                 />
               </div>
 
@@ -484,22 +485,20 @@ export const ConsultaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                 <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   Tipo de Registro (LEG004)
                 </label>
-                <select
+                <FilamentSelect
                   value={filtroTipo}
-                  onChange={(e) => {
-                    const novoTipo = e.target.value as any;
-                    setFiltroTipo(novoTipo);
-                    // RN004: Ao alterar para outro tipo que não seja RE, limpa o tipo de emergência
+                  onChange={(novoTipo) => {
+                    setFiltroTipo(novoTipo as any);
                     if (novoTipo !== 'RE') {
                       setFiltroTipoEmergencia('Todos os Tipos de Emergência');
                     }
                   }}
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
-                >
-                  <option value="TODOS">Todos (RD e RE)</option>
-                  <option value="RD">Denúncia Ambiental (RD)</option>
-                  <option value="RE">Emergência Química (RE)</option>
-                </select>
+                  options={[
+                    { value: 'TODOS', label: 'Todos os Tipos (RD e RE)' },
+                    { value: 'RD', label: 'Apenas Denúncias (RD)' },
+                    { value: 'RE', label: 'Apenas Emergências (RE)' },
+                  ]}
+                />
               </div>
 
               {/* 4. Tipo da Emergência Química (RN004, LEG005 - Condicional) */}
@@ -507,23 +506,12 @@ export const ConsultaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                 <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   Tipo Emergência Química (LEG005)
                 </label>
-                <select
+                <FilamentSelect
                   value={filtroTipoEmergencia}
-                  onChange={(e) => setFiltroTipoEmergencia(e.target.value)}
+                  onChange={setFiltroTipoEmergencia}
                   disabled={filtroTipo !== 'RE'}
-                  className={cn(
-                    "w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 px-3 py-2 text-slate-800 dark:text-slate-100 outline-none",
-                    filtroTipo === 'RE'
-                      ? "bg-white dark:bg-slate-800 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600"
-                      : "bg-slate-100 dark:bg-slate-800/50 text-slate-400 cursor-not-allowed opacity-60"
-                  )}
-                >
-                  {TIPOS_EMERGENCIA.map((tipo) => (
-                    <option key={tipo} value={tipo}>
-                      {tipo}
-                    </option>
-                  ))}
-                </select>
+                  options={TIPOS_EMERGENCIA}
+                />
               </div>
 
               {/* 5. Município (LEG003) */}
@@ -531,18 +519,15 @@ export const ConsultaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                 <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   Município (LEG003)
                 </label>
-                <select
+                <FilamentSelect
                   value={filtroMunicipio}
-                  onChange={(e) => setFiltroMunicipio(e.target.value)}
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
-                >
-                  <option value="TODOS">Todos os Municípios da Bahia</option>
-                  {MUNICIPIOS_BAHIA.slice(0, 30).map((m) => (
-                    <option key={m} value={m}>
-                      {m}
-                    </option>
-                  ))}
-                </select>
+                  onChange={setFiltroMunicipio}
+                  searchable
+                  options={[
+                    { value: 'TODOS', label: 'Todos os Municípios da Bahia' },
+                    ...MUNICIPIOS_BAHIA.map((m) => ({ value: m, label: m })),
+                  ]}
+                />
               </div>
 
               {/* 6. Período: Data Inicial (LEG006, RN005) */}
@@ -554,7 +539,7 @@ export const ConsultaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                   type="date"
                   value={filtroDataInicial}
                   onChange={(e) => setFiltroDataInicial(e.target.value)}
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
+                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none shadow-2xs"
                 />
               </div>
 
@@ -567,7 +552,7 @@ export const ConsultaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                   type="date"
                   value={filtroDataFinal}
                   onChange={(e) => setFiltroDataFinal(e.target.value)}
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
+                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none shadow-2xs"
                 />
               </div>
 
@@ -581,7 +566,7 @@ export const ConsultaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                   value={filtroPalavraChave}
                   onChange={(e) => setFiltroPalavraChave(e.target.value)}
                   placeholder="Ex: óleo, vazamento, desmate..."
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
+                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none shadow-2xs"
                 />
               </div>
 
@@ -590,17 +575,11 @@ export const ConsultaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                 <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   Eixo Temático Pauta (LEG008)
                 </label>
-                <select
+                <FilamentSelect
                   value={filtroEixoTematico}
-                  onChange={(e) => setFiltroEixoTematico(e.target.value)}
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
-                >
-                  {EIXOS_TEMATICOS.map((eixo) => (
-                    <option key={eixo} value={eixo}>
-                      {eixo}
-                    </option>
-                  ))}
-                </select>
+                  onChange={setFiltroEixoTematico}
+                  options={EIXOS_TEMATICOS}
+                />
               </div>
 
               {/* 10. Técnico Plantonista Associado (LEG009) */}
@@ -608,18 +587,14 @@ export const ConsultaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                 <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   Técnico Plantonista (LEG009)
                 </label>
-                <select
+                <FilamentSelect
                   value={filtroTecnico}
-                  onChange={(e) => setFiltroTecnico(e.target.value)}
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
-                >
-                  <option value="TODOS">Todos os Fiscais/Técnicos</option>
-                  {FISCAIS_DIFIS.map((f) => (
-                    <option key={f} value={f}>
-                      {f}
-                    </option>
-                  ))}
-                </select>
+                  onChange={setFiltroTecnico}
+                  options={[
+                    { value: 'TODOS', label: 'Todos os Fiscais/Técnicos' },
+                    ...FISCAIS_DIFIS.map((f) => ({ value: f, label: f })),
+                  ]}
+                />
               </div>
 
               {/* 11. Comunicante / Infrator (LEG010, RN022) */}
@@ -632,7 +607,7 @@ export const ConsultaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                   value={filtroComunicante}
                   onChange={(e) => setFiltroComunicante(e.target.value)}
                   placeholder="Nome, Razão Social ou CPF/CNPJ"
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
+                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none shadow-2xs"
                 />
               </div>
 
@@ -641,19 +616,19 @@ export const ConsultaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                 <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   Unidade Destino (LEG011)
                 </label>
-                <select
+                <FilamentSelect
                   value={filtroUnidade}
-                  onChange={(e) => setFiltroUnidade(e.target.value)}
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
-                >
-                  <option value="TODOS">Todas as Unidades</option>
-                  <option value="SEDE / DIFIS Salvador">SEDE / DIFIS Salvador</option>
-                  <option value="UR Metropolitana">UR Metropolitana</option>
-                  <option value="UR Oeste">UR Oeste (Barreiras)</option>
-                  <option value="UR Litoral Sul">UR Litoral Sul (Ilhéus)</option>
-                  <option value="UR Chapada">UR Chapada Diamantina</option>
-                  <option value="UR São Francisco">UR São Francisco (Juazeiro)</option>
-                </select>
+                  onChange={setFiltroUnidade}
+                  options={[
+                    { value: 'TODOS', label: 'Todas as Unidades' },
+                    { value: 'SEDE / DIFIS Salvador', label: 'SEDE / DIFIS Salvador' },
+                    { value: 'UR Metropolitana', label: 'UR Metropolitana' },
+                    { value: 'UR Oeste', label: 'UR Oeste (Barreiras)' },
+                    { value: 'UR Litoral Sul', label: 'UR Litoral Sul (Ilhéus)' },
+                    { value: 'UR Chapada', label: 'UR Chapada Diamantina' },
+                    { value: 'UR São Francisco', label: 'UR São Francisco (Juazeiro)' },
+                  ]}
+                />
               </div>
             </div>
 
@@ -919,15 +894,15 @@ export const ConsultaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                   <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     Tipo do Relatório Técnico <span className="text-rose-500">*</span>
                   </label>
-                  <select
+                  <FilamentSelect
                     value={tipoRelatorioAnexo}
-                    onChange={(e) => setTipoRelatorioAnexo(e.target.value as any)}
-                    className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-slate-800 dark:text-slate-100 outline-none"
-                  >
-                    <option value="Preliminar">Relatório Preliminar de Emergência Química (RPEQ)</option>
-                    <option value="Conclusivo">Relatório Técnico Conclusivo de Vistoria</option>
-                    <option value="Complementar">Relatório Técnico Complementar</option>
-                  </select>
+                    onChange={(val) => setTipoRelatorioAnexo(val as any)}
+                    options={[
+                      { value: 'Preliminar', label: 'Relatório Preliminar de Emergência Química (RPEQ)' },
+                      { value: 'Conclusivo', label: 'Relatório Técnico Conclusivo de Vistoria' },
+                      { value: 'Complementar', label: 'Relatório Técnico Complementar' },
+                    ]}
+                  />
                 </div>
 
                 <div>
@@ -1023,17 +998,12 @@ export const ConsultaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                   <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                     Selecione o Plantonista na Escala Vigente:
                   </label>
-                  <select
+                  <FilamentSelect
                     value={tecnicoSelecionado}
-                    onChange={(e) => setTecnicoSelecionado(e.target.value)}
-                    className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
-                  >
-                    {FISCAIS_DIFIS.map((f) => (
-                      <option key={f} value={f}>
-                        {f}
-                      </option>
-                    ))}
-                  </select>
+                    onChange={(val) => setTecnicoSelecionado(val)}
+                    options={FISCAIS_DIFIS}
+                    searchable
+                  />
                 </div>
               </div>
 

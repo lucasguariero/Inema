@@ -24,6 +24,7 @@ import {
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { FilamentSelect } from '@/components/filament';
 import {
   Dialog,
   DialogContent,
@@ -339,15 +340,15 @@ export const EmergenciaExternaPage: React.FC<{ onNavigate?: (route: string) => v
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                   Possui vínculo com a empresa responsável? <span className="text-rose-500">*</span>
                 </label>
-                <select
+                <FilamentSelect
                   value={vinculoEmpresa}
                   disabled={registroFinalizado}
-                  onChange={(e) => setVinculoEmpresa(e.target.value as any)}
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
-                >
-                  <option value="Sim">Sim (Funcionário / Contratado)</option>
-                  <option value="Não">Não</option>
-                </select>
+                  onChange={(val) => setVinculoEmpresa(val as any)}
+                  options={[
+                    { value: 'Sim', label: 'Sim (Funcionário / Contratado)' },
+                    { value: 'Não', label: 'Não' },
+                  ]}
+                />
               </div>
 
               {/* Vínculo = Sim */}
@@ -394,16 +395,16 @@ export const EmergenciaExternaPage: React.FC<{ onNavigate?: (route: string) => v
                     <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                       Você está comunicando como: <span className="text-rose-500">*</span>
                     </label>
-                    <select
+                    <FilamentSelect
                       value={comunicandoComo}
                       disabled={registroFinalizado}
-                      onChange={(e) => setComunicandoComo(e.target.value as any)}
-                      className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
-                    >
-                      <option value="Cidadão comum">Cidadão comum</option>
-                      <option value="Força Policial">Força Policial (PM / PRF / CBMBA)</option>
-                      <option value="Outras instituições">Outras instituições</option>
-                    </select>
+                      onChange={(val) => setComunicandoComo(val as any)}
+                      options={[
+                        { value: 'Cidadão comum', label: 'Cidadão comum' },
+                        { value: 'Força Policial', label: 'Força Policial (PM / PRF / CBMBA)' },
+                        { value: 'Outras instituições', label: 'Outras instituições' },
+                      ]}
+                    />
                   </div>
 
                   {comunicandoComo === 'Outras instituições' && (
@@ -432,15 +433,13 @@ export const EmergenciaExternaPage: React.FC<{ onNavigate?: (route: string) => v
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Sabe informar o nome da empresa responsável pela emergência química? (RN005)
               </label>
-              <select
+              <FilamentSelect
                 value={sabeEmpresaResponsavel}
                 disabled={registroFinalizado}
-                onChange={(e) => setSabeEmpresaResponsavel(e.target.value as any)}
-                className="w-full md:w-1/3 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-slate-800 dark:text-slate-100 outline-none"
-              >
-                <option value="Sim">Sim</option>
-                <option value="Não">Não</option>
-              </select>
+                onChange={(val) => setSabeEmpresaResponsavel(val as any)}
+                options={['Sim', 'Não']}
+                className="w-full md:w-1/3"
+              />
             </div>
           </CardContent>
         </Card>
@@ -483,20 +482,19 @@ export const EmergenciaExternaPage: React.FC<{ onNavigate?: (route: string) => v
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Tipo da Emergência Química <span className="text-rose-500">*</span>
               </label>
-              <select
+              <FilamentSelect
                 value={tipoEmergencia}
                 disabled={registroFinalizado}
-                onChange={(e) => setTipoEmergencia(e.target.value)}
-                required
-                className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
-              >
-                <option value="Tombamento de Carga Perigosa em Rodovia">Tombamento de Carga Perigosa em Rodovia</option>
-                <option value="Vazamento em Instalação Industrial / Polo">Vazamento em Instalação Industrial / Polo</option>
-                <option value="Explosão / Incêndio com Produtos Químicos">Explosão / Incêndio com Produtos Químicos</option>
-                <option value="Derrame em Rio, Lagoa, Estuário ou Mar">Derrame em Rio, Lagoa, Estuário ou Mar</option>
-                <option value="Ruptura ou Furo em Duto / Oleoduto">Ruptura ou Furo em Duto / Oleoduto</option>
-                <option value="Outros">Outros</option>
-              </select>
+                onChange={(val) => setTipoEmergencia(val)}
+                options={[
+                  'Tombamento de Carga Perigosa em Rodovia',
+                  'Vazamento em Instalação Industrial / Polo',
+                  'Explosão / Incêndio com Produtos Químicos',
+                  'Derrame em Rio, Lagoa, Estuário ou Mar',
+                  'Ruptura ou Furo em Duto / Oleoduto',
+                  'Outros',
+                ]}
+              />
             </div>
 
             {tipoEmergencia === 'Outros' && (
@@ -520,18 +518,16 @@ export const EmergenciaExternaPage: React.FC<{ onNavigate?: (route: string) => v
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Produto Químico / Substância <span className="text-rose-500">*</span>
               </label>
-              <select
+              <FilamentSelect
                 value={substancia}
                 disabled={registroFinalizado}
-                onChange={(e) => handleSubstanciaChange(e.target.value)}
-                className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
-              >
-                {SUBSTANCIAS_QUIMICAS.map((s) => (
-                  <option key={s.nome} value={s.nome}>
-                    {s.nome} (ONU {s.onu})
-                  </option>
-                ))}
-              </select>
+                onChange={(val) => handleSubstanciaChange(val)}
+                options={SUBSTANCIAS_QUIMICAS.map((s) => ({
+                  value: s.nome,
+                  label: `${s.nome} (ONU ${s.onu})`,
+                }))}
+                searchable
+              />
             </div>
 
             <div>
@@ -565,15 +561,15 @@ export const EmergenciaExternaPage: React.FC<{ onNavigate?: (route: string) => v
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Atingiu curso d'água / manancial? <span className="text-rose-500">*</span>
               </label>
-              <select
+              <FilamentSelect
                 value={houveVazamentoAgua}
                 disabled={registroFinalizado}
-                onChange={(e) => setHouveVazamentoAgua(e.target.value as any)}
-                className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
-              >
-                <option value="NÃO">Não</option>
-                <option value="SIM">Sim (Risco Crítico a Recursos Hídricos)</option>
-              </select>
+                onChange={(val) => setHouveVazamentoAgua(val as any)}
+                options={[
+                  { value: 'NÃO', label: 'Não' },
+                  { value: 'SIM', label: 'Sim (Risco Crítico a Recursos Hídricos)' },
+                ]}
+              />
             </div>
           </CardContent>
         </Card>
@@ -602,18 +598,13 @@ export const EmergenciaExternaPage: React.FC<{ onNavigate?: (route: string) => v
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                   Município <span className="text-rose-500">*</span>
                 </label>
-                <select
+                <FilamentSelect
                   value={municipio}
                   disabled={registroFinalizado}
-                  onChange={(e) => setMunicipio(e.target.value)}
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
-                >
-                  {MUNICIPIOS_BAHIA.map((m) => (
-                    <option key={m} value={m}>
-                      {m}
-                    </option>
-                  ))}
-                </select>
+                  onChange={(val) => setMunicipio(val)}
+                  options={MUNICIPIOS_BAHIA}
+                  searchable
+                />
               </div>
 
               <div>

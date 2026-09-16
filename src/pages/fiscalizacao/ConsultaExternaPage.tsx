@@ -21,7 +21,7 @@ import {
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { StatsOverviewWidget, InputWrapper } from '@/components/filament';
+import { StatsOverviewWidget, InputWrapper, FilamentSelect } from '@/components/filament';
 import {
   Dialog,
   DialogContent,
@@ -164,35 +164,28 @@ export const ConsultaExternaPage: React.FC<{ onNavigate?: (route: string) => voi
 
           {/* Filtro por Tipo */}
           <div>
-            <InputWrapper>
-              <select
-                value={filtroTipo}
-                onChange={(e) => setFiltroTipo(e.target.value as any)}
-                className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-800 dark:text-slate-100 focus:outline-none font-medium cursor-pointer"
-              >
-                <option value="TODOS">Todos os Tipos (RD e RE)</option>
-                <option value="RD">Apenas Denúncias (RD)</option>
-                <option value="RE">Apenas Emergências (RE)</option>
-              </select>
-            </InputWrapper>
+            <FilamentSelect
+              value={filtroTipo}
+              onChange={(val) => setFiltroTipo(val as any)}
+              options={[
+                { value: 'TODOS', label: 'Todos os Tipos (RD e RE)' },
+                { value: 'RD', label: 'Apenas Denúncias (RD)' },
+                { value: 'RE', label: 'Apenas Emergências (RE)' },
+              ]}
+            />
           </div>
 
           {/* Filtro por Município */}
           <div>
-            <InputWrapper>
-              <select
-                value={filtroMunicipio}
-                onChange={(e) => setFiltroMunicipio(e.target.value)}
-                className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-800 dark:text-slate-100 focus:outline-none cursor-pointer"
-              >
-                <option value="TODOS">Todos os Municípios</option>
-                {MUNICIPIOS_BAHIA.map((m) => (
-                  <option key={m} value={m}>
-                    {m}
-                  </option>
-                ))}
-              </select>
-            </InputWrapper>
+            <FilamentSelect
+              value={filtroMunicipio}
+              onChange={(val) => setFiltroMunicipio(val)}
+              options={[
+                { value: 'TODOS', label: 'Todos os Municípios' },
+                ...MUNICIPIOS_BAHIA.map((m) => ({ value: m, label: m })),
+              ]}
+              searchable
+            />
           </div>
         </div>
       </div>

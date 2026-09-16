@@ -27,6 +27,7 @@ import {
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { FilamentSelect } from '@/components/filament';
 import {
   Dialog,
   DialogContent,
@@ -451,18 +452,12 @@ export const DenunciaExternaPage: React.FC<{ onNavigate?: (route: string) => voi
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                   Município da Bahia <span className="text-rose-500">*</span>
                 </label>
-                <select
+                <FilamentSelect
                   value={municipio}
-                  onChange={(e) => setMunicipio(e.target.value)}
-                  required
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none"
-                >
-                  {MUNICIPIOS_BAHIA.map((m) => (
-                    <option key={m} value={m}>
-                      {m}
-                    </option>
-                  ))}
-                </select>
+                  onChange={(val) => setMunicipio(val)}
+                  options={MUNICIPIOS_BAHIA}
+                  searchable
+                />
               </div>
 
               <div>

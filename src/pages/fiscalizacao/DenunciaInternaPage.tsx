@@ -22,6 +22,7 @@ import {
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { FilamentSelect } from '@/components/filament';
 import {
   Dialog,
   DialogContent,
@@ -312,22 +313,21 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Origem do Comunicado <span className="text-rose-500">*</span>
               </label>
-              <select
+              <FilamentSelect
                 value={origem}
-                onChange={(e) => setOrigem(e.target.value)}
-                required
-                className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
-              >
-                <option value="">Selecione a origem...</option>
-                <option value="Call center">Call center</option>
-                <option value="Correspondência">Correspondência</option>
-                <option value="E-mail">E-mail</option>
-                <option value="Ofício">Ofício</option>
-                <option value="Ouvidoria">Ouvidoria</option>
-                <option value="Presencial">Presencial</option>
-                <option value="SEI">SEI</option>
-                <option value="Telefone">Telefone</option>
-              </select>
+                onChange={(val) => setOrigem(val)}
+                options={[
+                  'Call center',
+                  'Correspondência',
+                  'E-mail',
+                  'Ofício',
+                  'Ouvidoria',
+                  'Presencial',
+                  'SEI',
+                  'Telefone',
+                ]}
+                placeholder="Selecione a origem..."
+              />
             </div>
 
             {origem === 'Ofício' && (
@@ -335,20 +335,19 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                   Órgão Interveniente <span className="text-rose-500">*</span>
                 </label>
-                <select
+                <FilamentSelect
                   value={orgaoInterveniente}
-                  onChange={(e) => setOrgaoInterveniente(e.target.value)}
-                  required
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
-                >
-                  <option value="">Selecione o órgão...</option>
-                  <option value="IBAMA">IBAMA</option>
-                  <option value="Ministério Público Estadual (MP-BA)">Ministério Público Estadual (MP-BA)</option>
-                  <option value="Polícia Militar / COPPA">Polícia Militar / COPPA</option>
-                  <option value="Polícia Rodoviária Federal">Polícia Rodoviária Federal</option>
-                  <option value="Prefeitura Municipal">Prefeitura Municipal</option>
-                  <option value="Outros">Outros</option>
-                </select>
+                  onChange={(val) => setOrgaoInterveniente(val)}
+                  options={[
+                    'IBAMA',
+                    'Ministério Público Estadual (MP-BA)',
+                    'Polícia Militar / COPPA',
+                    'Polícia Rodoviária Federal',
+                    'Prefeitura Municipal',
+                    'Outros',
+                  ]}
+                  placeholder="Selecione o órgão..."
+                />
               </div>
             )}
 
@@ -446,21 +445,20 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                   Tipologia Principal da Infração <span className="text-rose-500">*</span>
                 </label>
-                <select
+                <FilamentSelect
                   value={tipologiaDano}
-                  onChange={(e) => setTipologiaDano(e.target.value)}
-                  required
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
-                >
-                  <option value="Desmatamento não autorizado">Desmatamento não autorizado</option>
-                  <option value="Poluição Hídrica / Lançamento de Efluentes">Poluição Hídrica / Lançamento de Efluentes</option>
-                  <option value="Queimada irregular ou Incêndio Florestal">Queimada irregular ou Incêndio Florestal</option>
-                  <option value="Cativeiro ou Tráfico de Fauna Silvestre">Cativeiro ou Tráfico de Fauna Silvestre</option>
-                  <option value="Intervenção em Área de Preservação Permanente (APP)">Intervenção em APP / Manguezal</option>
-                  <option value="Mineração sem licença ambiental">Mineração sem licença ambiental</option>
-                  <option value="Poluição do Ar / Emissões Clandestinas">Poluição do Ar / Emissões Clandestinas</option>
-                  <option value="Descarte irregular de Resíduos Perigosos">Descarte irregular de Resíduos Perigosos</option>
-                </select>
+                  onChange={(val) => setTipologiaDano(val)}
+                  options={[
+                    'Desmatamento não autorizado',
+                    'Poluição Hídrica / Lançamento de Efluentes',
+                    'Queimada irregular ou Incêndio Florestal',
+                    'Cativeiro ou Tráfico de Fauna Silvestre',
+                    { value: 'Intervenção em Área de Preservação Permanente (APP)', label: 'Intervenção em APP / Manguezal' },
+                    'Mineração sem licença ambiental',
+                    'Poluição do Ar / Emissões Clandestinas',
+                    'Descarte irregular de Resíduos Perigosos',
+                  ]}
+                />
               </div>
             </div>
 
@@ -551,18 +549,12 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                   Município da Bahia <span className="text-rose-500">*</span>
                 </label>
-                <select
+                <FilamentSelect
                   value={municipio}
-                  onChange={(e) => setMunicipio(e.target.value)}
-                  required
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
-                >
-                  {MUNICIPIOS_BAHIA.map((m) => (
-                    <option key={m} value={m}>
-                      {m}
-                    </option>
-                  ))}
-                </select>
+                  onChange={(val) => setMunicipio(val)}
+                  options={MUNICIPIOS_BAHIA}
+                  searchable
+                />
               </div>
 
               <div>
@@ -720,16 +712,16 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
 
               <div className="grid grid-cols-1 md:grid-cols-4 gap-3 pt-2">
                 <div>
-                  <select
+                  <FilamentSelect
                     value={novaCoordTipo}
-                    onChange={(e) => setNovaCoordTipo(e.target.value)}
-                    className="w-full text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-2.5 py-1.5 text-slate-800 dark:text-slate-100 outline-none"
-                  >
-                    <option value="Geográfica / Grau Decimal">Geográfica / Grau Decimal</option>
-                    <option value="Grau / Minuto / Segundo (GMS)">GMS</option>
-                    <option value="UTM 23">UTM 23</option>
-                    <option value="UTM 24">UTM 24</option>
-                  </select>
+                    onChange={(val) => setNovaCoordTipo(val)}
+                    options={[
+                      { value: 'Geográfica / Grau Decimal', label: 'Geográfica / Grau Decimal' },
+                      { value: 'Grau / Minuto / Segundo (GMS)', label: 'GMS' },
+                      { value: 'UTM 23', label: 'UTM 23' },
+                      { value: 'UTM 24', label: 'UTM 24' },
+                    ]}
+                  />
                 </div>
                 <div>
                   <input
