@@ -42,10 +42,16 @@ const ROUTE_INFO: Record<string, { module: string; page: string }> = {
 };
 
 export const Header: React.FC<HeaderProps> = ({ activeRoute = 'relatorios', isSidebarCollapsed, onToggleSidebar }) => {
-  const { theme, themeConfig, setTheme, isDarkMode, toggleDarkMode } = useTheme();
+  const { theme, themeConfig, setTheme, isDarkMode, setDarkMode, toggleDarkMode } = useTheme();
   const currentRoute = ROUTE_INFO[activeRoute] || ROUTE_INFO.relatorios;
 
-  const colorOptions: { id: ThemeMode; label: string; sub: string; color: string; border: string }[] = [
+  const appearanceOptions: {
+    id: 'vizora-blue' | 'vizora-green' | 'inema-light' | 'dark';
+    label: string;
+    sub: string;
+    color: string;
+    border: string;
+  }[] = [
     {
       id: 'vizora-blue',
       label: 'Azul Petróleo',
@@ -61,20 +67,35 @@ export const Header: React.FC<HeaderProps> = ({ activeRoute = 'relatorios', isSi
       border: '#206954',
     },
     {
-      id: 'inema-forest',
-      label: 'Verde Institucional',
-      sub: '#0F4C3A',
-      color: '#0F4C3A',
-      border: '#143B2E',
-    },
-    {
       id: 'inema-light',
       label: 'Sidebar Branca',
       sub: '#FFFFFF',
       color: '#FFFFFF',
       border: '#CBD5E1',
     },
+    {
+      id: 'dark',
+      label: 'Modo Escuro',
+      sub: '#020617',
+      color: '#020617',
+      border: '#334155',
+    },
   ];
+
+  const handleSelectAppearance = (optId: 'vizora-blue' | 'vizora-green' | 'inema-light' | 'dark') => {
+    if (optId === 'dark') {
+      setDarkMode(true);
+    } else {
+      setDarkMode(false);
+      setTheme(optId);
+    }
+  };
+
+  const isAppearanceSelected = (optId: 'vizora-blue' | 'vizora-green' | 'inema-light' | 'dark') => {
+    if (optId === 'dark') return isDarkMode;
+    if (isDarkMode) return false;
+    return theme === optId || (optId === 'vizora-blue' && (theme === 'default' || theme === 'inema-forest'));
+  };
 
   return (
     <header className={cn(
@@ -173,30 +194,39 @@ export const Header: React.FC<HeaderProps> = ({ activeRoute = 'relatorios', isSi
 
             <DropdownMenuSeparator className="bg-slate-100 dark:bg-slate-800 my-1.5" />
 
-            {/* Seletor dos 4 Temas de Cores da Sidebar */}
+            {/* Seletor Unificado de Aparência (4 Opções) */}
             <div className="px-2 py-1.5">
-              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2">
-                Cor da Sidebar (4 Opções)
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                  Aparência (4 Opções)
+                </span>
+                {isDarkMode && (
+                  <span className="text-[10px] font-semibold text-emerald-500 bg-emerald-500/10 px-1.5 py-0.2 rounded border border-emerald-500/20">
+                    Dark Fixo
+                  </span>
+                )}
               </div>
               <div className="grid grid-cols-2 gap-1.5">
-                {colorOptions.map((opt) => {
-                  const isSelected =
-                    theme === opt.id || (opt.id === 'vizora-blue' && theme === 'default');
+                {appearanceOptions.map((opt) => {
+                  const selected = isAppearanceSelected(opt.id);
                   return (
                     <button
                       key={opt.id}
-                      onClick={() => setTheme(opt.id)}
+                      onClick={() => handleSelectAppearance(opt.id)}
                       className={cn(
                         "flex items-center gap-2 p-1.5 rounded-lg border text-left transition-all cursor-pointer",
-                        isSelected
+                        selected
                           ? "bg-slate-100 dark:bg-slate-800 border-slate-400 dark:border-slate-500 shadow-2xs ring-1 ring-slate-400 dark:ring-slate-500"
                           : "bg-slate-50/70 dark:bg-slate-800/40 border-slate-200 dark:border-slate-700/60 hover:bg-slate-100 dark:hover:bg-slate-800"
                       )}
+                      title={opt.id === 'dark' ? "Ativar Modo Escuro total" : `Ativar tema ${opt.label}`}
                     >
                       <span
-                        className="w-4 h-4 rounded-full shrink-0 shadow-2xs border"
+                        className="w-4 h-4 rounded-full shrink-0 shadow-2xs border flex items-center justify-center text-[9px]"
                         style={{ backgroundColor: opt.color, borderColor: opt.border }}
-                      />
+                      >
+                        {opt.id === 'dark' && <Moon className="w-2.5 h-2.5 text-amber-400" />}
+                      </span>
                       <div className="min-w-0 flex-1">
                         <div className="text-[11px] font-semibold text-slate-800 dark:text-slate-200 truncate leading-tight">
                           {opt.label}
@@ -205,45 +235,16 @@ export const Header: React.FC<HeaderProps> = ({ activeRoute = 'relatorios', isSi
                           {opt.sub}
                         </div>
                       </div>
-                      {isSelected && <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400 shrink-0" />}
+                      {selected && <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400 shrink-0" />}
                     </button>
                   );
                 })}
               </div>
-            </div>
-
-            <DropdownMenuSeparator className="bg-slate-100 dark:bg-slate-800 my-1.5" />
-
-            {/* Alternador de Dark Mode */}
-            <div className="px-2 py-1.5">
-              <button
-                onClick={toggleDarkMode}
-                className="w-full flex items-center justify-between p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700/70 transition-all cursor-pointer"
-              >
-                <div className="flex items-center gap-2.5">
-                  <div className="w-6 h-6 rounded-lg bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-700 dark:text-slate-200">
-                    {isDarkMode ? <Moon className="w-3.5 h-3.5 text-amber-400" /> : <Sun className="w-3.5 h-3.5 text-amber-600" />}
-                  </div>
-                  <div className="text-left">
-                    <div className="text-xs font-semibold text-slate-800 dark:text-slate-200 leading-tight">
-                      Modo Escuro
-                    </div>
-                    <div className="text-[10px] text-slate-400 dark:text-slate-400 leading-tight">
-                      {isDarkMode ? "Ativado para todas as telas" : "Desativado"}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Switch visual */}
-                <div
-                  className={cn(
-                    "w-9 h-5 rounded-full p-0.5 transition-colors duration-200 ease-in-out shrink-0 flex items-center",
-                    isDarkMode ? "bg-emerald-600 justify-end" : "bg-slate-300 dark:bg-slate-600 justify-start"
-                  )}
-                >
-                  <div className="w-4 h-4 rounded-full bg-white shadow-xs transition-transform duration-200" />
-                </div>
-              </button>
+              {isDarkMode && (
+                <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-2 leading-tight">
+                  No Modo Escuro a sidebar é dark fixa. Clique em Azul, Verde ou Branco para alternar para o modo claro correspondente.
+                </p>
+              )}
             </div>
 
             <DropdownMenuSeparator className="bg-slate-100 dark:bg-slate-800 my-1.5" />

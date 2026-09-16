@@ -90,77 +90,61 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const { theme, isDarkMode } = useTheme();
   const isInemaLight = theme === 'inema-light';
-  const isInemaForest = theme === 'inema-forest';
-  const isVizora = theme === 'vizora-blue' || theme === 'vizora-green';
-  const isVizoraBlue = theme === 'vizora-blue';
   const isVizoraGreen = theme === 'vizora-green';
-  const isDark = theme === 'forest' || theme === 'inema-forest' || isVizora;
-  const isForest = theme === 'forest';
-  const isNordic = theme === 'nordic';
-  const isBiophilic = theme === 'biophilic';
+  const isVizoraBlue = !isDarkMode && !isVizoraGreen && !isInemaLight;
+
+  // Scrollbar dinâmica acompanhando a cor do seletor de aparência
+  const getSidebarScrollClass = () => {
+    if (isDarkMode) return 'sidebar-scroll-dark';
+    if (isVizoraGreen) return 'sidebar-scroll-green';
+    if (isInemaLight) return 'sidebar-scroll-white';
+    return 'sidebar-scroll-blue';
+  };
 
   const getDirectItemClass = (isActive: boolean) => {
-    if (isActive) {
-      if (isVizoraBlue) return 'bg-[#165a6e] text-white font-semibold shadow-xs border border-[#207087]';
-      if (isVizoraGreen) return 'bg-[#22725b] text-white font-semibold shadow-xs border border-[#2c8d71]';
-      if (isInemaLight) return isDarkMode ? 'bg-blue-950/60 text-blue-300 font-semibold border-l-4 border-blue-500 shadow-2xs rounded-r-lg' : 'bg-blue-50 text-blue-800 font-semibold border-l-4 border-blue-600 shadow-2xs rounded-r-lg';
-      if (isInemaForest) return 'bg-white/10 text-white font-medium rounded-md';
-      if (isForest) return 'bg-[#144233] text-white font-semibold shadow-xs border border-[#21614C]';
-      if (isNordic) return 'bg-[#E8F3EE] text-[#0B3B2C] font-semibold shadow-xs border border-[#CBDED8]';
-      if (isBiophilic) return 'bg-[#EAEFE8] text-[#153E32] font-semibold shadow-xs border border-[#D5DDD2]';
-      return 'bg-[#E2ECE9] text-[#0F4C3A] font-bold shadow-2xs border border-[#CBDED8]/70';
+    if (isDarkMode) {
+      if (isActive) return 'bg-slate-800 text-white font-semibold shadow-xs border border-slate-700';
+      return 'text-slate-400 hover:bg-slate-900 hover:text-white font-medium';
     }
-    if (isVizoraBlue) return 'text-[#9ec3cc] hover:bg-[#135467] hover:text-white font-medium';
+    if (isActive) {
+      if (isVizoraGreen) return 'bg-[#22725b] text-white font-semibold shadow-xs border border-[#2c8d71]';
+      if (isInemaLight) return 'bg-blue-50 text-blue-800 font-semibold border-l-4 border-blue-600 shadow-2xs rounded-r-lg';
+      return 'bg-[#165a6e] text-white font-semibold shadow-xs border border-[#207087]';
+    }
     if (isVizoraGreen) return 'text-[#bce0d3] hover:bg-[#1f6853] hover:text-white font-medium';
-    if (isInemaLight) return isDarkMode ? 'text-slate-400 hover:bg-slate-800 hover:text-white font-medium' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium';
-    if (isInemaForest) return 'text-slate-400 hover:bg-white/5 hover:text-white font-medium';
-    if (isForest) return 'text-[#8EA89F] hover:bg-[#12362A] hover:text-white font-medium';
-    if (isNordic) return 'text-[#2D3F37] hover:bg-[#F2F6F4] hover:text-[#0B3B2C] font-medium';
-    if (isBiophilic) return 'text-[#2A352F] hover:bg-[#F2F5F0] hover:text-[#153E32] font-medium';
-    return isDarkMode ? 'text-slate-400 hover:bg-slate-800 hover:text-white font-medium' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium';
+    if (isInemaLight) return 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium';
+    return 'text-[#9ec3cc] hover:bg-[#135467] hover:text-white font-medium';
   };
 
   const getSubItemClass = (isActive: boolean, disabled?: boolean) => {
     if (disabled) return 'opacity-50 cursor-not-allowed text-slate-400';
+    if (isDarkMode) {
+      if (isActive) return 'bg-slate-800 text-white font-semibold border-l-2 border-emerald-400 shadow-xs';
+      return 'text-slate-400 hover:bg-slate-900 hover:text-white font-medium cursor-pointer';
+    }
     if (isActive) {
-      if (isVizoraBlue) return 'bg-[#165a6e] text-white font-semibold border-l-2 border-[#34D399] shadow-xs';
       if (isVizoraGreen) return 'bg-[#22725b] text-white font-semibold border-l-2 border-[#34D399] shadow-xs';
       if (isInemaLight) return 'bg-blue-50 text-blue-800 font-semibold border-l-4 border-blue-600 shadow-2xs rounded-r-md';
-      if (isInemaForest) return 'bg-white/10 text-white font-medium rounded-md';
-      if (isForest) return 'bg-[#144233] text-white font-semibold border-l-2 border-emerald-400 shadow-xs';
-      if (isNordic) return 'bg-[#E8F3EE] text-[#0B3B2C] font-semibold border-l-2 border-[#0B3B2C] shadow-xs';
-      if (isBiophilic) return 'bg-[#EAEFE8] text-[#153E32] font-semibold border-l-2 border-[#153E32] shadow-xs';
-      return 'bg-[#E2ECE9] text-[#0F4C3A] font-bold shadow-[inset_0_1px_0_rgba(255,255,255,0.6)]';
+      return 'bg-[#165a6e] text-white font-semibold border-l-2 border-[#34D399] shadow-xs';
     }
-    if (isVizoraBlue) return 'text-[#9ec3cc] hover:bg-[#135467] hover:text-white font-medium cursor-pointer';
     if (isVizoraGreen) return 'text-[#bce0d3] hover:bg-[#1f6853] hover:text-white font-medium cursor-pointer';
     if (isInemaLight) return 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium cursor-pointer';
-    if (isInemaForest) return 'text-slate-400 hover:bg-white/5 hover:text-white font-medium cursor-pointer';
-    if (isForest) return 'text-[#A3B8B0] hover:bg-[#12362A] hover:text-white font-medium cursor-pointer';
-    if (isNordic) return 'text-[#2D3F37] hover:bg-[#F2F6F4] hover:text-[#0B3B2C] font-medium cursor-pointer';
-    if (isBiophilic) return 'text-[#2A352F] hover:bg-[#F2F5F0] hover:text-[#153E32] font-medium cursor-pointer';
-    return 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium cursor-pointer';
+    return 'text-[#9ec3cc] hover:bg-[#135467] hover:text-white font-medium cursor-pointer';
   };
 
   const getGroupBtnClass = (hasActiveChild: boolean) => {
+    if (isDarkMode) {
+      if (hasActiveChild) return 'text-white font-semibold bg-slate-900';
+      return 'text-slate-400 hover:bg-slate-900 hover:text-white font-semibold';
+    }
     if (hasActiveChild) {
-      if (isVizoraBlue) return 'text-white font-semibold bg-[#135467]/70';
       if (isVizoraGreen) return 'text-white font-semibold bg-[#1f6853]/70';
       if (isInemaLight) return 'text-blue-900 font-semibold bg-blue-50/50';
-      if (isInemaForest) return 'text-white font-semibold bg-white/5';
-      if (isForest) return 'text-white font-semibold bg-[#12362A]/60';
-      if (isNordic) return 'text-[#0B3B2C] font-semibold bg-[#E8F3EE]/50';
-      if (isBiophilic) return 'text-[#153E32] font-semibold bg-[#EAEFE8]/50';
-      return 'text-slate-900 font-bold bg-slate-50/80';
+      return 'text-white font-semibold bg-[#135467]/70';
     }
-    if (isVizoraBlue) return 'text-[#c6e1e8] hover:bg-[#135467] hover:text-white font-semibold';
     if (isVizoraGreen) return 'text-[#d2ede2] hover:bg-[#1f6853] hover:text-white font-semibold';
     if (isInemaLight) return 'text-slate-700 hover:bg-slate-100/70 hover:text-slate-900 font-semibold';
-    if (isInemaForest) return 'text-slate-400 hover:bg-white/5 hover:text-white font-semibold';
-    if (isForest) return 'text-[#E0ECE7] hover:bg-[#12362A] hover:text-white font-semibold';
-    if (isNordic) return 'text-[#2D3F37] hover:bg-[#F2F6F4] hover:text-[#0B3B2C] font-semibold';
-    if (isBiophilic) return 'text-[#2A352F] hover:bg-[#F2F5F0] hover:text-[#153E32] font-semibold';
-    return 'text-slate-700 hover:bg-slate-100/70 hover:text-slate-900 font-semibold';
+    return 'text-[#c6e1e8] hover:bg-[#135467] hover:text-white font-semibold';
   };
 
   // Estado de grupos abertos (acordeão)
@@ -263,15 +247,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <span
           className={cn(
             'px-1.5 py-0.2 rounded-full text-[10px] font-bold',
-            isVizora
-              ? 'bg-[#165a6e] text-emerald-300 border border-[#207087]'
-              : isForest
-              ? 'bg-[#144233] text-emerald-300 border border-emerald-500/40'
-              : isNordic
-              ? 'bg-[#E8F3EE] text-[#0B3B2C] border border-[#CBDED8]'
-              : isBiophilic
-              ? 'bg-[#EAEFE8] text-[#153E32] border border-[#D5DDD2]'
-              : 'bg-[#E2ECE9] text-[#0F4C3A] border border-[#CBDED8]'
+            isDarkMode
+              ? 'bg-slate-800 text-emerald-400 border border-slate-700'
+              : isVizoraGreen
+              ? 'bg-[#103d30] text-[#a7f3d0] border border-[#206954]'
+              : isInemaLight
+              ? 'bg-emerald-50 text-[#0F4C3A] border border-emerald-200'
+              : 'bg-[#165a6e] text-emerald-300 border border-[#207087]'
           )}
         >
           {badge}
@@ -308,21 +290,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <aside
         className={cn(
           'flex flex-col fixed inset-y-0 left-0 z-40 lg:static lg:z-auto h-screen shrink-0 transition-all duration-200 ease-in-out shadow-xl lg:shadow-none overflow-hidden',
-          isVizoraBlue
-            ? 'bg-[#0c4353] border-r border-[#145366] text-[#9ec3cc]'
+          isDarkMode
+            ? 'bg-slate-950 border-r border-slate-800 text-slate-300'
             : isVizoraGreen
             ? 'bg-[#185846] border-r border-[#206954] text-[#bce0d3]'
-            : isInemaForest
-            ? 'bg-forest-900 border-none text-slate-400'
             : isInemaLight
-            ? 'bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300'
-            : isForest
-            ? 'bg-[#0A221A] border-r border-[#143B2E] text-[#E0ECE7]'
-            : isNordic
-            ? 'bg-[#FCFDFD] border-r border-[#E1ECE6] text-[#2D3F37]'
-            : isBiophilic
-            ? 'bg-[#FAFBF8] border-r border-[#E3E7DE] text-[#2A352F]'
-            : 'bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800',
+            ? 'bg-white border-r border-slate-200 text-slate-700'
+            : 'bg-[#0c4353] border-r border-[#145366] text-[#9ec3cc]',
           isOpenMobile ? 'translate-x-0 w-64' : '-translate-x-full lg:translate-x-0',
           isCollapsed ? 'lg:w-16' : 'lg:w-72'
         )}
@@ -335,7 +309,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         >
           {/* Header da Sidebar: Logo oficial e botão de alternância (Sempre h-16 / 64px alinhado com a Topbar) */}
           {isCollapsed ? (
-            <div className={cn("h-16 shrink-0 border-b flex items-center justify-center w-full", isVizoraBlue ? "border-[#145366]" : isVizoraGreen ? "border-[#206954]" : isInemaForest ? "border-forest-800" : isForest ? "border-[#143B2E]" : isNordic ? "border-[#E1ECE6]" : isBiophilic ? "border-[#E3E7DE]" : "border-slate-200 dark:border-slate-800")}>
+            <div className={cn("h-16 shrink-0 border-b flex items-center justify-center w-full", isDarkMode ? "border-slate-800" : isVizoraGreen ? "border-[#206954]" : isInemaLight ? "border-slate-200" : "border-[#145366]")}>
               <Tooltip delayDuration={0}>
                 <TooltipTrigger asChild>
                   <button
@@ -343,19 +317,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     onClick={onToggleCollapse}
                     className={cn(
                       'h-9 w-9 inline-flex items-center justify-center rounded-md transition-colors focus-visible:outline-none cursor-pointer',
-                      isVizoraBlue
-                        ? 'text-[#9ec3cc] hover:text-white hover:bg-[#135467]'
+                      isDarkMode
+                        ? 'text-slate-400 hover:text-white hover:bg-slate-800'
                         : isVizoraGreen
                         ? 'text-[#bce0d3] hover:text-white hover:bg-[#1f6853]'
-                        : isInemaForest
-                        ? 'text-slate-400 hover:text-white hover:bg-white/10'
-                        : isForest
-                        ? 'text-[#8EA89F] hover:text-white hover:bg-[#144233]'
-                        : isNordic
-                        ? 'text-[#5B7368] hover:text-[#0B3B2C] hover:bg-[#E8F3EE]'
-                        : isBiophilic
-                        ? 'text-[#6B756D] hover:text-[#153E32] hover:bg-[#EAEFE8]'
-                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
+                        : isInemaLight
+                        ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                        : 'text-[#9ec3cc] hover:text-white hover:bg-[#135467]'
                     )}
                     aria-label="Expandir menu lateral"
                     title="Expandir menu lateral"
@@ -369,10 +337,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </Tooltip>
             </div>
           ) : (
-            <div className={cn("h-16 shrink-0 border-b flex items-center justify-between px-4 lg:px-5 w-full", isVizoraBlue ? "border-[#145366]" : isVizoraGreen ? "border-[#206954]" : isInemaForest ? "border-forest-800" : isForest ? "border-[#143B2E]" : isNordic ? "border-[#E1ECE6]" : isBiophilic ? "border-[#E3E7DE]" : "border-slate-200 dark:border-slate-800")}>
+            <div className={cn("h-16 shrink-0 border-b flex items-center justify-between px-4 lg:px-5 w-full", isDarkMode ? "border-slate-800" : isVizoraGreen ? "border-[#206954]" : isInemaLight ? "border-slate-200" : "border-[#145366]")}>
               <a href="/" className="flex items-center">
                 <img
-                  src={isDark || isDarkMode ? inemaLogoWhite : inemaLogoColor}
+                  src={isDarkMode || !isInemaLight ? inemaLogoWhite : inemaLogoColor}
                   alt="INEMA"
                   className="h-7 lg:h-8 w-auto object-contain transition-all opacity-95 hover:opacity-100"
                 />
@@ -384,19 +352,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     onClick={onToggleCollapse}
                     className={cn(
                       'h-8 w-8 inline-flex items-center justify-center rounded-md transition-colors focus-visible:outline-none cursor-pointer',
-                      isVizoraBlue
-                        ? 'text-[#9ec3cc] hover:text-white hover:bg-[#135467]'
+                      isDarkMode
+                        ? 'text-slate-400 hover:text-white hover:bg-slate-800'
                         : isVizoraGreen
                         ? 'text-[#bce0d3] hover:text-white hover:bg-[#1f6853]'
-                        : isInemaForest
-                        ? 'text-slate-400 hover:text-white hover:bg-white/10'
-                        : isForest
-                        ? 'text-[#8EA89F] hover:text-white hover:bg-[#144233]'
-                        : isNordic
-                        ? 'text-[#5B7368] hover:text-[#0B3B2C] hover:bg-[#E8F3EE]'
-                        : isBiophilic
-                        ? 'text-[#6B756D] hover:text-[#153E32] hover:bg-[#EAEFE8]'
-                        : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
+                        : isInemaLight
+                        ? 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
+                        : 'text-[#9ec3cc] hover:text-white hover:bg-[#135467]'
                     )}
                     aria-label="Recolher menu lateral"
                     title="Recolher menu lateral"
@@ -413,7 +375,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
           {/* Caixa de Busca / Filtro Rápido (Ocultada quando retraída) */}
           {!isCollapsed && (
-            <div className={cn("p-3 pb-2 border-b", isVizoraBlue ? "border-[#145366]" : isVizoraGreen ? "border-[#206954]" : isInemaForest ? "border-forest-800" : isForest ? "border-[#143B2E]" : isNordic ? "border-[#E1ECE6]" : isBiophilic ? "border-[#E3E7DE]" : "border-slate-100")}>
+            <div className={cn("p-3 pb-2 border-b", isDarkMode ? "border-slate-800" : isVizoraGreen ? "border-[#206954]" : isInemaLight ? "border-slate-100" : "border-[#145366]")}>
               <div className="relative">
                 <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                 <input
@@ -423,21 +385,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   placeholder="Filtrar menu..."
                   className={cn(
                     'w-full pl-8 pr-7 py-1.5 text-xs rounded-xl transition-all focus:outline-none focus:ring-1',
-                    isVizoraBlue
-                      ? 'bg-[#083340]/85 border border-[#155b70] text-white placeholder:text-[#7ea8b3] focus:ring-sky-400 focus:border-sky-400'
+                    isDarkMode
+                      ? 'bg-slate-900 border border-slate-800 text-white placeholder:text-slate-500 focus:ring-emerald-500 focus:border-emerald-500'
                       : isVizoraGreen
                       ? 'bg-[#103d30]/85 border border-[#23755e] text-white placeholder:text-[#97c7b6] focus:ring-emerald-400 focus:border-emerald-400'
-                      : isInemaForest
-                      ? 'bg-forest-800/80 border border-forest-800 text-white placeholder:text-slate-500 focus:ring-green-500 focus:border-green-500'
                       : isInemaLight
                       ? 'bg-slate-50 hover:bg-slate-100/60 focus:bg-white border border-slate-200 text-slate-800 placeholder:text-slate-400 focus:ring-blue-600 focus:border-blue-600'
-                      : isForest
-                      ? 'bg-[#0e2c22] border border-[#1a4738] text-white placeholder:text-[#6a877d] focus:ring-emerald-400 focus:border-emerald-400'
-                      : isNordic
-                      ? 'bg-[#F2F6F4] border border-[#E1ECE6] text-[#0B3B2C] placeholder:text-[#7D9489] focus:ring-[#0B3B2C] focus:border-[#0B3B2C]'
-                      : isBiophilic
-                      ? 'bg-[#F2F5F0] border border-[#E3E7DE] text-[#153E32] placeholder:text-[#828D84] focus:ring-[#153E32] focus:border-[#153E32]'
-                      : 'bg-slate-50 hover:bg-slate-100/60 focus:bg-white border border-slate-200/80 text-slate-800 placeholder:text-slate-400 focus:ring-[#0F4C3A] focus:border-[#0F4C3A]'
+                      : 'bg-[#083340]/85 border border-[#155b70] text-white placeholder:text-[#7ea8b3] focus:ring-sky-400 focus:border-sky-400'
                   )}
                 />
                 {searchFilter && (
@@ -455,7 +409,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {/* Lista de Navegação */}
         {isCollapsed ? (
-          <nav className="flex-1 overflow-y-auto py-3 px-2 space-y-1.5 flex flex-col items-center select-none w-full scrollbar-none">
+          <nav className={cn("flex-1 overflow-y-auto py-3 px-2 space-y-1.5 flex flex-col items-center select-none w-full", getSidebarScrollClass())}>
             {/* Itens Raiz Diretos */}
             {TOP_DIRECT_ITEMS.map((item) => {
               const IconComponent = ICON_MAP[item.icon] || Home;
@@ -480,16 +434,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       className={cn(
                         'h-10 w-10 flex items-center justify-center rounded-md transition-all duration-150 cursor-pointer',
                         isActive
-                          ? isVizora
-                            ? 'bg-[#165a6e] text-white font-bold shadow-xs border border-[#207087]'
-                            : isInemaForest
-                            ? 'bg-white/10 text-white font-medium'
-                            : 'bg-[#E2ECE9] text-[#0F4C3A] font-bold shadow-2xs border border-[#CBDED8]/70'
-                          : isVizora
-                          ? 'text-[#9ec3cc] hover:bg-[#135467] hover:text-white'
-                          : isInemaForest
-                          ? 'text-slate-400 hover:bg-white/5 hover:text-white'
-                          : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                          ? isDarkMode
+                            ? 'bg-slate-800 text-white font-bold shadow-xs border border-slate-700'
+                            : isVizoraGreen
+                            ? 'bg-[#22725b] text-white font-bold shadow-xs border border-[#2c8d71]'
+                            : isInemaLight
+                            ? 'bg-blue-50 text-blue-700 font-bold border border-blue-200'
+                            : 'bg-[#165a6e] text-white font-bold shadow-xs border border-[#207087]'
+                          : isDarkMode
+                          ? 'text-slate-400 hover:bg-slate-900 hover:text-white'
+                          : isVizoraGreen
+                          ? 'text-[#bce0d3] hover:bg-[#1f6853] hover:text-white'
+                          : isInemaLight
+                          ? 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                          : 'text-[#9ec3cc] hover:bg-[#135467] hover:text-white'
                       )}
                       aria-label={item.label}
                     >
@@ -503,7 +461,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               );
             })}
 
-            <div className={cn("w-8 my-1 border-t", isVizora ? "border-[#145366]" : isForest ? "border-[#143B2E]" : "border-slate-200/80")} />
+            <div className={cn("w-8 my-1 border-t", isDarkMode ? "border-slate-800" : isVizoraGreen ? "border-[#206954]" : isInemaLight ? "border-slate-200" : "border-[#145366]")} />
 
             {/* Módulos Oficiais e Agrupamentos */}
             {GLA_MENU_GROUPS.map((group) => {
@@ -540,20 +498,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         className={cn(
                           'h-10 w-10 flex items-center justify-center rounded-md transition-all duration-150 cursor-pointer',
                           isActive
-                            ? isVizoraBlue
-                              ? 'bg-[#165a6e] text-white font-bold shadow-xs border border-[#207087]'
+                            ? isDarkMode
+                              ? 'bg-slate-800 text-white font-bold shadow-xs border border-slate-700'
                               : isVizoraGreen
                               ? 'bg-[#22725b] text-white font-bold shadow-xs border border-[#2c8d71]'
-                              : isInemaForest
-                              ? 'bg-white/10 text-white font-medium'
-                              : 'bg-[#E2ECE9] text-[#0F4C3A] font-bold shadow-2xs border border-[#CBDED8]/70'
-                            : isVizoraBlue
-                            ? 'text-[#9ec3cc] hover:bg-[#135467] hover:text-white'
+                              : isInemaLight
+                              ? 'bg-blue-50 text-blue-700 font-bold border border-blue-200'
+                              : 'bg-[#165a6e] text-white font-bold shadow-xs border border-[#207087]'
+                            : isDarkMode
+                            ? 'text-slate-400 hover:bg-slate-900 hover:text-white'
                             : isVizoraGreen
                             ? 'text-[#bce0d3] hover:bg-[#1f6853] hover:text-white'
-                            : isInemaForest
-                            ? 'text-slate-400 hover:bg-white/5 hover:text-white'
-                            : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                            : isInemaLight
+                            ? 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                            : 'text-[#9ec3cc] hover:bg-[#135467] hover:text-white'
                         )}
                         aria-label={group.label}
                       >
@@ -569,20 +527,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         className={cn(
                           'h-10 w-10 flex items-center justify-center rounded-md transition-all duration-150 cursor-pointer',
                           isActive
-                            ? isVizoraBlue
-                              ? 'bg-[#165a6e] text-white font-bold shadow-xs border border-[#207087]'
+                            ? isDarkMode
+                              ? 'bg-slate-800 text-white font-bold shadow-xs border border-slate-700'
                               : isVizoraGreen
                               ? 'bg-[#22725b] text-white font-bold shadow-xs border border-[#2c8d71]'
-                              : isInemaForest
-                              ? 'bg-white/10 text-white font-medium'
-                              : 'bg-[#E2ECE9] text-[#0F4C3A] font-bold shadow-2xs border border-[#CBDED8]/70'
-                            : isVizoraBlue
-                            ? 'text-[#9ec3cc] hover:bg-[#135467] hover:text-white'
+                              : isInemaLight
+                              ? 'bg-blue-50 text-blue-700 font-bold border border-blue-200'
+                              : 'bg-[#165a6e] text-white font-bold shadow-xs border border-[#207087]'
+                            : isDarkMode
+                            ? 'text-slate-400 hover:bg-slate-900 hover:text-white'
                             : isVizoraGreen
                             ? 'text-[#bce0d3] hover:bg-[#1f6853] hover:text-white'
-                            : isInemaForest
-                            ? 'text-slate-400 hover:bg-white/5 hover:text-white'
-                            : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                            : isInemaLight
+                            ? 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                            : 'text-[#9ec3cc] hover:bg-[#135467] hover:text-white'
                         )}
                         aria-label={group.label}
                       >
@@ -618,7 +576,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </nav>
         ) : (
           /* Lista de Navegação com Scroll customizado (Expandida) */
-          <nav className="flex-1 overflow-y-auto pt-2 pb-6 px-2.5 space-y-0.5 select-none scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent">
+          <nav className={cn("flex-1 overflow-y-auto pt-2 pb-6 px-2.5 space-y-0.5 select-none", getSidebarScrollClass())}>
           {/* Seção 1: Itens Diretos do Topo (Início, Requerimento, Processos, etc) */}
           {filteredDirectItems.length > 0 && (
             <div className="space-y-0.5 pb-2">
@@ -648,36 +606,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         className={cn(
                           'w-6 h-6 rounded-lg flex items-center justify-center shrink-0 transition-colors',
                           isActive
-                            ? isVizoraBlue
-                              ? 'bg-[#1d6b82] text-white shadow-xs'
+                            ? isDarkMode
+                              ? 'bg-slate-700 text-white shadow-xs'
                               : isVizoraGreen
                               ? 'bg-[#298369] text-white shadow-xs'
                               : isInemaLight
                               ? 'bg-blue-600 text-white shadow-xs'
-                              : isInemaForest
-                              ? 'bg-white/20 text-white shadow-xs'
-                              : isForest
-                              ? 'bg-[#21614C] text-white shadow-xs'
-                              : isNordic
-                              ? 'bg-[#0B3B2C] text-white shadow-xs'
-                              : isBiophilic
-                              ? 'bg-[#153E32] text-white shadow-xs'
-                              : 'bg-[#0F4C3A] text-white shadow-xs'
-                            : isVizoraBlue
-                            ? 'bg-[#083340] text-[#9ec3cc] group-hover:bg-[#135467] group-hover:text-white'
+                              : 'bg-[#1d6b82] text-white shadow-xs'
+                            : isDarkMode
+                            ? 'bg-slate-900 text-slate-400 group-hover:bg-slate-800 group-hover:text-white'
                             : isVizoraGreen
                             ? 'bg-[#103d30] text-[#bce0d3] group-hover:bg-[#1f6853] group-hover:text-white'
                             : isInemaLight
-                            ? 'bg-slate-100/80 text-slate-400 group-hover:bg-slate-200/80 group-hover:text-slate-600'
-                            : isInemaForest
-                            ? 'bg-white/5 text-slate-400 group-hover:bg-white/10 group-hover:text-white'
-                            : isForest
-                            ? 'bg-[#0e2c22] text-[#8EA89F] group-hover:bg-[#144233] group-hover:text-white'
-                            : isNordic
-                            ? 'bg-[#E8F3EE] text-[#5B7368] group-hover:bg-[#D8EADB]'
-                            : isBiophilic
-                            ? 'bg-[#EAEFE8] text-[#6B756D] group-hover:bg-[#D5DDD2]'
-                            : 'bg-slate-100 text-slate-500 group-hover:bg-slate-200'
+                            ? 'bg-slate-100/80 text-slate-500 group-hover:bg-slate-200/80 group-hover:text-slate-800'
+                            : 'bg-[#083340] text-[#9ec3cc] group-hover:bg-[#135467] group-hover:text-white'
                         )}
                       >
                         <IconComponent className="w-3.5 h-3.5" />
@@ -691,19 +633,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         <span
                           className={cn(
                             'w-1.5 h-1.5 rounded-full',
-                            isVizoraBlue || isVizoraGreen
+                            isDarkMode
+                              ? 'bg-emerald-400'
+                              : isVizoraGreen
                               ? 'bg-[#34D399]'
                               : isInemaLight
                               ? 'bg-blue-600'
-                              : isInemaForest
-                              ? 'bg-green-500'
-                              : isForest
-                              ? 'bg-emerald-400'
-                              : isNordic
-                              ? 'bg-[#0B3B2C]'
-                              : isBiophilic
-                              ? 'bg-[#153E32]'
-                              : 'bg-[#0F4C3A]'
+                              : 'bg-[#34D399]'
                           )}
                         />
                       )}
@@ -719,7 +655,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
           {/* Divisor Elegante */}
           {filteredDirectItems.length > 0 && filteredGroups.length > 0 && (
-            <div className={cn("my-1.5 border-t", isVizoraBlue ? "border-[#145366]" : isVizoraGreen ? "border-[#206954]" : isForest ? "border-[#143B2E]" : isNordic ? "border-[#E1ECE6]" : isBiophilic ? "border-[#E3E7DE]" : "border-slate-100/80")} />
+            <div className={cn("my-1.5 border-t", isDarkMode ? "border-slate-800" : isVizoraGreen ? "border-[#206954]" : isInemaLight ? "border-slate-100" : "border-[#145366]")} />
           )}
 
           {/* Seção 2: Grupos de Acordeão e Itens Oficiais do GLA */}
@@ -761,36 +697,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         className={cn(
                           'w-6 h-6 rounded-lg flex items-center justify-center shrink-0 transition-colors',
                           isDirectActive
-                            ? isVizoraBlue
-                              ? 'bg-[#1d6b82] text-white shadow-xs'
+                            ? isDarkMode
+                              ? 'bg-slate-700 text-white shadow-xs'
                               : isVizoraGreen
                               ? 'bg-[#298369] text-white shadow-xs'
                               : isInemaLight
                               ? 'bg-blue-600 text-white shadow-xs'
-                              : isInemaForest
-                              ? 'bg-white/20 text-white shadow-xs'
-                              : isForest
-                              ? 'bg-[#21614C] text-white shadow-xs'
-                              : isNordic
-                              ? 'bg-[#0B3B2C] text-white shadow-xs'
-                              : isBiophilic
-                              ? 'bg-[#153E32] text-white shadow-xs'
-                              : 'bg-[#0F4C3A] text-white shadow-xs'
-                            : isVizoraBlue
-                            ? 'bg-[#083340] text-[#9ec3cc] group-hover:bg-[#135467] group-hover:text-white'
+                              : 'bg-[#1d6b82] text-white shadow-xs'
+                            : isDarkMode
+                            ? 'bg-slate-900 text-slate-400 group-hover:bg-slate-800 group-hover:text-white'
                             : isVizoraGreen
                             ? 'bg-[#103d30] text-[#bce0d3] group-hover:bg-[#1f6853] group-hover:text-white'
                             : isInemaLight
-                            ? 'bg-slate-100/80 text-slate-400 group-hover:bg-slate-200/80 group-hover:text-slate-600'
-                            : isInemaForest
-                            ? 'bg-white/5 text-slate-400 group-hover:bg-white/10 group-hover:text-white'
-                            : isForest
-                            ? 'bg-[#0e2c22] text-[#8EA89F] group-hover:bg-[#144233] group-hover:text-white'
-                            : isNordic
-                            ? 'bg-[#E8F3EE] text-[#5B7368] group-hover:bg-[#D8EADB]'
-                            : isBiophilic
-                            ? 'bg-[#EAEFE8] text-[#6B756D] group-hover:bg-[#D5DDD2]'
-                            : 'bg-slate-100 text-slate-500 group-hover:bg-slate-200'
+                            ? 'bg-slate-100/80 text-slate-500 group-hover:bg-slate-200/80 group-hover:text-slate-800'
+                            : 'bg-[#083340] text-[#9ec3cc] group-hover:bg-[#135467] group-hover:text-white'
                         )}
                       >
                         <GroupIcon className="w-3.5 h-3.5" />
@@ -804,19 +724,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         <span
                           className={cn(
                             'w-1.5 h-1.5 rounded-full',
-                            isVizoraBlue || isVizoraGreen
+                            isDarkMode
+                              ? 'bg-emerald-400'
+                              : isVizoraGreen
                               ? 'bg-[#34D399]'
                               : isInemaLight
                               ? 'bg-blue-600'
-                              : isInemaForest
-                              ? 'bg-green-500'
-                              : isForest
-                              ? 'bg-emerald-400'
-                              : isNordic
-                              ? 'bg-[#0B3B2C]'
-                              : isBiophilic
-                              ? 'bg-[#153E32]'
-                              : 'bg-[#0F4C3A]'
+                              : 'bg-[#34D399]'
                           )}
                         />
                       )}
@@ -856,36 +770,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       className={cn(
                         'w-6 h-6 rounded-lg flex items-center justify-center shrink-0 border transition-colors',
                         hasActiveChild
-                          ? isVizoraBlue
-                            ? 'bg-[#1d6b82] text-white border-[#1d6b82]'
+                          ? isDarkMode
+                            ? 'bg-slate-800 text-white border-slate-700'
                             : isVizoraGreen
                             ? 'bg-[#298369] text-white border-[#298369]'
                             : isInemaLight
                             ? 'bg-blue-100 text-blue-800 border-blue-200'
-                            : isInemaForest
-                            ? 'bg-white/15 text-white border-white/20'
-                            : isForest
-                            ? 'bg-[#21614C] text-white border-[#21614C]'
-                            : isNordic
-                            ? 'bg-[#E8F3EE] text-[#0B3B2C] border-[#CBDED8]'
-                            : isBiophilic
-                            ? 'bg-[#EAEFE8] text-[#153E32] border-[#D5DDD2]'
-                            : 'bg-emerald-50 text-[#0F4C3A] border-emerald-200/80'
-                          : isVizoraBlue
-                          ? 'bg-[#083340] text-[#9ec3cc] border-[#145366]'
+                            : 'bg-[#1d6b82] text-white border-[#1d6b82]'
+                          : isDarkMode
+                          ? 'bg-slate-900 text-slate-400 border-slate-800'
                           : isVizoraGreen
                           ? 'bg-[#103d30] text-[#bce0d3] border-[#206954]'
                           : isInemaLight
                           ? 'bg-slate-100/70 text-slate-400 border-slate-200/60'
-                          : isInemaForest
-                          ? 'bg-white/5 text-slate-400 border-white/5'
-                          : isForest
-                          ? 'bg-[#0e2c22] text-[#8EA89F] border-[#1a4738]'
-                          : isNordic
-                          ? 'bg-[#E8F3EE] text-[#5B7368] border-[#CBDED8]'
-                          : isBiophilic
-                          ? 'bg-[#EAEFE8] text-[#6B756D] border-[#D5DDD2]'
-                          : 'bg-slate-100/70 text-slate-500 border-slate-200/60'
+                          : 'bg-[#083340] text-[#9ec3cc] border-[#145366]'
                       )}
                     >
                       <GroupIcon className="w-3.5 h-3.5" />
@@ -898,7 +796,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     <ChevronDown
                       className={cn(
                         'w-3.5 h-3.5 transition-transform duration-200',
-                        isVizoraBlue ? 'text-[#9ec3cc]' : isVizoraGreen ? 'text-[#bce0d3]' : 'text-slate-400',
+                        isDarkMode
+                          ? 'text-slate-400'
+                          : isVizoraGreen
+                          ? 'text-[#bce0d3]'
+                          : isInemaLight
+                          ? 'text-slate-400'
+                          : 'text-[#9ec3cc]',
                         expanded && 'rotate-180'
                       )}
                     />
@@ -911,21 +815,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     id={group.htmlId}
                     className={cn(
                       'mt-1 ml-3.5 pl-2.5 border-l-2 space-y-0.5 py-0.5',
-                      isVizoraBlue
-                        ? 'border-[#145366]'
+                      isDarkMode
+                        ? 'border-slate-800'
                         : isVizoraGreen
                         ? 'border-[#206954]'
-                        : isInemaForest
-                        ? 'border-forest-800'
                         : isInemaLight
                         ? 'border-slate-200'
-                        : isForest
-                        ? 'border-[#194536]'
-                        : isNordic
-                        ? 'border-[#CBDED8]'
-                        : isBiophilic
-                        ? 'border-[#D5DDD2]'
-                        : 'border-slate-100/90'
+                        : 'border-[#145366]'
                     )}
                   >
                     {group.items.map((subItem) => {
@@ -945,21 +841,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             <div
                               className={cn(
                                 'pt-2 pb-1 px-2 text-[10px] font-semibold uppercase tracking-wider select-none pointer-events-none flex items-center gap-1.5',
-                                isVizoraBlue
-                                  ? 'text-[#7ea8b3]'
+                                isDarkMode
+                                  ? 'text-slate-500'
                                   : isVizoraGreen
                                   ? 'text-[#97c7b6]'
-                                  : isInemaForest
-                                  ? 'text-slate-500'
                                   : isInemaLight
                                   ? 'text-slate-400'
-                                  : isForest
-                                  ? 'text-[#5E7B70]'
-                                  : isNordic
-                                  ? 'text-[#5B7368]'
-                                  : isBiophilic
-                                  ? 'text-[#6B756D]'
-                                  : 'text-slate-400'
+                                  : 'text-[#7ea8b3]'
                               )}
                             >
                               <span>{subItem.subgroup}</span>
@@ -1035,21 +923,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div
             className={cn(
               'p-3 border-t shrink-0 flex items-center justify-center w-full transition-colors',
-              isVizoraBlue
-                ? 'bg-[#0c4353] border-[#145366]'
+              isDarkMode
+                ? 'bg-slate-950 border-slate-800'
                 : isVizoraGreen
                 ? 'bg-[#185846] border-[#206954]'
-                : isInemaForest
-                ? 'bg-forest-900 border-forest-800'
                 : isInemaLight
                 ? 'bg-white border-slate-100'
-                : isForest
-                ? 'bg-[#0A221A] border-[#143B2E]'
-                : isNordic
-                ? 'bg-[#FCFDFD] border-[#E1ECE6]'
-                : isBiophilic
-                ? 'bg-[#FAFBF8] border-[#E3E7DE]'
-                : 'bg-white border-slate-100'
+                : 'bg-[#0c4353] border-[#145366]'
             )}
           >
             <Tooltip delayDuration={0}>
@@ -1081,21 +961,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div
             className={cn(
               'p-3 border-t shrink-0 transition-colors',
-              isVizoraBlue
-                ? 'bg-[#0c4353] border-[#145366]'
+              isDarkMode
+                ? 'bg-slate-950 border-slate-800'
                 : isVizoraGreen
                 ? 'bg-[#185846] border-[#206954]'
-                : isInemaForest
-                ? 'bg-forest-900 border-forest-800'
                 : isInemaLight
                 ? 'bg-white border-slate-100'
-                : isForest
-                ? 'bg-[#0A221A] border-[#143B2E]'
-                : isNordic
-                ? 'bg-[#FCFDFD] border-[#E1ECE6]'
-                : isBiophilic
-                ? 'bg-[#FAFBF8] border-[#E3E7DE]'
-                : 'bg-white border-slate-100'
+                : 'bg-[#0c4353] border-[#145366]'
             )}
           >
             <button

@@ -178,3 +178,81 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #94A3B8;
 }
+
+/* Custom Scrollbars temáticos para a Sidebar (acompanham a cor do seletor) */
+.sidebar-scroll-blue {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(158, 195, 204, 0.28) transparent;
+}
+.sidebar-scroll-blue::-webkit-scrollbar {
+  width: 5px;
+}
+.sidebar-scroll-blue::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sidebar-scroll-blue::-webkit-scrollbar-thumb {
+  background: rgba(158, 195, 204, 0.25);
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+.sidebar-scroll-blue::-webkit-scrollbar-thumb:hover {
+  background: rgba(158, 195, 204, 0.55);
+}
+
+.sidebar-scroll-green {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(188, 224, 211, 0.28) transparent;
+}
+.sidebar-scroll-green::-webkit-scrollbar {
+  width: 5px;
+}
+.sidebar-scroll-green::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sidebar-scroll-green::-webkit-scrollbar-thumb {
+  background: rgba(188, 224, 211, 0.25);
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+.sidebar-scroll-green::-webkit-scrollbar-thumb:hover {
+  background: rgba(188, 224, 211, 0.55);
+}
+
+.sidebar-scroll-white {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.3) transparent;
+}
+.sidebar-scroll-white::-webkit-scrollbar {
+  width: 5px;
+}
+.sidebar-scroll-white::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sidebar-scroll-white::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.28);
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+.sidebar-scroll-white::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.5);
+}
+
+.sidebar-scroll-dark {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
+.sidebar-scroll-dark::-webkit-scrollbar {
+  width: 5px;
+}
+.sidebar-scroll-dark::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sidebar-scroll-dark::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+.sidebar-scroll-dark::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+

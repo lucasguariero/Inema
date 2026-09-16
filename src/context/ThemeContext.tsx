@@ -19,17 +19,17 @@ function getInitialTheme(): ThemeMode {
   if (pathname.includes('proposta-verde-azul') || pathname.includes('verde-azul') || pathname.includes('vizora-blue') || pathname.includes('sidebar-azul')) return 'vizora-blue';
   if (pathname.includes('proposta-verde') || pathname.includes('sidebar-verde') || pathname.includes('vizora-green')) return 'vizora-green';
   if (pathname.includes('proposta-branca') || pathname.includes('sidebar-branca') || pathname.includes('inema-light') || pathname.includes('light-shell')) return 'inema-light';
-  if (pathname.includes('proposta-02') || pathname.includes('inema-forest') || pathname.includes('dark-forest')) return 'inema-forest';
+  if (pathname.includes('proposta-02') || pathname.includes('inema-forest') || pathname.includes('dark-forest')) return 'vizora-green';
 
   const searchParams = new URLSearchParams(window.location.search);
   const temaParam = searchParams.get('tema') || searchParams.get('theme') || searchParams.get('c');
   if (temaParam === 'verde-azul' || temaParam === 'proposta-verde-azul' || temaParam === 'vizora-blue') return 'vizora-blue';
   if (temaParam === 'verde' || temaParam === 'proposta-verde' || temaParam === 'vizora-green') return 'vizora-green';
   if (temaParam === 'branca' || temaParam === 'proposta-branca' || temaParam === 'inema-light') return 'inema-light';
-  if (temaParam === 'proposta-02' || temaParam === 'inema-forest') return 'inema-forest';
+  if (temaParam === 'proposta-02' || temaParam === 'inema-forest') return 'vizora-green';
 
   const stored = localStorage.getItem('inema_theme_mode') as ThemeMode;
-  if (stored && THEMES[stored]) return stored;
+  if (stored && stored !== 'inema-forest' && THEMES[stored]) return stored;
 
   return 'vizora-blue';
 }
