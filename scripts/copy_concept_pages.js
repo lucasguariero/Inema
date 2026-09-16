@@ -29,3 +29,11 @@ if (fs.existsSync(distIndex)) {
     console.log(`Created dist/${c}.html and dist/${c}/index.html`);
   }
 }
+
+const galeriaHtml = path.resolve('public/galeria.html');
+if (fs.existsSync(galeriaHtml)) {
+  const galeriaDir = path.resolve('dist/galeria');
+  if (!fs.existsSync(galeriaDir)) fs.mkdirSync(galeriaDir, { recursive: true });
+  fs.copyFileSync(galeriaHtml, path.resolve('dist/galeria/index.html'));
+  console.log('Created dist/galeria/index.html');
+}

@@ -1,0 +1,1887 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeria de Telas & Protótipos — INEMA GLA</title>
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace']
+                    },
+                    colors: {
+                        brand: {
+                            blue: '#0c4353',
+                            green: '#0F4C3A',
+                            accent: '#78C043'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .lightbox-img {
+            max-height: 88vh;
+            max-width: 92vw;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen font-sans antialiased selection:bg-emerald-500 selection:text-white">
+
+    <!-- Topo / Header Fixo -->
+    <header class="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-md border-b border-slate-800 shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0c4353] to-[#0F4C3A] flex items-center justify-center p-2 border border-emerald-500/30 shadow-inner">
+                    <img src="/logo.svg" alt="INEMA" class="w-full h-full object-contain filter brightness-200" />
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-lg sm:text-xl font-bold tracking-tight text-white flex items-center gap-2">
+                            INEMA <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-semibold uppercase tracking-wider">GLA HML</span>
+                        </h1>
+                    </div>
+                    <p class="text-xs text-slate-400">Galeria Visual de Telas, Módulos e Responsividade Mobile</p>
+                </div>
+            </div>
+
+            <!-- Resumo e Ações Globais -->
+            <div class="flex items-center gap-3 flex-wrap">
+                <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/80 border border-slate-700/80 text-xs text-slate-300 font-mono">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <strong class="text-white">30 Telas Capturadas</strong>
+                </div>
+                <a href="https://inema-six.vercel.app/" target="_blank" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-lg shadow-emerald-950/50 transition-all hover:scale-[1.02] cursor-pointer">
+                    <span>Abrir Sistema Live</span>
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                </a>
+            </div>
+        </div>
+
+        <!-- Barra de Filtros / Navegação Rápida -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 pb-3 pt-1 border-t border-slate-800/60 flex items-center justify-between gap-4 overflow-x-auto">
+            <div class="flex items-center gap-1.5 text-xs">
+                <button onclick="setFilter('all')" id="tab-all" class="filter-tab px-3 py-1.5 rounded-lg font-medium transition-all bg-emerald-500 text-white font-semibold shadow-xs">
+                    Todas as Telas (30)
+                </button>
+                <button onclick="setFilter('dashboard')" id="tab-dashboard" class="filter-tab px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                    Dashboard & 3 Temas (6)
+                </button>
+                <button onclick="setFilter('fiscalizacao-interna')" id="tab-fiscalizacao-interna" class="filter-tab px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                    Fiscalização Interna (6)
+                </button>
+                <button onclick="setFilter('fiscalizacao-cidadao')" id="tab-fiscalizacao-cidadao" class="filter-tab px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                    Fiscalização Cidadão (6)
+                </button>
+                <button onclick="setFilter('mobile')" id="tab-mobile" class="filter-tab px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                    Mobile iPhone 13 (12)
+                </button>
+            </div>
+
+            <!-- Busca Rápida -->
+            <div class="relative w-48 sm:w-64 shrink-0">
+                <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Filtrar por nome..." class="w-full bg-slate-900 border border-slate-700/80 rounded-lg px-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-hidden focus:border-emerald-500 transition-all font-mono">
+            </div>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+        <!-- Grid de Prints -->
+        <div id="galleryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <div class="gallery-card group bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 flex flex-col"
+                 data-category="dashboard"
+                 data-title="dashboard executivo - sidebar azul petróleo (#0c4353)"
+                 data-dark="false"
+                 data-index="0">
+                
+                <!-- Imagem do Print com Overlay Hover -->
+                <div class="relative aspect-video sm:aspect-16/10 bg-slate-900 overflow-hidden cursor-pointer border-b border-slate-800/60" onclick="openLightbox(0)">
+                    <img src="/galeria-prints/01-dashboard-azul-petroleo.png"
+                         alt="Dashboard Executivo - Sidebar Azul Petróleo (#0c4353)"
+                         loading="lazy"
+                         class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/40 backdrop-blur-2xs">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-600/90 text-white text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            Expandir em Alta Definição
+                        </span>
+                    </div>
+
+                    <!-- Badges no topo da imagem -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-sky-500/20 text-sky-300 border border-sky-500/30">
+                            🖥️ Desktop
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-slate-700/60 text-slate-300 border border-slate-600">
+                            ☀️ Light
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Informações e Ações -->
+                <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug group-hover:text-emerald-400 transition-colors">
+                            Dashboard Executivo - Sidebar Azul Petróleo (#0c4353)
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1 font-mono">
+                            01-dashboard-azul-petroleo.png
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
+                        <button onclick="openLightbox(0)" class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-medium transition-colors cursor-pointer">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <span>Ver Print</span>
+                        </button>
+                        <a href="https://inema-six.vercel.app/?route=relatorios&theme=verde-azul" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                            <span>Testar no Sistema</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-card group bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 flex flex-col"
+                 data-category="dashboard"
+                 data-title="dashboard executivo - sidebar verde floresta (#0f4c3a)"
+                 data-dark="false"
+                 data-index="1">
+                
+                <!-- Imagem do Print com Overlay Hover -->
+                <div class="relative aspect-video sm:aspect-16/10 bg-slate-900 overflow-hidden cursor-pointer border-b border-slate-800/60" onclick="openLightbox(1)">
+                    <img src="/galeria-prints/02-dashboard-verde.png"
+                         alt="Dashboard Executivo - Sidebar Verde Floresta (#0F4C3A)"
+                         loading="lazy"
+                         class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/40 backdrop-blur-2xs">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-600/90 text-white text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            Expandir em Alta Definição
+                        </span>
+                    </div>
+
+                    <!-- Badges no topo da imagem -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-sky-500/20 text-sky-300 border border-sky-500/30">
+                            🖥️ Desktop
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-slate-700/60 text-slate-300 border border-slate-600">
+                            ☀️ Light
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Informações e Ações -->
+                <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug group-hover:text-emerald-400 transition-colors">
+                            Dashboard Executivo - Sidebar Verde Floresta (#0F4C3A)
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1 font-mono">
+                            02-dashboard-verde.png
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
+                        <button onclick="openLightbox(1)" class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-medium transition-colors cursor-pointer">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <span>Ver Print</span>
+                        </button>
+                        <a href="https://inema-six.vercel.app/?route=relatorios&theme=verde" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                            <span>Testar no Sistema</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-card group bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 flex flex-col"
+                 data-category="dashboard"
+                 data-title="dashboard executivo - sidebar branca institucional"
+                 data-dark="false"
+                 data-index="2">
+                
+                <!-- Imagem do Print com Overlay Hover -->
+                <div class="relative aspect-video sm:aspect-16/10 bg-slate-900 overflow-hidden cursor-pointer border-b border-slate-800/60" onclick="openLightbox(2)">
+                    <img src="/galeria-prints/03-dashboard-branca.png"
+                         alt="Dashboard Executivo - Sidebar Branca Institucional"
+                         loading="lazy"
+                         class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/40 backdrop-blur-2xs">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-600/90 text-white text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            Expandir em Alta Definição
+                        </span>
+                    </div>
+
+                    <!-- Badges no topo da imagem -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-sky-500/20 text-sky-300 border border-sky-500/30">
+                            🖥️ Desktop
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-slate-700/60 text-slate-300 border border-slate-600">
+                            ☀️ Light
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Informações e Ações -->
+                <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug group-hover:text-emerald-400 transition-colors">
+                            Dashboard Executivo - Sidebar Branca Institucional
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1 font-mono">
+                            03-dashboard-branca.png
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
+                        <button onclick="openLightbox(2)" class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-medium transition-colors cursor-pointer">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <span>Ver Print</span>
+                        </button>
+                        <a href="https://inema-six.vercel.app/?route=relatorios&theme=branca" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                            <span>Testar no Sistema</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-card group bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 flex flex-col"
+                 data-category="dashboard"
+                 data-title="dashboard executivo - modo escuro (dark mode)"
+                 data-dark="true"
+                 data-index="3">
+                
+                <!-- Imagem do Print com Overlay Hover -->
+                <div class="relative aspect-video sm:aspect-16/10 bg-slate-900 overflow-hidden cursor-pointer border-b border-slate-800/60" onclick="openLightbox(3)">
+                    <img src="/galeria-prints/04-dashboard-dark.png"
+                         alt="Dashboard Executivo - Modo Escuro (Dark Mode)"
+                         loading="lazy"
+                         class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/40 backdrop-blur-2xs">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-600/90 text-white text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            Expandir em Alta Definição
+                        </span>
+                    </div>
+
+                    <!-- Badges no topo da imagem -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-sky-500/20 text-sky-300 border border-sky-500/30">
+                            🖥️ Desktop
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                            🌙 Dark
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Informações e Ações -->
+                <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug group-hover:text-emerald-400 transition-colors">
+                            Dashboard Executivo - Modo Escuro (Dark Mode)
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1 font-mono">
+                            04-dashboard-dark.png
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
+                        <button onclick="openLightbox(3)" class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-medium transition-colors cursor-pointer">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <span>Ver Print</span>
+                        </button>
+                        <a href="https://inema-six.vercel.app/?route=relatorios&dark=true" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                            <span>Testar no Sistema</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-card group bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 flex flex-col"
+                 data-category="dashboard"
+                 data-title="dashboard executivo - painel lateral de filtros avançados"
+                 data-dark="false"
+                 data-index="4">
+                
+                <!-- Imagem do Print com Overlay Hover -->
+                <div class="relative aspect-video sm:aspect-16/10 bg-slate-900 overflow-hidden cursor-pointer border-b border-slate-800/60" onclick="openLightbox(4)">
+                    <img src="/galeria-prints/05-dashboard-filtros.png"
+                         alt="Dashboard Executivo - Painel Lateral de Filtros Avançados"
+                         loading="lazy"
+                         class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/40 backdrop-blur-2xs">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-600/90 text-white text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            Expandir em Alta Definição
+                        </span>
+                    </div>
+
+                    <!-- Badges no topo da imagem -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-sky-500/20 text-sky-300 border border-sky-500/30">
+                            🖥️ Desktop
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-slate-700/60 text-slate-300 border border-slate-600">
+                            ☀️ Light
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Informações e Ações -->
+                <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug group-hover:text-emerald-400 transition-colors">
+                            Dashboard Executivo - Painel Lateral de Filtros Avançados
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1 font-mono">
+                            05-dashboard-filtros.png
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
+                        <button onclick="openLightbox(4)" class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-medium transition-colors cursor-pointer">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <span>Ver Print</span>
+                        </button>
+                        <a href="https://inema-six.vercel.app/?route=relatorios" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                            <span>Testar no Sistema</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-card group bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 flex flex-col"
+                 data-category="dashboard"
+                 data-title="relatórios gerenciais - versão antiga sincronizada (doc requisitos)"
+                 data-dark="false"
+                 data-index="5">
+                
+                <!-- Imagem do Print com Overlay Hover -->
+                <div class="relative aspect-video sm:aspect-16/10 bg-slate-900 overflow-hidden cursor-pointer border-b border-slate-800/60" onclick="openLightbox(5)">
+                    <img src="/galeria-prints/06-relatorios-antigo.png"
+                         alt="Relatórios Gerenciais - Versão Antiga Sincronizada (Doc Requisitos)"
+                         loading="lazy"
+                         class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/40 backdrop-blur-2xs">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-600/90 text-white text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            Expandir em Alta Definição
+                        </span>
+                    </div>
+
+                    <!-- Badges no topo da imagem -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-sky-500/20 text-sky-300 border border-sky-500/30">
+                            🖥️ Desktop
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-slate-700/60 text-slate-300 border border-slate-600">
+                            ☀️ Light
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Informações e Ações -->
+                <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug group-hover:text-emerald-400 transition-colors">
+                            Relatórios Gerenciais - Versão Antiga Sincronizada (Doc Requisitos)
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1 font-mono">
+                            06-relatorios-antigo.png
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
+                        <button onclick="openLightbox(5)" class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-medium transition-colors cursor-pointer">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <span>Ver Print</span>
+                        </button>
+                        <a href="https://inema-six.vercel.app/relatorios-antigo" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                            <span>Testar no Sistema</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-card group bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 flex flex-col"
+                 data-category="fiscalizacao-interna"
+                 data-title="fiscalização: denúncia interna (dor001 - atendente)"
+                 data-dark="false"
+                 data-index="6">
+                
+                <!-- Imagem do Print com Overlay Hover -->
+                <div class="relative aspect-video sm:aspect-16/10 bg-slate-900 overflow-hidden cursor-pointer border-b border-slate-800/60" onclick="openLightbox(6)">
+                    <img src="/galeria-prints/07-denuncia-interna-light.png"
+                         alt="Fiscalização: Denúncia Interna (DOR001 - Atendente)"
+                         loading="lazy"
+                         class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/40 backdrop-blur-2xs">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-600/90 text-white text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            Expandir em Alta Definição
+                        </span>
+                    </div>
+
+                    <!-- Badges no topo da imagem -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-sky-500/20 text-sky-300 border border-sky-500/30">
+                            🖥️ Desktop
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-slate-700/60 text-slate-300 border border-slate-600">
+                            ☀️ Light
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Informações e Ações -->
+                <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug group-hover:text-emerald-400 transition-colors">
+                            Fiscalização: Denúncia Interna (DOR001 - Atendente)
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1 font-mono">
+                            07-denuncia-interna-light.png
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
+                        <button onclick="openLightbox(6)" class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-medium transition-colors cursor-pointer">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <span>Ver Print</span>
+                        </button>
+                        <a href="https://inema-six.vercel.app/?route=atendente" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                            <span>Testar no Sistema</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-card group bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 flex flex-col"
+                 data-category="fiscalizacao-interna"
+                 data-title="fiscalização: denúncia interna (dor001 - dark mode)"
+                 data-dark="true"
+                 data-index="7">
+                
+                <!-- Imagem do Print com Overlay Hover -->
+                <div class="relative aspect-video sm:aspect-16/10 bg-slate-900 overflow-hidden cursor-pointer border-b border-slate-800/60" onclick="openLightbox(7)">
+                    <img src="/galeria-prints/08-denuncia-interna-dark.png"
+                         alt="Fiscalização: Denúncia Interna (DOR001 - Dark Mode)"
+                         loading="lazy"
+                         class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/40 backdrop-blur-2xs">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-600/90 text-white text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            Expandir em Alta Definição
+                        </span>
+                    </div>
+
+                    <!-- Badges no topo da imagem -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-sky-500/20 text-sky-300 border border-sky-500/30">
+                            🖥️ Desktop
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                            🌙 Dark
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Informações e Ações -->
+                <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug group-hover:text-emerald-400 transition-colors">
+                            Fiscalização: Denúncia Interna (DOR001 - Dark Mode)
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1 font-mono">
+                            08-denuncia-interna-dark.png
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
+                        <button onclick="openLightbox(7)" class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-medium transition-colors cursor-pointer">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <span>Ver Print</span>
+                        </button>
+                        <a href="https://inema-six.vercel.app/?route=atendente&dark=true" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                            <span>Testar no Sistema</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-card group bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 flex flex-col"
+                 data-category="fiscalizacao-cidadao"
+                 data-title="fiscalização: denúncia cidadão (dor002 - anônima/identificada)"
+                 data-dark="false"
+                 data-index="8">
+                
+                <!-- Imagem do Print com Overlay Hover -->
+                <div class="relative aspect-video sm:aspect-16/10 bg-slate-900 overflow-hidden cursor-pointer border-b border-slate-800/60" onclick="openLightbox(8)">
+                    <img src="/galeria-prints/09-denuncia-externa-light.png"
+                         alt="Fiscalização: Denúncia Cidadão (DOR002 - Anônima/Identificada)"
+                         loading="lazy"
+                         class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/40 backdrop-blur-2xs">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-600/90 text-white text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            Expandir em Alta Definição
+                        </span>
+                    </div>
+
+                    <!-- Badges no topo da imagem -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-sky-500/20 text-sky-300 border border-sky-500/30">
+                            🖥️ Desktop
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-slate-700/60 text-slate-300 border border-slate-600">
+                            ☀️ Light
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Informações e Ações -->
+                <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug group-hover:text-emerald-400 transition-colors">
+                            Fiscalização: Denúncia Cidadão (DOR002 - Anônima/Identificada)
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1 font-mono">
+                            09-denuncia-externa-light.png
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
+                        <button onclick="openLightbox(8)" class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-medium transition-colors cursor-pointer">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <span>Ver Print</span>
+                        </button>
+                        <a href="https://inema-six.vercel.app/?route=cidadao" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                            <span>Testar no Sistema</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-card group bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 flex flex-col"
+                 data-category="fiscalizacao-cidadao"
+                 data-title="fiscalização: denúncia cidadão (dor002 - dark mode)"
+                 data-dark="true"
+                 data-index="9">
+                
+                <!-- Imagem do Print com Overlay Hover -->
+                <div class="relative aspect-video sm:aspect-16/10 bg-slate-900 overflow-hidden cursor-pointer border-b border-slate-800/60" onclick="openLightbox(9)">
+                    <img src="/galeria-prints/10-denuncia-externa-dark.png"
+                         alt="Fiscalização: Denúncia Cidadão (DOR002 - Dark Mode)"
+                         loading="lazy"
+                         class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/40 backdrop-blur-2xs">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-600/90 text-white text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            Expandir em Alta Definição
+                        </span>
+                    </div>
+
+                    <!-- Badges no topo da imagem -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-sky-500/20 text-sky-300 border border-sky-500/30">
+                            🖥️ Desktop
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                            🌙 Dark
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Informações e Ações -->
+                <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug group-hover:text-emerald-400 transition-colors">
+                            Fiscalização: Denúncia Cidadão (DOR002 - Dark Mode)
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1 font-mono">
+                            10-denuncia-externa-dark.png
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
+                        <button onclick="openLightbox(9)" class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-medium transition-colors cursor-pointer">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <span>Ver Print</span>
+                        </button>
+                        <a href="https://inema-six.vercel.app/?route=cidadao&dark=true" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                            <span>Testar no Sistema</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-card group bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 flex flex-col"
+                 data-category="fiscalizacao-interna"
+                 data-title="emergência química: cadastro interno (dor003 - plantão difis 24h)"
+                 data-dark="false"
+                 data-index="10">
+                
+                <!-- Imagem do Print com Overlay Hover -->
+                <div class="relative aspect-video sm:aspect-16/10 bg-slate-900 overflow-hidden cursor-pointer border-b border-slate-800/60" onclick="openLightbox(10)">
+                    <img src="/galeria-prints/11-emergencia-interna-light.png"
+                         alt="Emergência Química: Cadastro Interno (DOR003 - Plantão DIFIS 24h)"
+                         loading="lazy"
+                         class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/40 backdrop-blur-2xs">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-600/90 text-white text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            Expandir em Alta Definição
+                        </span>
+                    </div>
+
+                    <!-- Badges no topo da imagem -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-sky-500/20 text-sky-300 border border-sky-500/30">
+                            🖥️ Desktop
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-slate-700/60 text-slate-300 border border-slate-600">
+                            ☀️ Light
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Informações e Ações -->
+                <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug group-hover:text-emerald-400 transition-colors">
+                            Emergência Química: Cadastro Interno (DOR003 - Plantão DIFIS 24h)
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1 font-mono">
+                            11-emergencia-interna-light.png
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
+                        <button onclick="openLightbox(10)" class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-medium transition-colors cursor-pointer">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <span>Ver Print</span>
+                        </button>
+                        <a href="https://inema-six.vercel.app/?route=emergencia-interna" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                            <span>Testar no Sistema</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-card group bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 flex flex-col"
+                 data-category="fiscalizacao-interna"
+                 data-title="emergência química: cadastro interno (dor003 - dark mode)"
+                 data-dark="true"
+                 data-index="11">
+                
+                <!-- Imagem do Print com Overlay Hover -->
+                <div class="relative aspect-video sm:aspect-16/10 bg-slate-900 overflow-hidden cursor-pointer border-b border-slate-800/60" onclick="openLightbox(11)">
+                    <img src="/galeria-prints/12-emergencia-interna-dark.png"
+                         alt="Emergência Química: Cadastro Interno (DOR003 - Dark Mode)"
+                         loading="lazy"
+                         class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/40 backdrop-blur-2xs">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-600/90 text-white text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            Expandir em Alta Definição
+                        </span>
+                    </div>
+
+                    <!-- Badges no topo da imagem -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-sky-500/20 text-sky-300 border border-sky-500/30">
+                            🖥️ Desktop
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                            🌙 Dark
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Informações e Ações -->
+                <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug group-hover:text-emerald-400 transition-colors">
+                            Emergência Química: Cadastro Interno (DOR003 - Dark Mode)
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1 font-mono">
+                            12-emergencia-interna-dark.png
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
+                        <button onclick="openLightbox(11)" class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-medium transition-colors cursor-pointer">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <span>Ver Print</span>
+                        </button>
+                        <a href="https://inema-six.vercel.app/?route=emergencia-interna&dark=true" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                            <span>Testar no Sistema</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-card group bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 flex flex-col"
+                 data-category="fiscalizacao-cidadao"
+                 data-title="emergência química: comunicação externa (dor004 - transportador/indústria)"
+                 data-dark="false"
+                 data-index="12">
+                
+                <!-- Imagem do Print com Overlay Hover -->
+                <div class="relative aspect-video sm:aspect-16/10 bg-slate-900 overflow-hidden cursor-pointer border-b border-slate-800/60" onclick="openLightbox(12)">
+                    <img src="/galeria-prints/13-emergencia-externa-light.png"
+                         alt="Emergência Química: Comunicação Externa (DOR004 - Transportador/Indústria)"
+                         loading="lazy"
+                         class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/40 backdrop-blur-2xs">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-600/90 text-white text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            Expandir em Alta Definição
+                        </span>
+                    </div>
+
+                    <!-- Badges no topo da imagem -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-sky-500/20 text-sky-300 border border-sky-500/30">
+                            🖥️ Desktop
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-slate-700/60 text-slate-300 border border-slate-600">
+                            ☀️ Light
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Informações e Ações -->
+                <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug group-hover:text-emerald-400 transition-colors">
+                            Emergência Química: Comunicação Externa (DOR004 - Transportador/Indústria)
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1 font-mono">
+                            13-emergencia-externa-light.png
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
+                        <button onclick="openLightbox(12)" class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-medium transition-colors cursor-pointer">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <span>Ver Print</span>
+                        </button>
+                        <a href="https://inema-six.vercel.app/?route=emergencia-externa" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                            <span>Testar no Sistema</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-card group bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 flex flex-col"
+                 data-category="fiscalizacao-cidadao"
+                 data-title="emergência química: comunicação externa (dor004 - dark mode)"
+                 data-dark="true"
+                 data-index="13">
+                
+                <!-- Imagem do Print com Overlay Hover -->
+                <div class="relative aspect-video sm:aspect-16/10 bg-slate-900 overflow-hidden cursor-pointer border-b border-slate-800/60" onclick="openLightbox(13)">
+                    <img src="/galeria-prints/14-emergencia-externa-dark.png"
+                         alt="Emergência Química: Comunicação Externa (DOR004 - Dark Mode)"
+                         loading="lazy"
+                         class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/40 backdrop-blur-2xs">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-600/90 text-white text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            Expandir em Alta Definição
+                        </span>
+                    </div>
+
+                    <!-- Badges no topo da imagem -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-sky-500/20 text-sky-300 border border-sky-500/30">
+                            🖥️ Desktop
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                            🌙 Dark
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Informações e Ações -->
+                <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug group-hover:text-emerald-400 transition-colors">
+                            Emergência Química: Comunicação Externa (DOR004 - Dark Mode)
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1 font-mono">
+                            14-emergencia-externa-dark.png
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
+                        <button onclick="openLightbox(13)" class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-medium transition-colors cursor-pointer">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <span>Ver Print</span>
+                        </button>
+                        <a href="https://inema-six.vercel.app/?route=emergencia-externa&dark=true" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                            <span>Testar no Sistema</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-card group bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 flex flex-col"
+                 data-category="fiscalizacao-cidadao"
+                 data-title="acompanhamento cidadão: consulta de denúncias e emergências"
+                 data-dark="false"
+                 data-index="14">
+                
+                <!-- Imagem do Print com Overlay Hover -->
+                <div class="relative aspect-video sm:aspect-16/10 bg-slate-900 overflow-hidden cursor-pointer border-b border-slate-800/60" onclick="openLightbox(14)">
+                    <img src="/galeria-prints/15-consulta-externa-light.png"
+                         alt="Acompanhamento Cidadão: Consulta de Denúncias e Emergências"
+                         loading="lazy"
+                         class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/40 backdrop-blur-2xs">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-600/90 text-white text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            Expandir em Alta Definição
+                        </span>
+                    </div>
+
+                    <!-- Badges no topo da imagem -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-sky-500/20 text-sky-300 border border-sky-500/30">
+                            🖥️ Desktop
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-slate-700/60 text-slate-300 border border-slate-600">
+                            ☀️ Light
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Informações e Ações -->
+                <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug group-hover:text-emerald-400 transition-colors">
+                            Acompanhamento Cidadão: Consulta de Denúncias e Emergências
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1 font-mono">
+                            15-consulta-externa-light.png
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
+                        <button onclick="openLightbox(14)" class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-medium transition-colors cursor-pointer">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <span>Ver Print</span>
+                        </button>
+                        <a href="https://inema-six.vercel.app/?route=consulta-externa" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                            <span>Testar no Sistema</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-card group bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 flex flex-col"
+                 data-category="fiscalizacao-cidadao"
+                 data-title="acompanhamento cidadão: consulta cidadão (dark mode)"
+                 data-dark="true"
+                 data-index="15">
+                
+                <!-- Imagem do Print com Overlay Hover -->
+                <div class="relative aspect-video sm:aspect-16/10 bg-slate-900 overflow-hidden cursor-pointer border-b border-slate-800/60" onclick="openLightbox(15)">
+                    <img src="/galeria-prints/16-consulta-externa-dark.png"
+                         alt="Acompanhamento Cidadão: Consulta Cidadão (Dark Mode)"
+                         loading="lazy"
+                         class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/40 backdrop-blur-2xs">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-600/90 text-white text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            Expandir em Alta Definição
+                        </span>
+                    </div>
+
+                    <!-- Badges no topo da imagem -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-sky-500/20 text-sky-300 border border-sky-500/30">
+                            🖥️ Desktop
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                            🌙 Dark
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Informações e Ações -->
+                <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug group-hover:text-emerald-400 transition-colors">
+                            Acompanhamento Cidadão: Consulta Cidadão (Dark Mode)
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1 font-mono">
+                            16-consulta-externa-dark.png
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
+                        <button onclick="openLightbox(15)" class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-medium transition-colors cursor-pointer">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <span>Ver Print</span>
+                        </button>
+                        <a href="https://inema-six.vercel.app/?route=consulta-externa&dark=true" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                            <span>Testar no Sistema</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-card group bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 flex flex-col"
+                 data-category="fiscalizacao-interna"
+                 data-title="operações difis: painel técnico centralizado e pauta fiscal"
+                 data-dark="false"
+                 data-index="16">
+                
+                <!-- Imagem do Print com Overlay Hover -->
+                <div class="relative aspect-video sm:aspect-16/10 bg-slate-900 overflow-hidden cursor-pointer border-b border-slate-800/60" onclick="openLightbox(16)">
+                    <img src="/galeria-prints/17-consulta-interna-light.png"
+                         alt="Operações DIFIS: Painel Técnico Centralizado e Pauta Fiscal"
+                         loading="lazy"
+                         class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/40 backdrop-blur-2xs">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-600/90 text-white text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            Expandir em Alta Definição
+                        </span>
+                    </div>
+
+                    <!-- Badges no topo da imagem -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-sky-500/20 text-sky-300 border border-sky-500/30">
+                            🖥️ Desktop
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-slate-700/60 text-slate-300 border border-slate-600">
+                            ☀️ Light
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Informações e Ações -->
+                <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug group-hover:text-emerald-400 transition-colors">
+                            Operações DIFIS: Painel Técnico Centralizado e Pauta Fiscal
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1 font-mono">
+                            17-consulta-interna-light.png
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
+                        <button onclick="openLightbox(16)" class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-medium transition-colors cursor-pointer">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <span>Ver Print</span>
+                        </button>
+                        <a href="https://inema-six.vercel.app/?route=consulta-interna" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                            <span>Testar no Sistema</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-card group bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 flex flex-col"
+                 data-category="fiscalizacao-interna"
+                 data-title="operações difis: painel técnico centralizado (dark mode)"
+                 data-dark="true"
+                 data-index="17">
+                
+                <!-- Imagem do Print com Overlay Hover -->
+                <div class="relative aspect-video sm:aspect-16/10 bg-slate-900 overflow-hidden cursor-pointer border-b border-slate-800/60" onclick="openLightbox(17)">
+                    <img src="/galeria-prints/18-consulta-interna-dark.png"
+                         alt="Operações DIFIS: Painel Técnico Centralizado (Dark Mode)"
+                         loading="lazy"
+                         class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/40 backdrop-blur-2xs">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-600/90 text-white text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            Expandir em Alta Definição
+                        </span>
+                    </div>
+
+                    <!-- Badges no topo da imagem -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-sky-500/20 text-sky-300 border border-sky-500/30">
+                            🖥️ Desktop
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                            🌙 Dark
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Informações e Ações -->
+                <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug group-hover:text-emerald-400 transition-colors">
+                            Operações DIFIS: Painel Técnico Centralizado (Dark Mode)
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1 font-mono">
+                            18-consulta-interna-dark.png
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
+                        <button onclick="openLightbox(17)" class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-medium transition-colors cursor-pointer">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <span>Ver Print</span>
+                        </button>
+                        <a href="https://inema-six.vercel.app/?route=consulta-interna&dark=true" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                            <span>Testar no Sistema</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-card group bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 flex flex-col"
+                 data-category="mobile"
+                 data-title="mobile: dashboard executivo (iphone 13 - modo claro)"
+                 data-dark="false"
+                 data-index="18">
+                
+                <!-- Imagem do Print com Overlay Hover -->
+                <div class="relative aspect-video sm:aspect-16/10 bg-slate-900 overflow-hidden cursor-pointer border-b border-slate-800/60" onclick="openLightbox(18)">
+                    <img src="/galeria-prints/m01-dashboard-mobile-light.png"
+                         alt="Mobile: Dashboard Executivo (iPhone 13 - Modo Claro)"
+                         loading="lazy"
+                         class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/40 backdrop-blur-2xs">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-600/90 text-white text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            Expandir em Alta Definição
+                        </span>
+                    </div>
+
+                    <!-- Badges no topo da imagem -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                            📱 iPhone 13
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-slate-700/60 text-slate-300 border border-slate-600">
+                            ☀️ Light
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Informações e Ações -->
+                <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug group-hover:text-emerald-400 transition-colors">
+                            Mobile: Dashboard Executivo (iPhone 13 - Modo Claro)
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1 font-mono">
+                            m01-dashboard-mobile-light.png
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
+                        <button onclick="openLightbox(18)" class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-medium transition-colors cursor-pointer">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <span>Ver Print</span>
+                        </button>
+                        <a href="https://inema-six.vercel.app/?route=relatorios" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                            <span>Testar no Sistema</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-card group bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 flex flex-col"
+                 data-category="mobile"
+                 data-title="mobile: dashboard executivo (iphone 13 - dark mode)"
+                 data-dark="true"
+                 data-index="19">
+                
+                <!-- Imagem do Print com Overlay Hover -->
+                <div class="relative aspect-video sm:aspect-16/10 bg-slate-900 overflow-hidden cursor-pointer border-b border-slate-800/60" onclick="openLightbox(19)">
+                    <img src="/galeria-prints/m02-dashboard-mobile-dark.png"
+                         alt="Mobile: Dashboard Executivo (iPhone 13 - Dark Mode)"
+                         loading="lazy"
+                         class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/40 backdrop-blur-2xs">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-600/90 text-white text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            Expandir em Alta Definição
+                        </span>
+                    </div>
+
+                    <!-- Badges no topo da imagem -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                            📱 iPhone 13
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                            🌙 Dark
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Informações e Ações -->
+                <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug group-hover:text-emerald-400 transition-colors">
+                            Mobile: Dashboard Executivo (iPhone 13 - Dark Mode)
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1 font-mono">
+                            m02-dashboard-mobile-dark.png
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
+                        <button onclick="openLightbox(19)" class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-medium transition-colors cursor-pointer">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <span>Ver Print</span>
+                        </button>
+                        <a href="https://inema-six.vercel.app/?route=relatorios&dark=true" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                            <span>Testar no Sistema</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-card group bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 flex flex-col"
+                 data-category="mobile"
+                 data-title="mobile: denúncia interna dor001 (iphone 13 - modo claro)"
+                 data-dark="false"
+                 data-index="20">
+                
+                <!-- Imagem do Print com Overlay Hover -->
+                <div class="relative aspect-video sm:aspect-16/10 bg-slate-900 overflow-hidden cursor-pointer border-b border-slate-800/60" onclick="openLightbox(20)">
+                    <img src="/galeria-prints/m03-denuncia-interna-mobile-light.png"
+                         alt="Mobile: Denúncia Interna DOR001 (iPhone 13 - Modo Claro)"
+                         loading="lazy"
+                         class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/40 backdrop-blur-2xs">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-600/90 text-white text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            Expandir em Alta Definição
+                        </span>
+                    </div>
+
+                    <!-- Badges no topo da imagem -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                            📱 iPhone 13
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-slate-700/60 text-slate-300 border border-slate-600">
+                            ☀️ Light
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Informações e Ações -->
+                <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug group-hover:text-emerald-400 transition-colors">
+                            Mobile: Denúncia Interna DOR001 (iPhone 13 - Modo Claro)
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1 font-mono">
+                            m03-denuncia-interna-mobile-light.png
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
+                        <button onclick="openLightbox(20)" class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-medium transition-colors cursor-pointer">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <span>Ver Print</span>
+                        </button>
+                        <a href="https://inema-six.vercel.app/?route=atendente" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                            <span>Testar no Sistema</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-card group bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 flex flex-col"
+                 data-category="mobile"
+                 data-title="mobile: denúncia interna dor001 (iphone 13 - dark mode)"
+                 data-dark="true"
+                 data-index="21">
+                
+                <!-- Imagem do Print com Overlay Hover -->
+                <div class="relative aspect-video sm:aspect-16/10 bg-slate-900 overflow-hidden cursor-pointer border-b border-slate-800/60" onclick="openLightbox(21)">
+                    <img src="/galeria-prints/m04-denuncia-interna-mobile-dark.png"
+                         alt="Mobile: Denúncia Interna DOR001 (iPhone 13 - Dark Mode)"
+                         loading="lazy"
+                         class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/40 backdrop-blur-2xs">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-600/90 text-white text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            Expandir em Alta Definição
+                        </span>
+                    </div>
+
+                    <!-- Badges no topo da imagem -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                            📱 iPhone 13
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                            🌙 Dark
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Informações e Ações -->
+                <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug group-hover:text-emerald-400 transition-colors">
+                            Mobile: Denúncia Interna DOR001 (iPhone 13 - Dark Mode)
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1 font-mono">
+                            m04-denuncia-interna-mobile-dark.png
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
+                        <button onclick="openLightbox(21)" class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-medium transition-colors cursor-pointer">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <span>Ver Print</span>
+                        </button>
+                        <a href="https://inema-six.vercel.app/?route=atendente&dark=true" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                            <span>Testar no Sistema</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-card group bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 flex flex-col"
+                 data-category="mobile"
+                 data-title="mobile: denúncia cidadão dor002 (iphone 13 - modo claro)"
+                 data-dark="false"
+                 data-index="22">
+                
+                <!-- Imagem do Print com Overlay Hover -->
+                <div class="relative aspect-video sm:aspect-16/10 bg-slate-900 overflow-hidden cursor-pointer border-b border-slate-800/60" onclick="openLightbox(22)">
+                    <img src="/galeria-prints/m05-denuncia-externa-mobile-light.png"
+                         alt="Mobile: Denúncia Cidadão DOR002 (iPhone 13 - Modo Claro)"
+                         loading="lazy"
+                         class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/40 backdrop-blur-2xs">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-600/90 text-white text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            Expandir em Alta Definição
+                        </span>
+                    </div>
+
+                    <!-- Badges no topo da imagem -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                            📱 iPhone 13
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-slate-700/60 text-slate-300 border border-slate-600">
+                            ☀️ Light
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Informações e Ações -->
+                <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug group-hover:text-emerald-400 transition-colors">
+                            Mobile: Denúncia Cidadão DOR002 (iPhone 13 - Modo Claro)
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1 font-mono">
+                            m05-denuncia-externa-mobile-light.png
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
+                        <button onclick="openLightbox(22)" class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-medium transition-colors cursor-pointer">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <span>Ver Print</span>
+                        </button>
+                        <a href="https://inema-six.vercel.app/?route=cidadao" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                            <span>Testar no Sistema</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-card group bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 flex flex-col"
+                 data-category="mobile"
+                 data-title="mobile: denúncia cidadão dor002 (iphone 13 - dark mode)"
+                 data-dark="true"
+                 data-index="23">
+                
+                <!-- Imagem do Print com Overlay Hover -->
+                <div class="relative aspect-video sm:aspect-16/10 bg-slate-900 overflow-hidden cursor-pointer border-b border-slate-800/60" onclick="openLightbox(23)">
+                    <img src="/galeria-prints/m06-denuncia-externa-mobile-dark.png"
+                         alt="Mobile: Denúncia Cidadão DOR002 (iPhone 13 - Dark Mode)"
+                         loading="lazy"
+                         class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/40 backdrop-blur-2xs">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-600/90 text-white text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            Expandir em Alta Definição
+                        </span>
+                    </div>
+
+                    <!-- Badges no topo da imagem -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                            📱 iPhone 13
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                            🌙 Dark
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Informações e Ações -->
+                <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug group-hover:text-emerald-400 transition-colors">
+                            Mobile: Denúncia Cidadão DOR002 (iPhone 13 - Dark Mode)
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1 font-mono">
+                            m06-denuncia-externa-mobile-dark.png
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
+                        <button onclick="openLightbox(23)" class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-medium transition-colors cursor-pointer">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <span>Ver Print</span>
+                        </button>
+                        <a href="https://inema-six.vercel.app/?route=cidadao&dark=true" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                            <span>Testar no Sistema</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-card group bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 flex flex-col"
+                 data-category="mobile"
+                 data-title="mobile: emergência química dor003 (iphone 13 - modo claro)"
+                 data-dark="false"
+                 data-index="24">
+                
+                <!-- Imagem do Print com Overlay Hover -->
+                <div class="relative aspect-video sm:aspect-16/10 bg-slate-900 overflow-hidden cursor-pointer border-b border-slate-800/60" onclick="openLightbox(24)">
+                    <img src="/galeria-prints/m07-emergencia-interna-mobile-light.png"
+                         alt="Mobile: Emergência Química DOR003 (iPhone 13 - Modo Claro)"
+                         loading="lazy"
+                         class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/40 backdrop-blur-2xs">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-600/90 text-white text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            Expandir em Alta Definição
+                        </span>
+                    </div>
+
+                    <!-- Badges no topo da imagem -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                            📱 iPhone 13
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-slate-700/60 text-slate-300 border border-slate-600">
+                            ☀️ Light
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Informações e Ações -->
+                <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug group-hover:text-emerald-400 transition-colors">
+                            Mobile: Emergência Química DOR003 (iPhone 13 - Modo Claro)
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1 font-mono">
+                            m07-emergencia-interna-mobile-light.png
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
+                        <button onclick="openLightbox(24)" class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-medium transition-colors cursor-pointer">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <span>Ver Print</span>
+                        </button>
+                        <a href="https://inema-six.vercel.app/?route=emergencia-interna" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                            <span>Testar no Sistema</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-card group bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 flex flex-col"
+                 data-category="mobile"
+                 data-title="mobile: emergência química dor003 (iphone 13 - dark mode)"
+                 data-dark="true"
+                 data-index="25">
+                
+                <!-- Imagem do Print com Overlay Hover -->
+                <div class="relative aspect-video sm:aspect-16/10 bg-slate-900 overflow-hidden cursor-pointer border-b border-slate-800/60" onclick="openLightbox(25)">
+                    <img src="/galeria-prints/m08-emergencia-interna-mobile-dark.png"
+                         alt="Mobile: Emergência Química DOR003 (iPhone 13 - Dark Mode)"
+                         loading="lazy"
+                         class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/40 backdrop-blur-2xs">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-600/90 text-white text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            Expandir em Alta Definição
+                        </span>
+                    </div>
+
+                    <!-- Badges no topo da imagem -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                            📱 iPhone 13
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                            🌙 Dark
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Informações e Ações -->
+                <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug group-hover:text-emerald-400 transition-colors">
+                            Mobile: Emergência Química DOR003 (iPhone 13 - Dark Mode)
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1 font-mono">
+                            m08-emergencia-interna-mobile-dark.png
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
+                        <button onclick="openLightbox(25)" class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-medium transition-colors cursor-pointer">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <span>Ver Print</span>
+                        </button>
+                        <a href="https://inema-six.vercel.app/?route=emergencia-interna&dark=true" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                            <span>Testar no Sistema</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-card group bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 flex flex-col"
+                 data-category="mobile"
+                 data-title="mobile: consulta cidadão (iphone 13 - modo claro)"
+                 data-dark="false"
+                 data-index="26">
+                
+                <!-- Imagem do Print com Overlay Hover -->
+                <div class="relative aspect-video sm:aspect-16/10 bg-slate-900 overflow-hidden cursor-pointer border-b border-slate-800/60" onclick="openLightbox(26)">
+                    <img src="/galeria-prints/m09-consulta-externa-mobile-light.png"
+                         alt="Mobile: Consulta Cidadão (iPhone 13 - Modo Claro)"
+                         loading="lazy"
+                         class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/40 backdrop-blur-2xs">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-600/90 text-white text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            Expandir em Alta Definição
+                        </span>
+                    </div>
+
+                    <!-- Badges no topo da imagem -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                            📱 iPhone 13
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-slate-700/60 text-slate-300 border border-slate-600">
+                            ☀️ Light
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Informações e Ações -->
+                <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug group-hover:text-emerald-400 transition-colors">
+                            Mobile: Consulta Cidadão (iPhone 13 - Modo Claro)
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1 font-mono">
+                            m09-consulta-externa-mobile-light.png
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
+                        <button onclick="openLightbox(26)" class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-medium transition-colors cursor-pointer">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <span>Ver Print</span>
+                        </button>
+                        <a href="https://inema-six.vercel.app/?route=consulta-externa" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                            <span>Testar no Sistema</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-card group bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 flex flex-col"
+                 data-category="mobile"
+                 data-title="mobile: consulta cidadão (iphone 13 - dark mode)"
+                 data-dark="true"
+                 data-index="27">
+                
+                <!-- Imagem do Print com Overlay Hover -->
+                <div class="relative aspect-video sm:aspect-16/10 bg-slate-900 overflow-hidden cursor-pointer border-b border-slate-800/60" onclick="openLightbox(27)">
+                    <img src="/galeria-prints/m10-consulta-externa-mobile-dark.png"
+                         alt="Mobile: Consulta Cidadão (iPhone 13 - Dark Mode)"
+                         loading="lazy"
+                         class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/40 backdrop-blur-2xs">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-600/90 text-white text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            Expandir em Alta Definição
+                        </span>
+                    </div>
+
+                    <!-- Badges no topo da imagem -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                            📱 iPhone 13
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                            🌙 Dark
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Informações e Ações -->
+                <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug group-hover:text-emerald-400 transition-colors">
+                            Mobile: Consulta Cidadão (iPhone 13 - Dark Mode)
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1 font-mono">
+                            m10-consulta-externa-mobile-dark.png
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
+                        <button onclick="openLightbox(27)" class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-medium transition-colors cursor-pointer">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <span>Ver Print</span>
+                        </button>
+                        <a href="https://inema-six.vercel.app/?route=consulta-externa&dark=true" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                            <span>Testar no Sistema</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-card group bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 flex flex-col"
+                 data-category="mobile"
+                 data-title="mobile: painel técnico difis (iphone 13 - modo claro)"
+                 data-dark="false"
+                 data-index="28">
+                
+                <!-- Imagem do Print com Overlay Hover -->
+                <div class="relative aspect-video sm:aspect-16/10 bg-slate-900 overflow-hidden cursor-pointer border-b border-slate-800/60" onclick="openLightbox(28)">
+                    <img src="/galeria-prints/m11-consulta-interna-mobile-light.png"
+                         alt="Mobile: Painel Técnico DIFIS (iPhone 13 - Modo Claro)"
+                         loading="lazy"
+                         class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/40 backdrop-blur-2xs">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-600/90 text-white text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            Expandir em Alta Definição
+                        </span>
+                    </div>
+
+                    <!-- Badges no topo da imagem -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                            📱 iPhone 13
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-slate-700/60 text-slate-300 border border-slate-600">
+                            ☀️ Light
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Informações e Ações -->
+                <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug group-hover:text-emerald-400 transition-colors">
+                            Mobile: Painel Técnico DIFIS (iPhone 13 - Modo Claro)
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1 font-mono">
+                            m11-consulta-interna-mobile-light.png
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
+                        <button onclick="openLightbox(28)" class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-medium transition-colors cursor-pointer">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <span>Ver Print</span>
+                        </button>
+                        <a href="https://inema-six.vercel.app/?route=consulta-interna" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                            <span>Testar no Sistema</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-card group bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 hover:shadow-2xl hover:shadow-black/60 transition-all duration-300 flex flex-col"
+                 data-category="mobile"
+                 data-title="mobile: painel técnico difis (iphone 13 - dark mode)"
+                 data-dark="true"
+                 data-index="29">
+                
+                <!-- Imagem do Print com Overlay Hover -->
+                <div class="relative aspect-video sm:aspect-16/10 bg-slate-900 overflow-hidden cursor-pointer border-b border-slate-800/60" onclick="openLightbox(29)">
+                    <img src="/galeria-prints/m12-consulta-interna-mobile-dark.png"
+                         alt="Mobile: Painel Técnico DIFIS (iPhone 13 - Dark Mode)"
+                         loading="lazy"
+                         class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/40 backdrop-blur-2xs">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-600/90 text-white text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            Expandir em Alta Definição
+                        </span>
+                    </div>
+
+                    <!-- Badges no topo da imagem -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                            📱 iPhone 13
+                        </span>
+                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                            🌙 Dark
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Informações e Ações -->
+                <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug group-hover:text-emerald-400 transition-colors">
+                            Mobile: Painel Técnico DIFIS (iPhone 13 - Dark Mode)
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1 font-mono">
+                            m12-consulta-interna-mobile-dark.png
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-auto">
+                        <button onclick="openLightbox(29)" class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-medium transition-colors cursor-pointer">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <span>Ver Print</span>
+                        </button>
+                        <a href="https://inema-six.vercel.app/?route=consulta-interna&dark=true" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                            <span>Testar no Sistema</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </main>
+
+    <!-- Modal Lightbox Fullscreen -->
+    <div id="lightbox" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md hidden flex flex-col items-center justify-center p-4 select-none">
+        <div class="absolute top-4 right-4 flex items-center gap-3">
+            <a id="lightboxLiveBtn" href="#" target="_blank" class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-lg inline-flex items-center gap-1.5">
+                <span>Abrir Rota Live</span>
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+            </a>
+            <button onclick="closeLightbox()" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+
+        <!-- Botões de Navegação -->
+        <button onclick="prevImage()" class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-slate-800/80 hover:bg-slate-700 text-white flex items-center justify-center transition-all cursor-pointer">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+        </button>
+        <button onclick="nextImage()" class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-slate-800/80 hover:bg-slate-700 text-white flex items-center justify-center transition-all cursor-pointer">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+        </button>
+
+        <!-- Imagem e Legenda -->
+        <div class="flex flex-col items-center max-w-full">
+            <img id="lightboxImg" src="" alt="" class="lightbox-img rounded-xl shadow-2xl border border-slate-800" />
+            <div class="mt-4 text-center">
+                <h3 id="lightboxTitle" class="text-base sm:text-lg font-bold text-white"></h3>
+                <p id="lightboxInfo" class="text-xs text-slate-400 font-mono mt-1"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const items = [{"id":"01-dashboard-azul-petroleo","fileName":"01-dashboard-azul-petroleo.png","title":"Dashboard Executivo - Sidebar Azul Petróleo (#0c4353)","category":"dashboard","device":"Desktop (1440x900)","isDark":false,"liveUrl":"https://inema-six.vercel.app/?route=relatorios&theme=verde-azul"},{"id":"02-dashboard-verde","fileName":"02-dashboard-verde.png","title":"Dashboard Executivo - Sidebar Verde Floresta (#0F4C3A)","category":"dashboard","device":"Desktop (1440x900)","isDark":false,"liveUrl":"https://inema-six.vercel.app/?route=relatorios&theme=verde"},{"id":"03-dashboard-branca","fileName":"03-dashboard-branca.png","title":"Dashboard Executivo - Sidebar Branca Institucional","category":"dashboard","device":"Desktop (1440x900)","isDark":false,"liveUrl":"https://inema-six.vercel.app/?route=relatorios&theme=branca"},{"id":"04-dashboard-dark","fileName":"04-dashboard-dark.png","title":"Dashboard Executivo - Modo Escuro (Dark Mode)","category":"dashboard","device":"Desktop (1440x900)","isDark":true,"liveUrl":"https://inema-six.vercel.app/?route=relatorios&dark=true"},{"id":"05-dashboard-filtros","fileName":"05-dashboard-filtros.png","title":"Dashboard Executivo - Painel Lateral de Filtros Avançados","category":"dashboard","device":"Desktop (1440x900)","isDark":false,"liveUrl":"https://inema-six.vercel.app/?route=relatorios"},{"id":"06-relatorios-antigo","fileName":"06-relatorios-antigo.png","title":"Relatórios Gerenciais - Versão Antiga Sincronizada (Doc Requisitos)","category":"dashboard","device":"Desktop (1440x900)","isDark":false,"liveUrl":"https://inema-six.vercel.app/relatorios-antigo"},{"id":"07-denuncia-interna-light","fileName":"07-denuncia-interna-light.png","title":"Fiscalização: Denúncia Interna (DOR001 - Atendente)","category":"fiscalizacao-interna","device":"Desktop (1440x900)","isDark":false,"liveUrl":"https://inema-six.vercel.app/?route=atendente"},{"id":"08-denuncia-interna-dark","fileName":"08-denuncia-interna-dark.png","title":"Fiscalização: Denúncia Interna (DOR001 - Dark Mode)","category":"fiscalizacao-interna","device":"Desktop (1440x900)","isDark":true,"liveUrl":"https://inema-six.vercel.app/?route=atendente&dark=true"},{"id":"09-denuncia-externa-light","fileName":"09-denuncia-externa-light.png","title":"Fiscalização: Denúncia Cidadão (DOR002 - Anônima/Identificada)","category":"fiscalizacao-cidadao","device":"Desktop (1440x900)","isDark":false,"liveUrl":"https://inema-six.vercel.app/?route=cidadao"},{"id":"10-denuncia-externa-dark","fileName":"10-denuncia-externa-dark.png","title":"Fiscalização: Denúncia Cidadão (DOR002 - Dark Mode)","category":"fiscalizacao-cidadao","device":"Desktop (1440x900)","isDark":true,"liveUrl":"https://inema-six.vercel.app/?route=cidadao&dark=true"},{"id":"11-emergencia-interna-light","fileName":"11-emergencia-interna-light.png","title":"Emergência Química: Cadastro Interno (DOR003 - Plantão DIFIS 24h)","category":"fiscalizacao-interna","device":"Desktop (1440x900)","isDark":false,"liveUrl":"https://inema-six.vercel.app/?route=emergencia-interna"},{"id":"12-emergencia-interna-dark","fileName":"12-emergencia-interna-dark.png","title":"Emergência Química: Cadastro Interno (DOR003 - Dark Mode)","category":"fiscalizacao-interna","device":"Desktop (1440x900)","isDark":true,"liveUrl":"https://inema-six.vercel.app/?route=emergencia-interna&dark=true"},{"id":"13-emergencia-externa-light","fileName":"13-emergencia-externa-light.png","title":"Emergência Química: Comunicação Externa (DOR004 - Transportador/Indústria)","category":"fiscalizacao-cidadao","device":"Desktop (1440x900)","isDark":false,"liveUrl":"https://inema-six.vercel.app/?route=emergencia-externa"},{"id":"14-emergencia-externa-dark","fileName":"14-emergencia-externa-dark.png","title":"Emergência Química: Comunicação Externa (DOR004 - Dark Mode)","category":"fiscalizacao-cidadao","device":"Desktop (1440x900)","isDark":true,"liveUrl":"https://inema-six.vercel.app/?route=emergencia-externa&dark=true"},{"id":"15-consulta-externa-light","fileName":"15-consulta-externa-light.png","title":"Acompanhamento Cidadão: Consulta de Denúncias e Emergências","category":"fiscalizacao-cidadao","device":"Desktop (1440x900)","isDark":false,"liveUrl":"https://inema-six.vercel.app/?route=consulta-externa"},{"id":"16-consulta-externa-dark","fileName":"16-consulta-externa-dark.png","title":"Acompanhamento Cidadão: Consulta Cidadão (Dark Mode)","category":"fiscalizacao-cidadao","device":"Desktop (1440x900)","isDark":true,"liveUrl":"https://inema-six.vercel.app/?route=consulta-externa&dark=true"},{"id":"17-consulta-interna-light","fileName":"17-consulta-interna-light.png","title":"Operações DIFIS: Painel Técnico Centralizado e Pauta Fiscal","category":"fiscalizacao-interna","device":"Desktop (1440x900)","isDark":false,"liveUrl":"https://inema-six.vercel.app/?route=consulta-interna"},{"id":"18-consulta-interna-dark","fileName":"18-consulta-interna-dark.png","title":"Operações DIFIS: Painel Técnico Centralizado (Dark Mode)","category":"fiscalizacao-interna","device":"Desktop (1440x900)","isDark":true,"liveUrl":"https://inema-six.vercel.app/?route=consulta-interna&dark=true"},{"id":"m01-dashboard-mobile-light","fileName":"m01-dashboard-mobile-light.png","title":"Mobile: Dashboard Executivo (iPhone 13 - Modo Claro)","category":"mobile","device":"Mobile iPhone 13 (390x844)","isDark":false,"liveUrl":"https://inema-six.vercel.app/?route=relatorios"},{"id":"m02-dashboard-mobile-dark","fileName":"m02-dashboard-mobile-dark.png","title":"Mobile: Dashboard Executivo (iPhone 13 - Dark Mode)","category":"mobile","device":"Mobile iPhone 13 (390x844)","isDark":true,"liveUrl":"https://inema-six.vercel.app/?route=relatorios&dark=true"},{"id":"m03-denuncia-interna-mobile-light","fileName":"m03-denuncia-interna-mobile-light.png","title":"Mobile: Denúncia Interna DOR001 (iPhone 13 - Modo Claro)","category":"mobile","device":"Mobile iPhone 13 (390x844)","isDark":false,"liveUrl":"https://inema-six.vercel.app/?route=atendente"},{"id":"m04-denuncia-interna-mobile-dark","fileName":"m04-denuncia-interna-mobile-dark.png","title":"Mobile: Denúncia Interna DOR001 (iPhone 13 - Dark Mode)","category":"mobile","device":"Mobile iPhone 13 (390x844)","isDark":true,"liveUrl":"https://inema-six.vercel.app/?route=atendente&dark=true"},{"id":"m05-denuncia-externa-mobile-light","fileName":"m05-denuncia-externa-mobile-light.png","title":"Mobile: Denúncia Cidadão DOR002 (iPhone 13 - Modo Claro)","category":"mobile","device":"Mobile iPhone 13 (390x844)","isDark":false,"liveUrl":"https://inema-six.vercel.app/?route=cidadao"},{"id":"m06-denuncia-externa-mobile-dark","fileName":"m06-denuncia-externa-mobile-dark.png","title":"Mobile: Denúncia Cidadão DOR002 (iPhone 13 - Dark Mode)","category":"mobile","device":"Mobile iPhone 13 (390x844)","isDark":true,"liveUrl":"https://inema-six.vercel.app/?route=cidadao&dark=true"},{"id":"m07-emergencia-interna-mobile-light","fileName":"m07-emergencia-interna-mobile-light.png","title":"Mobile: Emergência Química DOR003 (iPhone 13 - Modo Claro)","category":"mobile","device":"Mobile iPhone 13 (390x844)","isDark":false,"liveUrl":"https://inema-six.vercel.app/?route=emergencia-interna"},{"id":"m08-emergencia-interna-mobile-dark","fileName":"m08-emergencia-interna-mobile-dark.png","title":"Mobile: Emergência Química DOR003 (iPhone 13 - Dark Mode)","category":"mobile","device":"Mobile iPhone 13 (390x844)","isDark":true,"liveUrl":"https://inema-six.vercel.app/?route=emergencia-interna&dark=true"},{"id":"m09-consulta-externa-mobile-light","fileName":"m09-consulta-externa-mobile-light.png","title":"Mobile: Consulta Cidadão (iPhone 13 - Modo Claro)","category":"mobile","device":"Mobile iPhone 13 (390x844)","isDark":false,"liveUrl":"https://inema-six.vercel.app/?route=consulta-externa"},{"id":"m10-consulta-externa-mobile-dark","fileName":"m10-consulta-externa-mobile-dark.png","title":"Mobile: Consulta Cidadão (iPhone 13 - Dark Mode)","category":"mobile","device":"Mobile iPhone 13 (390x844)","isDark":true,"liveUrl":"https://inema-six.vercel.app/?route=consulta-externa&dark=true"},{"id":"m11-consulta-interna-mobile-light","fileName":"m11-consulta-interna-mobile-light.png","title":"Mobile: Painel Técnico DIFIS (iPhone 13 - Modo Claro)","category":"mobile","device":"Mobile iPhone 13 (390x844)","isDark":false,"liveUrl":"https://inema-six.vercel.app/?route=consulta-interna"},{"id":"m12-consulta-interna-mobile-dark","fileName":"m12-consulta-interna-mobile-dark.png","title":"Mobile: Painel Técnico DIFIS (iPhone 13 - Dark Mode)","category":"mobile","device":"Mobile iPhone 13 (390x844)","isDark":true,"liveUrl":"https://inema-six.vercel.app/?route=consulta-interna&dark=true"}];
+        let currentIndex = 0;
+
+        function setFilter(cat) {
+            document.querySelectorAll('.filter-tab').forEach(t => {
+                t.classList.remove('bg-emerald-500', 'text-white', 'font-semibold', 'shadow-xs');
+                t.classList.add('text-slate-400');
+            });
+            const activeTab = document.getElementById('tab-' + cat);
+            if (activeTab) {
+                activeTab.classList.remove('text-slate-400');
+                activeTab.classList.add('bg-emerald-500', 'text-white', 'font-semibold', 'shadow-xs');
+            }
+
+            const cards = document.querySelectorAll('.gallery-card');
+            cards.forEach(card => {
+                if (cat === 'all' || card.dataset.category === cat) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.gallery-card');
+            cards.forEach(card => {
+                const title = card.dataset.title || '';
+                if (query === '' || title.includes(query)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function openLightbox(idx) {
+            currentIndex = idx;
+            const item = items[idx];
+            document.getElementById('lightboxImg').src = '/galeria-prints/' + item.fileName;
+            document.getElementById('lightboxTitle').textContent = item.title;
+            document.getElementById('lightboxInfo').textContent = item.device + ' • ' + (item.isDark ? 'Dark Mode' : 'Light Mode') + ' • ' + item.fileName;
+            document.getElementById('lightboxLiveBtn').href = item.liveUrl;
+            document.getElementById('lightbox').classList.remove('hidden');
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.add('hidden');
+        }
+
+        function nextImage() {
+            currentIndex = (currentIndex + 1) % items.length;
+            openLightbox(currentIndex);
+        }
+
+        function prevImage() {
+            currentIndex = (currentIndex - 1 + items.length) % items.length;
+            openLightbox(currentIndex);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('lightbox').classList.contains('hidden')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowRight') nextImage();
+            if (e.key === 'ArrowLeft') prevImage();
+        });
+    </script>
+</body>
+</html>
