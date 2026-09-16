@@ -126,19 +126,15 @@ export const Header: React.FC<HeaderProps> = ({ activeRoute = 'relatorios', isSi
         </nav>
       </div>
 
-      {/* Centro: Barra de busca omnibox global compacta (⌘K) */}
+      {/* Centro: Barra de busca omnibox global compacta */}
       <div className="flex-1 max-w-md mx-4 lg:mx-8 hidden md:block">
         <div className="relative group">
           <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-slate-600 dark:group-focus-within:text-slate-300 transition-colors" />
           <input
             type="text"
             placeholder="Buscar processos, atos, REs ou requerimentos..."
-            className="w-full pl-8 pr-12 py-1.5 bg-slate-50 dark:bg-slate-800/80 hover:bg-slate-100/70 dark:hover:bg-slate-800 focus:bg-white dark:focus:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-slate-300 dark:focus:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-xs focus:outline-none focus:ring-1 focus:ring-slate-300 dark:focus:ring-slate-600 transition-all"
+            className="w-full pl-8 pr-3 py-1.5 bg-slate-50 dark:bg-slate-800/80 hover:bg-slate-100/70 dark:hover:bg-slate-800 focus:bg-white dark:focus:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-slate-300 dark:focus:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-xs focus:outline-none focus:ring-1 focus:ring-slate-300 dark:focus:ring-slate-600 transition-all"
           />
-          <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-[10px] text-slate-500 dark:text-slate-300 font-mono shadow-2xs pointer-events-none">
-            <span>⌘</span>
-            <span>K</span>
-          </div>
         </div>
       </div>
 
