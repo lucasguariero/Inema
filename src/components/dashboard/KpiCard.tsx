@@ -70,10 +70,10 @@ export const KpiCard: React.FC<KpiCardProps> = ({
     <div
       onClick={onClick}
       className={cn(
-        'p-4 bg-white dark:bg-slate-900 border rounded-xl flex flex-col justify-between transition-all duration-200 cursor-pointer select-none',
+        'fi-wi-stats-overview-stat p-5 bg-white dark:bg-slate-900 rounded-xl flex flex-col justify-between transition-all duration-150 cursor-pointer select-none shadow-xs ring-1',
         isSelected
-          ? 'border-[#0F4C3A] dark:border-emerald-500 ring-2 ring-[#0F4C3A]/20 dark:ring-emerald-500/20 shadow-md'
-          : 'border-slate-200/80 dark:border-slate-800 shadow-2xs hover:border-slate-300 dark:hover:border-slate-700 hover:-translate-y-0.5'
+          ? 'ring-2 ring-blue-600 dark:ring-blue-500 shadow-sm'
+          : 'ring-slate-950/5 dark:ring-white/10 hover:ring-slate-300 dark:hover:ring-slate-700'
       )}
     >
       {/* Linha 1: Label em caixa alta suave com ícone sutil à direita */}

@@ -28,6 +28,12 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
+  StatsOverviewWidget,
+  TableContainer,
+  TableToolbar,
+  InputWrapper,
+} from '@/components/filament';
+import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -111,46 +117,30 @@ export const ConsultaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
   const getStatusBadge = (status: RegistroFiscalizacao['status']) => {
     switch (status) {
       case 'Concluído':
-        return <Badge variant="emerald" dot>Concluído</Badge>;
+        return <Badge color="success" dot>Concluído</Badge>;
       case 'Auto de Infração':
-        return <Badge variant="rose" dot>Auto Lavrado</Badge>;
+        return <Badge color="danger" dot>Auto Lavrado</Badge>;
       case 'Notificado':
-        return <Badge variant="amber" dot>Notificado</Badge>;
+        return <Badge color="warning" dot>Notificado</Badge>;
       case 'Vistoria Agendada':
-        return <Badge variant="blue" dot>Vistoria Agendada</Badge>;
+        return <Badge color="info" dot>Vistoria Agendada</Badge>;
       case 'Em Análise':
-        return <Badge variant="amber" dot>Em Análise</Badge>;
+        return <Badge color="warning" dot>Em Análise</Badge>;
       default:
-        return <Badge variant="secondary" dot>Triagem</Badge>;
+        return <Badge color="gray" dot>Triagem</Badge>;
     }
   };
 
   const getPrioridadeBadge = (prioridade: RegistroFiscalizacao['prioridade']) => {
     switch (prioridade) {
       case 'Crítica':
-        return (
-          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-rose-50 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200 dark:border-rose-900/60">
-            Crítica
-          </span>
-        );
+        return <Badge color="danger">Crítica</Badge>;
       case 'Alta':
-        return (
-          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-900/60">
-            Alta
-          </span>
-        );
+        return <Badge color="warning">Alta</Badge>;
       case 'Média':
-        return (
-          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200 dark:border-blue-900/60">
-            Média
-          </span>
-        );
+        return <Badge color="info">Média</Badge>;
       default:
-        return (
-          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
-            Normal
-          </span>
-        );
+        return <Badge color="gray">Normal</Badge>;
     }
   };
 
@@ -198,217 +188,217 @@ export const ConsultaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
         </div>
       </div>
 
-      {/* KPIs da Operação */}
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-        <Card className="border-slate-200/90 dark:border-slate-800 p-4">
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Pauta Ativa</span>
-          <div className="text-2xl font-black text-slate-900 dark:text-white mt-1">
-            {registros.length}
-          </div>
-          <span className="text-[10px] text-slate-500">Casos na fila DIFIS</span>
-        </Card>
+      {/* KPIs da Operação (Filament StatsOverviewWidget) */}
+      <StatsOverviewWidget
+        columns={5}
+        stats={[
+          {
+            label: 'Pauta Ativa',
+            value: registros.length,
+            description: 'Casos na fila DIFIS',
+            color: 'gray',
+          },
+          {
+            label: 'Emergências Químicas',
+            value: registros.filter((r) => r.tipo === 'RE').length,
+            description: 'Monitoramento 24h',
+            color: 'danger',
+          },
+          {
+            label: 'Vistorias Agendadas',
+            value: registros.filter((r) => r.status === 'Vistoria Agendada').length,
+            description: 'Equipes em campo',
+            color: 'info',
+          },
+          {
+            label: 'Autos / Notificações',
+            value: registros.filter((r) => r.status === 'Auto de Infração' || r.status === 'Notificado').length,
+            description: 'Lavrados no mês',
+            color: 'warning',
+          },
+          {
+            label: 'Concluídos',
+            value: registros.filter((r) => r.status === 'Concluído').length,
+            description: 'Arquivados/Saneados',
+            color: 'success',
+          },
+        ]}
+      />
 
-        <Card className="border-slate-200/90 dark:border-slate-800 p-4 bg-rose-50/40 dark:bg-rose-950/20 border-rose-200/60 dark:border-rose-900/60">
-          <span className="text-[10px] font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider block">Emergências Químicas</span>
-          <div className="text-2xl font-black text-rose-700 dark:text-rose-400 mt-1">
-            {registros.filter((r) => r.tipo === 'RE').length}
-          </div>
-          <span className="text-[10px] text-rose-600/80">Monitoramento 24h</span>
-        </Card>
+      {/* Tabela de Operações DIFIS (Filament Resource Table: fi-ta) */}
+      <TableContainer
+        toolbar={
+          <div className="p-4 border-b border-slate-100 dark:border-slate-800/80 bg-white dark:bg-slate-900 space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+              {/* Busca por texto */}
+              <div className="lg:col-span-2">
+                <InputWrapper prefixIcon={Search}>
+                  <input
+                    type="text"
+                    value={busca}
+                    onChange={(e) => setBusca(e.target.value)}
+                    placeholder="Buscar por protocolo, infrator, fiscal ou município..."
+                    className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100 dark:placeholder:text-slate-500"
+                  />
+                </InputWrapper>
+              </div>
 
-        <Card className="border-slate-200/90 dark:border-slate-800 p-4">
-          <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider block">Vistorias Agendadas</span>
-          <div className="text-2xl font-black text-blue-700 dark:text-blue-400 mt-1">
-            {registros.filter((r) => r.status === 'Vistoria Agendada').length}
-          </div>
-          <span className="text-[10px] text-slate-500">Equipes em campo</span>
-        </Card>
+              {/* Tipo */}
+              <div>
+                <InputWrapper>
+                  <select
+                    value={filtroTipo}
+                    onChange={(e) => setFiltroTipo(e.target.value as any)}
+                    className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-800 dark:text-slate-100 focus:outline-none font-medium cursor-pointer"
+                  >
+                    <option value="TODOS">Tipo: Todos</option>
+                    <option value="RD">Apenas Denúncias (RD)</option>
+                    <option value="RE">Apenas Emergências (RE)</option>
+                  </select>
+                </InputWrapper>
+              </div>
 
-        <Card className="border-slate-200/90 dark:border-slate-800 p-4">
-          <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider block">Autos / Notificações</span>
-          <div className="text-2xl font-black text-amber-700 dark:text-amber-400 mt-1">
-            {registros.filter((r) => r.status === 'Auto de Infração' || r.status === 'Notificado').length}
-          </div>
-          <span className="text-[10px] text-slate-500">Lavrados no mês</span>
-        </Card>
+              {/* Unidade Regional */}
+              <div>
+                <InputWrapper>
+                  <select
+                    value={filtroUR}
+                    onChange={(e) => setFiltroUR(e.target.value)}
+                    className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-800 dark:text-slate-100 focus:outline-none cursor-pointer"
+                  >
+                    <option value="TODOS">Todas as Unidades Regionais</option>
+                    <option value="UR Metropolitana">UR Metropolitana</option>
+                    <option value="UR Oeste">UR Oeste (Barreiras)</option>
+                    <option value="UR Litoral Sul">UR Litoral Sul (Ilhéus)</option>
+                    <option value="UR Chapada">UR Chapada Diamantina</option>
+                    <option value="UR São Francisco">UR São Francisco (Juazeiro)</option>
+                  </select>
+                </InputWrapper>
+              </div>
 
-        <Card className="border-slate-200/90 dark:border-slate-800 p-4">
-          <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block">Concluídos</span>
-          <div className="text-2xl font-black text-emerald-700 dark:text-emerald-400 mt-1">
-            {registros.filter((r) => r.status === 'Concluído').length}
+              {/* Prioridade */}
+              <div>
+                <InputWrapper>
+                  <select
+                    value={filtroPrioridade}
+                    onChange={(e) => setFiltroPrioridade(e.target.value)}
+                    className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-800 dark:text-slate-100 focus:outline-none cursor-pointer"
+                  >
+                    <option value="TODOS">Prioridade: Todas</option>
+                    <option value="Crítica">Crítica</option>
+                    <option value="Alta">Alta</option>
+                    <option value="Média">Média</option>
+                    <option value="Normal">Normal</option>
+                  </select>
+                </InputWrapper>
+              </div>
+            </div>
           </div>
-          <span className="text-[10px] text-slate-500">Arquivados/Saneados</span>
-        </Card>
-      </div>
-
-      {/* Barra de Filtros Avançados */}
-      <Card className="border-slate-200/90 dark:border-slate-800 p-4 space-y-3">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-          {/* Busca por texto */}
-          <div className="relative lg:col-span-2">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-            <input
-              type="text"
-              value={busca}
-              onChange={(e) => setBusca(e.target.value)}
-              placeholder="Buscar por protocolo, infrator, fiscal ou município..."
-              className="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none"
-            />
-          </div>
-
-          {/* Tipo */}
-          <div>
-            <select
-              value={filtroTipo}
-              onChange={(e) => setFiltroTipo(e.target.value as any)}
-              className="w-full py-2 px-3 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none font-medium"
-            >
-              <option value="TODOS">Tipo: Todos</option>
-              <option value="RD">Apenas Denúncias (RD)</option>
-              <option value="RE">Apenas Emergências (RE)</option>
-            </select>
-          </div>
-
-          {/* Unidade Regional */}
-          <div>
-            <select
-              value={filtroUR}
-              onChange={(e) => setFiltroUR(e.target.value)}
-              className="w-full py-2 px-3 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none"
-            >
-              <option value="TODOS">Todas as Unidades Regionais</option>
-              <option value="UR Metropolitana">UR Metropolitana</option>
-              <option value="UR Oeste">UR Oeste (Barreiras)</option>
-              <option value="UR Litoral Sul">UR Litoral Sul (Ilhéus)</option>
-              <option value="UR Chapada">UR Chapada Diamantina</option>
-              <option value="UR São Francisco">UR São Francisco (Juazeiro)</option>
-            </select>
-          </div>
-
-          {/* Prioridade */}
-          <div>
-            <select
-              value={filtroPrioridade}
-              onChange={(e) => setFiltroPrioridade(e.target.value)}
-              className="w-full py-2 px-3 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none"
-            >
-              <option value="TODOS">Prioridade: Todas</option>
-              <option value="Crítica">Crítica</option>
-              <option value="Alta">Alta</option>
-              <option value="Média">Média</option>
-              <option value="Normal">Normal</option>
-            </select>
-          </div>
-        </div>
-      </Card>
-
-      {/* Tabela de Operações DIFIS */}
-      <Card className="border-slate-200 dark:border-slate-800 shadow-2xs overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
-            <thead>
-              <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-600 dark:text-slate-400 font-semibold uppercase text-[10px] tracking-wider">
-                <th className="py-3 px-4 font-semibold whitespace-nowrap">Protocolo / Tipo</th>
-                <th className="py-3 px-4 font-semibold">Objeto / Ocorrência</th>
-                <th className="py-3 px-4 font-semibold whitespace-nowrap">Município / UR</th>
-                <th className="py-3 px-4 font-semibold whitespace-nowrap">Prioridade</th>
-                <th className="py-3 px-4 font-semibold whitespace-nowrap">Fiscal Responsável</th>
-                <th className="py-3 px-4 font-semibold whitespace-nowrap">Status</th>
-                <th className="py-3 px-4 text-right font-semibold whitespace-nowrap">Ações</th>
+        }
+      >
+        <table className="fi-ta-table w-full text-left text-xs border-collapse">
+          <thead>
+            <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 font-semibold uppercase text-[10px] tracking-wider">
+              <th className="fi-ta-header-cell py-3.5 px-4 font-semibold whitespace-nowrap">Protocolo / Tipo</th>
+              <th className="fi-ta-header-cell py-3.5 px-4 font-semibold">Objeto / Ocorrência</th>
+              <th className="fi-ta-header-cell py-3.5 px-4 font-semibold whitespace-nowrap">Município / UR</th>
+              <th className="fi-ta-header-cell py-3.5 px-4 font-semibold whitespace-nowrap">Prioridade</th>
+              <th className="fi-ta-header-cell py-3.5 px-4 font-semibold whitespace-nowrap">Fiscal Responsável</th>
+              <th className="fi-ta-header-cell py-3.5 px-4 font-semibold whitespace-nowrap">Status</th>
+              <th className="fi-ta-header-cell py-3.5 px-4 text-right font-semibold whitespace-nowrap">Ações</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80">
+            {registrosFiltrados.length === 0 ? (
+              <tr>
+                <td colSpan={7} className="py-12 text-center text-slate-400">
+                  Nenhuma ocorrência encontrada com os filtros selecionados.
+                </td>
               </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-              {registrosFiltrados.length === 0 ? (
-                <tr>
-                  <td colSpan={7} className="py-12 text-center text-slate-400">
-                    Nenhuma ocorrência encontrada com os filtros selecionados.
+            ) : (
+              registrosFiltrados.map((r) => (
+                <tr
+                  key={r.id}
+                  className="fi-ta-row hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-colors"
+                >
+                  <td className="fi-ta-cell py-3.5 px-4 align-top">
+                    <div className="font-mono font-semibold text-slate-900 dark:text-white">
+                      {r.protocolo}
+                    </div>
+                    <div className="mt-1">
+                      <span className={cn(
+                        "fi-badge inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-medium ring-1 ring-inset",
+                        r.tipo === 'RE'
+                          ? "bg-rose-50 text-rose-700 ring-rose-600/20 dark:bg-rose-950/40 dark:text-rose-300 dark:ring-rose-900/60"
+                          : "bg-slate-100 text-slate-700 ring-slate-600/20 dark:bg-slate-800 dark:text-slate-300 dark:ring-slate-700"
+                      )}>
+                        {r.tipo} &bull; {r.tipoNome}
+                      </span>
+                    </div>
+                  </td>
+
+                  <td className="fi-ta-cell py-3.5 px-4 max-w-xs align-top">
+                    <p className="text-slate-900 dark:text-slate-100 font-medium truncate" title={r.descricao}>
+                      {r.descricao}
+                    </p>
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400 block truncate mt-0.5">
+                      Alvo: {r.infratorOuResponsavel}
+                    </span>
+                  </td>
+
+                  <td className="fi-ta-cell py-3.5 px-4 align-top whitespace-nowrap">
+                    <div className="text-slate-900 dark:text-slate-100 font-medium">
+                      {r.municipio}
+                    </div>
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400 block">{r.unidadeRegional}</span>
+                  </td>
+
+                  <td className="fi-ta-cell py-3.5 px-4 align-top whitespace-nowrap">{getPrioridadeBadge(r.prioridade)}</td>
+
+                  <td className="fi-ta-cell py-3.5 px-4 align-top whitespace-nowrap">
+                    {r.tecnicoResponsavel ? (
+                      <span className="text-slate-800 dark:text-slate-200 font-medium flex items-center gap-1.5">
+                        <UserCheck className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400 shrink-0" />
+                        <span>{r.tecnicoResponsavel}</span>
+                      </span>
+                    ) : (
+                      <span className="fi-badge inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-medium bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400 ring-1 ring-inset ring-amber-600/20">
+                        Pendente
+                      </span>
+                    )}
+                  </td>
+
+                  <td className="fi-ta-cell py-3.5 px-4 align-top whitespace-nowrap">{getStatusBadge(r.status)}</td>
+
+                  <td className="fi-ta-cell py-3.5 px-4 text-right align-top whitespace-nowrap">
+                    <div className="fi-ta-actions flex items-center justify-end gap-1.5">
+                      <Button
+                        size="xs"
+                        variant="outline"
+                        onClick={() => setDesignarModalReg(r)}
+                        className="font-medium cursor-pointer shadow-2xs gap-1"
+                        title="Designar Técnico"
+                      >
+                        <User className="w-3 h-3 text-slate-500" />
+                        Designar
+                      </Button>
+                      <Button
+                        size="xs"
+                        variant="secondary"
+                        onClick={() => setDossieAberto(r)}
+                        className="font-medium gap-1 cursor-pointer shadow-2xs"
+                      >
+                        <Eye className="w-3 h-3 text-slate-500" />
+                        Dossiê
+                      </Button>
+                    </div>
                   </td>
                 </tr>
-              ) : (
-                registrosFiltrados.map((r) => (
-                  <tr
-                    key={r.id}
-                    className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-colors"
-                  >
-                    <td className="py-3 px-4 align-top">
-                      <div className="font-mono font-semibold text-slate-900 dark:text-white">
-                        {r.protocolo}
-                      </div>
-                      <div className="mt-1">
-                        <span className={cn(
-                          "inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium border",
-                          r.tipo === 'RE'
-                            ? "bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-900/60"
-                            : "bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700"
-                        )}>
-                          {r.tipo} &bull; {r.tipoNome}
-                        </span>
-                      </div>
-                    </td>
-
-                    <td className="py-3 px-4 max-w-xs align-top">
-                      <p className="text-slate-900 dark:text-slate-100 font-medium truncate" title={r.descricao}>
-                        {r.descricao}
-                      </p>
-                      <span className="text-[11px] text-slate-500 dark:text-slate-400 block truncate mt-0.5">
-                        Alvo: {r.infratorOuResponsavel}
-                      </span>
-                    </td>
-
-                    <td className="py-3 px-4 align-top">
-                      <div className="text-slate-900 dark:text-slate-100 font-medium">
-                        {r.municipio}
-                      </div>
-                      <span className="text-[11px] text-slate-500 dark:text-slate-400 block">{r.unidadeRegional}</span>
-                    </td>
-
-                    <td className="py-3 px-4 align-top whitespace-nowrap">{getPrioridadeBadge(r.prioridade)}</td>
-
-                    <td className="py-3 px-4 align-top whitespace-nowrap">
-                      {r.tecnicoResponsavel ? (
-                        <span className="text-slate-800 dark:text-slate-200 font-medium flex items-center gap-1.5">
-                          <UserCheck className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400 shrink-0" />
-                          <span>{r.tecnicoResponsavel}</span>
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400 border border-amber-200 dark:border-amber-900/40">
-                          Pendente
-                        </span>
-                      )}
-                    </td>
-
-                    <td className="py-3 px-4 align-top whitespace-nowrap">{getStatusBadge(r.status)}</td>
-
-                    <td className="py-3 px-4 text-right align-top whitespace-nowrap">
-                      <div className="flex items-center justify-end gap-1.5">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => setDesignarModalReg(r)}
-                          className="h-7 px-2 text-xs font-medium cursor-pointer shadow-2xs gap-1"
-                          title="Designar Técnico"
-                        >
-                          <User className="w-3 h-3 text-slate-500" />
-                          Designar
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="secondary"
-                          onClick={() => setDossieAberto(r)}
-                          className="h-7 px-2 text-xs font-medium gap-1 cursor-pointer shadow-2xs"
-                        >
-                          <Eye className="w-3 h-3 text-slate-500" />
-                          Dossiê
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-      </Card>
+              ))
+            )}
+          </tbody>
+        </table>
+      </TableContainer>
 
       {/* Modal: Designar Fiscal Técnico */}
       <Dialog open={!!designarModalReg} onOpenChange={(open) => !open && setDesignarModalReg(null)}>

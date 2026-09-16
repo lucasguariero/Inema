@@ -21,6 +21,7 @@ import {
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { StatsOverviewWidget, InputWrapper } from '@/components/filament';
 import {
   Dialog,
   DialogContent,
@@ -65,17 +66,17 @@ export const ConsultaExternaPage: React.FC<{ onNavigate?: (route: string) => voi
   const getStatusBadge = (status: RegistroFiscalizacao['status']) => {
     switch (status) {
       case 'Concluído':
-        return <Badge variant="emerald" dot>Concluído</Badge>;
+        return <Badge color="success" dot>Concluído</Badge>;
       case 'Auto de Infração':
-        return <Badge variant="rose" dot>Auto Lavrado</Badge>;
+        return <Badge color="danger" dot>Auto Lavrado</Badge>;
       case 'Notificado':
-        return <Badge variant="amber" dot>Notificado</Badge>;
+        return <Badge color="warning" dot>Notificado</Badge>;
       case 'Vistoria Agendada':
-        return <Badge variant="blue" dot>Vistoria Agendada</Badge>;
+        return <Badge color="info" dot>Vistoria Agendada</Badge>;
       case 'Em Análise':
-        return <Badge variant="amber" dot>Em Análise Técnica</Badge>;
+        return <Badge color="warning" dot>Em Análise Técnica</Badge>;
       default:
-        return <Badge variant="secondary" dot>Registrado</Badge>;
+        return <Badge color="gray" dot>Registrado</Badge>;
     }
   };
 
@@ -114,86 +115,87 @@ export const ConsultaExternaPage: React.FC<{ onNavigate?: (route: string) => voi
         </div>
       </div>
 
-      {/* Mini KPIs */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <Card className="border-slate-200/90 dark:border-slate-800 p-4">
-          <span className="text-[11px] font-bold text-slate-400 block uppercase">Total de Registros</span>
-          <div className="text-2xl font-black text-slate-900 dark:text-white mt-1">
-            {registros.length}
-          </div>
-          <span className="text-[10px] text-slate-500 dark:text-slate-400">Na base de acompanhamento</span>
-        </Card>
+      {/* Mini KPIs (Filament StatsOverviewWidget) */}
+      <StatsOverviewWidget
+        columns={4}
+        stats={[
+          {
+            label: 'Total de Registros',
+            value: registros.length,
+            description: 'Na base de acompanhamento',
+            color: 'gray',
+          },
+          {
+            label: 'Emergências (RE)',
+            value: registros.filter((r) => r.tipo === 'RE').length,
+            description: 'Acidentes químicos autuados',
+            color: 'danger',
+          },
+          {
+            label: 'Denúncias (RD)',
+            value: registros.filter((r) => r.tipo === 'RD').length,
+            description: 'Em apuração ou vistoria',
+            color: 'success',
+          },
+          {
+            label: 'Concluídos',
+            value: registros.filter((r) => r.status === 'Concluído').length,
+            description: 'Processos finalizados',
+            color: 'info',
+          },
+        ]}
+      />
 
-        <Card className="border-slate-200/90 dark:border-slate-800 p-4">
-          <span className="text-[11px] font-bold text-rose-600 dark:text-rose-400 block uppercase">Emergências (RE)</span>
-          <div className="text-2xl font-black text-rose-700 dark:text-rose-400 mt-1">
-            {registros.filter((r) => r.tipo === 'RE').length}
-          </div>
-          <span className="text-[10px] text-slate-500 dark:text-slate-400">Acidentes químicos autuados</span>
-        </Card>
-
-        <Card className="border-slate-200/90 dark:border-slate-800 p-4">
-          <span className="text-[11px] font-bold text-emerald-700 dark:text-emerald-400 block uppercase">Denúncias (RD)</span>
-          <div className="text-2xl font-black text-emerald-800 dark:text-emerald-400 mt-1">
-            {registros.filter((r) => r.tipo === 'RD').length}
-          </div>
-          <span className="text-[10px] text-slate-500 dark:text-slate-400">Em apuração ou vistoria</span>
-        </Card>
-
-        <Card className="border-slate-200/90 dark:border-slate-800 p-4">
-          <span className="text-[11px] font-bold text-blue-600 dark:text-blue-400 block uppercase">Concluídos</span>
-          <div className="text-2xl font-black text-blue-700 dark:text-blue-400 mt-1">
-            {registros.filter((r) => r.status === 'Concluído').length}
-          </div>
-          <span className="text-[10px] text-slate-500 dark:text-slate-400">Processos finalizados</span>
-        </Card>
-      </div>
-
-      {/* Barra de Filtros */}
-      <Card className="border-slate-200/90 dark:border-slate-800 p-4 space-y-3">
+      {/* Barra de Filtros (Filament Form / Filter Container) */}
+      <div className="fi-section rounded-xl bg-white shadow-xs ring-1 ring-slate-950/5 dark:bg-slate-900 dark:ring-white/10 p-4 space-y-3">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
           {/* Busca por texto */}
-          <div className="relative md:col-span-2">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-            <input
-              type="text"
-              value={buscaTexto}
-              onChange={(e) => setBuscaTexto(e.target.value)}
-              placeholder="Buscar por protocolo (ex: 2026.000142), município ou palavra-chave..."
-              className="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none"
-            />
+          <div className="md:col-span-2">
+            <InputWrapper prefixIcon={Search}>
+              <input
+                type="text"
+                value={buscaTexto}
+                onChange={(e) => setBuscaTexto(e.target.value)}
+                placeholder="Buscar por protocolo (ex: 2026.000142), município ou palavra-chave..."
+                className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100 dark:placeholder:text-slate-500"
+              />
+            </InputWrapper>
           </div>
 
           {/* Filtro por Tipo */}
           <div>
-            <select
-              value={filtroTipo}
-              onChange={(e) => setFiltroTipo(e.target.value as any)}
-              className="w-full py-2 px-3 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none font-medium"
-            >
-              <option value="TODOS">Todos os Tipos (RD e RE)</option>
-              <option value="RD">Apenas Denúncias (RD)</option>
-              <option value="RE">Apenas Emergências (RE)</option>
-            </select>
+            <InputWrapper>
+              <select
+                value={filtroTipo}
+                onChange={(e) => setFiltroTipo(e.target.value as any)}
+                className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-800 dark:text-slate-100 focus:outline-none font-medium cursor-pointer"
+              >
+                <option value="TODOS">Todos os Tipos (RD e RE)</option>
+                <option value="RD">Apenas Denúncias (RD)</option>
+                <option value="RE">Apenas Emergências (RE)</option>
+              </select>
+            </InputWrapper>
           </div>
 
           {/* Filtro por Município */}
           <div>
-            <select
-              value={filtroMunicipio}
-              onChange={(e) => setFiltroMunicipio(e.target.value)}
-              className="w-full py-2 px-3 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 outline-none"
-            >
-              <option value="TODOS">Todos os Municípios</option>
-              {MUNICIPIOS_BAHIA.map((m) => (
-                <option key={m} value={m}>
-                  {m}
-                </option>
-              ))}
-            </select>
+            <InputWrapper>
+              <select
+                value={filtroMunicipio}
+                onChange={(e) => setFiltroMunicipio(e.target.value)}
+                className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-800 dark:text-slate-100 focus:outline-none cursor-pointer"
+              >
+                <option value="TODOS">Todos os Municípios</option>
+                {MUNICIPIOS_BAHIA.map((m) => (
+                  <option key={m} value={m}>
+                    {m}
+                  </option>
+                ))}
+              </select>
+            </InputWrapper>
           </div>
         </div>
-      </Card>
+      </div>
 
       {/* Lista de Registros */}
       <div className="space-y-3">
