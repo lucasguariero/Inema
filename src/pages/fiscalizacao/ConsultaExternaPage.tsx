@@ -81,7 +81,7 @@ export const ConsultaExternaPage: React.FC<{ onNavigate?: (route: string) => voi
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* Topo & Breadcrumb */}
       <div className="flex flex-col gap-2">
-        <nav className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
+        <nav className="hidden sm:flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
           <span className="hover:text-emerald-700 cursor-pointer" onClick={() => onNavigate?.('relatorios')}>
             Início
           </span>
@@ -95,7 +95,7 @@ export const ConsultaExternaPage: React.FC<{ onNavigate?: (route: string) => voi
 
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-1">
           <div>
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
               Acompanhamento de Denúncias e Emergências
             </h1>
             <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400">
@@ -103,23 +103,23 @@ export const ConsultaExternaPage: React.FC<{ onNavigate?: (route: string) => voi
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 w-full sm:w-auto">
             <Button
               variant="outline"
               size="sm"
               onClick={() => onNavigate?.('cidadao')}
-              className="gap-1.5 text-xs font-semibold"
+              className="gap-1.5 text-xs font-semibold whitespace-nowrap shrink-0"
             >
-              <FileText className="w-3.5 h-3.5 text-emerald-600" />
+              <FileText className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
               Nova Denúncia
             </Button>
             <Button
               variant="outline"
               size="sm"
               onClick={() => onNavigate?.('emergencia-externa')}
-              className="gap-1.5 text-xs font-semibold text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-900"
+              className="gap-1.5 text-xs font-semibold text-rose-700 dark:text-rose-400 whitespace-nowrap shrink-0"
             >
-              <Flame className="w-3.5 h-3.5 text-rose-600" />
+              <Flame className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
               Comunicar Acidente
             </Button>
           </div>

@@ -116,7 +116,7 @@ export const EmergenciaExternaPage: React.FC<{ onNavigate?: (route: string) => v
     <div className="space-y-6 max-w-5xl mx-auto pb-12">
       {/* Topo & Breadcrumb */}
       <div className="flex flex-col gap-2">
-        <nav className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
+        <nav className="hidden sm:flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
           <span className="hover:text-emerald-700 cursor-pointer" onClick={() => onNavigate?.('relatorios')}>
             Início
           </span>
@@ -130,11 +130,11 @@ export const EmergenciaExternaPage: React.FC<{ onNavigate?: (route: string) => v
 
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-1">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-rose-100 dark:bg-rose-950/80 text-rose-700 dark:text-rose-300 flex items-center justify-center shadow-2xs">
+            <div className="w-10 h-10 rounded-xl bg-rose-100 dark:bg-rose-950/80 text-rose-700 dark:text-rose-300 flex items-center justify-center shadow-2xs shrink-0">
               <AlertOctagon className="w-5 h-5" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
                 Comunicação de Emergência Química (DOR004)
               </h1>
               <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400">
@@ -143,13 +143,13 @@ export const EmergenciaExternaPage: React.FC<{ onNavigate?: (route: string) => v
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 w-full sm:w-auto">
             <Button
               type="button"
               variant="outline"
               size="sm"
               onClick={handlePreencherExemplo}
-              className="gap-1.5 text-xs font-semibold"
+              className="gap-1.5 text-xs font-semibold whitespace-nowrap shrink-0"
             >
               <Sparkles className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
               Preencher Exemplo
@@ -159,7 +159,7 @@ export const EmergenciaExternaPage: React.FC<{ onNavigate?: (route: string) => v
               variant="outline"
               size="sm"
               onClick={handleLimpar}
-              className="gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300"
+              className="gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 whitespace-nowrap shrink-0"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               Limpar

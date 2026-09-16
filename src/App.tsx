@@ -19,7 +19,7 @@ export function App() {
       return;
     }
 
-    const rotaParam = params.get('rota') || params.get('r');
+    const rotaParam = params.get('rota') || params.get('route') || params.get('r');
     const fluxoParam = params.get('fluxo');
     const path = window.location.pathname;
 

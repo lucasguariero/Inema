@@ -17,17 +17,17 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variantStyles = {
       default:
-        'bg-gradient-to-b from-[#145A45] to-[#0F4C3A] text-white shadow-[0_1px_3px_rgba(15,76,58,0.3),inset_0_1px_0_rgba(255,255,255,0.15)] hover:from-[#17664f] hover:to-[#125441] hover:shadow-[0_4px_12px_rgba(15,76,58,0.25)] border border-[#0A3528]/40',
+        'bg-gradient-to-b from-[#145A45] to-[#0F4C3A] text-white shadow-[0_1px_3px_rgba(15,76,58,0.3),inset_0_1px_0_rgba(255,255,255,0.15)] hover:from-[#17664f] hover:to-[#125441] hover:shadow-[0_4px_12px_rgba(15,76,58,0.25)] border border-[#0A3528]/40 dark:from-emerald-700 dark:to-emerald-900 dark:border-emerald-600/40',
       secondary:
-        'bg-[#E2ECE9]/80 text-[#0F4C3A] hover:bg-[#CBDED8] font-bold border border-[#CBDED8]/60 shadow-2xs',
+        'bg-[#E2ECE9]/80 text-[#0F4C3A] hover:bg-[#CBDED8] font-bold border border-[#CBDED8]/60 shadow-2xs dark:bg-slate-800 dark:text-emerald-300 dark:border-slate-700 dark:hover:bg-slate-700',
       outline:
-        'border border-slate-200/90 bg-white/90 text-slate-700 hover:bg-slate-50/80 hover:text-slate-900 hover:border-slate-300 shadow-[0_1px_2px_rgba(15,23,42,0.04)]',
+        'border border-slate-200/90 bg-white/90 text-slate-700 hover:bg-slate-50/80 hover:text-slate-900 hover:border-slate-300 shadow-[0_1px_2px_rgba(15,23,42,0.04)] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700 dark:hover:border-slate-600',
       ghost:
-        'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900',
+        'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100',
       destructive:
-        'bg-rose-50 text-rose-600 border border-rose-200/80 hover:bg-rose-100/90 hover:border-rose-300 shadow-2xs',
+        'bg-rose-50 text-rose-600 border border-rose-200/80 hover:bg-rose-100/90 hover:border-rose-300 shadow-2xs dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-800',
       pill:
-        'rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900 font-medium',
+        'rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900 font-medium dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700',
     };
 
     const sizeStyles = {

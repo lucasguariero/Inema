@@ -36,6 +36,11 @@ function getInitialTheme(): ThemeMode {
 
 function getInitialDarkMode(): boolean {
   if (typeof window === 'undefined') return false;
+  const searchParams = new URLSearchParams(window.location.search);
+  const darkParam = searchParams.get('dark') || searchParams.get('modo') || searchParams.get('mode');
+  if (darkParam === 'true' || darkParam === 'dark' || darkParam === '1') {
+    return true;
+  }
   const stored = localStorage.getItem('inema_dark_mode');
   if (stored !== null) {
     return stored === 'true';

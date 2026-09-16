@@ -26,12 +26,24 @@ import { ThemeMode } from '@/types/theme';
 import { cn } from '@/lib/utils';
 
 interface HeaderProps {
+  activeRoute?: string;
   isSidebarCollapsed?: boolean;
   onToggleSidebar?: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ isSidebarCollapsed, onToggleSidebar }) => {
+const ROUTE_INFO: Record<string, { module: string; page: string }> = {
+  relatorios: { module: 'Regulação', page: 'Relatórios Gerenciais' },
+  atendente: { module: 'Fiscalização', page: 'Denúncia Interna' },
+  cidadao: { module: 'Fiscalização', page: 'Formulário Cidadão' },
+  'emergencia-interna': { module: 'Fiscalização', page: 'Emergência Química' },
+  'emergencia-externa': { module: 'Fiscalização', page: 'Registro Emergência' },
+  'consulta-externa': { module: 'Fiscalização', page: 'Consulta Cidadão' },
+  'consulta-interna': { module: 'Fiscalização', page: 'Painel DIFIS' },
+};
+
+export const Header: React.FC<HeaderProps> = ({ activeRoute = 'relatorios', isSidebarCollapsed, onToggleSidebar }) => {
   const { theme, themeConfig, setTheme, isDarkMode, toggleDarkMode } = useTheme();
+  const currentRoute = ROUTE_INFO[activeRoute] || ROUTE_INFO.relatorios;
 
   const colorOptions: { id: ThemeMode; label: string; sub: string; color: string; border: string }[] = [
     {
@@ -66,13 +78,12 @@ export const Header: React.FC<HeaderProps> = ({ isSidebarCollapsed, onToggleSide
 
   return (
     <header className={cn(
-      "h-16 shrink-0 flex items-center justify-between px-4 lg:px-6 select-none shadow-2xs transition-colors duration-200 border-b",
-      isDarkMode
-        ? "bg-slate-900 border-slate-800 text-slate-100"
-        : cn(themeConfig.tokens.headerBg, themeConfig.tokens.headerBorder)
+      "h-16 shrink-0 flex items-center justify-between px-3 sm:px-4 lg:px-6 select-none shadow-2xs transition-colors duration-200 border-b",
+      "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100",
+      !isDarkMode && cn(themeConfig.tokens.headerBg, themeConfig.tokens.headerBorder)
     )}>
-      {/* Lado esquerdo: Botão Mobile SidebarTrigger + Breadcrumb sutil da navegação */}
-      <div className="flex items-center gap-3">
+      {/* Lado esquerdo: Botão Mobile SidebarTrigger + Breadcrumb dinâmico */}
+      <div className="flex items-center gap-2.5 sm:gap-3">
         <button
           onClick={onToggleSidebar}
           className="h-8 w-8 inline-flex items-center justify-center rounded-md text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus-visible:outline-none cursor-pointer lg:hidden"
@@ -82,14 +93,14 @@ export const Header: React.FC<HeaderProps> = ({ isSidebarCollapsed, onToggleSide
           <PanelLeft className="w-4 h-4" />
         </button>
 
-        <nav className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 font-medium select-none" aria-label="Breadcrumb">
-          <a href="/" className="text-slate-400 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors">
+        <nav className="flex items-center gap-1 sm:gap-1.5 text-xs text-slate-500 dark:text-slate-400 font-medium select-none" aria-label="Breadcrumb">
+          <a href="/" className="text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-200 transition-colors hidden sm:inline">
             Início
           </a>
-          <ChevronRight className="w-3.5 h-3.5 text-slate-300 dark:text-slate-600" />
-          <span className="text-slate-500 dark:text-slate-400 hidden sm:inline">Regulação</span>
           <ChevronRight className="w-3.5 h-3.5 text-slate-300 dark:text-slate-600 hidden sm:inline" />
-          <span className="text-slate-900 dark:text-slate-100 font-semibold">Painel Executivo</span>
+          <span className="text-slate-500 dark:text-slate-400 hidden md:inline">{currentRoute.module}</span>
+          <ChevronRight className="w-3.5 h-3.5 text-slate-300 dark:text-slate-600 hidden md:inline" />
+          <span className="text-slate-900 dark:text-slate-100 font-bold truncate max-w-[180px] sm:max-w-none">{currentRoute.page}</span>
         </nav>
       </div>
 
@@ -109,8 +120,17 @@ export const Header: React.FC<HeaderProps> = ({ isSidebarCollapsed, onToggleSide
         </div>
       </div>
 
-      {/* Lado direito: Notificações e menu de perfil */}
-      <div className="flex items-center gap-2 sm:gap-3">
+      {/* Lado direito: Dark mode toggle, Notificações e menu de perfil */}
+      <div className="flex items-center gap-1.5 sm:gap-2">
+        {/* Alternador Rápido de Dark Mode Direto no Topo */}
+        <button
+          onClick={toggleDarkMode}
+          className="w-8 h-8 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 active:scale-95 flex items-center justify-center text-slate-600 dark:text-slate-300 transition-colors cursor-pointer"
+          title={isDarkMode ? "Mudar para modo claro" : "Mudar para modo escuro"}
+        >
+          {isDarkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-600 dark:text-slate-400" />}
+        </button>
+
         {/* Notificações */}
         <button
           className="relative w-8 h-8 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 active:scale-95 flex items-center justify-center text-slate-600 dark:text-slate-300 transition-colors cursor-pointer"

@@ -28,7 +28,7 @@ export const AppShell: React.FC<AppShellProps> = ({
   };
 
   return (
-    <div className={cn('h-screen w-screen overflow-hidden flex antialiased transition-colors duration-200', isDarkMode ? 'dark bg-slate-950 text-slate-100' : themeConfig.tokens.canvasBg)}>
+    <div className={cn('h-screen w-screen overflow-hidden flex antialiased transition-colors duration-200 dark:bg-slate-950 dark:text-slate-100', isDarkMode ? 'dark bg-slate-950 text-slate-100' : themeConfig.tokens.canvasBg)}>
       {/* Sidebar: h-screen fixa à esquerda com suporte a colapso */}
       <Sidebar
         activeRoute={activeRoute}
@@ -40,16 +40,17 @@ export const AppShell: React.FC<AppShellProps> = ({
       />
 
       {/* Coluna flexível à direita: Topbar + Conteúdo (expande dinamicamente) */}
-      <div className={cn("flex-1 flex flex-col h-screen min-w-0 overflow-hidden transition-all duration-200 ease-in-out", isDarkMode ? "bg-slate-950" : "bg-transparent")}>
+      <div className={cn("flex-1 flex flex-col h-screen min-w-0 overflow-hidden transition-all duration-200 ease-in-out dark:bg-slate-950", isDarkMode ? "bg-slate-950" : "bg-transparent")}>
         {/* Topbar: 100% da largura horizontal da coluna à direita */}
         <Header
+          activeRoute={activeRoute}
           isSidebarCollapsed={isSidebarCollapsed}
           onToggleSidebar={handleToggleSidebar}
         />
 
-        {/* Miolo principal com overflow-y-auto e padding confortável */}
-        <main className={cn("flex-1 w-full min-w-0 overflow-y-auto", isDarkMode ? "bg-slate-950 text-slate-100" : "")}>
-          <div className="w-full max-w-[2000px] mx-auto p-6 lg:p-8 pb-20">
+        {/* Miolo principal com overflow-y-auto e padding confortável para mobile e desktop */}
+        <main className={cn("flex-1 w-full min-w-0 overflow-y-auto dark:bg-slate-950 dark:text-slate-100", isDarkMode ? "bg-slate-950 text-slate-100" : "")}>
+          <div className="w-full max-w-[2000px] mx-auto p-3.5 sm:p-6 lg:p-8 pb-32">
             {children}
           </div>
         </main>

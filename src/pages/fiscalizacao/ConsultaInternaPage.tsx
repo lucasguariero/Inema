@@ -138,7 +138,7 @@ export const ConsultaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* Topo & Breadcrumb */}
       <div className="flex flex-col gap-2">
-        <nav className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
+        <nav className="hidden sm:flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
           <span className="hover:text-emerald-700 cursor-pointer" onClick={() => onNavigate?.('relatorios')}>
             Início
           </span>
@@ -152,11 +152,11 @@ export const ConsultaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
 
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-1">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 flex items-center justify-center shadow-2xs">
+            <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 flex items-center justify-center shadow-2xs shrink-0">
               <Layers className="w-5 h-5" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight flex items-center gap-2">
+              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight flex flex-wrap items-center gap-2">
                 Painel de Operações DIFIS
                 <Badge variant="emerald">Ambiente Técnico</Badge>
               </h1>
@@ -166,32 +166,32 @@ export const ConsultaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
             </div>
           </div>
 
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 w-full sm:w-auto">
             <Button
               size="sm"
               variant="outline"
               onClick={() => onNavigate?.('atendente')}
-              className="gap-1.5 text-xs font-semibold"
+              className="gap-1.5 text-xs font-semibold whitespace-nowrap shrink-0"
             >
-              <FileText className="w-3.5 h-3.5 text-emerald-600" />
+              <FileText className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
               Nova Denúncia
             </Button>
             <Button
               size="sm"
               variant="outline"
               onClick={() => onNavigate?.('emergencia-interna')}
-              className="gap-1.5 text-xs font-semibold text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-900"
+              className="gap-1.5 text-xs font-semibold text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-900 whitespace-nowrap shrink-0"
             >
-              <Flame className="w-3.5 h-3.5 text-rose-600" />
+              <Flame className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
               Autuar Emergência (RE)
             </Button>
             <Button
               size="sm"
               variant="secondary"
               onClick={() => alert('Exportando Pauta Operacional DIFIS para planilha Excel...')}
-              className="gap-1.5 text-xs font-semibold"
+              className="gap-1.5 text-xs font-semibold whitespace-nowrap shrink-0"
             >
-              <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-700" />
+              <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-700 dark:text-emerald-300" />
               Exportar Pauta
             </Button>
           </div>
