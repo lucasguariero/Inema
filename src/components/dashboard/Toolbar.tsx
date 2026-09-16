@@ -38,23 +38,6 @@ export const Toolbar: React.FC<ToolbarProps> = ({
     { label: '2026', value: '2026' },
   ];
 
-  const periods = [
-    { label: 'Últimos 30 dias', value: '30d' },
-    { label: 'Últimos 7 dias', value: '7d' },
-    { label: '1º Trimestre 2026 (Atual)', value: 'Q1-2026' },
-    { label: 'Ano de 2025', value: '2025' },
-    { label: 'Exercício 2026', value: '2026' },
-  ];
-
-  const getPeriodLabel = () => {
-    if (selectedPeriod === '30d') return 'Últimos 30 dias';
-    if (selectedPeriod === '7d') return 'Últimos 7 dias';
-    if (selectedPeriod === 'Q1-2026') return '01/01/2026 a 31/03/2026';
-    if (selectedPeriod === '2026') return 'Exercício 2026';
-    if (selectedPeriod === '2025') return 'Ano de 2025';
-    return '01/01/2026 a 31/03/2026';
-  };
-
   return (
     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b border-slate-100 dark:border-slate-800 transition-colors duration-200">
       {/* Esquerda: Título da tela e subtítulo */}
@@ -92,42 +75,6 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             );
           })}
         </div>
-
-        {/* Seletor de Período Dropdown */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-8 gap-2 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 text-xs font-medium hover:bg-slate-50 dark:hover:bg-slate-800 shadow-2xs cursor-pointer"
-            >
-              <Calendar className="w-3.5 h-3.5 text-slate-400" />
-              <span>{getPeriodLabel()}</span>
-              <ChevronDown className="w-3 h-3 text-slate-400" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-60 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl rounded-xl p-1.5 z-50">
-            <DropdownMenuLabel className="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-500 px-2 py-1">
-              Período de Análise
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator className="bg-slate-100 dark:bg-slate-800" />
-            {periods.map((p) => {
-              const isSelected = selectedPeriod === p.value;
-              return (
-                <DropdownMenuItem
-                  key={p.value}
-                  onClick={() => onSelectPeriod(p.value)}
-                  className="flex items-center justify-between text-xs py-1.5 px-2 cursor-pointer dark:text-slate-300 dark:hover:text-white dark:focus:bg-slate-800 rounded-lg"
-                >
-                  <span className={isSelected ? 'font-bold text-slate-900 dark:text-white' : ''}>
-                    {p.label}
-                  </span>
-                  {isSelected && <Check className="w-3.5 h-3.5 text-slate-700 dark:text-slate-300" />}
-                </DropdownMenuItem>
-              );
-            })}
-          </DropdownMenuContent>
-        </DropdownMenu>
 
         {/* Botão de Filtros com Badge (Abre Drawer à Direita) */}
         <Button

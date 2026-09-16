@@ -147,11 +147,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
     return 'text-[#c6e1e8] hover:bg-[#135467] hover:text-white font-semibold';
   };
 
-  // Estado de grupos abertos (acordeão)
-  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
-    fiscalizacao: true,
-    analise: false,
-  });
+  // Estado de grupos abertos (acordeão) - todos fechados por padrão
+  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
 
   // Filtro de busca instantâneo
   const [searchFilter, setSearchFilter] = useState('');

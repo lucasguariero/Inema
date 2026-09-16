@@ -4,6 +4,23 @@ const path = require('path');
 // Load Central Navigation Config (Single Source of Truth)
 const navConfig = require('../src/data/navigationConfig.json');
 
+// Map legacy items strictly to legacy HTML files so navigation remains within the backup project
+const LEGACY_PAGE_MAP = {
+  'inicio': 'https://gla-inema-hml.acto.com.br',
+  'iniciar-requerimento': 'https://gla-inema-hml.acto.com.br/requerimento/informacoes',
+  'meus-processos': 'https://gla-inema-hml.acto.com.br/meus-processos',
+  'notificacoes': 'https://gla-inema-hml.acto.com.br/notificacoes',
+  'acesso-publico': 'https://gla-inema-hml.acto.com.br/acesso-publico',
+  'fisc-atendente': '/fiscalizacao.html',
+  'fisc-cidadao': '/fiscalizacao.html?fluxo=externo',
+  'fisc-emerg-interna': '/emergencia-quimica.html?fluxo=interna',
+  'fisc-emerg-externa': '/emergencia-quimica-externa.html',
+  'fisc-consulta-cidadao': '/consulta-externa.html',
+  'fisc-painel-interno-difis': '/consulta-interna.html',
+  'relatorios': '/relatorios-antigo.html',
+  'fauna': '/fauna.html',
+};
+
 // Generate Unified Legacy Navigation HTML from navigationConfig
 function generateLegacyNavHtml(config, activeId = 'relatorios') {
   let html = `<nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1">\n`;
@@ -11,8 +28,9 @@ function generateLegacyNavHtml(config, activeId = 'relatorios') {
   // 1. Links Raiz (Topo)
   for (const item of config.topDirectItems) {
     const isExternal = item.href.startsWith('http');
+    const targetHref = LEGACY_PAGE_MAP[item.id] || item.href;
     html += `                <!-- ${item.label} -->\n`;
-    html += `                <a href="${item.href}" id="${item.htmlId || item.id}" data-testid="${item.htmlId || item.id}" ${isExternal ? 'target="_blank" rel="noopener noreferrer"' : ''} class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium transition-colors duration-150">\n`;
+    html += `                <a href="${targetHref}" id="${item.htmlId || item.id}" data-testid="${item.htmlId || item.id}" ${isExternal ? 'target="_blank" rel="noopener noreferrer"' : ''} class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium transition-colors duration-150">\n`;
     html += `                    <span class="material-symbols-outlined text-xl text-slate-500">${item.materialIcon || 'arrow_forward'}</span>\n`;
     html += `                    <span class="text-sm font-medium">${item.label}</span>\n`;
     html += `                </a>\n`;
@@ -20,11 +38,12 @@ function generateLegacyNavHtml(config, activeId = 'relatorios') {
 
   // 2. Módulos e Itens Oficiais
   for (const group of config.menuGroups) {
+    const directTargetHref = LEGACY_PAGE_MAP[group.id] || group.href || '#';
     if (group.isDirectItem) {
       const isActive = group.id === activeId || group.route === activeId;
       html += `\n                <!-- ${group.label} -->\n`;
       html += `                <div class="pt-1">\n`;
-      html += `                    <a href="${group.href}" id="${group.htmlId || group.id}" data-testid="nav-${group.label}" class="flex items-center justify-between px-3 py-2.5 rounded-lg ${isActive ? 'text-[#0F4C3A] bg-[#E2ECE9] font-bold border border-[#CBDED8]/70 shadow-2xs' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium'} transition-colors duration-150">\n`;
+      html += `                    <a href="${directTargetHref}" id="${group.htmlId || group.id}" data-testid="nav-${group.label}" class="flex items-center justify-between px-3 py-2.5 rounded-lg ${isActive ? 'text-[#0F4C3A] bg-[#E2ECE9] font-bold border border-[#CBDED8]/70 shadow-2xs' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium'} transition-colors duration-150">\n`;
       html += `                        <div class="flex items-center gap-3">\n`;
       html += `                            <span class="material-symbols-outlined text-xl ${isActive ? 'text-[#0F4C3A]' : 'text-slate-500'}">${group.materialIcon || 'circle'}</span>\n`;
       html += `                            <span class="text-sm ${isActive ? 'font-bold' : 'font-medium'}">${group.label}</span>\n`;
@@ -37,7 +56,8 @@ function generateLegacyNavHtml(config, activeId = 'relatorios') {
       continue;
     }
 
-    const isOpen = !!group.defaultOpen;
+    const hasActiveChild = group.items && group.items.some((it) => it.id === activeId || it.route === activeId);
+    const isOpen = hasActiveChild;
     const isFiscalizacao = group.id === 'fiscalizacao';
     const subId = group.htmlId || `sub_${group.id}`;
     const iconId = `icon_${group.id}`;
@@ -72,11 +92,11 @@ function generateLegacyNavHtml(config, activeId = 'relatorios') {
         html += `                            <div class="space-y-1 mt-1">\n`;
       }
 
-      const isSubExternal = sub.href && sub.href.startsWith('http');
+      const itemTargetHref = LEGACY_PAGE_MAP[sub.id] || sub.href || '#';
+      const isSubExternal = itemTargetHref.startsWith('http');
       const isSubActive = sub.id === activeId || sub.route === activeId;
-      const indentClass = isFiscalizacao ? '' : '';
 
-      html += `                        <a href="${sub.href || '#'}" id="${sub.htmlId || sub.id}" data-testid="${sub.htmlId || sub.id}" ${isSubExternal ? 'target="_blank" rel="noopener noreferrer"' : ''} class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 ${isSubActive ? 'bg-[#E2ECE9] text-[#0F4C3A] font-bold' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium'}">\n`;
+      html += `                        <a href="${itemTargetHref}" id="${sub.htmlId || sub.id}" data-testid="${sub.htmlId || sub.id}" ${isSubExternal ? 'target="_blank" rel="noopener noreferrer"' : ''} class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 ${isSubActive ? 'bg-[#E2ECE9] text-[#0F4C3A] font-bold' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium'}">\n`;
       html += `                            <span class="truncate">${sub.label}</span>\n`;
       if (sub.badge) {
         const badgeIdAttr = sub.id === 'fisc-painel-interno-difis' ? ' id="sidebarBadgeEmergencias"' : '';
@@ -147,25 +167,58 @@ if (fs.existsSync('src/css')) {
   console.log('CSS copied to public/css and public/src/css');
 }
 
-// 3. Copy all src/*.html to public/src/ and public/
+// 3. Process and Copy all src/*.html to public/src/ and public/
+const PAGE_ACTIVE_IDS = {
+  'relatorios.html': 'relatorios',
+  'relatorios-antigo.html': 'relatorios',
+  'fiscalizacao.html': 'fisc-atendente',
+  'emergencia-quimica.html': 'fisc-emerg-interna',
+  'emergencia-quimica-externa.html': 'fisc-emerg-externa',
+  'consulta-externa.html': 'fisc-consulta-cidadao',
+  'consulta-interna.html': 'fisc-painel-interno-difis',
+  'fauna.html': 'fauna'
+};
+
+const LEGACY_BANNER = `
+<div style="background: linear-gradient(90deg, #fef3c7, #fffbeb); border-bottom: 1px solid #fde68a; padding: 6px 16px; font-size: 12px; color: #92400e; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 99999; box-shadow: 0 1px 3px rgba(0,0,0,0.05); font-family: Inter, sans-serif;">
+  <div style="display: flex; align-items: center; gap: 8px;">
+    <span style="display: inline-block; width: 8px; height: 8px; border-radius: 9999px; background-color: #d97706;"></span>
+    <span>Ambiente do <strong>Projeto Anterior (Backup Legado)</strong> &bull; Navegando entre telas legadas</span>
+  </div>
+  <a href="/" style="background-color: #005ea3; color: white; padding: 4px 12px; border-radius: 6px; font-weight: 600; text-decoration: none; font-size: 11px; transition: background 0.15s ease;">
+    Voltar para o Projeto Novo &rarr;
+  </a>
+</div>
+`;
+
 const srcFiles = fs.readdirSync('src');
 for (const file of srcFiles) {
-  if (file.endsWith('.html')) {
+  if (file.endsWith('.html') && file !== 'index.html') {
+    let content = fs.readFileSync(path.join('src', file), 'utf8');
+    const activeId = PAGE_ACTIVE_IDS[file] || 'relatorios';
+    const navHtml = generateLegacyNavHtml(navConfig, activeId);
+
+    // Replace nav inside sidebar if present
+    content = content.replace(/<nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1">[\s\S]*?<\/nav>/i, navHtml);
+
+    // Fix relative assets
+    content = content.replaceAll('href="css/design-system.css"', 'href="/css/design-system.css"');
+    content = content.replaceAll('src="logo.svg"', 'src="/logo.svg"');
+
+    // Inject legacy banner after body opening if not present
+    if (!content.includes('Ambiente do <strong>Projeto Anterior')) {
+      content = content.replace(/<body([^>]*)>/i, `<body$1>\n${LEGACY_BANNER}`);
+    }
+
     const destDir = 'public/src';
     if (!fs.existsSync(destDir)) fs.mkdirSync(destDir, { recursive: true });
-    fs.copyFileSync(path.join('src', file), path.join(destDir, file));
-    // Also copy to public/ root for direct access
-    fs.copyFileSync(path.join('src', file), path.join('public', file));
+    fs.writeFileSync(path.join(destDir, file), content, 'utf8');
+    fs.writeFileSync(path.join('public', file), content, 'utf8');
   }
 }
-console.log('HTML files copied to public/src/ and public/');
+console.log('HTML files copied to public/src/ and public/ with synchronized legacy navigation and backup banner.');
 
-// 4. Prepare public/relatorios-antigo.html (pure legacy without banner)
-let relatoriosHtml = fs.readFileSync('src/relatorios.html', 'utf8');
-
-// Adjust relative asset paths if needed
-relatoriosHtml = relatoriosHtml.replaceAll('href="css/design-system.css"', 'href="/css/design-system.css"');
-relatoriosHtml = relatoriosHtml.replaceAll('src="logo.svg"', 'src="/logo.svg"');
-
+// 4. Also prepare public/relatorios-antigo.html explicitly
+let relatoriosHtml = fs.readFileSync('public/relatorios.html', 'utf8');
 fs.writeFileSync('public/relatorios-antigo.html', relatoriosHtml, 'utf8');
-console.log('public/relatorios-antigo.html created successfully (clean synced legacy).');
+console.log('public/relatorios-antigo.html created successfully.');

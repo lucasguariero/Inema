@@ -53,9 +53,20 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
     </style>
-    <link rel="stylesheet" href="css/design-system.css">
+    <link rel="stylesheet" href="/css/design-system.css">
 </head>
 <body class="bg-[#F8FAFC] text-slate-800 antialiased min-h-screen">
+
+<div style="background: linear-gradient(90deg, #fef3c7, #fffbeb); border-bottom: 1px solid #fde68a; padding: 6px 16px; font-size: 12px; color: #92400e; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 99999; box-shadow: 0 1px 3px rgba(0,0,0,0.05); font-family: Inter, sans-serif;">
+  <div style="display: flex; align-items: center; gap: 8px;">
+    <span style="display: inline-block; width: 8px; height: 8px; border-radius: 9999px; background-color: #d97706;"></span>
+    <span>Ambiente do <strong>Projeto Anterior (Backup Legado)</strong> &bull; Navegando entre telas legadas</span>
+  </div>
+  <a href="/" style="background-color: #005ea3; color: white; padding: 4px 12px; border-radius: 6px; font-weight: 600; text-decoration: none; font-size: 11px; transition: background 0.15s ease;">
+    Voltar para o Projeto Novo &rarr;
+  </a>
+</div>
+
     <!-- Header -->
     <header class="h-[60px] bg-[#0F4C3A] text-white fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 lg:px-6 shadow-xs">
                 <div class="flex items-center gap-3">
@@ -63,7 +74,7 @@
                 <span class="material-symbols-outlined text-2xl">menu</span>
             </button>
             <a href="index.html" class="flex items-center">
-                <img src="logo.svg" alt="INEMA" class="h-10 w-auto">
+                <img src="/logo.svg" alt="INEMA" class="h-10 w-auto">
             </a>
         </div>
         <div class="flex items-center gap-3 ml-auto">
@@ -121,19 +132,19 @@
                             <span class="material-symbols-outlined text-xl text-slate-500">fact_check</span>
                             <span class="text-sm font-semibold truncate">Fiscalização</span>
                         </div>
-                        <span id="icon_fiscalizacao" class="material-symbols-outlined text-lg text-slate-500 transition-transform duration-200 rotate-180">expand_more</span>
+                        <span id="icon_fiscalizacao" class="material-symbols-outlined text-lg text-slate-500 transition-transform duration-200 ">expand_more</span>
                     </button>
-                    <div id="subFiscalizacao" class="mt-1 border-l-2 border-slate-200 ml-4 pl-3 space-y-3">
+                    <div id="subFiscalizacao" class="hidden mt-1 border-l-2 border-slate-200 ml-4 pl-3 space-y-3">
                         <!-- Subgrupo: DENÚNCIAS -->
                         <div>
                             <div class="text-slate-400 font-semibold text-[10px] tracking-wider uppercase px-2 py-1 select-none pointer-events-none">
                                 DENÚNCIAS
                             </div>
                             <div class="space-y-1 mt-1">
-                        <a href="/?rota=atendente" id="menu-atendente" data-testid="menu-atendente"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                        <a href="/fiscalizacao.html" id="menu-atendente" data-testid="menu-atendente"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                             <span class="truncate">Atendente</span>
                         </a>
-                        <a href="/?rota=cidadao" id="menu-cidadao" data-testid="menu-cidadao"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                        <a href="/fiscalizacao.html?fluxo=externo" id="menu-cidadao" data-testid="menu-cidadao"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                             <span class="truncate">Formulário Cidadão</span>
                         </a>
                             </div>
@@ -144,10 +155,10 @@
                                 EMERGÊNCIAS QUÍMICAS
                             </div>
                             <div class="space-y-1 mt-1">
-                        <a href="/?rota=emergencia-interna" id="menu-emerg-interna" data-testid="menu-emerg-interna"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                        <a href="/emergencia-quimica.html?fluxo=interna" id="menu-emerg-interna" data-testid="menu-emerg-interna"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                             <span class="truncate">Cadastro Interno</span>
                         </a>
-                        <a href="/?rota=emergencia-externa" id="menu-emerg-externa" data-testid="menu-emerg-externa"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                        <a href="/emergencia-quimica-externa.html" id="menu-emerg-externa" data-testid="menu-emerg-externa"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                             <span class="truncate">Registro Externo</span>
                         </a>
                             </div>
@@ -158,10 +169,10 @@
                                 CONSULTAS
                             </div>
                             <div class="space-y-1 mt-1">
-                        <a href="/?rota=consulta-externa" id="menu-consulta-externa" data-testid="menu-consulta-externa"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                        <a href="/consulta-externa.html" id="menu-consulta-externa" data-testid="menu-consulta-externa"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                             <span class="truncate">Consulta Cidadão</span>
                         </a>
-                        <a href="/?rota=consulta-interna" id="menu-consulta-interna" data-testid="menu-consulta-interna"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                        <a href="/consulta-interna.html" id="menu-consulta-interna" data-testid="menu-consulta-interna"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                             <span class="truncate">Painel Interno DIFIS</span>
                             <span class="bg-rose-500 text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full" id="sidebarBadgeEmergencias">3</span>
                         </a>
@@ -172,7 +183,7 @@
 
                 <!-- Relatórios Gerenciais -->
                 <div class="pt-1">
-                    <a href="/src/relatorios.html" id="menu-relatorios" data-testid="nav-Relatórios Gerenciais" class="flex items-center justify-between px-3 py-2.5 rounded-lg text-[#0F4C3A] bg-[#E2ECE9] font-bold border border-[#CBDED8]/70 shadow-2xs transition-colors duration-150">
+                    <a href="/relatorios-antigo.html" id="menu-relatorios" data-testid="nav-Relatórios Gerenciais" class="flex items-center justify-between px-3 py-2.5 rounded-lg text-[#0F4C3A] bg-[#E2ECE9] font-bold border border-[#CBDED8]/70 shadow-2xs transition-colors duration-150">
                         <div class="flex items-center gap-3">
                             <span class="material-symbols-outlined text-xl text-[#0F4C3A]">bar_chart</span>
                             <span class="text-sm font-bold">Relatórios Gerenciais</span>
