@@ -179,18 +179,6 @@ const PAGE_ACTIVE_IDS = {
   'fauna.html': 'fauna'
 };
 
-const LEGACY_BANNER = `
-<div style="background: linear-gradient(90deg, #fef3c7, #fffbeb); border-bottom: 1px solid #fde68a; padding: 6px 16px; font-size: 12px; color: #92400e; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 99999; box-shadow: 0 1px 3px rgba(0,0,0,0.05); font-family: Inter, sans-serif;">
-  <div style="display: flex; align-items: center; gap: 8px;">
-    <span style="display: inline-block; width: 8px; height: 8px; border-radius: 9999px; background-color: #d97706;"></span>
-    <span>Ambiente do <strong>Projeto Anterior (Backup Legado)</strong> &bull; Navegando entre telas legadas</span>
-  </div>
-  <a href="/" style="background-color: #005ea3; color: white; padding: 4px 12px; border-radius: 6px; font-weight: 600; text-decoration: none; font-size: 11px; transition: background 0.15s ease;">
-    Voltar para o Projeto Novo &rarr;
-  </a>
-</div>
-`;
-
 const srcFiles = fs.readdirSync('src');
 for (const file of srcFiles) {
   if (file.endsWith('.html') && file !== 'index.html') {
@@ -205,18 +193,13 @@ for (const file of srcFiles) {
     content = content.replaceAll('href="css/design-system.css"', 'href="/css/design-system.css"');
     content = content.replaceAll('src="logo.svg"', 'src="/logo.svg"');
 
-    // Inject legacy banner after body opening if not present
-    if (!content.includes('Ambiente do <strong>Projeto Anterior')) {
-      content = content.replace(/<body([^>]*)>/i, `<body$1>\n${LEGACY_BANNER}`);
-    }
-
     const destDir = 'public/src';
     if (!fs.existsSync(destDir)) fs.mkdirSync(destDir, { recursive: true });
     fs.writeFileSync(path.join(destDir, file), content, 'utf8');
     fs.writeFileSync(path.join('public', file), content, 'utf8');
   }
 }
-console.log('HTML files copied to public/src/ and public/ with synchronized legacy navigation and backup banner.');
+console.log('HTML files copied to public/src/ and public/ with synchronized legacy navigation.');
 
 // 4. Also prepare public/relatorios-antigo.html explicitly
 let relatoriosHtml = fs.readFileSync('public/relatorios.html', 'utf8');

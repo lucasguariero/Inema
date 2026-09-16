@@ -8,11 +8,13 @@ import {
   UserCheck,
   ChevronRight,
   Sparkles,
+  Wand2,
   RotateCcw,
   Copy,
   Check,
   Navigation,
   FileCheck2,
+  FilePlus2,
   TreePine,
   Waves,
   Flame,
@@ -128,52 +130,38 @@ export const DenunciaExternaPage: React.FC<{ onNavigate?: (route: string) => voi
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto pb-12">
-      {/* Breadcrumb & Topo */}
-      <div className="flex flex-col gap-2">
-        <nav className="hidden sm:flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
-          <span className="hover:text-emerald-700 cursor-pointer" onClick={() => onNavigate?.('relatorios')}>
-            Início
-          </span>
-          <ChevronRight className="w-3.5 h-3.5" />
-          <span>Portal do Cidadão</span>
-          <ChevronRight className="w-3.5 h-3.5" />
-          <span>Denúncias</span>
-          <ChevronRight className="w-3.5 h-3.5" />
-          <span className="font-semibold text-emerald-700 dark:text-emerald-400">Formulário Cidadão (DOR002)</span>
-        </nav>
+      {/* Topo Oficial (Breadcrumb está exclusivamente na Topbar) */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-1">
+        <div>
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+            Canal de Denúncia Ambiental Cidadã
+          </h1>
+          <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+            Registre agressões ao meio ambiente no Estado da Bahia de forma rápida, segura e com opção de sigilo total.
+          </p>
+        </div>
 
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-1">
-          <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
-              Canal de Denúncia Ambiental Cidadã
-            </h1>
-            <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400">
-              Registre agressões ao meio ambiente no Estado da Bahia de forma rápida, segura e com opção de sigilo total.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 w-full sm:w-auto">
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={handlePreencherExemplo}
-              className="gap-1.5 text-xs font-semibold whitespace-nowrap shrink-0"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-              Preencher Exemplo
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={handleLimpar}
-              className="gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 whitespace-nowrap shrink-0"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              Limpar
-            </Button>
-          </div>
+        <div className="flex items-center gap-2 flex-wrap shrink-0">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handlePreencherExemplo}
+            className="gap-1.5 text-xs font-semibold whitespace-nowrap cursor-pointer shadow-2xs"
+          >
+            <Wand2 className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+            Preencher Exemplo
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleLimpar}
+            className="gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 whitespace-nowrap cursor-pointer shadow-2xs"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            Limpar
+          </Button>
         </div>
       </div>
 
@@ -273,12 +261,19 @@ export const DenunciaExternaPage: React.FC<{ onNavigate?: (route: string) => voi
         {/* Escolha do Tipo de Ocorrência */}
         <Card className="border-slate-200/90 dark:border-slate-800">
           <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">
-            <CardTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
-              1. O que você gostaria de denunciar?
-            </CardTitle>
-            <CardDescription className="text-xs">
-              Selecione a categoria que melhor representa a infração que você presenciou.
-            </CardDescription>
+            <div className="flex items-center gap-2.5">
+              <span className="w-7 h-7 rounded-lg bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/60 text-xs font-bold flex items-center justify-center shadow-2xs">
+                1
+              </span>
+              <div>
+                <CardTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
+                  O que você gostaria de denunciar?
+                </CardTitle>
+                <CardDescription className="text-xs">
+                  Selecione a categoria que melhor representa a infração que você presenciou.
+                </CardDescription>
+              </div>
+            </div>
           </CardHeader>
 
           <CardContent className="pt-5">
@@ -324,12 +319,19 @@ export const DenunciaExternaPage: React.FC<{ onNavigate?: (route: string) => voi
         {/* Detalhes e Descrição */}
         <Card className="border-slate-200/90 dark:border-slate-800">
           <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">
-            <CardTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
-              2. Detalhes da Ocorrência
-            </CardTitle>
-            <CardDescription className="text-xs">
-              Conte com suas palavras o que está acontecendo e quando ocorreu.
-            </CardDescription>
+            <div className="flex items-center gap-2.5">
+              <span className="w-7 h-7 rounded-lg bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/60 text-xs font-bold flex items-center justify-center shadow-2xs">
+                2
+              </span>
+              <div>
+                <CardTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
+                  Detalhes da Ocorrência
+                </CardTitle>
+                <CardDescription className="text-xs">
+                  Conte com suas palavras o que está acontecendo e quando ocorreu.
+                </CardDescription>
+              </div>
+            </div>
           </CardHeader>
 
           <CardContent className="pt-5 space-y-4">
@@ -417,20 +419,25 @@ export const DenunciaExternaPage: React.FC<{ onNavigate?: (route: string) => voi
         <Card className="border-slate-200/90 dark:border-slate-800">
           <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">
             <div className="flex items-center justify-between flex-wrap gap-2">
-              <div>
-                <CardTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
-                  3. Onde fica o local da infração?
-                </CardTitle>
-                <CardDescription className="text-xs">
-                  Informe a cidade e pontos de referência para que a equipe chegue ao local correto.
-                </CardDescription>
+              <div className="flex items-center gap-2.5">
+                <span className="w-7 h-7 rounded-lg bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/60 text-xs font-bold flex items-center justify-center shadow-2xs">
+                  3
+                </span>
+                <div>
+                  <CardTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
+                    Onde fica o local da infração?
+                  </CardTitle>
+                  <CardDescription className="text-xs">
+                    Informe a cidade e pontos de referência para que a equipe chegue ao local correto.
+                  </CardDescription>
+                </div>
               </div>
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 onClick={handlePegarGps}
-                className="gap-1.5 text-xs text-emerald-700 dark:text-emerald-400 font-bold border-emerald-300 dark:border-emerald-800"
+                className="gap-1.5 text-xs text-emerald-700 dark:text-emerald-400 font-bold border-emerald-300 dark:border-emerald-800 cursor-pointer shadow-2xs"
               >
                 <Navigation className="w-3.5 h-3.5" />
                 {gpsAtivo ? 'Localização GPS Obtida' : 'Usar minha localização GPS'}
@@ -505,8 +512,9 @@ export const DenunciaExternaPage: React.FC<{ onNavigate?: (route: string) => voi
             </span>
             <Button
               type="submit"
-              className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs shadow-sm px-7"
+              className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs shadow-sm px-7 flex items-center gap-2 cursor-pointer"
             >
+              <FilePlus2 className="w-4 h-4" />
               Enviar Denúncia ao INEMA
             </Button>
           </CardFooter>

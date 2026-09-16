@@ -3,6 +3,8 @@ import {
   Search,
   Filter,
   FileText,
+  FilePlus2,
+  AlertOctagon,
   Flame,
   CheckCircle2,
   Clock,
@@ -78,51 +80,37 @@ export const ConsultaExternaPage: React.FC<{ onNavigate?: (route: string) => voi
   };
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-12">
-      {/* Topo & Breadcrumb */}
-      <div className="flex flex-col gap-2">
-        <nav className="hidden sm:flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
-          <span className="hover:text-emerald-700 cursor-pointer" onClick={() => onNavigate?.('relatorios')}>
-            Início
-          </span>
-          <ChevronRight className="w-3.5 h-3.5" />
-          <span>Portal do Cidadão</span>
-          <ChevronRight className="w-3.5 h-3.5" />
-          <span>Consultas</span>
-          <ChevronRight className="w-3.5 h-3.5" />
-          <span className="font-semibold text-emerald-700 dark:text-emerald-400">Consulta Cidadão</span>
-        </nav>
+    <div className="space-y-6 w-full max-w-7xl mx-auto pb-12">
+      {/* Topo Oficial (Breadcrumb está exclusivamente na Topbar) */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-1">
+        <div>
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+            Acompanhamento de Denúncias e Emergências
+          </h1>
+          <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+            Consulte protocolos vinculados, visualize histórico de fiscalização e faça o download de comprovantes oficiais.
+          </p>
+        </div>
 
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-1">
-          <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
-              Acompanhamento de Denúncias e Emergências
-            </h1>
-            <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400">
-              Consulte protocolos vinculados, visualize histórico de fiscalização e faça o download de comprovantes oficiais.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 w-full sm:w-auto">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => onNavigate?.('cidadao')}
-              className="gap-1.5 text-xs font-semibold whitespace-nowrap shrink-0"
-            >
-              <FileText className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-              Nova Denúncia
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => onNavigate?.('emergencia-externa')}
-              className="gap-1.5 text-xs font-semibold text-rose-700 dark:text-rose-400 whitespace-nowrap shrink-0"
-            >
-              <Flame className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
-              Comunicar Acidente
-            </Button>
-          </div>
+        <div className="flex items-center gap-2 flex-wrap shrink-0">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => onNavigate?.('cidadao')}
+            className="gap-1.5 text-xs font-semibold whitespace-nowrap cursor-pointer shadow-2xs"
+          >
+            <FilePlus2 className="w-3.5 h-3.5 text-slate-600 dark:text-slate-300" />
+            Nova Denúncia
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => onNavigate?.('emergencia-externa')}
+            className="gap-1.5 text-xs font-semibold text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-900 hover:bg-rose-50 dark:hover:bg-rose-950/40 whitespace-nowrap cursor-pointer shadow-2xs"
+          >
+            <AlertOctagon className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
+            Comunicar Acidente
+          </Button>
         </div>
       </div>
 

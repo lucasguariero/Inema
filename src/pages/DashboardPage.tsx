@@ -331,19 +331,14 @@ export const DashboardPage: React.FC = () => {
       {/* 5. Tabela Oficial: Processos Vencidos (Top 5) */}
       <Card className="w-full overflow-hidden shadow-2xs border border-slate-200 dark:border-slate-800 dark:bg-slate-900 transition-all">
         <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between flex-wrap gap-2">
-          <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 flex items-center justify-center border border-rose-200 dark:border-rose-900/60 shadow-2xs">
-              <AlertTriangle className="w-3.5 h-3.5" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <CardTitle className="text-sm font-bold text-slate-900 dark:text-slate-100 tracking-tight">
-                  Processos Vencidos (Top 5)
-                </CardTitle>
-                <span className="text-xs font-medium text-slate-400 dark:text-slate-500">
-                  (Exibindo {processosFiltrados.length} de 198)
-                </span>
-              </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <CardTitle className="text-sm font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+                Processos Vencidos (Top 5)
+              </CardTitle>
+              <span className="text-xs font-medium text-slate-400 dark:text-slate-500">
+                (Exibindo {processosFiltrados.length} de 198)
+              </span>
             </div>
           </div>
           <button

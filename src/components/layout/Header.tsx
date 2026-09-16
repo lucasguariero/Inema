@@ -162,16 +162,6 @@ export const Header: React.FC<HeaderProps> = ({ activeRoute = 'relatorios', isSi
           <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-rose-500 rounded-full" />
         </button>
 
-        {/* Botão Acesso Rápido ao Projeto Antigo (Backup) */}
-        <a
-          href="/relatorios-antigo.html"
-          className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100/80 dark:bg-amber-950/30 dark:hover:bg-amber-950/50 text-amber-800 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/60 text-xs font-semibold transition-colors cursor-pointer"
-          title="Acessar páginas do projeto antigo (backup)"
-        >
-          <History className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-          <span>Backup Antigo</span>
-        </a>
-
         <div className="h-4 w-px bg-slate-200 dark:bg-slate-700 mx-0.5 hidden sm:block" />
 
         {/* Menu de Perfil do Gestor com Seletores e 100% Opacidade */}
@@ -258,14 +248,11 @@ export const Header: React.FC<HeaderProps> = ({ activeRoute = 'relatorios', isSi
               )}
             </div>
 
-            {/* Link para o Projeto Antigo (Backup) */}
+            {/* Link para o Design Antigo (Backup) */}
             <DropdownMenuItem asChild className="cursor-pointer text-xs dark:text-slate-300 dark:hover:text-white dark:focus:bg-slate-800">
-              <a href="/relatorios-antigo.html" className="flex items-center gap-2 w-full py-1">
-                <History className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-                <div className="flex flex-col">
-                  <span className="font-semibold text-slate-800 dark:text-slate-200">Projeto Antigo (Backup)</span>
-                  <span className="text-[10px] text-slate-400">Navegar entre telas legadas</span>
-                </div>
+              <a href="/relatorios-antigo.html" className="flex items-center gap-2 w-full py-1.5 px-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                <History className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 shrink-0" />
+                <span className="font-medium text-xs text-slate-700 dark:text-slate-200">Ver design antigo</span>
               </a>
             </DropdownMenuItem>
 

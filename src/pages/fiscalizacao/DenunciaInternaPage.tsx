@@ -11,6 +11,7 @@ import {
   Check,
   RotateCcw,
   Sparkles,
+  Wand2,
   ChevronRight,
   Plus,
   Trash2,
@@ -177,70 +178,49 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
   };
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-12">
-      {/* Topo & Ações */}
-      <div className="flex flex-col gap-2">
-        <nav className="hidden sm:flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
-          <span className="hover:text-emerald-700 cursor-pointer" onClick={() => onNavigate?.('relatorios')}>
-            Início
-          </span>
-          <ChevronRight className="w-3.5 h-3.5" />
-          <span>Fiscalização</span>
-          <ChevronRight className="w-3.5 h-3.5" />
-          <span>Denúncias</span>
-          <ChevronRight className="w-3.5 h-3.5" />
-          <span className="font-semibold text-emerald-700 dark:text-emerald-400">Atendente (Interno)</span>
-        </nav>
+    <div className="space-y-6 w-full max-w-7xl mx-auto pb-12">
+      {/* Topo Oficial (Breadcrumb está exclusivamente na Topbar) */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pt-1">
+        <div>
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight leading-tight">
+            Cadastro de Denúncia Ambiental (DOR001)
+          </h1>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            Módulo de atendimento interno para triagem e autuação de comunicados ambientais.
+          </p>
+        </div>
 
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pt-1">
-          <div>
-            <div className="flex items-center gap-2.5 sm:gap-3">
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 flex items-center justify-center shadow-2xs shrink-0">
-                <FileText className="w-5 h-5" />
-              </div>
-              <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight leading-tight">
-                  Cadastro de Denúncia Ambiental (DOR001)
-                </h1>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                  Módulo de atendimento interno para triagem e autuação de comunicados ambientais.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Ações de Topo */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 w-full sm:w-auto">
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={handlePreencherExemplo}
-              className="gap-1.5 text-xs font-semibold whitespace-nowrap shrink-0"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-              Preencher Exemplo
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={handleLimpar}
-              className="gap-1.5 text-xs font-semibold whitespace-nowrap shrink-0"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              Limpar
-            </Button>
-            <Button
-              type="button"
-              variant="secondary"
-              size="sm"
-              onClick={handleSalvarRascunho}
-              className="gap-1.5 text-xs font-semibold whitespace-nowrap shrink-0"
-            >
-              Salvar Rascunho
-            </Button>
-          </div>
+        {/* Ações de Topo */}
+        <div className="flex items-center gap-2 flex-wrap shrink-0">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handlePreencherExemplo}
+            className="gap-1.5 text-xs font-semibold whitespace-nowrap cursor-pointer shadow-2xs"
+          >
+            <Wand2 className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+            Preencher Exemplo
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleLimpar}
+            className="gap-1.5 text-xs font-semibold whitespace-nowrap cursor-pointer shadow-2xs"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            Limpar
+          </Button>
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            onClick={handleSalvarRascunho}
+            className="gap-1.5 text-xs font-semibold whitespace-nowrap cursor-pointer shadow-2xs"
+          >
+            Salvar Rascunho
+          </Button>
         </div>
       </div>
 
@@ -259,7 +239,7 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
           <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">
             <div className="flex items-center justify-between flex-wrap gap-2">
               <div className="flex items-center gap-2.5">
-                <span className="w-7 h-7 rounded-lg bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 text-xs font-bold flex items-center justify-center">
+                <span className="w-7 h-7 rounded-lg bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/60 text-xs font-bold flex items-center justify-center shadow-2xs">
                   1
                 </span>
                 <div>
@@ -355,7 +335,7 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
         <Card className="border-slate-200/90 dark:border-slate-800">
           <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">
             <div className="flex items-center gap-2.5">
-              <span className="w-7 h-7 rounded-lg bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 text-xs font-bold flex items-center justify-center">
+              <span className="w-7 h-7 rounded-lg bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/60 text-xs font-bold flex items-center justify-center shadow-2xs">
                 2
               </span>
               <div>
@@ -484,7 +464,7 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
         <Card className="border-slate-200/90 dark:border-slate-800">
           <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">
             <div className="flex items-center gap-2.5">
-              <span className="w-7 h-7 rounded-lg bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 text-xs font-bold flex items-center justify-center">
+              <span className="w-7 h-7 rounded-lg bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/60 text-xs font-bold flex items-center justify-center shadow-2xs">
                 3
               </span>
               <div>
@@ -660,7 +640,7 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
           <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">
             <div className="flex items-center justify-between flex-wrap gap-2">
               <div className="flex items-center gap-2.5">
-                <span className="w-7 h-7 rounded-lg bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 text-xs font-bold flex items-center justify-center">
+                <span className="w-7 h-7 rounded-lg bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/60 text-xs font-bold flex items-center justify-center shadow-2xs">
                   4
                 </span>
                 <div>

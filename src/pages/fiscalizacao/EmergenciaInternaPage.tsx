@@ -10,6 +10,7 @@ import {
   Check,
   RotateCcw,
   Sparkles,
+  Wand2,
   ChevronRight,
   Plus,
   Trash2,
@@ -151,70 +152,51 @@ export const EmergenciaInternaPage: React.FC<{ onNavigate?: (route: string) => v
   };
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-12">
-      {/* Topo & Breadcrumb */}
-      <div className="flex flex-col gap-2">
-        <nav className="hidden sm:flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
-          <span className="hover:text-emerald-700 cursor-pointer" onClick={() => onNavigate?.('relatorios')}>
-            Início
-          </span>
-          <ChevronRight className="w-3.5 h-3.5" />
-          <span>Fiscalização</span>
-          <ChevronRight className="w-3.5 h-3.5" />
-          <span>Emergências Químicas</span>
-          <ChevronRight className="w-3.5 h-3.5" />
-          <span className="font-semibold text-emerald-700 dark:text-emerald-400">Cadastro Interno (DOR003)</span>
-        </nav>
+    <div className="space-y-6 w-full max-w-7xl mx-auto pb-12">
+      {/* Topo Oficial (Breadcrumb está exclusivamente na Topbar) */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-1">
+        <div>
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight flex flex-wrap items-center gap-2">
+            Atendimento a Emergência Química (RE)
+            <Badge variant="rose" dot>
+              Plantão DIFIS 24h
+            </Badge>
+          </h1>
+          <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+            Registro operacional de acidentes com produtos perigosos para acionamento de resposta rápida e perícia.
+          </p>
+        </div>
 
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-1">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-rose-100 dark:bg-rose-950/80 text-rose-700 dark:text-rose-300 flex items-center justify-center shadow-2xs shrink-0">
-              <Flame className="w-5 h-5" />
-            </div>
-            <div>
-              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight flex flex-wrap items-center gap-2">
-                Atendimento a Emergência Química (RE)
-                <Badge variant="rose" dot>
-                  Plantão DIFIS 24h
-                </Badge>
-              </h1>
-              <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400">
-                Registro operacional de acidentes com produtos perigosos para acionamento de resposta rápida e perícia.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 w-full sm:w-auto">
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={handlePreencherExemplo}
-              className="gap-1.5 text-xs font-semibold whitespace-nowrap shrink-0"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-              Preencher Exemplo
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={handleLimpar}
-              className="gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 whitespace-nowrap shrink-0"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              Limpar
-            </Button>
-            <Button
-              type="button"
-              variant="secondary"
-              size="sm"
-              onClick={handleSalvarRascunho}
-              className="gap-1.5 text-xs font-semibold whitespace-nowrap shrink-0"
-            >
-              Salvar Rascunho
-            </Button>
-          </div>
+        <div className="flex items-center gap-2 flex-wrap shrink-0">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handlePreencherExemplo}
+            className="gap-1.5 text-xs font-semibold whitespace-nowrap cursor-pointer shadow-2xs"
+          >
+            <Wand2 className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+            Preencher Exemplo
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleLimpar}
+            className="gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 whitespace-nowrap cursor-pointer shadow-2xs"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            Limpar
+          </Button>
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            onClick={handleSalvarRascunho}
+            className="gap-1.5 text-xs font-semibold whitespace-nowrap cursor-pointer shadow-2xs"
+          >
+            Salvar Rascunho
+          </Button>
         </div>
       </div>
 
@@ -232,7 +214,7 @@ export const EmergenciaInternaPage: React.FC<{ onNavigate?: (route: string) => v
           <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">
             <div className="flex items-center justify-between flex-wrap gap-2">
               <div className="flex items-center gap-2.5">
-                <span className="w-7 h-7 rounded-lg bg-rose-100 dark:bg-rose-900/60 text-rose-800 dark:text-rose-300 text-xs font-bold flex items-center justify-center">
+                <span className="w-7 h-7 rounded-lg bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/60 text-xs font-bold flex items-center justify-center shadow-2xs">
                   1
                 </span>
                 <div>
@@ -336,7 +318,7 @@ export const EmergenciaInternaPage: React.FC<{ onNavigate?: (route: string) => v
         <Card className="border-slate-200/90 dark:border-slate-800">
           <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">
             <div className="flex items-center gap-2.5">
-              <span className="w-7 h-7 rounded-lg bg-rose-100 dark:bg-rose-900/60 text-rose-800 dark:text-rose-300 text-xs font-bold flex items-center justify-center">
+              <span className="w-7 h-7 rounded-lg bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/60 text-xs font-bold flex items-center justify-center shadow-2xs">
                 2
               </span>
               <div>
@@ -526,7 +508,7 @@ export const EmergenciaInternaPage: React.FC<{ onNavigate?: (route: string) => v
         <Card className="border-slate-200/90 dark:border-slate-800">
           <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">
             <div className="flex items-center gap-2.5">
-              <span className="w-7 h-7 rounded-lg bg-rose-100 dark:bg-rose-900/60 text-rose-800 dark:text-rose-300 text-xs font-bold flex items-center justify-center">
+              <span className="w-7 h-7 rounded-lg bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/60 text-xs font-bold flex items-center justify-center shadow-2xs">
                 3
               </span>
               <div>

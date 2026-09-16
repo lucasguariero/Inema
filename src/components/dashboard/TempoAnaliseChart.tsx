@@ -48,8 +48,8 @@ const CustomTooltip = ({ active, payload }: any) => {
 
 export const TempoAnaliseChart: React.FC = () => {
   return (
-    <Card className="flex flex-col justify-between hover:border-slate-300/80 transition-all duration-300 shadow-2xs dark:bg-slate-900 dark:border-slate-800">
-      <CardHeader className="flex flex-row items-center justify-between pb-2">
+    <Card className="relative flex flex-col justify-between hover:border-slate-300/80 transition-all duration-300 shadow-2xs dark:bg-slate-900 dark:border-slate-800">
+      <CardHeader className="flex flex-row items-start justify-between pb-2 pr-10">
         <div>
           <div className="flex items-center gap-2">
             <CardTitle className="text-sm font-semibold text-slate-900 dark:text-slate-100">
@@ -64,7 +64,7 @@ export const TempoAnaliseChart: React.FC = () => {
           </CardDescription>
         </div>
         <button
-          className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors cursor-pointer"
+          className="absolute top-3.5 right-3.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors cursor-pointer p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
           title="Tempo médio decorrido entre o recebimento da tarefa e a emissão do parecer."
         >
           <Info className="w-3.5 h-3.5" />

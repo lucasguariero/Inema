@@ -3,6 +3,9 @@ import {
   Search,
   Filter,
   FileText,
+  FilePlus2,
+  Gavel,
+  FileDown,
   Flame,
   CheckCircle2,
   AlertTriangle,
@@ -34,6 +37,7 @@ import {
 } from '@/components/ui/dialog';
 import { REGISTROS_MOCK_INICIAIS, RegistroFiscalizacao, MUNICIPIOS_BAHIA } from '@/data/fiscalizacaoMock';
 import { useTheme } from '@/context/ThemeContext';
+import { cn } from '@/lib/utils';
 
 const FISCAIS_DIFIS = [
   'Eng. Carlos Andrade (DIFIS/Emergências)',
@@ -124,77 +128,74 @@ export const ConsultaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
   const getPrioridadeBadge = (prioridade: RegistroFiscalizacao['prioridade']) => {
     switch (prioridade) {
       case 'Crítica':
-        return <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300 animate-pulse">Crítica</span>;
+        return (
+          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-rose-50 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200 dark:border-rose-900/60">
+            Crítica
+          </span>
+        );
       case 'Alta':
-        return <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">Alta</span>;
+        return (
+          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-900/60">
+            Alta
+          </span>
+        );
       case 'Média':
-        return <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300">Média</span>;
+        return (
+          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200 dark:border-blue-900/60">
+            Média
+          </span>
+        );
       default:
-        return <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300">Normal</span>;
+        return (
+          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+            Normal
+          </span>
+        );
     }
   };
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-12">
-      {/* Topo & Breadcrumb */}
-      <div className="flex flex-col gap-2">
-        <nav className="hidden sm:flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
-          <span className="hover:text-emerald-700 cursor-pointer" onClick={() => onNavigate?.('relatorios')}>
-            Início
-          </span>
-          <ChevronRight className="w-3.5 h-3.5" />
-          <span>Fiscalização</span>
-          <ChevronRight className="w-3.5 h-3.5" />
-          <span>Consultas</span>
-          <ChevronRight className="w-3.5 h-3.5" />
-          <span className="font-semibold text-emerald-700 dark:text-emerald-400">Painel Interno DIFIS</span>
-        </nav>
+    <div className="space-y-6 w-full max-w-7xl mx-auto pb-12">
+      {/* Topo Oficial (Breadcrumb está exclusivamente na Topbar) */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-1">
+        <div>
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight flex flex-wrap items-center gap-2">
+            Painel de Operações DIFIS
+            <Badge variant="emerald">Ambiente Técnico</Badge>
+          </h1>
+          <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+            Pauta técnica centralizada de denúncias ambientais, emergências químicas e distribuição de vistorias.
+          </p>
+        </div>
 
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-1">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 flex items-center justify-center shadow-2xs shrink-0">
-              <Layers className="w-5 h-5" />
-            </div>
-            <div>
-              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight flex flex-wrap items-center gap-2">
-                Painel de Operações DIFIS
-                <Badge variant="emerald">Ambiente Técnico</Badge>
-              </h1>
-              <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400">
-                Pauta técnica centralizada de denúncias ambientais, emergências químicas e distribuição de vistorias.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 w-full sm:w-auto">
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => onNavigate?.('atendente')}
-              className="gap-1.5 text-xs font-semibold whitespace-nowrap shrink-0"
-            >
-              <FileText className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-              Nova Denúncia
-            </Button>
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => onNavigate?.('emergencia-interna')}
-              className="gap-1.5 text-xs font-semibold text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-900 whitespace-nowrap shrink-0"
-            >
-              <Flame className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
-              Autuar Emergência (RE)
-            </Button>
-            <Button
-              size="sm"
-              variant="secondary"
-              onClick={() => alert('Exportando Pauta Operacional DIFIS para planilha Excel...')}
-              className="gap-1.5 text-xs font-semibold whitespace-nowrap shrink-0"
-            >
-              <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-700 dark:text-emerald-300" />
-              Exportar Pauta
-            </Button>
-          </div>
+        <div className="flex items-center gap-2 flex-wrap shrink-0">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => onNavigate?.('atendente')}
+            className="gap-1.5 text-xs font-semibold whitespace-nowrap cursor-pointer shadow-2xs"
+          >
+            <FilePlus2 className="w-3.5 h-3.5 text-slate-600 dark:text-slate-300" />
+            Nova Denúncia
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => onNavigate?.('emergencia-interna')}
+            className="gap-1.5 text-xs font-semibold text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-900 hover:bg-rose-50 dark:hover:bg-rose-950/40 whitespace-nowrap cursor-pointer shadow-2xs"
+          >
+            <Gavel className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
+            Autuar Emergência (RE)
+          </Button>
+          <Button
+            size="sm"
+            variant="secondary"
+            onClick={() => alert('Exportando Pauta Operacional DIFIS para planilha Excel...')}
+            className="gap-1.5 text-xs font-semibold whitespace-nowrap cursor-pointer shadow-2xs"
+          >
+            <FileDown className="w-3.5 h-3.5 text-slate-700 dark:text-slate-200" />
+            Exportar Pauta
+          </Button>
         </div>
       </div>
 
@@ -303,24 +304,24 @@ export const ConsultaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
       </Card>
 
       {/* Tabela de Operações DIFIS */}
-      <Card className="border-slate-200/90 dark:border-slate-800 overflow-hidden">
+      <Card className="border-slate-200 dark:border-slate-800 shadow-2xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-semibold uppercase text-[10px] tracking-wider">
-                <th className="py-3 px-4">Protocolo / Tipo</th>
-                <th className="py-3 px-4">Objeto / Ocorrência</th>
-                <th className="py-3 px-4">Município / UR</th>
-                <th className="py-3 px-4">Prioridade</th>
-                <th className="py-3 px-4">Fiscal Responsável</th>
-                <th className="py-3 px-4">Status</th>
-                <th className="py-3 px-4 text-right">Ações</th>
+              <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-600 dark:text-slate-400 font-semibold uppercase text-[10px] tracking-wider">
+                <th className="py-3 px-4 font-semibold whitespace-nowrap">Protocolo / Tipo</th>
+                <th className="py-3 px-4 font-semibold">Objeto / Ocorrência</th>
+                <th className="py-3 px-4 font-semibold whitespace-nowrap">Município / UR</th>
+                <th className="py-3 px-4 font-semibold whitespace-nowrap">Prioridade</th>
+                <th className="py-3 px-4 font-semibold whitespace-nowrap">Fiscal Responsável</th>
+                <th className="py-3 px-4 font-semibold whitespace-nowrap">Status</th>
+                <th className="py-3 px-4 text-right font-semibold whitespace-nowrap">Ações</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               {registrosFiltrados.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-8 text-center text-slate-400">
+                  <td colSpan={7} className="py-12 text-center text-slate-400">
                     Nenhuma ocorrência encontrada com os filtros selecionados.
                   </td>
                 </tr>
@@ -328,71 +329,76 @@ export const ConsultaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
                 registrosFiltrados.map((r) => (
                   <tr
                     key={r.id}
-                    className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors"
+                    className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-colors"
                   >
-                    <td className="py-3 px-4">
-                      <div className="font-mono font-bold text-slate-900 dark:text-white">
+                    <td className="py-3 px-4 align-top">
+                      <div className="font-mono font-semibold text-slate-900 dark:text-white">
                         {r.protocolo}
                       </div>
-                      <div className="mt-0.5">
-                        <Badge variant={r.tipo === 'RE' ? 'rose' : 'emerald'}>
-                          {r.tipo} • {r.tipoNome}
-                        </Badge>
+                      <div className="mt-1">
+                        <span className={cn(
+                          "inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium border",
+                          r.tipo === 'RE'
+                            ? "bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-900/60"
+                            : "bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700"
+                        )}>
+                          {r.tipo} &bull; {r.tipoNome}
+                        </span>
                       </div>
                     </td>
 
-                    <td className="py-3 px-4 max-w-xs">
-                      <p className="text-slate-800 dark:text-slate-200 font-medium truncate" title={r.descricao}>
+                    <td className="py-3 px-4 max-w-xs align-top">
+                      <p className="text-slate-900 dark:text-slate-100 font-medium truncate" title={r.descricao}>
                         {r.descricao}
                       </p>
-                      <span className="text-[11px] text-slate-400 block truncate">
+                      <span className="text-[11px] text-slate-500 dark:text-slate-400 block truncate mt-0.5">
                         Alvo: {r.infratorOuResponsavel}
                       </span>
                     </td>
 
-                    <td className="py-3 px-4">
-                      <div className="text-slate-800 dark:text-slate-200 font-medium">
+                    <td className="py-3 px-4 align-top">
+                      <div className="text-slate-900 dark:text-slate-100 font-medium">
                         {r.municipio}
                       </div>
-                      <span className="text-[11px] text-slate-400">{r.unidadeRegional}</span>
+                      <span className="text-[11px] text-slate-500 dark:text-slate-400 block">{r.unidadeRegional}</span>
                     </td>
 
-                    <td className="py-3 px-4">{getPrioridadeBadge(r.prioridade)}</td>
+                    <td className="py-3 px-4 align-top whitespace-nowrap">{getPrioridadeBadge(r.prioridade)}</td>
 
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-4 align-top whitespace-nowrap">
                       {r.tecnicoResponsavel ? (
                         <span className="text-slate-800 dark:text-slate-200 font-medium flex items-center gap-1.5">
-                          <UserCheck className="w-3.5 h-3.5 text-emerald-600" />
-                          {r.tecnicoResponsavel}
+                          <UserCheck className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400 shrink-0" />
+                          <span>{r.tecnicoResponsavel}</span>
                         </span>
                       ) : (
-                        <span className="text-amber-600 dark:text-amber-400 font-bold text-[11px]">
-                          Pendente de Designação
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400 border border-amber-200 dark:border-amber-900/40">
+                          Pendente
                         </span>
                       )}
                     </td>
 
-                    <td className="py-3 px-4">{getStatusBadge(r.status)}</td>
+                    <td className="py-3 px-4 align-top whitespace-nowrap">{getStatusBadge(r.status)}</td>
 
-                    <td className="py-3 px-4 text-right">
+                    <td className="py-3 px-4 text-right align-top whitespace-nowrap">
                       <div className="flex items-center justify-end gap-1.5">
                         <Button
                           size="sm"
                           variant="outline"
                           onClick={() => setDesignarModalReg(r)}
-                          className="h-8 px-2 text-[11px] font-semibold"
+                          className="h-7 px-2 text-xs font-medium cursor-pointer shadow-2xs gap-1"
                           title="Designar Técnico"
                         >
-                          <User className="w-3 h-3" />
+                          <User className="w-3 h-3 text-slate-500" />
                           Designar
                         </Button>
                         <Button
                           size="sm"
                           variant="secondary"
                           onClick={() => setDossieAberto(r)}
-                          className="h-8 px-2 text-[11px] font-semibold gap-1"
+                          className="h-7 px-2 text-xs font-medium gap-1 cursor-pointer shadow-2xs"
                         >
-                          <Eye className="w-3 h-3" />
+                          <Eye className="w-3 h-3 text-slate-500" />
                           Dossiê
                         </Button>
                       </div>
