@@ -29,7 +29,7 @@ import {
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { FilamentSelect } from '@/components/filament';
+import { FilamentSelect, FilamentTabs } from '@/components/filament';
 import {
  Dialog,
  DialogContent,
@@ -231,53 +231,31 @@ export const AtividadesDidaticasPage: React.FC<{ onNavigate?: (route: string) =>
  return (
  <div className="space-y-6">
       {/* CABEÇALHO DO MÓDULO */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-4">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
-            Autorização para Realização de Atividades Didáticas em UC
-          </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Aulas práticas e saídas de campo universitárias / técnicas: Tipo 1 (sem coleta) e Tipo 2 (com coleta e captura de espécimes).
-          </p>
-        </div>
-
-        {/* NAVEGAÇÃO DE ABAS */}
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setAbaAtiva('painel')}
-            className={cn(
-              "px-3 py-1.5 text-xs font-semibold rounded-lg transition-all",
-              abaAtiva === 'painel'
-                ? "bg-[#0F4C3A] text-white shadow-xs"
-                : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-50"
-            )}
-          >
-            Processos AAD
-          </button>
-          <button
-            onClick={() => setAbaAtiva('formulario')}
-            className={cn(
-              "px-3 py-1.5 text-xs font-semibold rounded-lg transition-all",
-              abaAtiva === 'formulario'
-                ? "bg-[#0F4C3A] text-white shadow-xs"
-                : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-50"
-            )}
-          >
-            Nova Solicitação
-          </button>
-          <button
-            onClick={() => setAbaAtiva('analise')}
-            className={cn(
-              "px-3 py-1.5 text-xs font-semibold rounded-lg transition-all",
-              abaAtiva === 'analise'
-                ? "bg-[#0F4C3A] text-white shadow-xs"
-                : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-50"
-            )}
-          >
-            Análise e Decisão
-          </button>
-        </div>
+      <div className="mb-4">
+        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+          Autorização para Realização de Atividades Didáticas em UC
+        </h1>
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+          Aulas práticas e saídas de campo universitárias / técnicas: Tipo 1 (sem coleta) e Tipo 2 (com coleta e captura de espécimes).
+        </p>
       </div>
+
+      {/* NAVEGAÇÃO DE ABAS OFICIAL GLA (FILAMENT) */}
+      <FilamentTabs
+        tabs={[
+          { id: 'painel', label: 'Processos AAD', badge: processos.length },
+          { id: 'formulario', label: 'Nova Solicitação' },
+          { id: 'analise', label: 'Análise e Decisão' }
+        ]}
+        activeTab={abaAtiva}
+        onChange={(tabId) => {
+          if (tabId === 'analise' && !processoSelecionado) {
+            setProcessoSelecionado(processos[0]);
+          }
+          setAbaAtiva(tabId as any);
+        }}
+        className="mb-6"
+      />
 
  {/* ========================================================================= */}
  {/* ABA 1: PAINEL DE PROCESSOS AAD */}

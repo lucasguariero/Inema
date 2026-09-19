@@ -30,7 +30,7 @@ import {
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { FilamentSelect } from '@/components/filament';
+import { FilamentSelect, FilamentTabs } from '@/components/filament';
 import {
  Dialog,
  DialogContent,
@@ -233,43 +233,31 @@ export const AutorizacaoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
 
  return (
  <div className="space-y-6">
- {/* CABEÇALHO DO MÓDULO */}
- <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-4">
- <div>
- <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
- Autorização Prévia para Realização de Atividades ou Eventos em UC
- </h1>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Processamento formal, instrução documental , análise técnica e emissão de portaria autorizativa .
- </p>
- </div>
+      {/* CABEÇALHO DO MÓDULO */}
+      <div className="mb-4">
+        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+          Autorização Prévia para Realização de Atividades ou Eventos em UC
+        </h1>
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+          Processamento formal, instrução documental, análise técnica e emissão de portaria autorizativa.
+        </p>
+      </div>
 
- {/* CONTROLE DE ABAS SUPERIORES */}
- <div className="flex items-center gap-2">
- <button
- onClick={() => setAbaAtiva('painel')}
- className={cn(
- "px-3 py-1.5 text-xs font-semibold rounded-lg transition-all",
- abaAtiva === 'painel'
- ? "bg-[#0F4C3A] text-white shadow-xs"
- : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-50"
- )}
- >
- Painel de Processos
- </button>
- <button
- onClick={() => setAbaAtiva('analise')}
- className={cn(
- "px-3 py-1.5 text-xs font-semibold rounded-lg transition-all",
- abaAtiva === 'analise'
- ? "bg-[#0F4C3A] text-white shadow-xs"
- : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-50"
- )}
- >
- Análise e Portaria
- </button>
- </div>
- </div>
+      {/* NAVEGAÇÃO DE ABAS OFICIAL GLA (FILAMENT) */}
+      <FilamentTabs
+        tabs={[
+          { id: 'painel', label: 'Painel de Processos', badge: processos.length },
+          { id: 'analise', label: 'Análise e Portaria' }
+        ]}
+        activeTab={abaAtiva}
+        onChange={(tabId) => {
+          if (tabId === 'analise' && !processoSelecionado) {
+            setProcessoSelecionado(processos[0]);
+          }
+          setAbaAtiva(tabId as any);
+        }}
+        className="mb-6"
+      />
 
  {/* ========================================================================= */}
  {/* ABA 1: PAINEL DE PROCESSOS AAV COM CONTROLE DE SLA E SEI-BA */}
@@ -474,7 +462,7 @@ export const AutorizacaoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
  <Card className="border-slate-200 dark:border-slate-800 shadow-sm">
  <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800">
  <div className="flex items-center justify-between">
- <CardTitle className="text-sm font-semibold text-slate-800 dark:text-slate-200"> — Instrução Documental Obrigatória (F-DUC-066-00)</CardTitle>
+ <CardTitle className="text-sm font-semibold text-slate-800 dark:text-slate-200">Instrução Documental Obrigatória (F-DUC-066-00)</CardTitle>
  <Badge variant="outline" className="text-[10px]">
  {DOCUMENTOS_AAV_PADRAO.filter((d) => d.status === 'Enviado').length} de {DOCUMENTOS_AAV_PADRAO.length} anexados
  </Badge>
@@ -530,7 +518,7 @@ export const AutorizacaoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
  {/* CHECKLIST TÉCNICO E PARECER */}
  <Card className="border-slate-200 dark:border-slate-800 shadow-sm">
  <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800">
- <CardTitle className="text-sm font-semibold text-slate-800 dark:text-slate-200"> — Análise Técnica e Checklist Normativo (F-DUC-070-00)</CardTitle>
+ <CardTitle className="text-sm font-semibold text-slate-800 dark:text-slate-200">Análise Técnica e Checklist Normativo (F-DUC-070-00)</CardTitle>
  <CardDescription className="text-xs text-slate-500 dark:text-slate-400">
  Parecer do Gestor da UC sobre conformidade territorial, zoneamento e salvaguardas.
  </CardDescription>
@@ -605,7 +593,7 @@ export const AutorizacaoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
  <div className="space-y-6">
  <Card className="border-slate-200 dark:border-slate-800 shadow-sm">
  <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800">
- <CardTitle className="text-sm font-semibold text-slate-800 dark:text-slate-200"> — Decisão e Minuta de Portaria</CardTitle>
+ <CardTitle className="text-sm font-semibold text-slate-800 dark:text-slate-200">Decisão e Minuta de Portaria</CardTitle>
  <CardDescription className="text-xs text-slate-500 dark:text-slate-400">
  F-DUC-072-00 Minuta de Portaria e atos conclusivos da DIREG/INEMA.
  </CardDescription>

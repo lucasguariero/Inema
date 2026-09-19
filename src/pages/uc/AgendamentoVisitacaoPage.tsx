@@ -28,7 +28,7 @@ import {
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { FilamentSelect, FilamentWizard } from '@/components/filament';
+import { FilamentSelect, FilamentWizard, FilamentTabs } from '@/components/filament';
 import {
  Dialog,
  DialogContent,
@@ -529,53 +529,35 @@ export const AgendamentoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
  return (
  <div className="space-y-6">
       {/* CABEÇALHO DO MÓDULO */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-4">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
-            Agendamento de Atividades de Visitação em UC
-          </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Pré-reserva, triagem operacional de uso público, calendário de ocupação e prevenção de conflitos de agenda.
-          </p>
-        </div>
-
-        {/* NAVEGAÇÃO DE VISÕES: FORMULÁRIO vs PAUTA GESTOR vs CALENDÁRIO */}
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setVisaoAtiva('formulario')}
-            className={cn(
-              "px-3 py-1.5 text-xs font-semibold rounded-lg transition-all",
-              visaoAtiva === 'formulario'
-                ? "bg-[#0F4C3A] text-white shadow-xs"
-                : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-50"
-            )}
-          >
-            Solicitar Agendamento
-          </button>
-          <button
-            onClick={() => setVisaoAtiva('pauta-gestor')}
-            className={cn(
-              "px-3 py-1.5 text-xs font-semibold rounded-lg transition-all",
-              visaoAtiva === 'pauta-gestor'
-                ? "bg-[#0F4C3A] text-white shadow-xs"
-                : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-50"
-            )}
-          >
-            Pauta do Gestor
-          </button>
-          <button
-            onClick={() => setVisaoAtiva('calendario')}
-            className={cn(
-              "px-3 py-1.5 text-xs font-semibold rounded-lg transition-all",
-              visaoAtiva === 'calendario'
-                ? "bg-[#0F4C3A] text-white shadow-xs"
-                : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-50"
-            )}
-          >
-            Calendário da UC
-          </button>
-        </div>
+      <div className="mb-4">
+        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+          Agendamento de Atividades de Visitação em UC
+        </h1>
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+          Pré-reserva, triagem operacional de uso público, calendário de ocupação e prevenção de conflitos de agenda.
+        </p>
       </div>
+
+      {/* NAVEGAÇÃO DE ABAS OFICIAL GLA (FILAMENT) */}
+      <FilamentTabs
+        tabs={[
+          { id: 'formulario', label: 'Solicitar Agendamento' },
+          {
+            id: 'pauta-gestor',
+            label: 'Pauta do Gestor',
+            badge: solicitacoes.filter((s) => s.status === 'Em Análise').length || undefined
+          },
+          { id: 'calendario', label: 'Calendário da UC' }
+        ]}
+        activeTab={visaoAtiva}
+        onChange={(tabId) => {
+          if (tabId === 'formulario') {
+            setEtapaForm(1);
+          }
+          setVisaoAtiva(tabId as any);
+        }}
+        className="mb-6"
+      />
 
       {/* ========================================================================= */}
       {/* VISÃO 1: FORMULÁRIO DE AGENDAMENTO (F-DUC-069-00) COM STEPPER ETAPAS 1 A 7 */}
@@ -682,7 +664,7 @@ export const AgendamentoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
  {etapaForm === 2 && (
  <>
  <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800">
- <CardTitle className="text-sm font-semibold text-slate-800 dark:text-slate-200"> — Local Pretendido, Atrativo e Agenda</CardTitle>
+ <CardTitle className="text-sm font-semibold text-slate-800 dark:text-slate-200">Local Pretendido, Atrativo e Agenda</CardTitle>
  <CardDescription className="text-xs text-slate-500 dark:text-slate-400">
  Defina o atrativo/trilha, datas, horários e períodos de montagem/desmobilização.
  </CardDescription>
@@ -810,7 +792,7 @@ export const AgendamentoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
  {etapaForm === 3 && (
  <>
  <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800">
- <CardTitle className="text-sm font-semibold text-slate-800 dark:text-slate-200"> — Identificação dos Responsáveis pela Atividade</CardTitle>
+ <CardTitle className="text-sm font-semibold text-slate-800 dark:text-slate-200">Identificação dos Responsáveis pela Atividade</CardTitle>
  <CardDescription className="text-xs text-slate-500 dark:text-slate-400">
  Preencha os dados do Requerente, Entidade Organizadora e Produtora quando houver.
  </CardDescription>
@@ -907,7 +889,7 @@ export const AgendamentoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
  {etapaForm === 4 && (
  <>
  <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800">
- <CardTitle className="text-sm font-semibold text-slate-800 dark:text-slate-200"> — Caracterização da Atividade e Triagem de Fluxo</CardTitle>
+ <CardTitle className="text-sm font-semibold text-slate-800 dark:text-slate-200">Caracterização da Atividade e Triagem de Fluxo</CardTitle>
  <CardDescription className="text-xs text-slate-500 dark:text-slate-400">
  Definição da natureza da atividade com verificação de sobreposição e redirecionamento.
  </CardDescription>
@@ -1020,7 +1002,7 @@ export const AgendamentoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
  {etapaForm === 5 && (
  <>
  <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800">
- <CardTitle className="text-sm font-semibold text-slate-800 dark:text-slate-200"> — Público Estimado, Divulgação e Caráter Comercial</CardTitle>
+ <CardTitle className="text-sm font-semibold text-slate-800 dark:text-slate-200">Público Estimado, Divulgação e Caráter Comercial</CardTitle>
  <CardDescription className="text-xs text-slate-500 dark:text-slate-400">
  Dimensionamento do contingente humano e verificação de cobrança ou patrocínio.
  </CardDescription>
@@ -1109,7 +1091,7 @@ export const AgendamentoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
  {etapaForm === 6 && (
  <>
  <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800">
- <CardTitle className="text-sm font-semibold text-slate-800 dark:text-slate-200"> — Infraestrutura, Equipamentos, Veículos e Resíduos</CardTitle>
+ <CardTitle className="text-sm font-semibold text-slate-800 dark:text-slate-200">Infraestrutura, Equipamentos, Veículos e Resíduos</CardTitle>
  <CardDescription className="text-xs text-slate-500 dark:text-slate-400">
  Estruturas provisórias, trânsito interno, mitigação de impactos e plano de segurança.
  </CardDescription>
@@ -1212,7 +1194,7 @@ export const AgendamentoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
  {etapaForm === 7 && (
  <>
  <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800">
- <CardTitle className="text-sm font-semibold text-slate-800 dark:text-slate-200"> — Revisão Consolidada, Declarações e Envio</CardTitle>
+ <CardTitle className="text-sm font-semibold text-slate-800 dark:text-slate-200">Revisão Consolidada, Declarações e Envio</CardTitle>
  <CardDescription className="text-xs text-slate-500 dark:text-slate-400">
  Confira o resumo geral da solicitação antes de enviar para análise do gestor.
  </CardDescription>
@@ -1342,7 +1324,7 @@ export const AgendamentoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
  <Card className="border-slate-200 dark:border-slate-800 shadow-sm">
  <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800 flex flex-row items-center justify-between">
  <div>
- <CardTitle className="text-sm font-semibold text-slate-800 dark:text-slate-200"> — Pauta de Análise e Triagem do Gestor da UC</CardTitle>
+ <CardTitle className="text-sm font-semibold text-slate-800 dark:text-slate-200">Pauta de Análise e Triagem do Gestor da UC</CardTitle>
  <CardDescription className="text-xs text-slate-500 dark:text-slate-400">
  Controle de solicitações recebidas, validação de capacidade de carga, reservas preliminares e conversão formal.
  </CardDescription>
@@ -1464,7 +1446,7 @@ export const AgendamentoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
  <Card className="border-slate-200 dark:border-slate-800 shadow-sm">
  <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800 flex flex-row items-center justify-between">
  <div>
- <CardTitle className="text-sm font-semibold text-slate-800 dark:text-slate-200"> — Calendário de Uso Público da UC (Outubro / 2026)</CardTitle>
+ <CardTitle className="text-sm font-semibold text-slate-800 dark:text-slate-200">Calendário de Uso Público da UC (Outubro / 2026)</CardTitle>
  <CardDescription className="text-xs text-slate-500 dark:text-slate-400">
  Visão consolidada de ocupação, reservas preliminares e prevenção de conflitos de horário.
  </CardDescription>
@@ -1516,7 +1498,7 @@ export const AgendamentoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
  {visaoAtiva === 'checkout' && solicitacaoEmFoco && (
  <Card className="border-slate-200 dark:border-slate-800 shadow-sm max-w-2xl mx-auto">
  <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800">
- <CardTitle className="text-sm font-semibold text-slate-800 dark:text-slate-200"> — Registro de Check-out e Encerramento Operacional</CardTitle>
+ <CardTitle className="text-sm font-semibold text-slate-800 dark:text-slate-200">Registro de Check-out e Encerramento Operacional</CardTitle>
  <CardDescription className="text-xs text-slate-500 dark:text-slate-400">
  Encerramento pós-atividade, comprovação de desmobilização e liberação do atrativo.
  </CardDescription>

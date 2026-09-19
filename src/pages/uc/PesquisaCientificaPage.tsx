@@ -35,7 +35,7 @@ import {
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { FilamentSelect, FilamentWizard } from '@/components/filament';
+import { FilamentSelect, FilamentWizard, FilamentTabs } from '@/components/filament';
 import {
  Dialog,
  DialogContent,
@@ -644,60 +644,34 @@ export const PesquisaCientificaPage: React.FC<{ onNavigate?: (route: string) => 
  )}
 
       {/* Breadcrumb & Header */}
-      <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-4">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">
-            Autorização para Realização de Pesquisa Científica em UC
-          </h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-            Protocolo, análise técnica de viabilidade, emissão de Portaria normativa e acompanhamento de relatórios/publicações segundo a Portaria INEMA nº 25.753/2022.
-          </p>
-        </div>
-
-        {/* Tab Selector */}
-        <div className="flex items-center gap-2 shrink-0">
-          <button
-            onClick={() => setActiveTab('painel')}
-            className={cn(
-              "px-3 py-1.5 text-xs font-semibold rounded-lg transition-all",
-              activeTab === 'painel'
-                ? "bg-[#0F4C3A] text-white shadow-xs"
-                : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-50"
-            )}
-          >
-            Painel
-          </button>
-
-          <button
-            onClick={() => {
-              setActiveTab('novo-projeto');
-              setEtapaForm(1);
-            }}
-            className={cn(
-              "px-3 py-1.5 text-xs font-semibold rounded-lg transition-all",
-              activeTab === 'novo-projeto'
-                ? "bg-[#0F4C3A] text-white shadow-xs"
-                : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-50"
-            )}
-          >
-            Novo Projeto
-          </button>
-
-          {selectedProcesso && (
-            <button
-              onClick={() => setActiveTab('detalhes')}
-              className={cn(
-                "px-3 py-1.5 text-xs font-semibold rounded-lg transition-all",
-                activeTab === 'detalhes'
-                  ? "bg-[#0F4C3A] text-white shadow-xs"
-                  : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-50"
-              )}
-            >
-              Ato e Relatórios
-            </button>
-          )}
-        </div>
+      <div className="mb-4">
+        <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+          Autorização para Realização de Pesquisa Científica em UC
+        </h1>
+        <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+          Protocolo, análise técnica de viabilidade, emissão de Portaria normativa e acompanhamento de relatórios/publicações segundo a Portaria INEMA nº 25.753/2022.
+        </p>
       </div>
+
+      {/* Navegação por Abas Oficial GLA (Filament) */}
+      <FilamentTabs
+        tabs={[
+          { id: 'painel', label: 'Painel', badge: processos.length },
+          { id: 'novo-projeto', label: 'Novo Projeto' },
+          { id: 'detalhes', label: 'Ato e Relatórios' }
+        ]}
+        activeTab={activeTab === 'analise-tecnica' ? 'detalhes' : activeTab}
+        onChange={(tabId) => {
+          if (tabId === 'detalhes' && !selectedProcesso) {
+            setSelectedProcesso(processos[0]);
+          }
+          if (tabId === 'novo-projeto') {
+            setEtapaForm(1);
+          }
+          setActiveTab(tabId as any);
+        }}
+        className="mb-6"
+      />
 
       {/* VIEW 1: PAINEL GERENCIAL */}
       {activeTab === 'painel' && (
@@ -1688,244 +1662,264 @@ export const PesquisaCientificaPage: React.FC<{ onNavigate?: (route: string) => 
  )}
 
  {/* VIEW 3: ATO E GESTÃO PÓS-AUTORIZAÇÃO */}
- {activeTab === 'detalhes' && selectedProcesso && (
- <div className="space-y-6 max-w-5xl mx-auto">
- {/* Top Process Header */}
- <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
- <div>
- <div className="flex items-center gap-2">
- <span className="text-xs font-mono font-bold text-teal-700 dark:text-teal-400 bg-teal-50 dark:bg-teal-950 px-2 py-0.5 rounded border border-teal-200 dark:border-teal-800">
- {selectedProcesso.numeroProtocolo}
- </span>
- <span className="text-xs text-slate-500 font-mono">
- {selectedProcesso.processoSEI}
- </span>
- <Badge
- className={cn(
- 'text-xs',
- selectedProcesso.status === 'Autorizado' && 'bg-emerald-100 text-emerald-800 border-emerald-300',
- selectedProcesso.status === 'Em Análise' && 'bg-amber-100 text-amber-800 border-amber-300',
- selectedProcesso.status === 'Concluído' && 'bg-blue-100 text-blue-800 border-blue-300',
- selectedProcesso.status === 'Indeferido' && 'bg-rose-100 text-rose-800 border-rose-300'
- )}
- >
- {selectedProcesso.status}
- </Badge>
- </div>
- <h2 className="text-base font-bold mt-2 text-slate-900 dark:text-slate-100">
- {selectedProcesso.tituloProjeto}
- </h2>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
- UC: <strong className="text-slate-700 dark:text-slate-300">{selectedProcesso.ucNome}</strong> | Coordenador: {selectedProcesso.pesquisadorResponsavel} ({selectedProcesso.instituicao})
- </p>
- </div>
+ {activeTab === 'detalhes' && (() => {
+   const processoFoco = selectedProcesso || processos[0];
+   if (!processoFoco) return null;
 
- <div className="flex items-center gap-2 shrink-0">
- {selectedProcesso.status === 'Em Análise' && (
- <Button
- size="sm"
- className="bg-teal-700 hover:bg-teal-800 text-white text-xs"
- onClick={() => setModalDecisaoAberto(true)}
- >
- <ShieldCheck className="w-3.5 h-3.5 mr-1" />
- Realizar Análise Técnica 
- </Button>
- )}
- {selectedProcesso.status === 'Autorizado' && (
- <>
- <Button
- size="sm"
- variant="outline"
- className="text-xs border-teal-600 text-teal-700 dark:text-teal-400"
- onClick={() => {
- alert('Download da Portaria oficial em PDF gerada com assinatura ICP-Brasil do Diretor Geral do INEMA.');
- }}
- >
- <Download className="w-3.5 h-3.5 mr-1" />
- Baixar Portaria (PDF)
- </Button>
- <Button
- size="sm"
- className="bg-teal-700 hover:bg-teal-800 text-white text-xs"
- onClick={() => setModalRelatorioAberto(true)}
- >
- <Upload className="w-3.5 h-3.5 mr-1" />
- Enviar Relatório
- </Button>
- </>
- )}
- </div>
- </div>
+   return (
+     <div className="space-y-6">
+          {/* Top Process Header */}
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5 shadow-xs">
+            <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+              <div className="space-y-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-xs font-mono font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded border border-slate-200 dark:border-slate-700">
+                    {processoFoco.numeroProtocolo}
+                  </span>
+                  <span className="text-xs text-slate-500 font-mono">
+                    {processoFoco.processoSEI}
+                  </span>
+                  <Badge
+                    variant="outline"
+                    className={cn(
+                      'text-xs font-medium',
+                      processoFoco.status === 'Autorizado' && 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800',
+                      processoFoco.status === 'Em Análise' && 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800',
+                      processoFoco.status === 'Concluído' && 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800',
+                      processoFoco.status === 'Indeferido' && 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800'
+                    )}
+                  >
+                    {processoFoco.status}
+                  </Badge>
+                </div>
+                <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+                  {processoFoco.tituloProjeto}
+                </h2>
+                <p className="text-xs text-slate-600 dark:text-slate-400">
+                  Unidade de Conservação: <strong className="text-slate-800 dark:text-slate-200 font-semibold">{processoFoco.ucNome}</strong> | Coordenador: {processoFoco.pesquisadorResponsavel} ({processoFoco.instituicao})
+                </p>
+              </div>
 
- {/* Seção 1: Certidão / Portaria Formal de Autorização */}
- {selectedProcesso.status === 'Autorizado' && (
- <Card className="border-2 border-teal-600/40 dark:border-teal-500/40 bg-teal-50/20 dark:bg-teal-950/10 shadow-sm">
- <CardHeader className="bg-teal-100/50 dark:bg-teal-950/40 border-b border-teal-200 dark:border-teal-800 py-3 px-4">
- <div className="flex items-center justify-between">
- <div className="flex items-center gap-2">
- <Award className="w-5 h-5 text-teal-700 dark:text-teal-400" />
- <div>
- <CardTitle className="text-sm font-bold text-teal-950 dark:text-teal-100">
- {selectedProcesso.portariaNumero || 'Portaria de Autorização Científica'}
- </CardTitle>
- <CardDescription className="text-xs text-slate-600 dark:text-slate-400">
- Publicado no Diário Oficial do Estado: {selectedProcesso.dataPublicacaoDOE || 'Publicado'} | Fundamentação: Portaria INEMA nº 25.753/2022
- </CardDescription>
- </div>
- </div>
- <Badge className="bg-teal-700 text-white text-[11px]">
- Vigência Ativa
- </Badge>
- </div>
- </CardHeader>
- <CardContent className="p-5 space-y-4 text-xs">
- <div>
- <h4 className="font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider mb-1">
- Parecer Técnico da CGEUC / DISUC:
- </h4>
- <p className="text-slate-600 dark:text-slate-300 italic bg-white dark:bg-slate-900 p-3 rounded border border-slate-200 dark:border-slate-800">
- "{selectedProcesso.parecerTecnico}"
- </p>
- </div>
+              <div className="flex flex-wrap items-center gap-2 shrink-0">
+                {processoFoco.status === 'Em Análise' && (
+                  <Button
+                    size="sm"
+                    className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs font-semibold shadow-xs"
+                    onClick={() => setModalDecisaoAberto(true)}
+                  >
+                    <ShieldCheck className="w-3.5 h-3.5 mr-1.5" />
+                    Realizar Análise Técnica
+                  </Button>
+                )}
+                {processoFoco.status === 'Autorizado' && (
+                  <>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="text-xs font-medium border-slate-300 text-slate-700 bg-white hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:bg-slate-800"
+                      onClick={() => {
+                        alert('Download da Portaria oficial em PDF gerada com assinatura digital do INEMA.');
+                      }}
+                    >
+                      <Download className="w-3.5 h-3.5 mr-1.5" />
+                      Baixar Portaria (PDF)
+                    </Button>
+                    <Button
+                      size="sm"
+                      className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs font-semibold shadow-xs"
+                      onClick={() => setModalRelatorioAberto(true)}
+                    >
+                      <Upload className="w-3.5 h-3.5 mr-1.5" />
+                      Enviar Relatório
+                    </Button>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
 
- {selectedProcesso.condicionantes && selectedProcesso.condicionantes.length > 0 && (
- <div>
- <h4 className="font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider mb-2">
- Condicionantes Ambientais Específicas Fixadas no Ato:
- </h4>
- <ul className="space-y-1.5 list-disc list-inside text-slate-700 dark:text-slate-300">
- {selectedProcesso.condicionantes.map((cond, idx) => (
- <li key={idx} className="leading-relaxed">
- {cond}
- </li>
- ))}
- </ul>
- </div>
- )}
- </CardContent>
- </Card>
- )}
+          {/* Seção 1: Certidão / Portaria Formal de Autorização */}
+          {processoFoco.status === 'Autorizado' && (
+            <Card className="border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs">
+              <CardHeader className="py-3.5 px-5 border-b border-slate-100 dark:border-slate-800">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                  <div>
+                    <CardTitle className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                      {processoFoco.portariaNumero || 'Portaria de Autorização Científica'}
+                    </CardTitle>
+                    <CardDescription className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                      Publicado no Diário Oficial do Estado: {processoFoco.dataPublicacaoDOE || 'Publicado'} • Fundamentação: Portaria INEMA nº 25.753/2022
+                    </CardDescription>
+                  </div>
+                  <Badge
+                    variant="outline"
+                    className="bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800 text-xs font-medium self-start sm:self-auto"
+                  >
+                    Vigência Ativa
+                  </Badge>
+                </div>
+              </CardHeader>
+              <CardContent className="p-5 space-y-4 text-xs">
+                <div>
+                  <h4 className="font-semibold text-slate-800 dark:text-slate-200 text-xs mb-1.5">
+                    Parecer Técnico Conclusivo:
+                  </h4>
+                  <div className="text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-900/60 p-3.5 rounded-md border border-slate-200 dark:border-slate-800 leading-relaxed">
+                    {processoFoco.parecerTecnico}
+                  </div>
+                </div>
 
- {/* Seção 2: Acompanhamento de Relatórios Parciais e Finais */}
- <Card className="border border-slate-200 dark:border-slate-800 shadow-sm">
- <CardHeader className="bg-slate-100/50 dark:bg-slate-900/50 py-3 px-4 border-b border-slate-200 dark:border-slate-800 flex flex-row items-center justify-between">
- <div>
- <CardTitle className="text-sm font-semibold text-slate-800 dark:text-slate-200">Controle de Relatórios Técnicos Parciais e Finais </CardTitle>
- <CardDescription className="text-xs">
- Obrigação regulamentar do pesquisador coordenador para prestação de contas dos resultados.
- </CardDescription>
- </div>
- {selectedProcesso.status === 'Autorizado' && (
- <Button
- size="sm"
- variant="outline"
- className="text-xs"
- onClick={() => setModalRelatorioAberto(true)}
- >
- <Upload className="w-3.5 h-3.5 mr-1" />
- Protocolar Relatório
- </Button>
- )}
- </CardHeader>
- <CardContent className="p-0">
- <table className="w-full text-left text-xs">
- <thead className="bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400">
- <tr>
- <th className="p-3">Tipo do Relatório</th>
- <th className="p-3">Prazo Regulamentar</th>
- <th className="p-3">Data de Protocolo</th>
- <th className="p-3">Status</th>
- <th className="p-3 text-right">Arquivo</th>
- </tr>
- </thead>
- <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
- {selectedProcesso.relatorios.map((rel) => (
- <tr key={rel.id} className="hover:bg-slate-50 dark:hover:bg-slate-900/40">
- <td className="p-3 font-medium">{rel.tipo}</td>
- <td className="p-3">{rel.dataPrevista}</td>
- <td className="p-3 text-slate-500">{rel.dataEntrega || 'Pendente'}</td>
- <td className="p-3">
- {rel.status === 'Entregue' && (
- <Badge className="bg-emerald-100 text-emerald-800 text-[10px]">Entregue / Em Análise</Badge>
- )}
- {rel.status === 'Pendente' && (
- <Badge variant="outline" className="text-slate-500 text-[10px]">Aguardando Período</Badge>
- )}
- {rel.status === 'Atrasado' && (
- <Badge className="bg-rose-100 text-rose-800 text-[10px] animate-pulse">Atrasado (Notificar)</Badge>
- )}
- </td>
- <td className="p-3 text-right">
- {rel.arquivoNome ? (
- <Button size="sm" variant="ghost" className="h-6 text-xs text-teal-700">
- <Download className="w-3 h-3 mr-1" /> Baixar
- </Button>
- ) : (
- <span className="text-slate-400">-</span>
- )}
- </td>
- </tr>
- ))}
- </tbody>
- </table>
- </CardContent>
- </Card>
+                {processoFoco.condicionantes && processoFoco.condicionantes.length > 0 && (
+                  <div>
+                    <h4 className="font-semibold text-slate-800 dark:text-slate-200 text-xs mb-2">
+                      Condicionantes Ambientais Fixadas no Ato:
+                    </h4>
+                    <ul className="space-y-1.5 list-disc list-inside text-slate-700 dark:text-slate-300">
+                      {processoFoco.condicionantes.map((cond, idx) => (
+                        <li key={idx} className="leading-relaxed">
+                          {cond}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          )}
 
- {/* Seção 3: Registro de Publicações e Produtos Científicos Decorrentes */}
- <Card className="border border-slate-200 dark:border-slate-800 shadow-sm">
- <CardHeader className="bg-slate-100/50 dark:bg-slate-900/50 py-3 px-4 border-b border-slate-200 dark:border-slate-800 flex flex-row items-center justify-between">
- <div>
- <CardTitle className="text-sm font-semibold text-slate-800 dark:text-slate-200">Publicações e Produtos Científicos Resultantes </CardTitle>
- <CardDescription className="text-xs">
- Artigos em periódicos, dissertações, teses e patentes decorrentes da autorização da UC.
- </CardDescription>
- </div>
- <Button
- size="sm"
- variant="outline"
- className="text-xs"
- onClick={() => setModalPublicacaoAberto(true)}
- >
- <PlusCircle className="w-3.5 h-3.5 mr-1" />
- Vincular Publicação
- </Button>
- </CardHeader>
- <CardContent className="p-4">
- {selectedProcesso.publicacoes.length === 0 ? (
- <div className="text-center py-6 text-slate-400 text-xs">
- Nenhuma publicação científica vinculada até o momento. Conforme a , o pesquisador deve cadastrar os artigos publicados contendo a citação do INEMA.
- </div>
- ) : (
- <div className="space-y-3">
- {selectedProcesso.publicacoes.map((pub) => (
- <div
- key={pub.id}
- className="p-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 flex items-start justify-between gap-4 text-xs"
- >
- <div className="space-y-1">
- <span className="font-bold text-slate-900 dark:text-slate-100 block">{pub.titulo}</span>
- <div className="flex items-center gap-2 text-slate-500">
- <Badge variant="outline" className="text-[10px]">{pub.tipo}</Badge>
- <span>{pub.veiculo} ({pub.ano})</span>
- </div>
- </div>
- <a
- href={pub.doiOuLink}
- target="_blank"
- rel="noreferrer"
- className="text-teal-700 dark:text-teal-400 hover:underline flex items-center gap-1 font-mono text-[11px] shrink-0"
- >
- <Share2 className="w-3 h-3" />
- Ver DOI / Link
- </a>
- </div>
- ))}
- </div>
- )}
- </CardContent>
- </Card>
- </div>
- )}
+          {/* Seção 2: Acompanhamento de Relatórios Parciais e Finais */}
+          <Card className="border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs">
+            <CardHeader className="py-3.5 px-5 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+              <div>
+                <CardTitle className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                  Controle de Relatórios Técnicos Parciais e Finais
+                </CardTitle>
+                <CardDescription className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  Obrigação regulamentar do pesquisador coordenador para prestação de contas dos resultados.
+                </CardDescription>
+              </div>
+              {processoFoco.status === 'Autorizado' && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="text-xs font-medium border-slate-300 text-slate-700 bg-white hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 self-start sm:self-auto"
+                  onClick={() => setModalRelatorioAberto(true)}
+                >
+                  <Upload className="w-3.5 h-3.5 mr-1.5" />
+                  Protocolar Relatório
+                </Button>
+              )}
+            </CardHeader>
+            <CardContent className="p-0">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Tipo do Relatório</th>
+                      <th className="px-4 py-3 font-semibold">Prazo Regulamentar</th>
+                      <th className="px-4 py-3 font-semibold">Data de Protocolo</th>
+                      <th className="px-4 py-3 font-semibold">Status</th>
+                      <th className="px-4 py-3 font-semibold text-right">Arquivo</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    {processoFoco.relatorios.map((rel) => (
+                      <tr key={rel.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
+                        <td className="px-4 py-3 font-medium text-slate-800 dark:text-slate-200">{rel.tipo}</td>
+                        <td className="px-4 py-3 text-slate-600 dark:text-slate-400">{rel.dataPrevista}</td>
+                        <td className="px-4 py-3 text-slate-500">{rel.dataEntrega || 'Pendente'}</td>
+                        <td className="px-4 py-3">
+                          {rel.status === 'Entregue' && (
+                            <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[11px] font-medium">
+                              Entregue / Em Análise
+                            </Badge>
+                          )}
+                          {rel.status === 'Pendente' && (
+                            <Badge variant="outline" className="bg-slate-50 text-slate-600 border-slate-200 text-[11px] font-medium">
+                              Aguardando Período
+                            </Badge>
+                          )}
+                          {rel.status === 'Atrasado' && (
+                            <Badge variant="outline" className="bg-rose-50 text-rose-700 border-rose-200 text-[11px] font-medium">
+                              Atrasado
+                            </Badge>
+                          )}
+                        </td>
+                        <td className="px-4 py-3 text-right">
+                          {rel.arquivoNome ? (
+                            <Button size="sm" variant="ghost" className="h-7 text-xs text-slate-700 hover:text-[#0F4C3A]">
+                              <Download className="w-3.5 h-3.5 mr-1" /> Baixar
+                            </Button>
+                          ) : (
+                            <span className="text-slate-400">-</span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Seção 3: Registro de Publicações e Produtos Científicos Decorrentes */}
+          <Card className="border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs">
+            <CardHeader className="py-3.5 px-5 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+              <div>
+                <CardTitle className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                  Publicações e Produtos Científicos Resultantes
+                </CardTitle>
+                <CardDescription className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  Artigos em periódicos, dissertações, teses e patentes decorrentes da autorização da UC.
+                </CardDescription>
+              </div>
+              <Button
+                size="sm"
+                variant="outline"
+                className="text-xs font-medium border-slate-300 text-slate-700 bg-white hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 self-start sm:self-auto"
+                onClick={() => setModalPublicacaoAberto(true)}
+              >
+                <PlusCircle className="w-3.5 h-3.5 mr-1.5" />
+                Vincular Publicação
+              </Button>
+            </CardHeader>
+            <CardContent className="p-5">
+              {processoFoco.publicacoes.length === 0 ? (
+                <div className="text-center py-6 text-slate-400 text-xs">
+                  Nenhuma publicação científica vinculada até o momento. O pesquisador deve cadastrar os artigos publicados com a citação institucional do INEMA.
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {processoFoco.publicacoes.map((pub) => (
+                    <div
+                      key={pub.id}
+                      className="p-3.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40 flex items-start justify-between gap-4 text-xs"
+                    >
+                      <div className="space-y-1">
+                        <span className="font-semibold text-slate-900 dark:text-slate-100 block">{pub.titulo}</span>
+                        <div className="flex items-center gap-2 text-slate-500">
+                          <Badge variant="outline" className="text-[10px] bg-white dark:bg-slate-800">{pub.tipo}</Badge>
+                          <span>{pub.veiculo} ({pub.ano})</span>
+                        </div>
+                      </div>
+                      <a
+                        href={pub.doiOuLink}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-[#0F4C3A] dark:text-emerald-400 hover:underline flex items-center gap-1 font-mono text-[11px] shrink-0 font-medium"
+                      >
+                        <Share2 className="w-3 h-3" />
+                        Ver DOI / Link
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+   );
+ })()}
 
  {/* MODAL 1: CONFIRMAÇÃO DE SUBMISSÃO COM */}
  <Dialog open={modalConfirmacaoAberto} onOpenChange={setModalConfirmacaoAberto}>
