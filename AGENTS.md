@@ -1,4 +1,4 @@
-﻿# Autonomous Execution & Zero-Interruption Rules
+# Autonomous Execution & Zero-Interruption Rules
 
 - **Total Autonomy & Auto-Approval**: Execute all tasks end-to-end without pausing for trivial questions, micro-approvals, permission dialogs, or intermediate confirmations. Whenever a task is requested, assume "Sim, sempre" for any command, file edit, or verification required to achieve the goal.
 - **Proactive Implementation**: Read, create, edit files, and run commands immediately as needed to complete the task. Never ask "Can I run this?" or "Should I proceed?".
@@ -51,3 +51,65 @@ Fora do escopo deste card: [Bugs periféricos encontrados que não impedem o fec
 Com isso, considero este card resolvido / [ou parecer correspondente].
 Fico à disposição se precisar de mais detalhes de qualquer um desses pontos.
 ```
+
+---
+
+# 🚀 Padrão Oficial de Prototipagem GLA / INEMA (Super Prompt & Regras de Ouro)
+
+Sempre que o usuário enviar um Documento de Requisito (DORxxx, DRxxx, card, issue, texto ou PDF) para criar ou refatorar protótipos de telas do INEMA/GLA, execute AUTOMATICAMENTE este protocolo de excelência de ponta a ponta:
+
+### 1. Auditoria e Mapeamento de Requisitos (RNs e Telas)
+- **Extrair todas as Regras de Negócio (RN001, RN002...)**: salvaguardas, travas de envio, cálculos, prazos/SLAs (ex: SLA 20 dias da DISUC, contagem regressiva, vigência de 12/24 meses).
+- **Mapear Telas Operacionais (TL001 a TL007)**: formular a hierarquia exata de navegação e os formulários oficiais integrados (ex: `F-DUC-066`, `F-DUC-067`, `F-DUC-068`, `F-DUC-069`, `F-DUC-070`, `F-DUC-072`).
+- **Base Normativa Real**: fundamentar as telas nas portarias reais do INEMA e leis ambientais (ex: Portaria INEMA nº 25.753/2022, Lei do SNUC nº 9.985/2000, integração com processos formais do SEI-BA).
+- **Cenários de Contraste**: prever dados e estados de contraste realistas (Deferido/Emitido, Em Análise Técnica, Pendência/Complementação, Indeferido com prazo recursal de 10 dias).
+
+### 2. Arquitetura de Navegação GLA / Filament (Regra de Ouro: Botão vs Aba)
+- **NUNCA transformar ações de criação em ABAS**:
+  - Expressões como *"Novo Projeto"*, *"Nova Solicitação"*, *"Novo Agendamento"*, *"Cadastrar Plantonista"* **NÃO SÃO ABAS**, são **AÇÕES**.
+- **O que são ABAS (`FilamentTabs`)**:
+  - São estritamente usadas para alternar **visões de dados ou contextos de consulta/gestão** sobre uma mesma entidade:
+    - Ex: `Projetos de Pesquisa (3)` | `Atos e Relatórios` (gestão de relatórios pós-autorização e acervo de teses/artigos).
+    - Ex: `Pauta de Agendamentos (1)` | `Calendário da UC` (ocupação de atrativos e prevenção de conflitos).
+    - Ex: `Processos AAD (2)` | `Análise e Decisão` (parecer técnico do gestor, condicionantes e emissão).
+    - Ex: `Painel de Processos (3)` | `Análise e Portaria` (minuta conclusiva e prazos).
+- **O que são BOTÕES PRIMÁRIOS**:
+  - O botão de ação primária (ex.: `+ Novo Projeto`, `+ Nova Solicitação`, `+ Novo Agendamento`) deve ficar no **canto superior direito do cabeçalho da página** (ou no header da tabela/filtros), estilizado com o verde oficial do INEMA (`bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white`).
+- **Fluxo do Formulário / Wizard**:
+  - Ao clicar no botão de criação, a aplicação exibe o formulário/wizard de preenchimento.
+  - A barra de abas de listagem NÃO é exibida enquanto o usuário preenche o formulário.
+  - O formulário DEVE conter um cabeçalho claro com o código do formulário oficial (ex: `DOR004`, `F-DUC-069-00`) e botão de retorno limpo: `← Voltar aos [Registros]`.
+  - Ao enviar ou cancelar, retorna diretamente para a pauta/listagem com o novo registro inserido.
+- **Tela Inicial Padrão**:
+  - A rota SEMPRE deve abrir na **Pauta / Painel Gerencial de Processos** (visão do gestor/técnico), NUNCA jogar o usuário de cara em um formulário em branco.
+
+### 3. Eliminação Total de AI Slop & Identidade Visual Estrita
+- **PROIBIDO paletas artificiais de IA**:
+  - **ZERO ROXO / PÚRPURA (`purple`, `violet`)**: O sistema GLA não tem elementos roxos.
+  - **ZERO TEAL GENÉRICO (`teal-600/700`)**: Botões primários NUNCA usam teal. Devem usar exclusivamente o verde primário oficial: `#0F4C3A`.
+  - **ZERO gradientes artificiais ou fundos chamativos**: Manter superfícies limpas (`bg-white dark:bg-slate-900`, `bg-slate-50 dark:bg-slate-950/40`, bordas `border-slate-200 dark:border-slate-800`).
+- **PROIBIDO ícones decorativos antes de títulos textuais**:
+  - Nunca colocar `<Award>`, `<BookOpen>`, `<Users>`, `<FlaskConical>` antes de títulos de cards ou cabeçalhos (h1/h2).
+  - Títulos devem ser sóbrios, institucionais e em `font-bold` / `font-semibold`.
+- **Badges e Tipografia Institucionais**:
+  - Protocolos e números de processos (SEI-BA, AAD, AAV, Pesc) SEMPRE em fonte monoespacial (`font-mono`), com cores neutras (`text-slate-800 dark:text-slate-200`).
+  - Badges semânticos de status:
+    - Verde institucional para Concluído/Autorizado (`bg-emerald-50 text-emerald-700 border-emerald-200`).
+    - Âmbar suave para Em Análise (`bg-amber-50 text-amber-700 border-amber-200`).
+    - Azul/laranja sóbrio para Pendências/Complementação.
+    - Vermelho sutil para Indeferido (`bg-rose-50 text-rose-700 border-rose-200`).
+- **Sidebar & Badges de Códigos**:
+  - Badges de códigos no menu lateral (`DOR001`, `DOR002`, `DOR006`...): pílula sutil de texto puro sem ícone (`text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700`).
+  - NUNCA chamar atenção excessiva ou ficar vermelho/berrante ao navegar.
+  - SEM pontos de notificação vermelha no sidebar.
+
+### 4. Ciclo de Execução, Verificação Visual e Publicação Automática
+Para qualquer tela criada ou editada:
+1. **Build Local**: Rodar `npm run build` e garantir 0 erros de compilação TypeScript/Vite.
+2. **Inspeção Visual Autônoma**: Executar script Playwright headless para capturar screenshot em alta resolução da tela e visualizá-lo com `view_file`. Auditar ativamente tipografia, ausência de AI Slop, alinhamentos e contraste.
+3. **Commit Padronizado**: `git add .` dos arquivos alterados e `git commit -m "feat(...) ou refactor(...)"`.
+4. **Deploy Simultâneo**:
+   - `git push origin main`
+   - `npx vercel --prod --yes`
+5. **Verificação em Produção**: Acessar `https://inema.acto.com.br/` via script de automação, validar ao vivo e emitir o parecer final pronto para uso.
+
