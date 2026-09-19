@@ -52,10 +52,13 @@ export interface ProcessoAAD {
  professorResponsavel: string;
  ucId: string;
  ucNome: string;
+ atrativo?: string;
  dataAulaCampo: string;
  quantidadeAlunos: number;
  status: 'Em Análise' | 'Autorizado' | 'Com Pendências' | 'Indeferido';
  autorizacaoNumero?: string;
+ parecerTecnico?: string;
+ condicionantes?: string[];
  coletaDetalhes?: {
  grupoTaxonomico: string;
  metodoCaptura: string;
@@ -107,9 +110,17 @@ export const AtividadesDidaticasPage: React.FC<{ onNavigate?: (route: string) =>
  professorResponsavel: 'Dra. Carolina Medeiros',
  ucId: 'UC-CONDURU',
  ucNome: 'Parque Estadual da Serra do Conduru',
+ atrativo: 'Trilha do Jequitibá Centenário e Mirante da Serra',
  dataAulaCampo: '20/10/2026 a 22/10/2026',
  quantidadeAlunos: 18,
  status: 'Em Análise',
+ parecerTecnico: 'Plano didático em conformidade com as diretrizes do Plano de Manejo da UC. Metodologia de amostragem entomológica não letal com armadilhas pitfall viável e compatível com a capacidade de suporte do atrativo.',
+ condicionantes: [
+ 'Entrega obrigatória de relatório síntese das atividades em até 30 (trinta) dias após a aula de campo.',
+ 'Proibição expressa de descarte de qualquer resíduo sólido nas trilhas ou na área de amortecimento.',
+ 'Depósito exclusivo dos espécimes coletados na Coleção Entomológica credenciada da UESC com comprovante de tombamento.',
+ 'Acompanhamento obrigatório de equipe da gestão da UC ou brigada durante a permanência no parque.'
+ ],
  coletaDetalhes: {
  grupoTaxonomico: 'Coleoptera e Hymenoptera (insetos de serrapilheira)',
  metodoCaptura: 'Armadilhas pitfall não letais e rede entomológica',
@@ -126,15 +137,29 @@ export const AtividadesDidaticasPage: React.FC<{ onNavigate?: (route: string) =>
  professorResponsavel: 'Prof. Gilberto Guimarães',
  ucId: 'UC-CONDURU',
  ucNome: 'Parque Estadual da Serra do Conduru',
+ atrativo: 'Centro de Visitantes e Trilha dos Macacos',
  dataAulaCampo: '14/10/2026',
  quantidadeAlunos: 32,
  status: 'Autorizado',
- autorizacaoNumero: 'AAD-INEMA nº 084/2026'
+ autorizacaoNumero: 'AAD-INEMA nº 084/2026',
+ parecerTecnico: 'Atividade pedagógica de interpretação ambiental sem coleta de material biológico, em consonância com a Portaria INEMA nº 25.753/2022.',
+ condicionantes: [
+ 'Respeito rigoroso à capacidade de carga máxima da trilha (35 pessoas por turno).',
+ 'Permanece expressamente vedada a coleta ou translocação de qualquer elemento da flora ou fauna silvestre.'
+ ]
  }
  ]);
 
  // Processo selecionado para análise
  const [processoSelecionado, setProcessoSelecionado] = useState<ProcessoAAD>(processos[0]);
+
+ // Estados da decisão do gestor
+ const [parecerGestor, setParecerGestor] = useState(
+ 'Plano didático em conformidade com as diretrizes do Plano de Manejo da UC. Metodologia compatível com a capacidade de suporte do atrativo e zoneamento ambiental.'
+ );
+ const [condicionantesTexto, setCondicionantesTexto] = useState(
+ '1. Entrega obrigatória de relatório síntese em até 30 dias.\n2. Proibição expressa de descarte de resíduos na UC.\n3. Depósito dos espécimes exclusivamente na coleção científica indicada.\n4. Acompanhamento por condutor ou equipe da UC.'
+ );
 
  // Modais de feedback
  const [modalState, setModalState] = useState<{
@@ -228,6 +253,38 @@ export const AtividadesDidaticasPage: React.FC<{ onNavigate?: (route: string) =>
  });
  };
 
+  // Ação: Solicitar Adequação ao Docente
+  const handleSolicitarAdequacaoAAD = () => {
+    setProcessos((prev) =>
+      prev.map((p) => (p.id === processoSelecionado.id ? { ...p, status: 'Com Pendências' } : p))
+    );
+    setProcessoSelecionado((prev) => ({ ...prev, status: 'Com Pendências' }));
+
+    setModalState({
+      isOpen: true,
+      tipo: 'aviso',
+      codigo: '',
+      titulo: 'Notificação de Pendência Didática',
+      mensagem: 'Foram solicitados esclarecimentos metodológicos ao docente responsável. O interessado foi notificado via sistema e SEI-BA.'
+    });
+  };
+
+  // Ação: Indeferimento da AAD
+  const handleIndeferirAAD = () => {
+    setProcessos((prev) =>
+      prev.map((p) => (p.id === processoSelecionado.id ? { ...p, status: 'Indeferido' } : p))
+    );
+    setProcessoSelecionado((prev) => ({ ...prev, status: 'Indeferido' }));
+
+    setModalState({
+      isOpen: true,
+      tipo: 'erro',
+      codigo: '',
+      titulo: 'Solicitação AAD Indeferida',
+      mensagem: 'A solicitação foi indeferida formalmente pelo Gestor da UC. A motivação técnica foi registrada no processo SEI-BA com abertura de prazo recursal.'
+    });
+  };
+
  return (
  <div className="space-y-6">
       {/* CABEÇALHO DO MÓDULO */}
@@ -294,7 +351,7 @@ export const AtividadesDidaticasPage: React.FC<{ onNavigate?: (route: string) =>
  {processos.map((p) => (
  <tr key={p.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors">
  <td className="py-3 px-4">
- <div className="font-mono font-semibold text-teal-700 dark:text-teal-400">{p.id}</div>
+ <div className="font-mono font-semibold text-slate-800 dark:text-slate-200">{p.id}</div>
  <div className="text-[10px] text-slate-400 font-mono">{p.numeroRequerimento}</div>
  </td>
  <td className="py-3 px-4">
@@ -368,51 +425,49 @@ export const AtividadesDidaticasPage: React.FC<{ onNavigate?: (route: string) =>
  <div className="space-y-6">
  {/* SELETOR DE ENQUADRAMENTO DIDÁTICO: TIPO 1 vs TIPO 2 */}
  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
- <div
- onClick={() => setTipoDidatica('tipo1')}
- className={cn(
- "p-4 rounded-xl border-2 cursor-pointer transition-all space-y-1.5",
- tipoDidatica === 'tipo1'
- ? "border-teal-600 bg-teal-50/50 dark:bg-teal-950/20 shadow-xs"
- : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 opacity-70 hover:opacity-100"
- )}
- >
- <div className="flex items-center justify-between">
- <span className="text-xs font-bold text-teal-800 dark:text-teal-300 flex items-center gap-1.5">
- 
- AAD Tipo 1 — Sem Coleta de Material
- </span>
- <Badge variant="outline" className="text-[10px] bg-teal-100 text-teal-800 border-teal-300">
- Rito Simplificado
- </Badge>
- </div>
- <p className="text-xs text-slate-600 dark:text-slate-400">
- Aulas práticas de observação, trilhas interpretativas, identificação botânica in loco e atividades sem remoção de amostras biológicas.
- </p>
- </div>
+          <div
+            onClick={() => setTipoDidatica('tipo1')}
+            className={cn(
+              "p-4 rounded-lg border cursor-pointer transition-all space-y-1.5",
+              tipoDidatica === 'tipo1'
+                ? "border-[#0F4C3A] bg-[#0F4C3A]/5 dark:bg-[#0F4C3A]/20 shadow-xs ring-1 ring-[#0F4C3A]"
+                : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300"
+            )}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+                AAD Tipo 1 — Sem Coleta de Material
+              </span>
+              <Badge variant="outline" className="text-[10px] bg-emerald-50 text-emerald-700 border-emerald-200">
+                Rito Simplificado
+              </Badge>
+            </div>
+            <p className="text-xs text-slate-600 dark:text-slate-400">
+              Aulas práticas de observação, trilhas interpretativas, identificação botânica in loco e atividades sem remoção de amostras biológicas.
+            </p>
+          </div>
 
- <div
- onClick={() => setTipoDidatica('tipo2')}
- className={cn(
- "p-4 rounded-xl border-2 cursor-pointer transition-all space-y-1.5",
- tipoDidatica === 'tipo2'
- ? "border-purple-600 bg-purple-50/50 dark:bg-purple-950/20 shadow-xs"
- : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 opacity-70 hover:opacity-100"
- )}
- >
- <div className="flex items-center justify-between">
- <span className="text-xs font-bold text-purple-800 dark:text-purple-300 flex items-center gap-1.5">
- 
- AAD Tipo 2 — Com Coleta e Captura de Espécimes
- </span>
- <Badge variant="outline" className="text-[10px] bg-purple-100 text-purple-800 border-purple-300">
- Exige Termo de Depósito
- </Badge>
- </div>
- <p className="text-xs text-slate-600 dark:text-slate-400">
- Aulas com coleta de espécimes botânicos, captura temporária de fauna, transporte biológico e tombamento obrigatório em coleção científica.
- </p>
- </div>
+          <div
+            onClick={() => setTipoDidatica('tipo2')}
+            className={cn(
+              "p-4 rounded-lg border cursor-pointer transition-all space-y-1.5",
+              tipoDidatica === 'tipo2'
+                ? "border-[#0F4C3A] bg-[#0F4C3A]/5 dark:bg-[#0F4C3A]/20 shadow-xs ring-1 ring-[#0F4C3A]"
+                : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300"
+            )}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+                AAD Tipo 2 — Com Coleta e Captura de Espécimes
+              </span>
+              <Badge variant="outline" className="text-[10px] bg-slate-100 text-slate-700 border-slate-200">
+                Exige Termo de Depósito
+              </Badge>
+            </div>
+            <p className="text-xs text-slate-600 dark:text-slate-400">
+              Aulas com coleta de espécimes botânicos, captura temporária de fauna, transporte biológico e tombamento obrigatório em coleção científica.
+            </p>
+          </div>
  </div>
 
  {/* FORMULÁRIO OPERACIONAL */}
@@ -547,20 +602,19 @@ export const AtividadesDidaticasPage: React.FC<{ onNavigate?: (route: string) =>
 
  {/* BLOCO ESPECÍFICO DO TIPO 2: COLETA E CAPTURA */}
  {tipoDidatica === 'tipo2' && (
- <div className="space-y-3 bg-purple-50/60 dark:bg-purple-950/20 p-4 rounded-lg border border-purple-200 dark:border-purple-800 mt-2">
+ <div className="space-y-3 bg-slate-50 dark:bg-slate-900/60 p-4 rounded-lg border border-slate-200 dark:border-slate-800 mt-2">
  <div className="flex items-center justify-between">
- <h3 className="font-bold text-purple-900 dark:text-purple-200 flex items-center gap-1.5">
- 
+ <h3 className="font-semibold text-slate-900 dark:text-slate-100 text-xs flex items-center gap-1.5">
  Especificação de Coleta / Captura Didática
  </h3>
- <Badge variant="outline" className="text-[10px] text-purple-700 border-purple-300 font-mono">
- Critérios Especiais
+ <Badge variant="outline" className="text-[10px] text-slate-600 border-slate-200 font-mono">
+ Exigência Especial
  </Badge>
  </div>
 
  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
  <div className="space-y-1.5">
- <label className="font-semibold text-purple-900 dark:text-purple-200">
+ <label className="font-semibold text-slate-700 dark:text-slate-300">
  Grupo Taxonômico Objeto da Coleta *
  </label>
  <input
@@ -568,12 +622,12 @@ export const AtividadesDidaticasPage: React.FC<{ onNavigate?: (route: string) =>
  value={grupoTaxonomico}
  onChange={(e) => setGrupoTaxonomico(e.target.value)}
  placeholder="Ex.: Briófitas epífitas / Insetos aquáticos"
- className="w-full text-xs h-9 px-3 rounded-md border border-purple-200 dark:border-purple-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100"
+ className="w-full text-xs h-9 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-1 focus:ring-[#0F4C3A]"
  />
  </div>
 
  <div className="space-y-1.5">
- <label className="font-semibold text-purple-900 dark:text-purple-200">
+ <label className="font-semibold text-slate-700 dark:text-slate-300">
  Método e Instrumentos de Captura / Coleta *
  </label>
  <input
@@ -581,12 +635,12 @@ export const AtividadesDidaticasPage: React.FC<{ onNavigate?: (route: string) =>
  value={metodoCaptura}
  onChange={(e) => setMetodoCaptura(e.target.value)}
  placeholder="Ex.: Rede entomológica, pinça botânica, frascos com álcool 70%"
- className="w-full text-xs h-9 px-3 rounded-md border border-purple-200 dark:border-purple-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100"
+ className="w-full text-xs h-9 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-1 focus:ring-[#0F4C3A]"
  />
  </div>
 
  <div className="space-y-1.5 sm:col-span-2">
- <label className="font-semibold text-purple-900 dark:text-purple-200">
+ <label className="font-semibold text-slate-700 dark:text-slate-300">
  Coleção Científica / Herbário de Destinação Obrigatória *
  </label>
  <input
@@ -594,7 +648,7 @@ export const AtividadesDidaticasPage: React.FC<{ onNavigate?: (route: string) =>
  value={colecaoCientifica}
  onChange={(e) => setColecaoCientifica(e.target.value)}
  placeholder="Ex.: Herbário da UEFS ou Museu de Zoologia da UFBA"
- className="w-full text-xs h-9 px-3 rounded-md border border-purple-200 dark:border-purple-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100"
+ className="w-full text-xs h-9 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-1 focus:ring-[#0F4C3A]"
  />
  </div>
  </div>
@@ -615,7 +669,7 @@ export const AtividadesDidaticasPage: React.FC<{ onNavigate?: (route: string) =>
  variant="default"
  size="sm"
  onClick={handleSubmeterAAD}
- className="bg-teal-700 hover:bg-teal-800 text-white text-xs font-semibold"
+ className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs font-semibold shadow-xs"
  >
  <Send className="w-3.5 h-3.5 mr-1" />
  Submeter Solicitação AAD
@@ -625,157 +679,291 @@ export const AtividadesDidaticasPage: React.FC<{ onNavigate?: (route: string) =>
  </div>
  )}
 
- {/* ========================================================================= */}
- {/* ABA 3: ANÁLISE TÉCNICA E EMISSÃO DE AUTORIZAÇÃO */}
- {/* ========================================================================= */}
- {abaAtiva === 'analise' && (
- <div className="space-y-6">
- <div className="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-lg border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
- <div>
- <div className="flex items-center gap-2">
- <span className="font-mono font-bold text-sm text-teal-800 dark:text-teal-300">
- {processoSelecionado.id}
- </span>
- <Badge variant="outline" className="text-[10px] font-mono">
- {processoSelecionado.numeroRequerimento}
- </Badge>
- <Badge
- variant="outline"
- className={cn(
- "text-[10px]",
- processoSelecionado.tipo.includes('Tipo 1')
- ? "bg-emerald-50 text-emerald-700 border-emerald-200"
- : "bg-purple-50 text-purple-700 border-purple-200"
- )}
- >
- {processoSelecionado.tipo}
- </Badge>
- </div>
- <h2 className="text-sm font-semibold text-slate-800 dark:text-slate-200 mt-1">
- {processoSelecionado.disciplina} — {processoSelecionado.instituicao}
- </h2>
- <p className="text-slate-500">
- <strong>Docente:</strong> {processoSelecionado.professorResponsavel} | <strong>Participantes:</strong> {processoSelecionado.quantidadeAlunos} alunos
- </p>
- </div>
+      {/* ========================================================================= */}
+      {/* ABA 3: ANÁLISE TÉCNICA E EMISSÃO DE AUTORIZAÇÃO */}
+      {/* ========================================================================= */}
+      {abaAtiva === 'analise' && (() => {
+        const processoFoco = processoSelecionado || processos[0];
+        if (!processoFoco) return null;
 
- <div className="text-right">
- <Badge
- variant="outline"
- className={cn(
- "text-xs px-2.5 py-0.5",
- processoSelecionado.status === 'Autorizado' ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-amber-50 text-amber-700 border-amber-200"
- )}
- >
- {processoSelecionado.status}
- </Badge>
- </div>
- </div>
+        return (
+          <div className="space-y-6">
+            {/* Top Process Header */}
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5 shadow-xs">
+              <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+                <div className="space-y-2">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-xs font-mono font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded border border-slate-200 dark:border-slate-700">
+                      {processoFoco.id}
+                    </span>
+                    <span className="text-xs text-slate-500 font-mono">
+                      {processoFoco.numeroRequerimento}
+                    </span>
+                    <Badge
+                      variant="outline"
+                      className={cn(
+                        "text-[11px] font-medium",
+                        processoFoco.tipo.includes('Tipo 1')
+                          ? "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800"
+                          : "bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700"
+                      )}
+                    >
+                      {processoFoco.tipo}
+                    </Badge>
+                    <Badge
+                      variant="outline"
+                      className={cn(
+                        "text-xs font-medium",
+                        processoFoco.status === 'Autorizado' && "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800",
+                        processoFoco.status === 'Em Análise' && "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800",
+                        processoFoco.status === 'Com Pendências' && "bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950/40 dark:text-orange-300 dark:border-orange-800",
+                        processoFoco.status === 'Indeferido' && "bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800"
+                      )}
+                    >
+                      {processoFoco.status}
+                    </Badge>
+                  </div>
+                  <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+                    {processoFoco.disciplina} — {processoFoco.instituicao}
+                  </h2>
+                  <p className="text-xs text-slate-600 dark:text-slate-400">
+                    Unidade de Conservação: <strong className="text-slate-800 dark:text-slate-200 font-semibold">{processoFoco.ucNome}</strong> | Docente Responsável: {processoFoco.professorResponsavel} ({processoFoco.curso})
+                  </p>
+                </div>
 
- <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 text-xs">
- {/* DETALHES E METODOLOGIA */}
- <div className="lg:col-span-2 space-y-4">
- <Card className="border-slate-200 dark:border-slate-800 shadow-sm">
- <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800">
- <CardTitle className="text-sm font-semibold text-slate-800 dark:text-slate-200">
- Plano Didático e Diretrizes de Campo
- </CardTitle>
- </CardHeader>
- <CardContent className="space-y-3 pt-4">
- <div>
- <span className="font-semibold text-slate-700 dark:text-slate-300 block">Objetivo Pedagógico:</span>
- <p className="text-slate-600 dark:text-slate-400 mt-0.5 leading-relaxed">
- Aplicação prática dos conceitos teóricos de ecologia e taxonomia vegetal/animal em ecossistema de Mata Atlântica preservado.
- </p>
- </div>
+                <div className="flex flex-wrap items-center gap-2 shrink-0">
+                  {processoFoco.status === 'Autorizado' && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="text-xs font-medium border-slate-300 text-slate-700 bg-white hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:bg-slate-800"
+                      onClick={() => {
+                        alert('Download do Certificado formal de AAD emitido pelo INEMA em PDF com assinatura digital.');
+                      }}
+                    >
+                      <Download className="w-3.5 h-3.5 mr-1.5" />
+                      Baixar Certificado AAD (PDF)
+                    </Button>
+                  )}
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setAbaAtiva('painel')}
+                    className="text-xs font-medium border-slate-300 text-slate-700 bg-white hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:bg-slate-800"
+                  >
+                    Voltar aos Processos
+                  </Button>
+                </div>
+              </div>
+            </div>
 
- {processoSelecionado.coletaDetalhes && (
- <div className="bg-purple-50/50 dark:bg-purple-950/20 p-3 rounded-lg border border-purple-200 dark:border-purple-800 space-y-1.5">
- <div className="font-bold text-purple-900 dark:text-purple-200">
- Detalhamento de Coleta Autorizada (Tipo 2):
- </div>
- <p><strong>Grupo:</strong> {processoSelecionado.coletaDetalhes.grupoTaxonomico}</p>
- <p><strong>Método:</strong> {processoSelecionado.coletaDetalhes.metodoCaptura}</p>
- <p><strong>Destino:</strong> {processoSelecionado.coletaDetalhes.colecaoCientifica}</p>
- </div>
- )}
- </CardContent>
- </Card>
- </div>
+            {/* Grid Principal: Detalhes do Plano Didático (2 Cols) + Parecer e Decisão (1 Col) */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 text-xs">
+              {/* COLUNA ESQUERDA (2 COLS): PLANO DIDÁTICO E SALVAGUARDAS */}
+              <div className="lg:col-span-2 space-y-6">
+                <Card className="border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs">
+                  <CardHeader className="py-3.5 px-5 border-b border-slate-100 dark:border-slate-800">
+                    <CardTitle className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                      Plano Didático e Metodologia da Aula Prática
+                    </CardTitle>
+                    <CardDescription className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                      Caracterização pedagógica e justificativa em conformidade com a Portaria INEMA nº 25.753/2022.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="p-5 space-y-4">
+                    <div>
+                      <h4 className="font-semibold text-slate-800 dark:text-slate-200 mb-1">
+                        Objetivo Pedagógico / Ementa de Campo:
+                      </h4>
+                      <p className="text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-900/60 p-3.5 rounded-md border border-slate-200 dark:border-slate-800 leading-relaxed">
+                        Aplicação prática dos conceitos teóricos de ecologia e taxonomia vegetal/animal em ecossistema de Mata Atlântica preservado, visando a formação técnica dos discentes por meio de observação in loco e levantamento sistemático.
+                      </p>
+                    </div>
 
- {/* DECISÃO DA AUTORIZAÇÃO */}
- <div>
- <Card className="border-slate-200 dark:border-slate-800 shadow-sm">
- <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800">
- <CardTitle className="text-sm font-semibold text-slate-800 dark:text-slate-200">Decisão de Autorização AAD</CardTitle>
- </CardHeader>
- <CardContent className="space-y-4 pt-4">
- {processoSelecionado.autorizacaoNumero ? (
- <div className="p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-lg space-y-2">
- <div className="font-bold text-emerald-800 dark:text-emerald-200 flex items-center gap-1.5">
- <Check className="w-4 h-4 text-emerald-600" />
- Autorização Didática Concedida!
- </div>
- <p className="font-mono font-bold text-slate-900 dark:text-slate-100">
- {processoSelecionado.autorizacaoNumero}
- </p>
- <Button variant="outline" size="sm" className="w-full text-xs font-medium">
- <Download className="w-3.5 h-3.5 mr-1" />
- Baixar Certificado AAD
- </Button>
- </div>
- ) : (
- <div className="space-y-2">
- <p className="text-slate-500 leading-relaxed">
- O parecer do gestor indicou compatibilidade plena com o zoneamento da UC.
- </p>
- <Button
- variant="default"
- size="sm"
- onClick={handleAutorizarAAD}
- className="w-full bg-teal-700 hover:bg-teal-800 text-white text-xs font-semibold"
- >
- <Check className="w-3.5 h-3.5 mr-1" />
- Deferir e Emitir Autorização
- </Button>
- </div>
- )}
- </CardContent>
- </Card>
- </div>
- </div>
- </div>
- )}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <div className="p-3 bg-slate-50 dark:bg-slate-900/60 rounded-md border border-slate-200 dark:border-slate-800">
+                        <span className="text-[11px] text-slate-500 font-medium block">Período da Atividade:</span>
+                        <span className="font-semibold text-slate-800 dark:text-slate-200 text-xs mt-0.5 block">{processoFoco.dataAulaCampo}</span>
+                      </div>
+                      <div className="p-3 bg-slate-50 dark:bg-slate-900/60 rounded-md border border-slate-200 dark:border-slate-800">
+                        <span className="text-[11px] text-slate-500 font-medium block">Contingente de Alunos:</span>
+                        <span className="font-semibold text-slate-800 dark:text-slate-200 text-xs mt-0.5 block">{processoFoco.quantidadeAlunos} alunos matriculados</span>
+                      </div>
+                      <div className="p-3 bg-slate-50 dark:bg-slate-900/60 rounded-md border border-slate-200 dark:border-slate-800">
+                        <span className="text-[11px] text-slate-500 font-medium block">Local / Atrativo na UC:</span>
+                        <span className="font-semibold text-slate-800 dark:text-slate-200 text-xs mt-0.5 block">{processoFoco.atrativo || 'Trilhas regulamentadas da UC'}</span>
+                      </div>
+                    </div>
 
- {/* DIÁLOGO / MODAL DE FEEDBACK */}
- <Dialog open={modalState.isOpen} onOpenChange={(open) => setModalState((prev) => ({ ...prev, isOpen: open }))}>
- <DialogContent className="sm:max-w-md">
- <DialogHeader>
- <div className="flex items-center gap-2 mb-1">
- {modalState.tipo === 'sucesso' && <CheckCircle2 className="w-5 h-5 text-emerald-600" />}
- {modalState.tipo === 'erro' && <AlertCircle className="w-5 h-5 text-red-600" />}
- {modalState.tipo === 'aviso' && <Info className="w-5 h-5 text-blue-600" />}
- <DialogTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
- {modalState.titulo}
- </DialogTitle>
- 
- </div>
- <DialogDescription className="text-xs text-slate-600 dark:text-slate-400 pt-1 leading-relaxed">
- {modalState.mensagem}
- </DialogDescription>
- </DialogHeader>
+                    {/* Detalhamento de Coleta (Tipo 2) em tom neutro padrão GLA */}
+                    {processoFoco.coletaDetalhes && (
+                      <div className="p-4 rounded-md border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-2.5">
+                        <div className="font-semibold text-slate-900 dark:text-slate-100 text-xs flex items-center justify-between">
+                          <span>Especificações da Coleta Científica Autorizada (Tipo 2):</span>
+                          <Badge variant="outline" className="text-[10px] bg-white dark:bg-slate-800 text-slate-600">
+                            Exigência RN010
+                          </Badge>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                          <div>
+                            <span className="text-slate-500 block text-[11px]">Grupo Taxonômico Amostrado:</span>
+                            <span className="font-medium text-slate-800 dark:text-slate-200">{processoFoco.coletaDetalhes.grupoTaxonomico}</span>
+                          </div>
+                          <div>
+                            <span className="text-slate-500 block text-[11px]">Método de Coleta / Captura:</span>
+                            <span className="font-medium text-slate-800 dark:text-slate-200">{processoFoco.coletaDetalhes.metodoCaptura}</span>
+                          </div>
+                          <div className="sm:col-span-2">
+                            <span className="text-slate-500 block text-[11px]">Coleção Científica Credenciada / Fiel Depositária:</span>
+                            <span className="font-medium text-slate-800 dark:text-slate-200">{processoFoco.coletaDetalhes.colecaoCientifica}</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
 
- <DialogFooter className="flex gap-2 sm:justify-end mt-4">
- <Button
- variant="default"
- size="sm"
- onClick={() => setModalState((prev) => ({ ...prev, isOpen: false }))}
- className="bg-teal-700 hover:bg-teal-800 text-white text-xs font-semibold"
- >
- OK
- </Button>
- </DialogFooter>
- </DialogContent>
+                    <div>
+                      <h4 className="font-semibold text-slate-800 dark:text-slate-200 mb-1.5">
+                        Diretrizes de Mínimo Impacto e Segurança Operacional:
+                      </h4>
+                      <ul className="space-y-1 list-disc list-inside text-slate-600 dark:text-slate-400">
+                        <li>Permanência restrita aos limites das trilhas oficiais sem abertura de picadas pioneiras.</li>
+                        <li>Proibição de fogueiras, equipamentos sonoros e descarte de quaisquer resíduos na UC.</li>
+                        <li>Presença contínua do professor orientador durante todas as etapas das aulas de campo.</li>
+                      </ul>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* COLUNA DIREITA (1 COL): DECISÃO E MINUTA DE AUTORIZAÇÃO */}
+              <div className="space-y-6">
+                <Card className="border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs">
+                  <CardHeader className="py-3.5 px-5 border-b border-slate-100 dark:border-slate-800">
+                    <CardTitle className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                      Decisão e Emissão da Autorização
+                    </CardTitle>
+                    <CardDescription className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                      Parecer técnico conclusivo e atos do Gestor da UC / INEMA.
+                    </CardDescription>
+                  </CardHeader>
+
+                  <CardContent className="p-5 space-y-4">
+                    {processoFoco.autorizacaoNumero ? (
+                      <div className="p-4 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-lg space-y-3">
+                        <div className="flex items-center gap-2 text-emerald-800 dark:text-emerald-200 font-bold text-xs">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                          Autorização Didática Concedida!
+                        </div>
+                        <p className="font-mono font-bold text-slate-900 dark:text-slate-100 text-sm">
+                          {processoFoco.autorizacaoNumero}
+                        </p>
+                        <p className="text-[11px] text-slate-600 dark:text-slate-400">
+                          Ato administrativo formal emitido e comunicado ao interessado com publicação SEI-BA.
+                        </p>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-full text-xs font-medium border-slate-300 text-slate-700 bg-white hover:bg-slate-50"
+                          onClick={() => {
+                            alert('Download do Certificado formal de AAD emitido pelo INEMA em PDF.');
+                          }}
+                        >
+                          <Download className="w-3.5 h-3.5 mr-1.5" />
+                          Baixar Certificado AAD (PDF)
+                        </Button>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="space-y-1.5">
+                          <label className="font-semibold text-slate-800 dark:text-slate-200 block text-xs">
+                            Parecer Técnico Conclusivo do Gestor:
+                          </label>
+                          <textarea
+                            rows={3}
+                            value={parecerGestor}
+                            onChange={(e) => setParecerGestor(e.target.value)}
+                            className="w-full text-xs p-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-1 focus:ring-[#0F4C3A]"
+                            placeholder="Fundamente a conformidade técnica com o zoneamento..."
+                          />
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="font-semibold text-slate-800 dark:text-slate-200 block text-xs">
+                            Condicionantes Ambientais Fixadas:
+                          </label>
+                          <textarea
+                            rows={4}
+                            value={condicionantesTexto}
+                            onChange={(e) => setCondicionantesTexto(e.target.value)}
+                            className="w-full text-xs p-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-mono text-[11px] focus:ring-1 focus:ring-[#0F4C3A]"
+                            placeholder="Enumere as condicionantes do ato..."
+                          />
+                        </div>
+
+                        <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                          <Button
+                            size="sm"
+                            onClick={handleAutorizarAAD}
+                            className="w-full bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs font-semibold shadow-xs"
+                          >
+                            <Check className="w-3.5 h-3.5 mr-1.5" />
+                            Deferir e Emitir Autorização
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={handleSolicitarAdequacaoAAD}
+                            className="w-full text-xs font-medium border-slate-300 text-slate-700 bg-white hover:bg-slate-50"
+                          >
+                            Solicitar Adequação ao Docente
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={handleIndeferirAAD}
+                            className="w-full text-xs font-medium text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30"
+                          >
+                            Indeferir Solicitação
+                          </Button>
+                        </div>
+                      </>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* DIÁLOGO / MODAL DE FEEDBACK */}
+      <Dialog open={modalState.isOpen} onOpenChange={(open) => setModalState((prev) => ({ ...prev, isOpen: open }))}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <div className="flex items-center gap-2 mb-1">
+              {modalState.tipo === 'sucesso' && <CheckCircle2 className="w-5 h-5 text-emerald-600" />}
+              {modalState.tipo === 'erro' && <AlertCircle className="w-5 h-5 text-red-600" />}
+              {modalState.tipo === 'aviso' && <Info className="w-5 h-5 text-blue-600" />}
+              <DialogTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
+                {modalState.titulo}
+              </DialogTitle>
+            </div>
+            <DialogDescription className="text-xs text-slate-600 dark:text-slate-400 pt-1 leading-relaxed">
+              {modalState.mensagem}
+            </DialogDescription>
+          </DialogHeader>
+
+          <DialogFooter className="flex gap-2 sm:justify-end mt-4">
+            <Button
+              variant="default"
+              size="sm"
+              onClick={() => setModalState((prev) => ({ ...prev, isOpen: false }))}
+              className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs font-semibold shadow-xs"
+            >
+              OK
+            </Button>
+          </DialogFooter>
+        </DialogContent>
  </Dialog>
  </div>
  );
