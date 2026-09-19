@@ -21,8 +21,6 @@
           "label": "Painel Interno DIFIS",
           "href": "/?rota=consulta-interna",
           "route": "consulta-interna",
-          "badge": "3",
-          "badgeVariant": "rose",
           "htmlId": "menu-consulta-interna"
         },
         {

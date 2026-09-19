@@ -105,8 +105,7 @@ function generateLegacyNavHtml(config, activeId = 'relatorios') {
       html += `                        <a href="${itemTargetHref}" id="${sub.htmlId || sub.id}" data-testid="${sub.htmlId || sub.id}" ${isSubExternal ? 'target="_blank" rel="noopener noreferrer"' : ''} class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 ${isSubActive ? 'bg-[#E2ECE9] text-[#0F4C3A] font-bold' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium'}">\n`;
       html += `                            <span class="truncate">${sub.label}</span>\n`;
       if (sub.badge) {
-        const badgeIdAttr = sub.id === 'fisc-painel-interno-difis' ? ' id="sidebarBadgeEmergencias"' : '';
-        html += `                            <span class="bg-rose-500 text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full"${badgeIdAttr}>${sub.badge}</span>\n`;
+        html += `                            <span class="text-[9px] font-mono tracking-tight px-1.5 py-0.5 rounded shrink-0 ml-1.5 whitespace-nowrap ${isSubActive ? 'bg-[#0F4C3A]/10 text-[#0F4C3A] font-semibold' : 'text-slate-400 bg-slate-100/70'}">${sub.badge}</span>\n`;
       }
       html += `                        </a>\n`;
     }

@@ -114,14 +114,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         <span className="truncate">{subItem.label}</span>
                         {subItem.badge && (
                           <span
-                            id={subItem.id === 'fisc-painel-interno-difis' ? 'sidebarBadgeEmergencias' : undefined}
                             className={cn(
-                              "text-[10px] font-mono font-medium px-1.5 py-0.5 rounded-full shrink-0 ml-1.5 whitespace-nowrap transition-colors",
-                              subItem.id === 'fisc-painel-interno-difis'
-                                ? "bg-rose-500 text-white font-bold px-1.5 py-0.2"
-                                : isSubActive
-                                ? "bg-[#0F4C3A] text-white"
-                                : "bg-slate-100 text-slate-600 border border-slate-200/80 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700"
+                              "text-[9px] font-mono tracking-tight px-1.5 py-0.5 rounded shrink-0 ml-1.5 whitespace-nowrap transition-colors select-none",
+                              isSubActive
+                                ? "bg-[#0F4C3A]/10 text-[#0F4C3A] font-semibold"
+                                : "text-slate-400 dark:text-slate-500 bg-slate-100/70 dark:bg-slate-800/60"
                             )}
                           >
                             {subItem.badge}
