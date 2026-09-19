@@ -29,6 +29,7 @@ import {
  Share2,
  Award,
  PlusCircle,
+ Plus,
  Trash2,
  FileSpreadsheet
 } from 'lucide-react';
@@ -643,35 +644,72 @@ export const PesquisaCientificaPage: React.FC<{ onNavigate?: (route: string) => 
  </div>
  )}
 
-      {/* Breadcrumb & Header */}
-      <div className="mb-4">
-        <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
-          Autorização para Realização de Pesquisa Científica em UC
-        </h1>
-        <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
-          Protocolo, análise técnica de viabilidade, emissão de Portaria normativa e acompanhamento de relatórios/publicações segundo a Portaria INEMA nº 25.753/2022.
-        </p>
-      </div>
+      {/* Breadcrumb & Header com Botão de Ação Primária */}
+      {activeTab !== 'novo-projeto' ? (
+        <>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+            <div>
+              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+                Autorização para Realização de Pesquisa Científica em UC
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+                Protocolo, análise técnica de viabilidade, emissão de Portaria normativa e acompanhamento de relatórios/publicações segundo a Portaria INEMA nº 25.753/2022.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setEtapaForm(1);
+                setActiveTab('novo-projeto');
+              }}
+              className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-white bg-[#0F4C3A] hover:bg-[#0c3d2e] rounded-md shadow-xs transition-colors shrink-0"
+            >
+              <Plus className="w-4 h-4" />
+              Novo Projeto
+            </button>
+          </div>
 
-      {/* Navegação por Abas Oficial GLA (Filament) */}
-      <FilamentTabs
-        tabs={[
-          { id: 'painel', label: 'Painel', badge: processos.length },
-          { id: 'novo-projeto', label: 'Novo Projeto' },
-          { id: 'detalhes', label: 'Ato e Relatórios' }
-        ]}
-        activeTab={activeTab === 'analise-tecnica' ? 'detalhes' : activeTab}
-        onChange={(tabId) => {
-          if (tabId === 'detalhes' && !selectedProcesso) {
-            setSelectedProcesso(processos[0]);
-          }
-          if (tabId === 'novo-projeto') {
-            setEtapaForm(1);
-          }
-          setActiveTab(tabId as any);
-        }}
-        className="mb-6"
-      />
+          {/* Navegação por Abas Oficial GLA (Filament) */}
+          <FilamentTabs
+            tabs={[
+              { id: 'painel', label: 'Projetos de Pesquisa', badge: processos.length },
+              { id: 'detalhes', label: 'Atos e Relatórios' }
+            ]}
+            activeTab={activeTab === 'analise-tecnica' ? 'detalhes' : activeTab}
+            onChange={(tabId) => {
+              if (tabId === 'detalhes' && !selectedProcesso) {
+                setSelectedProcesso(processos[0]);
+              }
+              setActiveTab(tabId as any);
+            }}
+            className="mb-6"
+          />
+        </>
+      ) : (
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 pb-4 border-b border-slate-200 dark:border-slate-800">
+          <div>
+            <div className="flex items-center gap-2">
+              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+                Novo Requerimento de Pesquisa Científica
+              </h1>
+              <span className="text-[10px] font-medium font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
+                DOR004
+              </span>
+            </div>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+              Instrução técnica de projeto para autorização em Unidade de Conservação Estadual (Portaria INEMA nº 25.753/2022).
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setActiveTab('painel')}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/60 rounded-md transition-colors shrink-0 shadow-xs"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            Voltar aos Projetos
+          </button>
+        </div>
+      )}
 
       {/* VIEW 1: PAINEL GERENCIAL */}
       {activeTab === 'painel' && (

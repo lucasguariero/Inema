@@ -25,6 +25,7 @@ import {
  Calendar,
  Layers,
  Sparkles,
+ Plus,
  Info
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
@@ -158,6 +159,61 @@ export const AutorizacaoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
  '1. Limite estrito de 180 participantes nas trilhas monitoradas.\n2. Proibido qualquer som amplificado após as 18h.\n3. Presença obrigatória de 2 guias credenciados pelo INEMA.'
  );
 
+ // Estados do Modal de Nova Solicitação de Evento
+ const [modalNovoAberto, setModalNovoAberto] = useState(false);
+ const [novoEventoTitulo, setNovoEventoTitulo] = useState('');
+ const [novoRequerente, setNovoRequerente] = useState('');
+ const [novoCpfCnpj, setNovoCpfCnpj] = useState('');
+ const [novoUcId, setNovoUcId] = useState('UC-CONDURU');
+ const [novoDataEvento, setNovoDataEvento] = useState('2026-11-20');
+ const [novoPublico, setNovoPublico] = useState('100');
+ const [novoZonaAmortecimento, setNovoZonaAmortecimento] = useState(false);
+
+ const handleCriarNovoProcessoAAV = () => {
+ if (!novoEventoTitulo || !novoRequerente) {
+ setModalState({
+ isOpen: true,
+ tipo: 'erro',
+ codigo: '',
+ titulo: 'Campos Obrigatórios',
+ mensagem: 'Informe o título do evento e o nome do requerente para autuar o processo.'
+ });
+ return;
+ }
+
+ const proxId = processos.length + 45;
+ const novoProc: ProcessoAAV = {
+ id: `SEI-021.7744.2026.000${proxId}-22`,
+ numeroSolicitacao: `AAV-2026-00${proxId}`,
+ ucId: novoUcId,
+ ucNome: novoUcId === 'UC-CONDURU' ? 'Parque Estadual da Serra do Conduru' : 'APA Litoral Norte do Estado da Bahia',
+ zonaAmortecimento: novoZonaAmortecimento,
+ requerente: novoRequerente,
+ cpfCnpj: novoCpfCnpj || '00.000.000/0001-00',
+ eventoTitulo: novoEventoTitulo,
+ dataEvento: novoDataEvento,
+ publicoTotal: Number(novoPublico) || 100,
+ dataAbertura: '19/09/2026',
+ prazoDiasRestantes: 20,
+ status: 'Análise Técnica',
+ parecerTecnico: ''
+ };
+
+ setProcessos([novoProc, ...processos]);
+ setProcessoSelecionado(novoProc);
+ setModalNovoAberto(false);
+ setNovoEventoTitulo('');
+ setNovoRequerente('');
+
+ setModalState({
+ isOpen: true,
+ tipo: 'sucesso',
+ codigo: '',
+ titulo: 'Processo AAV Autuado com Sucesso',
+ mensagem: `Processo formal ${novoProc.id} (${novoProc.numeroSolicitacao}) aberto no SEI-BA! SLA regulamentar de 20 dias iniciado.`
+ });
+ };
+
  // Modais de feedback
  const [modalState, setModalState] = useState<{
  isOpen: boolean;
@@ -233,14 +289,24 @@ export const AutorizacaoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
 
  return (
  <div className="space-y-6">
-      {/* CABEÇALHO DO MÓDULO */}
-      <div className="mb-4">
-        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
-          Autorização Prévia para Realização de Atividades ou Eventos em UC
-        </h1>
-        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-          Processamento formal, instrução documental, análise técnica e emissão de portaria autorizativa.
-        </p>
+      {/* CABEÇALHO DO MÓDULO COM BOTÃO DE AÇÃO PRIMÁRIA */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+        <div>
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            Autorização Prévia para Realização de Atividades ou Eventos em UC
+          </h1>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            Processamento formal, instrução documental, análise técnica e emissão de portaria autorizativa.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setModalNovoAberto(true)}
+          className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-white bg-[#0F4C3A] hover:bg-[#0c3d2e] rounded-md shadow-xs transition-colors shrink-0"
+        >
+          <Plus className="w-4 h-4" />
+          Nova Solicitação de Evento
+        </button>
       </div>
 
       {/* NAVEGAÇÃO DE ABAS OFICIAL GLA (FILAMENT) */}
@@ -345,7 +411,7 @@ export const AutorizacaoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
  {processos.map((p) => (
  <tr key={p.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors">
  <td className="py-3 px-4">
- <div className="font-mono font-semibold text-teal-700 dark:text-teal-400">{p.id}</div>
+ <div className="font-mono font-semibold text-slate-800 dark:text-slate-200">{p.id}</div>
  <div className="text-[10px] text-slate-400 font-mono">{p.numeroSolicitacao}</div>
  </td>
  <td className="py-3 px-4">
@@ -390,19 +456,19 @@ export const AutorizacaoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
  </Badge>
  </td>
  <td className="py-3 px-4 text-right">
- <Button
- variant="outline"
- size="sm"
- onClick={() => {
- setProcessoSelecionado(p);
- setParecerTexto(p.parecerTecnico || '');
- setAbaAtiva('analise');
- }}
- className="h-7 text-xs font-medium text-teal-700 border-teal-300 hover:bg-teal-50"
- >
- <Eye className="w-3 h-3 mr-1" />
- Analisar
- </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setProcessoSelecionado(p);
+                        setParecerTexto(p.parecerTecnico || '');
+                        setAbaAtiva('analise');
+                      }}
+                      className="h-7 text-xs font-medium text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800"
+                    >
+                      <Eye className="w-3 h-3 mr-1" />
+                      Analisar
+                    </Button>
  </td>
  </tr>
  ))}
@@ -638,7 +704,7 @@ export const AutorizacaoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
  variant="default"
  size="sm"
  onClick={handleEmitirPortaria}
- className="w-full bg-teal-700 hover:bg-teal-800 text-white text-xs font-semibold"
+ className="w-full bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs font-semibold"
  >
  <Check className="w-3.5 h-3.5 mr-1" />
  Emitir Portaria de Autorização
@@ -685,6 +751,127 @@ export const AutorizacaoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
  </div>
  )}
 
+ {/* MODAL: NOVA SOLICITAÇÃO DE EVENTO / AUTORIZAÇÃO PRÉVIA (AAV) */}
+ <Dialog open={modalNovoAberto} onOpenChange={setModalNovoAberto}>
+ <DialogContent className="sm:max-w-lg">
+ <DialogHeader>
+ <div className="flex items-center gap-2">
+ <DialogTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
+ Nova Solicitação de Autorização Prévia (AAV)
+ </DialogTitle>
+ <Badge variant="outline" className="text-[10px] font-mono">F-DUC-068-00</Badge>
+ </div>
+ <DialogDescription className="text-xs text-slate-500 pt-1">
+ Cadastre as informações da atividade/evento para autuação no SEI-BA e início do SLA de 20 dias.
+ </DialogDescription>
+ </DialogHeader>
+
+ <div className="space-y-3.5 py-2 text-xs">
+ <div className="space-y-1">
+ <label className="font-semibold text-slate-700 dark:text-slate-300">
+ Título do Evento / Atividade *
+ </label>
+ <input
+ type="text"
+ value={novoEventoTitulo}
+ onChange={(e) => setNovoEventoTitulo(e.target.value)}
+ placeholder="Ex.: Trilha Ecológica Noturna da Biodiversidade"
+ className="w-full h-8 px-2.5 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900"
+ />
+ </div>
+
+ <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+ <div className="space-y-1">
+ <label className="font-semibold text-slate-700 dark:text-slate-300">
+ Nome do Requerente / Entidade *
+ </label>
+ <input
+ type="text"
+ value={novoRequerente}
+ onChange={(e) => setNovoRequerente(e.target.value)}
+ placeholder="Ex.: Instituto de Ecoturismo da Bahia"
+ className="w-full h-8 px-2.5 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900"
+ />
+ </div>
+
+ <div className="space-y-1">
+ <label className="font-semibold text-slate-700 dark:text-slate-300">
+ CNPJ / CPF do Responsável
+ </label>
+ <input
+ type="text"
+ value={novoCpfCnpj}
+ onChange={(e) => setNovoCpfCnpj(e.target.value)}
+ placeholder="00.000.000/0001-00"
+ className="w-full h-8 px-2.5 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900"
+ />
+ </div>
+ </div>
+
+ <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+ <div className="space-y-1 sm:col-span-2">
+ <label className="font-semibold text-slate-700 dark:text-slate-300">
+ Unidade de Conservação *
+ </label>
+ <select
+ value={novoUcId}
+ onChange={(e) => setNovoUcId(e.target.value)}
+ className="w-full h-8 px-2 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs"
+ >
+ <option value="UC-CONDURU">Parque Estadual da Serra do Conduru</option>
+ <option value="UC-APA-LITORAL-NORTE">APA Litoral Norte do Estado da Bahia</option>
+ <option value="UC-CHAPADA-DIAMANTINA">APA Serra do Barbado / Chapada</option>
+ </select>
+ </div>
+
+ <div className="space-y-1">
+ <label className="font-semibold text-slate-700 dark:text-slate-300">
+ Público Total
+ </label>
+ <input
+ type="number"
+ value={novoPublico}
+ onChange={(e) => setNovoPublico(e.target.value)}
+ className="w-full h-8 px-2.5 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900"
+ />
+ </div>
+ </div>
+
+ <div className="flex items-center gap-2 pt-1">
+ <input
+ type="checkbox"
+ id="checkZANovo"
+ checked={novoZonaAmortecimento}
+ onChange={(e) => setNovoZonaAmortecimento(e.target.checked)}
+ className="rounded border-slate-300 text-[#0F4C3A] focus:ring-[#0F4C3A]"
+ />
+ <label htmlFor="checkZANovo" className="text-xs text-slate-600 dark:text-slate-400 cursor-pointer">
+ A atividade incide em Zona de Amortecimento (ZA) da UC
+ </label>
+ </div>
+ </div>
+
+ <DialogFooter className="flex gap-2 sm:justify-end mt-2">
+ <Button
+ variant="outline"
+ size="sm"
+ onClick={() => setModalNovoAberto(false)}
+ className="text-xs"
+ >
+ Cancelar
+ </Button>
+ <Button
+ variant="default"
+ size="sm"
+ onClick={handleCriarNovoProcessoAAV}
+ className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs font-semibold"
+ >
+ Autuar Processo no SEI-BA
+ </Button>
+ </DialogFooter>
+ </DialogContent>
+ </Dialog>
+
  {/* DIÁLOGO / MODAL DE MENSAGENS NORMATIVAS */}
  <Dialog open={modalState.isOpen} onOpenChange={(open) => setModalState((prev) => ({ ...prev, isOpen: open }))}>
  <DialogContent className="sm:max-w-md">
@@ -696,7 +883,6 @@ export const AutorizacaoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
  <DialogTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
  {modalState.titulo}
  </DialogTitle>
- 
  </div>
  <DialogDescription className="text-xs text-slate-600 dark:text-slate-400 pt-1 leading-relaxed">
  {modalState.mensagem}
@@ -708,7 +894,7 @@ export const AutorizacaoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
  variant="default"
  size="sm"
  onClick={() => setModalState((prev) => ({ ...prev, isOpen: false }))}
- className="bg-teal-700 hover:bg-teal-800 text-white text-xs font-semibold"
+ className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs font-semibold"
  >
  OK
  </Button>

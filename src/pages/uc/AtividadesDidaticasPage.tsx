@@ -22,6 +22,7 @@ import {
  X,
  Layers,
  Sparkles,
+ Plus,
  ArrowRight,
  ArrowLeft,
  Info
@@ -287,32 +288,69 @@ export const AtividadesDidaticasPage: React.FC<{ onNavigate?: (route: string) =>
 
  return (
  <div className="space-y-6">
-      {/* CABEÇALHO DO MÓDULO */}
-      <div className="mb-4">
-        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
-          Autorização para Realização de Atividades Didáticas em UC
-        </h1>
-        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-          Aulas práticas e saídas de campo universitárias / técnicas: Tipo 1 (sem coleta) e Tipo 2 (com coleta e captura de espécimes).
-        </p>
-      </div>
+      {/* CABEÇALHO DO MÓDULO COM BOTÃO DE AÇÃO PRIMÁRIA */}
+      {abaAtiva !== 'formulario' ? (
+        <>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+            <div>
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+                Autorização para Realização de Atividades Didáticas em UC
+              </h1>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Aulas práticas e saídas de campo universitárias / técnicas: Tipo 1 (sem coleta) e Tipo 2 (com coleta e captura de espécimes).
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setAbaAtiva('formulario')}
+              className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-white bg-[#0F4C3A] hover:bg-[#0c3d2e] rounded-md shadow-xs transition-colors shrink-0"
+            >
+              <Plus className="w-4 h-4" />
+              Nova Solicitação
+            </button>
+          </div>
 
-      {/* NAVEGAÇÃO DE ABAS OFICIAL GLA (FILAMENT) */}
-      <FilamentTabs
-        tabs={[
-          { id: 'painel', label: 'Processos AAD', badge: processos.length },
-          { id: 'formulario', label: 'Nova Solicitação' },
-          { id: 'analise', label: 'Análise e Decisão' }
-        ]}
-        activeTab={abaAtiva}
-        onChange={(tabId) => {
-          if (tabId === 'analise' && !processoSelecionado) {
-            setProcessoSelecionado(processos[0]);
-          }
-          setAbaAtiva(tabId as any);
-        }}
-        className="mb-6"
-      />
+          {/* NAVEGAÇÃO DE ABAS OFICIAL GLA (FILAMENT) */}
+          <FilamentTabs
+            tabs={[
+              { id: 'painel', label: 'Processos AAD', badge: processos.length },
+              { id: 'analise', label: 'Análise e Decisão' }
+            ]}
+            activeTab={abaAtiva}
+            onChange={(tabId) => {
+              if (tabId === 'analise' && !processoSelecionado) {
+                setProcessoSelecionado(processos[0]);
+              }
+              setAbaAtiva(tabId as any);
+            }}
+            className="mb-6"
+          />
+        </>
+      ) : (
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 pb-4 border-b border-slate-200 dark:border-slate-800">
+          <div>
+            <div className="flex items-center gap-2">
+              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+                Nova Solicitação de Atividade Didática
+              </h1>
+              <span className="text-[10px] font-medium font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
+                AAD - Portaria 25.753/2022
+              </span>
+            </div>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+              Enquadramento: Tipo 1 (Aulas sem coleta) ou Tipo 2 (Com coleta de material biológico/geológico).
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setAbaAtiva('painel')}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/60 rounded-md transition-colors shrink-0 shadow-xs"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            Voltar aos Processos
+          </button>
+        </div>
+      )}
 
  {/* ========================================================================= */}
  {/* ABA 1: PAINEL DE PROCESSOS AAD */}

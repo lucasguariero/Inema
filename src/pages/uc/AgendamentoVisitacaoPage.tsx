@@ -107,7 +107,7 @@ export const AgendamentoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
  const { isDarkMode } = useTheme();
 
  // Modo de visualização superior: Formulário Requerente vs Gestor da UC vs Calendário
- const [visaoAtiva, setVisaoAtiva] = useState<'formulario' | 'pauta-gestor' | 'calendario' | 'checkout'>('formulario');
+ const [visaoAtiva, setVisaoAtiva] = useState<'formulario' | 'pauta-gestor' | 'calendario' | 'checkout'>('pauta-gestor');
 
  // Aba ativa do Wizard F-DUC-069-00 (Etapas a )
  const [etapaForm, setEtapaForm] = useState<number>(1);
@@ -529,35 +529,70 @@ export const AgendamentoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
  return (
  <div className="space-y-6">
       {/* CABEÇALHO DO MÓDULO */}
-      <div className="mb-4">
-        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
-          Agendamento de Atividades de Visitação em UC
-        </h1>
-        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-          Pré-reserva, triagem operacional de uso público, calendário de ocupação e prevenção de conflitos de agenda.
-        </p>
-      </div>
+      {visaoAtiva !== 'formulario' ? (
+        <>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+            <div>
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+                Agendamento de Atividades de Visitação em UC
+              </h1>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Pré-reserva, triagem operacional de uso público, calendário de ocupação e prevenção de conflitos de agenda.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setEtapaForm(1);
+                setVisaoAtiva('formulario');
+              }}
+              className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-white bg-[#0F4C3A] hover:bg-[#0c3d2e] rounded-md shadow-xs transition-colors shrink-0"
+            >
+              <Plus className="w-4 h-4" />
+              Novo Agendamento
+            </button>
+          </div>
 
-      {/* NAVEGAÇÃO DE ABAS OFICIAL GLA (FILAMENT) */}
-      <FilamentTabs
-        tabs={[
-          { id: 'formulario', label: 'Solicitar Agendamento' },
-          {
-            id: 'pauta-gestor',
-            label: 'Pauta do Gestor',
-            badge: solicitacoes.filter((s) => s.status === 'Em Análise').length || undefined
-          },
-          { id: 'calendario', label: 'Calendário da UC' }
-        ]}
-        activeTab={visaoAtiva}
-        onChange={(tabId) => {
-          if (tabId === 'formulario') {
-            setEtapaForm(1);
-          }
-          setVisaoAtiva(tabId as any);
-        }}
-        className="mb-6"
-      />
+          {/* NAVEGAÇÃO DE ABAS OFICIAL GLA (FILAMENT) */}
+          <FilamentTabs
+            tabs={[
+              {
+                id: 'pauta-gestor',
+                label: 'Pauta de Agendamentos',
+                badge: solicitacoes.filter((s) => s.status === 'Em Análise').length || undefined
+              },
+              { id: 'calendario', label: 'Calendário da UC' }
+            ]}
+            activeTab={visaoAtiva === 'checkout' ? 'pauta-gestor' : visaoAtiva}
+            onChange={(tabId) => setVisaoAtiva(tabId as any)}
+            className="mb-6"
+          />
+        </>
+      ) : (
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 pb-4 border-b border-slate-200 dark:border-slate-800">
+          <div>
+            <div className="flex items-center gap-2">
+              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+                Nova Solicitação de Agendamento
+              </h1>
+              <span className="text-[10px] font-medium font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
+                F-DUC-069-00
+              </span>
+            </div>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+              Instrução preliminar de visitação, dimensionamento de público e triagem de salvaguardas operacionais.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setVisaoAtiva('pauta-gestor')}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/60 rounded-md transition-colors shrink-0 shadow-xs"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            Voltar à Pauta
+          </button>
+        </div>
+      )}
 
       {/* ========================================================================= */}
       {/* VISÃO 1: FORMULÁRIO DE AGENDAMENTO (F-DUC-069-00) COM STEPPER ETAPAS 1 A 7 */}
