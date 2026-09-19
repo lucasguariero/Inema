@@ -13,7 +13,7 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 function getInitialTheme(): ThemeMode {
-  if (typeof window === 'undefined') return 'vizora-blue';
+  if (typeof window === 'undefined') return 'inema-light';
 
   const pathname = window.location.pathname.toLowerCase();
   if (pathname.includes('proposta-verde-azul') || pathname.includes('verde-azul') || pathname.includes('vizora-blue') || pathname.includes('sidebar-azul')) return 'vizora-blue';
@@ -29,9 +29,9 @@ function getInitialTheme(): ThemeMode {
   if (temaParam === 'proposta-02' || temaParam === 'inema-forest') return 'vizora-green';
 
   const stored = localStorage.getItem('inema_theme_mode') as ThemeMode;
-  if (stored && stored !== 'inema-forest' && THEMES[stored]) return stored;
+  if (stored && stored !== 'inema-forest' && THEMES[stored] && searchParams.get('layout') === 'novo') return stored;
 
-  return 'vizora-blue';
+  return 'inema-light';
 }
 
 function getInitialDarkMode(): boolean {

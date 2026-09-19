@@ -1,58 +1,12 @@
 {
-  "topDirectItems": [
-    {
-      "id": "inicio",
-      "label": "Início",
-      "href": "https://gla-inema-hml.acto.com.br",
-      "route": "inicio",
-      "icon": "Home",
-      "materialIcon": "home",
-      "htmlId": "menu-inicio"
-    },
-    {
-      "id": "iniciar-requerimento",
-      "label": "Iniciar Requerimento",
-      "href": "https://gla-inema-hml.acto.com.br/requerimento/informacoes",
-      "route": "iniciar-requerimento",
-      "icon": "FilePlus2",
-      "materialIcon": "post_add",
-      "htmlId": "menu-iniciar-requerimento"
-    },
-    {
-      "id": "meus-processos",
-      "label": "Meus Processos",
-      "href": "https://gla-inema-hml.acto.com.br/meus-processos",
-      "route": "meus-processos",
-      "icon": "FolderKanban",
-      "materialIcon": "folder_open",
-      "htmlId": "menu-meus-processos"
-    },
-    {
-      "id": "notificacoes",
-      "label": "Notificações",
-      "href": "https://gla-inema-hml.acto.com.br/notificacoes",
-      "route": "notificacoes",
-      "icon": "Bell",
-      "materialIcon": "notifications",
-      "htmlId": "menu-notificacoes"
-    },
-    {
-      "id": "acesso-publico",
-      "label": "Acesso Público",
-      "href": "https://gla-inema-hml.acto.com.br/acesso-publico",
-      "route": "acesso-publico",
-      "icon": "Globe",
-      "materialIcon": "public",
-      "htmlId": "menu-acesso-publico"
-    }
-  ],
+  "topDirectItems": [],
   "menuGroups": [
     {
       "id": "fiscalizacao",
       "label": "Fiscalização",
       "icon": "ShieldAlert",
       "materialIcon": "fact_check",
-      "defaultOpen": false,
+      "defaultOpen": true,
       "htmlId": "subFiscalizacao",
       "items": [
         {
@@ -70,162 +24,58 @@
           "badge": "3",
           "badgeVariant": "rose",
           "htmlId": "menu-consulta-interna"
+        },
+        {
+          "id": "fisc-plantonista",
+          "label": "Cadastro de Plantonista",
+          "href": "/?rota=fisc-plantonista",
+          "route": "fisc-plantonista",
+          "htmlId": "menu-fisc-plantonista"
+        },
+        {
+          "id": "fisc-escala",
+          "label": "Escala de Plantonistas",
+          "href": "/?rota=fisc-escala",
+          "route": "fisc-escala",
+          "htmlId": "menu-fisc-escala"
         }
       ]
     },
     {
-      "id": "relatorios",
-      "label": "Relatórios Gerenciais",
-      "icon": "BarChart3",
-      "materialIcon": "bar_chart",
-      "href": "/src/relatorios.html",
-      "route": "relatorios",
-      "isDirectItem": true,
-      "htmlId": "menu-relatorios",
-      "items": []
-    },
-    {
-      "id": "sispass",
-      "label": "SISPASS",
-      "icon": "Bird",
-      "materialIcon": "pets",
-      "htmlId": "subSispass",
+      "id": "unidades-conservacao",
+      "label": "Unidades de Conservação",
+      "icon": "Trees",
+      "materialIcon": "forest",
+      "defaultOpen": true,
+      "htmlId": "subUC",
       "items": [
         {
-          "id": "sispass-meus-perfis",
-          "label": "Meus Perfis",
-          "href": "https://gla-inema-hml.acto.com.br/meus-perfis",
-          "htmlId": "menu-sispass-meus-perfis"
+          "id": "uc-agendamento",
+          "label": "Agendamento de Visitação",
+          "href": "/?rota=uc-agendamento",
+          "route": "uc-agendamento",
+          "htmlId": "menu-uc-agendamento"
         },
         {
-          "id": "sispass-calendario-anual",
-          "label": "Calendário Anual",
-          "href": "https://gla-inema-hml.acto.com.br/validacao-calendario-anual",
-          "htmlId": "menu-sispass-calendario-anual"
+          "id": "uc-autorizacao-visitacao",
+          "label": "Autorização de Eventos (AAV)",
+          "href": "/?rota=uc-autorizacao-visitacao",
+          "route": "uc-autorizacao-visitacao",
+          "htmlId": "menu-uc-autorizacao-visitacao"
         },
         {
-          "id": "sispass-convites",
-          "label": "Convites de Associação",
-          "href": "https://gla-inema-hml.acto.com.br/sispass/convites-associado",
-          "htmlId": "menu-sispass-convites"
-        }
-      ]
-    },
-    {
-      "id": "financeiro",
-      "label": "Financeiro",
-      "icon": "Landmark",
-      "materialIcon": "account_balance",
-      "htmlId": "subFinanceiro",
-      "items": [
-        {
-          "id": "fin-certidao-debito",
-          "label": "Certidão de Débito Ambiental",
-          "href": "https://gla-inema-hml.acto.com.br/certidao-debito-ambiental",
-          "htmlId": "menu-fin-certidao-debito"
-        }
-      ]
-    },
-    {
-      "id": "meu-cadastro",
-      "label": "Meu Cadastro",
-      "icon": "UserCircle",
-      "materialIcon": "badge",
-      "htmlId": "subMeuCadastro",
-      "items": [
-        {
-          "id": "cad-dados-pessoais",
-          "label": "Dados Pessoais",
-          "href": "https://gla-inema-hml.acto.com.br/meu-cadastro",
-          "htmlId": "menu-cad-dados-pessoais"
+          "id": "uc-atividades-didaticas",
+          "label": "Atividades Didáticas (AAD)",
+          "href": "/?rota=uc-atividades-didaticas",
+          "route": "uc-atividades-didaticas",
+          "htmlId": "menu-uc-atividades-didaticas"
         },
         {
-          "id": "cad-representante-legal",
-          "label": "Representante Legal",
-          "href": "https://gla-inema-hml.acto.com.br/representantes-legais",
-          "htmlId": "menu-cad-representante-legal"
-        },
-        {
-          "id": "cad-responsavel-tecnico",
-          "label": "Responsável Técnico",
-          "href": "https://gla-inema-hml.acto.com.br/responsaveis-tecnicos",
-          "htmlId": "menu-cad-responsavel-tecnico"
-        },
-        {
-          "id": "cad-empreendimentos",
-          "label": "Empreendimentos",
-          "href": "https://gla-inema-hml.acto.com.br/empreendimentos",
-          "htmlId": "menu-cad-empreendimentos"
-        },
-        {
-          "id": "cad-procurador",
-          "label": "Procurador",
-          "href": "https://gla-inema-hml.acto.com.br/procuradores",
-          "htmlId": "menu-cad-procurador"
-        },
-        {
-          "id": "cad-representacoes",
-          "label": "Representações",
-          "href": "https://gla-inema-hml.acto.com.br/consultorias",
-          "htmlId": "menu-cad-representacoes"
-        }
-      ]
-    },
-    {
-      "id": "ansla",
-      "label": "Atividades Não Sujeitas a Licenciamento...",
-      "icon": "ShieldCheck",
-      "materialIcon": "verified_user",
-      "htmlId": "subAnsla",
-      "items": [
-        {
-          "id": "ansla-inicial",
-          "label": "Tela Inicial ANSLA",
-          "href": "https://gla-inema-hml.acto.com.br/atividades-dispensadas/informacoes",
-          "htmlId": "menu-ansla-inicial"
-        }
-      ]
-    },
-    {
-      "id": "requerimentos",
-      "label": "Requerimentos",
-      "icon": "Send",
-      "materialIcon": "send",
-      "htmlId": "subRequerimentos",
-      "items": [
-        {
-          "id": "req-dtrp",
-          "label": "Declaração de Transportes",
-          "href": "https://gla-inema-hml.acto.com.br/dtrp-requerimento/dtrp-requerimentos",
-          "htmlId": "menu-req-dtrp"
-        },
-        {
-          "id": "req-parcelamento",
-          "label": "Parcelamento",
-          "href": "https://gla-inema-hml.acto.com.br/parcelamento",
-          "htmlId": "menu-req-parcelamento"
-        }
-      ]
-    },
-    {
-      "id": "administracao",
-      "label": "Administração",
-      "icon": "Sliders",
-      "materialIcon": "tune",
-      "htmlId": "subAdministracao",
-      "items": [
-        {
-          "id": "adm-tipologias",
-          "label": "Tipologias",
-          "href": "https://gla-inema-hml.acto.com.br/administracao/tipologia?sub=tipologias",
-          "htmlId": "menu-adm-tipologias"
-        },
-        {
-          "id": "seg-pessoas-fisicas",
-          "label": "Pessoas Físicas",
-          "href": "https://gla-inema-hml.acto.com.br/pessoa-fisicas",
-          "subgroup": "SEGURANÇA",
-          "htmlId": "menu-seg-pessoas-fisicas"
+          "id": "uc-pesquisa-cientifica",
+          "label": "Pesquisa Científica (Pesc)",
+          "href": "/?rota=uc-pesquisa-cientifica",
+          "route": "uc-pesquisa-cientifica",
+          "htmlId": "menu-uc-pesquisa-cientifica"
         }
       ]
     }

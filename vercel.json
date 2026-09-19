@@ -3,6 +3,20 @@
   "cleanUrls": true,
   "rewrites": [
     {
+      "source": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "rota"
+        }
+      ],
+      "destination": "/index.html"
+    },
+    {
+      "source": "/",
+      "destination": "/relatorios-antigo.html"
+    },
+    {
       "source": "/layout-antigo",
       "destination": "/relatorios-antigo.html"
     },
@@ -81,6 +95,30 @@
     {
       "source": "/consulta-interna",
       "destination": "/index.html?rota=consulta-interna"
+    },
+    {
+      "source": "/fisc-plantonista",
+      "destination": "/index.html?rota=fisc-plantonista"
+    },
+    {
+      "source": "/fisc-escala",
+      "destination": "/index.html?rota=fisc-escala"
+    },
+    {
+      "source": "/uc-agendamento",
+      "destination": "/index.html?rota=uc-agendamento"
+    },
+    {
+      "source": "/uc-autorizacao-visitacao",
+      "destination": "/index.html?rota=uc-autorizacao-visitacao"
+    },
+    {
+      "source": "/uc-atividades-didaticas",
+      "destination": "/index.html?rota=uc-atividades-didaticas"
+    },
+    {
+      "source": "/uc-pesquisa-cientifica",
+      "destination": "/index.html?rota=uc-pesquisa-cientifica"
     },
     {
       "source": "/fauna",

@@ -1,0 +1,7 @@
+Fala time! Retestei e homologuei o prototipo e fluxo do card de "DOR007 - Modulo Fiscalizacao - Cadastro de Escala de Plantonistas". Segue o resultado:
+
+Resolvido: Implementada a tela completa TL001 de Cadastro de Escala de Plantonistas (Print 01), com selecao de periodo semanal sem horas (RN001), Unidade Regional parametrizada (RN002) e inclusao de multiplos plantonistas com integracao automatica e bloqueio de edicao dos telefones institucionais e pessoais vindos do DOR006 (RN003, RN004, RN005) (Print 02). Foram contemplados os campos opcionais de motorista, telefone, horas numericas (RN007) e numero equivalente com simbolos (RN008). A gravacao da escala valida exibiu a confirmacao com a mensagem normativa exata MSG002 ("Escala criada com sucesso!") (Print 03). Para contraste e validacao de ciclo completo, testei a recuperacao de escala cadastrada a partir da lista lateral (RN012), disparando a mensagem MSG005 ("Escala ja registrada") e habilitando o modo de edicao e o botao de exclusao com confirmacao SIM/NAO (RN013/RN015) (Print 04).
+Nao resolvido: Nenhum ponto pendente. Todos os requisitos normativos (RN001 a RN016), legendas (LEG001 a LEG009), botoes (BOT001 a BOT003) e mensagens (MSG001 a MSG007) foram atendidos integralmente.
+Fora do escopo deste card: O cadastro basico de plantonistas individuais e sua abrangencia municipal pertencem ao DOR006.
+Com isso, considero este card resolvido e validado.
+Fico a disposicao se precisar de mais detalhes de qualquer um desses pontos.

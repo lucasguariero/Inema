@@ -40,6 +40,12 @@ const ROUTE_INFO: Record<string, { module: string; page: string }> = {
   'emergencia-externa': { module: 'Fiscalização', page: 'Registro Emergência' },
   'consulta-externa': { module: 'Fiscalização', page: 'Consulta Cidadão' },
   'consulta-interna': { module: 'Fiscalização', page: 'Painel DIFIS' },
+  'fisc-plantonista': { module: 'Fiscalização', page: 'Cadastro de Plantonista (DOR006)' },
+  'fisc-escala': { module: 'Fiscalização', page: 'Escala de Plantonistas (DOR007)' },
+  'uc-agendamento': { module: 'Unidades de Conservação', page: 'Agendamento de Visitação (DOR001)' },
+  'uc-autorizacao-visitacao': { module: 'Unidades de Conservação', page: 'Autorização de Eventos - AAV (DOR002)' },
+  'uc-atividades-didaticas': { module: 'Unidades de Conservação', page: 'Atividades Didáticas - AAD (DOR003)' },
+  'uc-pesquisa-cientifica': { module: 'Unidades de Conservação', page: 'Pesquisa Científica - Pesc (DOR004)' },
 };
 
 export const Header: React.FC<HeaderProps> = ({ activeRoute = 'relatorios', isSidebarCollapsed, onToggleSidebar }) => {

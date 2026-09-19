@@ -2,6 +2,16 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      (function() {
+        const p = new URLSearchParams(window.location.search);
+        const hasRoute = p.get('rota') || p.get('route') || p.get('r');
+        const isNewLayout = p.get('layout') === 'novo' || window.location.pathname.startsWith('/conceito') || window.location.pathname.startsWith('/proposta');
+        if (!hasRoute && !isNewLayout && (window.location.pathname === '/' || window.location.pathname === '/index.html')) {
+          window.location.replace('/relatorios-antigo.html');
+        }
+      })();
+    </script>
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>INEMA - Portal Integrado de Fiscalização e Regulação Ambiental</title>

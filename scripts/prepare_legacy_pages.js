@@ -6,7 +6,7 @@ const navConfig = require('../src/data/navigationConfig.json');
 
 // Map legacy items strictly to legacy HTML files so navigation remains within the backup project
 const LEGACY_PAGE_MAP = {
-  'inicio': 'https://gla-inema-hml.acto.com.br',
+  'inicio': '/relatorios-antigo.html',
   'iniciar-requerimento': 'https://gla-inema-hml.acto.com.br/requerimento/informacoes',
   'meus-processos': 'https://gla-inema-hml.acto.com.br/meus-processos',
   'notificacoes': 'https://gla-inema-hml.acto.com.br/notificacoes',
@@ -17,6 +17,12 @@ const LEGACY_PAGE_MAP = {
   'fisc-emerg-externa': '/emergencia-quimica-externa.html',
   'fisc-consulta-cidadao': '/consulta-externa.html',
   'fisc-painel-interno-difis': '/consulta-interna.html',
+  'fisc-plantonista': '/?rota=fisc-plantonista',
+  'fisc-escala': '/?rota=fisc-escala',
+  'uc-agendamento': '/?rota=uc-agendamento',
+  'uc-autorizacao-visitacao': '/?rota=uc-autorizacao-visitacao',
+  'uc-atividades-didaticas': '/?rota=uc-atividades-didaticas',
+  'uc-pesquisa-cientifica': '/?rota=uc-pesquisa-cientifica',
   'relatorios': '/relatorios-antigo.html',
   'fauna': '/fauna.html',
 };
@@ -57,7 +63,7 @@ function generateLegacyNavHtml(config, activeId = 'relatorios') {
     }
 
     const hasActiveChild = group.items && group.items.some((it) => it.id === activeId || it.route === activeId);
-    const isOpen = hasActiveChild;
+    const isOpen = hasActiveChild || group.defaultOpen;
     const isFiscalizacao = group.id === 'fiscalizacao';
     const subId = group.htmlId || `sub_${group.id}`;
     const iconId = `icon_${group.id}`;

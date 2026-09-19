@@ -125,31 +125,6 @@
         <!-- Sidebar Lateral Padronizada (280px) -->
         <aside id="sidebar" class="w-[280px] bg-white border-r border-[#E5E7EB] flex flex-col fixed top-[60px] bottom-0 left-0 z-40 transition-transform duration-200 -translate-x-full lg:translate-x-0">
             <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1">
-                <!-- Início -->
-                <a href="https://gla-inema-hml.acto.com.br" id="menu-inicio" data-testid="menu-inicio" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium transition-colors duration-150">
-                    <span class="material-symbols-outlined text-xl text-slate-500">home</span>
-                    <span class="text-sm font-medium">Início</span>
-                </a>
-                <!-- Iniciar Requerimento -->
-                <a href="https://gla-inema-hml.acto.com.br/requerimento/informacoes" id="menu-iniciar-requerimento" data-testid="menu-iniciar-requerimento" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium transition-colors duration-150">
-                    <span class="material-symbols-outlined text-xl text-slate-500">post_add</span>
-                    <span class="text-sm font-medium">Iniciar Requerimento</span>
-                </a>
-                <!-- Meus Processos -->
-                <a href="https://gla-inema-hml.acto.com.br/meus-processos" id="menu-meus-processos" data-testid="menu-meus-processos" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium transition-colors duration-150">
-                    <span class="material-symbols-outlined text-xl text-slate-500">folder_open</span>
-                    <span class="text-sm font-medium">Meus Processos</span>
-                </a>
-                <!-- Notificações -->
-                <a href="https://gla-inema-hml.acto.com.br/notificacoes" id="menu-notificacoes" data-testid="menu-notificacoes" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium transition-colors duration-150">
-                    <span class="material-symbols-outlined text-xl text-slate-500">notifications</span>
-                    <span class="text-sm font-medium">Notificações</span>
-                </a>
-                <!-- Acesso Público -->
-                <a href="https://gla-inema-hml.acto.com.br/acesso-publico" id="menu-acesso-publico" data-testid="menu-acesso-publico" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium transition-colors duration-150">
-                    <span class="material-symbols-outlined text-xl text-slate-500">public</span>
-                    <span class="text-sm font-medium">Acesso Público</span>
-                </a>
 
                 <!-- Módulo: Fiscalização -->
                 <div class="pt-1">
@@ -158,9 +133,9 @@
                             <span class="material-symbols-outlined text-xl text-slate-500">fact_check</span>
                             <span class="text-sm font-semibold truncate">Fiscalização</span>
                         </div>
-                        <span id="icon_fiscalizacao" class="material-symbols-outlined text-lg text-slate-500 transition-transform duration-200 ">expand_more</span>
+                        <span id="icon_fiscalizacao" class="material-symbols-outlined text-lg text-slate-500 transition-transform duration-200 rotate-180">expand_more</span>
                     </button>
-                    <div id="subFiscalizacao" class="hidden mt-1 border-l-2 border-slate-200 ml-4 pl-3 space-y-1">
+                    <div id="subFiscalizacao" class="mt-1 border-l-2 border-slate-200 ml-4 pl-3 space-y-1">
                         <a href="/consulta-externa.html" id="menu-consulta-externa" data-testid="menu-consulta-externa"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                             <span class="truncate">Consulta Cidadão</span>
                         </a>
@@ -168,147 +143,37 @@
                             <span class="truncate">Painel Interno DIFIS</span>
                             <span class="bg-rose-500 text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full" id="sidebarBadgeEmergencias">3</span>
                         </a>
-                    </div>
-                </div>
-
-                <!-- Relatórios Gerenciais -->
-                <div class="pt-1">
-                    <a href="/relatorios-antigo.html" id="menu-relatorios" data-testid="nav-Relatórios Gerenciais" class="flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium transition-colors duration-150">
-                        <div class="flex items-center gap-3">
-                            <span class="material-symbols-outlined text-xl text-slate-500">bar_chart</span>
-                            <span class="text-sm font-medium">Relatórios Gerenciais</span>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Módulo: SISPASS -->
-                <div class="pt-1">
-                    <button id="btn-sispass" data-testid="nav-SISPASS" onclick="toggleSubmenu('subSispass', 'icon_sispass')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-semibold transition-colors duration-150 cursor-pointer">
-                        <div class="flex items-center gap-3 min-w-0">
-                            <span class="material-symbols-outlined text-xl text-slate-500">pets</span>
-                            <span class="text-sm font-semibold truncate">SISPASS</span>
-                        </div>
-                        <span id="icon_sispass" class="material-symbols-outlined text-lg text-slate-500 transition-transform duration-200 ">expand_more</span>
-                    </button>
-                    <div id="subSispass" class="hidden mt-1 border-l-2 border-slate-200 ml-4 pl-3 space-y-1">
-                        <a href="https://gla-inema-hml.acto.com.br/meus-perfis" id="menu-sispass-meus-perfis" data-testid="menu-sispass-meus-perfis" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
-                            <span class="truncate">Meus Perfis</span>
+                        <a href="/?rota=fisc-plantonista" id="menu-fisc-plantonista" data-testid="menu-fisc-plantonista"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                            <span class="truncate">Cadastro de Plantonista</span>
                         </a>
-                        <a href="https://gla-inema-hml.acto.com.br/validacao-calendario-anual" id="menu-sispass-calendario-anual" data-testid="menu-sispass-calendario-anual" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
-                            <span class="truncate">Calendário Anual</span>
-                        </a>
-                        <a href="https://gla-inema-hml.acto.com.br/sispass/convites-associado" id="menu-sispass-convites" data-testid="menu-sispass-convites" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
-                            <span class="truncate">Convites de Associação</span>
+                        <a href="/?rota=fisc-escala" id="menu-fisc-escala" data-testid="menu-fisc-escala"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                            <span class="truncate">Escala de Plantonistas</span>
                         </a>
                     </div>
                 </div>
 
-                <!-- Módulo: Financeiro -->
+                <!-- Módulo: Unidades de Conservação -->
                 <div class="pt-1">
-                    <button id="btn-financeiro" data-testid="nav-Financeiro" onclick="toggleSubmenu('subFinanceiro', 'icon_financeiro')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-semibold transition-colors duration-150 cursor-pointer">
+                    <button id="btn-unidades-conservacao" data-testid="nav-Unidades de Conservação" onclick="toggleSubmenu('subUC', 'icon_unidades-conservacao')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-semibold transition-colors duration-150 cursor-pointer">
                         <div class="flex items-center gap-3 min-w-0">
-                            <span class="material-symbols-outlined text-xl text-slate-500">account_balance</span>
-                            <span class="text-sm font-semibold truncate">Financeiro</span>
+                            <span class="material-symbols-outlined text-xl text-slate-500">forest</span>
+                            <span class="text-sm font-semibold truncate">Unidades de Conservação</span>
                         </div>
-                        <span id="icon_financeiro" class="material-symbols-outlined text-lg text-slate-500 transition-transform duration-200 ">expand_more</span>
+                        <span id="icon_unidades-conservacao" class="material-symbols-outlined text-lg text-slate-500 transition-transform duration-200 rotate-180">expand_more</span>
                     </button>
-                    <div id="subFinanceiro" class="hidden mt-1 border-l-2 border-slate-200 ml-4 pl-3 space-y-1">
-                        <a href="https://gla-inema-hml.acto.com.br/certidao-debito-ambiental" id="menu-fin-certidao-debito" data-testid="menu-fin-certidao-debito" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
-                            <span class="truncate">Certidão de Débito Ambiental</span>
+                    <div id="subUC" class="mt-1 border-l-2 border-slate-200 ml-4 pl-3 space-y-1">
+                        <a href="/?rota=uc-agendamento" id="menu-uc-agendamento" data-testid="menu-uc-agendamento"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                            <span class="truncate">Agendamento de Visitação</span>
                         </a>
-                    </div>
-                </div>
-
-                <!-- Módulo: Meu Cadastro -->
-                <div class="pt-1">
-                    <button id="btn-meu-cadastro" data-testid="nav-Meu Cadastro" onclick="toggleSubmenu('subMeuCadastro', 'icon_meu-cadastro')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-semibold transition-colors duration-150 cursor-pointer">
-                        <div class="flex items-center gap-3 min-w-0">
-                            <span class="material-symbols-outlined text-xl text-slate-500">badge</span>
-                            <span class="text-sm font-semibold truncate">Meu Cadastro</span>
-                        </div>
-                        <span id="icon_meu-cadastro" class="material-symbols-outlined text-lg text-slate-500 transition-transform duration-200 ">expand_more</span>
-                    </button>
-                    <div id="subMeuCadastro" class="hidden mt-1 border-l-2 border-slate-200 ml-4 pl-3 space-y-1">
-                        <a href="https://gla-inema-hml.acto.com.br/meu-cadastro" id="menu-cad-dados-pessoais" data-testid="menu-cad-dados-pessoais" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
-                            <span class="truncate">Dados Pessoais</span>
+                        <a href="/?rota=uc-autorizacao-visitacao" id="menu-uc-autorizacao-visitacao" data-testid="menu-uc-autorizacao-visitacao"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                            <span class="truncate">Autorização de Eventos (AAV)</span>
                         </a>
-                        <a href="https://gla-inema-hml.acto.com.br/representantes-legais" id="menu-cad-representante-legal" data-testid="menu-cad-representante-legal" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
-                            <span class="truncate">Representante Legal</span>
+                        <a href="/?rota=uc-atividades-didaticas" id="menu-uc-atividades-didaticas" data-testid="menu-uc-atividades-didaticas"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                            <span class="truncate">Atividades Didáticas (AAD)</span>
                         </a>
-                        <a href="https://gla-inema-hml.acto.com.br/responsaveis-tecnicos" id="menu-cad-responsavel-tecnico" data-testid="menu-cad-responsavel-tecnico" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
-                            <span class="truncate">Responsável Técnico</span>
+                        <a href="/?rota=uc-pesquisa-cientifica" id="menu-uc-pesquisa-cientifica" data-testid="menu-uc-pesquisa-cientifica"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                            <span class="truncate">Pesquisa Científica (Pesc)</span>
                         </a>
-                        <a href="https://gla-inema-hml.acto.com.br/empreendimentos" id="menu-cad-empreendimentos" data-testid="menu-cad-empreendimentos" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
-                            <span class="truncate">Empreendimentos</span>
-                        </a>
-                        <a href="https://gla-inema-hml.acto.com.br/procuradores" id="menu-cad-procurador" data-testid="menu-cad-procurador" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
-                            <span class="truncate">Procurador</span>
-                        </a>
-                        <a href="https://gla-inema-hml.acto.com.br/consultorias" id="menu-cad-representacoes" data-testid="menu-cad-representacoes" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
-                            <span class="truncate">Representações</span>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Módulo: Atividades Não Sujeitas a Licenciamento... -->
-                <div class="pt-1">
-                    <button id="btn-ansla" data-testid="nav-Atividades Não Sujeitas a Licenciamento..." onclick="toggleSubmenu('subAnsla', 'icon_ansla')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-semibold transition-colors duration-150 cursor-pointer">
-                        <div class="flex items-center gap-3 min-w-0">
-                            <span class="material-symbols-outlined text-xl text-slate-500">verified_user</span>
-                            <span class="text-sm font-semibold truncate">Atividades Não Sujeitas a Licenciamento...</span>
-                        </div>
-                        <span id="icon_ansla" class="material-symbols-outlined text-lg text-slate-500 transition-transform duration-200 ">expand_more</span>
-                    </button>
-                    <div id="subAnsla" class="hidden mt-1 border-l-2 border-slate-200 ml-4 pl-3 space-y-1">
-                        <a href="https://gla-inema-hml.acto.com.br/atividades-dispensadas/informacoes" id="menu-ansla-inicial" data-testid="menu-ansla-inicial" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
-                            <span class="truncate">Tela Inicial ANSLA</span>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Módulo: Requerimentos -->
-                <div class="pt-1">
-                    <button id="btn-requerimentos" data-testid="nav-Requerimentos" onclick="toggleSubmenu('subRequerimentos', 'icon_requerimentos')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-semibold transition-colors duration-150 cursor-pointer">
-                        <div class="flex items-center gap-3 min-w-0">
-                            <span class="material-symbols-outlined text-xl text-slate-500">send</span>
-                            <span class="text-sm font-semibold truncate">Requerimentos</span>
-                        </div>
-                        <span id="icon_requerimentos" class="material-symbols-outlined text-lg text-slate-500 transition-transform duration-200 ">expand_more</span>
-                    </button>
-                    <div id="subRequerimentos" class="hidden mt-1 border-l-2 border-slate-200 ml-4 pl-3 space-y-1">
-                        <a href="https://gla-inema-hml.acto.com.br/dtrp-requerimento/dtrp-requerimentos" id="menu-req-dtrp" data-testid="menu-req-dtrp" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
-                            <span class="truncate">Declaração de Transportes</span>
-                        </a>
-                        <a href="https://gla-inema-hml.acto.com.br/parcelamento" id="menu-req-parcelamento" data-testid="menu-req-parcelamento" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
-                            <span class="truncate">Parcelamento</span>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Módulo: Administração -->
-                <div class="pt-1">
-                    <button id="btn-administracao" data-testid="nav-Administração" onclick="toggleSubmenu('subAdministracao', 'icon_administracao')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-semibold transition-colors duration-150 cursor-pointer">
-                        <div class="flex items-center gap-3 min-w-0">
-                            <span class="material-symbols-outlined text-xl text-slate-500">tune</span>
-                            <span class="text-sm font-semibold truncate">Administração</span>
-                        </div>
-                        <span id="icon_administracao" class="material-symbols-outlined text-lg text-slate-500 transition-transform duration-200 ">expand_more</span>
-                    </button>
-                    <div id="subAdministracao" class="hidden mt-1 border-l-2 border-slate-200 ml-4 pl-3 space-y-1">
-                        <a href="https://gla-inema-hml.acto.com.br/administracao/tipologia?sub=tipologias" id="menu-adm-tipologias" data-testid="menu-adm-tipologias" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
-                            <span class="truncate">Tipologias</span>
-                        </a>
-                        <!-- Subgrupo: SEGURANÇA -->
-                        <div>
-                            <div class="text-slate-400 font-semibold text-[10px] tracking-wider uppercase px-2 py-1 select-none pointer-events-none">
-                                SEGURANÇA
-                            </div>
-                            <div class="space-y-1 mt-1">
-                        <a href="https://gla-inema-hml.acto.com.br/pessoa-fisicas" id="menu-seg-pessoas-fisicas" data-testid="menu-seg-pessoas-fisicas" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
-                            <span class="truncate">Pessoas Físicas</span>
-                        </a>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </nav>

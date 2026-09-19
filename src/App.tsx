@@ -8,6 +8,12 @@ import { EmergenciaInternaPage } from '@/pages/fiscalizacao/EmergenciaInternaPag
 import { EmergenciaExternaPage } from '@/pages/fiscalizacao/EmergenciaExternaPage';
 import { ConsultaExternaPage } from '@/pages/fiscalizacao/ConsultaExternaPage';
 import { ConsultaInternaPage } from '@/pages/fiscalizacao/ConsultaInternaPage';
+import { CadastroPlantonistaPage } from '@/pages/fiscalizacao/CadastroPlantonistaPage';
+import { CadastroEscalaPage } from '@/pages/fiscalizacao/CadastroEscalaPage';
+import { AgendamentoVisitacaoPage } from '@/pages/uc/AgendamentoVisitacaoPage';
+import { AutorizacaoVisitacaoPage } from '@/pages/uc/AutorizacaoVisitacaoPage';
+import { AtividadesDidaticasPage } from '@/pages/uc/AtividadesDidaticasPage';
+import { PesquisaCientificaPage } from '@/pages/uc/PesquisaCientificaPage';
 
 export function App() {
   const [activeRoute, setActiveRoute] = useState('relatorios');
@@ -15,13 +21,18 @@ export function App() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get('layout') === 'antigo' || params.get('v') === 'antigo') {
-      window.location.href = '/relatorios-antigo.html';
+      window.location.replace('/relatorios-antigo.html');
       return;
     }
 
     const rotaParam = params.get('rota') || params.get('route') || params.get('r');
     const fluxoParam = params.get('fluxo');
     const path = window.location.pathname;
+
+    if (!rotaParam && params.get('layout') !== 'novo' && !path.startsWith('/conceito') && !path.startsWith('/proposta') && (path === '/' || path === '/index.html')) {
+      window.location.replace('/relatorios-antigo.html');
+      return;
+    }
 
     if (rotaParam) {
       setActiveRoute(rotaParam);
@@ -61,6 +72,18 @@ export function App() {
         return <ConsultaExternaPage onNavigate={handleNavigate} />;
       case 'consulta-interna':
         return <ConsultaInternaPage onNavigate={handleNavigate} />;
+      case 'fisc-plantonista':
+        return <CadastroPlantonistaPage onNavigate={handleNavigate} />;
+      case 'fisc-escala':
+        return <CadastroEscalaPage onNavigate={handleNavigate} />;
+      case 'uc-agendamento':
+        return <AgendamentoVisitacaoPage onNavigate={handleNavigate} />;
+      case 'uc-autorizacao-visitacao':
+        return <AutorizacaoVisitacaoPage onNavigate={handleNavigate} />;
+      case 'uc-atividades-didaticas':
+        return <AtividadesDidaticasPage onNavigate={handleNavigate} />;
+      case 'uc-pesquisa-cientifica':
+        return <PesquisaCientificaPage onNavigate={handleNavigate} />;
       case 'relatorios':
       default:
         return <DashboardPage />;

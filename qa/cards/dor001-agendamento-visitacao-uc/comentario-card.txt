@@ -1,0 +1,7 @@
+Fala time! Retestei e homologuei o prototipo e fluxo do card de "DOR001 - Modulo Gestao de Unidades de Conservacao - Agendamento de Atividades de Visitacao em UC (Formulario F-DUC-069-00)". Segue o resultado:
+
+Resolvido: Implementado o fluxo completo de agendamento preliminar em 7 etapas no padrao Filament do INEMA (Print 01), com banner institucional de carater nao-autorizativo (RN001), selecao de UC habilitada no CEUC (RN002, RN003) e atrativos com checagem de interdicao (RN004, RN005). Na etapa de caracterizacao (TL005), foram integradas as regras de triagem automatica para redirecionamento a Atividades Didaticas AAD com coleta (RN011), Pesquisa Cientifica Pesc (RN012) e Uso de Imagem AUI (RN013) (Print 02). O envio final gerou a solicitacao AG-2026-004 com a mensagem normativa MSG008 (Print 03). Foram implementadas e validadas a Pauta do Gestor da UC (TL009) com acoes de pre-reserva e conversao formal SEI (Print 04) e o Calendario de Ocupacao (TL010) (Print 05), alem da tela de Check-out operacional (TL012).
+Nao resolvido: Nenhum ponto pendente. Todos os requisitos (RN001 a RN026), telas (TL001 a TL012) e mensagens normativas foram integralmente atendidos.
+Fora do escopo deste card: O rito formal de emissao de portaria/autorizacao formal de eventos e tratado no DOR002 (AAV/APV), e a execucao didatica formal no DOR003 (AAD).
+Com isso, considero este card resolvido e validado.
+Fico a disposicao se precisar de mais detalhes de qualquer um desses pontos.

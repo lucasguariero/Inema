@@ -1,0 +1,7 @@
+Fala time! Retestei e homologuei o prototipo e fluxo do card de "DOR006 - Modulo Fiscalizacao - Cadastro de Plantonista". Segue o resultado:
+
+Resolvido: Implementada a tela completa TL001 de Cadastro de Plantonista no layout padrao Filament do INEMA (Print 01). Validei a importacao automatica do cadastro basico de servidores via Nome ou CPF (RN001), obrigatoriedade de todos os campos e vinculacao de municipios da Bahia a Area de Abrangencia da UR (RN002, RN004, RN005) (Print 02). A gravacao exibe a mensagem de sucesso MSG001 com confirmacao (Print 03). Para contraste e validacao de regras avancadas, testei a recuperacao do registro pelo card lateral (RN007), onde o sistema entra em Modo Edicao e bloqueia a alteracao de Nome, CPF e contatos de origem, mantendo editaveis apenas Telefone Institucional, UR e Area de Abrangencia (RN010) (Print 04).
+Nao resolvido: Nenhum ponto pendente. Todos os requisitos, botoes (BOT001 a BOT003), legendas (LEG001 a LEG007) e mensagens normativas (MSG001 a MSG007) foram atendidos integralmente.
+Fora do escopo deste card: O cadastro e amaracao de multiplos plantonistas na escala de servico e tratado no DOR007.
+Com isso, considero este card resolvido e validado.
+Fico a disposicao se precisar de mais detalhes de qualquer um desses pontos.
