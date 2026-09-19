@@ -30,6 +30,7 @@
           "label": "Cadastro de Plantonista",
           "href": "/?rota=fisc-plantonista",
           "route": "fisc-plantonista",
+          "badge": "DOR006",
           "htmlId": "menu-fisc-plantonista"
         },
         {
@@ -37,6 +38,7 @@
           "label": "Escala de Plantonistas",
           "href": "/?rota=fisc-escala",
           "route": "fisc-escala",
+          "badge": "DOR007",
           "htmlId": "menu-fisc-escala"
         }
       ]
@@ -54,6 +56,7 @@
           "label": "Agendamento de Visitação",
           "href": "/?rota=uc-agendamento",
           "route": "uc-agendamento",
+          "badge": "DOR001",
           "htmlId": "menu-uc-agendamento"
         },
         {
@@ -61,6 +64,7 @@
           "label": "Autorização de Eventos (AAV)",
           "href": "/?rota=uc-autorizacao-visitacao",
           "route": "uc-autorizacao-visitacao",
+          "badge": "DOR002",
           "htmlId": "menu-uc-autorizacao-visitacao"
         },
         {
@@ -68,6 +72,7 @@
           "label": "Atividades Didáticas (AAD)",
           "href": "/?rota=uc-atividades-didaticas",
           "route": "uc-atividades-didaticas",
+          "badge": "DOR003",
           "htmlId": "menu-uc-atividades-didaticas"
         },
         {
@@ -75,6 +80,7 @@
           "label": "Pesquisa Científica (Pesc)",
           "href": "/?rota=uc-pesquisa-cientifica",
           "route": "uc-pesquisa-cientifica",
+          "badge": "DOR004",
           "htmlId": "menu-uc-pesquisa-cientifica"
         }
       ]

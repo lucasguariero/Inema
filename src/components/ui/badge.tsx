@@ -74,7 +74,7 @@ function Badge({ className, color, size = 'sm', variant = 'default', dot = false
   return (
     <div
       className={cn(
-        'fi-badge inline-flex items-center justify-center gap-x-1 rounded-md ring-1 ring-inset font-medium tracking-tight transition-colors',
+        'fi-badge inline-flex items-center justify-center gap-x-1.5 whitespace-nowrap shrink-0 rounded-md ring-1 ring-inset font-medium tracking-tight transition-colors',
         `fi-badge-color-${effectiveColor}`,
         `fi-badge-size-${size}`,
         colorStyles[effectiveColor],
@@ -86,7 +86,7 @@ function Badge({ className, color, size = 'sm', variant = 'default', dot = false
       {dot && (
         <span className={cn('h-1.5 w-1.5 rounded-full shrink-0', dotColors[effectiveColor])} />
       )}
-      <span>{children}</span>
+      {children}
     </div>
   );
 }

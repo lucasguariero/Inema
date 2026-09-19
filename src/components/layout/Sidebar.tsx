@@ -115,7 +115,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         {subItem.badge && (
                           <span
                             id={subItem.id === 'fisc-painel-interno-difis' ? 'sidebarBadgeEmergencias' : undefined}
-                            className="bg-rose-500 text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full"
+                            className={cn(
+                              "text-[10px] font-mono font-medium px-1.5 py-0.5 rounded-full shrink-0 ml-1.5 whitespace-nowrap transition-colors",
+                              subItem.id === 'fisc-painel-interno-difis'
+                                ? "bg-rose-500 text-white font-bold px-1.5 py-0.2"
+                                : isSubActive
+                                ? "bg-[#0F4C3A] text-white"
+                                : "bg-slate-100 text-slate-600 border border-slate-200/80 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700"
+                            )}
                           >
                             {subItem.badge}
                           </span>

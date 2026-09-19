@@ -101,10 +101,10 @@ export const AtividadesDidaticasPage: React.FC<{ onNavigate?: (route: string) =>
  id: 'SEI-021.5544.2026.000789-22',
  numeroRequerimento: 'AAD-2026-0015',
  tipo: 'Tipo 2 - Com Coleta/Captura',
- instituicao: 'Universidade Estadual de Santa Cruz - UESC',
+ instituicao: 'UESC',
  curso: 'Biologia e Ecologia Aplicada',
  disciplina: 'Entomologia Geral e Forense',
- professorResponsavel: 'Profa. Dra. Carolina Medeiros Neves',
+ professorResponsavel: 'Dra. Carolina Medeiros',
  ucId: 'UC-CONDURU',
  ucNome: 'Parque Estadual da Serra do Conduru',
  dataAulaCampo: '20/10/2026 a 22/10/2026',
@@ -120,10 +120,10 @@ export const AtividadesDidaticasPage: React.FC<{ onNavigate?: (route: string) =>
  id: 'SEI-021.1190.2026.000342-10',
  numeroRequerimento: 'AAD-2026-0012',
  tipo: 'Tipo 1 - Sem Coleta',
- instituicao: 'Instituto Federal da Bahia - IFBA Ilhéus',
+ instituicao: 'IFBA Ilhéus',
  curso: 'Técnico em Meio Ambiente',
- disciplina: 'Interpretação Ambiental e Trilhas Ecológicas',
- professorResponsavel: 'Prof. Me. Gilberto Santos Guimarães',
+ disciplina: 'Interpretação Ambiental',
+ professorResponsavel: 'Prof. Gilberto Guimarães',
  ucId: 'UC-CONDURU',
  ucNome: 'Parque Estadual da Serra do Conduru',
  dataAulaCampo: '14/10/2026',
@@ -347,33 +347,33 @@ export const AtividadesDidaticasPage: React.FC<{ onNavigate?: (route: string) =>
  <div>{p.dataAulaCampo}</div>
  <div className="text-slate-500 font-sans font-medium">{p.quantidadeAlunos} alunos</div>
  </td>
- <td className="py-3 px-4">
- <Badge
- variant="outline"
- className={cn(
- "text-[10px]",
- p.status === 'Em Análise' && "bg-amber-50 text-amber-700 border-amber-200",
- p.status === 'Autorizado' && "bg-emerald-50 text-emerald-700 border-emerald-200"
- )}
- >
- {p.status}
- </Badge>
- </td>
- <td className="py-3 px-4 text-right">
- <Button
- variant="outline"
- size="sm"
- onClick={() => {
- setProcessoSelecionado(p);
- setAbaAtiva('analise');
- }}
- className="h-7 text-xs font-medium text-teal-700 border-teal-300 hover:bg-teal-50"
- >
- <Eye className="w-3 h-3 mr-1" />
- Ver / Analisar
- </Button>
- </td>
- </tr>
+                      <td className="py-3 px-4 whitespace-nowrap">
+                        <Badge
+                          variant="outline"
+                          className={cn(
+                            "text-[10px] whitespace-nowrap shrink-0",
+                            p.status === 'Em Análise' && "bg-amber-50 text-amber-700 border-amber-200",
+                            p.status === 'Autorizado' && "bg-emerald-50 text-emerald-700 border-emerald-200"
+                          )}
+                        >
+                          {p.status}
+                        </Badge>
+                      </td>
+                      <td className="py-3 px-4 text-right whitespace-nowrap">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setProcessoSelecionado(p);
+                            setAbaAtiva('analise');
+                          }}
+                          className="h-7 text-xs font-medium text-[#0F4C3A] border-slate-300 hover:bg-slate-50 whitespace-nowrap shrink-0"
+                        >
+                          <Eye className="w-3.5 h-3.5 mr-1 shrink-0" />
+                          Analisar
+                        </Button>
+                      </td>
+                    </tr>
  ))}
  </tbody>
  </table>

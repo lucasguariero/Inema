@@ -35,7 +35,7 @@ import {
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { FilamentSelect } from '@/components/filament';
+import { FilamentSelect, FilamentWizard } from '@/components/filament';
 import {
  Dialog,
  DialogContent,
@@ -122,7 +122,7 @@ export const MOCK_PESQUISAS: ProcessoPesquisa[] = [
  processoSEI: 'SEI-021.7820.2026.000188-42',
  tituloProjeto: 'Ecologia populacional e variabilidade genética de primatas ameaçados no Parque Estadual da Serra do Conduru',
  areaTematica: 'Zoologia / Conservação da Biodiversidade',
- instituicao: 'Universidade Estadual de Santa Cruz - UESC',
+ instituicao: 'UESC',
  pesquisadorResponsavel: 'Dra. Mariana Lins Albuquerque',
  cpfPesquisador: '234.567.890-12',
  lattesPesquisador: 'http://lattes.cnpq.br/4458920194827182',
@@ -138,7 +138,7 @@ export const MOCK_PESQUISAS: ProcessoPesquisa[] = [
  grupoTaxonomico: 'Mamíferos (Primates - Leontopithecus chrysomelas)',
  metodologiaAmostragem: 'Captura não letal com armadilhas Tomahawk para coleta de ectoparasitas e sangue (0.5ml), biometria e marcação com microchip.',
  quantidadeAmostras: '20 indivíduos com soltura imediata no local de captura.',
- instituicaoDepositaria: 'Coleção Zoológica Gregório Bondar - UESC',
+ instituicaoDepositaria: 'Coleção Zoológica UESC',
  comiteEticaCEUA: 'CEUA-UESC nº 018/2025',
  registroSisGen: 'SisGen A8920BC',
  licencaFederalSISBIO: 'SISBIO/ICMBio nº 88412-3',
@@ -214,7 +214,7 @@ export const MOCK_PESQUISAS: ProcessoPesquisa[] = [
  processoSEI: 'SEI-021.8490.2026.000305-19',
  tituloProjeto: 'Florística e conservação de briófitas e pteridófitas rupícolas nas serras do Parque Estadual das Sete Passagens',
  areaTematica: 'Botânica / Taxonomia Vegetal',
- instituicao: 'Universidade Estadual de Feira de Santana - UEFS',
+ instituicao: 'UEFS',
  pesquisadorResponsavel: 'Prof. Dr. Cláudio Augusto Ribeiro',
  cpfPesquisador: '123.456.789-01',
  lattesPesquisador: 'http://lattes.cnpq.br/1122334455667788',
@@ -230,7 +230,7 @@ export const MOCK_PESQUISAS: ProcessoPesquisa[] = [
  grupoTaxonomico: 'Plantas Não Vasculares (Bryophyta) e Monilophyta',
  metodologiaAmostragem: 'Coleta botânica manual de amostras férteis com faca de campo e secagem em estufa para herborização.',
  quantidadeAmostras: 'Até 150 espécimes botânicos para tombamento.',
- instituicaoDepositaria: 'Herbário da Universidade Estadual de Feira de Santana (HUEFS)',
+ instituicaoDepositaria: 'Herbário UEFS',
  registroSisGen: 'SisGen B77610A',
  vinculoPlanoManejo: 'Inventário da Flora das Zonas Intangíveis e Primitivas do PESP',
  resumoProjeto: 'Inventário fisionômico e taxonômico das espécies botânicas que ocorrem nos campos rupestres e paredões quartzíticos do PESP.',
@@ -270,7 +270,7 @@ export const MOCK_PESQUISAS: ProcessoPesquisa[] = [
  processoSEI: 'SEI-021.6500.2025.001422-90',
  tituloProjeto: 'Dinâmica hidrogeoquímica e vulnerabilidade cárstica na APA Gruta dos Brejões / Vereda do Romão Gramacho',
  areaTematica: 'Geociências / Hidrogeologia Cárstica',
- instituicao: 'Universidade Federal da Bahia - UFBA',
+ instituicao: 'UFBA',
  pesquisadorResponsavel: 'Dr. Fernando Sampaio Nogueira',
  cpfPesquisador: '789.012.345-67',
  lattesPesquisador: 'http://lattes.cnpq.br/9988776655443322',
@@ -867,60 +867,60 @@ export const PesquisaCientificaPage: React.FC<{ onNavigate?: (route: string) => 
                             </Badge>
                           )}
                         </td>
-                        <td className="py-3 px-4 min-w-[180px] align-top">
+                        <td className="py-3 px-4 min-w-[150px] align-top">
                           {item.haColeta ? (
                             <div>
-                              <Badge className="bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300 border-amber-300 text-[10px] font-medium">
-                                Com Coleta/Captura
+                              <Badge className="bg-amber-50 text-amber-700 border-amber-200 text-[10px] font-medium whitespace-nowrap shrink-0 inline-flex items-center">
+                                Com Coleta
                               </Badge>
                               {item.instituicaoDepositaria && (
-                                <span className="text-[11px] text-slate-600 dark:text-slate-400 block mt-1 leading-tight">
+                                <span className="text-[11px] text-slate-500 dark:text-slate-400 block mt-1 leading-tight">
                                   {item.instituicaoDepositaria}
                                 </span>
                               )}
                             </div>
                           ) : (
-                            <Badge variant="outline" className="text-[10px] text-slate-500 border-slate-300 font-normal">
-                              Sem Coleta (Observacional)
+                            <Badge variant="outline" className="text-[10px] text-slate-500 border-slate-300 font-normal whitespace-nowrap shrink-0">
+                              Sem Coleta
                             </Badge>
                           )}
                         </td>
                         <td className="py-3 px-4 whitespace-nowrap align-top">
                           {item.status === 'Autorizado' && (
-                            <div>
-                              <Badge className="bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-300 text-[11px]">
-                                <CheckCircle2 className="w-3 h-3 mr-1" />
-                                Autorizado
+                            <div className="flex flex-col items-start gap-1">
+                              <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 text-xs whitespace-nowrap shrink-0 inline-flex items-center gap-1.5">
+                                <CheckCircle2 className="w-3.5 h-3.5 shrink-0 text-emerald-600" />
+                                <span>Autorizado</span>
                               </Badge>
                               {item.portariaNumero && (
-                                <span className="text-[10px] text-slate-500 dark:text-slate-400 block mt-1 font-mono">
+                                <span className="text-[10px] text-slate-500 dark:text-slate-400 block font-mono">
                                   {item.portariaNumero}
                                 </span>
                               )}
                             </div>
                           )}
                           {item.status === 'Em Análise' && (
-                            <Badge className="bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 border-amber-300 text-[11px]">
-                              <Clock className="w-3 h-3 mr-1" />
-                              Em Análise
+                            <Badge className="bg-amber-50 text-amber-700 border-amber-200 text-xs whitespace-nowrap shrink-0 inline-flex items-center gap-1.5">
+                              <Clock className="w-3.5 h-3.5 shrink-0 text-amber-600" />
+                              <span>Em Análise</span>
                             </Badge>
                           )}
                           {item.status === 'Aguardando Complementação' && (
-                            <Badge className="bg-orange-100 text-orange-800 dark:bg-orange-950 dark:text-orange-300 border-orange-300 text-[11px]">
-                              <AlertTriangle className="w-3 h-3 mr-1" />
-                              Complementação
+                            <Badge className="bg-orange-50 text-orange-700 border-orange-200 text-xs whitespace-nowrap shrink-0 inline-flex items-center gap-1.5">
+                              <AlertTriangle className="w-3.5 h-3.5 shrink-0 text-orange-600" />
+                              <span>Complementação</span>
                             </Badge>
                           )}
                           {item.status === 'Concluído' && (
-                            <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300 border-blue-300 text-[11px]">
-                              <Check className="w-3 h-3 mr-1" />
-                              Concluído
+                            <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-xs whitespace-nowrap shrink-0 inline-flex items-center gap-1.5">
+                              <Check className="w-3.5 h-3.5 shrink-0 text-blue-600" />
+                              <span>Concluído</span>
                             </Badge>
                           )}
                           {item.status === 'Indeferido' && (
-                            <Badge className="bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300 border-rose-300 text-[11px]">
-                              <X className="w-3 h-3 mr-1" />
-                              Indeferido
+                            <Badge className="bg-rose-50 text-rose-700 border-rose-200 text-xs whitespace-nowrap shrink-0 inline-flex items-center gap-1.5">
+                              <X className="w-3.5 h-3.5 shrink-0 text-rose-600" />
+                              <span>Indeferido</span>
                             </Badge>
                           )}
                         </td>
@@ -928,25 +928,25 @@ export const PesquisaCientificaPage: React.FC<{ onNavigate?: (route: string) => 
                           <Button
                             size="sm"
                             variant="outline"
-                            className="text-xs h-7 px-2 border-slate-300 text-slate-700 hover:bg-slate-50 bg-white"
+                            className="text-xs h-7 px-2.5 border-slate-300 text-slate-700 hover:bg-slate-50 bg-white whitespace-nowrap shrink-0 inline-flex items-center"
                             onClick={() => {
                               setSelectedProcesso(item);
                               setActiveTab('detalhes');
                             }}
                           >
-                            <Eye className="w-3 h-3 mr-1" />
-                            Ver Ato
+                            <Eye className="w-3.5 h-3.5 mr-1 shrink-0" />
+                            <span>Ver Ato</span>
                           </Button>
                           {item.status === 'Em Análise' && (
                             <Button
                               size="sm"
-                              className="text-xs h-7 px-2 bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white font-medium"
+                              className="text-xs h-7 px-2.5 bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white font-medium whitespace-nowrap shrink-0 inline-flex items-center"
                               onClick={() => {
                                 setSelectedProcesso(item);
                                 setModalDecisaoAberto(true);
                               }}
                             >
-                              Analisar
+                              <span>Analisar</span>
                             </Button>
                           )}
                         </td>
@@ -963,38 +963,20 @@ export const PesquisaCientificaPage: React.FC<{ onNavigate?: (route: string) => 
       {/* VIEW 2: CADASTRO DE PROJETO CIENTÍFICO */}
       {activeTab === 'novo-projeto' && (
  <div className="space-y-6 max-w-5xl mx-auto">
- {/* Stepper Wizard */}
- <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-4 shadow-sm">
- <div className="flex items-center justify-between">
- {[
- { step: 1, label: 'Dados Gerais & UC', sub: '' },
- { step: 2, label: 'Instituição & Equipe', sub: '' },
- { step: 3, label: 'Coleta & Fiel Depositário', sub: '' },
- { step: 4, label: 'Cronograma & Localização', sub: '' },
- { step: 5, label: 'Instrução & Envio', sub: '' }
- ].map((s) => (
- <div key={s.step} className="flex items-center gap-2 flex-1 last:flex-none">
- <div
- className={cn(
- 'w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-colors',
- etapaForm === s.step
- ? 'bg-teal-700 text-white ring-4 ring-teal-100 dark:ring-teal-950'
- : etapaForm > s.step
- ? 'bg-emerald-600 text-white'
- : 'bg-slate-200 dark:bg-slate-800 text-slate-500'
- )}
- >
- {etapaForm > s.step ? <Check className="w-4 h-4" /> : s.step}
- </div>
- <div className="hidden sm:block">
- <p className="text-xs font-semibold leading-tight">{s.label}</p>
- <p className="text-[10px] text-slate-400">{s.sub}</p>
- </div>
- {s.step < 5 && <div className="flex-1 h-0.5 bg-slate-200 dark:bg-slate-800 mx-2 hidden md:block" />}
- </div>
- ))}
- </div>
- </div>
+          {/* Stepper Wizard (Padrão Oficial GLA Inema) */}
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-xs overflow-hidden">
+            <FilamentWizard
+              steps={[
+                { id: 1, label: 'Dados Gerais & UC' },
+                { id: 2, label: 'Instituição & Equipe' },
+                { id: 3, label: 'Coleta & Fiel Depositário' },
+                { id: 4, label: 'Cronograma & Localização' },
+                { id: 5, label: 'Instrução & Envio' }
+              ]}
+              currentStep={etapaForm}
+              onStepClick={(step) => setEtapaForm(step)}
+            />
+          </div>
 
  {/* ETAPA 1: DADOS GERAIS E UNIDADE DE CONSERVAÇÃO */}
  {etapaForm === 1 && (
@@ -1028,18 +1010,18 @@ export const PesquisaCientificaPage: React.FC<{ onNavigate?: (route: string) => 
  <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 block mb-1">
  Área Temática Principal* <span className="text-slate-400 font-normal"></span>
  </label>
- <select
+ <FilamentSelect
  value={formAreaTematica}
- onChange={(e) => setFormAreaTematica(e.target.value)}
- className="w-full text-xs p-2.5 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900"
- >
- <option value="Botânica / Taxonomia e Sistemática Vegetal">Botânica / Taxonomia e Sistemática Vegetal</option>
- <option value="Zoologia / Mastologia e Ornitologia">Zoologia / Mastologia e Ornitologia</option>
- <option value="Zoologia / Herpetologia e Ictiologia">Zoologia / Herpetologia e Ictiologia</option>
- <option value="Ecologia / Conservação da Biodiversidade">Ecologia / Conservação da Biodiversidade</option>
- <option value="Geociências / Hidrogeologia Cárstica e Espeleologia">Geociências / Hidrogeologia Cárstica e Espeleologia</option>
- <option value="Gestão Socioambiental e Comunidades Tradicionais">Gestão Socioambiental e Comunidades Tradicionais</option>
- </select>
+ onChange={(val) => setFormAreaTematica(val)}
+ options={[
+ { value: 'Botânica / Taxonomia e Sistemática Vegetal', label: 'Botânica / Taxonomia e Sistemática Vegetal' },
+ { value: 'Zoologia / Mastologia e Ornitologia', label: 'Zoologia / Mastologia e Ornitologia' },
+ { value: 'Zoologia / Herpetologia e Ictiologia', label: 'Zoologia / Herpetologia e Ictiologia' },
+ { value: 'Ecologia / Conservação da Biodiversidade', label: 'Ecologia / Conservação da Biodiversidade' },
+ { value: 'Geociências / Hidrogeologia Cárstica e Espeleologia', label: 'Geociências / Hidrogeologia Cárstica e Espeleologia' },
+ { value: 'Gestão Socioambiental e Comunidades Tradicionais', label: 'Gestão Socioambiental e Comunidades Tradicionais' }
+ ]}
+ />
  </div>
  </div>
 

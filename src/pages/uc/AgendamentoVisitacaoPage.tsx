@@ -28,7 +28,7 @@ import {
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { FilamentSelect } from '@/components/filament';
+import { FilamentSelect, FilamentWizard } from '@/components/filament';
 import {
  Dialog,
  DialogContent,
@@ -591,68 +591,21 @@ export const AgendamentoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
             </div>
           </div>
 
-          {/* STEPPER DE ETAPAS DO WIZARD (PADRÃO CHEVRON OFICIAL INEMA) */}
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg overflow-x-auto shadow-2xs">
-            <div className="flex items-stretch min-w-max">
-              {[
-                { num: 1, label: 'Unidade' },
-                { num: 2, label: 'Local e Agenda' },
-                { num: 3, label: 'Responsáveis' },
-                { num: 4, label: 'Caracterização' },
-                { num: 5, label: 'Público' },
-                { num: 6, label: 'Infraestrutura' },
-                { num: 7, label: 'Revisão e Envio' }
-              ].map((step, idx, arr) => {
-                const isActive = etapaForm === step.num;
-                const isDone = etapaForm > step.num;
-                return (
-                  <React.Fragment key={step.num}>
-                    <button
-                      type="button"
-                      onClick={() => setEtapaForm(step.num)}
-                      className={cn(
-                        "flex items-center gap-2.5 px-4 py-3.5 transition-colors text-left cursor-pointer",
-                        isActive
-                          ? "border-b-[3px] border-[#0F4C3A] bg-emerald-50/20 dark:bg-emerald-950/10"
-                          : "border-b-[3px] border-transparent hover:bg-slate-50 dark:hover:bg-slate-800/40"
-                      )}
-                    >
-                      <div
-                        className={cn(
-                          "w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-colors shrink-0",
-                          isActive
-                            ? "border-2 border-[#0F4C3A] text-[#0F4C3A] bg-white dark:bg-slate-900"
-                            : isDone
-                            ? "border-2 border-emerald-600 text-emerald-600 bg-white dark:bg-slate-900"
-                            : "border-2 border-slate-300 dark:border-slate-700 text-slate-400 dark:text-slate-500 bg-white dark:bg-slate-900"
-                        )}
-                      >
-                        {String(step.num).padStart(2, '0')}
-                      </div>
-                      <span
-                        className={cn(
-                          "text-xs whitespace-nowrap",
-                          isActive
-                            ? "font-bold text-slate-900 dark:text-white"
-                            : isDone
-                            ? "font-semibold text-slate-700 dark:text-slate-300"
-                            : "font-medium text-slate-500 dark:text-slate-400"
-                        )}
-                      >
-                        {step.label}
-                      </span>
-                    </button>
-                    {idx < arr.length - 1 && (
-                      <div className="flex items-center text-slate-300 dark:text-slate-700 shrink-0 select-none px-1">
-                        <svg width="14" height="48" viewBox="0 0 19 73" fill="none" className="h-8 w-auto">
-                          <path d="M19.0068 36.7236L18.8945 36.9473L0.894531 72.4473L0.00195312 71.9941L17.8887 36.7158L0 0.441406L0.896484 0L19.0068 36.7236Z" fill="currentColor"/>
-                        </svg>
-                      </div>
-                    )}
-                  </React.Fragment>
-                );
-              })}
-            </div>
+          {/* STEPPER DE ETAPAS DO WIZARD (PADRÃO OFICIAL GLA INEMA) */}
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-xs overflow-hidden">
+            <FilamentWizard
+              steps={[
+                { id: 1, label: 'Unidade' },
+                { id: 2, label: 'Local e Agenda' },
+                { id: 3, label: 'Responsáveis' },
+                { id: 4, label: 'Caracterização' },
+                { id: 5, label: 'Público' },
+                { id: 6, label: 'Infraestrutura' },
+                { id: 7, label: 'Revisão e Envio' }
+              ]}
+              currentStep={etapaForm}
+              onStepClick={(step) => setEtapaForm(step)}
+            />
           </div>
 
  {/* CONTEÚDO DA ETAPA DO FORMULÁRIO */}
