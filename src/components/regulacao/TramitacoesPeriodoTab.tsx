@@ -29,6 +29,8 @@ import {
   MOCK_ANUAL_DIRRE,
   LISTA_FAMILIAS
 } from '@/data/regulacaoMock';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import {
   GlaTable,
   GlaTableHead,
@@ -248,87 +250,52 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* 1. BARRA SUPERIOR: FILTROS, PÍLULAS E EXPORTAÇÃO */}
-      <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-xs">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex flex-wrap items-center gap-2.5">
-            <button
-              onClick={onOpenFiltros}
-              className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 shadow-2xs transition-colors cursor-pointer"
-            >
-              <Filter className="w-3.5 h-3.5 text-slate-600" />
-              <span>Filtros</span>
-              {totalFiltrosAtivos > 0 && (
-                <span className="inline-flex items-center justify-center px-1.5 py-0.2 text-[10px] font-bold rounded-full bg-[#0F4C3A] text-white">
-                  {totalFiltrosAtivos}
-                </span>
-              )}
-            </button>
-
+      {/* 1. BARRA DE FILTROS SUPERIOR (LEVE E INTEGRADA) */}
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-900 px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-2xs">
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            onClick={onOpenFiltros}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700 shadow-2xs transition-colors cursor-pointer"
+          >
+            <Filter className="w-3.5 h-3.5 text-slate-600 dark:text-slate-400" />
+            <span>Filtros</span>
             {totalFiltrosAtivos > 0 && (
-              <button
-                onClick={onLimparFiltros}
-                className="text-xs font-semibold text-[#0F4C3A] hover:underline cursor-pointer transition-colors ml-1"
-              >
-                Limpar todos
-              </button>
+              <span className="inline-flex items-center justify-center px-1.5 py-0.2 text-[10px] font-bold rounded-full bg-[#0F4C3A] text-white">
+                {totalFiltrosAtivos}
+              </span>
             )}
-          </div>
+          </button>
 
-          <div>
-            {statusExportacao === 'disponivel' && (
+          {/* Pílulas de filtros aplicados */}
+          {pillsFiltros.map((pill, idx) => (
+            <span
+              key={`${pill.chave}-${idx}`}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700"
+            >
+              <span>{pill.label}</span>
               <button
-                onClick={handleExportarExcel}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#0F4C3A] hover:bg-[#155d47] text-white text-xs font-bold rounded-lg shadow-xs transition-colors cursor-pointer"
+                onClick={() => onRemoveFiltro(pill.chave, pill.valor)}
+                className="hover:text-rose-600 focus:outline-hidden cursor-pointer"
+                title="Remover filtro"
               >
-                <FileSpreadsheet className="w-4 h-4" />
-                <span>Exportar Excel</span>
+                <X className="w-3.5 h-3.5 text-slate-400 hover:text-rose-600" />
               </button>
-            )}
+            </span>
+          ))}
 
-            {statusExportacao === 'gerando' && (
-              <button
-                disabled
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 border border-slate-300 text-slate-500 text-xs font-bold rounded-lg cursor-not-allowed shadow-2xs"
-              >
-                <Loader2 className="w-4 h-4 animate-spin text-slate-600" />
-                <span>Gerando Excel...</span>
-              </button>
-            )}
-
-            {statusExportacao === 'sucesso' && (
-              <button
-                disabled
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#0F4C3A] text-white text-xs font-bold rounded-lg shadow-xs"
-              >
-                <Check className="w-4 h-4" />
-                <span>Excel gerado</span>
-              </button>
-            )}
-          </div>
+          {totalFiltrosAtivos > 0 && (
+            <button
+              onClick={onLimparFiltros}
+              className="text-xs font-semibold text-[#0F4C3A] hover:underline cursor-pointer transition-colors ml-1"
+            >
+              Limpar filtros
+            </button>
+          )}
         </div>
 
-        {/* Pílulas de filtros aplicados */}
-        {totalFiltrosAtivos > 0 && (
-          <div className="flex flex-wrap items-center gap-2 pt-3 mt-3 border-t border-slate-100">
-            <span className="text-xs font-bold text-slate-600">Filtros aplicados:</span>
-            {pillsFiltros.map((pill, idx) => (
-              <span
-                key={`${pill.chave}-${idx}`}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200"
-              >
-                <span>{pill.label}</span>
-                <button
-                  onClick={() => onRemoveFiltro(pill.chave, pill.valor)}
-                  className="hover:text-rose-600 focus:outline-hidden cursor-pointer"
-                  title="Remover filtro"
-                >
-                  <X className="w-3.5 h-3.5 text-slate-500 hover:text-rose-600" />
-                </button>
-              </span>
-            ))}
-          </div>
-        )}
+        <div className="text-xs font-mono text-slate-400 dark:text-slate-500 hidden sm:block">
+          SEIA / DIRRE • Base 2024
+        </div>
       </div>
 
       {/* 2. CARDS DE RESUMO (KPIs) - PADRÃO GLA LEGADO (fi-wi-stats-overview) */}
@@ -431,80 +398,119 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
         </div>
       </div>
 
-      {/* 4. VISUALIZAÇÕES DA TABELA COM SEGMENTED CONTROLS */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-        {/* Cabeçalho do Bloco de Dados */}
-        <div className="px-5 py-3.5 bg-slate-50/80 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      {/* 4. TABELA DE DETALHAMENTO DOS DADOS (PADRÃO DOR003 / DOR002) */}
+      <Card className="border-slate-200 dark:border-slate-800 shadow-sm">
+        {/* Cabeçalho do Bloco de Dados - Idêntico a DOR003 e DOR002 */}
+        <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h3 className="text-xs font-bold text-slate-700">Detalhamento dos Dados</h3>
-            <p className="text-[11px] text-slate-500 block">
+            <CardTitle className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+              Detalhamento dos Dados
+            </CardTitle>
+            <CardDescription className="text-xs text-slate-500 dark:text-slate-400">
               Alterne a visualização conforme a granularidade e o objetivo da análise.
-            </p>
+            </CardDescription>
           </div>
 
-          {/* Segmented Control Legado GLA */}
-          <div className="inline-flex rounded-lg bg-slate-100 p-1 border border-slate-200 shrink-0">
-            <button
-              onClick={() => setModoVisualizacao('registros')}
-              className={`px-3 py-1.5 text-xs rounded-md transition-colors cursor-pointer ${
-                modoVisualizacao === 'registros'
-                  ? 'bg-white text-slate-900 font-bold shadow-2xs'
-                  : 'text-slate-600 hover:text-slate-900 font-medium'
-              }`}
-            >
-              Registros
-            </button>
-            <button
-              onClick={() => setModoVisualizacao('tecnicos')}
-              className={`px-3 py-1.5 text-xs rounded-md transition-colors cursor-pointer ${
-                modoVisualizacao === 'tecnicos'
-                  ? 'bg-white text-slate-900 font-bold shadow-2xs'
-                  : 'text-slate-600 hover:text-slate-900 font-medium'
-              }`}
-            >
-              Atividades por técnico
-            </button>
-            <button
-              onClick={() => setModoVisualizacao('agrupamento')}
-              className={`px-3 py-1.5 text-xs rounded-md transition-colors cursor-pointer ${
-                modoVisualizacao === 'agrupamento'
-                  ? 'bg-white text-slate-900 font-bold shadow-2xs'
-                  : 'text-slate-600 hover:text-slate-900 font-medium'
-              }`}
-            >
-              Por agrupamento
-            </button>
-            <button
-              onClick={() => setModoVisualizacao('anual')}
-              className={`px-3 py-1.5 text-xs rounded-md transition-colors cursor-pointer ${
-                modoVisualizacao === 'anual'
-                  ? 'bg-white text-slate-900 font-bold shadow-2xs'
-                  : 'text-slate-600 hover:text-slate-900 font-medium'
-              }`}
-            >
-              Anual DIRRE
-            </button>
-          </div>
-        </div>
+          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+            {/* Segmented Control Legado GLA */}
+            <div className="inline-flex rounded-lg bg-slate-100 dark:bg-slate-800 p-0.5 border border-slate-200 dark:border-slate-700 shrink-0">
+              <button
+                onClick={() => setModoVisualizacao('registros')}
+                className={`px-3 py-1 text-xs rounded-md transition-colors cursor-pointer ${
+                  modoVisualizacao === 'registros'
+                    ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white font-bold shadow-2xs'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 font-medium'
+                }`}
+              >
+                Registros
+              </button>
+              <button
+                onClick={() => setModoVisualizacao('tecnicos')}
+                className={`px-3 py-1 text-xs rounded-md transition-colors cursor-pointer ${
+                  modoVisualizacao === 'tecnicos'
+                    ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white font-bold shadow-2xs'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 font-medium'
+                }`}
+              >
+                Atividades por técnico
+              </button>
+              <button
+                onClick={() => setModoVisualizacao('agrupamento')}
+                className={`px-3 py-1 text-xs rounded-md transition-colors cursor-pointer ${
+                  modoVisualizacao === 'agrupamento'
+                    ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white font-bold shadow-2xs'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 font-medium'
+                }`}
+              >
+                Por agrupamento
+              </button>
+              <button
+                onClick={() => setModoVisualizacao('anual')}
+                className={`px-3 py-1 text-xs rounded-md transition-colors cursor-pointer ${
+                  modoVisualizacao === 'anual'
+                    ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white font-bold shadow-2xs'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 font-medium'
+                }`}
+              >
+                Anual DIRRE
+              </button>
+            </div>
 
-        {/* MODO A: REGISTROS (PADRÃO COM GLATABLE) */}
+            <Badge variant="outline" className="text-xs font-mono">
+              {tramitacoesFiltradas.length} processos
+            </Badge>
+
+            {/* Ação Primária da Tabela: Exportar Excel */}
+            {statusExportacao === 'disponivel' && (
+              <button
+                onClick={handleExportarExcel}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs font-semibold rounded-md shadow-2xs transition-colors cursor-pointer"
+              >
+                <FileSpreadsheet className="w-3.5 h-3.5" />
+                <span>Exportar Excel</span>
+              </button>
+            )}
+
+            {statusExportacao === 'gerando' && (
+              <button
+                disabled
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 border border-slate-300 text-slate-500 text-xs font-semibold rounded-md cursor-not-allowed shadow-2xs"
+              >
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-slate-600" />
+                <span>Gerando...</span>
+              </button>
+            )}
+
+            {statusExportacao === 'sucesso' && (
+              <button
+                disabled
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0F4C3A] text-white text-xs font-semibold rounded-md shadow-2xs"
+              >
+                <Check className="w-3.5 h-3.5" />
+                <span>Gerado</span>
+              </button>
+            )}
+          </div>
+        </CardHeader>
+
+        {/* MODO A: REGISTROS (PADRÃO DOR003 / DOR002) */}
         {modoVisualizacao === 'registros' && (
-          <div>
+          <CardContent className="p-0">
             <div className="overflow-x-auto">
-              <GlaTable>
-                <GlaTableHead>
+              <table className="w-full text-left text-xs border-collapse">
+                <thead className="bg-slate-50 dark:bg-slate-900/70 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 font-semibold">
                   <tr>
-                    <GlaTh>Data tramitação</GlaTh>
-                    <GlaTh>Processo</GlaTh>
-                    <GlaTh>Interessado</GlaTh>
-                    <GlaTh>Unidade/coord.</GlaTh>
-                    <GlaTh>Ato/atividade</GlaTh>
-                    <GlaTh>Situação</GlaTh>
-                    <GlaTh>Equipe técnica</GlaTh>
-                    <GlaTh align="right">Ação</GlaTh>
+                    <th className="py-3 px-4">Cód. Processo / CEFIR</th>
+                    <th className="py-3 px-4">Data da Tramitação</th>
+                    <th className="py-3 px-4">Interessado / Razão Social</th>
+                    <th className="py-3 px-4">Coordenação</th>
+                    <th className="py-3 px-4">Ato / Atividade</th>
+                    <th className="py-3 px-4">Situação</th>
+                    <th className="py-3 px-4">Equipe Técnica</th>
+                    <th className="py-3 px-4 text-right">Ação</th>
                   </tr>
-                </GlaTableHead>
-                <GlaTableBody>
+                </thead>
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-800 dark:text-slate-200">
                   {tramitacoesFiltradas.length === 0 ? (
                     <tr>
                       <td colSpan={8} className="py-8 text-center text-slate-500">
@@ -513,51 +519,52 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
                     </tr>
                   ) : (
                     tramitacoesFiltradas.map((item) => (
-                      <GlaTableRow key={item.id}>
-                        <GlaTd className="whitespace-nowrap text-slate-600 font-medium">
+                      <tr key={item.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors">
+                        <td className="py-3 px-4">
+                          <div className="font-mono font-semibold text-slate-800 dark:text-slate-200">{item.processo}</div>
+                          <div className="text-[10px] text-slate-400 font-mono">SEIA / DIRRE</div>
+                        </td>
+                        <td className="py-3 px-4 text-slate-600 font-medium whitespace-nowrap">
                           {item.dataTramitacao}
-                        </GlaTd>
-                        <GlaTd className="whitespace-nowrap text-slate-900 font-semibold">
-                          {item.processo}
-                        </GlaTd>
-                        <GlaTd className="text-slate-700 max-w-[200px] truncate" title={item.interessado}>
+                        </td>
+                        <td className="py-3 px-4 text-slate-700 max-w-[200px] truncate" title={item.interessado}>
                           {item.interessado}
-                        </GlaTd>
-                        <GlaTd className="whitespace-nowrap text-slate-600 font-medium">
+                        </td>
+                        <td className="py-3 px-4 text-slate-600 font-medium whitespace-nowrap">
                           {item.unidade}
-                        </GlaTd>
-                        <GlaTd className="text-slate-700 max-w-[180px] truncate font-medium" title={item.ato}>
+                        </td>
+                        <td className="py-3 px-4 text-slate-700 max-w-[180px] truncate font-medium" title={item.ato}>
                           {item.ato}
-                        </GlaTd>
-                        <GlaTd className="whitespace-nowrap">
+                        </td>
+                        <td className="py-3 px-4 whitespace-nowrap">
                           {renderSituacaoBadge(item.situacao)}
-                        </GlaTd>
-                        <GlaTd className="text-slate-600">
+                        </td>
+                        <td className="py-3 px-4 text-slate-600">
                           <span className="font-semibold text-slate-800">{item.liderEquipe}</span>
                           {item.membrosEquipe.length > 0 && (
                             <span className="text-slate-500 block text-[10px]">
                               +{item.membrosEquipe.length} participante(s)
                             </span>
                           )}
-                        </GlaTd>
-                        <GlaTd align="right" className="whitespace-nowrap">
-                          <GlaTableAction
-                            variant="outline"
+                        </td>
+                        <td className="py-3 px-4 text-right whitespace-nowrap">
+                          <button
                             onClick={() => onSelectProcesso(item)}
-                            icon={<Eye className="w-3.5 h-3.5 text-slate-600" />}
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 shadow-2xs transition-colors cursor-pointer"
                           >
-                            Detalhar
-                          </GlaTableAction>
-                        </GlaTd>
-                      </GlaTableRow>
+                            <Eye className="w-3.5 h-3.5 text-slate-600" />
+                            <span>Detalhar</span>
+                          </button>
+                        </td>
+                      </tr>
                     ))
                   )}
-                </GlaTableBody>
-              </GlaTable>
+                </tbody>
+              </table>
             </div>
 
-            {/* Paginação Padrão GLA */}
-            <div className="px-5 py-3 border-t border-slate-200 bg-slate-50/50">
+            {/* Paginação Padrão GLA / DOR003 */}
+            <div className="px-5 py-3 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20">
               <GlaPagination
                 currentCount={tramitacoesFiltradas.length}
                 totalCount={4182}
@@ -566,7 +573,7 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
                 entityName="registros"
               />
             </div>
-          </div>
+          </CardContent>
         )}
 
         {/* MODO B: ATIVIDADES POR TÉCNICO */}
@@ -792,7 +799,7 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
             </div>
           </div>
         )}
-      </div>
+      </Card>
     </div>
   );
 };

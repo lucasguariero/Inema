@@ -81,7 +81,7 @@ export const ConsultaExternaPage: React.FC<{ onNavigate?: (route: string) => voi
   };
 
   return (
-    <div className="space-y-6 w-full max-w-7xl mx-auto pb-12">
+    <div className="space-y-6 w-full pb-12">
       {/* Topo Oficial (Breadcrumb está exclusivamente na Topbar) */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-1">
         <div>

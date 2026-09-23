@@ -32,16 +32,10 @@ import {
   FiltrosPauta
 } from '@/data/regulacaoMock';
 import {
-  GlaTableContainer,
-  GlaTable,
-  GlaTableHead,
-  GlaTh,
-  GlaTableBody,
-  GlaTableRow,
-  GlaTd,
-  GlaTableAction,
   GlaPagination
 } from '@/components/common/GlaTable';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
 interface AcompanhamentoPautaTabProps {
   filtros: FiltrosPauta;
@@ -337,40 +331,74 @@ export const AcompanhamentoPautaTab: React.FC<AcompanhamentoPautaTabProps> = ({
         </div>
       </div>
 
-      {/* 4. BARRA DE FILTROS LIMPA (SEM SELECTS SOLTOS NA TELA) */}
-      <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-xs">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex flex-wrap items-center gap-2.5">
-            <button
-              onClick={onOpenFiltros}
-              className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 shadow-2xs transition-colors cursor-pointer"
-            >
-              <Filter className="w-3.5 h-3.5 text-slate-600" />
-              <span>Filtros da Pauta</span>
-              {totalFiltrosAtivos > 0 && (
-                <span className="inline-flex items-center justify-center px-1.5 py-0.2 text-[10px] font-bold rounded-full bg-[#0F4C3A] text-white">
-                  {totalFiltrosAtivos}
-                </span>
-              )}
-            </button>
-
+      {/* 4. BARRA DE FILTROS SUPERIOR (LEVE E INTEGRADA) */}
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-900 px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-2xs">
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            onClick={onOpenFiltros}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700 shadow-2xs transition-colors cursor-pointer"
+          >
+            <Filter className="w-3.5 h-3.5 text-slate-500" />
+            <span>Filtros da Pauta</span>
             {totalFiltrosAtivos > 0 && (
-              <button
-                onClick={onLimparFiltros}
-                className="text-xs font-semibold text-[#0F4C3A] hover:underline cursor-pointer transition-colors ml-1"
-              >
-                Limpar todos
-              </button>
+              <span className="inline-flex items-center justify-center px-1.5 py-0.2 text-[10px] font-bold rounded-full bg-[#0F4C3A] text-white">
+                {totalFiltrosAtivos}
+              </span>
             )}
+          </button>
+
+          {/* Pílulas de filtros ativos */}
+          {pillsFiltros.map((pill) => (
+            <span
+              key={pill.chave}
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700"
+            >
+              <span>{pill.label}</span>
+              <button
+                onClick={() => onRemoveFiltro(pill.chave)}
+                className="hover:text-rose-600 focus:outline-hidden cursor-pointer"
+                title="Remover filtro"
+              >
+                <X className="w-3 h-3 text-slate-400 hover:text-rose-600" />
+              </button>
+            </span>
+          ))}
+
+          {totalFiltrosAtivos > 0 && (
+            <button
+              onClick={onLimparFiltros}
+              className="text-xs font-semibold text-[#0F4C3A] hover:underline cursor-pointer transition-colors ml-1"
+            >
+              Limpar todos
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* 5. TABELA DA PAUTA ATIVA (PADRÃO DOR003 / DOR002) */}
+      <Card className="border-slate-200 dark:border-slate-800 shadow-sm">
+        <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <CardTitle className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+              Processos na Pauta Ativa
+            </CardTitle>
+            <CardDescription className="text-xs text-slate-500 dark:text-slate-400">
+              Lista operacional com alerta de prazos e distribuição técnica das coordenações.
+            </CardDescription>
           </div>
 
-          <div>
+          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+            <Badge variant="outline" className="text-xs font-mono">
+              {pautaFiltrada.length} de 3.840 processos
+            </Badge>
+
+            {/* Ação Primária da Tabela: Exportar Pauta */}
             {statusExportacao === 'disponivel' && (
               <button
                 onClick={handleExportarExcel}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#0F4C3A] hover:bg-[#155d47] text-white text-xs font-bold rounded-lg shadow-xs transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs font-semibold rounded-md shadow-2xs transition-colors cursor-pointer"
               >
-                <FileSpreadsheet className="w-4 h-4" />
+                <FileSpreadsheet className="w-3.5 h-3.5" />
                 <span>Exportar Pauta</span>
               </button>
             )}
@@ -378,144 +406,120 @@ export const AcompanhamentoPautaTab: React.FC<AcompanhamentoPautaTabProps> = ({
             {statusExportacao === 'gerando' && (
               <button
                 disabled
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 border border-slate-300 text-slate-500 text-xs font-bold rounded-lg cursor-not-allowed shadow-2xs"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 border border-slate-300 text-slate-500 text-xs font-semibold rounded-md cursor-not-allowed shadow-2xs"
               >
-                <Loader2 className="w-4 h-4 animate-spin text-slate-600" />
-                <span>Gerando Planilha...</span>
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-slate-600" />
+                <span>Gerando...</span>
               </button>
             )}
 
             {statusExportacao === 'sucesso' && (
               <button
                 disabled
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#0F4C3A] text-white text-xs font-bold rounded-lg shadow-xs"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0F4C3A] text-white text-xs font-semibold rounded-md shadow-2xs"
               >
-                <Check className="w-4 h-4" />
-                <span>Planilha gerada</span>
+                <Check className="w-3.5 h-3.5" />
+                <span>Gerada</span>
               </button>
             )}
           </div>
-        </div>
+        </CardHeader>
 
-        {/* Pílulas de filtros da pauta */}
-        {totalFiltrosAtivos > 0 && (
-          <div className="flex flex-wrap items-center gap-2 pt-3 mt-3 border-t border-slate-100">
-            <span className="text-xs font-bold text-slate-600">Filtros aplicados:</span>
-            {pillsFiltros.map((pill) => (
-              <span
-                key={pill.chave}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200"
-              >
-                <span>{pill.label}</span>
-                <button
-                  onClick={() => onRemoveFiltro(pill.chave)}
-                  className="hover:text-rose-600 focus:outline-hidden cursor-pointer"
-                  title="Remover filtro"
-                >
-                  <X className="w-3.5 h-3.5 text-slate-500 hover:text-rose-600" />
-                </button>
-              </span>
-            ))}
+        <CardContent className="p-0">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead className="bg-slate-50 dark:bg-slate-900/70 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 font-semibold">
+                <tr>
+                  <th className="py-3 px-4">Cód. Processo</th>
+                  <th className="py-3 px-4">Interessado</th>
+                  <th className="py-3 px-4">Unidade Atual</th>
+                  <th className="py-3 px-4">Técnico Atual</th>
+                  <th className="py-3 px-4">Situação Atual</th>
+                  <th className="py-3 px-4 text-center">Atos</th>
+                  <th className="py-3 px-4">Última Movimentação</th>
+                  <th className="py-3 px-4 text-center">Dias s/ Mov.</th>
+                  <th className="py-3 px-4">Situação Prazo</th>
+                  <th className="py-3 px-4 text-right">Ação</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-800 dark:text-slate-200">
+                {pautaFiltrada.length === 0 ? (
+                  <tr>
+                    <td colSpan={10} className="py-8 text-center text-slate-500">
+                      Nenhum processo encontrado na pauta com os filtros selecionados.
+                    </td>
+                  </tr>
+                ) : (
+                  pautaFiltrada.map((item) => (
+                    <tr key={item.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors">
+                      <td className="py-3 px-4">
+                        <div className="font-mono font-semibold text-slate-800 dark:text-slate-200">{item.processo}</div>
+                        <div className="text-[10px] text-slate-400 font-mono">SEIA / Regulação</div>
+                      </td>
+                      <td className="py-3 px-4 text-slate-700 max-w-[200px] truncate" title={item.interessado}>
+                        {item.interessado}
+                      </td>
+                      <td className="py-3 px-4 whitespace-nowrap text-slate-600 font-medium">
+                        {item.unidadeAtual}
+                      </td>
+                      <td className="py-3 px-4 whitespace-nowrap">
+                        {item.tecnicoAtual === 'Sem atribuição técnica' ? (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">
+                            Sem atribuição técnica
+                          </span>
+                        ) : (
+                          <span className="font-semibold text-slate-800">{item.tecnicoAtual}</span>
+                        )}
+                      </td>
+                      <td className="py-3 px-4 whitespace-nowrap">
+                        {renderSituacaoBadge(item.situacaoAtual)}
+                      </td>
+                      <td className="py-3 px-4 text-center whitespace-nowrap">
+                        <span
+                          className="inline-flex items-center justify-center w-6 h-5 rounded text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200 cursor-help"
+                          title={item.atos.join(' • ')}
+                        >
+                          {item.qtdAtos}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 whitespace-nowrap text-slate-600 font-medium">
+                        {item.ultimaMovimentacao}
+                      </td>
+                      <td className="py-3 px-4 text-center whitespace-nowrap">
+                        <span className={item.diasSemMovimentacao > 30 ? 'text-rose-700 font-bold' : 'text-slate-700 font-medium'}>
+                          {item.diasSemMovimentacao}d
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 whitespace-nowrap">
+                        {renderBadgePrazo(item.situacaoPrazo)}
+                      </td>
+                      <td className="py-3 px-4 text-right whitespace-nowrap">
+                        <button
+                          onClick={() => handleDetalhar(item)}
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 shadow-2xs transition-colors cursor-pointer"
+                        >
+                          <Eye className="w-3.5 h-3.5 text-slate-600" />
+                          <span>Detalhar</span>
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
           </div>
-        )}
-      </div>
 
-      {/* 5. TABELA DENSA DA PAUTA OPERACIONAL (COMPONENTE CANÔNICO GLATABLE) */}
-      <GlaTableContainer
-        heading="Processos na Pauta Ativa"
-        description="Lista operacional com alerta de prazos e distribuição técnica."
-        badge={`Total: ${pautaFiltrada.length} de 3.840 processos`}
-        pagination={
-          <GlaPagination
-            currentCount={pautaFiltrada.length}
-            totalCount={3840}
-            page={1}
-            totalPages={1}
-            entityName="processos"
-          />
-        }
-      >
-        <GlaTable>
-          <GlaTableHead>
-            <tr>
-              <GlaTh>Processo</GlaTh>
-              <GlaTh>Interessado</GlaTh>
-              <GlaTh>Unidade atual</GlaTh>
-              <GlaTh>Técnico atual</GlaTh>
-              <GlaTh>Situação atual</GlaTh>
-              <GlaTh align="center">Atos</GlaTh>
-              <GlaTh>Última mov.</GlaTh>
-              <GlaTh align="center">Dias s/ mov.</GlaTh>
-              <GlaTh>Situação prazo</GlaTh>
-              <GlaTh align="right">Ação</GlaTh>
-            </tr>
-          </GlaTableHead>
-          <GlaTableBody>
-            {pautaFiltrada.length === 0 ? (
-              <tr>
-                <td colSpan={10} className="py-8 text-center text-slate-500">
-                  Nenhum processo encontrado na pauta com os filtros selecionados.
-                </td>
-              </tr>
-            ) : (
-              pautaFiltrada.map((item) => (
-                <GlaTableRow key={item.id}>
-                  <GlaTd className="whitespace-nowrap font-bold text-slate-900">
-                    {item.processo}
-                  </GlaTd>
-                  <GlaTd className="text-slate-700 max-w-[200px] truncate" title={item.interessado}>
-                    {item.interessado}
-                  </GlaTd>
-                  <GlaTd className="whitespace-nowrap text-slate-600 font-medium">
-                    {item.unidadeAtual}
-                  </GlaTd>
-                  <GlaTd className="whitespace-nowrap">
-                    {item.tecnicoAtual === 'Sem atribuição técnica' ? (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">
-                        Sem atribuição técnica
-                      </span>
-                    ) : (
-                      <span className="font-semibold text-slate-800">{item.tecnicoAtual}</span>
-                    )}
-                  </GlaTd>
-                  <GlaTd className="whitespace-nowrap">
-                    {renderSituacaoBadge(item.situacaoAtual)}
-                  </GlaTd>
-                  <GlaTd align="center" className="whitespace-nowrap">
-                    <span
-                      className="inline-flex items-center justify-center w-6 h-5 rounded text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200 cursor-help"
-                      title={item.atos.join(' • ')}
-                    >
-                      {item.qtdAtos}
-                    </span>
-                  </GlaTd>
-                  <GlaTd className="whitespace-nowrap text-slate-600 font-medium">
-                    {item.ultimaMovimentacao}
-                  </GlaTd>
-                  <GlaTd align="center" className="whitespace-nowrap">
-                    <span className={item.diasSemMovimentacao > 30 ? 'text-rose-700 font-bold' : 'text-slate-700 font-medium'}>
-                      {item.diasSemMovimentacao}d
-                    </span>
-                  </GlaTd>
-                  <GlaTd className="whitespace-nowrap">
-                    {renderBadgePrazo(item.situacaoPrazo)}
-                  </GlaTd>
-                  <GlaTd align="right" className="whitespace-nowrap">
-                    <GlaTableAction
-                      variant="outline"
-                      onClick={() => handleDetalhar(item)}
-                      icon={<Eye className="w-3.5 h-3.5 text-slate-600" />}
-                    >
-                      Detalhar
-                    </GlaTableAction>
-                  </GlaTd>
-                </GlaTableRow>
-              ))
-            )}
-          </GlaTableBody>
-        </GlaTable>
-      </GlaTableContainer>
-
+          <div className="px-5 py-3 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20">
+            <GlaPagination
+              currentCount={pautaFiltrada.length}
+              totalCount={3840}
+              page={1}
+              totalPages={1}
+              entityName="processos"
+            />
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

@@ -619,8 +619,8 @@ export const PesquisaCientificaPage: React.FC<{ onNavigate?: (route: string) => 
  return true;
  });
 
- return (
- <div className={cn('min-h-screen p-6 transition-colors duration-200', isDark ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900')}>
+  return (
+    <div className="space-y-6">
  {/* Toast Notification */}
  {mensagemToast && (
  <div
