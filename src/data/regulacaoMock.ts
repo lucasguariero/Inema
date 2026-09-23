@@ -1,4 +1,4 @@
-﻿export interface TramitacaoItem {
+export interface TramitacaoItem {
   id: string;
   processo: string;
   dataTramitacao: string;
@@ -63,6 +63,22 @@ export const FILTROS_INICIAIS: FiltrosTramitacao = {
   interessado: '',
   municipios: [],
   tipologias: []
+};
+
+export interface FiltrosPauta {
+  busca: string;
+  prazo: string;
+  unidade: string;
+  tecnico: string;
+  situacao: string;
+}
+
+export const FILTROS_PAUTA_INICIAIS: FiltrosPauta = {
+  busca: '',
+  prazo: 'todos',
+  unidade: 'todas',
+  tecnico: 'todos',
+  situacao: 'todas'
 };
 
 export const LISTA_UNIDADES = [
@@ -429,10 +445,10 @@ export const MOCK_DISTRIBUICAO_UNIDADE = [
 
 export const MOCK_SITUACOES_PAUTA = [
   { name: 'EM ANÁLISE TÉCNICA', value: 342, color: '#0F4C3A' },
-  { name: 'RL APROVADA', value: 215, color: '#1E6B52' },
-  { name: 'NOTIFICADO', value: 128, color: '#D97706' },
-  { name: 'REVISADO', value: 89, color: '#2563EB' },
-  { name: 'AGUARDANDO DOC.', value: 72, color: '#64748B' }
+  { name: 'RL APROVADA', value: 215, color: '#2D6A4F' },
+  { name: 'NOTIFICADO', value: 128, color: '#52796F' },
+  { name: 'REVISADO', value: 89, color: '#475569' },
+  { name: 'AGUARDANDO DOC.', value: 72, color: '#94A3B8' }
 ];
 
 export const MOCK_FAIXAS_DIAS_PAUTA = [

@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
+import { FilamentTabs } from '@/components/filament';
 import { TramitacoesPeriodoTab } from '@/components/regulacao/TramitacoesPeriodoTab';
 import { AcompanhamentoPautaTab } from '@/components/regulacao/AcompanhamentoPautaTab';
 import { FiltrosDrawer } from '@/components/regulacao/FiltrosDrawer';
 import { DetalheProcessoModal } from '@/components/regulacao/DetalheProcessoModal';
 import {
   FiltrosTramitacao,
+  FiltrosPauta,
   FILTROS_INICIAIS,
+  FILTROS_PAUTA_INICIAIS,
   TramitacaoItem
 } from '@/data/regulacaoMock';
 
@@ -14,20 +17,21 @@ type AbaPrincipal = 'tramitacoes' | 'pauta';
 export const RelatoriosRegulacaoPage: React.FC = () => {
   const [abaAtiva, setAbaAtiva] = useState<AbaPrincipal>('tramitacoes');
   const [drawerFiltrosAberto, setDrawerFiltrosAberto] = useState(false);
-  const [filtros, setFiltros] = useState<FiltrosTramitacao>(FILTROS_INICIAIS);
+  const [filtrosTramitacao, setFiltrosTramitacao] = useState<FiltrosTramitacao>(FILTROS_INICIAIS);
+  const [filtrosPauta, setFiltrosPauta] = useState<FiltrosPauta>(FILTROS_PAUTA_INICIAIS);
   const [processoSelecionado, setProcessoSelecionado] = useState<TramitacaoItem | null>(null);
 
-  const handleAplicarFiltros = (novosFiltros: FiltrosTramitacao) => {
-    setFiltros(novosFiltros);
-    setDrawerFiltrosAberto(false);
+  // Handlers para Tramitações
+  const handleAplicarFiltrosTramitacao = (novos: FiltrosTramitacao) => {
+    setFiltrosTramitacao(novos);
   };
 
-  const handleLimparFiltros = () => {
-    setFiltros(FILTROS_INICIAIS);
+  const handleLimparFiltrosTramitacao = () => {
+    setFiltrosTramitacao(FILTROS_INICIAIS);
   };
 
-  const handleRemoverFiltro = (chave: keyof FiltrosTramitacao, valor?: string) => {
-    setFiltros((prev) => {
+  const handleRemoverFiltroTramitacao = (chave: keyof FiltrosTramitacao, valor?: string) => {
+    setFiltrosTramitacao((prev) => {
       const atual = prev[chave];
       if (Array.isArray(atual) && valor) {
         return {
@@ -45,79 +49,88 @@ export const RelatoriosRegulacaoPage: React.FC = () => {
     });
   };
 
+  // Handlers para Pauta
+  const handleAplicarFiltrosPauta = (novos: FiltrosPauta) => {
+    setFiltrosPauta(novos);
+  };
+
+  const handleLimparFiltrosPauta = () => {
+    setFiltrosPauta(FILTROS_PAUTA_INICIAIS);
+  };
+
+  const handleRemoverFiltroPauta = (chave: keyof FiltrosPauta) => {
+    setFiltrosPauta((prev) => ({
+      ...prev,
+      [chave]: chave === 'prazo' || chave === 'unidade' || chave === 'tecnico' || chave === 'situacao' ? 'todos' : ''
+    }));
+  };
+
   return (
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6 font-sans">
-      {/* 1. CABEÇALHO SÓBRIO INSTITUCIONAL - ZERO ÍCONES NO H1 */}
-      <div className="bg-white rounded-lg border border-slate-200 p-6 shadow-xs">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-xl font-bold text-slate-900 tracking-tight">
-              Relatórios de Regulação
-            </h1>
-            <p className="text-xs text-slate-600 mt-1">
-              Consulte as tramitações e acompanhe os processos da regulação ambiental.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <span className="px-2.5 py-1 text-xs font-medium rounded-full bg-slate-100 text-slate-700 border border-slate-200">
-              Dados do SEIA
-            </span>
-            <span className="px-2.5 py-1 text-xs font-medium rounded-full bg-slate-100 text-slate-600 border border-slate-200">
-              Atualizado em: 22/09/2026 10:00
-            </span>
-          </div>
+      {/* 1. CABEÇALHO OFICIAL GLA - FORA DE CARD, SÓBRIO E LIMPO */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight">
+            Relatórios de Regulação
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-500 mt-1">
+            Consulte as tramitações e acompanhe os processos da regulação ambiental.
+          </p>
         </div>
 
-        {/* 2. ABAS PRINCIPAIS (GLA FILAMENT TABS) */}
-        <div className="mt-6 border-b border-slate-200 flex items-center gap-8">
-          <button
-            onClick={() => setAbaAtiva('tramitacoes')}
-            className={`pb-3 text-sm font-semibold border-b-2 transition-colors cursor-pointer ${
-              abaAtiva === 'tramitacoes'
-                ? 'border-[#0F4C3A] text-[#0F4C3A]'
-                : 'border-transparent text-slate-500 hover:text-slate-800'
-            }`}
-          >
-            Tramitações no período
-          </button>
-          <button
-            onClick={() => setAbaAtiva('pauta')}
-            className={`pb-3 text-sm font-semibold border-b-2 transition-colors cursor-pointer ${
-              abaAtiva === 'pauta'
-                ? 'border-[#0F4C3A] text-[#0F4C3A]'
-                : 'border-transparent text-slate-500 hover:text-slate-800'
-            }`}
-          >
-            Acompanhamento da pauta
-          </button>
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+            Dados do SEIA
+          </span>
+          <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">
+            Atualizado em: 22/09/2026 10:00
+          </span>
         </div>
       </div>
+
+      {/* 2. BARRA DE ABAS OFICIAL FILAMENT (GLA) */}
+      <FilamentTabs
+        tabs={[
+          { id: 'tramitacoes', label: 'Tramitações no período', badge: '4.182' },
+          { id: 'pauta', label: 'Acompanhamento da pauta', badge: '3.840' }
+        ]}
+        activeTab={abaAtiva}
+        onChange={(tabId) => setAbaAtiva(tabId as any)}
+        className="mb-2"
+      />
 
       {/* 3. CONTEÚDO DAS ABAS */}
       {abaAtiva === 'tramitacoes' && (
         <TramitacoesPeriodoTab
-          filtros={filtros}
+          filtros={filtrosTramitacao}
           onOpenFiltros={() => setDrawerFiltrosAberto(true)}
-          onRemoveFiltro={handleRemoverFiltro}
-          onLimparFiltros={handleLimparFiltros}
+          onRemoveFiltro={handleRemoverFiltroTramitacao}
+          onLimparFiltros={handleLimparFiltrosTramitacao}
           onSelectProcesso={(p) => setProcessoSelecionado(p)}
         />
       )}
 
       {abaAtiva === 'pauta' && (
         <AcompanhamentoPautaTab
+          filtros={filtrosPauta}
+          onOpenFiltros={() => setDrawerFiltrosAberto(true)}
+          onRemoveFiltro={handleRemoverFiltroPauta}
+          onLimparFiltros={handleLimparFiltrosPauta}
           onSelectProcesso={(p) => setProcessoSelecionado(p)}
         />
       )}
 
-      {/* 4. GAVETA LATERAL DE FILTROS */}
+      {/* 4. GAVETA LATERAL DE FILTROS INTEGRADA */}
       <FiltrosDrawer
         isOpen={drawerFiltrosAberto}
         onClose={() => setDrawerFiltrosAberto(false)}
-        filtros={filtros}
-        onAplicarFiltros={handleAplicarFiltros}
-        onLimparFiltros={handleLimparFiltros}
+        abaAtiva={abaAtiva}
+        filtrosTramitacao={filtrosTramitacao}
+        filtrosPauta={filtrosPauta}
+        onAplicarFiltrosTramitacao={handleAplicarFiltrosTramitacao}
+        onLimparFiltrosTramitacao={handleLimparFiltrosTramitacao}
+        onAplicarFiltrosPauta={handleAplicarFiltrosPauta}
+        onLimparFiltrosPauta={handleLimparFiltrosPauta}
       />
 
       {/* 5. MODAL DE DETALHAMENTO DO PROCESSO */}
