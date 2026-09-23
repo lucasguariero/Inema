@@ -15,6 +15,13 @@
           "href": "/?rota=relatorios",
           "route": "relatorios",
           "htmlId": "menu-relatorios"
+        },
+        {
+          "id": "dashboard-gerencial",
+          "label": "Dashboard Gerencial",
+          "href": "/?rota=dashboard",
+          "route": "dashboard",
+          "htmlId": "menu-dashboard"
         }
       ]
     },

@@ -21,6 +21,7 @@ export function App() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
+    // Keep ?layout=antigo support if explicitly requested
     if (params.get('layout') === 'antigo' || params.get('v') === 'antigo') {
       window.location.replace('/relatorios-antigo.html');
       return;
@@ -29,11 +30,6 @@ export function App() {
     const rotaParam = params.get('rota') || params.get('route') || params.get('r');
     const fluxoParam = params.get('fluxo');
     const path = window.location.pathname;
-
-    if (!rotaParam && params.get('layout') !== 'novo' && !path.startsWith('/conceito') && !path.startsWith('/proposta') && (path === '/' || path === '/index.html')) {
-      window.location.replace('/relatorios-antigo.html');
-      return;
-    }
 
     if (rotaParam) {
       setActiveRoute(rotaParam);

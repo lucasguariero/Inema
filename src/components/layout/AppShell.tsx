@@ -12,6 +12,7 @@ interface AppShellProps {
 const ROUTE_INFO: Record<string, { module: string; page: string }> = {
  relatorios: { module: 'Regulação', page: 'Relatórios de Regulação' },
  regulacao: { module: 'Regulação', page: 'Relatórios de Regulação' },
+ dashboard: { module: 'Regulação', page: 'Dashboard Gerencial' },
  atendente: { module: 'Fiscalização', page: 'Denúncia Interna' },
  cidadao: { module: 'Fiscalização', page: 'Formulário Cidadão' },
  'emergencia-interna': { module: 'Fiscalização', page: 'Emergência Química' },
@@ -46,7 +47,7 @@ export const AppShell: React.FC<AppShellProps> = ({
  >
  <Menu className="w-5 h-5" />
  </button>
- <a href="/relatorios-antigo.html" className="flex items-center">
+ <a href="/?rota=relatorios" className="flex items-center">
  <img src="/logo.svg" alt="INEMA" className="h-9 w-auto object-contain" />
  </a>
  </div>
@@ -104,7 +105,7 @@ export const AppShell: React.FC<AppShellProps> = ({
  <main className="flex-1 lg:ml-[280px] p-4 sm:p-6 lg:p-8 space-y-6 overflow-y-auto min-h-[calc(100vh-60px)] bg-[#F8FAFC]">
  {/* Breadcrumbs Oficiais */}
  <nav className="flex items-center gap-2 text-xs text-slate-500 font-medium" aria-label="Breadcrumb">
- <a href="/relatorios-antigo.html" className="hover:text-slate-700">Início</a>
+ <a href="/?rota=relatorios" className="hover:text-slate-700">Início</a>
  <span>›</span>
  <span className="hover:text-slate-700">{currentRoute.module}</span>
  <span>›</span>
