@@ -14,6 +14,7 @@ import { AgendamentoVisitacaoPage } from '@/pages/uc/AgendamentoVisitacaoPage';
 import { AutorizacaoVisitacaoPage } from '@/pages/uc/AutorizacaoVisitacaoPage';
 import { AtividadesDidaticasPage } from '@/pages/uc/AtividadesDidaticasPage';
 import { PesquisaCientificaPage } from '@/pages/uc/PesquisaCientificaPage';
+import { RelatoriosRegulacaoPage } from '@/pages/regulacao/RelatoriosRegulacaoPage';
 
 export function App() {
   const [activeRoute, setActiveRoute] = useState('relatorios');
@@ -85,8 +86,12 @@ export function App() {
       case 'uc-pesquisa-cientifica':
         return <PesquisaCientificaPage onNavigate={handleNavigate} />;
       case 'relatorios':
-      default:
+      case 'regulacao':
+        return <RelatoriosRegulacaoPage />;
+      case 'dashboard':
         return <DashboardPage />;
+      default:
+        return <RelatoriosRegulacaoPage />;
     }
   };
 

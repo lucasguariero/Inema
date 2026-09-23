@@ -10,7 +10,8 @@ interface AppShellProps {
 }
 
 const ROUTE_INFO: Record<string, { module: string; page: string }> = {
- relatorios: { module: 'Regulação', page: 'Relatórios Gerenciais' },
+ relatorios: { module: 'Regulação', page: 'Relatórios de Regulação' },
+ regulacao: { module: 'Regulação', page: 'Relatórios de Regulação' },
  atendente: { module: 'Fiscalização', page: 'Denúncia Interna' },
  cidadao: { module: 'Fiscalização', page: 'Formulário Cidadão' },
  'emergencia-interna': { module: 'Fiscalização', page: 'Emergência Química' },

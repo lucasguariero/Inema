@@ -2,6 +2,23 @@
   "topDirectItems": [],
   "menuGroups": [
     {
+      "id": "regulacao",
+      "label": "Regulação",
+      "icon": "FileCheck",
+      "materialIcon": "assignment",
+      "defaultOpen": true,
+      "htmlId": "subRegulacao",
+      "items": [
+        {
+          "id": "relatorios",
+          "label": "Relatórios de Regulação",
+          "href": "/?rota=relatorios",
+          "route": "relatorios",
+          "htmlId": "menu-relatorios"
+        }
+      ]
+    },
+    {
       "id": "fiscalizacao",
       "label": "Fiscalização",
       "icon": "ShieldAlert",
