@@ -31,6 +31,17 @@ import {
   TramitacaoItem,
   FiltrosPauta
 } from '@/data/regulacaoMock';
+import {
+  GlaTableContainer,
+  GlaTable,
+  GlaTableHead,
+  GlaTh,
+  GlaTableBody,
+  GlaTableRow,
+  GlaTd,
+  GlaTableAction,
+  GlaPagination
+} from '@/components/common/GlaTable';
 
 interface AcompanhamentoPautaTabProps {
   filtros: FiltrosPauta;
@@ -276,9 +287,10 @@ export const AcompanhamentoPautaTab: React.FC<AcompanhamentoPautaTabProps> = ({
                   paddingAngle={2}
                   dataKey="value"
                 >
-                  {MOCK_SITUACOES_PAUTA.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
+                  {MOCK_SITUACOES_PAUTA.map((_, index) => {
+                    const colors = ['#0F4C3A', '#2D6A4F', '#52796F', '#64748B', '#94A3B8', '#CBD5E1'];
+                    return <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />;
+                  })}
                 </Pie>
                 <Tooltip
                   contentStyle={{
@@ -318,7 +330,7 @@ export const AcompanhamentoPautaTab: React.FC<AcompanhamentoPautaTabProps> = ({
                     boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
                   }}
                 />
-                <Bar dataKey="processos" name="Processos" fill="#0F4C3A" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="quantidade" name="Processos" fill="#0F4C3A" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -408,127 +420,102 @@ export const AcompanhamentoPautaTab: React.FC<AcompanhamentoPautaTabProps> = ({
         )}
       </div>
 
-      {/* 5. TABELA DENSA DA PAUTA OPERACIONAL */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-        {/* Cabeçalho da Tabela */}
-        <div className="px-5 py-3.5 bg-slate-50/80 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div>
-            <h3 className="text-xs font-bold text-slate-700">Processos na Pauta Ativa</h3>
-            <p className="text-[11px] text-slate-500 block">
-              Lista operacional com alerta de prazos e distribuição técnica.
-            </p>
-          </div>
-          <span className="text-xs font-bold text-slate-600">
-            Total: {pautaFiltrada.length} de 3.840 processos
-          </span>
-        </div>
-
-        {/* Tabela da Pauta */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-100/75 border-b border-slate-200 text-slate-600 font-semibold uppercase text-[10px] tracking-wider">
+      {/* 5. TABELA DENSA DA PAUTA OPERACIONAL (COMPONENTE CANÔNICO GLATABLE) */}
+      <GlaTableContainer
+        heading="Processos na Pauta Ativa"
+        description="Lista operacional com alerta de prazos e distribuição técnica."
+        badge={`Total: ${pautaFiltrada.length} de 3.840 processos`}
+        pagination={
+          <GlaPagination
+            currentCount={pautaFiltrada.length}
+            totalCount={3840}
+            page={1}
+            totalPages={1}
+            entityName="processos"
+          />
+        }
+      >
+        <GlaTable>
+          <GlaTableHead>
+            <tr>
+              <GlaTh>Processo</GlaTh>
+              <GlaTh>Interessado</GlaTh>
+              <GlaTh>Unidade atual</GlaTh>
+              <GlaTh>Técnico atual</GlaTh>
+              <GlaTh>Situação atual</GlaTh>
+              <GlaTh align="center">Atos</GlaTh>
+              <GlaTh>Última mov.</GlaTh>
+              <GlaTh align="center">Dias s/ mov.</GlaTh>
+              <GlaTh>Situação prazo</GlaTh>
+              <GlaTh align="right">Ação</GlaTh>
+            </tr>
+          </GlaTableHead>
+          <GlaTableBody>
+            {pautaFiltrada.length === 0 ? (
               <tr>
-                <th className="py-2.5 px-3.5">Processo</th>
-                <th className="py-2.5 px-3.5">Interessado</th>
-                <th className="py-2.5 px-3.5">Unidade atual</th>
-                <th className="py-2.5 px-3.5">Técnico atual</th>
-                <th className="py-2.5 px-3.5">Situação atual</th>
-                <th className="py-2.5 px-3.5 text-center">Atos</th>
-                <th className="py-2.5 px-3.5">Última mov.</th>
-                <th className="py-2.5 px-3.5 text-center">Dias s/ mov.</th>
-                <th className="py-2.5 px-3.5">Situação prazo</th>
-                <th className="py-2.5 px-3.5 text-right">Ação</th>
+                <td colSpan={10} className="py-8 text-center text-slate-500">
+                  Nenhum processo encontrado na pauta com os filtros selecionados.
+                </td>
               </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-200">
-              {pautaFiltrada.length === 0 ? (
-                <tr>
-                  <td colSpan={10} className="py-8 text-center text-slate-500">
-                    Nenhum processo encontrado na pauta com os filtros selecionados.
-                  </td>
-                </tr>
-              ) : (
-                pautaFiltrada.map((item) => (
-                  <tr key={item.id} className="hover:bg-slate-50/80 transition-colors">
-                    <td className="py-2.5 px-3.5 whitespace-nowrap font-bold text-slate-900">
-                      {item.processo}
-                    </td>
-                    <td className="py-2.5 px-3.5 text-slate-700 max-w-[190px] truncate" title={item.interessado}>
-                      {item.interessado}
-                    </td>
-                    <td className="py-2.5 px-3.5 whitespace-nowrap text-slate-600 font-medium">
-                      {item.unidadeAtual}
-                    </td>
-                    <td className="py-2.5 px-3.5 whitespace-nowrap">
-                      {item.tecnicoAtual === 'Sem atribuição técnica' ? (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">
-                          Sem atribuição técnica
-                        </span>
-                      ) : (
-                        <span className="font-semibold text-slate-800">{item.tecnicoAtual}</span>
-                      )}
-                    </td>
-                    <td className="py-2.5 px-3.5 whitespace-nowrap">
-                      {renderSituacaoBadge(item.situacaoAtual)}
-                    </td>
-                    <td className="py-2.5 px-3.5 text-center whitespace-nowrap">
-                      <span
-                        className="inline-flex items-center justify-center w-6 h-5 rounded text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200 cursor-help"
-                        title={item.atos.join(' • ')}
-                      >
-                        {item.qtdAtos}
+            ) : (
+              pautaFiltrada.map((item) => (
+                <GlaTableRow key={item.id}>
+                  <GlaTd className="whitespace-nowrap font-bold text-slate-900">
+                    {item.processo}
+                  </GlaTd>
+                  <GlaTd className="text-slate-700 max-w-[200px] truncate" title={item.interessado}>
+                    {item.interessado}
+                  </GlaTd>
+                  <GlaTd className="whitespace-nowrap text-slate-600 font-medium">
+                    {item.unidadeAtual}
+                  </GlaTd>
+                  <GlaTd className="whitespace-nowrap">
+                    {item.tecnicoAtual === 'Sem atribuição técnica' ? (
+                      <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">
+                        Sem atribuição técnica
                       </span>
-                    </td>
-                    <td className="py-2.5 px-3.5 whitespace-nowrap text-slate-600 font-medium">
-                      {item.ultimaMovimentacao}
-                    </td>
-                    <td className="py-2.5 px-3.5 text-center whitespace-nowrap">
-                      <span className={item.diasSemMovimentacao > 30 ? 'text-rose-700 font-bold' : 'text-slate-700 font-medium'}>
-                        {item.diasSemMovimentacao}d
-                      </span>
-                    </td>
-                    <td className="py-2.5 px-3.5 whitespace-nowrap">
-                      {renderBadgePrazo(item.situacaoPrazo)}
-                    </td>
-                    <td className="py-2.5 px-3.5 text-right whitespace-nowrap">
-                      <button
-                        onClick={() => handleDetalhar(item)}
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 shadow-2xs transition-colors cursor-pointer"
-                      >
-                        <Eye className="w-3.5 h-3.5 text-slate-600" />
-                        <span>Detalhar</span>
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+                    ) : (
+                      <span className="font-semibold text-slate-800">{item.tecnicoAtual}</span>
+                    )}
+                  </GlaTd>
+                  <GlaTd className="whitespace-nowrap">
+                    {renderSituacaoBadge(item.situacaoAtual)}
+                  </GlaTd>
+                  <GlaTd align="center" className="whitespace-nowrap">
+                    <span
+                      className="inline-flex items-center justify-center w-6 h-5 rounded text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200 cursor-help"
+                      title={item.atos.join(' • ')}
+                    >
+                      {item.qtdAtos}
+                    </span>
+                  </GlaTd>
+                  <GlaTd className="whitespace-nowrap text-slate-600 font-medium">
+                    {item.ultimaMovimentacao}
+                  </GlaTd>
+                  <GlaTd align="center" className="whitespace-nowrap">
+                    <span className={item.diasSemMovimentacao > 30 ? 'text-rose-700 font-bold' : 'text-slate-700 font-medium'}>
+                      {item.diasSemMovimentacao}d
+                    </span>
+                  </GlaTd>
+                  <GlaTd className="whitespace-nowrap">
+                    {renderBadgePrazo(item.situacaoPrazo)}
+                  </GlaTd>
+                  <GlaTd align="right" className="whitespace-nowrap">
+                    <GlaTableAction
+                      variant="outline"
+                      onClick={() => handleDetalhar(item)}
+                      icon={<Eye className="w-3.5 h-3.5 text-slate-600" />}
+                    >
+                      Detalhar
+                    </GlaTableAction>
+                  </GlaTd>
+                </GlaTableRow>
+              ))
+            )}
+          </GlaTableBody>
+        </GlaTable>
+      </GlaTableContainer>
 
-        {/* Paginação Padrão GLA */}
-        <div className="px-5 py-3 border-t border-slate-200 bg-slate-50/50 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600">
-          <div>
-            Exibindo <span className="font-bold text-slate-900">1</span>-<span className="font-bold text-slate-900">{pautaFiltrada.length}</span> de <span className="font-bold text-slate-900">3.840</span> processos
-          </div>
-          <div className="flex items-center gap-1.5">
-            <button
-              disabled
-              className="px-3 py-1.5 bg-white border border-slate-300 rounded-md font-semibold text-slate-400 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 shadow-2xs"
-            >
-              <ChevronLeft className="w-3.5 h-3.5" />
-              Anterior
-            </button>
-            <span className="px-2.5 py-1 bg-[#0F4C3A] text-white font-bold rounded-md text-xs">1</span>
-            <button
-              className="px-3 py-1.5 bg-white border border-slate-300 rounded-md font-semibold text-slate-700 hover:bg-slate-50 transition-colors flex items-center gap-1 shadow-2xs cursor-pointer"
-            >
-              Próxima
-              <ChevronRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };

@@ -66,7 +66,7 @@ export const RelatoriosRegulacaoPage: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6 font-sans">
+    <div className="w-full space-y-6 font-sans">
       {/* 1. CABEÇALHO OFICIAL GLA - FORA DE CARD, SÓBRIO E LIMPO */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>

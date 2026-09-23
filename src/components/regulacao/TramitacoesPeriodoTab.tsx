@@ -29,6 +29,16 @@ import {
   MOCK_ANUAL_DIRRE,
   LISTA_FAMILIAS
 } from '@/data/regulacaoMock';
+import {
+  GlaTable,
+  GlaTableHead,
+  GlaTh,
+  GlaTableBody,
+  GlaTableRow,
+  GlaTd,
+  GlaTableAction,
+  GlaPagination
+} from '@/components/common/GlaTable';
 
 interface TramitacoesPeriodoTabProps {
   filtros: FiltrosTramitacao;
@@ -477,24 +487,24 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
           </div>
         </div>
 
-        {/* MODO A: REGISTROS (PADRÃO) */}
+        {/* MODO A: REGISTROS (PADRÃO COM GLATABLE) */}
         {modoVisualizacao === 'registros' && (
           <div>
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead className="bg-slate-100/75 border-b border-slate-200 text-slate-600 font-semibold uppercase text-[10px] tracking-wider">
+              <GlaTable>
+                <GlaTableHead>
                   <tr>
-                    <th className="py-2.5 px-3.5">Data tramitação</th>
-                    <th className="py-2.5 px-3.5">Processo</th>
-                    <th className="py-2.5 px-3.5">Interessado</th>
-                    <th className="py-2.5 px-3.5">Unidade/coord.</th>
-                    <th className="py-2.5 px-3.5">Ato/atividade</th>
-                    <th className="py-2.5 px-3.5">Situação</th>
-                    <th className="py-2.5 px-3.5">Equipe técnica</th>
-                    <th className="py-2.5 px-3.5 text-right">Ação</th>
+                    <GlaTh>Data tramitação</GlaTh>
+                    <GlaTh>Processo</GlaTh>
+                    <GlaTh>Interessado</GlaTh>
+                    <GlaTh>Unidade/coord.</GlaTh>
+                    <GlaTh>Ato/atividade</GlaTh>
+                    <GlaTh>Situação</GlaTh>
+                    <GlaTh>Equipe técnica</GlaTh>
+                    <GlaTh align="right">Ação</GlaTh>
                   </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-200">
+                </GlaTableHead>
+                <GlaTableBody>
                   {tramitacoesFiltradas.length === 0 ? (
                     <tr>
                       <td colSpan={8} className="py-8 text-center text-slate-500">
@@ -503,70 +513,58 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
                     </tr>
                   ) : (
                     tramitacoesFiltradas.map((item) => (
-                      <tr key={item.id} className="hover:bg-slate-50/80 transition-colors">
-                        <td className="py-2.5 px-3.5 whitespace-nowrap text-slate-600 font-medium">
+                      <GlaTableRow key={item.id}>
+                        <GlaTd className="whitespace-nowrap text-slate-600 font-medium">
                           {item.dataTramitacao}
-                        </td>
-                        <td className="py-2.5 px-3.5 whitespace-nowrap text-slate-900 font-semibold">
+                        </GlaTd>
+                        <GlaTd className="whitespace-nowrap text-slate-900 font-semibold">
                           {item.processo}
-                        </td>
-                        <td className="py-2.5 px-3.5 text-slate-700 max-w-[200px] truncate" title={item.interessado}>
+                        </GlaTd>
+                        <GlaTd className="text-slate-700 max-w-[200px] truncate" title={item.interessado}>
                           {item.interessado}
-                        </td>
-                        <td className="py-2.5 px-3.5 whitespace-nowrap text-slate-600 font-medium">
+                        </GlaTd>
+                        <GlaTd className="whitespace-nowrap text-slate-600 font-medium">
                           {item.unidade}
-                        </td>
-                        <td className="py-2.5 px-3.5 text-slate-700 max-w-[180px] truncate font-medium" title={item.ato}>
+                        </GlaTd>
+                        <GlaTd className="text-slate-700 max-w-[180px] truncate font-medium" title={item.ato}>
                           {item.ato}
-                        </td>
-                        <td className="py-2.5 px-3.5 whitespace-nowrap">
+                        </GlaTd>
+                        <GlaTd className="whitespace-nowrap">
                           {renderSituacaoBadge(item.situacao)}
-                        </td>
-                        <td className="py-2.5 px-3.5 text-slate-600">
+                        </GlaTd>
+                        <GlaTd className="text-slate-600">
                           <span className="font-semibold text-slate-800">{item.liderEquipe}</span>
                           {item.membrosEquipe.length > 0 && (
                             <span className="text-slate-500 block text-[10px]">
                               +{item.membrosEquipe.length} participante(s)
                             </span>
                           )}
-                        </td>
-                        <td className="py-2.5 px-3.5 text-right whitespace-nowrap">
-                          <button
+                        </GlaTd>
+                        <GlaTd align="right" className="whitespace-nowrap">
+                          <GlaTableAction
+                            variant="outline"
                             onClick={() => onSelectProcesso(item)}
-                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 shadow-2xs transition-colors cursor-pointer"
+                            icon={<Eye className="w-3.5 h-3.5 text-slate-600" />}
                           >
-                            <Eye className="w-3.5 h-3.5 text-slate-600" />
-                            <span>Detalhar</span>
-                          </button>
-                        </td>
-                      </tr>
+                            Detalhar
+                          </GlaTableAction>
+                        </GlaTd>
+                      </GlaTableRow>
                     ))
                   )}
-                </tbody>
-              </table>
+                </GlaTableBody>
+              </GlaTable>
             </div>
 
             {/* Paginação Padrão GLA */}
-            <div className="px-5 py-3 border-t border-slate-200 bg-slate-50/50 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600">
-              <div>
-                Exibindo <span className="font-bold text-slate-900">1</span>-<span className="font-bold text-slate-900">{tramitacoesFiltradas.length}</span> de <span className="font-bold text-slate-900">4.182</span> registros
-              </div>
-              <div className="flex items-center gap-1.5">
-                <button
-                  disabled
-                  className="px-3 py-1.5 bg-white border border-slate-300 rounded-md font-semibold text-slate-400 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 shadow-2xs"
-                >
-                  <ChevronLeft className="w-3.5 h-3.5" />
-                  Anterior
-                </button>
-                <span className="px-2.5 py-1 bg-[#0F4C3A] text-white font-bold rounded-md text-xs">1</span>
-                <button
-                  className="px-3 py-1.5 bg-white border border-slate-300 rounded-md font-semibold text-slate-700 hover:bg-slate-50 transition-colors flex items-center gap-1 shadow-2xs cursor-pointer"
-                >
-                  Próxima
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
+            <div className="px-5 py-3 border-t border-slate-200 bg-slate-50/50">
+              <GlaPagination
+                currentCount={tramitacoesFiltradas.length}
+                totalCount={4182}
+                page={1}
+                totalPages={1}
+                entityName="registros"
+              />
             </div>
           </div>
         )}
@@ -594,40 +592,40 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead className="bg-slate-100/75 border-b border-slate-200 text-slate-600 font-semibold uppercase text-[10px] tracking-wider">
+              <GlaTable>
+                <GlaTableHead>
                   <tr>
-                    <th className="py-2.5 px-3.5">Técnico</th>
-                    <th className="py-2.5 px-3.5">Unidade de lotação</th>
-                    <th className="py-2.5 px-3.5 text-center">Processos com participação</th>
-                    <th className="py-2.5 px-3.5 text-center">Registros com participação</th>
-                    <th className="py-2.5 px-3.5 text-right">Ação</th>
+                    <GlaTh>Técnico</GlaTh>
+                    <GlaTh>Unidade de lotação</GlaTh>
+                    <GlaTh align="center">Processos com participação</GlaTh>
+                    <GlaTh align="center">Registros com participação</GlaTh>
+                    <GlaTh align="right">Ação</GlaTh>
                   </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-200">
+                </GlaTableHead>
+                <GlaTableBody>
                   {MOCK_ATIVIDADES_TECNICO.map((tec, idx) => (
-                    <tr key={idx} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="py-2.5 px-3.5 font-bold text-slate-900">{tec.tecnico}</td>
-                      <td className="py-2.5 px-3.5 text-slate-600 font-medium">{tec.unidade}</td>
-                      <td className="py-2.5 px-3.5 text-center font-bold text-slate-800">
+                    <GlaTableRow key={idx}>
+                      <GlaTd className="font-bold text-slate-900">{tec.tecnico}</GlaTd>
+                      <GlaTd className="text-slate-600 font-medium">{tec.unidade}</GlaTd>
+                      <GlaTd align="center" className="font-bold text-slate-800">
                         {tec.processosParticipacao}
-                      </td>
-                      <td className="py-2.5 px-3.5 text-center font-bold text-slate-800">
+                      </GlaTd>
+                      <GlaTd align="center" className="font-bold text-slate-800">
                         {tec.registrosParticipacao}
-                      </td>
-                      <td className="py-2.5 px-3.5 text-right">
-                        <button
+                      </GlaTd>
+                      <GlaTd align="right">
+                        <GlaTableAction
+                          variant="outline"
                           onClick={() => setModoVisualizacao('registros')}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 shadow-2xs transition-colors cursor-pointer"
+                          icon={<ChevronRight className="w-3.5 h-3.5 text-slate-500" />}
                         >
-                          <span>Ver registros</span>
-                          <ChevronRight className="w-3.5 h-3.5 text-slate-500" />
-                        </button>
-                      </td>
-                    </tr>
+                          Ver registros
+                        </GlaTableAction>
+                      </GlaTd>
+                    </GlaTableRow>
                   ))}
-                </tbody>
-              </table>
+                </GlaTableBody>
+              </GlaTable>
             </div>
           </div>
         )}
@@ -760,37 +758,37 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead className="bg-slate-100/75 border-b border-slate-200 text-slate-600 font-semibold uppercase text-[10px] tracking-wider">
+              <GlaTable>
+                <GlaTableHead>
                   <tr>
-                    <th className="py-2.5 px-3.5">Família</th>
-                    <th className="py-2.5 px-3.5">Ato/atividade</th>
-                    <th className="py-2.5 px-3.5">Situação</th>
-                    <th className="py-2.5 px-3.5 text-center">Registros totais</th>
-                    <th className="py-2.5 px-3.5 text-center">Concluídos / Publicados</th>
-                    <th className="py-2.5 px-3.5 text-right">Ação</th>
+                    <GlaTh>Família</GlaTh>
+                    <GlaTh>Ato/atividade</GlaTh>
+                    <GlaTh>Situação</GlaTh>
+                    <GlaTh align="center">Registros totais</GlaTh>
+                    <GlaTh align="center">Concluídos / Publicados</GlaTh>
+                    <GlaTh align="right">Ação</GlaTh>
                   </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-200">
+                </GlaTableHead>
+                <GlaTableBody>
                   {dadosAnualDirre.map((item, idx) => (
-                    <tr key={idx} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="py-2.5 px-3.5 text-slate-600 font-medium">{item.familia}</td>
-                      <td className="py-2.5 px-3.5 font-bold text-slate-900">{item.ato}</td>
-                      <td className="py-2.5 px-3.5">{renderSituacaoBadge(item.situacao)}</td>
-                      <td className="py-2.5 px-3.5 text-center font-bold text-slate-800">{item.registros}</td>
-                      <td className="py-2.5 px-3.5 text-center font-bold text-emerald-700">{item.concluidosPublicados}</td>
-                      <td className="py-2.5 px-3.5 text-right">
-                        <button
+                    <GlaTableRow key={idx}>
+                      <GlaTd className="text-slate-600 font-medium">{item.familia}</GlaTd>
+                      <GlaTd className="font-bold text-slate-900">{item.ato}</GlaTd>
+                      <GlaTd>{renderSituacaoBadge(item.situacao)}</GlaTd>
+                      <GlaTd align="center" className="font-bold text-slate-800">{item.registros}</GlaTd>
+                      <GlaTd align="center" className="font-bold text-emerald-700">{item.concluidosPublicados}</GlaTd>
+                      <GlaTd align="right">
+                        <GlaTableAction
+                          variant="outline"
                           onClick={() => setModoVisualizacao('registros')}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 shadow-2xs transition-colors cursor-pointer"
                         >
-                          <span>Detalhar</span>
-                        </button>
-                      </td>
-                    </tr>
+                          Detalhar
+                        </GlaTableAction>
+                      </GlaTd>
+                    </GlaTableRow>
                   ))}
-                </tbody>
-              </table>
+                </GlaTableBody>
+              </GlaTable>
             </div>
           </div>
         )}
