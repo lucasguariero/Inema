@@ -15,6 +15,8 @@ import { AutorizacaoVisitacaoPage } from '@/pages/uc/AutorizacaoVisitacaoPage';
 import { AtividadesDidaticasPage } from '@/pages/uc/AtividadesDidaticasPage';
 import { PesquisaCientificaPage } from '@/pages/uc/PesquisaCientificaPage';
 import { RelatoriosRegulacaoPage } from '@/pages/regulacao/RelatoriosRegulacaoPage';
+import { SeiaHomePage } from '@/pages/hibrido/SeiaHomePage';
+import { SeiaDaesPage } from '@/pages/hibrido/SeiaDaesPage';
 
 export function App() {
   const [activeRoute, setActiveRoute] = useState('relatorios');
@@ -28,10 +30,13 @@ export function App() {
     }
 
     const rotaParam = params.get('rota') || params.get('route') || params.get('r');
+    const vParam = params.get('v');
     const fluxoParam = params.get('fluxo');
     const path = window.location.pathname;
 
-    if (rotaParam) {
+    if (vParam === 'hibrido' || rotaParam === 'hibrido' || rotaParam === 'seia') {
+      setActiveRoute('seia-home');
+    } else if (rotaParam) {
       setActiveRoute(rotaParam);
     } else if (fluxoParam === 'externo') {
       setActiveRoute('cidadao');
@@ -57,6 +62,11 @@ export function App() {
 
   const renderContent = () => {
     switch (activeRoute) {
+      case 'seia-home':
+      case 'hibrido':
+        return <SeiaHomePage onNavigate={handleNavigate} />;
+      case 'seia-daes':
+        return <SeiaDaesPage onNavigate={handleNavigate} />;
       case 'atendente':
         return <DenunciaInternaPage onNavigate={handleNavigate} />;
       case 'cidadao':

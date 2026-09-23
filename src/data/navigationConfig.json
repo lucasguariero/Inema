@@ -2,6 +2,32 @@
   "topDirectItems": [],
   "menuGroups": [
     {
+      "id": "seia-hibrido",
+      "label": "SEIA Plataforma (Híbrido)",
+      "icon": "Layers",
+      "materialIcon": "dashboard_customize",
+      "defaultOpen": true,
+      "htmlId": "subSeiaHibrido",
+      "items": [
+        {
+          "id": "seia-home",
+          "label": "Central SEIA (Home)",
+          "href": "/?rota=seia-home",
+          "route": "seia-home",
+          "badge": "NOVO",
+          "htmlId": "menu-seia-home"
+        },
+        {
+          "id": "seia-daes",
+          "label": "Gestão de DAEs",
+          "href": "/?rota=seia-daes",
+          "route": "seia-daes",
+          "badge": "SEFAZ",
+          "htmlId": "menu-seia-daes"
+        }
+      ]
+    },
+    {
       "id": "regulacao",
       "label": "Regulação",
       "icon": "FileCheck",

@@ -10,6 +10,9 @@ interface AppShellProps {
 }
 
 const ROUTE_INFO: Record<string, { module: string; page: string }> = {
+ 'seia-home': { module: 'SEIA Plataforma', page: 'Central de Gestão e Prazos' },
+ 'seia-daes': { module: 'SEIA Plataforma', page: 'Gestão de DAEs' },
+ hibrido: { module: 'SEIA Plataforma', page: 'Central de Gestão e Prazos' },
  relatorios: { module: 'Regulação', page: 'Relatórios de Regulação' },
  regulacao: { module: 'Regulação', page: 'Relatórios de Regulação' },
  dashboard: { module: 'Regulação', page: 'Dashboard Gerencial' },

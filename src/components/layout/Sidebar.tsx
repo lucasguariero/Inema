@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   FileCheck,
   Trees,
+  Layers,
   ChevronDown,
   Sparkles,
 } from 'lucide-react';
@@ -18,8 +19,10 @@ interface SidebarProps {
 const ICON_MAP: Record<string, React.ElementType> = {
   ShieldAlert: FileCheck,
   Trees: Trees,
+  Layers: Layers,
   fact_check: FileCheck,
   forest: Trees,
+  dashboard_customize: Layers,
 };
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -29,6 +32,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onNavigate,
 }) => {
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
+    'seia-hibrido': true,
+    regulacao: true,
     fiscalizacao: true,
     'unidades-conservacao': true,
   });
