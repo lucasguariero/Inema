@@ -19,7 +19,7 @@ import { SeiaHomePage } from '@/pages/hibrido/SeiaHomePage';
 import { SeiaDaesPage } from '@/pages/hibrido/SeiaDaesPage';
 
 export function App() {
-  const [activeRoute, setActiveRoute] = useState('relatorios');
+  const [activeRoute, setActiveRoute] = useState('seia-home');
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -97,7 +97,7 @@ export function App() {
       case 'dashboard':
         return <DashboardPage />;
       default:
-        return <RelatoriosRegulacaoPage />;
+        return <SeiaHomePage onNavigate={handleNavigate} />;
     }
   };
 
