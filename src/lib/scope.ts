@@ -10,13 +10,15 @@ export function getCurrentScope(): AnalystScope {
   if (typeof window === 'undefined') return 'todas';
 
   const host = window.location.hostname.toLowerCase();
+  const path = window.location.pathname.toLowerCase();
   const params = new URLSearchParams(window.location.search);
-  const paramScope = (params.get('escopo') || params.get('analista') || '').toLowerCase();
+  const paramScope = (params.get('escopo') || params.get('modulo') || params.get('rota') || params.get('route') || '').toLowerCase();
 
   if (
-    paramScope === 'maria' ||
-    paramScope === 'naiane' ||
     paramScope === 'regulacao' ||
+    paramScope === 'relatorios' ||
+    path.startsWith('/regulacao') ||
+    path.startsWith('/relatorios') ||
     host.includes('inema-regulacao') ||
     host.includes('regulacao')
   ) {
@@ -24,15 +26,12 @@ export function getCurrentScope(): AnalystScope {
   }
 
   if (
-    paramScope === 'herickles' ||
     paramScope === 'fiscalizacao' ||
+    path.startsWith('/fiscalizacao') ||
     host.includes('inema-fiscalizacao')
   ) {
     return 'fiscalizacao';
   }
-
-  if (paramScope === 'thays') return 'thays';
-  if (paramScope === 'maria') return 'maria';
 
   return 'todas';
 }
