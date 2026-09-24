@@ -52,6 +52,38 @@ Com isso, considero este card resolvido / [ou parecer correspondente].
 Fico à disposição se precisar de mais detalhes de qualquer um desses pontos.
 ```
 
+# 🎯 Padrão Obrigatório de Entregas por Analista (Naiane, Herickles, Thays, Maria)
+
+Trabalhamos com demandas de 4 analistas principais: **Naiane, Herickles, Thays e Maria**. Toda entrega de protótipo deve seguir rigorosamente as seguintes diretrizes:
+
+1. **Padrão Visual Institucional**: Todas as solicitações dos analistas levam **estritamente o padrão visual do sistema legado GLA / Filament** (`#0F4C3A`, verde institucional, tabelas canônicas e abas de contexto).
+2. **Link Separado por Solicitação / Task**: Cada entrega concluída recebe um **link exclusivo e dedicado no Vercel** (ex: `inema-regulacao.vercel.app`, `inema-uc.vercel.app`, etc.).
+3. **Sidebar Estritamente Focada (Zero Ruído)**:
+   - Na sidebar do link entregue ao analista, deve constar **SOMENTE as telas executadas naquela task específica**.
+   - É terminantemente proibido exibir na sidebar telas de solicitações anteriores ou de outros analistas (a não ser que o usuário peça explicitamente). O analista precisa desse link limpo para apresentar e validar exclusivamente o seu escopo.
+4. **Link Principal Consolidado (`https://inema.acto.com.br`)**:
+   - Mantemos o link principal onde a sidebar reúne **todos os módulos e telas já desenvolvidos**, funcionando como o portal mestre integrado da plataforma.
+5. **Imutabilidade das Entregas Anteriores**:
+   - Links já enviados para solicitações passadas continuam no ar, intocados e congelados no estado em que foram aprovados. Nenhuma nova task pode sobrescrever ou desconfigurar os links anteriores.
+
+---
+
+# 🎨 Diretriz Dual-Track: Solicitações dos Analistas vs Redesign do Inema
+
+Temos duas trilhas de desenvolvimento e apresentação completamente distintas que NUNCA se misturam:
+
+### 1. Trilha de Solicitações dos Analistas (Naiane, Herickles, Thays, Maria)
+- **Padrão Visual**: Sistema Legado GLA / Filament (`#0F4C3A`, verde institucional, tabelas canônicas e abas contextuais).
+- **Links Separados por Task**: Cada solicitação recebe um link exclusivo e isolado (ex.: `https://inema.acto.com.br/?escopo=regulacao` ou `inema-regulacao.vercel.app`).
+- **Sidebar Estritamente Focada**: Exibe **SOMENTE** as telas daquela solicitação específica para apresentação limpa ao analista e gestores.
+- **Link Principal Consolidado**: `https://inema.acto.com.br/` reúne todos os módulos já finalizados para visão corporativa integrada.
+
+### 2. Trilha de Solicitações sobre o Redesign do Inema
+- **Padrão Visual**: Padrão **shadcn adaptado para Filament** (estilo moderno, paleta slate/azul, dark mode, cartões refinados, métricas modernas e microinterações).
+- **Link Separado e Exclusivo**: Mantido em link próprio dedicado exclusivamente a essa frente (ex.: `https://inema-lucas.vercel.app/`).
+- **Sidebar do Redesign**: Focada nas telas refinadas dessa proposta de redesign (módulos de Fiscalização e Relatórios Gerenciais refinados), consistente em todas as páginas dessa versão.
+- **Isolamento Total**: Alterações das solicitações dos analistas não alteram o link do redesign shadcn, e alterações de redesign não afetam as telas legadas dos analistas.
+
 ---
 
 # 🚀 Padrão Oficial de Prototipagem GLA / INEMA (Super Prompt & Regras de Ouro)
