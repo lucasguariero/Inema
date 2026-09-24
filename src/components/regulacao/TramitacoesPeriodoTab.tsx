@@ -335,10 +335,6 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
             </button>
           )}
         </div>
-
-        <div className="text-xs font-mono text-slate-400 dark:text-slate-500 hidden sm:block">
-          SEIA / DIRRE • Base 2024
-        </div>
       </div>
 
       {/* 2. CARDS DE RESUMO (KPIs) - PADRÃO GLA LEGADO (fi-wi-stats-overview) */}
@@ -550,10 +546,6 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
               </button>
             </div>
 
-            <Badge variant="outline" className="text-xs font-mono">
-              {tramitacoesFiltradas.length} processos
-            </Badge>
-
             {/* Ação Primária da Tabela: Exportar Excel */}
             {statusExportacao === 'disponivel' && (
               <button
@@ -704,23 +696,6 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
                   </button>
                 </div>
               </div>
-
-              {contextoTecnico === 'nout' && (
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setSimularMediaIndisponivel(!simularMediaIndisponivel)}
-                    className={cn(
-                      'text-[11px] font-semibold px-2.5 py-1 rounded-md border transition-colors cursor-pointer',
-                      simularMediaIndisponivel
-                        ? 'bg-amber-100 text-amber-900 border-amber-300'
-                        : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50'
-                    )}
-                  >
-                    {simularMediaIndisponivel ? '✓ Simulação: Cobertura não confirmada' : 'Testar: Cobertura não confirmada'}
-                  </button>
-                </div>
-              )}
             </div>
 
             {/* Bloco de médias de processos (Exclusivo NOUT) */}
@@ -737,25 +712,25 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
                 </div>
               ) : (
                 <div className="space-y-2">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 p-4 bg-slate-50/80 rounded-xl border border-slate-200">
-                    <div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div className="rounded-xl bg-white p-4 border border-slate-200 shadow-xs ring-1 ring-slate-950/5">
                       <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Média Mensal</div>
-                      <div className="text-xl font-bold text-slate-800 mt-0.5">18,4 processos/mês</div>
-                      <div className="text-[11px] text-slate-500 mt-0.5">
+                      <div className="text-xl font-bold text-slate-800 mt-1">18,4 <span className="text-xs font-normal text-slate-500">processos/mês</span></div>
+                      <div className="text-[11px] text-slate-500 mt-1">
                         Jan/2026 a Jun/2026 (6 meses completos considerados)
                       </div>
                     </div>
-                    <div>
+                    <div className="rounded-xl bg-white p-4 border border-slate-200 shadow-xs ring-1 ring-slate-950/5">
                       <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Média Trimestral</div>
-                      <div className="text-xl font-bold text-slate-800 mt-0.5">54,2 processos/trimestre</div>
-                      <div className="text-[11px] text-slate-500 mt-0.5">
+                      <div className="text-xl font-bold text-slate-800 mt-1">54,2 <span className="text-xs font-normal text-slate-500">processos/trimestre</span></div>
+                      <div className="text-[11px] text-slate-500 mt-1">
                         1º e 2º Trimestres 2026 (2 trimestres completos)
                       </div>
                     </div>
-                    <div>
+                    <div className="rounded-xl bg-white p-4 border border-slate-200 shadow-xs ring-1 ring-slate-950/5">
                       <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Média Semestral</div>
-                      <div className="text-xl font-bold text-slate-800 mt-0.5">108,1 processos/semestre</div>
-                      <div className="text-[11px] text-slate-500 mt-0.5">
+                      <div className="text-xl font-bold text-slate-800 mt-1">108,1 <span className="text-xs font-normal text-slate-500">processos/semestre</span></div>
+                      <div className="text-[11px] text-slate-500 mt-1">
                         1º Semestre 2026 (1 semestre completo)
                       </div>
                     </div>
