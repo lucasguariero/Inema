@@ -20,7 +20,7 @@ export const GlaBadge: React.FC<GlaBadgeProps> = ({
   children,
   ...props
 }) => {
-  const baseStyles = 'inline-flex items-center font-semibold rounded-md border tracking-tight select-none';
+  const baseStyles = 'inline-flex items-center font-semibold rounded-full border tracking-tight select-none';
 
   const variants: Record<GlaBadgeVariant, string> = {
     primary: 'bg-[#0F4C3A]/10 text-[#0F4C3A] border-[#0F4C3A]/25 dark:bg-[#0F4C3A]/20 dark:text-emerald-300 dark:border-[#0F4C3A]/40',
@@ -39,9 +39,9 @@ export const GlaBadge: React.FC<GlaBadgeProps> = ({
   };
 
   const sizes: Record<GlaBadgeSize, string> = {
-    xs: 'text-[10px] px-1.5 py-0.2 gap-1',
-    sm: 'text-[11px] px-2 py-0.5 gap-1.5',
-    md: 'text-xs px-2.5 py-1 gap-1.5',
+    xs: 'text-[10px] px-2 py-0.5 gap-1',
+    sm: 'text-[11px] px-2.5 py-0.5 gap-1.5',
+    md: 'text-xs px-3 py-1 gap-1.5',
   };
 
   return (

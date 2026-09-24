@@ -17,6 +17,7 @@ import {
   GlaCardHeader,
   GlaCardTitle,
   GlaCardDescription,
+  GlaCardContent,
   GlaButton,
   GlaBadge,
   GlaInput,
@@ -231,28 +232,9 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
       {/* 1. CABEÇALHO DO FORMULÁRIO (SEM BREADCRUMB DUPLICADO + AÇÕES DIRETAS NO TOPO) */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-1">
         <div>
-          <div className="flex flex-wrap items-center gap-2.5">
-            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
-              {isEdicao ? uc.nome : 'Nova Unidade de Conservação'}
-            </h1>
-            {isEdicao ? (
-              <>
-                <GlaBadge variant="neutral" size="sm" mono>
-                  {uc.codigoCeu}
-                </GlaBadge>
-                <GlaBadge variant="success" size="sm" dot>
-                  Cadastrada
-                </GlaBadge>
-              </>
-            ) : (
-              <GlaBadge variant="warning" size="sm" dot>
-                Em Preenchimento
-              </GlaBadge>
-            )}
-            <GlaBadge variant="primary" size="sm">
-              CEUC / INEMA
-            </GlaBadge>
-          </div>
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
+            {isEdicao ? uc.nome : 'Nova Unidade de Conservação'}
+          </h1>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
             {isEdicao
               ? 'Edição dos parâmetros cadastrais, espaciais e normativos da Unidade de Conservação.'
@@ -305,20 +287,15 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
           {/* SEÇÃO 1: DADOS BÁSICOS E ENQUADRAMENTO LEGAL */}
           <GlaCard className="border-slate-200 dark:border-slate-800 shadow-sm">
             <GlaCardHeader>
-              <div className="flex items-center gap-2">
-                <GlaCardTitle className="text-base font-bold text-slate-900 dark:text-white">
-                  Dados Básicos e Enquadramento Legal
-                </GlaCardTitle>
-                <GlaBadge variant="neutral" size="xs">
-                  Obrigatório
-                </GlaBadge>
-              </div>
+              <GlaCardTitle className="text-base font-bold text-slate-900 dark:text-white">
+                Dados Básicos e Enquadramento Legal
+              </GlaCardTitle>
               <GlaCardDescription>
                 Identificação institucional, siglas oficiais, datas de criação e atos normativos no SEUC/SNUC.
               </GlaCardDescription>
             </GlaCardHeader>
 
-            <div className="space-y-5 pt-2">
+            <GlaCardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* Nome da UC */}
                 <div className="md:col-span-2">
@@ -539,26 +516,21 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
                   </div>
                 </div>
               </div>
-            </div>
+            </GlaCardContent>
           </GlaCard>
 
           {/* SEÇÃO 2: INFORMAÇÕES GEOGRÁFICAS E TERRITORIAIS */}
           <GlaCard className="border-slate-200 dark:border-slate-800 shadow-sm">
             <GlaCardHeader>
-              <div className="flex items-center gap-2">
-                <GlaCardTitle className="text-base font-bold text-slate-900 dark:text-white">
-                  Informações Geográficas e Territoriais
-                </GlaCardTitle>
-                <GlaBadge variant="neutral" size="xs">
-                  Delimitação & Espaço
-                </GlaBadge>
-              </div>
+              <GlaCardTitle className="text-base font-bold text-slate-900 dark:text-white">
+                Informações Geográficas e Territoriais
+              </GlaCardTitle>
               <GlaCardDescription>
                 Área declarada em hectares, biomas incidentes, bacias hidrográficas (RPGA), população e situação fundiária.
               </GlaCardDescription>
             </GlaCardHeader>
 
-            <div className="space-y-5 pt-2">
+            <GlaCardContent className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {/* Área Total Declarada */}
                 <div>
@@ -649,7 +621,7 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
                   {municipios.map((mun) => (
                     <span
                       key={mun}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-600 max-w-full truncate"
+                      className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-600 max-w-full truncate"
                     >
                       <MapPin className="w-3 h-3 text-slate-500 shrink-0" />
                       <span className="truncate">{mun}</span>
@@ -677,12 +649,12 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
                           handleAdicionarMunicipio();
                         }
                       }}
-                      className="text-xs px-2.5 py-1 rounded border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 focus:outline-none focus:ring-1 focus:ring-[#0F4C3A]"
+                      className="text-xs px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 focus:outline-none focus:ring-1 focus:ring-[#0F4C3A]"
                     />
                     <button
                       type="button"
                       onClick={handleAdicionarMunicipio}
-                      className="p-1 rounded bg-slate-100 dark:bg-slate-700 text-slate-600 hover:text-slate-900 cursor-pointer"
+                      className="p-1 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 hover:text-slate-900 cursor-pointer"
                       title="Adicionar"
                     >
                       <Plus className="w-3.5 h-3.5" />
@@ -717,7 +689,7 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
                   />
                 </div>
               </div>
-            </div>
+            </GlaCardContent>
           </GlaCard>
         </div>
       ) : (

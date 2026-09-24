@@ -216,14 +216,9 @@ export const CeucConsultaPage: React.FC = () => {
       <div className="space-y-1">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
-            <div className="flex items-center gap-2.5">
-              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
-                Cadastro Estadual de Unidades de Conservação
-              </h1>
-              <GlaBadge variant="primary" size="sm">
-                CEUC / INEMA
-              </GlaBadge>
-            </div>
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+              Cadastro Estadual de Unidades de Conservação
+            </h1>
             <p className="text-xs text-slate-500 mt-1">
               Registro centralizado e base cadastral unificada de parâmetros para os módulos integrados do SEIA.
             </p>

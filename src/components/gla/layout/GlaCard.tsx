@@ -37,7 +37,7 @@ export const GlaCardHeader: React.FC<GlaCardHeaderProps> = ({
   return (
     <div
       className={cn(
-        'px-5 py-4 border-b border-slate-100 dark:border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3',
+        'px-6 py-5 sm:px-8 border-b border-slate-100 dark:border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3',
         className
       )}
       {...props}
@@ -81,7 +81,7 @@ export const GlaCardContent: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
   ...props
 }) => {
   return (
-    <div className={cn('p-5', className)} {...props}>
+    <div className={cn('p-6 sm:p-8', className)} {...props}>
       {children}
     </div>
   );
