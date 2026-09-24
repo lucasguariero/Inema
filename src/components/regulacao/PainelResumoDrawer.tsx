@@ -207,7 +207,9 @@ export const PainelResumoDrawer: React.FC<PainelResumoDrawerProps> = ({
 
                   <div className="pt-1">
                     <span className="text-[10px] text-slate-500 uppercase tracking-wider block">Atos Vinculados ({pauta.qtdAtos})</span>
-                    <span className="text-slate-700 block mt-0.5 font-medium">{pauta.atos.join(', ')}</span>
+                    <span className="text-slate-700 block mt-0.5 font-medium">
+                      {Array.isArray(pauta.atos) ? pauta.atos.join(', ') : 'Ato(s) em tramitação'}
+                    </span>
                   </div>
 
                   <div className="pt-1 text-[11px] text-slate-500 flex items-center gap-1.5">

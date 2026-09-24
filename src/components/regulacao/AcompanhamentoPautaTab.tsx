@@ -130,26 +130,7 @@ export const AcompanhamentoPautaTab: React.FC<AcompanhamentoPautaTabProps> = ({
   };
 
   const handleDetalhar = (pauta: PautaItem) => {
-    const itemAdaptado: TramitacaoItem = {
-      id: pauta.id,
-      processo: pauta.processo,
-      dataTramitacao: pauta.ultimaMovimentacao + ' 10:00',
-      interessado: pauta.interessado,
-      unidade: pauta.unidadeAtual,
-      ato: pauta.atos.join(', '),
-      familiaAto: 'Regulação Geral',
-      situacao: pauta.situacaoAtual as any,
-      municipio: pauta.municipio,
-      tipologia: pauta.tipologia,
-      liderEquipe: pauta.liderEquipe,
-      membrosEquipe: pauta.membrosEquipe,
-      ano: 2026,
-      diasSemMovimentacao: pauta.diasSemMovimentacao,
-      prazoExcedido: pauta.situacaoPrazo === 'Prazo Excedido',
-      resumoDespacho: pauta.observacoes,
-      etapaAtual: 'Análise de Pauta Regulatória'
-    };
-    onSelectProcesso(itemAdaptado);
+    onSelectProcesso(pauta as any);
   };
 
   const renderBadgePrazo = (prazo: string) => {
