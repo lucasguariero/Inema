@@ -26,10 +26,21 @@ import {
   GlaModal
 } from '@/components/gla';
 import { MOCK_UNIDADES_CONSERVACAO, UcItem } from '@/data/ceucMock';
+import { CeucFormularioPage } from './CeucFormularioPage';
 
 export const CeucConsultaPage: React.FC = () => {
   // Lista de UCs
   const [unidades, setUnidades] = useState<UcItem[]>(MOCK_UNIDADES_CONSERVACAO);
+
+  // Modo de visualização: 'lista' (TL001) ou 'formulario' (TL002)
+  const [modoVisualizacao, setModoVisualizacao] = useState<'lista' | 'formulario'>(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('acao') === 'novo' || params.get('acao') === 'cadastro') return 'formulario';
+    }
+    return 'lista';
+  });
+  const [ucEmEdicao, setUcEmEdicao] = useState<UcItem | null>(null);
 
   // Filtros de pesquisa
   const [buscaNome, setBuscaNome] = useState('');
@@ -43,9 +54,8 @@ export const CeucConsultaPage: React.FC = () => {
   const [statusExportacao, setStatusExportacao] = useState<'disponivel' | 'gerando' | 'sucesso'>('disponivel');
   const [toastNotificacao, setToastNotificacao] = useState<string | null>(null);
 
-  // Estados de modal de visualização e edição (placeholder para Fases seguintes)
+  // Modal de visualização de detalhes
   const [ucVisualizar, setUcVisualizar] = useState<UcItem | null>(null);
-  const [ucEditar, setUcEditar] = useState<UcItem | null>(null);
 
   // Opções para comboboxes baseadas nos dados
   const categorias = useMemo(() => {
@@ -138,13 +148,65 @@ export const CeucConsultaPage: React.FC = () => {
     }, 1200);
   };
 
+  if (modoVisualizacao === 'formulario') {
+    return (
+      <CeucFormularioPage
+        uc={ucEmEdicao}
+        onVoltar={() => {
+          setModoVisualizacao('lista');
+          setUcEmEdicao(null);
+        }}
+        onSalvar={(dados, mensagem) => {
+          if (ucEmEdicao) {
+            setUnidades((prev) =>
+              prev.map((item) =>
+                item.id === ucEmEdicao.id ? ({ ...item, ...dados } as UcItem) : item
+              )
+            );
+          } else {
+            const novoId = `uc-${String(unidades.length + 1).padStart(3, '0')}`;
+            const novoCodigo = `BA-0${30 + unidades.length}-PI`;
+            const novaUc: UcItem = {
+              id: novoId,
+              codigoCeu: novoCodigo,
+              nome: dados.nome || 'Nova Unidade de Conservação',
+              sigla: dados.sigla || '',
+              categoria: dados.categoria || 'Parque Estadual',
+              grupoManejo: dados.grupoManejo || 'Proteção Integral',
+              municipio: dados.municipio || 'Salvador',
+              municipiosAbrangidos: dados.municipiosAbrangidos || [dados.municipio || 'Salvador'],
+              gestor: 'Técnico Responsável INEMA',
+              statusPmuc: 'Pendente',
+              statusConselho: 'Em Formação',
+              elegivelVisitacao: false,
+              bioma: dados.bioma || 'Caatinga',
+              areaHectares: dados.areaHectares || 1000,
+              rpga: dados.rpga || 'RPGA do Rio Paraguaçu',
+              territorioIdentidade: dados.territorioIdentidade || 'Metropolitana de Salvador',
+              percentualRegularizado: dados.percentualRegularizado || 0,
+              descricaoSituacaoFundiaria: dados.descricaoSituacaoFundiaria || '',
+              normaCriacaoArquivo: dados.normaCriacaoArquivo,
+              normaAlteracaoArquivo: dados.normaAlteracaoArquivo,
+              dataCriacao: dados.dataCriacao || new Date().toISOString().split('T')[0],
+              dataAtualizacao: new Date().toISOString().split('T')[0]
+            };
+            setUnidades((prev) => [novaUc, ...prev]);
+          }
+          setModoVisualizacao('lista');
+          setUcEmEdicao(null);
+          setToastNotificacao(mensagem);
+        }}
+      />
+    );
+  }
+
   return (
     <div className="w-full space-y-6 font-sans">
       {/* Toast Notificação de Sucesso */}
       {toastNotificacao && (
         <GlaNotification
           type="success"
-          title="Exportação concluída"
+          title="Operação Realizada"
           message={toastNotificacao}
           onClose={() => setToastNotificacao(null)}
         />
@@ -192,7 +254,10 @@ export const CeucConsultaPage: React.FC = () => {
                 variant="primary"
                 size="sm"
                 leftIcon={<Plus className="w-3.5 h-3.5" />}
-                onClick={() => alert('O formulário completo de cadastro (Fases seguintes) será aberto.')}
+                onClick={() => {
+                  setUcEmEdicao(null);
+                  setModoVisualizacao('formulario');
+                }}
               >
                 Nova UC
               </GlaButton>
@@ -420,7 +485,10 @@ export const CeucConsultaPage: React.FC = () => {
                           variant="outline"
                           size="xs"
                           leftIcon={<Edit2 className="w-3 h-3 text-slate-500" />}
-                          onClick={() => setUcEditar(uc)}
+                          onClick={() => {
+                            setUcEmEdicao(uc);
+                            setModoVisualizacao('formulario');
+                          }}
                           title="Editar cadastro da UC"
                         >
                           Editar
@@ -492,48 +560,6 @@ export const CeucConsultaPage: React.FC = () => {
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Elegibilidade para Visitação</span>
               <span className="text-xs font-semibold text-slate-800">{ucVisualizar.elegivelVisitacao ? 'Sim (Disponível no Módulo de Visitação)' : 'Não (Restrito)'}</span>
             </div>
-          </div>
-        </GlaModal>
-      )}
-
-      {/* MODAL DE EDIÇÃO (PLACEHOLDER INFORMATIVO FASE 1) */}
-      {ucEditar && (
-        <GlaModal
-          isOpen={!!ucEditar}
-          onClose={() => setUcEditar(null)}
-          title={`Editar Cadastro: ${ucEditar.nome}`}
-          description="Formulário completo do CEUC (DOR036) com dados geográficos, atos e equipe técnica."
-          size="md"
-          footer={
-            <div className="flex items-center gap-2">
-              <GlaButton variant="outline" size="sm" onClick={() => setUcEditar(null)}>
-                Cancelar
-              </GlaButton>
-              <GlaButton
-                variant="primary"
-                size="sm"
-                onClick={() => {
-                  setUcEditar(null);
-                  setToastNotificacao(`Dados da UC ${ucEditar.codigoCeu} atualizados com sucesso.`);
-                }}
-              >
-                Salvar Alterações
-              </GlaButton>
-            </div>
-          }
-        >
-          <div className="space-y-3">
-            <GlaInput label="Nome da Unidade de Conservação" defaultValue={ucEditar.nome} />
-            <GlaInput label="Gestor Responsável" defaultValue={ucEditar.gestor} />
-            <GlaSelect
-              label="Status do Conselho Gestor"
-              defaultValue={ucEditar.statusConselho}
-              options={[
-                { value: 'Ativo e Paritário', label: 'Ativo e Paritário' },
-                { value: 'Em Formação', label: 'Em Formação' },
-                { value: 'Inativo', label: 'Inativo' }
-              ]}
-            />
           </div>
         </GlaModal>
       )}
