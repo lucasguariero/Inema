@@ -125,3 +125,24 @@ Ao receber qualquer documento de requisito (DOR, DR, card, issue, texto ou PDF):
 5. **Inspeção Visual Autônoma**: Executar Playwright headless para capturar screenshots e auditar visualmente com `view_file`.
 6. **Versionamento e Deploy**: `git commit` + `git push origin main` + `npx vercel --prod --yes`.
 7. **Emissão do Relatório**: Gerar `checklist.md`, `anexos.zip`, `comentario-card.txt` e apresentar link direto testado ao usuário.
+
+---
+
+## 8. Protocolo de Validação em Duas Etapas & Handover para Auditoria GPT
+
+Ao finalizar qualquer entrega ou protótipo, o agente deve obrigatoriamente rodar a etapa de auditoria visual em alta resolução e estruturar a entrega nos 3 pilares fundamentais para validação humana e revisão externa pelo GPT do usuário:
+
+### 1. Captura em Alta Resolução (1920x1080px)
+- Acessar o link exclusivo da entrega (ex.: `?analista=...`) na resolução de tela do analista: **1920x1080px (Full HD nativo)**.
+- Capturar prints abrangentes cobrindo:
+  - Todas as abas e sub-visões de dados;
+  - Todas as gavetas laterais (Drawers Nível 1) abertas em seus devidos contextos;
+  - Todos os modais abertos (Sobre os dados, Filtros avançados, Detalhamentos completos Nível 2 em todos os blocos rolados);
+  - Tabelas evidenciando casos de contraste canônicos.
+- Empacotar todas as capturas em `qa/cards/[id-do-card]/anexos-1080p-auditoria-gpt.zip`.
+
+### 2. Os 3 Pilares Obrigatórios da Resposta de Entrega
+Toda entrega de protótipo deve fornecer no relatório:
+1. **Pilar 1 — Explicação da Execução Técnica**: O que exatamente foi codificado, decisões de arquitetura de dados adotadas, componentes criados/ajustados e regras de negócio implementadas.
+2. **Pilar 2 — Explicação Detalhada dos Prints**: Mapeamento 1-a-1 de cada print capturado associado ao requisito exato do documento original (DOR, Guia UX ou Card) que ele comprova visualmente.
+3. **Pilar 3 — Declaração Explícita de "O que falta ainda" (Gaps / Limitações / Próximos Passos)**: No entendimento do agente, declarar com total transparência o que não foi implementado, o que depende de backend real (SEIA/PostgreSQL), o que está mockado e eventuais regras secundárias pendentes, permitindo ao GPT auditor do usuário validar se os requisitos foram compreendidos e executados corretamente.

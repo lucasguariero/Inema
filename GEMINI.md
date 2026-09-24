@@ -31,6 +31,13 @@ Sempre que o usuário enviar um Documento de Requisito (DORxxx, DRxxx, card, iss
    - Inspeção visual autônoma capturando screenshot Playwright e auditando com `view_file`.
    - `git commit` e `git push origin main`.
    - `npx vercel --prod --yes` e validação no link de produção (`https://inema.acto.com.br/`).
+5. **Protocolo de Validação em Duas Etapas & Handover para Auditoria GPT**:
+   - Captura abrangente em **1920x1080px (Full HD nativo)** de todas as abas, sub-visões, gavetas (Drawers Nível 1), modais (Nível 2 rolado, filtros e metadados) e tabelas com casos de contraste.
+   - Empacotar em `qa/cards/[id-do-card]/anexos-1080p-auditoria-gpt.zip`.
+   - Estrutura obrigatória do relatório em 3 Pilares:
+     1. **Pilar 1 — Explicação da Execução Técnica**: O que foi codificado e decisões de arquitetura.
+     2. **Pilar 2 — Explicação Detalhada dos Prints**: Mapeamento 1-a-1 de cada imagem com o requisito que ela comprova.
+     3. **Pilar 3 — Declaração Explícita de "O que falta ainda"**: Transparência sobre o que é mock, integrações pendentes com backend real e limitações, para o GPT auditor do usuário validar se os requisitos foram compreendidos e executados corretamente.
 
 ---
 

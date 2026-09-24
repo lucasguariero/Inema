@@ -145,3 +145,12 @@ Para qualquer tela criada ou editada:
    - `npx vercel --prod --yes`
 5. **Verificação em Produção**: Acessar `https://inema.acto.com.br/` via script de automação, validar ao vivo e emitir o parecer final pronto para uso.
 
+### 5. Protocolo de Validação em Duas Etapas & Handover para Auditoria GPT
+Ao concluir a entrega técnica de qualquer protótipo:
+1. **Captura em 1920x1080px (Full HD nativo)**: Acessar como usuário o link exclusivo da entrega (`?analista=...`) e capturar todas as abas, sub-visões, gavetas laterais (Drawers Nível 1), modais (Nível 2 rolado, filtros e metadados) e tabelas com casos de contraste.
+2. **Empacotamento**: Salvar todos os prints em `qa/cards/[id-do-card]/anexos-1080p-auditoria-gpt.zip`.
+3. **Estrutura Obrigatória do Relatório de Entrega (Os 3 Pilares)**:
+   - **Pilar 1 — Explicação da Execução Técnica**: O que foi codificado, decisões de arquitetura e regras de negócio implementadas.
+   - **Pilar 2 — Explicação Detalhada dos Prints**: Mapeamento de cada imagem com o requisito exato do documento original (DOR/Guia UX/Card) que ela comprova.
+   - **Pilar 3 — Declaração Explícita de "O que falta ainda"**: Transparência sobre dados mockados, integrações pendentes com backend real e potenciais débitos técnicos, permitindo ao GPT auditor do usuário confrontar o entendimento do agente com os requisitos antes do fechamento.
+
