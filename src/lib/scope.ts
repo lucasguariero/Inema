@@ -14,6 +14,7 @@ export function getCurrentScope(): AnalystScope {
   const paramScope = (params.get('escopo') || params.get('analista') || '').toLowerCase();
 
   if (
+    paramScope === 'maria' ||
     paramScope === 'naiane' ||
     paramScope === 'regulacao' ||
     host.includes('inema-regulacao') ||

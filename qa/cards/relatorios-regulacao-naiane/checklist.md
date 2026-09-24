@@ -1,6 +1,6 @@
-# Checklist de Homologação — Relatórios de Regulação SEIA (Entrega Analista Naiane)
+# Checklist de Homologação — Relatórios de Regulação SEIA (Entrega Analista Maria)
 
-- **Analista Responsável**: Naiane (Diretoria de Regulação — DIRRE / INEMA)
+- **Analista Responsável**: Maria (Diretoria de Regulação — DIRRE / INEMA)
 - **Documento Base**: `01 - Guia UX - Relatorios de Regulacao SEIA.md`
 - **Ambiente de Entrega Isolada**: `https://inema-regulacao.vercel.app/` (ou `https://inema.acto.com.br/?escopo=regulacao`)
 - **Ambiente Master Consolidado**: `https://inema.acto.com.br/`
