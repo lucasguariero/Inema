@@ -17,9 +17,12 @@ import { PesquisaCientificaPage } from '@/pages/uc/PesquisaCientificaPage';
 import { RelatoriosRegulacaoPage } from '@/pages/regulacao/RelatoriosRegulacaoPage';
 import { SeiaHomePage } from '@/pages/hibrido/SeiaHomePage';
 import { SeiaDaesPage } from '@/pages/hibrido/SeiaDaesPage';
+import { getCurrentScope } from '@/lib/scope';
 
 export function App() {
-  const [activeRoute, setActiveRoute] = useState('seia-home');
+  const [activeRoute, setActiveRoute] = useState(() => {
+    return getCurrentScope() === 'regulacao' ? 'relatorios' : 'seia-home';
+  });
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -33,11 +36,14 @@ export function App() {
     const vParam = params.get('v');
     const fluxoParam = params.get('fluxo');
     const path = window.location.pathname;
+    const scope = getCurrentScope();
 
     if (vParam === 'hibrido' || rotaParam === 'hibrido' || rotaParam === 'seia') {
       setActiveRoute('seia-home');
     } else if (rotaParam) {
       setActiveRoute(rotaParam);
+    } else if (scope === 'regulacao') {
+      setActiveRoute('relatorios');
     } else if (fluxoParam === 'externo') {
       setActiveRoute('cidadao');
     } else if (fluxoParam === 'interna') {

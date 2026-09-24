@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
+import { Info } from 'lucide-react';
 import { FilamentTabs } from '@/components/filament';
 import { TramitacoesPeriodoTab } from '@/components/regulacao/TramitacoesPeriodoTab';
 import { AcompanhamentoPautaTab } from '@/components/regulacao/AcompanhamentoPautaTab';
 import { FiltrosDrawer } from '@/components/regulacao/FiltrosDrawer';
-import { DetalheProcessoModal } from '@/components/regulacao/DetalheProcessoModal';
+import { SobreOsDadosModal } from '@/components/regulacao/SobreOsDadosModal';
+import { PainelResumoDrawer } from '@/components/regulacao/PainelResumoDrawer';
+import { DetalhesCompletosModal } from '@/components/regulacao/DetalhesCompletosModal';
 import {
   FiltrosTramitacao,
   FiltrosPauta,
   FILTROS_INICIAIS,
   FILTROS_PAUTA_INICIAIS,
-  TramitacaoItem
+  TramitacaoItem,
+  PautaItem
 } from '@/data/regulacaoMock';
 
 type AbaPrincipal = 'tramitacoes' | 'pauta';
@@ -17,9 +21,15 @@ type AbaPrincipal = 'tramitacoes' | 'pauta';
 export const RelatoriosRegulacaoPage: React.FC = () => {
   const [abaAtiva, setAbaAtiva] = useState<AbaPrincipal>('tramitacoes');
   const [drawerFiltrosAberto, setDrawerFiltrosAberto] = useState(false);
+  const [sobreDadosAberto, setSobreDadosAberto] = useState(false);
   const [filtrosTramitacao, setFiltrosTramitacao] = useState<FiltrosTramitacao>(FILTROS_INICIAIS);
   const [filtrosPauta, setFiltrosPauta] = useState<FiltrosPauta>(FILTROS_PAUTA_INICIAIS);
-  const [processoSelecionado, setProcessoSelecionado] = useState<TramitacaoItem | null>(null);
+
+  // Estados do Detalhamento Compartilhado em 2 Níveis
+  const [itemSelecionado, setItemSelecionado] = useState<TramitacaoItem | PautaItem | null>(null);
+  const [origemItem, setOrigemItem] = useState<'tramitacoes' | 'pauta'>('tramitacoes');
+  const [drawerResumoAberto, setDrawerResumoAberto] = useState(false);
+  const [modalCompletoAberto, setModalCompletoAberto] = useState(false);
 
   // Handlers para Tramitações
   const handleAplicarFiltrosTramitacao = (novos: FiltrosTramitacao) => {
@@ -65,6 +75,30 @@ export const RelatoriosRegulacaoPage: React.FC = () => {
     }));
   };
 
+  // Handlers do Detalhamento em 2 Níveis
+  const handleDetalhar = (item: TramitacaoItem | PautaItem, origem: 'tramitacoes' | 'pauta') => {
+    setItemSelecionado(item);
+    setOrigemItem(origem);
+    setDrawerResumoAberto(true);
+    setModalCompletoAberto(false);
+  };
+
+  const handleAbrirDetalhesCompletos = () => {
+    setDrawerResumoAberto(false);
+    setModalCompletoAberto(true);
+  };
+
+  const handleVoltarAoResumo = () => {
+    setModalCompletoAberto(false);
+    setDrawerResumoAberto(true);
+  };
+
+  const handleFecharDetalhamento = () => {
+    setDrawerResumoAberto(false);
+    setModalCompletoAberto(false);
+    setItemSelecionado(null);
+  };
+
   return (
     <div className="w-full space-y-6 font-sans">
       {/* 1. CABEÇALHO OFICIAL GLA - FORA DE CARD, SÓBRIO E LIMPO */}
@@ -78,13 +112,21 @@ export const RelatoriosRegulacaoPage: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
             Dados do SEIA
           </span>
           <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">
             Atualizado em: 22/09/2026 10:00
           </span>
+          <button
+            type="button"
+            onClick={() => setSobreDadosAberto(true)}
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white text-[#0F4C3A] border border-[#0F4C3A]/30 hover:bg-[#0F4C3A]/5 transition-colors cursor-pointer shadow-2xs"
+          >
+            <Info className="w-3.5 h-3.5" />
+            <span>Sobre os dados</span>
+          </button>
         </div>
       </div>
 
@@ -106,7 +148,7 @@ export const RelatoriosRegulacaoPage: React.FC = () => {
           onOpenFiltros={() => setDrawerFiltrosAberto(true)}
           onRemoveFiltro={handleRemoverFiltroTramitacao}
           onLimparFiltros={handleLimparFiltrosTramitacao}
-          onSelectProcesso={(p) => setProcessoSelecionado(p)}
+          onSelectProcesso={(p) => handleDetalhar(p, 'tramitacoes')}
         />
       )}
 
@@ -116,7 +158,7 @@ export const RelatoriosRegulacaoPage: React.FC = () => {
           onOpenFiltros={() => setDrawerFiltrosAberto(true)}
           onRemoveFiltro={handleRemoverFiltroPauta}
           onLimparFiltros={handleLimparFiltrosPauta}
-          onSelectProcesso={(p) => setProcessoSelecionado(p)}
+          onSelectProcesso={(p) => handleDetalhar(p, 'pauta')}
         />
       )}
 
@@ -133,12 +175,30 @@ export const RelatoriosRegulacaoPage: React.FC = () => {
         onLimparFiltrosPauta={handleLimparFiltrosPauta}
       />
 
-      {/* 5. MODAL DE DETALHAMENTO DO PROCESSO */}
-      <DetalheProcessoModal
-        isOpen={Boolean(processoSelecionado)}
-        onClose={() => setProcessoSelecionado(null)}
-        processo={processoSelecionado}
+      {/* 5. PAINEL SOBRE OS DADOS */}
+      <SobreOsDadosModal
+        isOpen={sobreDadosAberto}
+        onClose={() => setSobreDadosAberto(false)}
+      />
+
+      {/* 6. NÍVEL 1: PAINEL LATERAL DE RESUMO */}
+      <PainelResumoDrawer
+        isOpen={drawerResumoAberto}
+        onClose={handleFecharDetalhamento}
+        origem={origemItem}
+        item={itemSelecionado}
+        onVerDetalhesCompletos={handleAbrirDetalhesCompletos}
+      />
+
+      {/* 7. NÍVEL 2: TELA DE DETALHES COMPLETOS (7 BLOCOS CANÔNICOS) */}
+      <DetalhesCompletosModal
+        isOpen={modalCompletoAberto}
+        onClose={handleFecharDetalhamento}
+        origem={origemItem}
+        item={itemSelecionado}
+        onVoltarAoResumo={handleVoltarAoResumo}
       />
     </div>
   );
 };
+

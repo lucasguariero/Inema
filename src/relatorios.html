@@ -89,6 +89,27 @@
         <aside id="sidebar" class="w-[280px] bg-white border-r border-[#E5E7EB] flex flex-col fixed top-[60px] bottom-0 left-0 z-40 transition-transform duration-200 -translate-x-full lg:translate-x-0">
             <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1">
 
+                <!-- Módulo: SEIA Plataforma (Híbrido) -->
+                <div class="pt-1">
+                    <button id="btn-seia-hibrido" data-testid="nav-SEIA Plataforma (Híbrido)" onclick="toggleSubmenu('subSeiaHibrido', 'icon_seia-hibrido')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-semibold transition-colors duration-150 cursor-pointer">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <span class="material-symbols-outlined text-xl text-slate-500">dashboard_customize</span>
+                            <span class="text-sm font-semibold truncate">SEIA Plataforma (Híbrido)</span>
+                        </div>
+                        <span id="icon_seia-hibrido" class="material-symbols-outlined text-lg text-slate-500 transition-transform duration-200 rotate-180">expand_more</span>
+                    </button>
+                    <div id="subSeiaHibrido" class="mt-1 border-l-2 border-slate-200 ml-4 pl-3 space-y-1">
+                        <a href="/?rota=seia-home" id="menu-seia-home" data-testid="menu-seia-home"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                            <span class="truncate">Central SEIA (Home)</span>
+                            <span class="text-[9px] font-mono tracking-tight px-1.5 py-0.5 rounded shrink-0 ml-1.5 whitespace-nowrap text-slate-400 bg-slate-100/70">NOVO</span>
+                        </a>
+                        <a href="/?rota=seia-daes" id="menu-seia-daes" data-testid="menu-seia-daes"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                            <span class="truncate">Gestão de DAEs</span>
+                            <span class="text-[9px] font-mono tracking-tight px-1.5 py-0.5 rounded shrink-0 ml-1.5 whitespace-nowrap text-slate-400 bg-slate-100/70">SEFAZ</span>
+                        </a>
+                    </div>
+                </div>
+
                 <!-- Módulo: Regulação -->
                 <div class="pt-1">
                     <button id="btn-regulacao" data-testid="nav-Regulação" onclick="toggleSubmenu('subRegulacao', 'icon_regulacao')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-semibold transition-colors duration-150 cursor-pointer">
@@ -101,6 +122,11 @@
                     <div id="subRegulacao" class="mt-1 border-l-2 border-slate-200 ml-4 pl-3 space-y-1">
                         <a href="/relatorios-antigo.html" id="menu-relatorios" data-testid="menu-relatorios"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 bg-[#E2ECE9] text-[#0F4C3A] font-bold">
                             <span class="truncate">Relatórios de Regulação</span>
+                            <span class="text-[9px] font-mono tracking-tight px-1.5 py-0.5 rounded shrink-0 ml-1.5 whitespace-nowrap bg-[#0F4C3A]/10 text-[#0F4C3A] font-semibold">NOVO</span>
+                        </a>
+                        <a href="/?rota=dashboard" id="menu-dashboard" data-testid="menu-dashboard"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                            <span class="truncate">Dashboard Gerencial</span>
+                            <span class="text-[9px] font-mono tracking-tight px-1.5 py-0.5 rounded shrink-0 ml-1.5 whitespace-nowrap text-slate-400 bg-slate-100/70">NOVO</span>
                         </a>
                     </div>
                 </div>
@@ -123,11 +149,9 @@
                         </a>
                         <a href="/?rota=fisc-plantonista" id="menu-fisc-plantonista" data-testid="menu-fisc-plantonista"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                             <span class="truncate">Cadastro de Plantonista</span>
-                            <span class="text-[9px] font-mono tracking-tight px-1.5 py-0.5 rounded shrink-0 ml-1.5 whitespace-nowrap text-slate-400 bg-slate-100/70">DOR006</span>
                         </a>
                         <a href="/?rota=fisc-escala" id="menu-fisc-escala" data-testid="menu-fisc-escala"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                             <span class="truncate">Escala de Plantonistas</span>
-                            <span class="text-[9px] font-mono tracking-tight px-1.5 py-0.5 rounded shrink-0 ml-1.5 whitespace-nowrap text-slate-400 bg-slate-100/70">DOR007</span>
                         </a>
                     </div>
                 </div>
@@ -144,19 +168,15 @@
                     <div id="subUC" class="mt-1 border-l-2 border-slate-200 ml-4 pl-3 space-y-1">
                         <a href="/?rota=uc-agendamento" id="menu-uc-agendamento" data-testid="menu-uc-agendamento"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                             <span class="truncate">Agendamento de Visitação</span>
-                            <span class="text-[9px] font-mono tracking-tight px-1.5 py-0.5 rounded shrink-0 ml-1.5 whitespace-nowrap text-slate-400 bg-slate-100/70">DOR001</span>
                         </a>
                         <a href="/?rota=uc-autorizacao-visitacao" id="menu-uc-autorizacao-visitacao" data-testid="menu-uc-autorizacao-visitacao"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                             <span class="truncate">Autorização de Eventos (AAV)</span>
-                            <span class="text-[9px] font-mono tracking-tight px-1.5 py-0.5 rounded shrink-0 ml-1.5 whitespace-nowrap text-slate-400 bg-slate-100/70">DOR002</span>
                         </a>
                         <a href="/?rota=uc-atividades-didaticas" id="menu-uc-atividades-didaticas" data-testid="menu-uc-atividades-didaticas"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                             <span class="truncate">Atividades Didáticas (AAD)</span>
-                            <span class="text-[9px] font-mono tracking-tight px-1.5 py-0.5 rounded shrink-0 ml-1.5 whitespace-nowrap text-slate-400 bg-slate-100/70">DOR003</span>
                         </a>
                         <a href="/?rota=uc-pesquisa-cientifica" id="menu-uc-pesquisa-cientifica" data-testid="menu-uc-pesquisa-cientifica"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                             <span class="truncate">Pesquisa Científica (Pesc)</span>
-                            <span class="text-[9px] font-mono tracking-tight px-1.5 py-0.5 rounded shrink-0 ml-1.5 whitespace-nowrap text-slate-400 bg-slate-100/70">DOR004</span>
                         </a>
                     </div>
                 </div>

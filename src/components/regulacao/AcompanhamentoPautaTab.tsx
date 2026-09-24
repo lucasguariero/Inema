@@ -254,7 +254,7 @@ export const AcompanhamentoPautaTab: React.FC<AcompanhamentoPautaTabProps> = ({
             </span>
           </div>
           <p className="mt-1.5 text-xs text-slate-500">
-            Processos sem movimentação técnica dentro do prazo regulamentar previsto pelo INEMA.
+            Espécie do prazo: <strong>Análise Regulatória Conclusiva (Portaria INEMA nº 25.753/2022)</strong>.
           </p>
         </div>
       </div>
@@ -392,14 +392,15 @@ export const AcompanhamentoPautaTab: React.FC<AcompanhamentoPautaTabProps> = ({
               {pautaFiltrada.length} de 3.840 processos
             </Badge>
 
-            {/* Ação Primária da Tabela: Exportar Pauta */}
+            {/* Ação Primária da Tabela: Exportar Pauta para Excel */}
             {statusExportacao === 'disponivel' && (
               <button
                 onClick={handleExportarExcel}
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs font-semibold rounded-md shadow-2xs transition-colors cursor-pointer"
+                title="Exporta os resultados da última consulta confirmada"
               >
                 <FileSpreadsheet className="w-3.5 h-3.5" />
-                <span>Exportar Pauta</span>
+                <span>Exportar Excel</span>
               </button>
             )}
 
@@ -409,7 +410,7 @@ export const AcompanhamentoPautaTab: React.FC<AcompanhamentoPautaTabProps> = ({
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 border border-slate-300 text-slate-500 text-xs font-semibold rounded-md cursor-not-allowed shadow-2xs"
               >
                 <Loader2 className="w-3.5 h-3.5 animate-spin text-slate-600" />
-                <span>Gerando...</span>
+                <span>Gerando Excel...</span>
               </button>
             )}
 
@@ -419,7 +420,7 @@ export const AcompanhamentoPautaTab: React.FC<AcompanhamentoPautaTabProps> = ({
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0F4C3A] text-white text-xs font-semibold rounded-md shadow-2xs"
               >
                 <Check className="w-3.5 h-3.5" />
-                <span>Gerada</span>
+                <span>Excel gerado. Baixar arquivo</span>
               </button>
             )}
           </div>
@@ -433,7 +434,7 @@ export const AcompanhamentoPautaTab: React.FC<AcompanhamentoPautaTabProps> = ({
                   <th className="py-3 px-4">Cód. Processo</th>
                   <th className="py-3 px-4">Interessado</th>
                   <th className="py-3 px-4">Unidade Atual</th>
-                  <th className="py-3 px-4">Técnico Atual</th>
+                  <th className="py-3 px-4">Técnico / Equipe</th>
                   <th className="py-3 px-4">Situação Atual</th>
                   <th className="py-3 px-4 text-center">Atos</th>
                   <th className="py-3 px-4">Última Movimentação</th>
@@ -483,12 +484,22 @@ export const AcompanhamentoPautaTab: React.FC<AcompanhamentoPautaTabProps> = ({
                         </span>
                       </td>
                       <td className="py-3 px-4 whitespace-nowrap text-slate-600 font-medium">
-                        {item.ultimaMovimentacao}
+                        {item.ultimaMovimentacao === 'Sem tramitação registrada' ? (
+                          <span className="text-slate-500 italic">Sem tramitação registrada</span>
+                        ) : (
+                          item.ultimaMovimentacao
+                        )}
                       </td>
                       <td className="py-3 px-4 text-center whitespace-nowrap">
-                        <span className={item.diasSemMovimentacao > 30 ? 'text-rose-700 font-bold' : 'text-slate-700 font-medium'}>
-                          {item.diasSemMovimentacao}d
-                        </span>
+                        {item.ultimaMovimentacao === 'Sem tramitação registrada' ? (
+                          <span className="text-[11px] font-semibold text-amber-800 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">
+                            {item.diasSemMovimentacao}d (desde formação)
+                          </span>
+                        ) : (
+                          <span className={item.diasSemMovimentacao > 30 ? 'text-rose-700 font-bold' : 'text-slate-700 font-medium'}>
+                            {item.diasSemMovimentacao}d
+                          </span>
+                        )}
                       </td>
                       <td className="py-3 px-4 whitespace-nowrap">
                         {renderBadgePrazo(item.situacaoPrazo)}

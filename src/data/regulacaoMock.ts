@@ -1040,47 +1040,91 @@ export const MOCK_TRAMITACOES: TramitacaoItem[] = [
 export const MOCK_PAUTA: PautaItem[] = [
   {
     "id": "pauta-001",
-    "processo": "2016.001.029630/CEFIR",
-    "interessado": "Gape Giuberti Agropecuaria Ltda",
+    "processo": "2024.001.008412/INEMA/LIC-00841",
+    "interessado": "Agroflorestal Bahia Sul S.A.",
+    "unidadeAtual": "DIRRE/CGF",
+    "tecnicoAtual": "RUTE DE OLIVEIRA SANTANA",
+    "situacaoAtual": "EM ANÁLISE TÉCNICA",
+    "qtdAtos": 2,
+    "atos": [
+      "Autorização de Supressão de Vegetação (ASV)",
+      "Licença Prévia (LP)"
+    ],
+    "ultimaMovimentacao": "15/09/2026",
+    "diasSemMovimentacao": 9,
+    "situacaoPrazo": "No prazo",
+    "municipio": "Ilhéus",
+    "tipologia": "Silvicultura / Florestal",
+    "liderEquipe": "RUTE DE OLIVEIRA SANTANA",
+    "membrosEquipe": [
+      "GENI DE SENA DIAS URPIA"
+    ],
+    "observacoes": "Processo em análise técnica instrutória pela equipe multidisciplinar da DIRRE."
+  },
+  {
+    "id": "pauta-002",
+    "processo": "2023.001.019432/INEMA/OUT-01943",
+    "interessado": "Mineração Serra Dourada Ltda",
+    "unidadeAtual": "DIRRE/CRH",
+    "tecnicoAtual": "THOMAZ BORGES ARARIPE BARBOSA",
+    "situacaoAtual": "AGUARDANDO RESPOSTA DO REQUERENTE",
+    "qtdAtos": 1,
+    "atos": [
+      "Outorga de Direito de Uso de Recursos Hídricos"
+    ],
+    "ultimaMovimentacao": "20/08/2026",
+    "diasSemMovimentacao": 35,
+    "situacaoPrazo": "Atenção",
+    "municipio": "Barreiras",
+    "tipologia": "Mineração / Indústria",
+    "liderEquipe": "THOMAZ BORGES ARARIPE BARBOSA",
+    "membrosEquipe": [],
+    "observacoes": "Notificação nº 2026/0412 expedida. Requerente em prazo regulamentar para juntada de complementações."
+  },
+  {
+    "id": "pauta-003",
+    "processo": "2026.001.000319/INEMA/FORM-00319",
+    "interessado": "Bioenergia Campo Limpo Ltda",
     "unidadeAtual": "COASP",
-    "tecnicoAtual": "CLARISSE DIAS CRUZ",
-    "situacaoAtual": "RL APROVADA",
+    "tecnicoAtual": "Sem atribuição técnica",
+    "situacaoAtual": "FORMADO - SEM TRAMITAÇÃO",
     "qtdAtos": 1,
     "atos": [
       "Aprovação da Localização da Reserva Legal (ARL)"
     ],
-    "ultimaMovimentacao": "02/05/2024",
-    "diasSemMovimentacao": 3,
-    "situacaoPrazo": "No prazo",
-    "municipio": "Salvador",
+    "ultimaMovimentacao": "Sem tramitação registrada",
+    "diasSemMovimentacao": 45,
+    "situacaoPrazo": "Atenção",
+    "municipio": "Luís Eduardo Magalhães",
     "tipologia": "Agrossilvopastoril",
-    "liderEquipe": "CLARISSE DIAS CRUZ",
+    "liderEquipe": "Sem atribuição técnica",
     "membrosEquipe": [],
-    "observacoes": "Processo em acompanhamento ativo na DIRRE/COASP."
+    "observacoes": "Processo formado via balcão do SEIA sem movimentação ou atribuição técnica inicial."
   },
   {
-    "id": "pauta-002",
-    "processo": "2024.001.000006/INEMA/LIC-00006",
-    "interessado": "CONSORCIO RZ PERNAMBUCO",
-    "unidadeAtual": "COASP",
-    "tecnicoAtual": "JOSELICE LEONE LIMA FONSECA",
-    "situacaoAtual": "REVISADO",
-    "qtdAtos": 2,
+    "id": "pauta-004",
+    "processo": "2024.001.002841/INEMA/LIC-00284",
+    "interessado": "Consórcio Eólico Ventos da Bahia",
+    "unidadeAtual": "DIRRE/CEG",
+    "tecnicoAtual": "Sem atribuição técnica",
+    "situacaoAtual": "AGUARDANDO DISTRIBUIÇÃO",
+    "qtdAtos": 3,
     "atos": [
-      "Autorização de Supressão de Vegetação (ASV)",
-      "Despacho"
+      "Licença Prévia (LP)",
+      "Licença de Instalação (LI)",
+      "ASV"
     ],
-    "ultimaMovimentacao": "02/05/2024",
-    "diasSemMovimentacao": 12,
+    "ultimaMovimentacao": "01/09/2026",
+    "diasSemMovimentacao": 23,
     "situacaoPrazo": "No prazo",
-    "municipio": "Barreiras",
-    "tipologia": "Infraestrutura / Energia",
-    "liderEquipe": "JOSELICE LEONE LIMA FONSECA",
+    "municipio": "Caetité",
+    "tipologia": "Energia Renovável / Eólica",
+    "liderEquipe": "Sem atribuição técnica",
     "membrosEquipe": [],
-    "observacoes": "Processo em acompanhamento ativo na DIRRE/COASP."
+    "observacoes": "Processo triado aguardando despacho da chefia para designação de responsável técnico."
   },
   {
-    "id": "pauta-003",
+    "id": "pauta-005",
     "processo": "046.0539.2024.0010739-10",
     "interessado": "THIAGO DANTE FORMAGIO",
     "unidadeAtual": "COASP",

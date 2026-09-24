@@ -7,7 +7,9 @@ import {
   X,
   ChevronRight,
   Eye,
-  ChevronLeft
+  ChevronLeft,
+  Info,
+  AlertCircle
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -31,6 +33,7 @@ import {
 } from '@/data/regulacaoMock';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 import {
   GlaTable,
   GlaTableHead,
@@ -52,6 +55,8 @@ interface TramitacoesPeriodoTabProps {
 
 type ModoVisualizacao = 'registros' | 'tecnicos' | 'agrupamento' | 'anual';
 type CriterioAgrupamento = 'municipio' | 'tipologia' | 'ato' | 'situacao';
+type MedidaGrafico = 'processos' | 'registros';
+type ContextoTecnico = 'nout' | 'geral';
 
 export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
   filtros,
@@ -65,6 +70,13 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
   const [criterioAgrupamento, setCriterioAgrupamento] = useState<CriterioAgrupamento>('municipio');
   const [anoDirre, setAnoDirre] = useState<number>(2026);
   const [familiaDirre, setFamiliaDirre] = useState<string>('Todas as Famílias');
+
+  // Controle de medida dos gráficos: Processos vs Registros
+  const [medidaGrafico, setMedidaGrafico] = useState<MedidaGrafico>('processos');
+
+  // Controle do contexto de técnico (NOUT vs Geral) e simulação de indisponibilidade
+  const [contextoTecnico, setContextoTecnico] = useState<ContextoTecnico>('nout');
+  const [simularMediaIndisponivel, setSimularMediaIndisponivel] = useState<boolean>(false);
 
   // Filtros ativos para exibir nas pílulas
   const pillsFiltros = useMemo(() => {
@@ -178,26 +190,57 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
     });
   }, [familiaDirre]);
 
-  // Handler de exportação para Excel
+  // Handler de exportação para Excel (respeita a visão ativa)
   const handleExportarExcel = () => {
     if (statusExportacao !== 'disponivel') return;
 
     setStatusExportacao('gerando');
 
     setTimeout(() => {
-      const cabecalhos = 'Data Tramitação,Processo,Interessado,Unidade,Ato,Situação,Líder Equipe,Membros Equipe\n';
-      const linhas = tramitacoesFiltradas
-        .map(
-          (t) =>
-            `"${t.dataTramitacao}","${t.processo}","${t.interessado}","${t.unidade}","${t.ato}","${t.situacao}","${t.liderEquipe}","${t.membrosEquipe.join('; ')}"`
-        )
-        .join('\n');
+      let cabecalhos = '';
+      let linhas = '';
+      let nomeArquivo = '';
+
+      if (modoVisualizacao === 'registros') {
+        cabecalhos = 'Data Tramitação,Processo,Interessado,Unidade,Ato,Situação,Líder Equipe,Membros Equipe\n';
+        linhas = tramitacoesFiltradas
+          .map(
+            (t) =>
+              `"${t.dataTramitacao}","${t.processo}","${t.interessado}","${t.unidade}","${t.ato}","${t.situacao}","${t.liderEquipe}","${t.membrosEquipe.join('; ')}"`
+          )
+          .join('\n');
+        nomeArquivo = `relatorio_tramitacoes_registros_${new Date().toISOString().slice(0, 10)}.csv`;
+      } else if (modoVisualizacao === 'tecnicos') {
+        cabecalhos = 'Técnico,Unidade de Lotação,Processos com Participação,Registros com Participação\n';
+        linhas = MOCK_ATIVIDADES_TECNICO
+          .map(
+            (t) =>
+              `"${t.tecnico}","${t.unidade}",${t.processosParticipacao},${t.registrosParticipacao}`
+          )
+          .join('\n');
+        nomeArquivo = `relatorio_atividades_por_tecnico_${new Date().toISOString().slice(0, 10)}.csv`;
+      } else if (modoVisualizacao === 'agrupamento') {
+        cabecalhos = `Grupo (${criterioAgrupamento}),Processos,Registros\n`;
+        linhas = dadosAgrupamento
+          .map((g) => `"${g.grupo}",${g.processos},${g.registros}`)
+          .join('\n');
+        nomeArquivo = `relatorio_por_agrupamento_${criterioAgrupamento}_${new Date().toISOString().slice(0, 10)}.csv`;
+      } else if (modoVisualizacao === 'anual') {
+        cabecalhos = 'Família,Ato/Atividade,Situação,Registros Totais,Concluídos ou Publicados\n';
+        linhas = dadosAnualDirre
+          .map(
+            (a) =>
+              `"${a.familia}","${a.ato}","${a.situacao}",${a.registros},${a.concluidosPublicados}`
+          )
+          .join('\n');
+        nomeArquivo = `relatorio_anual_dirre_${anoDirre}_${new Date().toISOString().slice(0, 10)}.csv`;
+      }
 
       const blob = new Blob([cabecalhos + linhas], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.setAttribute('href', url);
-      link.setAttribute('download', `relatorio_tramitacoes_regulacao_${new Date().toISOString().slice(0, 10)}.csv`);
+      link.setAttribute('download', nomeArquivo);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -332,68 +375,119 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
       </div>
 
       {/* 3. GRÁFICOS: EVOLUÇÃO NO PERÍODO & DISTRIBUIÇÃO POR UNIDADE */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Gráfico 1: Evolução Mensal */}
-        <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs">
-          <div className="mb-4">
-            <h3 className="text-sm font-bold text-slate-800">Evolução no período</h3>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Volume mensal de tramitações e atos registrados em 2026.
-            </p>
+      <div className="space-y-4">
+        {/* Seletor de Medida dos Gráficos (Processos vs Registros de Atos/Atividades) */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
+          <div className="flex items-center gap-2.5">
+            <span className="text-xs font-bold text-slate-700">Medida dos Gráficos:</span>
+            <div className="inline-flex rounded-lg bg-slate-100 p-0.5 border border-slate-200">
+              <button
+                type="button"
+                onClick={() => setMedidaGrafico('processos')}
+                className={cn(
+                  'px-3 py-1 text-xs rounded-md font-semibold transition-colors cursor-pointer',
+                  medidaGrafico === 'processos'
+                    ? 'bg-white text-[#0F4C3A] font-bold shadow-2xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                )}
+              >
+                Processos
+              </button>
+              <button
+                type="button"
+                onClick={() => setMedidaGrafico('registros')}
+                className={cn(
+                  'px-3 py-1 text-xs rounded-md font-semibold transition-colors cursor-pointer',
+                  medidaGrafico === 'registros'
+                    ? 'bg-white text-[#0F4C3A] font-bold shadow-2xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                )}
+              >
+                Registros de atos/atividades
+              </button>
+            </div>
           </div>
-          <div className="h-64 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={MOCK_EVOLUCAO_MENSAL} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
-                <XAxis dataKey="mes" tick={{ fontSize: 11, fill: '#64748B' }} tickLine={false} />
-                <YAxis tick={{ fontSize: 11, fill: '#64748B' }} tickLine={false} />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: '#FFFFFF',
-                    borderColor: '#CBD5E1',
-                    borderRadius: '8px',
-                    fontSize: '12px',
-                    boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
-                  }}
-                />
-                <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }} />
-                <Bar dataKey="tramitacoes" name="Tramitações" fill="#0F4C3A" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="atos" name="Atos/Atividades" fill="#52796F" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+          <span className="text-[11px] text-slate-500 font-medium">
+            O título e os valores refletem a medida selecionada.
+          </span>
         </div>
 
-        {/* Gráfico 2: Distribuição por Unidade */}
-        <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs">
-          <div className="mb-4">
-            <h3 className="text-sm font-bold text-slate-800">Distribuição por Unidade</h3>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Distribuição do total de atos entre diretorias e unidades regionais.
-            </p>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Gráfico 1: Evolução Mensal */}
+          <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs">
+            <div className="mb-4">
+              <h3 className="text-sm font-bold text-slate-800">
+                Evolução no período • {medidaGrafico === 'processos' ? 'Processos' : 'Registros de atos/atividades'}
+              </h3>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Volume mensal de {medidaGrafico === 'processos' ? 'processos distintos com tramitação' : 'registros de atos e atividades'} em 2026.
+              </p>
+            </div>
+            <div className="h-64 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={MOCK_EVOLUCAO_MENSAL} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
+                  <XAxis dataKey="mes" tick={{ fontSize: 11, fill: '#64748B' }} tickLine={false} />
+                  <YAxis tick={{ fontSize: 11, fill: '#64748B' }} tickLine={false} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: '#FFFFFF',
+                      borderColor: '#CBD5E1',
+                      borderRadius: '8px',
+                      fontSize: '12px',
+                      boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+                    }}
+                  />
+                  <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }} />
+                  {medidaGrafico === 'processos' ? (
+                    <Bar dataKey="total" name="Processos com Tramitação" fill="#0F4C3A" radius={[4, 4, 0, 0]} />
+                  ) : (
+                    <Bar dataKey="atos" name="Registros de Atos/Atividades" fill="#52796F" radius={[4, 4, 0, 0]} />
+                  )}
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
-          <div className="h-64 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                data={MOCK_DISTRIBUICAO_UNIDADE}
-                layout="vertical"
-                margin={{ top: 5, right: 20, left: 35, bottom: 5 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#E2E8F0" />
-                <XAxis type="number" tick={{ fontSize: 11, fill: '#64748B' }} tickLine={false} />
-                <YAxis dataKey="unidade" type="category" tick={{ fontSize: 10, fill: '#475569' }} tickLine={false} />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: '#FFFFFF',
-                    borderColor: '#CBD5E1',
-                    borderRadius: '8px',
-                    fontSize: '12px',
-                    boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
-                  }}
-                />
-                <Bar dataKey="total" name="Atos Registrados" fill="#0F4C3A" radius={[0, 4, 4, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+
+          {/* Gráfico 2: Distribuição por Unidade */}
+          <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs">
+            <div className="mb-4">
+              <h3 className="text-sm font-bold text-slate-800">
+                Distribuição por Unidade • {medidaGrafico === 'processos' ? 'Processos' : 'Registros de atos/atividades'}
+              </h3>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Distribuição entre diretorias e unidades regionais (clique para filtrar).
+              </p>
+            </div>
+            <div className="h-64 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={MOCK_DISTRIBUICAO_UNIDADE}
+                  layout="vertical"
+                  margin={{ top: 5, right: 20, left: 35, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#E2E8F0" />
+                  <XAxis type="number" tick={{ fontSize: 11, fill: '#64748B' }} tickLine={false} />
+                  <YAxis dataKey="unidade" type="category" tick={{ fontSize: 10, fill: '#475569' }} tickLine={false} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: '#FFFFFF',
+                      borderColor: '#CBD5E1',
+                      borderRadius: '8px',
+                      fontSize: '12px',
+                      boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+                    }}
+                  />
+                  <Bar
+                    dataKey="total"
+                    name={medidaGrafico === 'processos' ? 'Processos' : 'Registros de Atos'}
+                    fill="#0F4C3A"
+                    radius={[0, 4, 4, 0]}
+                    className="cursor-pointer"
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
       </div>
@@ -579,24 +673,100 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
         {/* MODO B: ATIVIDADES POR TÉCNICO */}
         {modoVisualizacao === 'tecnicos' && (
           <div className="p-4 space-y-4">
-            {/* Bloco de médias de processos */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 p-4 bg-slate-50/80 rounded-xl border border-slate-200">
-              <div>
-                <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Média Mensal</div>
-                <div className="text-xl font-bold text-slate-800 mt-0.5">18,4 processos/mês</div>
-                <div className="text-[11px] text-slate-500">Por técnico ativo na regulação</div>
+            {/* Seletor de Contexto: NOUT vs Geral DIRRE */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50/90 p-3.5 rounded-xl border border-slate-200">
+              <div className="flex items-center gap-2.5">
+                <span className="text-xs font-bold text-slate-700">Contexto de Análise:</span>
+                <div className="inline-flex rounded-lg bg-white border border-slate-300 p-0.5 shadow-2xs">
+                  <button
+                    type="button"
+                    onClick={() => setContextoTecnico('nout')}
+                    className={cn(
+                      'px-3 py-1 text-xs rounded-md font-semibold transition-colors cursor-pointer',
+                      contextoTecnico === 'nout'
+                        ? 'bg-[#0F4C3A] text-white font-bold'
+                        : 'text-slate-600 hover:text-slate-900'
+                    )}
+                  >
+                    NOUT (Núcleo de Outorga)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setContextoTecnico('geral')}
+                    className={cn(
+                      'px-3 py-1 text-xs rounded-md font-semibold transition-colors cursor-pointer',
+                      contextoTecnico === 'geral'
+                        ? 'bg-[#0F4C3A] text-white font-bold'
+                        : 'text-slate-600 hover:text-slate-900'
+                    )}
+                  >
+                    Geral DIRRE
+                  </button>
+                </div>
               </div>
-              <div>
-                <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Média Trimestral</div>
-                <div className="text-xl font-bold text-slate-800 mt-0.5">54,2 processos/trimestre</div>
-                <div className="text-[11px] text-slate-500">Média ponderada do quadro</div>
-              </div>
-              <div>
-                <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Média Semestral</div>
-                <div className="text-xl font-bold text-slate-800 mt-0.5">108,1 processos/semestre</div>
-                <div className="text-[11px] text-slate-500">Consolidação semestral DIRRE</div>
-              </div>
+
+              {contextoTecnico === 'nout' && (
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setSimularMediaIndisponivel(!simularMediaIndisponivel)}
+                    className={cn(
+                      'text-[11px] font-semibold px-2.5 py-1 rounded-md border transition-colors cursor-pointer',
+                      simularMediaIndisponivel
+                        ? 'bg-amber-100 text-amber-900 border-amber-300'
+                        : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50'
+                    )}
+                  >
+                    {simularMediaIndisponivel ? '✓ Simulação: Cobertura não confirmada' : 'Testar: Cobertura não confirmada'}
+                  </button>
+                </div>
+              )}
             </div>
+
+            {/* Bloco de médias de processos (Exclusivo NOUT) */}
+            {contextoTecnico === 'nout' && (
+              simularMediaIndisponivel ? (
+                <div className="p-4 rounded-xl bg-amber-50/80 border border-amber-200 text-amber-900 text-xs flex items-center gap-3">
+                  <AlertCircle className="w-5 h-5 text-amber-700 shrink-0" />
+                  <div>
+                    <span className="font-bold block text-sm">Média indisponível: cobertura do período não confirmada</span>
+                    <p className="text-[11px] text-amber-800/80 mt-0.5">
+                      O período selecionado na consulta não atende aos requisitos de consolidação temporal para apuração das médias dos técnicos do NOUT.
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 p-4 bg-slate-50/80 rounded-xl border border-slate-200">
+                    <div>
+                      <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Média Mensal</div>
+                      <div className="text-xl font-bold text-slate-800 mt-0.5">18,4 processos/mês</div>
+                      <div className="text-[11px] text-slate-500 mt-0.5">
+                        Jan/2026 a Jun/2026 (6 meses completos considerados)
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Média Trimestral</div>
+                      <div className="text-xl font-bold text-slate-800 mt-0.5">54,2 processos/trimestre</div>
+                      <div className="text-[11px] text-slate-500 mt-0.5">
+                        1º e 2º Trimestres 2026 (2 trimestres completos)
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Média Semestral</div>
+                      <div className="text-xl font-bold text-slate-800 mt-0.5">108,1 processos/semestre</div>
+                      <div className="text-[11px] text-slate-500 mt-0.5">
+                        1º Semestre 2026 (1 semestre completo)
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1.5 px-1 text-[11px] text-slate-500">
+                    <Info className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                    <span>Média dos totais de processos distintos de cada período completo considerado.</span>
+                  </div>
+                </div>
+              )
+            )}
 
             <div className="overflow-x-auto">
               <GlaTable>
@@ -641,45 +811,53 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
         {modoVisualizacao === 'agrupamento' && (
           <div className="p-4 space-y-4">
             <div className="flex flex-wrap items-center gap-3 bg-slate-50/80 p-3 rounded-xl border border-slate-200">
-              <span className="text-xs font-bold text-slate-700">Critério de agrupamento:</span>
-              <div className="inline-flex rounded-lg bg-white border border-slate-300 p-0.5">
+              <span className="text-xs font-bold text-slate-700">Agrupar por:</span>
+              <div className="inline-flex rounded-lg bg-white border border-slate-300 p-0.5 shadow-2xs">
                 <button
+                  type="button"
                   onClick={() => setCriterioAgrupamento('municipio')}
-                  className={`px-3 py-1 text-xs font-bold rounded ${
+                  className={cn(
+                    'px-3 py-1 text-xs rounded font-semibold transition-colors cursor-pointer',
                     criterioAgrupamento === 'municipio'
                       ? 'bg-[#0F4C3A] text-white shadow-xs'
                       : 'text-slate-600 hover:text-slate-900'
-                  }`}
+                  )}
                 >
                   Município
                 </button>
                 <button
+                  type="button"
                   onClick={() => setCriterioAgrupamento('tipologia')}
-                  className={`px-3 py-1 text-xs font-bold rounded ${
+                  className={cn(
+                    'px-3 py-1 text-xs rounded font-semibold transition-colors cursor-pointer',
                     criterioAgrupamento === 'tipologia'
                       ? 'bg-[#0F4C3A] text-white shadow-xs'
                       : 'text-slate-600 hover:text-slate-900'
-                  }`}
+                  )}
                 >
                   Tipologia
                 </button>
                 <button
+                  type="button"
                   onClick={() => setCriterioAgrupamento('ato')}
-                  className={`px-3 py-1 text-xs font-bold rounded ${
+                  className={cn(
+                    'px-3 py-1 text-xs rounded font-semibold transition-colors cursor-pointer',
                     criterioAgrupamento === 'ato'
                       ? 'bg-[#0F4C3A] text-white shadow-xs'
                       : 'text-slate-600 hover:text-slate-900'
-                  }`}
+                  )}
                 >
-                  Ato/Atividade
+                  Ato / Atividade
                 </button>
                 <button
+                  type="button"
                   onClick={() => setCriterioAgrupamento('situacao')}
-                  className={`px-3 py-1 text-xs font-bold rounded ${
+                  className={cn(
+                    'px-3 py-1 text-xs rounded font-semibold transition-colors cursor-pointer',
                     criterioAgrupamento === 'situacao'
                       ? 'bg-[#0F4C3A] text-white shadow-xs'
                       : 'text-slate-600 hover:text-slate-900'
-                  }`}
+                  )}
                 >
                   Situação
                 </button>
@@ -692,11 +870,11 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
                   <tr>
                     <th className="py-2.5 px-3.5">Grupo ({criterioAgrupamento.toUpperCase()})</th>
                     <th className="py-2.5 px-3.5 text-center">Processos</th>
-                    <th className="py-2.5 px-3.5 text-center">Registros</th>
+                    <th className="py-2.5 px-3.5 text-center">Registros de atos/atividades</th>
                     <th className="py-2.5 px-3.5 text-right">Ação</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-200">
+                <tbody className="divide-y divide-slate-200 bg-white">
                   {dadosAgrupamento.map((item, idx) => (
                     <tr key={idx} className="hover:bg-slate-50/80 transition-colors">
                       <td className="py-2.5 px-3.5 font-bold text-slate-900">{item.grupo}</td>
@@ -704,6 +882,7 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
                       <td className="py-2.5 px-3.5 text-center font-bold text-slate-800">{item.registros}</td>
                       <td className="py-2.5 px-3.5 text-right">
                         <button
+                          type="button"
                           onClick={() => setModoVisualizacao('registros')}
                           className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 shadow-2xs transition-colors cursor-pointer"
                         >
@@ -716,6 +895,14 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
                 </tbody>
               </table>
             </div>
+
+            {/* Nota Obrigatória conforme Guia UX */}
+            <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 text-slate-600 text-xs flex items-center gap-2">
+              <Info className="w-4 h-4 text-slate-500 shrink-0" />
+              <span>
+                Um processo pode aparecer em mais de um grupo. O total geral considera processos distintos.
+              </span>
+            </div>
           </div>
         )}
 
@@ -723,34 +910,40 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
         {modoVisualizacao === 'anual' && (
           <div className="p-4 space-y-4">
             {/* Controles de filtro Anual */}
-            <div className="flex flex-wrap items-center gap-4 bg-slate-50/80 p-3 rounded-xl border border-slate-200">
-              <div className="flex items-center gap-2">
-                <label className="text-xs font-bold text-slate-700">Ano base:</label>
-                <select
-                  value={anoDirre}
-                  onChange={(e) => setAnoDirre(Number(e.target.value))}
-                  className="h-8 px-2 text-xs rounded-lg border border-slate-300 bg-white text-slate-800 focus:outline-hidden font-medium"
-                >
-                  <option value={2026}>2026</option>
-                  <option value={2025}>2025</option>
-                  <option value={2024}>2024</option>
-                </select>
+            <div className="flex flex-wrap items-center justify-between gap-4 bg-slate-50/80 p-3.5 rounded-xl border border-slate-200">
+              <div className="flex flex-wrap items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <label className="text-xs font-bold text-slate-700">Ano base:</label>
+                  <select
+                    value={anoDirre}
+                    onChange={(e) => setAnoDirre(Number(e.target.value))}
+                    className="h-8 px-2 text-xs rounded-lg border border-slate-300 bg-white text-slate-800 focus:outline-hidden font-medium"
+                  >
+                    <option value={2026}>2026</option>
+                    <option value={2025}>2025</option>
+                    <option value={2024}>2024</option>
+                  </select>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <label className="text-xs font-bold text-slate-700">Família do ato:</label>
+                  <select
+                    value={familiaDirre}
+                    onChange={(e) => setFamiliaDirre(e.target.value)}
+                    className="h-8 px-2 text-xs rounded-lg border border-slate-300 bg-white text-slate-800 focus:outline-hidden font-medium"
+                  >
+                    {LISTA_FAMILIAS.map((fam) => (
+                      <option key={fam} value={fam}>
+                        {fam}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
-              <div className="flex items-center gap-2">
-                <label className="text-xs font-bold text-slate-700">Família do ato:</label>
-                <select
-                  value={familiaDirre}
-                  onChange={(e) => setFamiliaDirre(e.target.value)}
-                  className="h-8 px-2 text-xs rounded-lg border border-slate-300 bg-white text-slate-800 focus:outline-hidden font-medium"
-                >
-                  {LISTA_FAMILIAS.map((fam) => (
-                    <option key={fam} value={fam}>
-                      {fam}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              <span className="text-[11px] font-semibold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+                Situações consideradas: Concluído e Para publicação
+              </span>
             </div>
 
             {/* Card Destacado Sóbrio */}
@@ -758,9 +951,9 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
               <div className="text-[10px] font-bold text-[#0F4C3A] uppercase tracking-wider">
                 Registros concluídos ou encaminhados para publicação
               </div>
-              <div className="text-2xl font-bold text-slate-900 mt-1">1.482 atos</div>
+              <div className="text-2xl font-bold text-slate-900 mt-1">1.482 registros</div>
               <p className="text-xs text-slate-500 mt-0.5">
-                Atos regulatórios finalizados pelas coordenações da DIRRE com publicação oficial no Diário Oficial do Estado (DOE) ou certificado SEIA emitido.
+                Atos regulatórios finalizados pelas coordenações da DIRRE com publicação oficial no Diário Oficial do Estado (DOE) ou certificado SEIA emitido. Esta visão conta registros.
               </p>
             </div>
 
@@ -769,10 +962,9 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
                 <GlaTableHead>
                   <tr>
                     <GlaTh>Família</GlaTh>
-                    <GlaTh>Ato/atividade</GlaTh>
+                    <GlaTh>Ato / Atividade</GlaTh>
                     <GlaTh>Situação</GlaTh>
-                    <GlaTh align="center">Registros totais</GlaTh>
-                    <GlaTh align="center">Concluídos / Publicados</GlaTh>
+                    <GlaTh align="center">Registros</GlaTh>
                     <GlaTh align="right">Ação</GlaTh>
                   </tr>
                 </GlaTableHead>
@@ -783,19 +975,26 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
                       <GlaTd className="font-bold text-slate-900">{item.ato}</GlaTd>
                       <GlaTd>{renderSituacaoBadge(item.situacao)}</GlaTd>
                       <GlaTd align="center" className="font-bold text-slate-800">{item.registros}</GlaTd>
-                      <GlaTd align="center" className="font-bold text-emerald-700">{item.concluidosPublicados}</GlaTd>
                       <GlaTd align="right">
                         <GlaTableAction
                           variant="outline"
                           onClick={() => setModoVisualizacao('registros')}
                         >
-                          Detalhar
+                          Ver registros
                         </GlaTableAction>
                       </GlaTd>
                     </GlaTableRow>
                   ))}
                 </GlaTableBody>
               </GlaTable>
+            </div>
+
+            {/* Avisos Institucionais Conforme Guia UX */}
+            <div className="p-3 bg-slate-100/70 rounded-lg border border-slate-200 text-slate-600 text-[11px] flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-slate-500 shrink-0" />
+                <span>38 atos Não classificados identificados na base. Registros Fora do recorte anual não são contabilizados nesta perspectiva.</span>
+              </div>
             </div>
           </div>
         )}

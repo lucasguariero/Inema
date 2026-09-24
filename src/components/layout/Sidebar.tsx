@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GLA_MENU_GROUPS, MenuItem } from '@/data/glaMenu';
+import { getCurrentScope, isGroupVisibleInScope, isItemVisibleInScope } from '@/lib/scope';
 
 interface SidebarProps {
   activeRoute?: string;
@@ -31,6 +32,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onCloseMobile,
   onNavigate,
 }) => {
+  const scope = getCurrentScope();
+
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
     'seia-hibrido': true,
     regulacao: true,
@@ -56,6 +59,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
     if (item.href && onCloseMobile) onCloseMobile();
   };
 
+  const visibleGroups = GLA_MENU_GROUPS.filter((group) => isGroupVisibleInScope(group.id, scope));
+
   return (
     <aside
       id="sidebar"
@@ -65,10 +70,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
       )}
     >
       <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-2">
-        {GLA_MENU_GROUPS.map((group) => {
+        {visibleGroups.map((group) => {
+          const visibleItems = group.items.filter((item) => isItemVisibleInScope(item.id, scope));
+          if (visibleItems.length === 0) return null;
+
           const GroupIcon = ICON_MAP[group.icon] || ICON_MAP[group.materialIcon || ''] || FileCheck;
           const isExpanded = openGroups[group.id] ?? true;
-          const hasActiveChild = group.items.some((it) => it.route && it.route === activeRoute);
+          const hasActiveChild = visibleItems.some((it) => it.route && it.route === activeRoute);
 
           return (
             <div key={group.id} className="pt-1">
@@ -99,7 +107,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   id={group.htmlId}
                   className="mt-1 border-l-2 border-slate-200 ml-4 pl-3 space-y-1"
                 >
-                  {group.items.map((subItem) => {
+                  {visibleItems.map((subItem) => {
                     const isSubActive = subItem.route && subItem.route === activeRoute;
 
                     return (

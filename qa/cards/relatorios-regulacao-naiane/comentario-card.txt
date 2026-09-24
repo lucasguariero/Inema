@@ -1,0 +1,14 @@
+Fala @Naiane! Finalizamos a implementação e refinamento completo do protótipo de "Relatórios de Regulação SEIA", alinhado rigorosamente a todas as especificações do Guia de UX e com isolamento total de visualização para sua apresentação. Segue o resultado:
+
+Resolvido: No link dedicado de entrega (com visualização isolada na barra lateral contendo estritamente o módulo de Regulação), validamos a arquitetura completa em duas abas funcionais:
+1. Em "Tramitações no período" (Print 01), confirmamos o seletor dinâmico de métrica entre "Processos" (4.182 processos com tramitação) e "Registros de atos/atividades" (9.450 registros, com média de 2,26 atos/processo), com atualização instantânea dos títulos e gráficos de evolução e distribuição por unidade. No cabeçalho, incluímos o carimbo "Atualizado em: 22/09/2026 10:00" e o painel "Sobre os dados" (Print 02) com as notas metodológicas do SEIA/DIRRE e critérios cadastrais.
+2. Na arquitetura de detalhamento em dois níveis (Seção 5 do Guia), validamos o Painel Lateral de Resumo rápido (Nível 1 - Print 03) ao clicar em "Detalhar", trazendo contexto de tramitação e situação atual, e a transição fluida para o modal completo em 7 blocos canônicos (Nível 2 - Print 04) estruturando Identificação (sem exibição de CPF/CNPJ), Registro Selecionado, Situação Atual com dias sem movimentação, Atos Vinculados com situações individualizadas, Histórico de Tramitação, Histórico de Comunicação apartado e Tempos/Prazos com espécie e nota de prazos concorrentes.
+3. Na visualização "Atividades por técnico" (Print 05), implementamos o filtro de contexto para o Núcleo de Outorga (NOUT) com os 3 cartões de médias analíticas (Mensal 18,4, Trimestral 54,2 e Semestral 108,1 com indicador de períodos completos) e o estado de contingência "Média indisponível: cobertura do período não confirmada", removendo qualquer lógica de ranqueamento.
+4. Pra contraste, na aba "Acompanhamento da pauta" (Print 06), validamos os cenários de processos formados sem tramitação ("Sem tramitação registrada - 45d desde formação"), processos sem atribuição técnica ("Sem atribuição técnica"), especificação normativa do prazo ("Análise Regulatória Conclusiva - Portaria INEMA nº 25.753/2022") e exportação em Excel condizente com a consulta confirmada.
+
+Não resolvido: Nenhum ponto pendente. Todos os requisitos do guia e diretrizes de design do GLA/Filament (#0F4C3A) foram cumpridos e validados via Playwright com 0 falhas.
+
+Fora do escopo deste card: O portal master consolidado com todos os demais módulos (Fiscalização, UCs e SEIA) continua preservado para uso interno no link principal.
+
+Com isso, considero este card resolvido e pronto para sua apresentação e validação com os gestores da DIRRE.
+Fico à disposição se precisar de mais detalhes de qualquer um desses pontos!
