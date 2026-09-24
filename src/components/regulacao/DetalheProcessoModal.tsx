@@ -155,7 +155,7 @@ export const DetalheProcessoModal: React.FC<DetalheProcessoModalProps> = ({
                 <div>
                   <span className="text-[11px] text-slate-500 block">Status do Prazo</span>
                   <span className="font-medium text-slate-800 block mt-0.5">
-                    {processo.prazoExcedido || ('situacaoPrazo' in processo && processo.situacaoPrazo === 'Prazo Excedido')
+                    {('situacaoPrazo' in processo && (processo.situacaoPrazo === 'Excedido' || (processo.situacaoPrazo as string) === 'Prazo Excedido')) || Boolean((processo as any).prazoExcedido)
                       ? 'Prazo Regulamentar Excedido'
                       : 'Dentro do Prazo Regulamentar'}
                   </span>

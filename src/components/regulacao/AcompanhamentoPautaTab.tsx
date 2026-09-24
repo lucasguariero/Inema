@@ -44,6 +44,7 @@ interface AcompanhamentoPautaTabProps {
   onRemoveFiltro: (chave: keyof FiltrosPauta) => void;
   onLimparFiltros: () => void;
   onSelectProcesso: (item: TramitacaoItem) => void;
+  onFiltrosChange?: (novos: FiltrosPauta) => void;
 }
 
 export const AcompanhamentoPautaTab: React.FC<AcompanhamentoPautaTabProps> = ({
@@ -52,6 +53,7 @@ export const AcompanhamentoPautaTab: React.FC<AcompanhamentoPautaTabProps> = ({
   onRemoveFiltro,
   onLimparFiltros,
   onSelectProcesso,
+  onFiltrosChange,
 }) => {
   const [statusExportacao, setStatusExportacao] = useState<'disponivel' | 'gerando' | 'sucesso'>('disponivel');
 
@@ -63,6 +65,29 @@ export const AcompanhamentoPautaTab: React.FC<AcompanhamentoPautaTabProps> = ({
     }
     if (filtros.prazo && filtros.prazo !== 'todos') {
       pills.push({ chave: 'prazo', label: `Prazo: ${filtros.prazo}` });
+    }
+    if (filtros.atribuicao && filtros.atribuicao !== 'todos') {
+      pills.push({
+        chave: 'atribuicao',
+        label: filtros.atribuicao === 'sem_atribuicao' ? 'Sem atribuição' : 'Com equipe'
+      });
+    }
+    if (filtros.atoVinculado && filtros.atoVinculado !== 'todos') {
+      pills.push({ chave: 'atoVinculado', label: `Ato: ${filtros.atoVinculado}` });
+    }
+    if (filtros.municipio && filtros.municipio !== 'todos') {
+      pills.push({ chave: 'municipio', label: `Município: ${filtros.municipio}` });
+    }
+    if (filtros.tipologia && filtros.tipologia !== 'todas') {
+      pills.push({ chave: 'tipologia', label: `Tipologia: ${filtros.tipologia}` });
+    }
+    const temDiasMin = filtros.diasMin !== undefined && filtros.diasMin !== '' && !isNaN(Number(filtros.diasMin));
+    const temDiasMax = filtros.diasMax !== undefined && filtros.diasMax !== '' && !isNaN(Number(filtros.diasMax));
+    if (temDiasMin || temDiasMax) {
+      pills.push({
+        chave: 'diasMin',
+        label: `Dias: ${temDiasMin ? filtros.diasMin : 0} a ${temDiasMax ? filtros.diasMax : '∞'}`
+      });
     }
     if (filtros.unidade && filtros.unidade !== 'todas') {
       pills.push({ chave: 'unidade', label: `Unidade: ${filtros.unidade}` });
@@ -87,16 +112,43 @@ export const AcompanhamentoPautaTab: React.FC<AcompanhamentoPautaTabProps> = ({
         const bateuTecnico = item.tecnicoAtual.toLowerCase().includes(termo);
         if (!bateuProcesso && !bateuInteressado && !bateuTecnico) return false;
       }
-      if (filtros.prazo !== 'todos' && item.situacaoPrazo !== filtros.prazo) {
+      if (filtros.prazo && filtros.prazo !== 'todos' && item.situacaoPrazo !== filtros.prazo) {
         return false;
       }
-      if (filtros.unidade !== 'todas' && item.unidadeAtual !== filtros.unidade) {
+      if (filtros.atribuicao && filtros.atribuicao !== 'todos') {
+        if (filtros.atribuicao === 'sem_atribuicao' && item.tecnicoAtual !== 'Sem atribuição técnica') {
+          return false;
+        }
+        if (filtros.atribuicao === 'com_equipe' && item.tecnicoAtual === 'Sem atribuição técnica') {
+          return false;
+        }
+      }
+      if (filtros.atoVinculado && filtros.atoVinculado !== 'todos') {
+        if (!item.atos.some((a) => a.toLowerCase().includes(filtros.atoVinculado!.toLowerCase()))) {
+          return false;
+        }
+      }
+      if (filtros.municipio && filtros.municipio !== 'todos' && item.municipio !== filtros.municipio) {
         return false;
       }
-      if (filtros.tecnico !== 'todos' && item.tecnicoAtual !== filtros.tecnico) {
+      if (filtros.tipologia && filtros.tipologia !== 'todas' && item.tipologia !== filtros.tipologia) {
         return false;
       }
-      if (filtros.situacao !== 'todas' && item.situacaoAtual !== filtros.situacao) {
+      const temFiltroMin = filtros.diasMin !== undefined && filtros.diasMin !== '' && !isNaN(Number(filtros.diasMin));
+      if (temFiltroMin && item.diasSemMovimentacao < Number(filtros.diasMin)) {
+        return false;
+      }
+      const temFiltroMax = filtros.diasMax !== undefined && filtros.diasMax !== '' && !isNaN(Number(filtros.diasMax));
+      if (temFiltroMax && item.diasSemMovimentacao > Number(filtros.diasMax)) {
+        return false;
+      }
+      if (filtros.unidade && filtros.unidade !== 'todas' && item.unidadeAtual !== filtros.unidade) {
+        return false;
+      }
+      if (filtros.tecnico && filtros.tecnico !== 'todos' && item.tecnicoAtual !== filtros.tecnico) {
+        return false;
+      }
+      if (filtros.situacao && filtros.situacao !== 'todas' && item.situacaoAtual !== filtros.situacao) {
         return false;
       }
       return true;
@@ -129,25 +181,41 @@ export const AcompanhamentoPautaTab: React.FC<AcompanhamentoPautaTabProps> = ({
   };
 
   const renderBadgePrazo = (prazo: string) => {
-    if (prazo === 'Prazo Excedido') {
-      return (
-        <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-rose-50 text-rose-700 border border-rose-200">
-          Prazo Excedido
-        </span>
-      );
+    switch (prazo) {
+      case 'Excedido':
+      case 'Prazo Excedido':
+        return (
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">
+            Excedido
+          </span>
+        );
+      case 'Suspenso':
+      case 'Atenção':
+        return (
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+            Suspenso
+          </span>
+        );
+      case 'Não aplicável':
+        return (
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">
+            Não aplicável
+          </span>
+        );
+      case 'Indeterminado':
+        return (
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">
+            Indeterminado
+          </span>
+        );
+      case 'No prazo':
+      default:
+        return (
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+            No prazo
+          </span>
+        );
     }
-    if (prazo === 'Atenção') {
-      return (
-        <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-50 text-amber-800 border border-amber-200">
-          Atenção
-        </span>
-      );
-    }
-    return (
-      <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-        No prazo
-      </span>
-    );
   };
 
   const renderSituacaoBadge = (situacao: string) => {
@@ -189,6 +257,25 @@ export const AcompanhamentoPautaTab: React.FC<AcompanhamentoPautaTabProps> = ({
 
   return (
     <div className="space-y-6 relative">
+      {/* CARIMBO OFICIAL DE ATUALIZAÇÃO DA PAUTA */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 px-4 py-3 rounded-xl bg-slate-50 border border-slate-200">
+        <div className="flex items-center gap-2">
+          <span className="w-2.5 h-2.5 rounded-full bg-[#0F4C3A]"></span>
+          <span className="font-mono font-bold text-xs text-slate-800">
+            Pauta em: 24/09/2024 10:00
+          </span>
+          <span className="text-slate-400 text-xs hidden sm:inline">•</span>
+          <span className="text-xs text-slate-500 hidden sm:inline">
+            Posição oficial consolidada de processos ativos
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-[11px] text-slate-500 font-medium">
+            Regra normativa: Portaria INEMA nº 25.753/2022
+          </span>
+        </div>
+      </div>
+
       {/* TOAST DE SUCESSO NO CANTO SUPERIOR DIREITO - PADRÃO GLA / FILAMENT */}
       {toastNotificacao && (
         <div className="fixed top-20 right-6 z-50 flex items-center gap-3 px-4 py-3 bg-white border border-emerald-300 text-slate-800 text-xs rounded-xl shadow-lg ring-1 ring-slate-950/5 animate-in fade-in slide-in-from-top-3 duration-200">
@@ -232,13 +319,19 @@ export const AcompanhamentoPautaTab: React.FC<AcompanhamentoPautaTabProps> = ({
             Processos com prazo excedido
           </div>
           <div className="mt-2 flex items-baseline gap-3">
-            <span className="text-3xl font-bold text-rose-700 tracking-tight">412</span>
+            <span className="text-3xl font-bold text-rose-700 tracking-tight">
+              {totalFiltrosAtivos > 0
+                ? pautaFiltrada.filter((p) => p.situacaoPrazo === 'Excedido').length
+                : 412}
+            </span>
             <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">
-              10,7% da pauta em alerta
+              {totalFiltrosAtivos > 0
+                ? `${((pautaFiltrada.filter((p) => p.situacaoPrazo === 'Excedido').length / (pautaFiltrada.length || 1)) * 100).toFixed(1)}% dos filtrados`
+                : '10,7% da pauta em alerta'}
             </span>
           </div>
           <p className="mt-1.5 text-xs text-slate-500">
-            Espécie do prazo: <strong>Análise Regulatória Conclusiva (Portaria INEMA nº 25.753/2022)</strong>.
+            Espécie do prazo: <strong>Análise Regulatória Conclusiva (Portaria INEMA nº 25.753/2022)</strong>. Não contabiliza prazos indeterminados.
           </p>
         </div>
       </div>
@@ -380,6 +473,138 @@ export const AcompanhamentoPautaTab: React.FC<AcompanhamentoPautaTabProps> = ({
           </div>
         </CardHeader>
 
+        {/* Toolbar de Filtros Integrados da Pauta */}
+        <div className="p-3.5 bg-slate-50/90 border-b border-slate-200 flex flex-wrap items-center gap-2.5">
+          {/* Busca Rápida */}
+          <div className="relative min-w-[200px] flex-1 sm:max-w-xs">
+            <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Buscar processo, interessado, técnico..."
+              value={filtros.busca || ''}
+              onChange={(e) => onFiltrosChange?.({ ...filtros, busca: e.target.value })}
+              className="w-full pl-8 pr-2.5 h-8 text-xs rounded-lg border border-slate-300 bg-white text-slate-800 placeholder-slate-400 focus:outline-hidden focus:border-[#0F4C3A]"
+            />
+          </div>
+
+          {/* Situação do Prazo */}
+          <div className="flex items-center gap-1.5">
+            <span className="text-[11px] font-bold text-slate-600 whitespace-nowrap">Prazo:</span>
+            <select
+              value={filtros.prazo || 'todos'}
+              onChange={(e) => onFiltrosChange?.({ ...filtros, prazo: e.target.value as any })}
+              className="h-8 px-2 text-xs rounded-lg border border-slate-300 bg-white text-slate-800 focus:outline-hidden font-medium"
+            >
+              <option value="todos">Todos</option>
+              <option value="No prazo">No prazo</option>
+              <option value="Excedido">Excedido</option>
+              <option value="Suspenso">Suspenso</option>
+              <option value="Não aplicável">Não aplicável</option>
+              <option value="Indeterminado">Indeterminado</option>
+            </select>
+          </div>
+
+          {/* Atribuição */}
+          <div className="flex items-center gap-1.5">
+            <span className="text-[11px] font-bold text-slate-600 whitespace-nowrap">Atribuição:</span>
+            <select
+              value={filtros.atribuicao || 'todos'}
+              onChange={(e) => onFiltrosChange?.({ ...filtros, atribuicao: e.target.value as any })}
+              className="h-8 px-2 text-xs rounded-lg border border-slate-300 bg-white text-slate-800 focus:outline-hidden font-medium"
+            >
+              <option value="todos">Todos</option>
+              <option value="sem_atribuicao">Sem atribuição técnica</option>
+              <option value="com_equipe">Com técnico / equipe</option>
+            </select>
+          </div>
+
+          {/* Ato Vinculado */}
+          <div className="flex items-center gap-1.5">
+            <span className="text-[11px] font-bold text-slate-600 whitespace-nowrap">Ato:</span>
+            <select
+              value={filtros.atoVinculado || 'todos'}
+              onChange={(e) => onFiltrosChange?.({ ...filtros, atoVinculado: e.target.value })}
+              className="h-8 px-2 text-xs rounded-lg border border-slate-300 bg-white text-slate-800 focus:outline-hidden font-medium max-w-[140px] truncate"
+            >
+              <option value="todos">Todos os Atos</option>
+              <option value="Outorga">Outorga Hídrica</option>
+              <option value="Licença Prévia">Licença Prévia (LP)</option>
+              <option value="Licença de Instalação">Licença Instalação (LI)</option>
+              <option value="Licença de Operação">Licença Operação (LO)</option>
+              <option value="Supressão">Supressão Vegetal (ASV)</option>
+            </select>
+          </div>
+
+          {/* Município */}
+          <div className="flex items-center gap-1.5">
+            <span className="text-[11px] font-bold text-slate-600 whitespace-nowrap">Município:</span>
+            <select
+              value={filtros.municipio || 'todos'}
+              onChange={(e) => onFiltrosChange?.({ ...filtros, municipio: e.target.value })}
+              className="h-8 px-2 text-xs rounded-lg border border-slate-300 bg-white text-slate-800 focus:outline-hidden font-medium max-w-[130px] truncate"
+            >
+              <option value="todos">Todos</option>
+              <option value="Salvador">Salvador</option>
+              <option value="Feira de Santana">Feira de Santana</option>
+              <option value="Camaçari">Camaçari</option>
+              <option value="Luís Eduardo Magalhães">Luís Eduardo Magalhães</option>
+              <option value="Barreiras">Barreiras</option>
+              <option value="Juazeiro">Juazeiro</option>
+              <option value="Ilhéus">Ilhéus</option>
+              <option value="Vitória da Conquista">Vitória da Conquista</option>
+            </select>
+          </div>
+
+          {/* Tipologia */}
+          <div className="flex items-center gap-1.5">
+            <span className="text-[11px] font-bold text-slate-600 whitespace-nowrap">Tipologia:</span>
+            <select
+              value={filtros.tipologia || 'todas'}
+              onChange={(e) => onFiltrosChange?.({ ...filtros, tipologia: e.target.value })}
+              className="h-8 px-2 text-xs rounded-lg border border-slate-300 bg-white text-slate-800 focus:outline-hidden font-medium max-w-[130px] truncate"
+            >
+              <option value="todas">Todas</option>
+              <option value="Recursos Hídricos">Recursos Hídricos</option>
+              <option value="Florestal">Florestal</option>
+              <option value="Indústria">Indústria</option>
+              <option value="Mineração">Mineração</option>
+              <option value="Infraestrutura">Infraestrutura</option>
+            </select>
+          </div>
+
+          {/* Faixa Dias s/ Movimentação */}
+          <div className="flex items-center gap-1 text-[11px] text-slate-600 font-bold whitespace-nowrap">
+            <span>Dias:</span>
+            <input
+              type="number"
+              min={0}
+              placeholder="Mín"
+              value={filtros.diasMin ?? ''}
+              onChange={(e) =>
+                onFiltrosChange?.({
+                  ...filtros,
+                  diasMin: e.target.value ? Number(e.target.value) : undefined
+                })
+              }
+              className="w-12 h-8 px-1 text-xs text-center rounded-lg border border-slate-300 bg-white text-slate-800 focus:outline-hidden"
+            />
+            <span className="text-slate-400 font-normal">-</span>
+            <input
+              type="number"
+              min={0}
+              placeholder="Máx"
+              value={filtros.diasMax ?? ''}
+              onChange={(e) =>
+                onFiltrosChange?.({
+                  ...filtros,
+                  diasMax: e.target.value ? Number(e.target.value) : undefined
+                })
+              }
+              className="w-12 h-8 px-1 text-xs text-center rounded-lg border border-slate-300 bg-white text-slate-800 focus:outline-hidden"
+            />
+          </div>
+        </div>
+
         {/* Barra de chips de filtros ativos integrada na tabela quando houver filtros */}
         {totalFiltrosAtivos > 0 && (
           <div className="px-4 py-2 bg-slate-50/80 border-b border-slate-100 flex flex-wrap items-center gap-2">
@@ -466,16 +691,16 @@ export const AcompanhamentoPautaTab: React.FC<AcompanhamentoPautaTabProps> = ({
                         </span>
                       </td>
                       <td className="py-3 px-4 whitespace-nowrap text-slate-600 font-medium">
-                        {item.ultimaMovimentacao === 'Sem tramitação registrada' ? (
+                        {item.semTramitacao || item.ultimaMovimentacao === 'Sem tramitação registrada' ? (
                           <span className="text-slate-500 italic">Sem tramitação registrada</span>
                         ) : (
                           item.ultimaMovimentacao
                         )}
                       </td>
                       <td className="py-3 px-4 text-center whitespace-nowrap">
-                        {item.ultimaMovimentacao === 'Sem tramitação registrada' ? (
-                          <span className="text-[11px] font-semibold text-amber-800 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">
-                            {item.diasSemMovimentacao}d (desde formação)
+                        {item.semTramitacao || item.ultimaMovimentacao === 'Sem tramitação registrada' ? (
+                          <span className="text-[11px] font-semibold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
+                            {item.diasDesdeFormacao ?? item.diasSemMovimentacao}d (desde formação)
                           </span>
                         ) : (
                           <span className={item.diasSemMovimentacao > 30 ? 'text-rose-700 font-bold' : 'text-slate-700 font-medium'}>

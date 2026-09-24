@@ -140,7 +140,7 @@ export const PainelResumoDrawer: React.FC<PainelResumoDrawerProps> = ({
 
                     <div className="pt-1 text-[11px] text-slate-500 flex items-center gap-1.5">
                       <Clock className="w-3.5 h-3.5 text-slate-400" />
-                      <span>Atualização da pauta: 22/09/2026 10:00</span>
+                      <span>Atualização da pauta: 24/09/2024 10:00</span>
                     </div>
                   </div>
                 </div>
@@ -189,18 +189,24 @@ export const PainelResumoDrawer: React.FC<PainelResumoDrawerProps> = ({
                       <span
                         className={cn(
                           'block mt-0.5 font-medium',
-                          pauta.ultimaMovimentacao === 'Sem tramitação registrada'
+                          pauta.semTramitacao || pauta.ultimaMovimentacao === 'Sem tramitação registrada'
                             ? 'text-slate-500 italic'
                             : 'text-slate-800'
                         )}
                       >
-                        {pauta.ultimaMovimentacao}
+                        {pauta.semTramitacao ? 'Sem tramitação registrada' : pauta.ultimaMovimentacao}
                       </span>
                     </div>
                     <div>
-                      <span className="text-[10px] text-slate-500 uppercase tracking-wider block">Dias Sem Movimentação</span>
+                      <span className="text-[10px] text-slate-500 uppercase tracking-wider block">
+                        {pauta.semTramitacao || pauta.ultimaMovimentacao === 'Sem tramitação registrada'
+                          ? 'Dias Desde a Formação'
+                          : 'Dias Sem Movimentação'}
+                      </span>
                       <span className="font-bold text-slate-900 block mt-0.5">
-                        {pauta.diasSemMovimentacao} dias
+                        {pauta.semTramitacao || pauta.ultimaMovimentacao === 'Sem tramitação registrada'
+                          ? `${pauta.diasDesdeFormacao ?? 45} dias`
+                          : `${pauta.diasSemMovimentacao} dias`}
                       </span>
                     </div>
                   </div>
@@ -214,7 +220,7 @@ export const PainelResumoDrawer: React.FC<PainelResumoDrawerProps> = ({
 
                   <div className="pt-1 text-[11px] text-slate-500 flex items-center gap-1.5">
                     <Clock className="w-3.5 h-3.5 text-slate-400" />
-                    <span>Situação do prazo: <strong>{pauta.situacaoPrazo}</strong></span>
+                    <span>Situação do prazo: <strong className="text-slate-700">{pauta.situacaoPrazo}</strong></span>
                   </div>
                 </div>
               </div>

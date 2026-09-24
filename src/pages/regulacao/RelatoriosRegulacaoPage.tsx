@@ -117,7 +117,7 @@ export const RelatoriosRegulacaoPage: React.FC = () => {
             Dados do SEIA
           </span>
           <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">
-            Atualizado em: 22/09/2026 10:00
+            Atualizado em: 24/09/2024 10:00
           </span>
           <button
             type="button"
@@ -159,6 +159,7 @@ export const RelatoriosRegulacaoPage: React.FC = () => {
           onRemoveFiltro={handleRemoverFiltroPauta}
           onLimparFiltros={handleLimparFiltrosPauta}
           onSelectProcesso={(p) => handleDetalhar(p, 'pauta')}
+          onFiltrosChange={handleAplicarFiltrosPauta}
         />
       )}
 

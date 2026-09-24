@@ -370,17 +370,129 @@ export const FiltrosDrawer: React.FC<FiltrosDrawerProps> = ({
                   </label>
                   <select
                     value={localPauta.prazo}
-                    onChange={(e) => setLocalPauta({ ...localPauta, prazo: e.target.value })}
+                    onChange={(e) => setLocalPauta({ ...localPauta, prazo: e.target.value as any })}
                     className="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none font-medium"
                   >
                     <option value="todos">Todos os prazos</option>
-                    <option value="No prazo">No prazo (Normal)</option>
-                    <option value="Atenção">Atenção (Próximo do vencimento)</option>
-                    <option value="Prazo Excedido">Prazo Excedido (Vencido)</option>
+                    <option value="No prazo">No prazo</option>
+                    <option value="Excedido">Excedido</option>
+                    <option value="Suspenso">Suspenso</option>
+                    <option value="Não aplicável">Não aplicável</option>
+                    <option value="Indeterminado">Indeterminado</option>
                   </select>
                 </div>
 
-                {/* 3. Unidade Atual */}
+                {/* 3. Atribuição Técnica */}
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    Atribuição Técnica
+                  </label>
+                  <select
+                    value={localPauta.atribuicao || 'todos'}
+                    onChange={(e) => setLocalPauta({ ...localPauta, atribuicao: e.target.value as any })}
+                    className="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none font-medium"
+                  >
+                    <option value="todos">Todas as atribuições</option>
+                    <option value="sem_atribuicao">Sem atribuição técnica</option>
+                    <option value="com_equipe">Com técnico / equipe designada</option>
+                  </select>
+                </div>
+
+                {/* 4. Ato Vinculado */}
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    Ato Vinculado
+                  </label>
+                  <select
+                    value={localPauta.atoVinculado || 'todos'}
+                    onChange={(e) => setLocalPauta({ ...localPauta, atoVinculado: e.target.value })}
+                    className="w-full text-xs py-2 px-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none font-medium"
+                  >
+                    <option value="todos">Todos os atos</option>
+                    <option value="Outorga">Outorga de Recursos Hídricos</option>
+                    <option value="Licença Prévia">Licença Prévia (LP)</option>
+                    <option value="Licença de Instalação">Licença de Instalação (LI)</option>
+                    <option value="Licença de Operação">Licença de Operação (LO)</option>
+                    <option value="Supressão">Autorização de Supressão (ASV)</option>
+                  </select>
+                </div>
+
+                {/* 5. Município e Tipologia */}
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">Município</label>
+                    <select
+                      value={localPauta.municipio || 'todos'}
+                      onChange={(e) => setLocalPauta({ ...localPauta, municipio: e.target.value })}
+                      className="w-full text-xs py-2 px-2 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none font-medium"
+                    >
+                      <option value="todos">Todos</option>
+                      {LISTA_MUNICIPIOS.map((m) => (
+                        <option key={m} value={m}>
+                          {m}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">Tipologia</label>
+                    <select
+                      value={localPauta.tipologia || 'todas'}
+                      onChange={(e) => setLocalPauta({ ...localPauta, tipologia: e.target.value })}
+                      className="w-full text-xs py-2 px-2 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none font-medium"
+                    >
+                      <option value="todas">Todas</option>
+                      {LISTA_TIPOLOGIAS.map((t) => (
+                        <option key={t} value={t}>
+                          {t}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                {/* 6. Faixa de Dias Sem Movimentação */}
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    Dias Sem Movimentação
+                  </label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <span className="text-[10px] text-slate-500 block mb-0.5 font-medium">Mínimo</span>
+                      <input
+                        type="number"
+                        min={0}
+                        placeholder="Ex: 0"
+                        value={localPauta.diasMin ?? ''}
+                        onChange={(e) =>
+                          setLocalPauta({
+                            ...localPauta,
+                            diasMin: e.target.value ? Number(e.target.value) : undefined
+                          })
+                        }
+                        className="w-full text-xs py-1.5 px-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none"
+                      />
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-slate-500 block mb-0.5 font-medium">Máximo</span>
+                      <input
+                        type="number"
+                        min={0}
+                        placeholder="Ex: 90"
+                        value={localPauta.diasMax ?? ''}
+                        onChange={(e) =>
+                          setLocalPauta({
+                            ...localPauta,
+                            diasMax: e.target.value ? Number(e.target.value) : undefined
+                          })
+                        }
+                        className="w-full text-xs py-1.5 px-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* 7. Unidade Atual */}
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
                     Unidade / Coordenação Atual
@@ -399,7 +511,7 @@ export const FiltrosDrawer: React.FC<FiltrosDrawerProps> = ({
                   </select>
                 </div>
 
-                {/* 4. Técnico Designado */}
+                {/* 8. Técnico Designado */}
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
                     Técnico Responsável
@@ -418,7 +530,7 @@ export const FiltrosDrawer: React.FC<FiltrosDrawerProps> = ({
                   </select>
                 </div>
 
-                {/* 5. Situação do Processo */}
+                {/* 9. Situação do Processo */}
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
                     Situação Atual do Processo

@@ -20,16 +20,27 @@ import {
   YAxis,
   Tooltip,
   Legend,
-  CartesianGrid
+  CartesianGrid,
+  PieChart,
+  Pie,
+  Cell
 } from 'recharts';
 import {
   TramitacaoItem,
   FiltrosTramitacao,
   MOCK_TRAMITACOES,
   MOCK_EVOLUCAO_MENSAL,
+  MOCK_EVOLUCAO_TRIMESTRAL_2024,
+  MOCK_EVOLUCAO_SEMESTRAL_2024,
+  MOCK_EVOLUCAO_ANUAL_HISTORICO,
   MOCK_DISTRIBUICAO_UNIDADE,
+  MOCK_DISTRIBUICAO_ATO_2024,
+  MOCK_DISTRIBUICAO_SITUACAO_2024,
+  MOCK_DISTRIBUICAO_TECNICO_2024,
   MOCK_ATIVIDADES_TECNICO,
   MOCK_ANUAL_DIRRE,
+  MOCK_ANUAL_DIRRE_FAMILIAS,
+  MOCK_ANUAL_DIRRE_EVOLUCAO,
   LISTA_FAMILIAS
 } from '@/data/regulacaoMock';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
@@ -57,7 +68,8 @@ interface TramitacoesPeriodoTabProps {
 type ModoVisualizacao = 'registros' | 'tecnicos' | 'agrupamento' | 'anual';
 type CriterioAgrupamento = 'municipio' | 'tipologia' | 'ato' | 'situacao';
 type MedidaGrafico = 'processos' | 'registros';
-type ContextoTecnico = 'nout' | 'geral';
+type GranularidadeEvolucao = 'mes' | 'trimestre' | 'semestre' | 'ano';
+type CriterioDistribuicao = 'unidade' | 'ato' | 'situacao' | 'tecnico';
 
 export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
   filtros,
@@ -69,15 +81,74 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
   const [modoVisualizacao, setModoVisualizacao] = useState<ModoVisualizacao>('registros');
   const [statusExportacao, setStatusExportacao] = useState<'disponivel' | 'gerando' | 'sucesso'>('disponivel');
   const [criterioAgrupamento, setCriterioAgrupamento] = useState<CriterioAgrupamento>('municipio');
-  const [anoDirre, setAnoDirre] = useState<number>(2026);
-  const [familiaDirre, setFamiliaDirre] = useState<string>('Todas as Famílias');
+  const [anoDirre, setAnoDirre] = useState<number>(2024);
+  const [familiaDirre, setFamiliaDirre] = useState<string>('Todas');
+
+  // Novos Controles de Gráficos (Requisito 1)
+  const [granularidadeEvolucao, setGranularidadeEvolucao] = useState<GranularidadeEvolucao>('mes');
+  const [criterioDistribuicao, setCriterioDistribuicao] = useState<CriterioDistribuicao>('unidade');
 
   // Controle de medida dos gráficos: Processos vs Registros
   const [medidaGrafico, setMedidaGrafico] = useState<MedidaGrafico>('processos');
 
-  // Controle do contexto de técnico (NOUT vs Geral) e simulação de indisponibilidade
-  const [contextoTecnico, setContextoTecnico] = useState<ContextoTecnico>('nout');
+  // Controle de filtro de unidade para visão Atividades por técnico (Requisito 2)
+  const [unidadeFiltroTecnico, setUnidadeFiltroTecnico] = useState<string>('NOUT');
   const [simularMediaIndisponivel, setSimularMediaIndisponivel] = useState<boolean>(false);
+
+  // Regra Condicional NOUT: Só renderiza médias se unidade for NOUT
+  const isNout = (filtros.unidades.length === 1 && (filtros.unidades[0] === 'NOUT' || filtros.unidades[0] === 'DIRRE/NOUT')) || unidadeFiltroTecnico === 'NOUT';
+
+  // Dados calculados para Evolução (Requisito 1)
+  const dadosEvolucao = useMemo(() => {
+    switch (granularidadeEvolucao) {
+      case 'trimestre':
+        return MOCK_EVOLUCAO_TRIMESTRAL_2024.map((item) => ({
+          label: item.periodo,
+          processos: item.total,
+          atos: item.atos
+        }));
+      case 'semestre':
+        return MOCK_EVOLUCAO_SEMESTRAL_2024.map((item) => ({
+          label: item.periodo,
+          processos: item.total,
+          atos: item.atos
+        }));
+      case 'ano':
+        return MOCK_EVOLUCAO_ANUAL_HISTORICO.map((item) => ({
+          label: item.periodo,
+          processos: item.total,
+          atos: item.atos
+        }));
+      case 'mes':
+      default:
+        return MOCK_EVOLUCAO_MENSAL.map((item) => ({
+          label: item.mes,
+          processos: item.total,
+          atos: item.atos
+        }));
+    }
+  }, [granularidadeEvolucao]);
+
+  // Dados calculados para Distribuição (Requisito 1)
+  const dadosDistribuicao = useMemo(() => {
+    switch (criterioDistribuicao) {
+      case 'ato':
+        return MOCK_DISTRIBUICAO_ATO_2024;
+      case 'situacao':
+        return MOCK_DISTRIBUICAO_SITUACAO_2024;
+      case 'tecnico':
+        return MOCK_DISTRIBUICAO_TECNICO_2024;
+      case 'unidade':
+      default:
+        return MOCK_DISTRIBUICAO_UNIDADE.map((u) => ({ label: u.unidade, total: u.total }));
+    }
+  }, [criterioDistribuicao]);
+
+  // Dados filtrados Anual DIRRE (Requisito 3)
+  const dadosAnualDirre = useMemo(() => {
+    if (familiaDirre === 'Todas') return MOCK_ANUAL_DIRRE;
+    return MOCK_ANUAL_DIRRE.filter((item) => item.familia === familiaDirre);
+  }, [familiaDirre]);
 
   // Filtros ativos para exibir nas pílulas
   const pillsFiltros = useMemo(() => {
@@ -181,15 +252,13 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
     return Array.from(mapa.values());
   }, [criterioAgrupamento]);
 
-  // Dados para o modo D (Anual DIRRE)
-  const dadosAnualDirre = useMemo(() => {
-    return MOCK_ANUAL_DIRRE.filter((item) => {
-      if (familiaDirre !== 'Todas as Famílias' && item.familia !== familiaDirre) {
-        return false;
-      }
-      return true;
-    });
-  }, [familiaDirre]);
+  // Técnicos filtrados conforme a coordenação/unidade selecionada
+  const tecnicosFiltrados = useMemo(() => {
+    if (unidadeFiltroTecnico === 'Todas') return MOCK_ATIVIDADES_TECNICO;
+    return MOCK_ATIVIDADES_TECNICO.filter(
+      (tec) => tec.unidade === unidadeFiltroTecnico || tec.unidade.includes(unidadeFiltroTecnico)
+    );
+  }, [unidadeFiltroTecnico]);
 
   // Estado de notificação toast de exportação
   const [toastNotificacao, setToastNotificacao] = useState<string | null>(null);
@@ -393,21 +462,39 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Gráfico 1: Evolução Mensal */}
+          {/* Gráfico 1: Evolução com Controles de Granularidade (Requisito 1) */}
           <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs">
-            <div className="mb-4">
-              <h3 className="text-sm font-bold text-slate-800">
-                Evolução no período • {medidaGrafico === 'processos' ? 'Processos' : 'Registros de atos/atividades'}
-              </h3>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Volume mensal de {medidaGrafico === 'processos' ? 'processos distintos com tramitação' : 'registros de atos e atividades'} em 2026.
-              </p>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+              <div>
+                <h3 className="text-sm font-bold text-slate-800">
+                  Evolução no período • {medidaGrafico === 'processos' ? 'Processos' : 'Registros de atos/atividades'}
+                </h3>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Volume {granularidadeEvolucao === 'mes' ? 'mensal' : granularidadeEvolucao === 'trimestre' ? 'trimestral' : granularidadeEvolucao === 'semestre' ? 'semestral' : 'anual'} de {medidaGrafico === 'processos' ? 'processos distintos com tramitação' : 'registros de atos e atividades'} em 2024.
+                </p>
+              </div>
+
+              {/* Seletor Compacto de Granularidade */}
+              <div className="flex items-center gap-1.5 shrink-0 bg-slate-50 p-1 rounded-lg border border-slate-200">
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider pl-1">Escala:</span>
+                <select
+                  value={granularidadeEvolucao}
+                  onChange={(e) => setGranularidadeEvolucao(e.target.value as any)}
+                  className="h-7 text-xs font-semibold rounded-md border border-slate-300 bg-white text-slate-800 px-2 shadow-2xs focus:outline-none cursor-pointer"
+                >
+                  <option value="mes">Mês</option>
+                  <option value="trimestre">Trimestre</option>
+                  <option value="semestre">Semestre</option>
+                  <option value="ano">Ano</option>
+                </select>
+              </div>
             </div>
+
             <div className="h-64 w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={MOCK_EVOLUCAO_MENSAL} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
+                <BarChart data={dadosEvolucao} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
-                  <XAxis dataKey="mes" tick={{ fontSize: 11, fill: '#64748B' }} tickLine={false} />
+                  <XAxis dataKey="label" tick={{ fontSize: 11, fill: '#64748B' }} tickLine={false} />
                   <YAxis tick={{ fontSize: 11, fill: '#64748B' }} tickLine={false} />
                   <Tooltip
                     contentStyle={{
@@ -420,7 +507,7 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
                   />
                   <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }} />
                   {medidaGrafico === 'processos' ? (
-                    <Bar dataKey="total" name="Processos com Tramitação" fill="#0F4C3A" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="processos" name="Processos com Tramitação" fill="#0F4C3A" radius={[4, 4, 0, 0]} />
                   ) : (
                     <Bar dataKey="atos" name="Registros de Atos/Atividades" fill="#52796F" radius={[4, 4, 0, 0]} />
                   )}
@@ -429,26 +516,44 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
             </div>
           </div>
 
-          {/* Gráfico 2: Distribuição por Unidade */}
+          {/* Gráfico 2: Distribuição com Controles de Critério (Requisito 1) */}
           <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs">
-            <div className="mb-4">
-              <h3 className="text-sm font-bold text-slate-800">
-                Distribuição por Unidade • {medidaGrafico === 'processos' ? 'Processos' : 'Registros de atos/atividades'}
-              </h3>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Distribuição entre diretorias e unidades regionais (clique para filtrar).
-              </p>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+              <div>
+                <h3 className="text-sm font-bold text-slate-800">
+                  Distribuição por {criterioDistribuicao === 'unidade' ? 'Unidade' : criterioDistribuicao === 'ato' ? 'Ato / Atividade' : criterioDistribuicao === 'situacao' ? 'Situação' : 'Técnico'} • {medidaGrafico === 'processos' ? 'Processos' : 'Registros'}
+                </h3>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Distribuição apurada no exercício de 2024.
+                </p>
+              </div>
+
+              {/* Seletor Compacto de Distribuição */}
+              <div className="flex items-center gap-1.5 shrink-0 bg-slate-50 p-1 rounded-lg border border-slate-200">
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider pl-1">Agrupar:</span>
+                <select
+                  value={criterioDistribuicao}
+                  onChange={(e) => setCriterioDistribuicao(e.target.value as any)}
+                  className="h-7 text-xs font-semibold rounded-md border border-slate-300 bg-white text-slate-800 px-2 shadow-2xs focus:outline-none cursor-pointer"
+                >
+                  <option value="unidade">Unidade / Coordenação</option>
+                  <option value="ato">Ato / Atividade</option>
+                  <option value="situacao">Situação</option>
+                  <option value="tecnico">Técnico</option>
+                </select>
+              </div>
             </div>
+
             <div className="h-64 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
-                  data={MOCK_DISTRIBUICAO_UNIDADE}
+                  data={dadosDistribuicao}
                   layout="vertical"
-                  margin={{ top: 5, right: 20, left: 35, bottom: 5 }}
+                  margin={{ top: 5, right: 20, left: 45, bottom: 5 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#E2E8F0" />
                   <XAxis type="number" tick={{ fontSize: 11, fill: '#64748B' }} tickLine={false} />
-                  <YAxis dataKey="unidade" type="category" tick={{ fontSize: 10, fill: '#475569' }} tickLine={false} />
+                  <YAxis dataKey="label" type="category" tick={{ fontSize: 10, fill: '#475569' }} tickLine={false} width={85} />
                   <Tooltip
                     contentStyle={{
                       backgroundColor: '#FFFFFF',
@@ -460,7 +565,7 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
                   />
                   <Bar
                     dataKey="total"
-                    name={medidaGrafico === 'processos' ? 'Processos' : 'Registros de Atos'}
+                    name={medidaGrafico === 'processos' ? 'Processos' : 'Registros'}
                     fill="#0F4C3A"
                     radius={[0, 4, 4, 0]}
                     className="cursor-pointer"
@@ -649,41 +754,41 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
         {/* MODO B: ATIVIDADES POR TÉCNICO */}
         {modoVisualizacao === 'tecnicos' && (
           <div className="p-4 space-y-4">
-            {/* Seletor de Contexto: NOUT vs Geral DIRRE */}
+            {/* Seletor de Coordenação / Unidade */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50/90 p-3.5 rounded-xl border border-slate-200">
-              <div className="flex items-center gap-2.5">
-                <span className="text-xs font-bold text-slate-700">Contexto de Análise:</span>
-                <div className="inline-flex rounded-lg bg-white border border-slate-300 p-0.5 shadow-2xs">
-                  <button
-                    type="button"
-                    onClick={() => setContextoTecnico('nout')}
-                    className={cn(
-                      'px-3 py-1 text-xs rounded-md font-semibold transition-colors cursor-pointer',
-                      contextoTecnico === 'nout'
-                        ? 'bg-[#0F4C3A] text-white font-bold'
-                        : 'text-slate-600 hover:text-slate-900'
-                    )}
-                  >
-                    NOUT (Núcleo de Outorga)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setContextoTecnico('geral')}
-                    className={cn(
-                      'px-3 py-1 text-xs rounded-md font-semibold transition-colors cursor-pointer',
-                      contextoTecnico === 'geral'
-                        ? 'bg-[#0F4C3A] text-white font-bold'
-                        : 'text-slate-600 hover:text-slate-900'
-                    )}
-                  >
-                    Geral DIRRE
-                  </button>
-                </div>
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="text-xs font-bold text-slate-700">Coordenação / Unidade:</span>
+                <select
+                  value={unidadeFiltroTecnico}
+                  onChange={(e) => setUnidadeFiltroTecnico(e.target.value)}
+                  className="h-8 px-2.5 text-xs rounded-lg border border-slate-300 bg-white text-slate-800 focus:outline-hidden font-medium shadow-2xs"
+                >
+                  <option value="NOUT">NOUT (Núcleo de Outorga)</option>
+                  <option value="Todas">Todas as Coordenações</option>
+                  <option value="DIRRE">DIRRE (Diretoria de Regulação)</option>
+                  <option value="CRAS">CRAS</option>
+                  <option value="DITEC">DITEC</option>
+                  <option value="DIFIS">DIFIS</option>
+                </select>
               </div>
+
+              {isNout && (
+                <div className="flex items-center gap-2">
+                  <label className="text-[11px] text-slate-500 font-medium cursor-pointer flex items-center gap-1.5">
+                    <input
+                      type="checkbox"
+                      checked={simularMediaIndisponivel}
+                      onChange={(e) => setSimularMediaIndisponivel(e.target.checked)}
+                      className="rounded border-slate-300 text-[#0F4C3A] focus:ring-[#0F4C3A]"
+                    />
+                    <span>Simular período não consolidado</span>
+                  </label>
+                </div>
+              )}
             </div>
 
-            {/* Bloco de médias de processos (Exclusivo NOUT) */}
-            {contextoTecnico === 'nout' && (
+            {/* Bloco de médias de processos (Exclusivo NOUT: só renderiza se coordenação/unidade for NOUT) */}
+            {isNout && (
               simularMediaIndisponivel ? (
                 <div className="p-4 rounded-xl bg-amber-50/80 border border-amber-200 text-amber-900 text-xs flex items-center gap-3">
                   <AlertCircle className="w-5 h-5 text-amber-700 shrink-0" />
@@ -698,30 +803,30 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
                 <div className="space-y-2">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <div className="rounded-xl bg-white p-4 border border-slate-200 shadow-xs ring-1 ring-slate-950/5">
-                      <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Média Mensal</div>
+                      <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Média Mensal em 2024 (12 meses)</div>
                       <div className="text-xl font-bold text-slate-800 mt-1">18,4 <span className="text-xs font-normal text-slate-500">processos/mês</span></div>
                       <div className="text-[11px] text-slate-500 mt-1">
-                        Jan/2026 a Jun/2026 (6 meses completos considerados)
+                        Jan/2024 a Dez/2024 (12 meses completos considerados)
                       </div>
                     </div>
                     <div className="rounded-xl bg-white p-4 border border-slate-200 shadow-xs ring-1 ring-slate-950/5">
-                      <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Média Trimestral</div>
+                      <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Média Trimestral em 2024 (4 trimestres)</div>
                       <div className="text-xl font-bold text-slate-800 mt-1">54,2 <span className="text-xs font-normal text-slate-500">processos/trimestre</span></div>
                       <div className="text-[11px] text-slate-500 mt-1">
-                        1º e 2º Trimestres 2026 (2 trimestres completos)
+                        1º ao 4º Trimestre 2024 (4 trimestres completos)
                       </div>
                     </div>
                     <div className="rounded-xl bg-white p-4 border border-slate-200 shadow-xs ring-1 ring-slate-950/5">
-                      <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Média Semestral</div>
+                      <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Média Semestral em 2024 (2 semestres)</div>
                       <div className="text-xl font-bold text-slate-800 mt-1">108,1 <span className="text-xs font-normal text-slate-500">processos/semestre</span></div>
                       <div className="text-[11px] text-slate-500 mt-1">
-                        1º Semestre 2026 (1 semestre completo)
+                        1º e 2º Semestre 2024 (2 semestres completos)
                       </div>
                     </div>
                   </div>
                   <div className="flex items-center gap-1.5 px-1 text-[11px] text-slate-500">
                     <Info className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                    <span>Média dos totais de processos distintos de cada período completo considerado.</span>
+                    <span>Média dos totais de processos distintos de cada período completo considerado (Exclusivo NOUT).</span>
                   </div>
                 </div>
               )
@@ -739,7 +844,7 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
                   </tr>
                 </GlaTableHead>
                 <GlaTableBody>
-                  {MOCK_ATIVIDADES_TECNICO.map((tec, idx) => (
+                  {tecnicosFiltrados.map((tec, idx) => (
                     <GlaTableRow key={idx}>
                       <GlaTd className="font-bold text-slate-900">{tec.tecnico}</GlaTd>
                       <GlaTd className="text-slate-600 font-medium">{tec.unidade}</GlaTd>
@@ -908,12 +1013,80 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
             {/* Card Destacado Sóbrio */}
             <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
               <div className="text-[10px] font-bold text-[#0F4C3A] uppercase tracking-wider">
-                Registros concluídos ou encaminhados para publicação
+                Ano Referência: {anoDirre}
               </div>
               <div className="text-2xl font-bold text-slate-900 mt-1">1.482 registros</div>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Atos regulatórios finalizados pelas coordenações da DIRRE com publicação oficial no Diário Oficial do Estado (DOE) ou certificado SEIA emitido. Esta visão conta registros.
+              <p className="text-xs text-slate-600 mt-0.5">
+                Registros concluídos ou encaminhados para publicação.
               </p>
+            </div>
+
+            {/* 2 Gráficos Específicos: Donut de Famílias + Barras Mensal */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              {/* Gráfico 1: Distribuição por Família (Donut) */}
+              <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+                <div className="text-xs font-bold text-slate-800 mb-3 flex items-center justify-between">
+                  <span>Distribuição por Família ({anoDirre})</span>
+                  <span className="text-[11px] text-slate-500 font-normal">Total: 1.482</span>
+                </div>
+                <div className="h-64">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={MOCK_ANUAL_DIRRE_FAMILIAS}
+                        dataKey="total"
+                        nameKey="familia"
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={55}
+                        outerRadius={85}
+                        paddingAngle={4}
+                      >
+                        {MOCK_ANUAL_DIRRE_FAMILIAS.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip
+                        formatter={(val: any) => [`${val} registros`, 'Volume']}
+                        contentStyle={{
+                          backgroundColor: '#ffffff',
+                          borderRadius: '8px',
+                          border: '1px solid #e2e8f0',
+                          fontSize: '12px'
+                        }}
+                      />
+                      <Legend verticalAlign="bottom" height={36} iconType="circle" />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
+              {/* Gráfico 2: Evolução Mensal no Ano Selecionado (Barras) */}
+              <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+                <div className="text-xs font-bold text-slate-800 mb-3 flex items-center justify-between">
+                  <span>Evolução Mensal ({anoDirre})</span>
+                  <span className="text-[11px] text-slate-500 font-normal">Jan a Dez</span>
+                </div>
+                <div className="h-64">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={MOCK_ANUAL_DIRRE_EVOLUCAO} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                      <XAxis dataKey="mes" tick={{ fontSize: 11, fill: '#64748b' }} axisLine={{ stroke: '#cbd5e1' }} />
+                      <YAxis tick={{ fontSize: 11, fill: '#64748b' }} axisLine={{ stroke: '#cbd5e1' }} />
+                      <Tooltip
+                        formatter={(val: any) => [`${val} registros`, 'Concluídos/Publicados']}
+                        contentStyle={{
+                          backgroundColor: '#ffffff',
+                          borderRadius: '8px',
+                          border: '1px solid #e2e8f0',
+                          fontSize: '12px'
+                        }}
+                      />
+                      <Bar dataKey="registros" fill="#0F4C3A" radius={[4, 4, 0, 0]} name="Registros" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
             </div>
 
             <div className="overflow-x-auto">

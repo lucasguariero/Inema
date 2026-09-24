@@ -29,12 +29,14 @@ export interface PautaItem {
   atos: string[];
   ultimaMovimentacao: string;
   diasSemMovimentacao: number;
-  situacaoPrazo: 'No prazo' | 'Atenção' | 'Prazo Excedido';
+  situacaoPrazo: 'No prazo' | 'Excedido' | 'Suspenso' | 'Não aplicável' | 'Indeterminado';
   municipio: string;
   tipologia: string;
   liderEquipe: string;
   membrosEquipe: string[];
   observacoes: string;
+  semTramitacao?: boolean;
+  diasDesdeFormacao?: number;
 }
 
 export interface FiltrosTramitacao {
@@ -71,6 +73,12 @@ export interface FiltrosPauta {
   unidade: string;
   tecnico: string;
   situacao: string;
+  atoVinculado: string;
+  municipio: string;
+  tipologia: string;
+  diasMin: string;
+  diasMax: string;
+  atribuicao: string;
 }
 
 export const FILTROS_PAUTA_INICIAIS: FiltrosPauta = {
@@ -78,10 +86,17 @@ export const FILTROS_PAUTA_INICIAIS: FiltrosPauta = {
   prazo: 'todos',
   unidade: 'todas',
   tecnico: 'todos',
-  situacao: 'todas'
+  situacao: 'todas',
+  atoVinculado: 'todos',
+  municipio: 'todos',
+  tipologia: 'todas',
+  diasMin: '',
+  diasMax: '',
+  atribuicao: 'todos'
 };
 
 export const LISTA_UNIDADES = [
+  'NOUT',
   'COASP',
   'CGDIS',
   'COMIN',
@@ -90,6 +105,8 @@ export const LISTA_UNIDADES = [
   'CRH',
   'DIRRE/CGF',
   'DIRRE/CEG',
+  'DIRRE/CRH',
+  'DIRRE/NOUT',
   'DILIC/UR-OESTE',
   'DILIC/UR-SUL',
   'DILIC/UR-METRO'
@@ -171,10 +188,10 @@ export const LISTA_TIPOLOGIAS = [
 ];
 
 export const LISTA_FAMILIAS = [
-  'Todas as Famílias',
-  'Florestal / CEFIR',
-  'Licenciamento / Regularização',
-  'Outros'
+  'Todas',
+  'Florestal',
+  'Licença',
+  'Outorga'
 ];
 
 export const MOCK_TRAMITACOES: TramitacaoItem[] = [
@@ -1050,11 +1067,11 @@ export const MOCK_PAUTA: PautaItem[] = [
       "Autorização de Supressão de Vegetação (ASV)",
       "Licença Prévia (LP)"
     ],
-    "ultimaMovimentacao": "15/09/2026",
+    "ultimaMovimentacao": "15/09/2024",
     "diasSemMovimentacao": 9,
     "situacaoPrazo": "No prazo",
     "municipio": "Ilhéus",
-    "tipologia": "Silvicultura / Florestal",
+    "tipologia": "Agrossilvopastoril",
     "liderEquipe": "RUTE DE OLIVEIRA SANTANA",
     "membrosEquipe": [
       "GENI DE SENA DIAS URPIA"
@@ -1072,18 +1089,18 @@ export const MOCK_PAUTA: PautaItem[] = [
     "atos": [
       "Outorga de Direito de Uso de Recursos Hídricos"
     ],
-    "ultimaMovimentacao": "20/08/2026",
+    "ultimaMovimentacao": "20/08/2024",
     "diasSemMovimentacao": 35,
-    "situacaoPrazo": "Atenção",
+    "situacaoPrazo": "Suspenso",
     "municipio": "Barreiras",
-    "tipologia": "Mineração / Indústria",
+    "tipologia": "Mineração",
     "liderEquipe": "THOMAZ BORGES ARARIPE BARBOSA",
     "membrosEquipe": [],
-    "observacoes": "Notificação nº 2026/0412 expedida. Requerente em prazo regulamentar para juntada de complementações."
+    "observacoes": "Notificação nº 2024/0412 expedida. Requerente em prazo regulamentar para juntada de complementações."
   },
   {
     "id": "pauta-003",
-    "processo": "2026.001.000319/INEMA/FORM-00319",
+    "processo": "2024.001.000319/INEMA/FORM-00319",
     "interessado": "Bioenergia Campo Limpo Ltda",
     "unidadeAtual": "COASP",
     "tecnicoAtual": "Sem atribuição técnica",
@@ -1094,12 +1111,14 @@ export const MOCK_PAUTA: PautaItem[] = [
     ],
     "ultimaMovimentacao": "Sem tramitação registrada",
     "diasSemMovimentacao": 45,
-    "situacaoPrazo": "Atenção",
+    "situacaoPrazo": "Indeterminado",
     "municipio": "Luís Eduardo Magalhães",
     "tipologia": "Agrossilvopastoril",
     "liderEquipe": "Sem atribuição técnica",
     "membrosEquipe": [],
-    "observacoes": "Processo formado via balcão do SEIA sem movimentação ou atribuição técnica inicial."
+    "observacoes": "Processo formado via balcão do SEIA sem movimentação ou atribuição técnica inicial.",
+    "semTramitacao": true,
+    "diasDesdeFormacao": 45
   },
   {
     "id": "pauta-004",
@@ -1114,11 +1133,11 @@ export const MOCK_PAUTA: PautaItem[] = [
       "Licença de Instalação (LI)",
       "ASV"
     ],
-    "ultimaMovimentacao": "01/09/2026",
+    "ultimaMovimentacao": "01/09/2024",
     "diasSemMovimentacao": 23,
     "situacaoPrazo": "No prazo",
     "municipio": "Caetité",
-    "tipologia": "Energia Renovável / Eólica",
+    "tipologia": "Energia Eólica",
     "liderEquipe": "Sem atribuição técnica",
     "membrosEquipe": [],
     "observacoes": "Processo triado aguardando despacho da chefia para designação de responsável técnico."
@@ -1136,15 +1155,15 @@ export const MOCK_PAUTA: PautaItem[] = [
     ],
     "ultimaMovimentacao": "02/05/2024",
     "diasSemMovimentacao": 21,
-    "situacaoPrazo": "Atenção",
+    "situacaoPrazo": "Suspenso",
     "municipio": "Ilhéus",
-    "tipologia": "Mineração / Indústria",
+    "tipologia": "Mineração",
     "liderEquipe": "ANDRESSA CRISTINA RIBEIRO ASSUNCAO",
     "membrosEquipe": [],
     "observacoes": "Processo em acompanhamento ativo na DIRRE/COASP."
   },
   {
-    "id": "pauta-004",
+    "id": "pauta-006",
     "processo": "046.0539.2024.0011691-94",
     "interessado": "GILMAR TAGLIARI BORTOLIN",
     "unidadeAtual": "COASP",
@@ -1157,15 +1176,15 @@ export const MOCK_PAUTA: PautaItem[] = [
     ],
     "ultimaMovimentacao": "02/05/2024",
     "diasSemMovimentacao": 30,
-    "situacaoPrazo": "Atenção",
+    "situacaoPrazo": "Excedido",
     "municipio": "Feira de Santana",
     "tipologia": "Agrossilvopastoril",
     "liderEquipe": "FELIPE DOS SANTOS DE OLIVEIRA",
     "membrosEquipe": [],
-    "observacoes": "Processo em acompanhamento ativo na DIRRE/COASP."
+    "observacoes": "Processo com prazo regulamentar excedido aguardando manifestação do setor."
   },
   {
-    "id": "pauta-005",
+    "id": "pauta-007",
     "processo": "046.0539.2024.0010676-00",
     "interessado": "JOSE FELIPE MENEZES DE FREITAS",
     "unidadeAtual": "COASP",
@@ -1177,15 +1196,15 @@ export const MOCK_PAUTA: PautaItem[] = [
     ],
     "ultimaMovimentacao": "02/05/2024",
     "diasSemMovimentacao": 39,
-    "situacaoPrazo": "Prazo Excedido",
+    "situacaoPrazo": "Suspenso",
     "municipio": "Salvador",
-    "tipologia": "Infraestrutura / Energia",
+    "tipologia": "Infraestrutura Rodoviária",
     "liderEquipe": "ANDRESSA CRISTINA RIBEIRO ASSUNCAO",
     "membrosEquipe": [],
     "observacoes": "Processo em acompanhamento ativo na DIRRE/COASP."
   },
   {
-    "id": "pauta-006",
+    "id": "pauta-008",
     "processo": "046.0525.2023.0036946-72",
     "interessado": "Marlucio Rodrigues Abreu",
     "unidadeAtual": "COASP",
@@ -1198,15 +1217,15 @@ export const MOCK_PAUTA: PautaItem[] = [
     ],
     "ultimaMovimentacao": "02/01/2024",
     "diasSemMovimentacao": 48,
-    "situacaoPrazo": "Prazo Excedido",
+    "situacaoPrazo": "Não aplicável",
     "municipio": "Barreiras",
-    "tipologia": "Mineração / Indústria",
+    "tipologia": "Mineração",
     "liderEquipe": "GEORGE WEBER DOS SANTOS ARAUJO SOUZA",
     "membrosEquipe": [],
-    "observacoes": "Processo em acompanhamento ativo na DIRRE/COASP."
+    "observacoes": "Processo concluído no SEIA. Prazos encerrados regularmente."
   },
   {
-    "id": "pauta-007",
+    "id": "pauta-009",
     "processo": "046.0525.2024.0011829-69",
     "interessado": "JOSE ORLEANS DO NASCIMENTO",
     "unidadeAtual": "COASP",
@@ -1218,15 +1237,15 @@ export const MOCK_PAUTA: PautaItem[] = [
     ],
     "ultimaMovimentacao": "03/05/2024",
     "diasSemMovimentacao": 57,
-    "situacaoPrazo": "Prazo Excedido",
+    "situacaoPrazo": "Não aplicável",
     "municipio": "Ilhéus",
     "tipologia": "Agrossilvopastoril",
     "liderEquipe": "GEORGE WEBER DOS SANTOS ARAUJO SOUZA",
     "membrosEquipe": [],
-    "observacoes": "Processo em acompanhamento ativo na DIRRE/COASP."
+    "observacoes": "Processo cancelado. Não aplicável regime de prazos regulamentares."
   },
   {
-    "id": "pauta-008",
+    "id": "pauta-010",
     "processo": "046.0539.2024.0011880-67",
     "interessado": "BERNARDO BATISTA DE ARAÚJO",
     "unidadeAtual": "COASP",
@@ -1239,15 +1258,15 @@ export const MOCK_PAUTA: PautaItem[] = [
     ],
     "ultimaMovimentacao": "03/05/2024",
     "diasSemMovimentacao": 66,
-    "situacaoPrazo": "Prazo Excedido",
+    "situacaoPrazo": "Excedido",
     "municipio": "Feira de Santana",
-    "tipologia": "Infraestrutura / Energia",
+    "tipologia": "Energia Eólica",
     "liderEquipe": "SARAH PATRICIA LIMA NUNES",
     "membrosEquipe": [],
-    "observacoes": "Processo em acompanhamento ativo na DIRRE/COASP."
+    "observacoes": "Processo com prazo vencido para análise instrutória complementar."
   },
   {
-    "id": "pauta-009",
+    "id": "pauta-011",
     "processo": "2023.001.000639/INEMA/LIC-00639",
     "interessado": "FERNANDO DE OLIVEIRA VAZ",
     "unidadeAtual": "COASP",
@@ -1259,53 +1278,12 @@ export const MOCK_PAUTA: PautaItem[] = [
     ],
     "ultimaMovimentacao": "03/05/2024",
     "diasSemMovimentacao": 75,
-    "situacaoPrazo": "Prazo Excedido",
+    "situacaoPrazo": "Excedido",
     "municipio": "Salvador",
-    "tipologia": "Mineração / Indústria",
+    "tipologia": "Mineração",
     "liderEquipe": "JOSELICE LEONE LIMA FONSECA",
     "membrosEquipe": [],
-    "observacoes": "Processo em acompanhamento ativo na DIRRE/COASP."
-  },
-  {
-    "id": "pauta-010",
-    "processo": "046.0539.2024.0011776-18",
-    "interessado": "COMPANHIA DE FERRO LIGAS DA BAHIA - FERBASA",
-    "unidadeAtual": "COASP",
-    "tecnicoAtual": "GENI DE SENA DIAS URPIA",
-    "situacaoAtual": "AUTUADO",
-    "qtdAtos": 1,
-    "atos": [
-      "Auto de Infração Multa (AIMU)",
-      "Despacho"
-    ],
-    "ultimaMovimentacao": "07/05/2024",
-    "diasSemMovimentacao": 84,
-    "situacaoPrazo": "Prazo Excedido",
-    "municipio": "Barreiras",
-    "tipologia": "Agrossilvopastoril",
-    "liderEquipe": "GENI DE SENA DIAS URPIA",
-    "membrosEquipe": [],
-    "observacoes": "Processo em acompanhamento ativo na DIRRE/COASP."
-  },
-  {
-    "id": "pauta-011",
-    "processo": "046.0539.2024.0011477-19",
-    "interessado": "COMERCIAL ARCOVERDE LTDA",
-    "unidadeAtual": "COASP",
-    "tecnicoAtual": "GENI DE SENA DIAS URPIA",
-    "situacaoAtual": "AUTUADO",
-    "qtdAtos": 2,
-    "atos": [
-      "Auto de Infração Advertência (AIAD)"
-    ],
-    "ultimaMovimentacao": "06/05/2024",
-    "diasSemMovimentacao": 93,
-    "situacaoPrazo": "Prazo Excedido",
-    "municipio": "Ilhéus",
-    "tipologia": "Infraestrutura / Energia",
-    "liderEquipe": "GENI DE SENA DIAS URPIA",
-    "membrosEquipe": [],
-    "observacoes": "Processo em acompanhamento ativo na DIRRE/COASP."
+    "observacoes": "Processo com prazo excedido na fila de revisão técnica da DIRRE."
   },
   {
     "id": "pauta-012",
@@ -1323,30 +1301,30 @@ export const MOCK_PAUTA: PautaItem[] = [
     "diasSemMovimentacao": 7,
     "situacaoPrazo": "No prazo",
     "municipio": "Feira de Santana",
-    "tipologia": "Mineração / Indústria",
+    "tipologia": "Agrossilvopastoril",
     "liderEquipe": "CLARISSE DIAS CRUZ",
     "membrosEquipe": [],
-    "observacoes": "Processo em acompanhamento ativo na DIRRE/COASP."
+    "observacoes": "Processo em acompanhamento regular dentro do prazo normativo."
   },
   {
     "id": "pauta-013",
     "processo": "2023.001.000537/INEMA/LIC-00537",
     "interessado": "GERSON JOSÉ BONFANTTI",
-    "unidadeAtual": "COASP",
+    "unidadeAtual": "NOUT",
     "tecnicoAtual": "JOSE DA SILVA CERQUEIRA NETO",
-    "situacaoAtual": "CONCLUÍDO",
+    "situacaoAtual": "EM ANÁLISE TÉCNICA",
     "qtdAtos": 1,
     "atos": [
-      "Autorização de Supressão de Vegetação (ASV)"
+      "Outorga de Direito de Uso de Recursos Hídricos"
     ],
     "ultimaMovimentacao": "06/05/2024",
     "diasSemMovimentacao": 16,
     "situacaoPrazo": "No prazo",
     "municipio": "Salvador",
-    "tipologia": "Agrossilvopastoril",
+    "tipologia": "Recursos Hídricos",
     "liderEquipe": "JOSE DA SILVA CERQUEIRA NETO",
     "membrosEquipe": [],
-    "observacoes": "Processo em acompanhamento ativo na DIRRE/COASP."
+    "observacoes": "Processo em análise técnica no Núcleo de Outorga (NOUT)."
   },
   {
     "id": "pauta-014",
@@ -1354,7 +1332,7 @@ export const MOCK_PAUTA: PautaItem[] = [
     "interessado": "AFONSO CHRISTIANO NETTO",
     "unidadeAtual": "COASP",
     "tecnicoAtual": "MARIA CRISTINA GOMES SANCHES",
-    "situacaoAtual": "CONCLUÍDO",
+    "situacaoAtual": "NOTIFICADO",
     "qtdAtos": 2,
     "atos": [
       "Autorização Ambiental (AA)",
@@ -1362,12 +1340,12 @@ export const MOCK_PAUTA: PautaItem[] = [
     ],
     "ultimaMovimentacao": "06/05/2024",
     "diasSemMovimentacao": 25,
-    "situacaoPrazo": "Atenção",
+    "situacaoPrazo": "Suspenso",
     "municipio": "Barreiras",
-    "tipologia": "Infraestrutura / Energia",
+    "tipologia": "Infraestrutura Rodoviária",
     "liderEquipe": "MARIA CRISTINA GOMES SANCHES",
     "membrosEquipe": [],
-    "observacoes": "Processo em acompanhamento ativo na DIRRE/COASP."
+    "observacoes": "Processo com prazo suspenso durante período de notificação técnica."
   },
   {
     "id": "pauta-015",
@@ -1382,33 +1360,32 @@ export const MOCK_PAUTA: PautaItem[] = [
     ],
     "ultimaMovimentacao": "06/05/2024",
     "diasSemMovimentacao": 34,
-    "situacaoPrazo": "Prazo Excedido",
+    "situacaoPrazo": "Excedido",
     "municipio": "Ilhéus",
-    "tipologia": "Mineração / Indústria",
+    "tipologia": "Mineração",
     "liderEquipe": "RUTE DE OLIVEIRA SANTANA",
     "membrosEquipe": [],
-    "observacoes": "Processo em acompanhamento ativo na DIRRE/COASP."
+    "observacoes": "Processo com prazo expirado na DIRRE."
   },
   {
     "id": "pauta-016",
-    "processo": "2012.001.000874/INEMA/LIC-00874",
-    "interessado": "Andre Luis Nascimento Guimaraes",
-    "unidadeAtual": "COASP",
-    "tecnicoAtual": "JOSELICE LEONE LIMA FONSECA",
-    "situacaoAtual": "REVISADO",
+    "processo": "2024.001.001289/INEMA/OUT-00128",
+    "interessado": "Agropecuária Vale do São Francisco",
+    "unidadeAtual": "NOUT",
+    "tecnicoAtual": "CLARISSE DIAS CRUZ",
+    "situacaoAtual": "EM ANÁLISE TÉCNICA",
     "qtdAtos": 1,
     "atos": [
-      "Autorização de Supressão de Vegetação (ASV)",
-      "Despacho"
+      "Outorga Preventiva"
     ],
-    "ultimaMovimentacao": "02/01/2024",
-    "diasSemMovimentacao": 43,
-    "situacaoPrazo": "Prazo Excedido",
-    "municipio": "Feira de Santana",
-    "tipologia": "Agrossilvopastoril",
-    "liderEquipe": "JOSELICE LEONE LIMA FONSECA",
+    "ultimaMovimentacao": "10/05/2024",
+    "diasSemMovimentacao": 12,
+    "situacaoPrazo": "No prazo",
+    "municipio": "Juazeiro",
+    "tipologia": "Recursos Hídricos",
+    "liderEquipe": "CLARISSE DIAS CRUZ",
     "membrosEquipe": [],
-    "observacoes": "Processo em acompanhamento ativo na DIRRE/COASP."
+    "observacoes": "Processo tramitado no NOUT com parecer hidrogeológico em elaboração."
   },
   {
     "id": "pauta-017",
@@ -1421,14 +1398,14 @@ export const MOCK_PAUTA: PautaItem[] = [
     "atos": [
       "Autorização de Supressão de Vegetação (ASV)"
     ],
-    "ultimaMovimentacao": "19/04/2019",
+    "ultimaMovimentacao": "19/04/2024",
     "diasSemMovimentacao": 52,
-    "situacaoPrazo": "Prazo Excedido",
+    "situacaoPrazo": "Excedido",
     "municipio": "Salvador",
-    "tipologia": "Infraestrutura / Energia",
+    "tipologia": "Infraestrutura Rodoviária",
     "liderEquipe": "JOSELICE LEONE LIMA FONSECA",
     "membrosEquipe": [],
-    "observacoes": "Processo em acompanhamento ativo na DIRRE/COASP."
+    "observacoes": "Processo em acompanhamento com prazo estourado."
   },
   {
     "id": "pauta-018",
@@ -1444,12 +1421,12 @@ export const MOCK_PAUTA: PautaItem[] = [
     ],
     "ultimaMovimentacao": "03/01/2024",
     "diasSemMovimentacao": 61,
-    "situacaoPrazo": "Prazo Excedido",
+    "situacaoPrazo": "Não aplicável",
     "municipio": "Barreiras",
-    "tipologia": "Mineração / Indústria",
+    "tipologia": "Mineração",
     "liderEquipe": "GEORGE WEBER DOS SANTOS ARAUJO SOUZA",
     "membrosEquipe": [],
-    "observacoes": "Processo em acompanhamento ativo na DIRRE/COASP."
+    "observacoes": "Processo concluído no SEIA."
   },
   {
     "id": "pauta-019",
@@ -1464,12 +1441,12 @@ export const MOCK_PAUTA: PautaItem[] = [
     ],
     "ultimaMovimentacao": "03/01/2024",
     "diasSemMovimentacao": 70,
-    "situacaoPrazo": "Prazo Excedido",
+    "situacaoPrazo": "Não aplicável",
     "municipio": "Ilhéus",
     "tipologia": "Agrossilvopastoril",
     "liderEquipe": "GEORGE WEBER DOS SANTOS ARAUJO SOUZA",
     "membrosEquipe": [],
-    "observacoes": "Processo em acompanhamento ativo na DIRRE/COASP."
+    "observacoes": "Processo concluído com expedição de ato."
   },
   {
     "id": "pauta-020",
@@ -1485,12 +1462,12 @@ export const MOCK_PAUTA: PautaItem[] = [
     ],
     "ultimaMovimentacao": "02/01/2024",
     "diasSemMovimentacao": 79,
-    "situacaoPrazo": "Prazo Excedido",
+    "situacaoPrazo": "Não aplicável",
     "municipio": "Feira de Santana",
-    "tipologia": "Infraestrutura / Energia",
+    "tipologia": "Infraestrutura Rodoviária",
     "liderEquipe": "GEORGE WEBER DOS SANTOS ARAUJO SOUZA",
     "membrosEquipe": [],
-    "observacoes": "Processo em acompanhamento ativo na DIRRE/COASP."
+    "observacoes": "Processo arquivado no SEIA."
   }
 ];
 
@@ -1620,10 +1597,85 @@ export const MOCK_ATIVIDADES_TECNICO = [
 ];
 
 export const MOCK_ANUAL_DIRRE = [
-  { familia: 'Florestal / CEFIR', ato: 'Aprovação da Localização da Reserva Legal (ARL)', situacao: 'RL APROVADA', registros: 335, concluidosPublicados: 310 },
-  { familia: 'Florestal / CEFIR', ato: 'Autorização de Supressão de Vegetação (ASV)', situacao: 'REVISADO', registros: 995, concluidosPublicados: 850 },
-  { familia: 'Licenciamento / Regularização', ato: 'Autorização por procedimento especial (APE)', situacao: 'CONCLUÍDO', registros: 971, concluidosPublicados: 940 },
-  { familia: 'Outros', ato: 'Despacho Normativo', situacao: 'CONCLUÍDO', registros: 3352, concluidosPublicados: 3352 },
-  { familia: 'Outros', ato: 'Notificação Técnica (NOT)', situacao: 'NOTIFICADO', registros: 1469, concluidosPublicados: 1200 },
-  { familia: 'Florestal / CEFIR', ato: 'Homologação de pátio (DOF+)', situacao: 'HOMOLOGAÇÃO DOF+', registros: 752, concluidosPublicados: 748 }
+  { familia: 'Florestal', ato: 'Aprovação da Localização da Reserva Legal (ARL)', situacao: 'RL APROVADA', registros: 335, concluidosPublicados: 310 },
+  { familia: 'Florestal', ato: 'Autorização de Supressão de Vegetação (ASV)', situacao: 'CONCLUÍDO', registros: 995, concluidosPublicados: 850 },
+  { familia: 'Florestal', ato: 'Homologação de pátio (DOF+)', situacao: 'CONCLUÍDO', registros: 752, concluidosPublicados: 748 },
+  { familia: 'Licença', ato: 'Autorização por procedimento especial (APE)', situacao: 'CONCLUÍDO', registros: 971, concluidosPublicados: 940 },
+  { familia: 'Licença', ato: 'Licença Prévia (LP)', situacao: 'CONCLUÍDO', registros: 840, concluidosPublicados: 820 },
+  { familia: 'Licença', ato: 'Licença de Instalação (LI)', situacao: 'CONCLUÍDO', registros: 620, concluidosPublicados: 600 },
+  { familia: 'Outorga', ato: 'Outorga de Direito de Uso de Recursos Hídricos', situacao: 'DEFERIDO', registros: 1240, concluidosPublicados: 1180 },
+  { familia: 'Outorga', ato: 'Outorga Preventiva de Recursos Hídricos', situacao: 'CONCLUÍDO', registros: 410, concluidosPublicados: 390 }
+];
+
+export const MOCK_ANUAL_DIRRE_FAMILIAS = [
+  { name: 'Florestal', registros: 2082, percentual: 33.8, fill: '#0F4C3A' },
+  { name: 'Licença', registros: 2431, percentual: 39.4, fill: '#2D6A4F' },
+  { name: 'Outorga', registros: 1650, percentual: 26.8, fill: '#52796F' }
+];
+
+export const MOCK_ANUAL_DIRRE_EVOLUCAO = [
+  { mes: 'Jan', registros: 315 },
+  { mes: 'Fev', registros: 290 },
+  { mes: 'Mar', registros: 412 },
+  { mes: 'Abr', registros: 445 },
+  { mes: 'Mai', registros: 482 },
+  { mes: 'Jun', registros: 390 },
+  { mes: 'Jul', registros: 360 },
+  { mes: 'Ago', registros: 410 },
+  { mes: 'Set', registros: 375 },
+  { mes: 'Out', registros: 330 },
+  { mes: 'Nov', registros: 280 },
+  { mes: 'Dez', registros: 15 }
+];
+
+export const MOCK_EVOLUCAO_TRIMESTRAL_2024 = [
+  { periodo: '1º Trimestre', total: 1017, atos: 1065 },
+  { periodo: '2º Trimestre', total: 1317, atos: 1347 },
+  { periodo: '3º Trimestre', total: 1145, atos: 1190 },
+  { periodo: '4º Trimestre', total: 625, atos: 655 }
+];
+
+export const MOCK_EVOLUCAO_SEMESTRAL_2024 = [
+  { periodo: '1º Semestre', total: 2334, atos: 2412 },
+  { periodo: '2º Semestre', total: 1770, atos: 1845 }
+];
+
+export const MOCK_EVOLUCAO_ANUAL_HISTORICO = [
+  { periodo: '2021', total: 3210, atos: 3450 },
+  { periodo: '2022', total: 3680, atos: 3920 },
+  { periodo: '2023', total: 3840, atos: 4120 },
+  { periodo: '2024', total: 4182, atos: 9450 }
+];
+
+export const MOCK_DISTRIBUICAO_ATO_2024 = [
+  { label: 'Despacho', total: 3352 },
+  { label: 'NOT', total: 1469 },
+  { label: 'Outorga Hídrica', total: 1240 },
+  { label: 'Carta / Ofício', total: 1051 },
+  { label: 'Supressão (ASV)', total: 995 },
+  { label: 'Proc. Especial (APE)', total: 971 },
+  { label: 'Manejo Fauna', total: 947 },
+  { label: 'Homologação Pátio', total: 752 },
+  { label: 'Reserva Legal (ARL)', total: 335 }
+];
+
+export const MOCK_DISTRIBUICAO_SITUACAO_2024 = [
+  { label: 'CONCLUÍDO', total: 7391 },
+  { label: 'NOTIFICADO', total: 2688 },
+  { label: 'HOMOLOGAÇÃO DOF+', total: 748 },
+  { label: 'AUTUADO', total: 308 },
+  { label: 'REVISADO', total: 282 },
+  { label: 'ARQUIVADO', total: 254 },
+  { label: 'RL APROVADA', total: 199 }
+];
+
+export const MOCK_DISTRIBUICAO_TECNICO_2024 = [
+  { label: 'JOSELICE LEONE', total: 2947 },
+  { label: 'WENDELL VILAS BOAS', total: 1254 },
+  { label: 'RUTE DE OLIVEIRA', total: 964 },
+  { label: 'MAGDA RANIELE', total: 915 },
+  { label: 'THOMAZ BORGES', total: 865 },
+  { label: 'GENI DE SENA', total: 712 },
+  { label: 'ADELINA DE OLIVEIRA', total: 512 },
+  { label: 'CAMILA DAPHINY', total: 510 }
 ];

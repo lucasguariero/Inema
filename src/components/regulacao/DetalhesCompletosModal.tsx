@@ -55,6 +55,12 @@ export const DetalhesCompletosModal: React.FC<DetalhesCompletosModalProps> = ({
   const equipeLider = isTramitacao ? tramitacao?.liderEquipe : pauta?.tecnicoAtual || pauta?.liderEquipe;
   const membros = item.membrosEquipe || [];
 
+  const semTramitacao = Boolean(
+    (item as any)?.semTramitacao ||
+    item.processo?.includes('FORM-00319') ||
+    item.ultimaMovimentacao === 'Sem tramitação registrada'
+  );
+
   // Mock dados complementares canônicos
   const requerimentoVinculado = '2024.REQ.' + Math.floor(100000 + Math.random() * 900000);
   const empreendimento = 'Complexo Agrossilvopastoril e Hídrico ' + (item.municipio || 'Bahia');
@@ -85,7 +91,7 @@ export const DetalhesCompletosModal: React.FC<DetalhesCompletosModalProps> = ({
   // Histórico de Tramitação Mock (Bloco 5)
   const historicoTramitacao = [
     {
-      dataHora: '20/09/2026 14:32',
+      dataHora: '20/09/2024 14:32',
       ocorrencia: 'Despacho Técnico emitido com parecer favorável condicionado',
       situacao: situacao || 'EM ANÁLISE TÉCNICA',
       responsavel: equipeLider,
@@ -93,7 +99,7 @@ export const DetalhesCompletosModal: React.FC<DetalhesCompletosModalProps> = ({
       observacao: 'Análise técnica finalizada com deferimento das diretrizes ambientais.',
     },
     {
-      dataHora: '05/08/2026 09:15',
+      dataHora: '05/08/2024 09:15',
       ocorrencia: 'Juntada de esclarecimentos e complementação cadastral',
       situacao: 'REVISADO',
       responsavel: 'Requerente / Sistema SEIA',
@@ -101,7 +107,7 @@ export const DetalhesCompletosModal: React.FC<DetalhesCompletosModalProps> = ({
       observacao: 'Documentação comprobatória de reserva legal anexada.',
     },
     {
-      dataHora: '12/05/2026 16:40',
+      dataHora: '12/05/2024 16:40',
       ocorrencia: 'Emissão de Notificação de Comunicação Técnica',
       situacao: 'NOTIFICADO',
       responsavel: equipeLider,
@@ -113,12 +119,12 @@ export const DetalhesCompletosModal: React.FC<DetalhesCompletosModalProps> = ({
   // Histórico de Comunicação Mock (Bloco 6 - Bloco Separado!)
   const historicoComunicacao = [
     {
-      dataHora: '12/05/2026 16:42',
-      tipo: 'Notificação Eletrônica SEIA nº 2026/0491',
+      dataHora: '12/05/2024 16:42',
+      tipo: 'Notificação Eletrônica SEIA nº 2024/0491',
       descricao: 'Disponibilização da notificação técnica de adequação do memorial com prazo de 30 dias para manifestação.',
     },
     {
-      dataHora: '18/02/2023 11:05',
+      dataHora: '18/02/2024 11:05',
       tipo: 'Aviso de Formação de Processo',
       descricao: 'Confirmação automática de abertura e formação de processo SEIA gerada após validação documental.',
     },
@@ -304,18 +310,20 @@ export const DetalhesCompletosModal: React.FC<DetalhesCompletosModalProps> = ({
                 <div>
                   <span className="text-[10px] text-slate-500 uppercase tracking-wider block">Última Movimentação</span>
                   <span className="font-medium text-slate-800 block mt-0.5">
-                    {isTramitacao ? tramitacao?.dataTramitacao : pauta?.ultimaMovimentacao}
+                    {semTramitacao ? 'Sem tramitação registrada' : (isTramitacao ? tramitacao?.dataTramitacao : pauta?.ultimaMovimentacao)}
                   </span>
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-500 uppercase tracking-wider block">Dias Sem Movimentação</span>
+                  <span className="text-[10px] text-slate-500 uppercase tracking-wider block">
+                    {semTramitacao ? 'Dias Desde a Formação' : 'Dias Sem Movimentação'}
+                  </span>
                   <span className="font-bold text-slate-900 block mt-0.5">
-                    {item.diasSemMovimentacao} dias
+                    {semTramitacao ? `${(item as any).diasDesdeFormacao ?? 45} dias` : `${item.diasSemMovimentacao} dias`}
                   </span>
                 </div>
                 <div>
                   <span className="text-[10px] text-slate-500 uppercase tracking-wider block">Atualização da Consulta</span>
-                  <span className="font-medium text-slate-600 block mt-0.5">22/09/2026 às 10:00</span>
+                  <span className="font-medium text-slate-600 block mt-0.5">24/09/2024 às 10:00</span>
                 </div>
               </div>
             </section>
@@ -364,36 +372,48 @@ export const DetalhesCompletosModal: React.FC<DetalhesCompletosModalProps> = ({
                 </h3>
               </div>
 
-              <div className="overflow-x-auto rounded-xl border border-slate-200">
-                <table className="w-full text-left text-xs border-collapse">
-                  <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold">
-                    <tr>
-                      <th className="py-2.5 px-3 whitespace-nowrap">Data / Hora</th>
-                      <th className="py-2.5 px-3">Ocorrência</th>
-                      <th className="py-2.5 px-3">Situação</th>
-                      <th className="py-2.5 px-3">Responsável</th>
-                      <th className="py-2.5 px-3">Destinatário</th>
-                      <th className="py-2.5 px-3">Observação</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 bg-white">
-                    {historicoTramitacao.map((h, idx) => (
-                      <tr key={idx} className="hover:bg-slate-50/70 transition-colors">
-                        <td className="py-2.5 px-3 font-mono text-[11px] text-slate-600 whitespace-nowrap">{h.dataHora}</td>
-                        <td className="py-2.5 px-3 font-medium text-slate-800">{h.ocorrencia}</td>
-                        <td className="py-2.5 px-3 whitespace-nowrap">
-                          <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
-                            {h.situacao}
-                          </span>
-                        </td>
-                        <td className="py-2.5 px-3 text-slate-700 whitespace-nowrap">{h.responsavel}</td>
-                        <td className="py-2.5 px-3 text-slate-600 whitespace-nowrap">{h.destinatario}</td>
-                        <td className="py-2.5 px-3 text-slate-500 max-w-[200px] truncate" title={h.observacao}>{h.observacao}</td>
+              {semTramitacao ? (
+                <div className="p-8 text-center rounded-xl border border-dashed border-slate-300 bg-slate-50/60">
+                  <Clock className="w-8 h-8 text-slate-400 mx-auto mb-2" />
+                  <span className="font-semibold text-slate-800 text-xs block">
+                    Sem tramitação registrada
+                  </span>
+                  <p className="text-[11px] text-slate-500 mt-1 max-w-sm mx-auto">
+                    Este processo não possui despachos, encaminhamentos ou movimentações internas registradas no SEIA desde sua formação.
+                  </p>
+                </div>
+              ) : (
+                <div className="overflow-x-auto rounded-xl border border-slate-200">
+                  <table className="w-full text-left text-xs border-collapse">
+                    <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold">
+                      <tr>
+                        <th className="py-2.5 px-3 whitespace-nowrap">Data / Hora</th>
+                        <th className="py-2.5 px-3">Ocorrência</th>
+                        <th className="py-2.5 px-3">Situação</th>
+                        <th className="py-2.5 px-3">Responsável</th>
+                        <th className="py-2.5 px-3">Destinatário</th>
+                        <th className="py-2.5 px-3">Observação</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 bg-white">
+                      {historicoTramitacao.map((h, idx) => (
+                        <tr key={idx} className="hover:bg-slate-50/70 transition-colors">
+                          <td className="py-2.5 px-3 font-mono text-[11px] text-slate-600 whitespace-nowrap">{h.dataHora}</td>
+                          <td className="py-2.5 px-3 font-medium text-slate-800">{h.ocorrencia}</td>
+                          <td className="py-2.5 px-3 whitespace-nowrap">
+                            <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                              {h.situacao}
+                            </span>
+                          </td>
+                          <td className="py-2.5 px-3 text-slate-700 whitespace-nowrap">{h.responsavel}</td>
+                          <td className="py-2.5 px-3 text-slate-600 whitespace-nowrap">{h.destinatario}</td>
+                          <td className="py-2.5 px-3 text-slate-500 max-w-[200px] truncate" title={h.observacao}>{h.observacao}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </section>
 
             {/* BLOCO 6: HISTÓRICO DE COMUNICAÇÃO (BLOCO SEPARADO!) */}
@@ -439,12 +459,16 @@ export const DetalhesCompletosModal: React.FC<DetalhesCompletosModalProps> = ({
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 p-4 rounded-xl bg-slate-50 border border-slate-200">
                 <div>
                   <span className="text-[10px] text-slate-500 uppercase tracking-wider block">Tempo em Análise Técnica</span>
-                  <span className="text-sm font-bold text-slate-900 block mt-0.5">48 dias</span>
+                  <span className={cn('text-sm font-bold block mt-0.5', semTramitacao ? 'text-slate-500 font-normal italic' : 'text-slate-900')}>
+                    {semTramitacao ? 'Tempo indisponível' : '48 dias'}
+                  </span>
                   <span className="text-[10px] text-slate-500">Período com equipe técnica</span>
                 </div>
                 <div>
                   <span className="text-[10px] text-slate-500 uppercase tracking-wider block">Tempo Aguardando Resposta</span>
-                  <span className="text-sm font-bold text-slate-900 block mt-0.5">30 dias</span>
+                  <span className={cn('text-sm font-bold block mt-0.5', semTramitacao ? 'text-slate-500 font-normal italic' : 'text-slate-900')}>
+                    {semTramitacao ? 'Tempo indisponível' : '30 dias'}
+                  </span>
                   <span className="text-[10px] text-slate-500">Prazos de notificação requerente</span>
                 </div>
                 <div>
@@ -454,9 +478,27 @@ export const DetalhesCompletosModal: React.FC<DetalhesCompletosModalProps> = ({
                 </div>
                 <div>
                   <span className="text-[10px] text-slate-500 uppercase tracking-wider block">Situação do Prazo</span>
-                  <span className="inline-block mt-0.5 px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                    No prazo (Vence em 15/11/2026)
-                  </span>
+                  {semTramitacao || pauta?.situacaoPrazo === 'Indeterminado' ? (
+                    <span className="inline-block mt-0.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">
+                      Indeterminado
+                    </span>
+                  ) : pauta?.situacaoPrazo === 'Excedido' ? (
+                    <span className="inline-block mt-0.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">
+                      Excedido
+                    </span>
+                  ) : pauta?.situacaoPrazo === 'Suspenso' ? (
+                    <span className="inline-block mt-0.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+                      Suspenso
+                    </span>
+                  ) : pauta?.situacaoPrazo === 'Não aplicável' ? (
+                    <span className="inline-block mt-0.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">
+                      Não aplicável
+                    </span>
+                  ) : (
+                    <span className="inline-block mt-0.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                      No prazo (Vence em 15/11/2024)
+                    </span>
+                  )}
                 </div>
               </div>
 
