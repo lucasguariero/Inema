@@ -11,7 +11,7 @@ export const GlaCard = React.forwardRef<HTMLDivElement, GlaCardProps>(
       <div
         ref={ref}
         className={cn(
-          'rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs ring-1 ring-slate-950/5 overflow-hidden',
+          'rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs ring-1 ring-slate-950/5 overflow-hidden',
           noPadding ? 'p-0' : '',
           className
         )}
@@ -37,7 +37,7 @@ export const GlaCardHeader: React.FC<GlaCardHeaderProps> = ({
   return (
     <div
       className={cn(
-        'px-6 py-4 border-b border-slate-100 dark:border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3',
+        'px-5 pt-5 pb-3.5 border-b border-slate-100 dark:border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3',
         className
       )}
       {...props}
@@ -81,7 +81,7 @@ export const GlaCardContent: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
   ...props
 }) => {
   return (
-    <div className={cn('px-6 py-5', className)} {...props}>
+    <div className={cn('p-5', className)} {...props}>
       {children}
     </div>
   );
@@ -95,7 +95,7 @@ export const GlaCardFooter: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
   return (
     <div
       className={cn(
-        'px-6 py-3.5 bg-slate-50/70 dark:bg-slate-900/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3 text-xs',
+        'px-5 py-3.5 bg-slate-50/70 dark:bg-slate-900/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3 text-xs',
         className
       )}
       {...props}

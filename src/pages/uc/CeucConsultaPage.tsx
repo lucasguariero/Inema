@@ -271,7 +271,7 @@ export const CeucConsultaPage: React.FC = () => {
         </GlaCardHeader>
 
         {/* TOOLBAR DE FILTROS INTEGRADA (SEM CARDS ÓRFÃOS) */}
-        <div className="p-4 bg-slate-50/70 border-b border-slate-200/80 space-y-3">
+        <div className="p-5 bg-slate-50/70 border-b border-slate-200/80 space-y-3">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
             {/* 1. Nome da UC */}
             <div>
