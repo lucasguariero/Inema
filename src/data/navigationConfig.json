@@ -100,6 +100,15 @@
       "htmlId": "subUC",
       "items": [
         {
+          "id": "ceuc-consulta",
+          "label": "Cadastro de UC (CEUC)",
+          "href": "/?rota=ceuc",
+          "route": "ceuc",
+          "badge": "NOVO",
+          "badgeVariant": "sage",
+          "htmlId": "menu-ceuc-consulta"
+        },
+        {
           "id": "uc-agendamento",
           "label": "Agendamento de Visitação",
           "href": "/?rota=uc-agendamento",

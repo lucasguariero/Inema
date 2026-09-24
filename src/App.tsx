@@ -15,13 +15,16 @@ import { AutorizacaoVisitacaoPage } from '@/pages/uc/AutorizacaoVisitacaoPage';
 import { AtividadesDidaticasPage } from '@/pages/uc/AtividadesDidaticasPage';
 import { PesquisaCientificaPage } from '@/pages/uc/PesquisaCientificaPage';
 import { RelatoriosRegulacaoPage } from '@/pages/regulacao/RelatoriosRegulacaoPage';
+import { CeucConsultaPage } from '@/pages/uc/CeucConsultaPage';
 import { SeiaHomePage } from '@/pages/hibrido/SeiaHomePage';
 import { SeiaDaesPage } from '@/pages/hibrido/SeiaDaesPage';
 import { getCurrentScope } from '@/lib/scope';
 
 export function App() {
   const [activeRoute, setActiveRoute] = useState(() => {
-    return getCurrentScope() === 'regulacao' ? 'relatorios' : 'seia-home';
+    const scope = getCurrentScope();
+    if (scope === 'ceuc') return 'ceuc';
+    return scope === 'regulacao' ? 'relatorios' : 'seia-home';
   });
 
   useEffect(() => {
@@ -40,8 +43,12 @@ export function App() {
 
     if (vParam === 'hibrido' || rotaParam === 'hibrido' || rotaParam === 'seia') {
       setActiveRoute('seia-home');
+    } else if (rotaParam === 'ceuc' || rotaParam === 'ceuc-consulta') {
+      setActiveRoute('ceuc');
     } else if (rotaParam) {
       setActiveRoute(rotaParam);
+    } else if (scope === 'ceuc') {
+      setActiveRoute('ceuc');
     } else if (scope === 'regulacao') {
       setActiveRoute('relatorios');
     } else if (fluxoParam === 'externo') {
@@ -89,6 +96,9 @@ export function App() {
         return <CadastroPlantonistaPage onNavigate={handleNavigate} />;
       case 'fisc-escala':
         return <CadastroEscalaPage onNavigate={handleNavigate} />;
+      case 'ceuc':
+      case 'ceuc-consulta':
+        return <CeucConsultaPage />;
       case 'uc-agendamento':
         return <AgendamentoVisitacaoPage onNavigate={handleNavigate} />;
       case 'uc-autorizacao-visitacao':

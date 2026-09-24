@@ -1,0 +1,8 @@
+Fala equipe! Finalizei o desenvolvimento do protótipo navegável da Fase 1 do CEUC (Cadastro Estadual de Unidades de Conservação - TL001).
+
+Link do protótipo: https://inema.acto.com.br/?modulo=ceuc
+
+Resolvido: Implementação da tela TL001 (Consulta de UCs) com base rigorosa no Design System GLA/Filament. Inclui tabela unificada com 4 UCs reais da Bahia cobrindo diferentes categorias (Proteção Integral e Uso Sustentável), busca e filtros integrados diretamente ao cabeçalho da tabela sem cards órfãos (Print 01 e Print 02), modal de visualização detalhada com metadados cadastrais e situação do plano de manejo (Print 03) e simulação de exportação de lista com notificação toast de confirmação no canto superior direito (Print 04).
+Sidebar e rota: Navegação estritamente isolada via parâmetro semântico `?modulo=ceuc`, sem carregar menus externos ou nomes de pessoas na URL.
+Com isso, considero a Fase 1 da TL001 pronta e homologada para a apresentação executiva.
+Fico à disposição se precisarem de mais detalhes!
