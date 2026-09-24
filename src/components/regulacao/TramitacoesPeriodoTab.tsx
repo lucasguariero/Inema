@@ -9,7 +9,8 @@ import {
   Eye,
   ChevronLeft,
   Info,
-  AlertCircle
+  AlertCircle,
+  CheckCircle2
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -190,63 +191,25 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
     });
   }, [familiaDirre]);
 
-  // Handler de exportação para Excel (respeita a visão ativa)
+  // Estado de notificação toast de exportação
+  const [toastNotificacao, setToastNotificacao] = useState<string | null>(null);
+
+  // Handler de exportação para Excel (respeita a visão ativa, 100% front-end sem download físico)
   const handleExportarExcel = () => {
     if (statusExportacao !== 'disponivel') return;
 
     setStatusExportacao('gerando');
 
     setTimeout(() => {
-      let cabecalhos = '';
-      let linhas = '';
-      let nomeArquivo = '';
-
-      if (modoVisualizacao === 'registros') {
-        cabecalhos = 'Data Tramitação,Processo,Interessado,Unidade,Ato,Situação,Líder Equipe,Membros Equipe\n';
-        linhas = tramitacoesFiltradas
-          .map(
-            (t) =>
-              `"${t.dataTramitacao}","${t.processo}","${t.interessado}","${t.unidade}","${t.ato}","${t.situacao}","${t.liderEquipe}","${t.membrosEquipe.join('; ')}"`
-          )
-          .join('\n');
-        nomeArquivo = `relatorio_tramitacoes_registros_${new Date().toISOString().slice(0, 10)}.csv`;
-      } else if (modoVisualizacao === 'tecnicos') {
-        cabecalhos = 'Técnico,Unidade de Lotação,Processos com Participação,Registros com Participação\n';
-        linhas = MOCK_ATIVIDADES_TECNICO
-          .map(
-            (t) =>
-              `"${t.tecnico}","${t.unidade}",${t.processosParticipacao},${t.registrosParticipacao}`
-          )
-          .join('\n');
-        nomeArquivo = `relatorio_atividades_por_tecnico_${new Date().toISOString().slice(0, 10)}.csv`;
-      } else if (modoVisualizacao === 'agrupamento') {
-        cabecalhos = `Grupo (${criterioAgrupamento}),Processos,Registros\n`;
-        linhas = dadosAgrupamento
-          .map((g) => `"${g.grupo}",${g.processos},${g.registros}`)
-          .join('\n');
-        nomeArquivo = `relatorio_por_agrupamento_${criterioAgrupamento}_${new Date().toISOString().slice(0, 10)}.csv`;
-      } else if (modoVisualizacao === 'anual') {
-        cabecalhos = 'Família,Ato/Atividade,Situação,Registros Totais,Concluídos ou Publicados\n';
-        linhas = dadosAnualDirre
-          .map(
-            (a) =>
-              `"${a.familia}","${a.ato}","${a.situacao}",${a.registros},${a.concluidosPublicados}`
-          )
-          .join('\n');
-        nomeArquivo = `relatorio_anual_dirre_${anoDirre}_${new Date().toISOString().slice(0, 10)}.csv`;
-      }
-
-      const blob = new Blob([cabecalhos + linhas], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.setAttribute('href', url);
-      link.setAttribute('download', nomeArquivo);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
       setStatusExportacao('sucesso');
+      setToastNotificacao('Relatório de tramitações exportado com sucesso.');
 
+      // Auto-fechamento do toast após 4 segundos
+      setTimeout(() => {
+        setToastNotificacao(null);
+      }, 4000);
+
+      // Retorno do botão ao estado disponível após 3 segundos
       setTimeout(() => {
         setStatusExportacao('disponivel');
       }, 3000);
@@ -292,7 +255,28 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
+      {/* TOAST DE SUCESSO NO CANTO SUPERIOR DIREITO - PADRÃO GLA / FILAMENT */}
+      {toastNotificacao && (
+        <div className="fixed top-20 right-6 z-50 flex items-center gap-3 px-4 py-3 bg-white border border-emerald-300 text-slate-800 text-xs rounded-xl shadow-lg ring-1 ring-slate-950/5 animate-in fade-in slide-in-from-top-3 duration-200">
+          <div className="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-50 text-emerald-700 shrink-0">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+          </div>
+          <div className="pr-2">
+            <span className="font-bold text-slate-900 block">Exportação concluída</span>
+            <span className="text-slate-600 text-[11px]">{toastNotificacao}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setToastNotificacao(null)}
+            className="text-slate-400 hover:text-slate-600 p-1 rounded-md transition-colors cursor-pointer text-xs"
+            title="Fechar notificação"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
+
       {/* 1. BARRA DE FILTROS SUPERIOR (LEVE E INTEGRADA) */}
       <div className="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-900 px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-2xs">
         <div className="flex flex-wrap items-center gap-2">

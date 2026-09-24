@@ -8,7 +8,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Check,
-  Loader2
+  Loader2,
+  CheckCircle2
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -102,29 +103,23 @@ export const AcompanhamentoPautaTab: React.FC<AcompanhamentoPautaTabProps> = ({
     });
   }, [filtros]);
 
-  // Handler de exportação
+  // Estado de notificação toast de exportação
+  const [toastNotificacao, setToastNotificacao] = useState<string | null>(null);
+
+  // Handler de exportação (100% front-end sem download físico)
   const handleExportarExcel = () => {
     if (statusExportacao !== 'disponivel') return;
     setStatusExportacao('gerando');
     setTimeout(() => {
-      const cabecalhos = 'Processo,Interessado,Unidade Atual,Técnico Atual,Situação Atual,Qtd Atos,Última Movimentação,Dias Sem Mov,Situação Prazo\n';
-      const linhas = pautaFiltrada
-        .map(
-          (p) =>
-            `"${p.processo}","${p.interessado}","${p.unidadeAtual}","${p.tecnicoAtual}","${p.situacaoAtual}","${p.qtdAtos}","${p.ultimaMovimentacao}","${p.diasSemMovimentacao}","${p.situacaoPrazo}"`
-        )
-        .join('\n');
-
-      const blob = new Blob([cabecalhos + linhas], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.setAttribute('href', url);
-      link.setAttribute('download', `pauta_regulacao_inema_${new Date().toISOString().slice(0, 10)}.csv`);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
       setStatusExportacao('sucesso');
+      setToastNotificacao('Pauta consolidada exportada com sucesso.');
+
+      // Auto-fechamento do toast após 4 segundos
+      setTimeout(() => {
+        setToastNotificacao(null);
+      }, 4000);
+
+      // Retorno do botão ao estado disponível após 3 segundos
       setTimeout(() => setStatusExportacao('disponivel'), 3000);
     }, 1200);
   };
@@ -193,7 +188,28 @@ export const AcompanhamentoPautaTab: React.FC<AcompanhamentoPautaTabProps> = ({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
+      {/* TOAST DE SUCESSO NO CANTO SUPERIOR DIREITO - PADRÃO GLA / FILAMENT */}
+      {toastNotificacao && (
+        <div className="fixed top-20 right-6 z-50 flex items-center gap-3 px-4 py-3 bg-white border border-emerald-300 text-slate-800 text-xs rounded-xl shadow-lg ring-1 ring-slate-950/5 animate-in fade-in slide-in-from-top-3 duration-200">
+          <div className="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-50 text-emerald-700 shrink-0">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+          </div>
+          <div className="pr-2">
+            <span className="font-bold text-slate-900 block">Exportação concluída</span>
+            <span className="text-slate-600 text-[11px]">{toastNotificacao}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setToastNotificacao(null)}
+            className="text-slate-400 hover:text-slate-600 p-1 rounded-md transition-colors cursor-pointer text-xs"
+            title="Fechar notificação"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
+
       {/* 1. NOTA DE ATUALIZAÇÃO NO TOPO - PADRÃO GLA LEGADO */}
       <div className="flex items-center justify-between bg-white rounded-xl border border-slate-200 px-4 py-3 shadow-xs">
         <div className="flex items-center gap-2">
