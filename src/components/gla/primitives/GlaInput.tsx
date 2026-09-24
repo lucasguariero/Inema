@@ -31,11 +31,11 @@ export const GlaInput = React.forwardRef<HTMLInputElement, GlaInputProps>(
     const inputId = id || (label ? label.toLowerCase().replace(/\s+/g, '-') : undefined);
 
     return (
-      <div className="w-full space-y-1">
+      <div className="w-full">
         {label && (
           <label
             htmlFor={inputId}
-            className="block text-xs font-semibold text-slate-700 dark:text-slate-300"
+            className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1 leading-tight"
           >
             {label}
           </label>
@@ -43,7 +43,7 @@ export const GlaInput = React.forwardRef<HTMLInputElement, GlaInputProps>(
 
         <div
           className={cn(
-            'flex items-center rounded-lg border bg-white dark:bg-slate-800 transition-colors shadow-2xs overflow-hidden',
+            'h-9 flex items-center rounded-md border bg-white dark:bg-slate-800 transition-colors shadow-2xs overflow-hidden',
             error
               ? 'border-rose-400 focus-within:border-rose-600 focus-within:ring-2 focus-within:ring-rose-500/20'
               : 'border-slate-300 dark:border-slate-700 focus-within:border-[#0F4C3A] focus-within:ring-2 focus-within:ring-[#0F4C3A]/20',
@@ -51,13 +51,13 @@ export const GlaInput = React.forwardRef<HTMLInputElement, GlaInputProps>(
           )}
         >
           {leftIcon && (
-            <span className="pl-3 pr-1 text-slate-400 dark:text-slate-500 shrink-0">
+            <span className="pl-2.5 pr-1 text-slate-400 dark:text-slate-500 shrink-0">
               {leftIcon}
             </span>
           )}
 
           {prefixText && (
-            <span className="px-3 py-1.5 bg-slate-50 dark:bg-slate-900/60 border-r border-slate-200 dark:border-slate-700 text-xs text-slate-500 dark:text-slate-400 font-medium select-none">
+            <span className="h-full flex items-center px-2.5 bg-slate-50 dark:bg-slate-900/60 border-r border-slate-200 dark:border-slate-700 text-xs text-slate-500 dark:text-slate-400 font-medium select-none shrink-0">
               {prefixText}
             </span>
           )}
@@ -67,31 +67,31 @@ export const GlaInput = React.forwardRef<HTMLInputElement, GlaInputProps>(
             ref={ref}
             disabled={disabled}
             className={cn(
-              'w-full px-3 py-1.5 text-xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 bg-transparent focus:outline-hidden disabled:cursor-not-allowed',
+              'h-full w-full px-3 py-1.5 text-xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 bg-transparent focus:outline-none disabled:cursor-not-allowed leading-normal',
               className
             )}
             {...props}
           />
 
           {suffixText && (
-            <span className="px-3 py-1.5 bg-slate-50 dark:bg-slate-900/60 border-l border-slate-200 dark:border-slate-700 text-xs text-slate-500 dark:text-slate-400 font-medium select-none">
+            <span className="h-full flex items-center px-2.5 bg-slate-50 dark:bg-slate-900/60 border-l border-slate-200 dark:border-slate-700 text-xs text-slate-500 dark:text-slate-400 font-medium select-none shrink-0">
               {suffixText}
             </span>
           )}
 
           {rightIcon && (
-            <span className="pr-3 pl-1 text-slate-400 dark:text-slate-500 shrink-0">
+            <span className="pr-2.5 pl-1 text-slate-400 dark:text-slate-500 shrink-0">
               {rightIcon}
             </span>
           )}
         </div>
 
         {hint && !error && (
-          <p className="text-[11px] text-slate-500 dark:text-slate-400">{hint}</p>
+          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-tight">{hint}</p>
         )}
 
         {error && (
-          <p className="text-[11px] font-medium text-rose-600 dark:text-rose-400">{error}</p>
+          <p className="text-[11px] font-medium text-rose-600 dark:text-rose-400 mt-1 leading-tight">{error}</p>
         )}
       </div>
     );

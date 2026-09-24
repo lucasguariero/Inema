@@ -37,7 +37,7 @@ export const GlaCardHeader: React.FC<GlaCardHeaderProps> = ({
   return (
     <div
       className={cn(
-        'px-6 py-5 sm:px-8 border-b border-slate-100 dark:border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3',
+        'px-6 py-4 border-b border-slate-100 dark:border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3',
         className
       )}
       {...props}
@@ -55,7 +55,7 @@ export const GlaCardTitle: React.FC<React.HTMLAttributes<HTMLHeadingElement>> = 
 }) => {
   return (
     <h3
-      className={cn('text-sm font-semibold text-slate-800 dark:text-slate-100 tracking-tight', className)}
+      className={cn('text-sm font-semibold text-slate-800 dark:text-slate-100 tracking-tight leading-snug', className)}
       {...props}
     >
       {children}
@@ -69,7 +69,7 @@ export const GlaCardDescription: React.FC<React.HTMLAttributes<HTMLParagraphElem
   ...props
 }) => {
   return (
-    <p className={cn('text-xs text-slate-500 dark:text-slate-400', className)} {...props}>
+    <p className={cn('text-xs text-slate-500 dark:text-slate-400 leading-normal', className)} {...props}>
       {children}
     </p>
   );
@@ -81,7 +81,7 @@ export const GlaCardContent: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
   ...props
 }) => {
   return (
-    <div className={cn('p-6 sm:p-8', className)} {...props}>
+    <div className={cn('px-6 py-5', className)} {...props}>
       {children}
     </div>
   );
@@ -95,7 +95,7 @@ export const GlaCardFooter: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
   return (
     <div
       className={cn(
-        'px-5 py-3 bg-slate-50/70 dark:bg-slate-900/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3 text-xs',
+        'px-6 py-3.5 bg-slate-50/70 dark:bg-slate-900/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3 text-xs',
         className
       )}
       {...props}

@@ -34,11 +34,11 @@ export const GlaSelect = React.forwardRef<HTMLSelectElement, GlaSelectProps>(
     const selectId = id || (label ? label.toLowerCase().replace(/\s+/g, '-') : undefined);
 
     return (
-      <div className="w-full space-y-1">
+      <div className="w-full">
         {label && (
           <label
             htmlFor={selectId}
-            className="block text-xs font-semibold text-slate-700 dark:text-slate-300"
+            className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1 leading-tight"
           >
             {label}
           </label>
@@ -46,7 +46,7 @@ export const GlaSelect = React.forwardRef<HTMLSelectElement, GlaSelectProps>(
 
         <div
           className={cn(
-            'relative flex items-center rounded-lg border bg-white dark:bg-slate-800 transition-colors shadow-2xs overflow-hidden',
+            'h-9 relative flex items-center rounded-md border bg-white dark:bg-slate-800 transition-colors shadow-2xs overflow-hidden',
             error
               ? 'border-rose-400 focus-within:border-rose-600 focus-within:ring-2 focus-within:ring-rose-500/20'
               : 'border-slate-300 dark:border-slate-700 focus-within:border-[#0F4C3A] focus-within:ring-2 focus-within:ring-[#0F4C3A]/20',
@@ -58,7 +58,7 @@ export const GlaSelect = React.forwardRef<HTMLSelectElement, GlaSelectProps>(
             ref={ref}
             disabled={disabled}
             className={cn(
-              'w-full appearance-none pl-3 pr-8 py-1.5 text-xs text-slate-800 dark:text-slate-100 bg-transparent focus:outline-hidden cursor-pointer disabled:cursor-not-allowed',
+              'h-full w-full appearance-none pl-3 pr-8 text-xs text-slate-800 dark:text-slate-100 bg-transparent focus:outline-none cursor-pointer disabled:cursor-not-allowed leading-normal',
               className
             )}
             {...props}
@@ -84,11 +84,11 @@ export const GlaSelect = React.forwardRef<HTMLSelectElement, GlaSelectProps>(
         </div>
 
         {hint && !error && (
-          <p className="text-[11px] text-slate-500 dark:text-slate-400">{hint}</p>
+          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-tight">{hint}</p>
         )}
 
         {error && (
-          <p className="text-[11px] font-medium text-rose-600 dark:text-rose-400">{error}</p>
+          <p className="text-[11px] font-medium text-rose-600 dark:text-rose-400 mt-1 leading-tight">{error}</p>
         )}
       </div>
     );

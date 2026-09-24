@@ -27,9 +27,19 @@ async function main() {
   const page = await context.newPage();
 
   try {
-    console.log('Acessando http://localhost:4177/?modulo=ceuc...');
-    await page.goto('http://localhost:4177/?modulo=ceuc', { waitUntil: 'networkidle' });
-    await page.waitForTimeout(1000);
+    // Retry connection until server is ready
+    let connected = false;
+  for (let i = 0; i < 15; i++) {
+    try {
+      await page.goto('http://localhost:4177/?modulo=ceuc', { waitUntil: 'domcontentloaded', timeout: 5000 });
+      connected = true;
+      break;
+    } catch (e) {
+      await new Promise((r) => setTimeout(r, 1000));
+    }
+  }
+  if (!connected) throw new Error('Não foi possível conectar ao servidor Vite Preview');
+  await page.waitForTimeout(1000);
 
     // 1. Captura Print 01: TL001 com Filtro de Gestor integrado na toolbar
     console.log('Capturando Print 01: TL001 com Filtro de Gestor...');

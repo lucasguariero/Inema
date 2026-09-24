@@ -209,9 +209,9 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
             </div>
           }
         >
-          <div className="p-8 border border-dashed border-slate-300 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-900/60 text-center space-y-4">
-            <div className="w-16 h-16 rounded-full bg-[#0F4C3A]/10 text-[#0F4C3A] mx-auto flex items-center justify-center">
-              <FileText className="w-8 h-8" />
+          <div className="p-5 border border-dashed border-slate-300 dark:border-slate-700 rounded-md bg-slate-50 dark:bg-slate-900/60 text-center space-y-3">
+            <div className="w-12 h-12 rounded-full bg-[#0F4C3A]/10 text-[#0F4C3A] mx-auto flex items-center justify-center">
+              <FileText className="w-6 h-6" />
             </div>
             <div>
               <h4 className="text-sm font-bold text-slate-900 dark:text-white">
@@ -287,7 +287,7 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
           {/* SEÇÃO 1: DADOS BÁSICOS E ENQUADRAMENTO LEGAL */}
           <GlaCard className="border-slate-200 dark:border-slate-800 shadow-sm">
             <GlaCardHeader>
-              <GlaCardTitle className="text-base font-bold text-slate-900 dark:text-white">
+              <GlaCardTitle className="text-sm font-semibold text-slate-900 dark:text-white">
                 Dados Básicos e Enquadramento Legal
               </GlaCardTitle>
               <GlaCardDescription>
@@ -295,8 +295,8 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
               </GlaCardDescription>
             </GlaCardHeader>
 
-            <GlaCardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <GlaCardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
                 {/* Nome da UC */}
                 <div className="md:col-span-2">
                   <GlaInput
@@ -324,7 +324,7 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-3.5">
                 {/* Data de Criação */}
                 <div>
                   <GlaInput
@@ -381,29 +381,27 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
 
               {/* Upload de Documentação Normativa */}
               <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 leading-tight">
                   Upload de Documentação Normativa
                 </label>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {/* Norma de Criação */}
-                  <div className="p-3.5 border border-dashed border-slate-300 dark:border-slate-700 rounded-lg bg-slate-50/60 dark:bg-slate-900/40">
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <p className="text-xs font-semibold text-slate-800 dark:text-slate-200">
-                          Norma de Criação (DOE / Decreto Regulamentador) *
+                  <div className="p-3 border border-dashed border-slate-300 dark:border-slate-700 rounded-md bg-slate-50/50 dark:bg-slate-900/40 hover:bg-slate-50 transition-colors">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="min-w-0">
+                        <p className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate">
+                          Norma de Criação (DOE / Decreto) *
                         </p>
-                        <p className="text-[11px] text-slate-500 mt-0.5">
-                          Formato aceito: PDF até 15MB.
-                        </p>
+                        <p className="text-[10px] text-slate-500 mt-0.5">PDF até 15MB</p>
                       </div>
-                      <UploadCloud className="w-5 h-5 text-slate-400 shrink-0" />
+                      <UploadCloud className="w-4 h-4 text-slate-400 shrink-0" />
                     </div>
 
                     {normaCriacaoArquivo ? (
-                      <div className="mt-3 flex items-center justify-between p-2 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs">
-                        <div className="flex items-center gap-2 truncate min-w-0 mr-2">
-                          <FileText className="w-4 h-4 text-[#0F4C3A] shrink-0" />
-                          <span className="font-mono text-slate-700 dark:text-slate-300 truncate">
+                      <div className="mt-2.5 flex items-center justify-between px-2.5 py-1 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs">
+                        <div className="flex items-center gap-1.5 truncate min-w-0 mr-2">
+                          <FileText className="w-3.5 h-3.5 text-[#0F4C3A] shrink-0" />
+                          <span className="font-mono text-[11px] text-slate-700 dark:text-slate-300 truncate">
                             {normaCriacaoArquivo}
                           </span>
                         </div>
@@ -414,26 +412,26 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
                               setDocumentoVisualizando(normaCriacaoArquivo);
                               setToastNotificacao(`Visualizando documento: ${normaCriacaoArquivo}`);
                             }}
-                            className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#0F4C3A] hover:bg-[#0F4C3A]/10 px-2 py-1 rounded cursor-pointer transition-colors"
+                            className="inline-flex items-center gap-1 text-[10px] font-semibold text-[#0F4C3A] hover:bg-[#0F4C3A]/10 px-1.5 py-0.5 rounded cursor-pointer"
                             title="Visualizar documento"
                           >
-                            <Eye className="w-3.5 h-3.5" />
+                            <Eye className="w-3 h-3" />
                             Visualizar
                           </button>
                           <button
                             type="button"
                             onClick={() => setNormaCriacaoArquivo(null)}
-                            className="text-slate-400 hover:text-rose-600 p-1 rounded cursor-pointer"
+                            className="text-slate-400 hover:text-rose-600 p-0.5 rounded cursor-pointer"
                             title="Remover arquivo"
                           >
-                            <X className="w-3.5 h-3.5" />
+                            <X className="w-3 h-3" />
                           </button>
                         </div>
                       </div>
                     ) : (
-                      <div className="mt-3">
-                        <label className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 cursor-pointer shadow-2xs">
-                          <Plus className="w-3.5 h-3.5" />
+                      <div className="mt-2.5">
+                        <label className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 cursor-pointer shadow-2xs">
+                          <Plus className="w-3 h-3" />
                           Selecionar Arquivo PDF
                           <input
                             type="file"
@@ -451,24 +449,22 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
                   </div>
 
                   {/* Normas de Alteração / Retificação */}
-                  <div className="p-3.5 border border-dashed border-slate-300 dark:border-slate-700 rounded-lg bg-slate-50/60 dark:bg-slate-900/40">
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <p className="text-xs font-semibold text-slate-800 dark:text-slate-200">
+                  <div className="p-3 border border-dashed border-slate-300 dark:border-slate-700 rounded-md bg-slate-50/50 dark:bg-slate-900/40 hover:bg-slate-50 transition-colors">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="min-w-0">
+                        <p className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate">
                           Normas de Alteração / Retificação (Opcional)
                         </p>
-                        <p className="text-[11px] text-slate-500 mt-0.5">
-                          Atos subsequentes de redefinição de limites ou zoneamento.
-                        </p>
+                        <p className="text-[10px] text-slate-500 mt-0.5">Atos subsequentes</p>
                       </div>
-                      <UploadCloud className="w-5 h-5 text-slate-400 shrink-0" />
+                      <UploadCloud className="w-4 h-4 text-slate-400 shrink-0" />
                     </div>
 
                     {normaAlteracaoArquivo ? (
-                      <div className="mt-3 flex items-center justify-between p-2 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs">
-                        <div className="flex items-center gap-2 truncate min-w-0 mr-2">
-                          <FileText className="w-4 h-4 text-[#0F4C3A] shrink-0" />
-                          <span className="font-mono text-slate-700 dark:text-slate-300 truncate">
+                      <div className="mt-2.5 flex items-center justify-between px-2.5 py-1 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs">
+                        <div className="flex items-center gap-1.5 truncate min-w-0 mr-2">
+                          <FileText className="w-3.5 h-3.5 text-[#0F4C3A] shrink-0" />
+                          <span className="font-mono text-[11px] text-slate-700 dark:text-slate-300 truncate">
                             {normaAlteracaoArquivo}
                           </span>
                         </div>
@@ -479,26 +475,26 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
                               setDocumentoVisualizando(normaAlteracaoArquivo);
                               setToastNotificacao(`Visualizando documento: ${normaAlteracaoArquivo}`);
                             }}
-                            className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#0F4C3A] hover:bg-[#0F4C3A]/10 px-2 py-1 rounded cursor-pointer transition-colors"
+                            className="inline-flex items-center gap-1 text-[10px] font-semibold text-[#0F4C3A] hover:bg-[#0F4C3A]/10 px-1.5 py-0.5 rounded cursor-pointer"
                             title="Visualizar documento"
                           >
-                            <Eye className="w-3.5 h-3.5" />
+                            <Eye className="w-3 h-3" />
                             Visualizar
                           </button>
                           <button
                             type="button"
                             onClick={() => setNormaAlteracaoArquivo(null)}
-                            className="text-slate-400 hover:text-rose-600 p-1 rounded cursor-pointer"
+                            className="text-slate-400 hover:text-rose-600 p-0.5 rounded cursor-pointer"
                             title="Remover arquivo"
                           >
-                            <X className="w-3.5 h-3.5" />
+                            <X className="w-3 h-3" />
                           </button>
                         </div>
                       </div>
                     ) : (
-                      <div className="mt-3">
-                        <label className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 cursor-pointer shadow-2xs">
-                          <Plus className="w-3.5 h-3.5" />
+                      <div className="mt-2.5">
+                        <label className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 cursor-pointer shadow-2xs">
+                          <Plus className="w-3 h-3" />
                           Selecionar Arquivo PDF
                           <input
                             type="file"
@@ -522,7 +518,7 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
           {/* SEÇÃO 2: INFORMAÇÕES GEOGRÁFICAS E TERRITORIAIS */}
           <GlaCard className="border-slate-200 dark:border-slate-800 shadow-sm">
             <GlaCardHeader>
-              <GlaCardTitle className="text-base font-bold text-slate-900 dark:text-white">
+              <GlaCardTitle className="text-sm font-semibold text-slate-900 dark:text-white">
                 Informações Geográficas e Territoriais
               </GlaCardTitle>
               <GlaCardDescription>
@@ -530,8 +526,8 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
               </GlaCardDescription>
             </GlaCardHeader>
 
-            <GlaCardContent className="space-y-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <GlaCardContent className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
                 {/* Área Total Declarada */}
                 <div>
                   <GlaInput
@@ -576,7 +572,7 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
                 {/* RPGA */}
                 <div>
                   <GlaSelect
@@ -614,21 +610,21 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
 
               {/* Municípios Abrangidos (Seleção Múltipla com Tags flex-wrap) */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1 leading-tight">
                   Municípios Abrangidos
                 </label>
-                <div className="flex flex-wrap items-center gap-2 p-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 w-full max-w-full overflow-hidden">
+                <div className="flex flex-wrap items-center gap-1.5 p-2 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 w-full max-w-full overflow-hidden min-h-[38px]">
                   {municipios.map((mun) => (
                     <span
                       key={mun}
-                      className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-600 max-w-full truncate"
+                      className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-600 max-w-full truncate"
                     >
                       <MapPin className="w-3 h-3 text-slate-500 shrink-0" />
                       <span className="truncate">{mun}</span>
                       <button
                         type="button"
                         onClick={() => handleRemoverMunicipio(mun)}
-                        className="text-slate-400 hover:text-rose-600 ml-1 cursor-pointer shrink-0"
+                        className="text-slate-400 hover:text-rose-600 ml-0.5 cursor-pointer shrink-0"
                         title={`Remover ${mun}`}
                       >
                         <X className="w-3 h-3" />
@@ -637,7 +633,7 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
                   ))}
 
                   {/* Campo inline para adicionar novos municípios */}
-                  <div className="flex items-center gap-1.5 shrink-0">
+                  <div className="flex items-center gap-1 shrink-0">
                     <input
                       type="text"
                       placeholder="Adicionar município..."
@@ -649,7 +645,7 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
                           handleAdicionarMunicipio();
                         }
                       }}
-                      className="text-xs px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 focus:outline-none focus:ring-1 focus:ring-[#0F4C3A]"
+                      className="text-xs px-2.5 py-0.5 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 focus:outline-none focus:ring-1 focus:ring-[#0F4C3A]"
                     />
                     <button
                       type="button"
@@ -657,7 +653,7 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
                       className="p-1 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 hover:text-slate-900 cursor-pointer"
                       title="Adicionar"
                     >
-                      <Plus className="w-3.5 h-3.5" />
+                      <Plus className="w-3 h-3" />
                     </button>
                   </div>
                 </div>
@@ -667,7 +663,7 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
               </div>
 
               {/* Situação Fundiária: Área Regularizada e Observações / Status Fundiário */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 pt-1">
                 <div>
                   <GlaInput
                     label="Área Regularizada (%)"
