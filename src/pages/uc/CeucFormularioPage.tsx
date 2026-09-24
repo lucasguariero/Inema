@@ -1,21 +1,16 @@
 import React, { useState } from 'react';
 import {
-  ChevronRight,
   ArrowLeft,
   ArrowRight,
   Save,
   UploadCloud,
   FileText,
+  Eye,
   X,
   Plus,
-  CheckCircle2,
-  AlertCircle,
-  Building2,
-  Calendar,
-  Layers,
   MapPin,
-  Trees,
-  FileCheck
+  FileCheck,
+  CheckCircle2
 } from 'lucide-react';
 import {
   GlaCard,
@@ -27,7 +22,8 @@ import {
   GlaInput,
   GlaSelect,
   GlaTabs,
-  GlaNotification
+  GlaNotification,
+  GlaModal
 } from '@/components/gla';
 import { UcItem } from '@/data/ceucMock';
 
@@ -50,6 +46,9 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
   // Estado de notificação local (toast)
   const [toastNotificacao, setToastNotificacao] = useState<string | null>(null);
 
+  // Modal de visualização de anexo
+  const [documentoVisualizando, setDocumentoVisualizando] = useState<string | null>(null);
+
   // Estados dos campos - Seção 1: Dados Básicos e Enquadramento Legal
   const [nome, setNome] = useState(uc?.nome || '');
   const [sigla, setSigla] = useState(uc?.sigla || '');
@@ -71,6 +70,9 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
   // Estados dos campos - Seção 2: Informações Geográficas e Territoriais
   const [areaHectares, setAreaHectares] = useState(uc?.areaHectares ? String(uc.areaHectares) : '');
   const [bioma, setBioma] = useState(uc?.bioma || 'Caatinga');
+  const [populacaoEstimada, setPopulacaoEstimada] = useState(
+    uc?.populacaoEstimada !== undefined ? String(uc.populacaoEstimada) : ''
+  );
   const [rpga, setRpga] = useState(uc?.rpga || 'RPGA do Rio Paraguaçu');
   const [territorioIdentidade, setTerritorioIdentidade] = useState(
     uc?.territorioIdentidade || 'Piemonte da Diamantina'
@@ -113,6 +115,7 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
       municipio: municipios[0] || 'A definir',
       municipiosAbrangidos: municipios,
       areaHectares: parseFloat(areaHectares) || 0,
+      populacaoEstimada: parseInt(populacaoEstimada, 10) || 0,
       bioma: bioma as any,
       rpga,
       territorioIdentidade,
@@ -145,32 +148,27 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
     setActiveTab('instrumentos');
   };
 
-  // Configuração das Abas do CEUC (DOR036)
+  // Configuração Limpa das Abas do CEUC (DOR036) — Sem badges poluentes de "Em breve"
   const TABS_CONFIG = [
     {
       id: 'gerais',
-      label: 'Informações Gerais e Territoriais',
-      badge: 'Ativa'
+      label: 'Informações Gerais e Territoriais'
     },
     {
       id: 'instrumentos',
-      label: 'Instrumentos de Gestão',
-      badge: 'Em breve'
+      label: 'Instrumentos de Gestão'
     },
     {
       id: 'zonas',
-      label: 'Zonas de Manejo e Áreas de Visitação',
-      badge: 'Em breve'
+      label: 'Zonas de Manejo e Áreas de Visitação'
     },
     {
       id: 'conselho',
-      label: 'Conselho Gestor e Equipe',
-      badge: 'Em breve'
+      label: 'Conselho Gestor e Equipe'
     },
     {
       id: 'infraestrutura',
-      label: 'Infraestrutura e Serviços',
-      badge: 'Em breve'
+      label: 'Infraestrutura e Serviços'
     }
   ];
 
@@ -187,68 +185,111 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
         />
       )}
 
-      {/* 1. CABEÇALHO DO FORMULÁRIO (BREADCRUMB + TÍTULO COM BADGES DE STATUS) */}
-      <div className="space-y-1.5">
-        {/* Breadcrumb canônico exigido pelo requisito */}
-        <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
-          <span>Gestão de UC</span>
-          <ChevronRight className="w-3 h-3 text-slate-400" />
-          <span>Cadastros Básicos</span>
-          <ChevronRight className="w-3 h-3 text-slate-400" />
-          <span>CEUC</span>
-          <ChevronRight className="w-3 h-3 text-slate-400" />
-          <span className="text-slate-800 dark:text-slate-200 font-semibold">
-            Cadastro de Unidade de Conservação
-          </span>
+      {/* Modal de Visualização de Documento Normativo Anexado (RN006) */}
+      {documentoVisualizando && (
+        <GlaModal
+          isOpen={!!documentoVisualizando}
+          onClose={() => setDocumentoVisualizando(null)}
+          title={`Visualização de Documento: ${documentoVisualizando}`}
+          description="Visualizador de atos regulamentares e decretos estaduais do CEUC (DOR036)."
+          size="lg"
+          footer={
+            <div className="flex items-center justify-between w-full">
+              <span className="text-xs text-slate-500 font-mono">
+                Assinado digitalmente via SEI-BA • Conforme DOE
+              </span>
+              <GlaButton
+                variant="primary"
+                size="sm"
+                onClick={() => setDocumentoVisualizando(null)}
+              >
+                Fechar Visualizador
+              </GlaButton>
+            </div>
+          }
+        >
+          <div className="p-8 border border-dashed border-slate-300 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-900/60 text-center space-y-4">
+            <div className="w-16 h-16 rounded-full bg-[#0F4C3A]/10 text-[#0F4C3A] mx-auto flex items-center justify-center">
+              <FileText className="w-8 h-8" />
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-slate-900 dark:text-white">
+                {documentoVisualizando}
+              </h4>
+              <p className="text-xs text-slate-500 mt-1">
+                Documento normativo homologado pelo Instituto do Meio Ambiente e Recursos Hídricos (INEMA).
+              </p>
+            </div>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-medium border border-emerald-200">
+              <CheckCircle2 className="w-3.5 h-3.5" />
+              Arquivo validado no repositório oficial
+            </div>
+          </div>
+        </GlaModal>
+      )}
+
+      {/* 1. CABEÇALHO DO FORMULÁRIO (SEM BREADCRUMB DUPLICADO + AÇÕES DIRETAS NO TOPO) */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-1">
+        <div>
+          <div className="flex flex-wrap items-center gap-2.5">
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
+              {isEdicao ? uc.nome : 'Nova Unidade de Conservação'}
+            </h1>
+            {isEdicao ? (
+              <>
+                <GlaBadge variant="neutral" size="sm" mono>
+                  {uc.codigoCeu}
+                </GlaBadge>
+                <GlaBadge variant="success" size="sm" dot>
+                  Cadastrada
+                </GlaBadge>
+              </>
+            ) : (
+              <GlaBadge variant="warning" size="sm" dot>
+                Em Preenchimento
+              </GlaBadge>
+            )}
+            <GlaBadge variant="primary" size="sm">
+              CEUC / INEMA
+            </GlaBadge>
+          </div>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+            {isEdicao
+              ? 'Edição dos parâmetros cadastrais, espaciais e normativos da Unidade de Conservação.'
+              : 'Preencha as informações para registrar uma nova Unidade de Conservação no Sistema Estadual.'}
+          </p>
         </div>
 
-        {/* Título Principal e Badges */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-1">
-          <div>
-            <div className="flex flex-wrap items-center gap-2.5">
-              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
-                {isEdicao ? uc.nome : 'Nova Unidade de Conservação'}
-              </h1>
-              {isEdicao ? (
-                <>
-                  <GlaBadge variant="neutral" size="sm" mono>
-                    {uc.codigoCeu}
-                  </GlaBadge>
-                  <GlaBadge variant="success" size="sm" dot>
-                    Cadastrada
-                  </GlaBadge>
-                </>
-              ) : (
-                <GlaBadge variant="warning" size="sm" dot>
-                  Em Preenchimento
-                </GlaBadge>
-              )}
-              <GlaBadge variant="primary" size="sm">
-                CEUC / INEMA
-              </GlaBadge>
-            </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              {isEdicao
-                ? 'Edição dos parâmetros cadastrais, espaciais e normativos da Unidade de Conservação.'
-                : 'Preencha as informações para registrar uma nova Unidade de Conservação no Sistema Estadual.'}
-            </p>
-          </div>
-
-          {/* Botão Superior para Voltar à Lista */}
-          <div className="shrink-0">
-            <GlaButton
-              variant="outline"
-              size="sm"
-              leftIcon={<ArrowLeft className="w-3.5 h-3.5" />}
-              onClick={onVoltar}
-            >
-              Voltar à Lista
-            </GlaButton>
-          </div>
+        {/* Ações Primárias no Cabeçalho (Fim da Rolagem Excessiva) */}
+        <div className="flex flex-wrap items-center gap-2 shrink-0">
+          <GlaButton
+            variant="outline"
+            size="sm"
+            leftIcon={<ArrowLeft className="w-3.5 h-3.5" />}
+            onClick={onVoltar}
+          >
+            Voltar à Lista
+          </GlaButton>
+          <GlaButton
+            variant="outline"
+            size="sm"
+            leftIcon={<Save className="w-3.5 h-3.5 text-slate-500" />}
+            onClick={handleSalvarRascunho}
+          >
+            Salvar Rascunho
+          </GlaButton>
+          <GlaButton
+            variant="primary"
+            size="sm"
+            rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
+            onClick={handleAvancar}
+          >
+            Avançar
+          </GlaButton>
         </div>
       </div>
 
-      {/* 2. BARRA DE ABAS CANÔNICA DO FILAMENT (GLATABS) */}
+      {/* 2. BARRA DE ABAS CANÔNICA DO FILAMENT (GLATABS) — LIMPA E ELEGANTE */}
       <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 px-4 pt-1 shadow-2xs">
         <GlaTabs
           tabs={TABS_CONFIG}
@@ -343,10 +384,10 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
                   />
                 </div>
 
-                {/* Categoria de Manejo */}
+                {/* Categoria de Manejo (SEUC/SNUC) */}
                 <div>
                   <GlaSelect
-                    label="Categoria de Manejo (SNUC) *"
+                    label="Categoria de Manejo (SEUC/SNUC) *"
                     value={categoria}
                     onChange={(e) => setCategoria(e.target.value as any)}
                     options={[
@@ -383,20 +424,34 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
 
                     {normaCriacaoArquivo ? (
                       <div className="mt-3 flex items-center justify-between p-2 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs">
-                        <div className="flex items-center gap-2 truncate">
+                        <div className="flex items-center gap-2 truncate min-w-0 mr-2">
                           <FileText className="w-4 h-4 text-[#0F4C3A] shrink-0" />
                           <span className="font-mono text-slate-700 dark:text-slate-300 truncate">
                             {normaCriacaoArquivo}
                           </span>
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => setNormaCriacaoArquivo(null)}
-                          className="text-slate-400 hover:text-rose-600 p-0.5 rounded cursor-pointer"
-                          title="Remover arquivo"
-                        >
-                          <X className="w-3.5 h-3.5" />
-                        </button>
+                        <div className="flex items-center gap-1 shrink-0">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setDocumentoVisualizando(normaCriacaoArquivo);
+                              setToastNotificacao(`Visualizando documento: ${normaCriacaoArquivo}`);
+                            }}
+                            className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#0F4C3A] hover:bg-[#0F4C3A]/10 px-2 py-1 rounded cursor-pointer transition-colors"
+                            title="Visualizar documento"
+                          >
+                            <Eye className="w-3.5 h-3.5" />
+                            Visualizar
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setNormaCriacaoArquivo(null)}
+                            className="text-slate-400 hover:text-rose-600 p-1 rounded cursor-pointer"
+                            title="Remover arquivo"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       </div>
                     ) : (
                       <div className="mt-3">
@@ -434,20 +489,34 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
 
                     {normaAlteracaoArquivo ? (
                       <div className="mt-3 flex items-center justify-between p-2 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs">
-                        <div className="flex items-center gap-2 truncate">
+                        <div className="flex items-center gap-2 truncate min-w-0 mr-2">
                           <FileText className="w-4 h-4 text-[#0F4C3A] shrink-0" />
                           <span className="font-mono text-slate-700 dark:text-slate-300 truncate">
                             {normaAlteracaoArquivo}
                           </span>
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => setNormaAlteracaoArquivo(null)}
-                          className="text-slate-400 hover:text-rose-600 p-0.5 rounded cursor-pointer"
-                          title="Remover arquivo"
-                        >
-                          <X className="w-3.5 h-3.5" />
-                        </button>
+                        <div className="flex items-center gap-1 shrink-0">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setDocumentoVisualizando(normaAlteracaoArquivo);
+                              setToastNotificacao(`Visualizando documento: ${normaAlteracaoArquivo}`);
+                            }}
+                            className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#0F4C3A] hover:bg-[#0F4C3A]/10 px-2 py-1 rounded cursor-pointer transition-colors"
+                            title="Visualizar documento"
+                          >
+                            <Eye className="w-3.5 h-3.5" />
+                            Visualizar
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setNormaAlteracaoArquivo(null)}
+                            className="text-slate-400 hover:text-rose-600 p-1 rounded cursor-pointer"
+                            title="Remover arquivo"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       </div>
                     ) : (
                       <div className="mt-3">
@@ -485,12 +554,12 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
                 </GlaBadge>
               </div>
               <GlaCardDescription>
-                Área declarada em hectares, biomas incidentes, bacias hidrográficas (RPGA) e situação fundiária.
+                Área declarada em hectares, biomas incidentes, bacias hidrográficas (RPGA), população e situação fundiária.
               </GlaCardDescription>
             </GlaCardHeader>
 
             <div className="space-y-5 pt-2">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {/* Área Total Declarada */}
                 <div>
                   <GlaInput
@@ -522,15 +591,15 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
                   />
                 </div>
 
-                {/* Situação Fundiária: Percentual Regularizado */}
+                {/* População Estimada (DOR036) */}
                 <div>
                   <GlaInput
-                    label="Área Regularizada (%)"
-                    placeholder="Ex: 85.0"
-                    value={percentualRegularizado}
-                    onChange={(e) => setPercentualRegularizado(e.target.value)}
-                    suffixText="%"
-                    hint="Percentual com matrícula/titularidade."
+                    type="number"
+                    label="População Estimada"
+                    placeholder="Ex: 42500 ou 0"
+                    value={populacaoEstimada}
+                    onChange={(e) => setPopulacaoEstimada(e.target.value)}
+                    hint="Famílias/Habitantes (vital em Uso Sustentável)."
                   />
                 </div>
               </div>
@@ -571,23 +640,23 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
                 </div>
               </div>
 
-              {/* Municípios Abrangidos (Seleção Múltipla com Tags) */}
+              {/* Municípios Abrangidos (Seleção Múltipla com Tags flex-wrap) */}
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                   Municípios Abrangidos
                 </label>
-                <div className="flex flex-wrap items-center gap-2 p-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800">
+                <div className="flex flex-wrap items-center gap-2 p-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 w-full max-w-full overflow-hidden">
                   {municipios.map((mun) => (
                     <span
                       key={mun}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-600"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-600 max-w-full truncate"
                     >
-                      <MapPin className="w-3 h-3 text-slate-500" />
-                      {mun}
+                      <MapPin className="w-3 h-3 text-slate-500 shrink-0" />
+                      <span className="truncate">{mun}</span>
                       <button
                         type="button"
                         onClick={() => handleRemoverMunicipio(mun)}
-                        className="text-slate-400 hover:text-rose-600 ml-1 cursor-pointer"
+                        className="text-slate-400 hover:text-rose-600 ml-1 cursor-pointer shrink-0"
                         title={`Remover ${mun}`}
                       >
                         <X className="w-3 h-3" />
@@ -596,7 +665,7 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
                   ))}
 
                   {/* Campo inline para adicionar novos municípios */}
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-1.5 shrink-0">
                     <input
                       type="text"
                       placeholder="Adicionar município..."
@@ -608,7 +677,7 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
                           handleAdicionarMunicipio();
                         }
                       }}
-                      className="text-xs px-2 py-1 rounded border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 focus:outline-none focus:ring-1 focus:ring-[#0F4C3A]"
+                      className="text-xs px-2.5 py-1 rounded border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 focus:outline-none focus:ring-1 focus:ring-[#0F4C3A]"
                     />
                     <button
                       type="button"
@@ -625,18 +694,28 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
                 </p>
               </div>
 
-              {/* Situação Fundiária: Descrição do Status */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  Situação e Histórico Fundiário
-                </label>
-                <textarea
-                  rows={3}
-                  value={descricaoSituacaoFundiaria}
-                  onChange={(e) => setDescricaoSituacaoFundiaria(e.target.value)}
-                  placeholder="Descreva o estágio das desapropriações, terras devolutas e conflitos de posse..."
-                  className="w-full text-xs p-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-[#0F4C3A] focus:ring-2 focus:ring-[#0F4C3A]/20 transition-colors shadow-2xs"
-                />
+              {/* Situação Fundiária: Área Regularizada e Observações / Status Fundiário */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
+                <div>
+                  <GlaInput
+                    label="Área Regularizada (%)"
+                    placeholder="Ex: 85.0"
+                    value={percentualRegularizado}
+                    onChange={(e) => setPercentualRegularizado(e.target.value)}
+                    suffixText="%"
+                    hint="Percentual com matrícula/titularidade."
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <GlaInput
+                    label="Observações / Status Fundiário"
+                    placeholder="Ex: Terras públicas estaduais, devolutas em discriminação ou desapropriações em andamento."
+                    value={descricaoSituacaoFundiaria}
+                    onChange={(e) => setDescricaoSituacaoFundiaria(e.target.value)}
+                    hint="Contexto: terras públicas, devolutas, desapropriações ou posseiros."
+                  />
+                </div>
               </div>
             </div>
           </GlaCard>

@@ -279,7 +279,7 @@ export const CeucConsultaPage: React.FC = () => {
         <div className="p-4 bg-slate-50/70 border-b border-slate-200/80 space-y-3">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
             {/* 1. Nome da UC */}
-            <div className="lg:col-span-2">
+            <div>
               <GlaInput
                 placeholder="Buscar por nome ou código..."
                 value={buscaNome}
@@ -324,7 +324,19 @@ export const CeucConsultaPage: React.FC = () => {
               />
             </div>
 
-            {/* 5. Elegível para Visitação */}
+            {/* 5. Gestor Responsável */}
+            <div>
+              <GlaSelect
+                value={filtroGestor}
+                onChange={(e) => setFiltroGestor(e.target.value)}
+                options={[
+                  { value: 'TODOS', label: 'Todos os Gestores' },
+                  ...gestores.map((g) => ({ value: g, label: g }))
+                ]}
+              />
+            </div>
+
+            {/* 6. Elegível para Visitação */}
             <div>
               <GlaSelect
                 value={filtroElegibilidade}

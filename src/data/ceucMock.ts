@@ -16,6 +16,7 @@ export interface UcItem {
   elegivelVisitacao: boolean;
   bioma: 'Caatinga' | 'Mata Atlântica' | 'Cerrado';
   areaHectares: number;
+  populacaoEstimada?: number;
   rpga?: string;
   territorioIdentidade?: string;
   percentualRegularizado?: number;
@@ -43,6 +44,7 @@ export const MOCK_UNIDADES_CONSERVACAO: UcItem[] = [
     elegivelVisitacao: true,
     bioma: 'Caatinga',
     areaHectares: 46000,
+    populacaoEstimada: 0,
     rpga: 'RPGA do Rio Paraguaçu',
     territorioIdentidade: 'Piemonte da Diamantina',
     percentualRegularizado: 91.5,
@@ -67,6 +69,7 @@ export const MOCK_UNIDADES_CONSERVACAO: UcItem[] = [
     elegivelVisitacao: true,
     bioma: 'Mata Atlântica',
     areaHectares: 142000,
+    populacaoEstimada: 42500,
     rpga: 'RPGA do Litoral Norte',
     territorioIdentidade: 'Litoral Norte e Agreste Baiano',
     percentualRegularizado: 68.0,
@@ -90,6 +93,7 @@ export const MOCK_UNIDADES_CONSERVACAO: UcItem[] = [
     elegivelVisitacao: false, // Cenário de contraste: Proteção integral restrita a pesquisas
     bioma: 'Mata Atlântica',
     areaHectares: 2400,
+    populacaoEstimada: 0,
     rpga: 'RPGA do Rio das Contas',
     territorioIdentidade: 'Baixo Sul',
     percentualRegularizado: 45.0,
@@ -114,6 +118,7 @@ export const MOCK_UNIDADES_CONSERVACAO: UcItem[] = [
     elegivelVisitacao: true,
     bioma: 'Caatinga',
     areaHectares: 2821,
+    populacaoEstimada: 0,
     rpga: 'RPGA do Rio Itapicuru',
     territorioIdentidade: 'Piemonte do Paraguaçu',
     percentualRegularizado: 88.0,
