@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   FileCheck2,
   Clock,
@@ -16,6 +16,8 @@ import {
 } from 'lucide-react';
 
 export const SeiaV2DashboardPage: React.FC = () => {
+  const [period, setPeriod] = useState<'2026' | '30d' | '7d'>('2026');
+
   return (
     <div className="space-y-6">
       {/* Cabeçalho da Página */}
@@ -39,13 +41,23 @@ export const SeiaV2DashboardPage: React.FC = () => {
         {/* Controles de Período e Filtros (Dense UI) */}
         <div className="flex items-center gap-2">
           <div className="flex items-center bg-white border border-slate-200 rounded-lg p-0.5 text-xs font-semibold text-slate-600 shadow-2xs">
-            <button className="px-2.5 py-1 rounded bg-[#0F4C3A] text-white">2026</button>
-            <button className="px-2.5 py-1 rounded hover:bg-slate-100">30d</button>
-            <button className="px-2.5 py-1 rounded hover:bg-slate-100">7d</button>
+            {(['2026', '30d', '7d'] as const).map((p) => (
+              <button
+                key={p}
+                onClick={() => setPeriod(p)}
+                className={`px-2.5 py-1 rounded-md transition-all duration-200 ease-in-out cursor-pointer ${
+                  period === p
+                    ? 'bg-[#0F4C3A] text-white shadow-2xs font-bold'
+                    : 'hover:bg-slate-100 hover:text-[#0F4C3A] text-slate-600 font-medium'
+                }`}
+              >
+                {p}
+              </button>
+            ))}
           </div>
 
-          <button className="h-9 px-3 text-xs font-medium bg-white border border-slate-200 rounded-lg text-slate-700 hover:bg-slate-50 flex items-center gap-1.5 shadow-2xs">
-            <Filter className="w-3.5 h-3.5 text-slate-500" />
+          <button className="h-9 px-3 text-xs font-medium bg-white border border-slate-200 hover:border-slate-300 rounded-lg text-slate-700 hover:text-[#0F4C3A] hover:bg-slate-50 transition-all duration-200 ease-in-out flex items-center gap-1.5 shadow-2xs cursor-pointer">
+            <Filter className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#0F4C3A]" />
             <span>Filtrar Unidade</span>
           </button>
         </div>
@@ -331,9 +343,9 @@ export const SeiaV2DashboardPage: React.FC = () => {
               status: 'Análise Hidrológica',
             },
           ].map((proc, idx) => (
-            <div key={idx} className="p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50/70 transition-colors">
+            <div key={idx} className="p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50/90 transition-all duration-200 ease-in-out">
               <div className="flex items-center gap-3">
-                <span className="font-mono text-xs font-bold text-slate-900 bg-slate-100 px-2 py-1 rounded border border-slate-200">
+                <span className="font-mono text-xs font-bold text-slate-800 bg-slate-100 px-2.5 py-1 rounded-md border border-slate-200">
                   {proc.sei}
                 </span>
                 <div>
@@ -350,10 +362,10 @@ export const SeiaV2DashboardPage: React.FC = () => {
                 <span className={`text-[10px] px-2 py-0.5 rounded-full border ${proc.slaColor}`}>
                   {proc.sla}
                 </span>
-                <span className="text-[11px] font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded">
+                <span className="text-[11px] font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md">
                   {proc.status}
                 </span>
-                <button className="h-8 px-3 text-xs font-semibold bg-[#0F4C3A] hover:bg-[#0b382b] text-white rounded-md transition-colors flex items-center gap-1 shadow-2xs">
+                <button className="h-8 px-3.5 text-xs font-semibold bg-[#0F4C3A] hover:bg-[#0b382b] text-white rounded-lg transition-all duration-200 ease-in-out flex items-center gap-1.5 shadow-2xs cursor-pointer">
                   <span>Analisar</span>
                   <ArrowRight className="w-3 h-3" />
                 </button>

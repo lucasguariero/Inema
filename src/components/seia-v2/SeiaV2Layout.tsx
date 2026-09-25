@@ -207,9 +207,9 @@ export const SeiaV2Layout: React.FC<SeiaV2LayoutProps> = ({
         <div className="hidden md:flex items-center gap-1 bg-black/15 p-1 rounded-lg border border-white/10">
           <button
             onClick={() => onScreenChange('dashboard')}
-            className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 ease-in-out cursor-pointer ${
               currentScreen === 'dashboard'
-                ? 'bg-white text-[#0F4C3A] shadow-xs'
+                ? 'bg-white text-[#0F4C3A] shadow-xs ring-1 ring-black/5'
                 : 'text-white/80 hover:text-white hover:bg-white/10'
             }`}
           >
@@ -219,9 +219,9 @@ export const SeiaV2Layout: React.FC<SeiaV2LayoutProps> = ({
 
           <button
             onClick={() => onScreenChange('formulario')}
-            className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 ease-in-out cursor-pointer ${
               currentScreen === 'formulario'
-                ? 'bg-white text-[#0F4C3A] shadow-xs'
+                ? 'bg-white text-[#0F4C3A] shadow-xs ring-1 ring-black/5'
                 : 'text-white/80 hover:text-white hover:bg-white/10'
             }`}
           >
@@ -231,9 +231,9 @@ export const SeiaV2Layout: React.FC<SeiaV2LayoutProps> = ({
 
           <button
             onClick={() => onScreenChange('tabela')}
-            className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 ease-in-out cursor-pointer ${
               currentScreen === 'tabela'
-                ? 'bg-white text-[#0F4C3A] shadow-xs'
+                ? 'bg-white text-[#0F4C3A] shadow-xs ring-1 ring-black/5'
                 : 'text-white/80 hover:text-white hover:bg-white/10'
             }`}
           >
@@ -245,17 +245,17 @@ export const SeiaV2Layout: React.FC<SeiaV2LayoutProps> = ({
         {/* Lado Direito: Notificações e Perfil do Analista */}
         <div className="flex items-center gap-3">
           <button
-            className="relative p-1.5 rounded-md hover:bg-white/10 text-white/90 transition-colors"
+            className="relative p-2 rounded-lg hover:bg-white/15 text-white/90 hover:text-white transition-all duration-200 ease-in-out cursor-pointer"
             title="Notificações do SEIA"
           >
             <Bell className="w-4 h-4" />
-            <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-amber-400 animate-pulse ring-2 ring-[#0F4C3A]" />
           </button>
 
           <div className="h-6 w-px bg-white/20 hidden sm:block" />
 
           {/* Perfil Técnico */}
-          <div className="flex items-center gap-2 pl-1">
+          <div className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 transition-all duration-200 ease-in-out cursor-pointer">
             <div className="w-8 h-8 rounded-full bg-emerald-800 border border-emerald-600/40 flex items-center justify-center text-xs font-bold text-white shadow-xs">
               CA
             </div>
@@ -285,7 +285,7 @@ export const SeiaV2Layout: React.FC<SeiaV2LayoutProps> = ({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Buscar no SEIA (Ctrl+K)..."
-              className="w-full h-9 pl-8 pr-12 text-xs bg-white border border-slate-200 rounded-lg placeholder-slate-400 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] transition-all"
+              className="w-full h-9 pl-8 pr-12 text-xs bg-white border border-slate-200 hover:border-slate-300 rounded-lg placeholder-slate-400 text-slate-700 shadow-2xs focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A] transition-all duration-200 ease-in-out"
             />
             <span className="absolute right-2 top-2 text-[10px] font-mono text-slate-400 px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200">
               ⌘K
@@ -314,16 +314,16 @@ export const SeiaV2Layout: React.FC<SeiaV2LayoutProps> = ({
               <div key={group.id} className="pt-2 first:pt-0">
                 <button
                   onClick={() => toggleGroup(group.id)}
-                  className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-md text-[11px] font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 transition-colors uppercase tracking-wider"
+                  className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-[11px] font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 transition-all duration-200 ease-in-out uppercase tracking-wider cursor-pointer"
                 >
                   <div className="flex items-center gap-2 truncate">
                     <GroupIcon className="w-3.5 h-3.5 text-[#0F4C3A] shrink-0" />
                     <span className="truncate">{group.title}</span>
                   </div>
                   {isOpen ? (
-                    <ChevronDown className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                    <ChevronDown className="w-3.5 h-3.5 text-slate-400 shrink-0 transition-transform duration-200" />
                   ) : (
-                    <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                    <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0 transition-transform duration-200" />
                   )}
                 </button>
 
@@ -341,9 +341,9 @@ export const SeiaV2Layout: React.FC<SeiaV2LayoutProps> = ({
                               onScreenChange(item.screenTarget);
                             }
                           }}
-                          className={`w-full flex items-center justify-between px-3 py-1.5 rounded-md text-xs font-medium transition-all text-left ${
+                          className={`w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ease-in-out text-left cursor-pointer ${
                             isActive
-                              ? 'bg-emerald-50 text-[#0F4C3A] font-semibold border-l-2 border-[#0F4C3A]'
+                              ? 'bg-[#0F4C3A]/10 text-[#0F4C3A] font-semibold border-l-2 border-[#0F4C3A]'
                               : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/60'
                           }`}
                         >

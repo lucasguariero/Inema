@@ -20,6 +20,7 @@ import {
   X,
   ExternalLink
 } from 'lucide-react';
+import { CustomSelect, SelectOption } from './CustomSelect';
 
 interface ProcessoItem {
   id: string;
@@ -211,6 +212,29 @@ export const SeiaV2TabelaOperacionalPage: React.FC = () => {
     }
   };
 
+  const statusOptions: SelectOption[] = [
+    { value: 'todos', label: 'Todos os Status' },
+    { value: 'analise', label: 'Em Análise Técnica' },
+    { value: 'pendencia', label: 'Pendência do Requerente' },
+    { value: 'deferido', label: 'Portaria / Deferido' },
+    { value: 'indeferido', label: 'Indeferido (Recurso)' },
+  ];
+
+  const diretoriaOptions: SelectOption[] = [
+    { value: 'todos', label: 'Todas as Diretorias' },
+    { value: 'dirre', label: 'DIRRE • Regulação e Outorga' },
+    { value: 'difis', label: 'DIFIS • Fiscalização' },
+    { value: 'disuc', label: 'DISUC • Unidades Conservação' },
+    { value: 'dipre', label: 'DIPRE • Recursos Hídricos' },
+  ];
+
+  const perPageOptions: SelectOption[] = [
+    { value: '10', label: '10' },
+    { value: '25', label: '25' },
+    { value: '50', label: '50' },
+    { value: '100', label: '100' },
+  ];
+
   return (
     <div className="space-y-5">
       {/* Cabeçalho da Página */}
@@ -234,9 +258,9 @@ export const SeiaV2TabelaOperacionalPage: React.FC = () => {
         <div className="flex items-center gap-2">
           <button
             onClick={() => alert('Exportando pauta em formato Excel (XLSX)...')}
-            className="h-9 px-3 text-xs font-semibold bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-lg transition-colors flex items-center gap-1.5 shadow-2xs"
+            className="h-9 px-3.5 text-xs font-semibold bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 rounded-lg transition-all duration-200 ease-in-out flex items-center gap-1.5 shadow-2xs cursor-pointer"
           >
-            <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-700" />
+            <FileSpreadsheet className="w-3.5 h-3.5 text-[#0F4C3A]" />
             <span>Exportar XLSX</span>
           </button>
         </div>
@@ -255,38 +279,28 @@ export const SeiaV2TabelaOperacionalPage: React.FC = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Filtrar por SEI, requerente, município..."
-              className="w-full h-9 pl-8 pr-3 text-xs bg-slate-50/50 border border-slate-200 rounded-lg placeholder-slate-400 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]"
+              className="w-full h-9 pl-9 pr-3 text-xs bg-white border border-slate-200 hover:border-slate-300 rounded-lg placeholder-slate-400 text-slate-700 shadow-2xs focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A] transition-all duration-200 ease-in-out"
             />
           </div>
 
-          {/* Filtro de Status */}
+          {/* Filtro de Status Customizado */}
           <div className="lg:col-span-3">
-            <select
+            <CustomSelect
               value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full h-9 px-3 text-xs bg-white border border-slate-200 rounded-lg text-slate-700 focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]"
-            >
-              <option value="todos">Todos os Status</option>
-              <option value="analise">Em Análise Técnica</option>
-              <option value="pendencia">Pendência do Requerente</option>
-              <option value="deferido">Portaria / Deferido</option>
-              <option value="indeferido">Indeferido</option>
-            </select>
+              onChange={setStatusFilter}
+              options={statusOptions}
+              placeholder="Todos os Status"
+            />
           </div>
 
-          {/* Filtro de Diretoria */}
+          {/* Filtro de Diretoria Customizado */}
           <div className="lg:col-span-3">
-            <select
+            <CustomSelect
               value={diretoriaFilter}
-              onChange={(e) => setDiretoriaFilter(e.target.value)}
-              className="w-full h-9 px-3 text-xs bg-white border border-slate-200 rounded-lg text-slate-700 focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]"
-            >
-              <option value="todos">Todas as Diretorias</option>
-              <option value="dirre">DIRRE • Regulação</option>
-              <option value="difis">DIFIS • Fiscalização</option>
-              <option value="disuc">DISUC • Unidades Conservação</option>
-              <option value="dipre">DIPRE • Recursos Hídricos</option>
-            </select>
+              onChange={setDiretoriaFilter}
+              options={diretoriaOptions}
+              placeholder="Todas as Diretorias"
+            />
           </div>
 
           {/* Ação Limpar */}
@@ -297,7 +311,7 @@ export const SeiaV2TabelaOperacionalPage: React.FC = () => {
                 setStatusFilter('todos');
                 setDiretoriaFilter('todos');
               }}
-              className="h-9 px-3 text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors w-full"
+              className="h-9 px-3 text-xs font-semibold text-slate-600 hover:text-[#0F4C3A] hover:bg-slate-100 rounded-lg border border-transparent hover:border-slate-200 transition-all duration-200 ease-in-out w-full cursor-pointer"
             >
               Limpar Filtros
             </button>
@@ -360,8 +374,8 @@ export const SeiaV2TabelaOperacionalPage: React.FC = () => {
                 return (
                   <tr
                     key={proc.id}
-                    className={`hover:bg-slate-50/70 transition-colors ${
-                      isSelected ? 'bg-emerald-50/40' : ''
+                    className={`transition-colors duration-150 ease-in-out ${
+                      isSelected ? 'bg-[#0F4C3A]/5 hover:bg-[#0F4C3A]/10' : 'hover:bg-slate-50/80'
                     }`}
                   >
                     <td className="p-3 text-center">
@@ -369,12 +383,12 @@ export const SeiaV2TabelaOperacionalPage: React.FC = () => {
                         type="checkbox"
                         checked={isSelected}
                         onChange={() => toggleSelectOne(proc.id)}
-                        className="rounded border-slate-300 text-[#0F4C3A] focus:ring-[#0F4C3A]"
+                        className="w-4 h-4 rounded border-slate-300 text-[#0F4C3A] focus:ring-2 focus:ring-[#0F4C3A]/20 transition-all duration-150 cursor-pointer"
                       />
                     </td>
 
                     <td className="p-3">
-                      <span className="font-mono font-bold text-slate-900 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">
+                      <span className="font-mono font-bold text-slate-800 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">
                         {proc.sei}
                       </span>
                     </td>
@@ -417,19 +431,19 @@ export const SeiaV2TabelaOperacionalPage: React.FC = () => {
                       <div className="inline-flex items-center gap-1">
                         <button
                           onClick={() => setSelectedProcesso(proc)}
-                          className="p-1.5 rounded hover:bg-slate-100 text-slate-600 hover:text-slate-900 transition-colors"
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-[#0F4C3A] hover:bg-slate-100 transition-all duration-200 ease-in-out cursor-pointer"
                           title="Visualizar Detalhes"
                         >
                           <Eye className="w-3.5 h-3.5" />
                         </button>
                         <button
-                          className="p-1.5 rounded hover:bg-emerald-50 text-[#0F4C3A] transition-colors"
+                          className="p-1.5 rounded-lg text-[#0F4C3A] hover:bg-[#0F4C3A]/10 transition-all duration-200 ease-in-out cursor-pointer"
                           title="Parecer Técnico"
                         >
                           <FileEdit className="w-3.5 h-3.5" />
                         </button>
                         <button
-                          className="p-1.5 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors"
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-all duration-200 ease-in-out cursor-pointer"
                           title="Histórico de Tramitação"
                         >
                           <History className="w-3.5 h-3.5" />
@@ -460,16 +474,13 @@ export const SeiaV2TabelaOperacionalPage: React.FC = () => {
             <span className="text-slate-300">•</span>
             <div className="flex items-center gap-1.5">
               <span>Por página:</span>
-              <select
-                value={itemsPerPage}
-                onChange={(e) => setItemsPerPage(Number(e.target.value))}
-                className="h-7 px-2 border border-slate-200 rounded bg-white text-xs text-slate-700"
-              >
-                <option value={10}>10</option>
-                <option value={25}>25</option>
-                <option value={50}>50</option>
-                <option value={100}>100</option>
-              </select>
+              <div className="w-18">
+                <CustomSelect
+                  value={String(itemsPerPage)}
+                  onChange={(v) => setItemsPerPage(Number(v))}
+                  options={perPageOptions}
+                />
+              </div>
             </div>
           </div>
 
@@ -477,26 +488,26 @@ export const SeiaV2TabelaOperacionalPage: React.FC = () => {
             <button
               disabled={currentPage === 1}
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              className="p-1.5 rounded border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-40"
+              className="p-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 hover:border-slate-300 disabled:opacity-40 transition-all duration-200 ease-in-out cursor-pointer"
             >
               <ChevronLeft className="w-3.5 h-3.5" />
             </button>
-            <button className="px-2.5 py-1 rounded bg-[#0F4C3A] text-white font-bold font-mono text-xs">
+            <button className="px-2.5 py-1 rounded-lg bg-[#0F4C3A] text-white font-bold font-mono text-xs shadow-2xs">
               1
             </button>
-            <button className="px-2.5 py-1 rounded border border-slate-200 bg-white hover:bg-slate-100 font-mono text-xs">
+            <button className="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 hover:border-slate-300 font-mono text-xs transition-all duration-200 ease-in-out cursor-pointer">
               2
             </button>
-            <button className="px-2.5 py-1 rounded border border-slate-200 bg-white hover:bg-slate-100 font-mono text-xs">
+            <button className="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 hover:border-slate-300 font-mono text-xs transition-all duration-200 ease-in-out cursor-pointer">
               3
             </button>
             <span className="px-1 text-slate-400">...</span>
-            <button className="px-2.5 py-1 rounded border border-slate-200 bg-white hover:bg-slate-100 font-mono text-xs">
+            <button className="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 hover:border-slate-300 font-mono text-xs transition-all duration-200 ease-in-out cursor-pointer">
               15
             </button>
             <button
               onClick={() => setCurrentPage((p) => p + 1)}
-              className="p-1.5 rounded border border-slate-200 bg-white hover:bg-slate-100"
+              className="p-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 hover:border-slate-300 transition-all duration-200 ease-in-out cursor-pointer"
             >
               <ChevronRight className="w-3.5 h-3.5" />
             </button>

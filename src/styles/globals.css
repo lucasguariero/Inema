@@ -256,3 +256,37 @@ body {
   background: rgba(255, 255, 255, 0.35);
 }
 
+/* =========================================================================
+   REFINO ENTERPRISE SEIA V2 (ZERO AZUL NATIVO & MICROINTERAÇÕES TALL/SHADCN)
+   ========================================================================= */
+
+/* Morte ao azul nativo do navegador em checkboxes, radios e foco */
+input[type="checkbox"],
+input[type="radio"],
+input[type="range"] {
+  accent-color: #0F4C3A !important;
+}
+
+/* Reset de contorno azul padrão do navegador para todos os elementos interativos */
+*:focus-visible {
+  outline: none !important;
+}
+
+/* Inputs, Textareas e Selects elegantes com focus ring suave */
+input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="reset"]),
+textarea {
+  transition: all 0.2s ease-in-out;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="reset"]):focus,
+textarea:focus {
+  outline: none !important;
+  border-color: #0F4C3A !important;
+  box-shadow: 0 0 0 2px rgba(15, 76, 58, 0.15) !important;
+}
+
+/* Transições universais suaves em botões, links e células interativas */
+button, a, select, summary {
+  transition: all 0.2s ease-in-out;
+}
+

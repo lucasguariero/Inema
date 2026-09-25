@@ -14,6 +14,30 @@ import {
   Save,
   X
 } from 'lucide-react';
+import { CustomSelect, SelectOption } from './CustomSelect';
+
+const tipologiaOptions: SelectOption[] = [
+  { value: 'Agricultura Irrigada de Grãos e Fibras', label: 'Agricultura Irrigada de Grãos e Fibras' },
+  { value: 'Mineração a Céu Aberto e Britagem', label: 'Mineração a Céu Aberto e Britagem' },
+  { value: 'Geração de Energia Eólica / Solar Fotovoltaica', label: 'Geração de Energia Eólica / Solar Fotovoltaica' },
+  { value: 'Indústria de Alimentos e Bebidas', label: 'Indústria de Alimentos e Bebidas' },
+  { value: 'Loteamento e Obras de Urbanização', label: 'Loteamento e Obras de Urbanização' },
+];
+
+const tipoLicencaOptions: SelectOption[] = [
+  { value: 'Licença Prévia (LP)', label: 'Licença Prévia (LP)' },
+  { value: 'Licença de Instalação (LI) com ampliação', label: 'Licença de Instalação (LI) com ampliação' },
+  { value: 'Licença de Operação (LO)', label: 'Licença de Operação (LO)' },
+  { value: 'Licença Unificada (LU)', label: 'Licença Unificada (LU)' },
+  { value: 'Autorização Ambiental (AA)', label: 'Autorização Ambiental (AA)' },
+];
+
+const tipoCaptacaoOptions: SelectOption[] = [
+  { value: 'Subterrânea (Poço Tubular Profundo)', label: 'Subterrânea (Poço Tubular Profundo)' },
+  { value: 'Superficial Direta (Rio / Riacho)', label: 'Superficial Direta (Rio / Riacho)' },
+  { value: 'Barramento com regularização de vazão', label: 'Barramento com regularização de vazão' },
+  { value: 'Canal de Irrigação de Distrito Público', label: 'Canal de Irrigação de Distrito Público' },
+];
 
 export const SeiaV2FormularioComplexoPage: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -109,16 +133,16 @@ export const SeiaV2FormularioComplexoPage: React.FC = () => {
               <button
                 key={s.num}
                 onClick={() => setCurrentStep(s.num)}
-                className={`flex items-center gap-2.5 p-2 rounded-lg text-left transition-all ${
+                className={`flex items-center gap-2.5 p-2 rounded-lg text-left transition-all duration-200 ease-in-out cursor-pointer ${
                   isCurrent
-                    ? 'bg-emerald-50 border border-emerald-300'
+                    ? 'bg-emerald-50 border border-emerald-300 shadow-2xs'
                     : isDone
                     ? 'bg-slate-50 hover:bg-slate-100 border border-slate-200'
                     : 'opacity-60 hover:opacity-100'
                 }`}
               >
                 <div
-                  className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold font-mono shrink-0 ${
+                  className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold font-mono shrink-0 transition-colors duration-200 ${
                     isCurrent
                       ? 'bg-[#0F4C3A] text-white shadow-xs'
                       : isDone
@@ -177,7 +201,7 @@ export const SeiaV2FormularioComplexoPage: React.FC = () => {
                       type="text"
                       value={formData.cnpj}
                       onChange={(e) => setFormData({ ...formData, cnpj: e.target.value })}
-                      className="w-full h-9 px-3 text-xs bg-white border border-slate-300 rounded-md focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A] font-mono"
+                      className="w-full h-9 px-3 py-1.5 text-xs text-slate-700 bg-white border border-slate-200 hover:border-slate-300 rounded-lg shadow-2xs transition-all duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A] font-mono"
                     />
                   </div>
 
@@ -187,7 +211,7 @@ export const SeiaV2FormularioComplexoPage: React.FC = () => {
                       type="text"
                       value={formData.razaoSocial}
                       onChange={(e) => setFormData({ ...formData, razaoSocial: e.target.value })}
-                      className="w-full h-9 px-3 text-xs bg-white border border-slate-300 rounded-md focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]"
+                      className="w-full h-9 px-3 py-1.5 text-xs text-slate-700 bg-white border border-slate-200 hover:border-slate-300 rounded-lg shadow-2xs transition-all duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A]"
                     />
                   </div>
 
@@ -197,7 +221,7 @@ export const SeiaV2FormularioComplexoPage: React.FC = () => {
                       type="text"
                       value={formData.nomeFantasia}
                       onChange={(e) => setFormData({ ...formData, nomeFantasia: e.target.value })}
-                      className="w-full h-9 px-3 text-xs bg-white border border-slate-300 rounded-md focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]"
+                      className="w-full h-9 px-3 py-1.5 text-xs text-slate-700 bg-white border border-slate-200 hover:border-slate-300 rounded-lg shadow-2xs transition-all duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A]"
                     />
                   </div>
 
@@ -207,7 +231,7 @@ export const SeiaV2FormularioComplexoPage: React.FC = () => {
                       type="text"
                       value={formData.inscricaoEstadual}
                       onChange={(e) => setFormData({ ...formData, inscricaoEstadual: e.target.value })}
-                      className="w-full h-9 px-3 text-xs bg-white border border-slate-300 rounded-md focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A] font-mono"
+                      className="w-full h-9 px-3 py-1.5 text-xs text-slate-700 bg-white border border-slate-200 hover:border-slate-300 rounded-lg shadow-2xs transition-all duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A] font-mono"
                     />
                   </div>
                 </div>
@@ -225,7 +249,7 @@ export const SeiaV2FormularioComplexoPage: React.FC = () => {
                       type="text"
                       value={formData.municipio}
                       onChange={(e) => setFormData({ ...formData, municipio: e.target.value })}
-                      className="w-full h-9 px-3 text-xs bg-white border border-slate-300 rounded-md focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]"
+                      className="w-full h-9 px-3 py-1.5 text-xs text-slate-700 bg-white border border-slate-200 hover:border-slate-300 rounded-lg shadow-2xs transition-all duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A]"
                     />
                   </div>
 
@@ -235,7 +259,7 @@ export const SeiaV2FormularioComplexoPage: React.FC = () => {
                       type="text"
                       value={formData.latitude}
                       onChange={(e) => setFormData({ ...formData, latitude: e.target.value })}
-                      className="w-full h-9 px-3 text-xs bg-white border border-slate-300 rounded-md focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A] font-mono"
+                      className="w-full h-9 px-3 py-1.5 text-xs text-slate-700 bg-white border border-slate-200 hover:border-slate-300 rounded-lg shadow-2xs transition-all duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A] font-mono"
                     />
                   </div>
 
@@ -245,7 +269,7 @@ export const SeiaV2FormularioComplexoPage: React.FC = () => {
                       type="text"
                       value={formData.longitude}
                       onChange={(e) => setFormData({ ...formData, longitude: e.target.value })}
-                      className="w-full h-9 px-3 text-xs bg-white border border-slate-300 rounded-md focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A] font-mono"
+                      className="w-full h-9 px-3 py-1.5 text-xs text-slate-700 bg-white border border-slate-200 hover:border-slate-300 rounded-lg shadow-2xs transition-all duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A] font-mono"
                     />
                   </div>
 
@@ -255,7 +279,7 @@ export const SeiaV2FormularioComplexoPage: React.FC = () => {
                       type="text"
                       value={formData.cefirNumero}
                       onChange={(e) => setFormData({ ...formData, cefirNumero: e.target.value })}
-                      className="w-full h-9 px-3 text-xs bg-white border border-slate-300 rounded-md focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A] font-mono"
+                      className="w-full h-9 px-3 py-1.5 text-xs text-slate-700 bg-white border border-slate-200 hover:border-slate-300 rounded-lg shadow-2xs transition-all duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A] font-mono"
                     />
                   </div>
 
@@ -265,7 +289,7 @@ export const SeiaV2FormularioComplexoPage: React.FC = () => {
                       type="text"
                       value={formData.areaTotal}
                       onChange={(e) => setFormData({ ...formData, areaTotal: e.target.value })}
-                      className="w-full h-9 px-3 text-xs bg-white border border-slate-300 rounded-md focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A] font-mono"
+                      className="w-full h-9 px-3 py-1.5 text-xs text-slate-700 bg-white border border-slate-200 hover:border-slate-300 rounded-lg shadow-2xs transition-all duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A] font-mono"
                     />
                   </div>
                 </div>
@@ -279,32 +303,20 @@ export const SeiaV2FormularioComplexoPage: React.FC = () => {
               <div className="grid grid-cols-12 gap-4">
                 <div className="col-span-12 md:col-span-8 space-y-1">
                   <label className="text-xs font-semibold text-slate-700">Tipologia Principal da Atividade *</label>
-                  <select
+                  <CustomSelect
+                    options={tipologiaOptions}
                     value={formData.tipologia}
-                    onChange={(e) => setFormData({ ...formData, tipologia: e.target.value })}
-                    className="w-full h-9 px-3 text-xs bg-white border border-slate-300 rounded-md focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]"
-                  >
-                    <option>Agricultura Irrigada de Grãos e Fibras</option>
-                    <option>Mineração a Céu Aberto e Britagem</option>
-                    <option>Geração de Energia Eólica / Solar Fotovoltaica</option>
-                    <option>Indústria de Alimentos e Bebidas</option>
-                    <option>Loteamento e Obras de Urbanização</option>
-                  </select>
+                    onChange={(v) => setFormData({ ...formData, tipologia: v })}
+                  />
                 </div>
 
                 <div className="col-span-12 md:col-span-4 space-y-1">
                   <label className="text-xs font-semibold text-slate-700">Tipo de Ato Requerido *</label>
-                  <select
+                  <CustomSelect
+                    options={tipoLicencaOptions}
                     value={formData.tipoLicenca}
-                    onChange={(e) => setFormData({ ...formData, tipoLicenca: e.target.value })}
-                    className="w-full h-9 px-3 text-xs bg-white border border-slate-300 rounded-md focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]"
-                  >
-                    <option>Licença Prévia (LP)</option>
-                    <option>Licença de Instalação (LI) com ampliação</option>
-                    <option>Licença de Operação (LO)</option>
-                    <option>Licença Unificada (LU)</option>
-                    <option>Autorização Ambiental (AA)</option>
-                  </select>
+                    onChange={(v) => setFormData({ ...formData, tipoLicenca: v })}
+                  />
                 </div>
 
                 <div className="col-span-12 md:col-span-6 space-y-1">
@@ -313,7 +325,7 @@ export const SeiaV2FormularioComplexoPage: React.FC = () => {
                     type="text"
                     readOnly
                     value={formData.porte}
-                    className="w-full h-9 px-3 text-xs bg-slate-50 border border-slate-300 rounded-md font-semibold text-slate-800"
+                    className="w-full h-9 px-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg font-semibold text-slate-700 cursor-not-allowed"
                   />
                   <p className="text-[10px] text-slate-500">Calculado automaticamente com base na área declarada.</p>
                 </div>
@@ -324,12 +336,12 @@ export const SeiaV2FormularioComplexoPage: React.FC = () => {
                     type="text"
                     readOnly
                     value={formData.potencialPoluidor}
-                    className="w-full h-9 px-3 text-xs bg-slate-50 border border-slate-300 rounded-md font-semibold text-slate-800"
+                    className="w-full h-9 px-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg font-semibold text-slate-700 cursor-not-allowed"
                   />
                   <p className="text-[10px] text-slate-500">Enquadramento conforme Resolução CEPRAM nº 4.579.</p>
                 </div>
 
-                <div className="col-span-12 p-4 rounded-lg bg-emerald-50 border border-emerald-200">
+                <div className="col-span-12 p-4 rounded-xl bg-emerald-50 border border-emerald-200 shadow-2xs">
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 text-[#0F4C3A]" />
                     <span className="text-xs font-bold text-[#0F4C3A]">Enquadramento Automático Homologado:</span>
@@ -353,16 +365,11 @@ export const SeiaV2FormularioComplexoPage: React.FC = () => {
                 <div className="grid grid-cols-12 gap-4">
                   <div className="col-span-12 md:col-span-6 space-y-1">
                     <label className="text-xs font-semibold text-slate-700">Tipo de Ponto de Captação *</label>
-                    <select
+                    <CustomSelect
+                      options={tipoCaptacaoOptions}
                       value={formData.tipoCaptacao}
-                      onChange={(e) => setFormData({ ...formData, tipoCaptacao: e.target.value })}
-                      className="w-full h-9 px-3 text-xs bg-white border border-slate-300 rounded-md focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]"
-                    >
-                      <option>Subterrânea (Poço Tubular Profundo)</option>
-                      <option>Superficial Direta (Rio / Riacho)</option>
-                      <option>Barramento com regularização de vazão</option>
-                      <option>Canal de Irrigação de Distrito Público</option>
-                    </select>
+                      onChange={(v) => setFormData({ ...formData, tipoCaptacao: v })}
+                    />
                   </div>
 
                   <div className="col-span-12 md:col-span-6 space-y-1">
@@ -371,7 +378,7 @@ export const SeiaV2FormularioComplexoPage: React.FC = () => {
                       type="text"
                       value={formData.vazaoDia}
                       onChange={(e) => setFormData({ ...formData, vazaoDia: e.target.value })}
-                      className="w-full h-9 px-3 text-xs bg-white border border-slate-300 rounded-md focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A] font-mono"
+                      className="w-full h-9 px-3 py-1.5 text-xs text-slate-700 bg-white border border-slate-200 hover:border-slate-300 rounded-lg shadow-2xs transition-all duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A] font-mono"
                     />
                   </div>
                 </div>
@@ -389,7 +396,7 @@ export const SeiaV2FormularioComplexoPage: React.FC = () => {
                       type="text"
                       value={formData.areaSupressao}
                       onChange={(e) => setFormData({ ...formData, areaSupressao: e.target.value })}
-                      className="w-full h-9 px-3 text-xs bg-white border border-slate-300 rounded-md focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A] font-mono"
+                      className="w-full h-9 px-3 py-1.5 text-xs text-slate-700 bg-white border border-slate-200 hover:border-slate-300 rounded-lg shadow-2xs transition-all duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A] font-mono"
                     />
                   </div>
 
@@ -399,7 +406,7 @@ export const SeiaV2FormularioComplexoPage: React.FC = () => {
                       type="text"
                       value={formData.bioma}
                       onChange={(e) => setFormData({ ...formData, bioma: e.target.value })}
-                      className="w-full h-9 px-3 text-xs bg-white border border-slate-300 rounded-md focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]"
+                      className="w-full h-9 px-3 py-1.5 text-xs text-slate-700 bg-white border border-slate-200 hover:border-slate-300 rounded-lg shadow-2xs transition-all duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A]"
                     />
                   </div>
                 </div>
@@ -417,7 +424,7 @@ export const SeiaV2FormularioComplexoPage: React.FC = () => {
                     type="text"
                     value={formData.artNumero}
                     onChange={(e) => setFormData({ ...formData, artNumero: e.target.value })}
-                    className="w-full h-9 px-3 text-xs bg-white border border-slate-300 rounded-md focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A] font-mono"
+                    className="w-full h-9 px-3 py-1.5 text-xs text-slate-700 bg-white border border-slate-200 hover:border-slate-300 rounded-lg shadow-2xs transition-all duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A] font-mono"
                   />
                 </div>
 
@@ -427,7 +434,7 @@ export const SeiaV2FormularioComplexoPage: React.FC = () => {
                     type="text"
                     value={formData.nomeRT}
                     onChange={(e) => setFormData({ ...formData, nomeRT: e.target.value })}
-                    className="w-full h-9 px-3 text-xs bg-white border border-slate-300 rounded-md focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]"
+                    className="w-full h-9 px-3 py-1.5 text-xs text-slate-700 bg-white border border-slate-200 hover:border-slate-300 rounded-lg shadow-2xs transition-all duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A]"
                   />
                 </div>
 
@@ -437,7 +444,7 @@ export const SeiaV2FormularioComplexoPage: React.FC = () => {
                     type="text"
                     value={formData.creaRT}
                     onChange={(e) => setFormData({ ...formData, creaRT: e.target.value })}
-                    className="w-full h-9 px-3 text-xs bg-white border border-slate-300 rounded-md focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A] font-mono"
+                    className="w-full h-9 px-3 py-1.5 text-xs text-slate-700 bg-white border border-slate-200 hover:border-slate-300 rounded-lg shadow-2xs transition-all duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A] font-mono"
                   />
                 </div>
               </div>
@@ -454,15 +461,15 @@ export const SeiaV2FormularioComplexoPage: React.FC = () => {
                     { nome: 'Estudo de Impacto Ambiental (EIA/RIMA)', status: 'eia_rima_revisao_04.pdf (18.2MB)' },
                     { nome: 'Inventário Florestal e Censo Amostral', status: 'inventario_asv_2026.pdf (7.1MB)' },
                   ].map((doc, i) => (
-                    <div key={i} className="p-3 rounded-lg border border-slate-200 bg-slate-50/50 flex flex-col justify-between">
+                    <div key={i} className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 ease-in-out flex flex-col justify-between shadow-2xs">
                       <div>
                         <div className="text-xs font-semibold text-slate-800">{doc.nome}</div>
-                        <div className="text-[11px] text-emerald-700 font-mono mt-1 flex items-center gap-1">
-                          <CheckCircle2 className="w-3.5 h-3.5" />
+                        <div className="text-[11px] text-[#0F4C3A] font-mono mt-1.5 flex items-center gap-1.5 font-medium">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                           <span>{doc.status}</span>
                         </div>
                       </div>
-                      <button className="mt-3 text-[11px] font-semibold text-[#0F4C3A] hover:underline text-left">
+                      <button className="mt-3 text-[11px] font-semibold text-[#0F4C3A] hover:text-[#0b382b] hover:underline text-left transition-colors duration-200 cursor-pointer">
                         Substituir arquivo...
                       </button>
                     </div>
@@ -475,7 +482,7 @@ export const SeiaV2FormularioComplexoPage: React.FC = () => {
           {/* ETAPA 5: DECLARAÇÕES E RESUMO FINANCEIRO */}
           {currentStep === 5 && (
             <div className="space-y-6">
-              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3 shadow-2xs">
                 <div className="flex items-center justify-between pb-2 border-b border-slate-200">
                   <span className="text-xs font-bold uppercase tracking-wider text-slate-600">
                     Resumo de Taxas de Vistoria e Licenciamento (DAE)
@@ -499,13 +506,13 @@ export const SeiaV2FormularioComplexoPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="p-4 rounded-xl border border-emerald-200 bg-emerald-50/50 space-y-2">
+              <div className="p-4 rounded-xl border border-emerald-200 bg-emerald-50/50 space-y-2 shadow-2xs">
                 <label className="flex items-start gap-2.5 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={formData.declaracaoVeracidade}
                     onChange={(e) => setFormData({ ...formData, declaracaoVeracidade: e.target.checked })}
-                    className="mt-0.5 rounded border-slate-300 text-[#0F4C3A] focus:ring-[#0F4C3A]"
+                    className="mt-0.5 rounded border-slate-300 text-[#0F4C3A] focus:ring-[#0F4C3A]/20 transition-all duration-200 cursor-pointer"
                   />
                   <span className="text-xs text-slate-700 leading-relaxed">
                     Declaro sob as penas da Lei nº 9.605/1998 (Lei de Crimes Ambientais) e do Código Penal Brasileiro que todas as informações prestadas, coordenadas e estudos anexados correspondem à fiel realidade do empreendimento.
@@ -526,7 +533,7 @@ export const SeiaV2FormularioComplexoPage: React.FC = () => {
               <button
                 type="button"
                 onClick={handlePrev}
-                className="h-9 px-4 text-xs font-semibold bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 rounded-md transition-colors flex items-center gap-1.5 shadow-2xs"
+                className="h-9 px-4 text-xs font-semibold bg-white border border-slate-200 hover:bg-slate-100 hover:text-[#0F4C3A] text-slate-700 rounded-lg transition-all duration-200 ease-in-out flex items-center gap-1.5 shadow-2xs cursor-pointer"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Voltar à Etapa Anterior</span>
@@ -534,7 +541,7 @@ export const SeiaV2FormularioComplexoPage: React.FC = () => {
             ) : (
               <button
                 type="button"
-                className="h-9 px-3 text-xs font-medium text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-md transition-colors"
+                className="h-9 px-3 text-xs font-medium text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-all duration-200 ease-in-out cursor-pointer"
               >
                 Cancelar Requerimento
               </button>
@@ -543,7 +550,7 @@ export const SeiaV2FormularioComplexoPage: React.FC = () => {
             <button
               type="button"
               onClick={handleSaveDraft}
-              className="h-9 px-3 text-xs font-medium text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 rounded-md transition-colors flex items-center gap-1.5 shadow-2xs"
+              className="h-9 px-3 text-xs font-medium text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 hover:text-[#0F4C3A] rounded-lg transition-all duration-200 ease-in-out flex items-center gap-1.5 shadow-2xs cursor-pointer"
             >
               <Save className="w-3.5 h-3.5 text-slate-500" />
               <span>Salvar Rascunho</span>
@@ -556,7 +563,7 @@ export const SeiaV2FormularioComplexoPage: React.FC = () => {
               <button
                 type="button"
                 onClick={handleNext}
-                className="h-9 px-5 text-xs font-semibold bg-[#0F4C3A] hover:bg-[#0b382b] text-white rounded-md transition-all shadow-xs flex items-center gap-1.5 cursor-pointer"
+                className="h-9 px-5 text-xs font-semibold bg-[#0F4C3A] hover:bg-[#0b382b] text-white rounded-lg transition-all duration-200 ease-in-out shadow-xs flex items-center gap-1.5 cursor-pointer"
               >
                 <span>Avançar para Etapa 0{currentStep + 1}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -565,7 +572,7 @@ export const SeiaV2FormularioComplexoPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => alert('Requerimento protocolado com sucesso no SEIA V2 sob o número 020.14920.2026/0001!')}
-                className="h-9 px-6 text-xs font-bold bg-[#0F4C3A] hover:bg-[#0b382b] text-white rounded-md transition-all shadow-md flex items-center gap-1.5 cursor-pointer"
+                className="h-9 px-6 text-xs font-bold bg-[#0F4C3A] hover:bg-[#0b382b] text-white rounded-lg transition-all duration-200 ease-in-out shadow-md flex items-center gap-1.5 cursor-pointer"
               >
                 <CheckCircle2 className="w-4 h-4" />
                 <span>Protocolar e Gerar DAE</span>
