@@ -43,19 +43,19 @@ class AdminPanelProvider extends PanelProvider
             ->sidebarCollapsibleOnDesktop()
             ->databaseNotifications()
             ->colors([
-                // Cor primária institucional Inema (Azul Corporativo GovBA)
+                // Cor primária institucional Inema (Verde Institucional Oficial #0F4C3A)
                 'primary' => [
-                    50 => '#eff6ff',
-                    100 => '#dbeafe',
-                    200 => '#bfdbfe',
-                    300 => '#93c5fd',
-                    400 => '#60a5fa',
-                    500 => '#0073C4',
-                    600 => '#005ea3',
-                    700 => '#004a82',
-                    800 => '#003e6b',
-                    900 => '#003358',
-                    950 => '#001e38',
+                    50 => '#f0fdf4',
+                    100 => '#dcfce7',
+                    200 => '#bbf7d0',
+                    300 => '#86efac',
+                    400 => '#4ade80',
+                    500 => '#0F4C3A',
+                    600 => '#0c3d2e',
+                    700 => '#092f24',
+                    800 => '#07241b',
+                    900 => '#051913',
+                    950 => '#020d0a',
                 ],
                 'gray' => Color::Slate,
                 'danger' => Color::Rose,
@@ -64,14 +64,15 @@ class AdminPanelProvider extends PanelProvider
                 'info' => Color::Sky,
             ])
             ->navigationGroups([
-                'Fiscalização',
-                'Relatórios Gerenciais',
-                'SISPASS',
-                'Financeiro',
-                'Meu Cadastro',
-                'Atividades Não Sujeitas a Licenciamento',
-                'Requerimentos',
-                'Administração',
+                'Início / Área de Trabalho',
+                'Atendimento e Cadastros',
+                'Recursos Hídricos',
+                'Flora e Vegetação',
+                'Fauna',
+                'Fiscalização e Controle',
+                'Conservação e Socioambiental',
+                'Monitoramento e Informação Ambiental',
+                'Gestão Institucional',
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')

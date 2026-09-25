@@ -18,6 +18,7 @@ import { RelatoriosRegulacaoPage } from '@/pages/regulacao/RelatoriosRegulacaoPa
 import { CeucConsultaPage } from '@/pages/uc/CeucConsultaPage';
 import { SeiaHomePage } from '@/pages/hibrido/SeiaHomePage';
 import { SeiaDaesPage } from '@/pages/hibrido/SeiaDaesPage';
+import { SeiaV2RootPage } from '@/pages/seia-v2/SeiaV2RootPage';
 import { getCurrentScope } from '@/lib/scope';
 
 export function App() {
@@ -40,6 +41,11 @@ export function App() {
     const fluxoParam = params.get('fluxo');
     const path = window.location.pathname;
     const scope = getCurrentScope();
+
+    if (vParam === 'v2' || vParam === 'seia-v2' || rotaParam === 'seia-v2' || path.includes('seia-v2')) {
+      setActiveRoute('seia-v2');
+      return;
+    }
 
     if (vParam === 'hibrido' || rotaParam === 'hibrido' || rotaParam === 'seia') {
       setActiveRoute('seia-home');
@@ -116,6 +122,10 @@ export function App() {
         return <SeiaHomePage onNavigate={handleNavigate} />;
     }
   };
+
+  if (activeRoute === 'seia-v2') {
+    return <SeiaV2RootPage />;
+  }
 
   return (
     <ThemeProvider>
