@@ -1,6 +1,7 @@
 import React from 'react';
 import {
-  PanelLeft,
+  PanelLeftClose,
+  PanelLeftOpen,
   Search,
   Bell,
   User,
@@ -14,6 +15,7 @@ import {
   Sun,
   History,
 } from 'lucide-react';
+import seiaLogo from '@/assets/logo-seia-plataforma.svg';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,32 +28,15 @@ import { useTheme } from '@/context/ThemeContext';
 import { cn } from '@/lib/utils';
 
 interface HeaderProps {
-  activeRoute?: string;
   isSidebarCollapsed?: boolean;
   onToggleSidebar?: () => void;
 }
 
-const ROUTE_INFO: Record<string, { module: string; page: string }> = {
-  relatorios: { module: 'Regulação / BI', page: 'Relatórios Gerenciais' },
-  dashboard: { module: 'Regulação / BI', page: 'Relatórios Gerenciais' },
-  tabela: { module: 'SEIA V2', page: 'Pauta de Processos e Atos' },
-  formulario: { module: 'SEIA V2', page: 'Requerimento Unificado' },
-  'seia-painel': { module: 'SEIA V2', page: 'Métricas do Analista' },
-  atendente: { module: 'Fiscalização', page: 'Denúncia Interna (DIFIS)' },
-  cidadao: { module: 'Fiscalização', page: 'Denúncia Cidadão' },
-  'emergencia-interna': { module: 'Fiscalização', page: 'Emergência Química Interna' },
-  'emergencia-externa': { module: 'Fiscalização', page: 'Emergência Química Cidadão' },
-  'consulta-externa': { module: 'Fiscalização', page: 'Consulta Cidadão' },
-  'consulta-interna': { module: 'Fiscalização', page: 'Painel DIFIS' },
-};
-
 export const ShadcnHeader: React.FC<HeaderProps> = ({
-  activeRoute = 'relatorios',
   isSidebarCollapsed,
   onToggleSidebar,
 }) => {
-  const { theme, themeConfig, setTheme, isDarkMode, setDarkMode, toggleDarkMode } = useTheme();
-  const currentRoute = ROUTE_INFO[activeRoute] || ROUTE_INFO.relatorios;
+  const { theme, setTheme, isDarkMode, setDarkMode, toggleDarkMode } = useTheme();
 
   const appearanceOptions: {
     id: 'vizora-blue' | 'vizora-green' | 'inema-light' | 'dark';
@@ -107,30 +92,35 @@ export const ShadcnHeader: React.FC<HeaderProps> = ({
 
   return (
     <header className={cn(
-      "h-16 shrink-0 flex items-center justify-between px-3 sm:px-4 lg:px-6 select-none shadow-2xs transition-colors duration-200 border-b",
-      "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100",
-      !isDarkMode && cn(themeConfig.tokens.headerBg, themeConfig.tokens.headerBorder)
+      "h-16 shrink-0 flex items-center px-3 sm:px-4 lg:px-5 select-none transition-colors duration-200",
+      "bg-[#52784D] text-white"
     )}>
-      {/* Lado esquerdo: Botão de alternância da Sidebar (Desktop e Mobile) */}
-      <div className="flex items-center gap-2">
+      <div className="flex w-64 lg:w-72 shrink-0 items-center gap-2 sm:gap-3">
+        <a href="/?rota=seia-v2" className="flex min-w-0 items-center" title="SEIA Plataforma">
+          <img
+            src={seiaLogo}
+            alt="SEIA Plataforma"
+            className="h-8 w-auto max-w-[122px] object-contain brightness-0 invert"
+          />
+        </a>
         <button
           onClick={onToggleSidebar}
-          className="h-9 w-9 inline-flex items-center justify-center rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus-visible:outline-none cursor-pointer"
+          className="ml-auto h-9 w-9 inline-flex items-center justify-center rounded-lg text-white/85 hover:text-white hover:bg-white/12 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 cursor-pointer"
           aria-label={isSidebarCollapsed ? "Expandir menu lateral" : "Recolher menu lateral"}
           title={isSidebarCollapsed ? "Expandir menu lateral" : "Recolher menu lateral"}
         >
-          <PanelLeft className="w-5 h-5" />
+          {isSidebarCollapsed ? <PanelLeftOpen className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
         </button>
       </div>
 
       {/* Centro: Barra de busca omnibox global compacta */}
-      <div className="flex-1 max-w-md mx-4 lg:mx-8 hidden md:block">
+      <div className="flex-1 max-w-xl mx-4 lg:mx-10 hidden md:block">
         <div className="relative group">
-          <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-slate-600 dark:group-focus-within:text-slate-300 transition-colors" />
+          <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-white/65 group-focus-within:text-white transition-colors" />
           <input
             type="text"
             placeholder="Buscar processos, requerimentos SEIA ou atos..."
-            className="w-full pl-8 pr-3 py-1.5 bg-slate-50 dark:bg-slate-800/80 hover:bg-slate-100/70 dark:hover:bg-slate-800 focus:bg-white dark:focus:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-slate-300 dark:focus:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-xs focus:outline-none focus:ring-1 focus:ring-slate-300 dark:focus:ring-slate-600 transition-all"
+            className="w-full pl-8 pr-3 py-2 bg-white/10 hover:bg-white/14 focus:bg-white/16 border border-white/18 focus:border-white/45 rounded-lg text-white placeholder:text-white/65 text-xs focus:outline-none focus:ring-2 focus:ring-white/20 transition-all"
           />
         </div>
       </div>
@@ -140,32 +130,32 @@ export const ShadcnHeader: React.FC<HeaderProps> = ({
         {/* Alternador Rápido de Dark Mode Direto no Topo */}
         <button
           onClick={toggleDarkMode}
-          className="w-8 h-8 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 active:scale-95 flex items-center justify-center text-slate-600 dark:text-slate-300 transition-colors cursor-pointer"
+          className="w-8 h-8 rounded-lg hover:bg-white/12 active:scale-95 flex items-center justify-center text-white/85 hover:text-white transition-colors cursor-pointer"
           title={isDarkMode ? "Mudar para modo claro" : "Mudar para modo escuro"}
         >
-          {isDarkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-600 dark:text-slate-400" />}
+          {isDarkMode ? <Sun className="w-4 h-4 text-amber-300" /> : <Moon className="w-4 h-4" />}
         </button>
 
         {/* Notificações */}
         <button
-          className="relative w-8 h-8 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 active:scale-95 flex items-center justify-center text-slate-600 dark:text-slate-300 transition-colors cursor-pointer"
+          className="relative w-8 h-8 rounded-lg hover:bg-white/12 active:scale-95 flex items-center justify-center text-white/85 hover:text-white transition-colors cursor-pointer"
           title="Notificações"
         >
           <Bell className="w-4 h-4" />
           <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-rose-500 rounded-full" />
         </button>
 
-        <div className="h-4 w-px bg-slate-200 dark:bg-slate-700 mx-0.5 hidden sm:block" />
+        <div className="h-4 w-px bg-white/25 mx-0.5 hidden sm:block" />
 
         {/* Menu de Perfil do Gestor com Seletores de Aparência */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="flex items-center gap-2 p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 active:scale-98 transition-all cursor-pointer outline-none">
-              <div className={cn("w-7 h-7 rounded-full text-white font-medium text-xs flex items-center justify-center shadow-2xs transition-colors", themeConfig.tokens.brandPrimary)}>
+            <button className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/12 active:scale-98 transition-all cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-white/70">
+              <div className="w-7 h-7 rounded-full bg-white/18 border border-white/25 text-white font-medium text-xs flex items-center justify-center transition-colors">
                 LM
               </div>
-              <span className="hidden lg:inline text-xs font-medium text-slate-700 dark:text-slate-200">Lucas Manager</span>
-              <ChevronDown className="w-3 h-3 text-slate-400 hidden lg:inline" />
+              <span className="hidden lg:inline text-xs font-medium text-white">Lucas Manager</span>
+              <ChevronDown className="w-3 h-3 text-white/70 hidden lg:inline" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
