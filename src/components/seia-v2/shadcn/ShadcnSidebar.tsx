@@ -32,8 +32,8 @@ import {
   FileSpreadsheet,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import inemaLogoWhite from '@/assets/logo-inema-white.png';
-import inemaLogoColor from '@/assets/logo-inema-color.png';
+import seiaLogo from '@/assets/logo-seia-plataforma.svg';
+import seiaIcon from '@/assets/icon-seia-plataforma.svg';
 import {
   TOP_DIRECT_ITEMS,
   SEIA_V2_MENU_GROUPS,
@@ -298,72 +298,28 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
             isCollapsed ? 'w-16 items-center' : 'w-64 lg:w-72'
           )}
         >
-          {/* Header da Sidebar: Logo oficial e botão de alternância (Sempre h-16 / 64px) */}
+          {/* Header da Sidebar: Logo oficial SEIA Plataforma (32px de altura) */}
           {isCollapsed ? (
-            <div className={cn("h-16 shrink-0 border-b flex items-center justify-center w-full", isDarkMode ? "border-slate-800" : isVizoraGreen ? "border-[#206954]" : isInemaLight ? "border-slate-200" : "border-[#145366]")}>
-              <Tooltip delayDuration={0}>
-                <TooltipTrigger asChild>
-                  <button
-                    id="btn-toggle-sidebar"
-                    onClick={onToggleCollapse}
-                    className={cn(
-                      'h-9 w-9 inline-flex items-center justify-center rounded-md transition-colors focus-visible:outline-none cursor-pointer',
-                      isDarkMode
-                        ? 'text-slate-400 hover:text-white hover:bg-slate-800'
-                        : isVizoraGreen
-                        ? 'text-[#bce0d3] hover:text-white hover:bg-[#1f6853]'
-                        : isInemaLight
-                        ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-                        : 'text-[#9ec3cc] hover:text-white hover:bg-[#135467]'
-                    )}
-                    aria-label="Expandir menu lateral"
-                    title="Expandir menu lateral"
-                  >
-                    <PanelLeftOpen className="w-4 h-4" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="right" sideOffset={12}>
-                  Expandir menu
-                </TooltipContent>
-              </Tooltip>
+            <div className={cn("h-16 shrink-0 border-b flex items-center justify-center w-full px-2", isDarkMode ? "border-slate-800" : isVizoraGreen ? "border-[#206954]" : isInemaLight ? "border-slate-200" : "border-[#145366]")}>
+              <a href="/?rota=seia-v2" className="flex items-center justify-center" title="SEIA Plataforma">
+                <img
+                  src={seiaIcon}
+                  alt="SEIA Plataforma"
+                  className="h-8 w-auto object-contain transition-all"
+                  style={{ height: '32px' }}
+                />
+              </a>
             </div>
           ) : (
-            <div className={cn("h-16 shrink-0 border-b flex items-center justify-between px-4 lg:px-5 w-full", isDarkMode ? "border-slate-800" : isVizoraGreen ? "border-[#206954]" : isInemaLight ? "border-slate-200" : "border-[#145366]")}>
-              <a href="/?rota=seia-v2" className="flex items-center gap-2">
+            <div className={cn("h-16 shrink-0 border-b flex items-center px-4 lg:px-5 w-full", isDarkMode ? "border-slate-800" : isVizoraGreen ? "border-[#206954]" : isInemaLight ? "border-slate-200" : "border-[#145366]")}>
+              <a href="/?rota=seia-v2" className="flex items-center">
                 <img
-                  src={isDarkMode || !isInemaLight ? inemaLogoWhite : inemaLogoColor}
-                  alt="INEMA"
-                  className="h-7 lg:h-8 w-auto object-contain transition-all opacity-95 hover:opacity-100"
+                  src={seiaLogo}
+                  alt="SEIA Plataforma"
+                  className="h-8 w-auto object-contain transition-all"
+                  style={{ height: '32px' }}
                 />
-                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-white/15 text-white/90 uppercase tracking-widest">
-                  V2
-                </span>
               </a>
-              <Tooltip delayDuration={0}>
-                <TooltipTrigger asChild>
-                  <button
-                    id="btn-toggle-sidebar"
-                    onClick={onToggleCollapse}
-                    className={cn(
-                      'h-8 w-8 inline-flex items-center justify-center rounded-md transition-colors focus-visible:outline-none cursor-pointer',
-                      isDarkMode
-                        ? 'text-slate-400 hover:text-white hover:bg-slate-800'
-                        : isVizoraGreen
-                        ? 'text-[#bce0d3] hover:text-white hover:bg-[#1f6853]'
-                        : isInemaLight
-                        ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-                        : 'text-[#9ec3cc] hover:text-white hover:bg-[#135467]'
-                    )}
-                    aria-label="Recolher menu lateral"
-                    title="Recolher menu lateral"
-                  >
-                    <PanelLeftClose className="w-4 h-4" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="right" sideOffset={8}>
-                  Recolher menu
-                </TooltipContent>
-              </Tooltip>
             </div>
           )}
 

@@ -111,26 +111,16 @@ export const ShadcnHeader: React.FC<HeaderProps> = ({
       "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100",
       !isDarkMode && cn(themeConfig.tokens.headerBg, themeConfig.tokens.headerBorder)
     )}>
-      {/* Lado esquerdo: Botão Mobile SidebarTrigger + Breadcrumb dinâmico */}
-      <div className="flex items-center gap-2.5 sm:gap-3">
+      {/* Lado esquerdo: Botão de alternância da Sidebar (Desktop e Mobile) */}
+      <div className="flex items-center gap-2">
         <button
           onClick={onToggleSidebar}
-          className="h-8 w-8 inline-flex items-center justify-center rounded-md text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus-visible:outline-none cursor-pointer lg:hidden"
+          className="h-9 w-9 inline-flex items-center justify-center rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus-visible:outline-none cursor-pointer"
           aria-label={isSidebarCollapsed ? "Expandir menu lateral" : "Recolher menu lateral"}
           title={isSidebarCollapsed ? "Expandir menu lateral" : "Recolher menu lateral"}
         >
-          <PanelLeft className="w-4 h-4" />
+          <PanelLeft className="w-5 h-5" />
         </button>
-
-        <nav className="flex items-center gap-1 sm:gap-1.5 text-xs text-slate-500 dark:text-slate-400 font-medium select-none" aria-label="Breadcrumb">
-          <a href="/?rota=seia-v2" className="text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-200 transition-colors hidden sm:inline">
-            SEIA V2
-          </a>
-          <ChevronRight className="w-3.5 h-3.5 text-slate-300 dark:text-slate-600 hidden sm:inline" />
-          <span className="text-slate-500 dark:text-slate-400 hidden md:inline">{currentRoute.module}</span>
-          <ChevronRight className="w-3.5 h-3.5 text-slate-300 dark:text-slate-600 hidden md:inline" />
-          <span className="text-slate-900 dark:text-slate-100 font-bold truncate max-w-[180px] sm:max-w-none">{currentRoute.page}</span>
-        </nav>
       </div>
 
       {/* Centro: Barra de busca omnibox global compacta */}

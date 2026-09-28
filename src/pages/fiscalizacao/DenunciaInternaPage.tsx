@@ -230,9 +230,16 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
 
   return (
     <div className="space-y-6 w-full max-w-7xl mx-auto pb-12">
-      {/* Topo Oficial (Breadcrumb está exclusivamente na Topbar) */}
+      {/* Topo Oficial com Breadcrumb */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pt-1">
         <div>
+          <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 font-medium mb-1 select-none" aria-label="Breadcrumb">
+            <span className="text-slate-400 dark:text-slate-500">Início</span>
+            <span className="text-slate-300 dark:text-slate-600">/</span>
+            <span className="text-slate-500 dark:text-slate-400">Fiscalização</span>
+            <span className="text-slate-300 dark:text-slate-600">/</span>
+            <span className="text-slate-800 dark:text-slate-200 font-semibold">Denúncia Interna (DIFIS)</span>
+          </div>
           <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight leading-tight">
             Cadastro de Denúncia Ambiental (DOR001)
           </h1>

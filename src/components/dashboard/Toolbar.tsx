@@ -42,6 +42,13 @@ export const Toolbar: React.FC<ToolbarProps> = ({
     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b border-slate-100 dark:border-slate-800 transition-colors duration-200">
       {/* Esquerda: Título da tela e subtítulo */}
       <div>
+        <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 font-medium mb-1.5 select-none" aria-label="Breadcrumb">
+          <span className="text-slate-400 dark:text-slate-500">Início</span>
+          <span className="text-slate-300 dark:text-slate-600">/</span>
+          <span className="text-slate-500 dark:text-slate-400">Regulação</span>
+          <span className="text-slate-300 dark:text-slate-600">/</span>
+          <span className="text-slate-800 dark:text-slate-200 font-semibold">Relatórios Gerenciais</span>
+        </div>
         <div className="flex items-center gap-2.5">
           <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
             Regulação – Dashboard Gerencial
