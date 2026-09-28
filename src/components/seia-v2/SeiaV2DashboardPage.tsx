@@ -47,8 +47,8 @@ export const SeiaV2DashboardPage: React.FC = () => {
                 onClick={() => setPeriod(p)}
                 className={`px-2.5 py-1 rounded-md transition-all duration-200 ease-in-out cursor-pointer ${
                   period === p
-                    ? 'bg-[#0F4C3A] text-white shadow-2xs font-bold'
-                    : 'hover:bg-slate-100 hover:text-[#0F4C3A] text-slate-600 font-medium'
+                    ? 'bg-[var(--button-primary-bg)] text-[var(--button-primary-text)] shadow-2xs font-bold'
+                    : 'hover:bg-[var(--color-surface-hover)] hover:text-[var(--color-text-link)] text-slate-600 font-medium'
                 }`}
               >
                 {p}
@@ -56,7 +56,7 @@ export const SeiaV2DashboardPage: React.FC = () => {
             ))}
           </div>
 
-          <button className="h-9 px-3 text-xs font-medium bg-white border border-slate-200 hover:border-slate-300 rounded-lg text-slate-700 hover:text-[#0F4C3A] hover:bg-slate-50 transition-all duration-200 ease-in-out flex items-center gap-1.5 shadow-2xs cursor-pointer">
+          <button className="h-9 px-3 text-xs font-medium bg-[var(--button-secondary-bg)] border border-[var(--button-secondary-border)] rounded-lg text-[var(--button-secondary-text)] hover:text-[var(--color-text-link)] hover:bg-[var(--button-secondary-bg-hover)] transition-all duration-200 ease-in-out flex items-center gap-1.5 shadow-2xs cursor-pointer">
             <Filter className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#0F4C3A]" />
             <span>Filtrar Unidade</span>
           </button>
@@ -198,11 +198,11 @@ export const SeiaV2DashboardPage: React.FC = () => {
             </div>
             <div className="flex items-center gap-3 text-xs">
               <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#0F4C3A]" />
+                <span className="w-2.5 h-2.5 rounded-full bg-[var(--data-primary)]" />
                 <span className="text-slate-600 font-medium">Entradas (Requerimentos)</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
+                <span className="w-2.5 h-2.5 rounded-full bg-[var(--data-secondary)]" />
                 <span className="text-slate-600 font-medium">Saídas (Deferidos)</span>
               </div>
             </div>
@@ -226,7 +226,7 @@ export const SeiaV2DashboardPage: React.FC = () => {
                   <div className="w-full flex items-end justify-center gap-1.5 h-48">
                     <div
                       style={{ height: `${(item.ent / 260) * 100}%` }}
-                      className="w-full max-w-[20px] bg-[#0F4C3A] rounded-t-sm group-hover:brightness-110 transition-all relative"
+                      className="w-full max-w-[20px] bg-[var(--data-primary)] rounded-t-sm group-hover:brightness-110 transition-all relative"
                     >
                       <span className="opacity-0 group-hover:opacity-100 absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-1 py-0.5 rounded font-mono transition-opacity">
                         {item.ent}
@@ -234,7 +234,7 @@ export const SeiaV2DashboardPage: React.FC = () => {
                     </div>
                     <div
                       style={{ height: `${(item.sai / 260) * 100}%` }}
-                      className="w-full max-w-[20px] bg-emerald-400 rounded-t-sm group-hover:brightness-110 transition-all relative"
+                      className="w-full max-w-[20px] bg-[var(--data-secondary)] rounded-t-sm group-hover:brightness-110 transition-all relative"
                     >
                       <span className="opacity-0 group-hover:opacity-100 absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-1 py-0.5 rounded font-mono transition-opacity">
                         {item.sai}
@@ -262,10 +262,10 @@ export const SeiaV2DashboardPage: React.FC = () => {
 
             <div className="space-y-3.5 mt-5">
               {[
-                { nome: 'DIRRE • Regulação e Outorga', qtd: 420, pct: 45, cor: 'bg-[#0F4C3A]' },
-                { nome: 'DIFIS • Fiscalização e Autos', qtd: 260, pct: 28, cor: 'bg-emerald-600' },
-                { nome: 'DISUC • Unidades de Conservação', qtd: 140, pct: 15, cor: 'bg-emerald-400' },
-                { nome: 'DIPRE • Recursos Hídricos', qtd: 110, pct: 12, cor: 'bg-slate-400' },
+                { nome: 'DIRRE • Regulação e Outorga', qtd: 420, pct: 45, cor: 'bg-[var(--data-primary)]' },
+                { nome: 'DIFIS • Fiscalização e Autos', qtd: 260, pct: 28, cor: 'bg-[var(--data-secondary)]' },
+                { nome: 'DISUC • Unidades de Conservação', qtd: 140, pct: 15, cor: 'bg-[var(--data-tertiary)]' },
+                { nome: 'DIPRE • Recursos Hídricos', qtd: 110, pct: 12, cor: 'bg-[var(--data-quaternary)]' },
               ].map((item, idx) => (
                 <div key={idx} className="space-y-1">
                   <div className="flex items-center justify-between text-xs">
@@ -312,7 +312,7 @@ export const SeiaV2DashboardPage: React.FC = () => {
               municipio: 'Barreiras',
               ato: 'Licença de Instalação (LI) + Outorga',
               sla: 'Expira em 3 dias',
-              slaColor: 'bg-rose-50 text-rose-700 border-rose-200 font-bold',
+              slaColor: 'bg-[var(--badge-critical-bg)] text-[var(--badge-critical-text)] border-[var(--badge-critical-border)] font-bold',
               status: 'Minuta Pronta',
             },
             {
@@ -321,7 +321,7 @@ export const SeiaV2DashboardPage: React.FC = () => {
               municipio: 'Gentio do Ouro',
               ato: 'Supressão Vegetal (ASV)',
               sla: 'Expira em 5 dias',
-              slaColor: 'bg-amber-50 text-amber-700 border-amber-200 font-bold',
+              slaColor: 'bg-[var(--badge-warning-bg)] text-[var(--badge-warning-text)] border-[var(--badge-warning-border)] font-bold',
               status: 'Vistoria Concluída',
             },
             {
@@ -330,7 +330,7 @@ export const SeiaV2DashboardPage: React.FC = () => {
               municipio: 'Lençóis',
               ato: 'Renovação de LO',
               sla: 'Expira em 7 dias',
-              slaColor: 'bg-amber-50 text-amber-700 border-amber-200',
+              slaColor: 'bg-[var(--badge-warning-bg)] text-[var(--badge-warning-text)] border-[var(--badge-warning-border)]',
               status: 'Parecer Técnico',
             },
             {
@@ -339,7 +339,7 @@ export const SeiaV2DashboardPage: React.FC = () => {
               municipio: 'Luís Eduardo Magalhães',
               ato: 'Outorga Subterrânea',
               sla: 'Expira em 9 dias',
-              slaColor: 'bg-slate-100 text-slate-700 border-slate-200',
+              slaColor: 'bg-[var(--badge-info-bg)] text-[var(--badge-info-text)] border-[var(--badge-info-border)]',
               status: 'Análise Hidrológica',
             },
           ].map((proc, idx) => (
@@ -365,7 +365,7 @@ export const SeiaV2DashboardPage: React.FC = () => {
                 <span className="text-[11px] font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md">
                   {proc.status}
                 </span>
-                <button className="h-8 px-3.5 text-xs font-semibold bg-[#0F4C3A] hover:bg-[#0b382b] text-white rounded-lg transition-all duration-200 ease-in-out flex items-center gap-1.5 shadow-2xs cursor-pointer">
+                <button className="h-8 px-3.5 text-xs font-semibold bg-[var(--button-primary-bg)] hover:bg-[var(--button-primary-bg-hover)] active:bg-[var(--button-primary-bg-active)] text-[var(--button-primary-text)] rounded-lg transition-all duration-200 ease-in-out flex items-center gap-1.5 shadow-2xs cursor-pointer">
                   <span>Analisar</span>
                   <ArrowRight className="w-3 h-3" />
                 </button>

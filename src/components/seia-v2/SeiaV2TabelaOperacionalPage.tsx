@@ -187,29 +187,29 @@ export const SeiaV2TabelaOperacionalPage: React.FC<SeiaV2TabelaOperacionalPagePr
     switch (status) {
       case 'deferido':
         return (
-          <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
-            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+          <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[var(--badge-success-bg)] text-[var(--badge-success-text)] border border-[var(--badge-success-border)]">
+            <CheckCircle2 className="w-3 h-3 text-[var(--color-status-success)]" />
             {label}
           </span>
         );
       case 'analise':
         return (
-          <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200">
-            <Clock className="w-3 h-3 text-amber-600" />
+          <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[var(--badge-warning-bg)] text-[var(--badge-warning-text)] border border-[var(--badge-warning-border)]">
+            <Clock className="w-3 h-3 text-[var(--color-status-warning)]" />
             {label}
           </span>
         );
       case 'pendencia':
         return (
-          <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-sky-50 text-sky-800 border border-sky-200">
-            <AlertTriangle className="w-3 h-3 text-sky-600" />
+          <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[var(--badge-info-bg)] text-[var(--badge-info-text)] border border-[var(--badge-info-border)]">
+            <AlertTriangle className="w-3 h-3 text-[var(--color-status-info)]" />
             {label}
           </span>
         );
       case 'indeferido':
         return (
-          <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-rose-50 text-rose-800 border border-rose-200">
-            <XCircle className="w-3 h-3 text-rose-600" />
+          <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[var(--badge-critical-bg)] text-[var(--badge-critical-text)] border border-[var(--badge-critical-border)]">
+            <XCircle className="w-3 h-3 text-[var(--color-status-critical)]" />
             {label}
           </span>
         );
@@ -264,13 +264,13 @@ export const SeiaV2TabelaOperacionalPage: React.FC<SeiaV2TabelaOperacionalPagePr
             onClick={() => alert('Exportando pauta em formato Excel (XLSX)...')}
             className="h-9 px-3.5 text-xs font-semibold bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 rounded-lg transition-all duration-200 ease-in-out flex items-center gap-1.5 shadow-2xs cursor-pointer"
           >
-            <FileSpreadsheet className="w-3.5 h-3.5 text-[#0F4C3A]" />
+            <FileSpreadsheet className="w-3.5 h-3.5 text-[var(--color-text-link)]" />
             <span>Exportar XLSX</span>
           </button>
           {onNavigate && (
             <button
               onClick={() => onNavigate('formulario')}
-              className="h-9 px-4 text-xs font-semibold bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white rounded-lg transition-all duration-200 ease-in-out flex items-center gap-1.5 shadow-xs cursor-pointer"
+              className="h-9 px-4 text-xs font-semibold bg-[var(--button-primary-bg)] hover:bg-[var(--button-primary-bg-hover)] active:bg-[var(--button-primary-bg-active)] text-[var(--button-primary-text)] rounded-lg transition-all duration-200 ease-in-out flex items-center gap-1.5 shadow-xs cursor-pointer"
             >
               <span>+ Novo Requerimento</span>
             </button>
@@ -331,13 +331,13 @@ export const SeiaV2TabelaOperacionalPage: React.FC<SeiaV2TabelaOperacionalPagePr
         </div>
 
         {selectedIds.length > 0 && (
-          <div className="p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-xs text-[#0F4C3A] flex items-center justify-between">
+          <div className="p-2.5 rounded-lg bg-[var(--color-brand-primary-subtle)] border border-[var(--badge-success-border)] text-xs text-[var(--color-brand-primary)] flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="font-bold">{selectedIds.length}</span>
               <span>processos selecionados para ação em lote.</span>
             </div>
             <div className="flex items-center gap-2">
-              <button className="px-2.5 py-1 text-[11px] font-bold bg-[#0F4C3A] text-white rounded hover:bg-[#0b382b]">
+              <button className="px-2.5 py-1 text-[11px] font-bold bg-[var(--button-primary-bg)] text-[var(--button-primary-text)] rounded hover:bg-[var(--button-primary-bg-hover)]">
                 Distribuir em Lote
               </button>
               <button
@@ -504,7 +504,7 @@ export const SeiaV2TabelaOperacionalPage: React.FC<SeiaV2TabelaOperacionalPagePr
             >
               <ChevronLeft className="w-3.5 h-3.5" />
             </button>
-            <button className="px-2.5 py-1 rounded-lg bg-[#0F4C3A] text-white font-bold font-mono text-xs shadow-2xs">
+            <button className="px-2.5 py-1 rounded-lg bg-[var(--button-primary-bg)] text-[var(--button-primary-text)] font-bold font-mono text-xs shadow-2xs">
               1
             </button>
             <button className="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 hover:border-slate-300 font-mono text-xs transition-all duration-200 ease-in-out cursor-pointer">
@@ -624,7 +624,7 @@ export const SeiaV2TabelaOperacionalPage: React.FC<SeiaV2TabelaOperacionalPagePr
                 </button>
                 <button
                   onClick={() => alert(`Redirecionando para SEI-BA: ${selectedProcesso.sei}`)}
-                  className="h-9 px-4 text-xs font-bold bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white rounded-lg transition-colors flex items-center gap-1.5 shadow-2xs"
+                  className="h-9 px-4 text-xs font-bold bg-[var(--button-primary-bg)] hover:bg-[var(--button-primary-bg-hover)] active:bg-[var(--button-primary-bg-active)] text-[var(--button-primary-text)] rounded-lg transition-colors flex items-center gap-1.5 shadow-2xs"
                 >
                   <span>Abrir no SEI-BA</span>
                   <ExternalLink className="w-3.5 h-3.5" />

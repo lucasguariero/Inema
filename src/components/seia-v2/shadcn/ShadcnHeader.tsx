@@ -15,8 +15,8 @@ import {
   Sun,
   History,
 } from 'lucide-react';
-import seiaLogo from '@/assets/logo-seia-plataforma.svg';
-import seiaIcon from '@/assets/icon-seia-plataforma.svg';
+import seiaLogoWhite from '@/assets/seia-plataforma/svg/SEIA Plataforma - Logo EXP_HORIZONTAL_W.svg';
+import seiaIconWhite from '@/assets/seia-plataforma/svg/SEIA Plataforma - Logo EXP_ICON_W.svg';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -96,7 +96,7 @@ export const ShadcnHeader: React.FC<HeaderProps> = ({
   return (
     <header className={cn(
       "h-16 shrink-0 flex items-center px-3 sm:px-4 lg:px-5 select-none transition-colors duration-200",
-      "bg-[#52784D] text-white"
+      "bg-[var(--topbar-bg)] text-[var(--topbar-text)]"
     )}>
       <div className={cn(
         "flex shrink-0 items-center transition-[width] duration-200 ease-in-out",
@@ -107,8 +107,8 @@ export const ShadcnHeader: React.FC<HeaderProps> = ({
           className={cn("flex min-w-0 items-center", isSidebarCollapsed && "lg:justify-center lg:w-full")}
           title="SEIA Plataforma"
         >
-          <img src={seiaLogo} alt="SEIA Plataforma" className={cn("h-8 w-auto max-w-[122px] object-contain brightness-0 invert", isSidebarCollapsed && "lg:hidden")} />
-          {isSidebarCollapsed && <img src={seiaIcon} alt="" className="hidden lg:block h-8 w-auto object-contain brightness-0 invert" />}
+          <img src={seiaLogoWhite} alt="SEIA Plataforma" className={cn("h-8 w-auto max-w-[122px] object-contain", isSidebarCollapsed && "lg:hidden")} />
+          {isSidebarCollapsed && <img src={seiaIconWhite} alt="" className="hidden lg:block h-8 w-auto object-contain" />}
         </a>
         <button
           onClick={onToggleSidebar}
@@ -149,7 +149,7 @@ export const ShadcnHeader: React.FC<HeaderProps> = ({
           title="Notificações"
         >
           <Bell className="w-4 h-4" />
-          <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-rose-500 rounded-full" />
+          <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-[var(--color-status-critical)] rounded-full" />
         </button>
 
         <div className="h-4 w-px bg-white/25 mx-0.5 hidden sm:block" />
@@ -176,7 +176,7 @@ export const ShadcnHeader: React.FC<HeaderProps> = ({
                 <span className="text-[11px] text-slate-500 dark:text-slate-400 font-normal lowercase tracking-normal mt-0.5" title="lucas.manager@inema.ba.gov.br">
                   lucas.manager@inema.ba.gov.br
                 </span>
-                <span className="inline-flex items-center gap-1 mt-2 px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/50 text-[#0F4C3A] dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60 text-[10px] font-medium w-fit normal-case tracking-normal">
+                <span className="inline-flex items-center gap-1 mt-2 px-2 py-0.5 rounded bg-[var(--badge-success-bg)] text-[var(--badge-success-text)] border border-[var(--badge-success-border)] text-[10px] font-medium w-fit normal-case tracking-normal">
                   <ShieldCheck className="w-3 h-3" />
                   DIFIS / Coordenação
                 </span>
@@ -192,7 +192,7 @@ export const ShadcnHeader: React.FC<HeaderProps> = ({
                   Aparência da Sidebar
                 </span>
                 {isDarkMode && (
-                  <span className="text-[10px] font-semibold text-emerald-500 bg-emerald-500/10 px-1.5 py-0.2 rounded border border-emerald-500/20">
+                  <span className="text-[10px] font-semibold text-[var(--badge-success-text)] bg-[var(--badge-success-bg)] px-1.5 py-0.2 rounded border border-[var(--badge-success-border)]">
                     Dark Fixo
                   </span>
                 )}
@@ -257,8 +257,8 @@ export const ShadcnHeader: React.FC<HeaderProps> = ({
 
             <DropdownMenuSeparator className="bg-slate-100 dark:bg-slate-800 my-1" />
 
-            <DropdownMenuItem className="text-rose-600 focus:text-rose-700 focus:bg-rose-50 dark:focus:bg-rose-950/40 cursor-pointer text-xs">
-              <LogOut className="w-3.5 h-3.5 text-rose-600" />
+            <DropdownMenuItem className="text-[var(--badge-critical-text)] focus:text-[var(--badge-critical-text)] focus:bg-[var(--badge-critical-bg)] cursor-pointer text-xs">
+              <LogOut className="w-3.5 h-3.5 text-[var(--color-status-critical)]" />
               <span>Encerrar Sessão</span>
             </DropdownMenuItem>
           </DropdownMenuContent>

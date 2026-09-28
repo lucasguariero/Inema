@@ -105,7 +105,7 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
         {/* Drawer Header */}
         <div className="px-6 py-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/70 dark:bg-slate-800/40">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-[#0F4C3A] dark:text-emerald-300 flex items-center justify-center border border-emerald-200/60 dark:border-emerald-800/60 shadow-2xs">
+            <div className="w-9 h-9 rounded-xl bg-[var(--badge-success-bg)] text-[var(--badge-success-text)] flex items-center justify-center border border-[var(--badge-success-border)] shadow-2xs">
               <Filter className="w-4 h-4" />
             </div>
             <div>
@@ -209,7 +209,7 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({
                       isSelected
                         ? st === 'Pendentes'
                           ? 'bg-amber-500 text-white border-amber-600 font-semibold shadow-2xs'
-                          : 'bg-[#0F4C3A] text-white border-[#0F4C3A] font-semibold shadow-2xs'
+                          : 'bg-[var(--button-primary-bg)] text-[var(--button-primary-text)] border-[var(--button-primary-bg)] font-semibold shadow-2xs'
                         : 'border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
                     )}
                   >

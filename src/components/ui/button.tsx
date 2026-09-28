@@ -55,39 +55,39 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const colorStyles: Record<FilamentButtonColor, { solid: string; outlined: string }> = {
       primary: {
         solid:
-          'bg-blue-600 text-white shadow-xs hover:bg-blue-500 focus-visible:ring-blue-600/50 dark:bg-blue-600 dark:hover:bg-blue-500 border border-blue-700/20',
+          'bg-[var(--button-primary-bg)] text-[var(--button-primary-text)] shadow-xs hover:bg-[var(--button-primary-bg-hover)] active:bg-[var(--button-primary-bg-active)] focus-visible:ring-[var(--color-green-alpha-32)] border border-transparent',
         outlined:
-          'bg-white text-blue-700 ring-1 ring-inset ring-blue-300 hover:bg-blue-50/70 focus-visible:ring-blue-600/50 dark:bg-slate-900 dark:text-blue-400 dark:ring-blue-700 dark:hover:bg-blue-950/40 shadow-xs',
+          'bg-[var(--button-secondary-bg)] text-[var(--color-text-link)] ring-1 ring-inset ring-[var(--button-secondary-border)] hover:bg-[var(--color-brand-primary-subtle)] focus-visible:ring-[var(--color-green-alpha-32)] shadow-xs',
       },
       gray: {
         solid:
-          'bg-white text-slate-700 ring-1 ring-inset ring-slate-300 hover:bg-slate-50 focus-visible:ring-slate-400/50 dark:bg-slate-800 dark:text-slate-200 dark:ring-slate-700 dark:hover:bg-slate-700/80 shadow-xs',
+          'bg-[var(--button-secondary-bg)] text-[var(--button-secondary-text)] ring-1 ring-inset ring-[var(--button-secondary-border)] hover:bg-[var(--button-secondary-bg-hover)] focus-visible:ring-[var(--color-border-focus)] shadow-xs',
         outlined:
-          'bg-transparent text-slate-700 ring-1 ring-inset ring-slate-300 hover:bg-slate-50/80 focus-visible:ring-slate-400/50 dark:text-slate-300 dark:ring-slate-700 dark:hover:bg-slate-800/80 shadow-xs',
+          'bg-transparent text-[var(--button-secondary-text)] ring-1 ring-inset ring-[var(--button-secondary-border)] hover:bg-[var(--button-secondary-bg-hover)] focus-visible:ring-[var(--color-border-focus)] shadow-xs',
       },
       danger: {
         solid:
-          'bg-rose-600 text-white shadow-xs hover:bg-rose-500 focus-visible:ring-rose-600/50 dark:bg-rose-600 dark:hover:bg-rose-500 border border-rose-700/20',
+          'bg-[var(--color-status-critical)] text-white shadow-xs hover:bg-[var(--color-red-800)] focus-visible:ring-[var(--color-red-300)] border border-transparent',
         outlined:
-          'bg-white text-rose-700 ring-1 ring-inset ring-rose-300 hover:bg-rose-50/80 focus-visible:ring-rose-600/50 dark:bg-slate-900 dark:text-rose-400 dark:ring-rose-800 dark:hover:bg-rose-950/40 shadow-xs',
+          'bg-[var(--button-secondary-bg)] text-[var(--badge-critical-text)] ring-1 ring-inset ring-[var(--badge-critical-border)] hover:bg-[var(--badge-critical-bg)] focus-visible:ring-[var(--color-status-critical)] shadow-xs',
       },
       warning: {
         solid:
-          'bg-amber-600 text-white shadow-xs hover:bg-amber-500 focus-visible:ring-amber-600/50 dark:bg-amber-600 dark:hover:bg-amber-500 border border-amber-700/20',
+          'bg-[var(--color-status-warning)] text-white shadow-xs hover:bg-[var(--color-orange-800)] focus-visible:ring-[var(--color-orange-300)] border border-transparent',
         outlined:
-          'bg-white text-amber-700 ring-1 ring-inset ring-amber-300 hover:bg-amber-50/80 focus-visible:ring-amber-600/50 dark:bg-slate-900 dark:text-amber-400 dark:ring-amber-800 dark:hover:bg-amber-950/40 shadow-xs',
+          'bg-[var(--button-secondary-bg)] text-[var(--badge-warning-text)] ring-1 ring-inset ring-[var(--badge-warning-border)] hover:bg-[var(--badge-warning-bg)] focus-visible:ring-[var(--color-status-warning)] shadow-xs',
       },
       success: {
         solid:
-          'bg-emerald-600 text-white shadow-xs hover:bg-emerald-500 focus-visible:ring-emerald-600/50 dark:bg-emerald-600 dark:hover:bg-emerald-500 border border-emerald-700/20',
+          'bg-[var(--color-status-success)] text-white shadow-xs hover:bg-[var(--color-green-700)] focus-visible:ring-[var(--color-green-alpha-32)] border border-transparent',
         outlined:
-          'bg-white text-emerald-700 ring-1 ring-inset ring-emerald-300 hover:bg-emerald-50/80 focus-visible:ring-emerald-600/50 dark:bg-slate-900 dark:text-emerald-400 dark:ring-emerald-800 dark:hover:bg-emerald-950/40 shadow-xs',
+          'bg-[var(--button-secondary-bg)] text-[var(--badge-success-text)] ring-1 ring-inset ring-[var(--badge-success-border)] hover:bg-[var(--badge-success-bg)] focus-visible:ring-[var(--color-status-success)] shadow-xs',
       },
       info: {
         solid:
-          'bg-sky-600 text-white shadow-xs hover:bg-sky-500 focus-visible:ring-sky-600/50 dark:bg-sky-600 dark:hover:bg-sky-500 border border-sky-700/20',
+          'bg-[var(--color-status-info)] text-white shadow-xs hover:bg-[var(--color-neutral-800)] focus-visible:ring-[var(--color-neutral-400)] border border-transparent',
         outlined:
-          'bg-white text-sky-700 ring-1 ring-inset ring-sky-300 hover:bg-sky-50/80 focus-visible:ring-sky-600/50 dark:bg-slate-900 dark:text-sky-400 dark:ring-sky-800 dark:hover:bg-sky-950/40 shadow-xs',
+          'bg-[var(--button-secondary-bg)] text-[var(--badge-info-text)] ring-1 ring-inset ring-[var(--badge-info-border)] hover:bg-[var(--badge-info-bg)] focus-visible:ring-[var(--color-status-info)] shadow-xs',
       },
     };
 
@@ -130,4 +130,3 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 Button.displayName = 'Button';
 
 export { Button };
-

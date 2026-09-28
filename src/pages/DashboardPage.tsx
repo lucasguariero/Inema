@@ -184,9 +184,9 @@ export const DashboardPage: React.FC = () => {
 
       {/* Banner de Filtros Ativos */}
       {activeFilterCount > 0 && (
-        <div className="p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 rounded-xl flex items-center justify-between text-xs text-emerald-950 dark:text-emerald-200 flex-wrap gap-2 animate-in fade-in">
+        <div className="p-3 bg-[var(--badge-success-bg)] border border-[var(--badge-success-border)] rounded-xl flex items-center justify-between text-xs text-[var(--badge-success-text)] flex-wrap gap-2 animate-in fade-in">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-semibold flex items-center gap-1 text-[#0F4C3A] dark:text-emerald-400">
+            <span className="font-semibold flex items-center gap-1 text-[var(--color-brand-primary)]">
               Filtros ativos:
             </span>
             {activeKpiFilter && (
@@ -243,7 +243,7 @@ export const DashboardPage: React.FC = () => {
           </div>
           <button
             onClick={clearAllFilters}
-            className="font-semibold text-emerald-800 dark:text-emerald-400 hover:underline flex items-center gap-1 ml-auto cursor-pointer"
+            className="font-semibold text-[var(--color-text-link)] hover:text-[var(--color-text-link-hover)] hover:underline flex items-center gap-1 ml-auto cursor-pointer"
           >
             Limpar todos <X className="w-3.5 h-3.5" />
           </button>
@@ -343,7 +343,7 @@ export const DashboardPage: React.FC = () => {
           </div>
           <button
             onClick={() => alert('Abrindo listagem completa de todos os 198 processos vencidos...')}
-            className="text-xs font-semibold text-emerald-800 dark:text-emerald-400 hover:underline flex items-center gap-1 cursor-pointer"
+            className="text-xs font-semibold text-[var(--color-text-link)] hover:text-[var(--color-text-link-hover)] hover:underline flex items-center gap-1 cursor-pointer"
           >
             Ver todos os 198 <ChevronRight className="w-3.5 h-3.5" />
           </button>
@@ -408,8 +408,8 @@ export const DashboardPage: React.FC = () => {
                     {proc.responsavel}
                   </td>
                   <td className="p-4">
-                    <span className="inline-flex items-center gap-1 font-bold text-xs px-2.5 py-0.5 rounded-full bg-rose-50 dark:bg-rose-950/50 text-rose-700 dark:text-rose-400 border border-rose-200/80 dark:border-rose-900/60 shadow-2xs">
-                      <span className="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0" />
+                    <span className="inline-flex items-center gap-1 font-bold text-xs px-2.5 py-0.5 rounded-full bg-[var(--badge-critical-bg)] text-[var(--badge-critical-text)] border border-[var(--badge-critical-border)] shadow-2xs">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-status-critical)] shrink-0" />
                       {proc.dias} dias
                     </span>
                   </td>
@@ -445,7 +445,7 @@ export const DashboardPage: React.FC = () => {
           <DialogContent className="max-w-lg bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100 rounded-2xl shadow-2xl">
             <DialogHeader className="border-b border-slate-100 dark:border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-[#0F4C3A] dark:text-emerald-300 flex items-center justify-center border border-emerald-200/60 dark:border-emerald-800/60">
+                <div className="w-8 h-8 rounded-lg bg-[var(--badge-success-bg)] text-[var(--badge-success-text)] flex items-center justify-center border border-[var(--badge-success-border)]">
                   <FileText className="w-4 h-4" />
                 </div>
                 <div>
@@ -495,14 +495,14 @@ export const DashboardPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="p-3.5 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 rounded-xl flex items-center justify-between">
+              <div className="p-3.5 bg-[var(--badge-critical-bg)] border border-[var(--badge-critical-border)] rounded-xl flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <AlertTriangle className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0" />
-                  <span className="font-semibold text-rose-900 dark:text-rose-200 text-xs">
+                  <AlertTriangle className="w-4 h-4 text-[var(--color-status-critical)] shrink-0" />
+                  <span className="font-semibold text-[var(--badge-critical-text)] text-xs">
                     Vencimento ultrapassado em
                   </span>
                 </div>
-                <span className="font-bold text-rose-700 dark:text-rose-300 text-sm tabular-nums">
+                <span className="font-bold text-[var(--badge-critical-text)] text-sm tabular-nums">
                   {activeModalProcess.dias} dias
                 </span>
               </div>

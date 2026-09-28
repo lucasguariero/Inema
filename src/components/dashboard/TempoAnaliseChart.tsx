@@ -14,11 +14,11 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Info } from 'lucide-react';
 
 const data = [
-  { etapa: 'Triagem', dias: 2.3, color: '#005ea3' },
-  { etapa: 'Análise Técnica', dias: 18.7, color: '#0F4C3A' }, // Gargalo
-  { etapa: 'Coordenação', dias: 5.2, color: '#0284C7' },
-  { etapa: 'Diretoria', dias: 8.1, color: '#0c4353' },
-  { etapa: 'Publicação', dias: 3.4, color: '#78C043' },
+  { etapa: 'Triagem', dias: 2.3, color: 'var(--data-tertiary)' },
+  { etapa: 'Análise Técnica', dias: 18.7, color: 'var(--data-primary)' }, // Gargalo
+  { etapa: 'Coordenação', dias: 5.2, color: 'var(--data-secondary)' },
+  { etapa: 'Diretoria', dias: 8.1, color: 'var(--data-quaternary)' },
+  { etapa: 'Publicação', dias: 3.4, color: 'var(--data-neutral)' },
 ];
 
 const CustomTooltip = ({ active, payload }: any) => {

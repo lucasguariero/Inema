@@ -90,13 +90,13 @@ export const Toolbar: React.FC<ToolbarProps> = ({
           onClick={onOpenFilters}
           className={cn(
             "h-8 gap-2 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 text-xs font-medium hover:bg-slate-50 dark:hover:bg-slate-800 shadow-2xs cursor-pointer transition-all",
-            activeFilterCount > 0 && "border-emerald-500 dark:border-emerald-600 bg-emerald-50/50 dark:bg-emerald-950/30 text-emerald-900 dark:text-emerald-300"
+            activeFilterCount > 0 && "border-[var(--badge-success-border)] bg-[var(--badge-success-bg)] text-[var(--badge-success-text)]"
           )}
         >
           <Filter className="w-3.5 h-3.5 text-slate-400" />
           <span>Filtros</span>
           {activeFilterCount > 0 && (
-            <span className="px-1.5 py-0.2 text-[10px] bg-[#0F4C3A] text-white rounded-full font-bold">
+            <span className="px-1.5 py-0.2 text-[10px] bg-[var(--color-brand-primary)] text-white rounded-full font-bold">
               {activeFilterCount}
             </span>
           )}

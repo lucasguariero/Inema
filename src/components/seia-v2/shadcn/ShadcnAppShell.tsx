@@ -28,7 +28,7 @@ export const ShadcnAppShell: React.FC<AppShellProps> = ({
   };
 
   return (
-    <div className={cn('h-screen w-screen overflow-hidden flex flex-col antialiased transition-colors duration-200 dark:bg-slate-950 dark:text-slate-100', isDarkMode ? 'dark bg-slate-950 text-slate-100' : 'bg-[#F7FAF6]')}>
+    <div className={cn('h-screen w-screen overflow-hidden flex flex-col antialiased transition-colors duration-200', isDarkMode ? 'dark bg-[var(--color-surface-canvas)] text-[var(--color-text-primary)]' : 'bg-[var(--color-surface-canvas)]')}>
       <ShadcnHeader
         isSidebarCollapsed={isSidebarCollapsed}
         isMobileSidebarOpen={isMobileSidebarOpen}
@@ -45,8 +45,8 @@ export const ShadcnAppShell: React.FC<AppShellProps> = ({
           onToggleCollapse={handleToggleSidebar}
         />
 
-        <div className={cn("flex-1 flex flex-col min-w-0 overflow-hidden transition-all duration-200 ease-in-out dark:bg-slate-950", isDarkMode ? "bg-slate-950" : "bg-transparent")}>
-          <main className={cn("flex-1 w-full min-w-0 overflow-y-auto dark:bg-slate-950 dark:text-slate-100", isDarkMode ? "bg-slate-950 text-slate-100" : "")}>
+        <div className="flex-1 flex flex-col min-w-0 overflow-hidden transition-all duration-200 ease-in-out bg-transparent">
+          <main className="flex-1 w-full min-w-0 overflow-y-auto text-[var(--color-text-primary)]">
           <div className="w-full max-w-[2000px] mx-auto p-3.5 sm:p-6 lg:p-8 pb-32">
             {children}
           </div>

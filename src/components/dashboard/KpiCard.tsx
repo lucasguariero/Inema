@@ -53,17 +53,17 @@ export const KpiCard: React.FC<KpiCardProps> = ({
   // Color logic according to exact user instruction:
   // "cor pra vencido = vermelho mesmo"
   // "cor pra pendente = laranja mesmo"
-  let sparklineStroke = '#10B981';
+  let sparklineStroke = 'var(--color-status-success)';
   if (isVencido) {
-    sparklineStroke = '#E11D48'; // Vermelho
+    sparklineStroke = 'var(--color-status-critical)';
   } else if (isPendente) {
-    sparklineStroke = '#F59E0B'; // Laranja
+    sparklineStroke = 'var(--color-status-warning)';
   } else if (isEmAnalise) {
-    sparklineStroke = '#64748B';
+    sparklineStroke = 'var(--color-status-info)';
   } else if (isPositive) {
-    sparklineStroke = '#10B981';
+    sparklineStroke = 'var(--color-status-success)';
   } else {
-    sparklineStroke = '#E11D48';
+    sparklineStroke = 'var(--color-status-critical)';
   }
 
   return (
@@ -72,7 +72,7 @@ export const KpiCard: React.FC<KpiCardProps> = ({
       className={cn(
         'fi-wi-stats-overview-stat p-5 bg-white dark:bg-slate-900 rounded-xl flex flex-col justify-between transition-all duration-150 cursor-pointer select-none shadow-xs ring-1',
         isSelected
-          ? 'ring-2 ring-blue-600 dark:ring-blue-500 shadow-sm'
+          ? 'ring-2 ring-[var(--color-border-focus)] shadow-sm'
           : 'ring-slate-950/5 dark:ring-white/10 hover:ring-slate-300 dark:hover:ring-slate-700'
       )}
     >
@@ -86,12 +86,12 @@ export const KpiCard: React.FC<KpiCardProps> = ({
             className={cn(
               'w-7 h-7 rounded-lg flex items-center justify-center shrink-0',
               isVencido
-                ? 'bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400'
+                ? 'bg-[var(--badge-critical-bg)] text-[var(--color-status-critical)]'
                 : isPendente
-                ? 'bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400'
+                ? 'bg-[var(--badge-warning-bg)] text-[var(--color-status-warning)]'
                 : isEmAnalise
-                ? 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
-                : 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400'
+                ? 'bg-[var(--badge-info-bg)] text-[var(--badge-info-text)]'
+                : 'bg-[var(--badge-success-bg)] text-[var(--color-status-success)]'
             )}
           >
             <Icon className="w-3.5 h-3.5" />
@@ -112,12 +112,12 @@ export const KpiCard: React.FC<KpiCardProps> = ({
               className={cn(
                 'inline-flex items-center gap-0.5 font-semibold px-1.5 py-0.5 rounded text-[11px] tabular-nums shrink-0 border',
                 isVencido
-                  ? 'bg-rose-50 dark:bg-rose-950/50 text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-900/60'
+                  ? 'bg-[var(--badge-critical-bg)] text-[var(--badge-critical-text)] border-[var(--badge-critical-border)]'
                   : isPendente
-                  ? 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-900/60'
+                  ? 'bg-[var(--badge-warning-bg)] text-[var(--badge-warning-text)] border-[var(--badge-warning-border)]'
                   : isEmAnalise
-                  ? 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700'
-                  : 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-900/60'
+                  ? 'bg-[var(--badge-info-bg)] text-[var(--badge-info-text)] border-[var(--badge-info-border)]'
+                  : 'bg-[var(--badge-success-bg)] text-[var(--badge-success-text)] border-[var(--badge-success-border)]'
               )}
             >
               {isPositive ? (

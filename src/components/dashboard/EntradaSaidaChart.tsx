@@ -43,26 +43,26 @@ const CustomTooltip = ({ active, payload, label }: any) => {
           <span
             className={`text-[10px] font-bold px-1.5 py-0.2 rounded ${
               diff >= 0
-                ? 'bg-emerald-950 text-emerald-400 border border-emerald-800/60'
-                : 'bg-rose-950 text-rose-400 border border-rose-800/60'
+                ? 'bg-[var(--badge-success-bg)] text-[var(--badge-success-text)] border border-[var(--badge-success-border)]'
+                : 'bg-[var(--badge-critical-bg)] text-[var(--badge-critical-text)] border border-[var(--badge-critical-border)]'
             }`}
           >
             {diff >= 0 ? `+${diff.toLocaleString('pt-BR')}` : diff.toLocaleString('pt-BR')} saldo
           </span>
         </div>
         <div className="space-y-1.5">
-          <div className="flex items-center justify-between text-emerald-400 font-medium">
+          <div className="flex items-center justify-between text-[var(--color-green-300)] font-medium">
             <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500" />
+              <span className="w-2 h-2 rounded-full bg-[var(--data-primary)]" />
               Entrada:
             </span>
             <strong className="font-bold text-white tabular-nums">
               {entrada.toLocaleString('pt-BR')}
             </strong>
           </div>
-          <div className="flex items-center justify-between text-teal-300 font-medium">
+          <div className="flex items-center justify-between text-[var(--color-green-200)] font-medium">
             <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-teal-400" />
+              <span className="w-2 h-2 rounded-full bg-[var(--data-secondary)]" />
               Saída:
             </span>
             <strong className="font-bold text-white tabular-nums">

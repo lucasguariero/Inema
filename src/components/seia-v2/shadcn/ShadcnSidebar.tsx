@@ -110,11 +110,11 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
     }
     if (isActive) {
       if (isVizoraGreen) return 'bg-[#22725b] text-white font-semibold shadow-xs border border-[#2c8d71]';
-      if (isInemaLight) return 'bg-[#E8F1E5] text-[#2F5E29] font-semibold';
+      if (isInemaLight) return 'bg-[var(--nav-item-selected-bg)] text-[var(--nav-item-selected-text)] font-semibold';
       return 'bg-[#165a6e] text-white font-semibold shadow-xs border border-[#207087]';
     }
     if (isVizoraGreen) return 'text-[#bce0d3] hover:bg-[#1f6853] hover:text-white font-medium';
-    if (isInemaLight) return 'text-slate-600 hover:bg-[#EEF4EC] hover:text-[#2F5E29] font-medium';
+    if (isInemaLight) return 'text-[var(--nav-item-text)] hover:bg-[var(--nav-item-hover-bg)] hover:text-[var(--nav-item-selected-text)] font-medium';
     return 'text-[#9ec3cc] hover:bg-[#135467] hover:text-white font-medium';
   };
 
@@ -126,11 +126,11 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
     }
     if (isActive) {
       if (isVizoraGreen) return 'bg-[#22725b] text-white font-semibold border-l-2 border-[#34D399] shadow-xs';
-      if (isInemaLight) return 'bg-[#E8F1E5] text-[#2F5E29] font-semibold';
+      if (isInemaLight) return 'bg-[var(--nav-item-selected-bg)] text-[var(--nav-item-selected-text)] font-semibold';
       return 'bg-[#165a6e] text-white font-semibold border-l-2 border-[#34D399] shadow-xs';
     }
     if (isVizoraGreen) return 'text-[#bce0d3] hover:bg-[#1f6853] hover:text-white font-medium cursor-pointer';
-    if (isInemaLight) return 'text-slate-600 hover:bg-[#EEF4EC] hover:text-[#2F5E29] font-medium cursor-pointer';
+    if (isInemaLight) return 'text-[var(--nav-item-text)] hover:bg-[var(--nav-item-hover-bg)] hover:text-[var(--nav-item-selected-text)] font-medium cursor-pointer';
     return 'text-[#9ec3cc] hover:bg-[#135467] hover:text-white font-medium cursor-pointer';
   };
 
@@ -141,11 +141,11 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
     }
     if (hasActiveChild) {
       if (isVizoraGreen) return 'text-white font-semibold bg-[#1f6853]/70';
-      if (isInemaLight) return 'text-[#2F5E29] font-semibold bg-[#EEF4EC]';
+      if (isInemaLight) return 'text-[var(--nav-item-selected-text)] font-semibold bg-[var(--nav-item-hover-bg)]';
       return 'text-white font-semibold bg-[#135467]/70';
     }
     if (isVizoraGreen) return 'text-[#d2ede2] hover:bg-[#1f6853] hover:text-white font-semibold';
-    if (isInemaLight) return 'text-slate-700 hover:bg-[#EEF4EC] hover:text-[#2F5E29] font-semibold';
+    if (isInemaLight) return 'text-[var(--color-text-primary)] hover:bg-[var(--nav-item-hover-bg)] hover:text-[var(--nav-item-selected-text)] font-semibold';
     return 'text-[#c6e1e8] hover:bg-[#135467] hover:text-white font-semibold';
   };
 
@@ -241,7 +241,7 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
               : isVizoraGreen
               ? 'bg-[#103d30] text-[#a7f3d0] border border-[#206954]'
               : isInemaLight
-              ? 'bg-emerald-50 text-[#0F4C3A] border border-emerald-200'
+              ? 'bg-[var(--badge-success-bg)] text-[var(--badge-success-text)] border border-[var(--badge-success-border)]'
               : 'bg-[#165a6e] text-emerald-300 border border-[#207087]'
           )}
         >
@@ -252,7 +252,7 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
 
     if (badge === '3' || variant === 'rose') {
       return (
-        <span className="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-800">
+        <span className="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-[var(--badge-critical-bg)] text-[var(--badge-critical-text)] border border-[var(--badge-critical-border)]">
           {badge}
         </span>
       );
@@ -284,7 +284,7 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
             : isVizoraGreen
             ? 'bg-[#185846] border-r border-[#206954] text-[#bce0d3]'
             : isInemaLight
-            ? 'bg-[#F7FAF6] border-r-0 text-slate-700'
+              ? 'bg-[var(--sidebar-bg)] border-r-0 text-[var(--sidebar-text)]'
             : 'bg-[#0c4353] border-r border-[#145366] text-[#9ec3cc]',
           isOpenMobile ? 'translate-x-0 w-64' : '-translate-x-full lg:translate-x-0',
           isCollapsed ? 'lg:w-16' : 'lg:w-72'
@@ -302,7 +302,7 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
               <button
                 type="button"
                 onClick={onToggleCollapse}
-                className="h-10 w-10 shrink-0 inline-flex items-center justify-center rounded-lg text-slate-500 hover:bg-[#E8F1E5] hover:text-[#2F5E29] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#52784D]/40 cursor-pointer"
+                className="h-10 w-10 shrink-0 inline-flex items-center justify-center rounded-lg text-[var(--sidebar-text)] hover:bg-[var(--sidebar-item-hover-bg)] hover:text-[var(--sidebar-item-active-text)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-green-alpha-32)] cursor-pointer"
                 aria-label="Expandir menu lateral"
                 title="Expandir menu lateral"
               >
@@ -325,7 +325,7 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                       : isVizoraGreen
                       ? 'bg-[#103d30]/85 border border-[#23755e] text-white placeholder:text-[#97c7b6] focus:ring-emerald-400 focus:border-emerald-400'
                       : isInemaLight
-                      ? 'bg-white/70 hover:bg-white focus:bg-white border border-[#DDE7DA] text-slate-800 placeholder:text-slate-400 focus:ring-[#52784D] focus:border-[#52784D]'
+                      ? 'bg-[var(--input-bg)] hover:bg-[var(--color-surface-raised)] focus:bg-[var(--input-bg)] border border-[var(--input-border)] text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] focus:ring-[var(--input-border-focus)] focus:border-[var(--input-border-focus)]'
                       : 'bg-[#083340]/85 border border-[#155b70] text-white placeholder:text-[#7ea8b3] focus:ring-sky-400 focus:border-sky-400'
                   )}
                 />
@@ -349,7 +349,7 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                     : isVizoraGreen
                     ? "text-[#bce0d3] hover:bg-[#1f6853] hover:text-white focus-visible:ring-emerald-300/50"
                     : isInemaLight
-                    ? "text-slate-500 hover:bg-[#E8F1E5] hover:text-[#2F5E29] focus-visible:ring-[#52784D]/40"
+                    ? "text-[var(--sidebar-text)] hover:bg-[var(--sidebar-item-hover-bg)] hover:text-[var(--sidebar-item-active-text)] focus-visible:ring-[var(--color-green-alpha-32)]"
                     : "text-[#9ec3cc] hover:bg-[#135467] hover:text-white focus-visible:ring-sky-300/50"
                 )}
                 aria-label="Recolher menu lateral"
@@ -384,14 +384,14 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                               : isVizoraGreen
                               ? 'bg-[#22725b] text-white font-bold shadow-xs border border-[#2c8d71]'
                               : isInemaLight
-                              ? 'bg-[#E8F1E5] text-[#2F5E29] font-bold'
+                              ? 'bg-[var(--nav-item-selected-bg)] text-[var(--nav-item-selected-text)] font-bold'
                               : 'bg-[#165a6e] text-white font-bold shadow-xs border border-[#207087]'
                             : isDarkMode
                             ? 'text-slate-400 hover:bg-slate-900 hover:text-white'
                             : isVizoraGreen
                             ? 'text-[#bce0d3] hover:bg-[#1f6853] hover:text-white'
                             : isInemaLight
-                            ? 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                            ? 'text-[var(--nav-item-text)] hover:bg-[var(--nav-item-hover-bg)] hover:text-[var(--nav-item-selected-text)]'
                             : 'text-[#9ec3cc] hover:bg-[#135467] hover:text-white'
                         )}
                         aria-label={item.label}
@@ -438,14 +438,14 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                                 : isVizoraGreen
                                 ? 'bg-[#22725b] text-white font-bold shadow-xs border border-[#2c8d71]'
                                 : isInemaLight
-                                ? 'bg-[#E8F1E5] text-[#2F5E29] font-bold'
+                                ? 'bg-[var(--nav-item-selected-bg)] text-[var(--nav-item-selected-text)] font-bold'
                                 : 'bg-[#165a6e] text-white font-bold shadow-xs border border-[#207087]'
                               : isDarkMode
                               ? 'text-slate-400 hover:bg-slate-900 hover:text-white'
                               : isVizoraGreen
                               ? 'text-[#bce0d3] hover:bg-[#1f6853] hover:text-white'
                               : isInemaLight
-                              ? 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                              ? 'text-[var(--nav-item-text)] hover:bg-[var(--nav-item-hover-bg)] hover:text-[var(--nav-item-selected-text)]'
                               : 'text-[#9ec3cc] hover:bg-[#135467] hover:text-white'
                           )}
                           aria-label={group.label}
@@ -467,14 +467,14 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                                 : isVizoraGreen
                                 ? 'bg-[#22725b] text-white font-bold shadow-xs border border-[#2c8d71]'
                                 : isInemaLight
-                                ? 'bg-[#E8F1E5] text-[#2F5E29] font-bold'
+                                ? 'bg-[var(--nav-item-selected-bg)] text-[var(--nav-item-selected-text)] font-bold'
                                 : 'bg-[#165a6e] text-white font-bold shadow-xs border border-[#207087]'
                               : isDarkMode
                               ? 'text-slate-400 hover:bg-slate-900 hover:text-white'
                               : isVizoraGreen
                               ? 'text-[#bce0d3] hover:bg-[#1f6853] hover:text-white'
                               : isInemaLight
-                              ? 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                              ? 'text-[var(--nav-item-text)] hover:bg-[var(--nav-item-hover-bg)] hover:text-[var(--nav-item-selected-text)]'
                               : 'text-[#9ec3cc] hover:bg-[#135467] hover:text-white'
                           )}
                           aria-label={group.label}
@@ -522,14 +522,14 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                                   : isVizoraGreen
                                   ? 'bg-[#298369] text-white shadow-xs'
                                   : isInemaLight
-                                  ? 'bg-[#52784D] text-white'
+                                  ? 'bg-[var(--sidebar-item-active-indicator)] text-white'
                                   : 'bg-[#1d6b82] text-white shadow-xs'
                                 : isDarkMode
                                 ? 'bg-slate-900 text-slate-400 group-hover:bg-slate-800 group-hover:text-white'
                                 : isVizoraGreen
                                 ? 'bg-[#103d30] text-[#bce0d3] group-hover:bg-[#1f6853] group-hover:text-white'
                                 : isInemaLight
-                                ? 'bg-slate-100/80 text-slate-500 group-hover:bg-slate-200/80 group-hover:text-slate-800'
+                                ? 'bg-[var(--color-surface-hover)] text-[var(--color-text-tertiary)] group-hover:bg-[var(--sidebar-item-hover-bg)] group-hover:text-[var(--sidebar-item-active-text)]'
                                 : 'bg-[#083340] text-[#9ec3cc] group-hover:bg-[#135467] group-hover:text-white'
                             )}
                           >
@@ -549,7 +549,7 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                                   : isVizoraGreen
                                   ? 'bg-[#34D399]'
                                   : isInemaLight
-                                  ? 'bg-[#52784D]'
+                                  ? 'bg-[var(--sidebar-item-active-indicator)]'
                                   : 'bg-[#34D399]'
                               )}
                             />
@@ -597,14 +597,14 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                                   : isVizoraGreen
                                   ? 'bg-[#298369] text-white shadow-xs'
                                   : isInemaLight
-                                  ? 'bg-[#52784D] text-white'
+                                  ? 'bg-[var(--sidebar-item-active-indicator)] text-white'
                                   : 'bg-[#1d6b82] text-white shadow-xs'
                                 : isDarkMode
                                 ? 'bg-slate-900 text-slate-400 group-hover:bg-slate-800 group-hover:text-white'
                                 : isVizoraGreen
                                 ? 'bg-[#103d30] text-[#bce0d3] group-hover:bg-[#1f6853] group-hover:text-white'
                                 : isInemaLight
-                                ? 'bg-slate-100/80 text-slate-500 group-hover:bg-slate-200/80 group-hover:text-slate-800'
+                                ? 'bg-[var(--color-surface-hover)] text-[var(--color-text-tertiary)] group-hover:bg-[var(--sidebar-item-hover-bg)] group-hover:text-[var(--sidebar-item-active-text)]'
                                 : 'bg-[#083340] text-[#9ec3cc] group-hover:bg-[#135467] group-hover:text-white'
                             )}
                           >
@@ -624,7 +624,7 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                                   : isVizoraGreen
                                   ? 'bg-[#34D399]'
                                   : isInemaLight
-                                  ? 'bg-[#52784D]'
+                                  ? 'bg-[var(--sidebar-item-active-indicator)]'
                                   : 'bg-[#34D399]'
                               )}
                             />
@@ -662,7 +662,7 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                                 : isVizoraGreen
                                 ? 'bg-[#298369] text-white border-[#298369]'
                                 : isInemaLight
-                                ? 'bg-[#E8F1E5] text-[#2F5E29] border-[#D6E5D2]'
+                                ? 'bg-[var(--nav-item-selected-bg)] text-[var(--nav-item-selected-text)] border-[var(--badge-success-border)]'
                                 : 'bg-[#1d6b82] text-white border-[#1d6b82]'
                               : isDarkMode
                               ? 'bg-slate-900 border-slate-800 text-slate-400'
@@ -721,7 +721,7 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                                 {subItem.badge && (
                                   <span
                                     id={subItem.id === 'fisc-painel-interno-difis' ? 'sidebarBadgeEmergencias' : undefined}
-                                    className="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-rose-500 text-white shadow-2xs"
+                                    className="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-[var(--color-status-critical)] text-white shadow-2xs"
                                   >
                                     {subItem.badge}
                                   </span>
@@ -744,7 +744,7 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                   </p>
                   <button
                     onClick={() => setSearchFilter('')}
-                    className="mt-2 text-xs text-[#0F4C3A] hover:underline font-semibold"
+                    className="mt-2 text-xs text-[var(--color-text-link)] hover:text-[var(--color-text-link-hover)] hover:underline font-semibold"
                   >
                     Limpar filtro
                   </button>
@@ -763,7 +763,7 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                   : isVizoraGreen
                   ? 'bg-[#185846] border-[#206954]'
                   : isInemaLight
-                  ? 'bg-white border-slate-100'
+                  ? 'bg-[var(--color-surface-default)] border-[var(--color-border-subtle)]'
                   : 'bg-[#0c4353] border-[#145366]'
               )}
             >
@@ -801,7 +801,7 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                   : isVizoraGreen
                   ? 'bg-[#185846] border-[#206954]'
                   : isInemaLight
-                  ? 'bg-white border-slate-100'
+                  ? 'bg-[var(--color-surface-default)] border-[var(--color-border-subtle)]'
                   : 'bg-[#0c4353] border-[#145366]'
               )}
             >

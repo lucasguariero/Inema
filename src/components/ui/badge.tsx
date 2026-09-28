@@ -43,17 +43,17 @@ function Badge({ className, color, size = 'sm', variant = 'default', dot = false
   // Filament badge colors
   const colorStyles: Record<FilamentBadgeColor, string> = {
     primary:
-      'bg-blue-50 text-blue-700 ring-blue-600/10 dark:bg-blue-400/10 dark:text-blue-400 dark:ring-blue-400/30',
+      'bg-[var(--color-brand-primary-subtle)] text-[var(--color-brand-primary)] ring-[var(--color-green-alpha-20)]',
     gray:
-      'bg-slate-100 text-slate-700 ring-slate-600/10 dark:bg-slate-800 dark:text-slate-300 dark:ring-slate-700',
+      'bg-[var(--badge-info-bg)] text-[var(--badge-info-text)] ring-[var(--badge-info-border)]',
     danger:
-      'bg-rose-50 text-rose-700 ring-rose-600/10 dark:bg-rose-400/10 dark:text-rose-400 dark:ring-rose-400/30',
+      'bg-[var(--badge-critical-bg)] text-[var(--badge-critical-text)] ring-[var(--badge-critical-border)]',
     warning:
-      'bg-amber-50 text-amber-700 ring-amber-600/10 dark:bg-amber-400/10 dark:text-amber-400 dark:ring-amber-400/30',
+      'bg-[var(--badge-warning-bg)] text-[var(--badge-warning-text)] ring-[var(--badge-warning-border)]',
     success:
-      'bg-emerald-50 text-emerald-700 ring-emerald-600/10 dark:bg-emerald-400/10 dark:text-emerald-400 dark:ring-emerald-400/30',
+      'bg-[var(--badge-success-bg)] text-[var(--badge-success-text)] ring-[var(--badge-success-border)]',
     info:
-      'bg-sky-50 text-sky-700 ring-sky-600/10 dark:bg-sky-400/10 dark:text-sky-400 dark:ring-sky-400/30',
+      'bg-[var(--badge-info-bg)] text-[var(--badge-info-text)] ring-[var(--badge-info-border)]',
   };
 
   const sizeStyles: Record<FilamentBadgeSize, string> = {
@@ -63,12 +63,12 @@ function Badge({ className, color, size = 'sm', variant = 'default', dot = false
   };
 
   const dotColors: Record<FilamentBadgeColor, string> = {
-    primary: 'bg-blue-500',
-    gray: 'bg-slate-400',
-    danger: 'bg-rose-500',
-    warning: 'bg-amber-500',
-    success: 'bg-emerald-500',
-    info: 'bg-sky-500',
+    primary: 'bg-[var(--color-brand-primary)]',
+    gray: 'bg-[var(--color-status-info)]',
+    danger: 'bg-[var(--color-status-critical)]',
+    warning: 'bg-[var(--color-status-warning)]',
+    success: 'bg-[var(--color-status-success)]',
+    info: 'bg-[var(--color-status-info)]',
   };
 
   return (
