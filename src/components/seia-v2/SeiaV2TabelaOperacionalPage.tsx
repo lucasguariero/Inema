@@ -36,7 +36,11 @@ interface ProcessoItem {
   analista: string;
 }
 
-export const SeiaV2TabelaOperacionalPage: React.FC = () => {
+interface SeiaV2TabelaOperacionalPageProps {
+  onNavigate?: (route: string) => void;
+}
+
+export const SeiaV2TabelaOperacionalPage: React.FC<SeiaV2TabelaOperacionalPageProps> = ({ onNavigate }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('todos');
   const [diretoriaFilter, setDiretoriaFilter] = useState('todos');
@@ -263,6 +267,14 @@ export const SeiaV2TabelaOperacionalPage: React.FC = () => {
             <FileSpreadsheet className="w-3.5 h-3.5 text-[#0F4C3A]" />
             <span>Exportar XLSX</span>
           </button>
+          {onNavigate && (
+            <button
+              onClick={() => onNavigate('formulario')}
+              className="h-9 px-4 text-xs font-semibold bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white rounded-lg transition-all duration-200 ease-in-out flex items-center gap-1.5 shadow-xs cursor-pointer"
+            >
+              <span>+ Novo Requerimento</span>
+            </button>
+          )}
         </div>
       </div>
 

@@ -39,7 +39,11 @@ const tipoCaptacaoOptions: SelectOption[] = [
   { value: 'Canal de Irrigação de Distrito Público', label: 'Canal de Irrigação de Distrito Público' },
 ];
 
-export const SeiaV2FormularioComplexoPage: React.FC = () => {
+interface SeiaV2FormularioComplexoPageProps {
+  onNavigate?: (route: string) => void;
+}
+
+export const SeiaV2FormularioComplexoPage: React.FC<SeiaV2FormularioComplexoPageProps> = ({ onNavigate }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [saveToast, setSaveToast] = useState(false);
 
@@ -103,21 +107,32 @@ export const SeiaV2FormularioComplexoPage: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* Cabeçalho Oficial (Sem botão voltar flutuante no topo direito) */}
-      <div className="pb-4 border-b border-slate-200">
-        <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
-          <span>Início</span>
-          <span>/</span>
-          <span>Atendimento e Cadastros</span>
-          <span>/</span>
-          <span className="text-slate-800 font-semibold">Novo Requerimento</span>
+      {/* Cabeçalho Oficial */}
+      <div className="pb-4 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
+            <span>Início</span>
+            <span>/</span>
+            <span>Atendimento e Cadastros</span>
+            <span>/</span>
+            <span className="text-slate-800 font-semibold">Novo Requerimento</span>
+          </div>
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight mt-1">
+            Requerimento Ambiental Unificado (SEIA V2)
+          </h1>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Formulário oficial para Licenciamento Ambiental, Outorga de Recursos Hídricos e Autorização de Supressão Vegetal (ASV).
+          </p>
         </div>
-        <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight mt-1">
-          Requerimento Ambiental Unificado (SEIA V2)
-        </h1>
-        <p className="text-xs text-slate-500 mt-0.5">
-          Formulário oficial para Licenciamento Ambiental, Outorga de Recursos Hídricos e Autorização de Supressão Vegetal (ASV).
-        </p>
+        {onNavigate && (
+          <button
+            onClick={() => onNavigate('tabela')}
+            className="h-9 px-3.5 text-xs font-semibold bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 rounded-lg transition-all duration-200 ease-in-out flex items-center gap-1.5 shadow-2xs cursor-pointer self-start sm:self-auto"
+          >
+            <ArrowLeft className="w-3.5 h-3.5 text-[#0F4C3A]" />
+            <span>Voltar à Pauta</span>
+          </button>
+        )}
       </div>
 
       {/* ========================================================= */}
@@ -541,6 +556,7 @@ export const SeiaV2FormularioComplexoPage: React.FC = () => {
             ) : (
               <button
                 type="button"
+                onClick={() => onNavigate ? onNavigate('tabela') : undefined}
                 className="h-9 px-3 text-xs font-medium text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-all duration-200 ease-in-out cursor-pointer"
               >
                 Cancelar Requerimento
