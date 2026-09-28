@@ -25,6 +25,8 @@ import {
   ExternalLink,
   X,
   Sparkles,
+  PanelLeftClose,
+  PanelLeftOpen,
   Layers,
   Table as TableIcon,
   FileSpreadsheet,
@@ -294,10 +296,22 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
             isCollapsed ? 'w-16 items-center' : 'w-64 lg:w-72'
           )}
         >
-          {/* Caixa de Busca / Filtro Rápido (Ocultada quando retraída) */}
-          {!isCollapsed && (
-            <div className={cn("p-3 pb-2", isDarkMode ? "border-slate-800" : isVizoraGreen ? "border-[#206954]" : isInemaLight ? "" : "border-[#145366]")}>
-              <div className="relative">
+          {/* Busca flexível + controle fixo da sidebar */}
+          {isCollapsed ? (
+            <div className="p-3 pb-2 flex justify-center">
+              <button
+                type="button"
+                onClick={onToggleCollapse}
+                className="h-10 w-10 shrink-0 inline-flex items-center justify-center rounded-lg text-slate-500 hover:bg-[#E8F1E5] hover:text-[#2F5E29] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#52784D]/40 cursor-pointer"
+                aria-label="Expandir menu lateral"
+                title="Expandir menu lateral"
+              >
+                <PanelLeftOpen className="h-4 w-4" />
+              </button>
+            </div>
+          ) : (
+            <div className={cn("p-3 pb-2 flex items-center gap-2", isDarkMode ? "border-slate-800" : isVizoraGreen ? "border-[#206954]" : isInemaLight ? "" : "border-[#145366]")}>
+              <div className="relative min-w-0 flex-1">
                 <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                 <input
                   type="text"
@@ -325,6 +339,24 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                   </button>
                 )}
               </div>
+              <button
+                type="button"
+                onClick={onToggleCollapse}
+                className={cn(
+                  "h-9 w-9 shrink-0 inline-flex items-center justify-center rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 cursor-pointer",
+                  isDarkMode
+                    ? "text-slate-400 hover:bg-slate-900 hover:text-white focus-visible:ring-emerald-500/50"
+                    : isVizoraGreen
+                    ? "text-[#bce0d3] hover:bg-[#1f6853] hover:text-white focus-visible:ring-emerald-300/50"
+                    : isInemaLight
+                    ? "text-slate-500 hover:bg-[#E8F1E5] hover:text-[#2F5E29] focus-visible:ring-[#52784D]/40"
+                    : "text-[#9ec3cc] hover:bg-[#135467] hover:text-white focus-visible:ring-sky-300/50"
+                )}
+                aria-label="Recolher menu lateral"
+                title="Recolher menu lateral"
+              >
+                <PanelLeftClose className="h-4 w-4" />
+              </button>
             </div>
           )}
 

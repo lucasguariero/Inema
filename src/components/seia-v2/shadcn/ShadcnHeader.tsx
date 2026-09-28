@@ -16,6 +16,7 @@ import {
   History,
 } from 'lucide-react';
 import seiaLogo from '@/assets/logo-seia-plataforma.svg';
+import seiaIcon from '@/assets/icon-seia-plataforma.svg';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,11 +30,13 @@ import { cn } from '@/lib/utils';
 
 interface HeaderProps {
   isSidebarCollapsed?: boolean;
+  isMobileSidebarOpen?: boolean;
   onToggleSidebar?: () => void;
 }
 
 export const ShadcnHeader: React.FC<HeaderProps> = ({
   isSidebarCollapsed,
+  isMobileSidebarOpen,
   onToggleSidebar,
 }) => {
   const { theme, setTheme, isDarkMode, setDarkMode, toggleDarkMode } = useTheme();
@@ -95,21 +98,25 @@ export const ShadcnHeader: React.FC<HeaderProps> = ({
       "h-16 shrink-0 flex items-center px-3 sm:px-4 lg:px-5 select-none transition-colors duration-200",
       "bg-[#52784D] text-white"
     )}>
-      <div className="flex w-64 lg:w-72 shrink-0 items-center gap-2 sm:gap-3">
-        <a href="/?rota=seia-v2" className="flex min-w-0 items-center" title="SEIA Plataforma">
-          <img
-            src={seiaLogo}
-            alt="SEIA Plataforma"
-            className="h-8 w-auto max-w-[122px] object-contain brightness-0 invert"
-          />
+      <div className={cn(
+        "flex shrink-0 items-center transition-[width] duration-200 ease-in-out",
+        isSidebarCollapsed ? "w-64 lg:w-16" : "w-64 lg:w-72"
+      )}>
+        <a
+          href="/?rota=seia-v2"
+          className={cn("flex min-w-0 items-center", isSidebarCollapsed && "lg:justify-center lg:w-full")}
+          title="SEIA Plataforma"
+        >
+          <img src={seiaLogo} alt="SEIA Plataforma" className={cn("h-8 w-auto max-w-[122px] object-contain brightness-0 invert", isSidebarCollapsed && "lg:hidden")} />
+          {isSidebarCollapsed && <img src={seiaIcon} alt="" className="hidden lg:block h-8 w-auto object-contain brightness-0 invert" />}
         </a>
         <button
           onClick={onToggleSidebar}
-          className="ml-auto h-9 w-9 inline-flex items-center justify-center rounded-lg text-white/85 hover:text-white hover:bg-white/12 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 cursor-pointer"
-          aria-label={isSidebarCollapsed ? "Expandir menu lateral" : "Recolher menu lateral"}
-          title={isSidebarCollapsed ? "Expandir menu lateral" : "Recolher menu lateral"}
+          className="ml-auto mr-2 h-9 w-9 lg:hidden inline-flex items-center justify-center rounded-lg text-white/85 hover:text-white hover:bg-white/12 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 cursor-pointer"
+          aria-label={isMobileSidebarOpen ? "Fechar menu lateral" : "Abrir menu lateral"}
+          title={isMobileSidebarOpen ? "Fechar menu lateral" : "Abrir menu lateral"}
         >
-          {isSidebarCollapsed ? <PanelLeftOpen className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
+          {isMobileSidebarOpen ? <PanelLeftClose className="w-4 h-4" /> : <PanelLeftOpen className="w-4 h-4" />}
         </button>
       </div>
 

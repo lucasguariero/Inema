@@ -31,6 +31,7 @@ export const ShadcnAppShell: React.FC<AppShellProps> = ({
     <div className={cn('h-screen w-screen overflow-hidden flex flex-col antialiased transition-colors duration-200 dark:bg-slate-950 dark:text-slate-100', isDarkMode ? 'dark bg-slate-950 text-slate-100' : 'bg-[#F7FAF6]')}>
       <ShadcnHeader
         isSidebarCollapsed={isSidebarCollapsed}
+        isMobileSidebarOpen={isMobileSidebarOpen}
         onToggleSidebar={handleToggleSidebar}
       />
 
