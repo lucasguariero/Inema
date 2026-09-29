@@ -171,4 +171,16 @@ export const SEIA_V2_MENU_GROUPS: MenuGroup[] = [
     disabled: true,
     items: [],
   },
+  {
+    id: 'design-system',
+    label: 'Design System',
+    section: 'Configuração do Sistema',
+    icon: 'Layers',
+    route: 'design-system',
+    href: seiaHref('design-system'),
+    isDirectItem: true,
+    badge: 'V2',
+    badgeVariant: 'sage',
+    items: [],
+  },
 ];

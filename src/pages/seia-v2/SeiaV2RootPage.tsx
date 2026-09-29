@@ -12,6 +12,7 @@ import { EmergenciaExternaPage } from '@/pages/fiscalizacao/EmergenciaExternaPag
 import { ConsultaExternaPage } from '@/pages/fiscalizacao/ConsultaExternaPage';
 import { ConsultaInternaPage } from '@/pages/fiscalizacao/ConsultaInternaPage';
 import { SeiaDaesPage } from '@/pages/hibrido/SeiaDaesPage';
+import { SeiaV2DesignSystemPage } from '@/pages/seia-v2/SeiaV2DesignSystemPage';
 
 export const SeiaV2RootPage: React.FC = () => {
   const [activeSubRoute, setActiveSubRoute] = useState<string>('inicio');
@@ -77,6 +78,8 @@ export const SeiaV2RootPage: React.FC = () => {
         return <ConsultaInternaPage onNavigate={handleNavigate} />;
       case 'seia-daes':
         return <SeiaDaesPage onNavigate={handleNavigate} />;
+      case 'design-system':
+        return <SeiaV2DesignSystemPage />;
       case 'inicio':
       case 'relatorios':
       case 'dashboard':
