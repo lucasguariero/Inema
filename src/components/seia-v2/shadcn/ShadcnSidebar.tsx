@@ -149,20 +149,16 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
     return 'text-[#c6e1e8] hover:bg-[#135467] hover:text-white font-semibold';
   };
 
-  // Grupos abertos por padrão: 'seia-v2-processos' e 'fiscalizacao'
+  // Um único módulo aberto por vez mantém a navegação curta e previsível.
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
-    'seia-v2-processos': true,
-    fiscalizacao: true,
+    regulacao: true,
   });
 
   // Filtro de busca instantâneo
   const [searchFilter, setSearchFilter] = useState('');
 
   const toggleGroup = (groupId: string) => {
-    setOpenGroups((prev) => ({
-      ...prev,
-      [groupId]: !prev[groupId],
-    }));
+    setOpenGroups((prev) => (prev[groupId] ? {} : { [groupId]: true }));
   };
 
   const handleNav = (item: MenuItem | TopDirectItem, e?: React.MouseEvent) => {
@@ -392,9 +388,12 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                             ? 'text-[#bce0d3] hover:bg-[#1f6853] hover:text-white'
                             : isInemaLight
                             ? 'text-[var(--nav-item-text)] hover:bg-[var(--nav-item-hover-bg)] hover:text-[var(--nav-item-selected-text)]'
-                            : 'text-[#9ec3cc] hover:bg-[#135467] hover:text-white'
+                            : 'text-[#9ec3cc] hover:bg-[#135467] hover:text-white',
+                          item.disabled && 'opacity-45 cursor-not-allowed'
                         )}
                         aria-label={item.label}
+                        aria-disabled={item.disabled || undefined}
+                        tabIndex={item.disabled ? -1 : undefined}
                       >
                         <IconComponent className="w-4 h-4" />
                       </a>
@@ -407,8 +406,9 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
               })}
 
               {/* Módulos Oficiais e Agrupamentos */}
-              {SEIA_V2_MENU_GROUPS.map((group) => {
+              {SEIA_V2_MENU_GROUPS.map((group, index) => {
                 const GroupIcon = ICON_MAP[group.icon] || Sliders;
+                const startsSection = index === 0 || group.section !== SEIA_V2_MENU_GROUPS[index - 1].section;
                 const isDirectActive = activeRoute === group.route;
                 const hasActiveChild = group.items?.some(
                   (it) => it.route && it.route === activeRoute
@@ -416,9 +416,13 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                 const isActive = isDirectActive || hasActiveChild;
 
                 return (
-                  <Tooltip key={group.id} delayDuration={0}>
-                    <TooltipTrigger asChild>
-                      {group.isDirectItem ? (
+                  <React.Fragment key={group.id}>
+                    {startsSection && (
+                      <div className="my-2 h-px w-7 shrink-0 bg-[var(--color-border-subtle)]" aria-hidden="true" />
+                    )}
+                    <Tooltip delayDuration={0}>
+                      <TooltipTrigger asChild>
+                        {group.isDirectItem ? (
                         <a
                           id={group.htmlId || group.id}
                           data-testid={`nav-${group.label}`}
@@ -457,8 +461,9 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                           id={`btn-${group.id}`}
                           data-testid={`nav-${group.label}`}
                           onClick={() => {
-                            if (onToggleCollapse) onToggleCollapse();
+                            if (!group.disabled && onToggleCollapse) onToggleCollapse();
                           }}
+                          disabled={group.disabled}
                           className={cn(
                             'h-10 w-10 flex items-center justify-center rounded-md transition-all duration-150 cursor-pointer',
                             isActive
@@ -475,18 +480,20 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                               ? 'text-[#bce0d3] hover:bg-[#1f6853] hover:text-white'
                               : isInemaLight
                               ? 'text-[var(--nav-item-text)] hover:bg-[var(--nav-item-hover-bg)] hover:text-[var(--nav-item-selected-text)]'
-                              : 'text-[#9ec3cc] hover:bg-[#135467] hover:text-white'
+                              : 'text-[#9ec3cc] hover:bg-[#135467] hover:text-white',
+                            group.disabled && 'opacity-45 cursor-not-allowed'
                           )}
                           aria-label={group.label}
                         >
                           <GroupIcon className="w-4 h-4" />
                         </button>
-                      )}
-                    </TooltipTrigger>
-                    <TooltipContent side="right" sideOffset={12}>
-                      {group.label}
-                    </TooltipContent>
-                  </Tooltip>
+                        )}
+                      </TooltipTrigger>
+                      <TooltipContent side="right" sideOffset={12}>
+                        {group.section} · {group.label}
+                      </TooltipContent>
+                    </Tooltip>
+                  </React.Fragment>
                 );
               })}
             </nav>
@@ -509,8 +516,11 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                         onClick={(e) => handleNav(item, e)}
                         className={cn(
                           'group flex items-center justify-between px-2.5 py-2 rounded-xl text-xs md:text-sm transition-all duration-150 cursor-pointer',
-                          getDirectItemClass(isActive)
+                          getDirectItemClass(isActive),
+                          item.disabled && 'opacity-45 cursor-not-allowed'
                         )}
+                        aria-disabled={item.disabled || undefined}
+                        tabIndex={item.disabled ? -1 : undefined}
                       >
                         <div className="flex items-center gap-2.5 min-w-0">
                           <div
@@ -562,15 +572,23 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
               )}
 
               {/* Seção 2: Grupos de Acordeão e Itens Oficiais */}
-              {filteredGroups.map((group) => {
+              {filteredGroups.map((group, index) => {
                 const GroupIcon = ICON_MAP[group.icon] || Sliders;
+                const startsSection = index === 0 || group.section !== filteredGroups[index - 1].section;
+                const sectionHeading = startsSection ? (
+                  <div className={cn('px-2.5 pb-1.5 text-[10px] font-bold uppercase tracking-[0.12em]', index > 0 ? 'pt-4 mt-3 border-t' : 'pt-2', isDarkMode ? 'text-slate-500 border-slate-800' : isVizoraGreen ? 'text-[#97c7b6] border-[#206954]' : isInemaLight ? 'text-[var(--color-text-tertiary)] border-[var(--color-border-subtle)]' : 'text-[#7ea8b3] border-[#145366]')}>
+                    {group.section}
+                  </div>
+                ) : null;
 
                 // Item Direto (ex.: Relatórios Gerenciais)
                 if (group.isDirectItem) {
                   const isDirectActive = activeRoute === group.route;
 
                   return (
-                    <div key={group.id} className="pt-0.5">
+                    <React.Fragment key={group.id}>
+                      {sectionHeading}
+                      <div className="pt-0.5">
                       <a
                         id={group.htmlId || group.id}
                         data-testid={`nav-${group.label}`}
@@ -631,7 +649,8 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                           )}
                         </div>
                       </a>
-                    </div>
+                      </div>
+                    </React.Fragment>
                   );
                 }
 
@@ -641,15 +660,19 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                 );
 
                 return (
-                  <div key={group.id} className="pt-0.5">
+                  <React.Fragment key={group.id}>
+                    {sectionHeading}
+                    <div className="pt-0.5">
                     {/* Cabeçalho do Grupo (Botão de Acordeão) */}
                     <button
                       id={`btn-${group.id}`}
                       data-testid={`nav-${group.label}`}
                       onClick={() => toggleGroup(group.id)}
+                      disabled={group.disabled}
                       className={cn(
                         'w-full flex items-center justify-between px-2.5 py-2 rounded-xl transition-all duration-150 cursor-pointer text-left',
-                        getGroupBtnClass(hasActiveChild)
+                        getGroupBtnClass(hasActiveChild),
+                        group.disabled && 'opacity-55 cursor-not-allowed'
                       )}
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
@@ -675,24 +698,26 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                         >
                           <GroupIcon className="w-3.5 h-3.5" />
                         </div>
-                        <span className="truncate text-xs md:text-sm font-semibold">
+                        <span className="min-w-0 text-xs md:text-sm font-semibold leading-4">
                           {group.label}
                         </span>
                       </div>
 
                       <div className="flex items-center gap-1.5 shrink-0">
                         {renderBadge(group.badge, group.badgeVariant)}
-                        <ChevronDown
-                          className={cn(
-                            'w-3.5 h-3.5 transition-transform duration-200 text-slate-400',
-                            expanded ? 'rotate-180' : ''
-                          )}
-                        />
+                        {!group.disabled && (
+                          <ChevronDown
+                            className={cn(
+                              'w-3.5 h-3.5 transition-transform duration-200 text-slate-400',
+                              expanded ? 'rotate-180' : ''
+                            )}
+                          />
+                        )}
                       </div>
                     </button>
 
                     {/* Subitens Expansíveis */}
-                    {expanded && (
+                    {expanded && !group.disabled && (
                       <div className={cn("mt-1 ml-3.5 pl-3 border-l space-y-0.5", isDarkMode ? "border-slate-800" : isVizoraGreen ? "border-[#206954]" : isInemaLight ? "border-slate-200" : "border-[#145366]")}>
                         {group.items.map((subItem) => {
                           const isSubActive = activeRoute === subItem.route;
@@ -704,7 +729,9 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                               data-testid={`subnav-${subItem.label}`}
                               href={subItem.href || '#'}
                               onClick={(e) => {
-                                if (subItem.route && onNavigate) {
+                                if (subItem.disabled) {
+                                  e.preventDefault();
+                                } else if (subItem.route && onNavigate) {
                                   e.preventDefault();
                                   onNavigate(subItem.route);
                                   if (onCloseMobile) onCloseMobile();
@@ -714,6 +741,8 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                                 'group flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-all duration-150',
                                 getSubItemClass(isSubActive, subItem.disabled)
                               )}
+                              aria-disabled={subItem.disabled || undefined}
+                              tabIndex={subItem.disabled ? -1 : undefined}
                             >
                               <span className="truncate pr-1">{subItem.label}</span>
 
@@ -732,7 +761,8 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                         })}
                       </div>
                     )}
-                  </div>
+                    </div>
+                  </React.Fragment>
                 );
               })}
 

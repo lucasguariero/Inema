@@ -11,12 +11,13 @@ import { EmergenciaInternaPage } from '@/pages/fiscalizacao/EmergenciaInternaPag
 import { EmergenciaExternaPage } from '@/pages/fiscalizacao/EmergenciaExternaPage';
 import { ConsultaExternaPage } from '@/pages/fiscalizacao/ConsultaExternaPage';
 import { ConsultaInternaPage } from '@/pages/fiscalizacao/ConsultaInternaPage';
+import { SeiaDaesPage } from '@/pages/hibrido/SeiaDaesPage';
 
 export const SeiaV2RootPage: React.FC = () => {
-  const [activeSubRoute, setActiveSubRoute] = useState<string>('relatorios');
+  const [activeSubRoute, setActiveSubRoute] = useState<string>('inicio');
 
   const parseRouteFromUrl = (): string => {
-    if (typeof window === 'undefined') return 'relatorios';
+    if (typeof window === 'undefined') return 'inicio';
     const params = new URLSearchParams(window.location.search);
     const tela = params.get('tela') || params.get('tab') || params.get('subrota');
     if (tela) {
@@ -32,7 +33,7 @@ export const SeiaV2RootPage: React.FC = () => {
       if (tela === 'relatorios' || tela === 'dashboard') return 'relatorios';
       return tela;
     }
-    return 'relatorios';
+    return 'inicio';
   };
 
   useEffect(() => {
@@ -74,6 +75,9 @@ export const SeiaV2RootPage: React.FC = () => {
         return <ConsultaExternaPage onNavigate={handleNavigate} />;
       case 'consulta-interna':
         return <ConsultaInternaPage onNavigate={handleNavigate} />;
+      case 'seia-daes':
+        return <SeiaDaesPage onNavigate={handleNavigate} />;
+      case 'inicio':
       case 'relatorios':
       case 'dashboard':
       default:
