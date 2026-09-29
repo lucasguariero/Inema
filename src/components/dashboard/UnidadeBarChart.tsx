@@ -76,12 +76,12 @@ export const UnidadeBarChart: React.FC = () => {
               layout="vertical"
               margin={{ top: 5, right: 55, left: -10, bottom: 0 }}
             >
-              <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" horizontal={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" horizontal={false} />
               <XAxis
                 type="number"
                 domain={[0, 1500]}
-                stroke="#64748B"
-                tick={{ fill: '#64748B', fontSize: 11 }}
+                stroke="var(--chart-axis)"
+                tick={{ fill: 'var(--chart-axis)', fontSize: 11 }}
                 tickLine={false}
                 axisLine={false}
                 tickFormatter={(val) => val.toLocaleString('pt-BR')}
@@ -89,8 +89,8 @@ export const UnidadeBarChart: React.FC = () => {
               <YAxis
                 type="category"
                 dataKey="unidade"
-                stroke="#334155"
-                tick={{ fill: '#0F172A', fontSize: 11, fontWeight: 600 }}
+                stroke="var(--chart-label)"
+                tick={{ fill: 'var(--chart-label)', fontSize: 11, fontWeight: 600 }}
                 tickLine={false}
                 axisLine={false}
               />
@@ -105,7 +105,7 @@ export const UnidadeBarChart: React.FC = () => {
                   dataKey="quantidade"
                   position="right"
                   formatter={(val: any) => Number(val).toLocaleString('pt-BR')}
-                  style={{ fill: '#334155', fontSize: 11, fontWeight: 600 }}
+                  style={{ fill: 'var(--chart-label)', fontSize: 11, fontWeight: 600 }}
                 />
                 {data.map((_, index) => (
                   <Cell

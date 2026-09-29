@@ -77,11 +77,11 @@ export const VencidosBarChart: React.FC = () => {
               layout="vertical"
               margin={{ top: 5, right: 40, left: 10, bottom: 0 }}
             >
-              <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" horizontal={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" horizontal={false} />
               <XAxis
                 type="number"
-                stroke="#64748B"
-                tick={{ fill: '#64748B', fontSize: 10 }}
+                stroke="var(--chart-axis)"
+                tick={{ fill: 'var(--chart-axis)', fontSize: 10 }}
                 tickLine={false}
                 axisLine={false}
                 tickFormatter={(val) => val.toLocaleString('pt-BR')}
@@ -89,8 +89,8 @@ export const VencidosBarChart: React.FC = () => {
               <YAxis
                 type="category"
                 dataKey="unidade"
-                stroke="#334155"
-                tick={{ fill: '#64748B', fontSize: 10, fontWeight: 600 }}
+                stroke="var(--chart-label)"
+                tick={{ fill: 'var(--chart-axis)', fontSize: 10, fontWeight: 600 }}
                 tickLine={false}
                 axisLine={false}
               />

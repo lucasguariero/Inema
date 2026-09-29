@@ -46,7 +46,7 @@ export const ShadcnAppShell: React.FC<AppShellProps> = ({
         />
 
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden transition-all duration-200 ease-in-out bg-transparent">
-          <main className="flex-1 w-full min-w-0 overflow-y-auto text-[var(--color-text-primary)]">
+          <main className="seia-v2-content flex-1 w-full min-w-0 overflow-y-auto text-[var(--color-text-primary)]">
           <div className="w-full max-w-[2000px] mx-auto p-3.5 sm:p-6 lg:p-8 pb-32">
             {children}
           </div>

@@ -44,7 +44,7 @@ export const TableToolbar: React.FC<TableToolbarProps> = ({
             className={cn(
               'fi-btn fi-btn-size-sm inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold ring-1 ring-inset shadow-2xs transition-colors shrink-0 cursor-pointer',
               activeFilterCount > 0 || showFilters
-                ? 'bg-blue-50 text-blue-700 ring-blue-300 dark:bg-blue-950/40 dark:text-blue-400 dark:ring-blue-700'
+                ? 'bg-[var(--color-brand-primary-subtle)] text-[var(--color-text-link)] ring-[var(--color-border-focus)]'
                 : 'bg-white text-slate-700 ring-slate-300 hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-200 dark:ring-slate-700'
             )}
           >

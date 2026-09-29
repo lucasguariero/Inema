@@ -31,7 +31,7 @@ export const InputWrapper = React.forwardRef<HTMLDivElement, InputWrapperProps>(
         className={cn(
           'fi-input-wrp flex items-center rounded-lg shadow-2xs ring-1 ring-inset transition-colors duration-75 overflow-hidden',
           valid
-            ? 'ring-slate-300 dark:ring-slate-700 focus-within:ring-2 focus-within:ring-inset focus-within:ring-blue-600 dark:focus-within:ring-blue-500 bg-white dark:bg-slate-900'
+            ? 'ring-slate-300 dark:ring-slate-700 focus-within:ring-2 focus-within:ring-inset focus-within:ring-[var(--input-border-focus)] bg-white dark:bg-slate-900'
             : 'ring-rose-400 dark:ring-rose-600 focus-within:ring-2 focus-within:ring-inset focus-within:ring-rose-600 bg-rose-50/20 dark:bg-rose-950/20',
           disabled && 'bg-slate-100/70 dark:bg-slate-800/50 cursor-not-allowed opacity-75',
           className

@@ -31,7 +31,7 @@ export const Section: React.FC<SectionProps> = ({
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed);
 
   const iconColorStyles = {
-    primary: 'text-blue-600 dark:text-blue-400',
+    primary: 'text-[var(--color-text-link)]',
     gray: 'text-slate-500 dark:text-slate-400',
     danger: 'text-rose-600 dark:text-rose-400',
     warning: 'text-amber-600 dark:text-amber-400',

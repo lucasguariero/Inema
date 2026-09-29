@@ -110,7 +110,7 @@ export const FilamentSelect: React.FC<FilamentSelectProps> = ({
           disabled
             ? 'bg-slate-100 dark:bg-slate-800/60 border-slate-200 dark:border-slate-800 text-slate-400 cursor-not-allowed opacity-60'
             : isOpen
-            ? 'bg-white dark:bg-slate-800 border-blue-600 ring-2 ring-blue-500/20 text-slate-900 dark:text-slate-100'
+            ? 'bg-white dark:bg-slate-800 border-[var(--input-border-focus)] ring-2 ring-[var(--color-green-alpha-20)] text-slate-900 dark:text-slate-100'
             : 'bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-100 hover:border-slate-400 dark:hover:border-slate-600'
         )}
       >
@@ -123,7 +123,7 @@ export const FilamentSelect: React.FC<FilamentSelectProps> = ({
         <ChevronDown
           className={cn(
             'w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200',
-            isOpen && 'rotate-180 text-blue-600 dark:text-blue-400'
+            isOpen && 'rotate-180 text-[var(--color-text-link)]'
           )}
         />
       </button>
@@ -165,7 +165,7 @@ export const FilamentSelect: React.FC<FilamentSelectProps> = ({
                     className={cn(
                       'fi-select-option w-full text-left px-2.5 py-1.5 rounded-lg text-xs flex items-center justify-between gap-2 transition-colors cursor-pointer',
                       isSelected
-                        ? 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-semibold'
+                        ? 'bg-[var(--color-brand-primary-subtle)] text-[var(--color-text-link)] font-semibold'
                         : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-slate-100'
                     )}
                   >
@@ -178,7 +178,7 @@ export const FilamentSelect: React.FC<FilamentSelectProps> = ({
                       )}
                     </div>
                     {isSelected && (
-                      <Check className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
+                      <Check className="w-3.5 h-3.5 text-[var(--color-text-link)] shrink-0" />
                     )}
                   </button>
                 );

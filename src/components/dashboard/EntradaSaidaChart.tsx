@@ -87,10 +87,10 @@ export const EntradaSaidaChart: React.FC = () => {
     <Card className={cn("flex flex-col justify-between hover:border-slate-300/80 transition-all duration-300 shadow-2xs", themeConfig.tokens.cardBorder)}>
       <CardHeader className="flex flex-row items-start justify-between pb-3">
         <div>
-          <CardTitle className="text-sm font-semibold text-slate-900">
+          <CardTitle className="text-sm font-semibold text-slate-900 dark:text-slate-100">
             Entrada vs. Saída
           </CardTitle>
-          <CardDescription className="text-xs text-slate-500 mt-0.5">
+          <CardDescription className="text-xs text-slate-500 dark:text-slate-300 mt-0.5">
             {viewMode === 'mensal' ? 'Volume apurado mês a mês' : 'Crescimento acumulado no exercício'}
           </CardDescription>
         </div>
@@ -98,23 +98,23 @@ export const EntradaSaidaChart: React.FC = () => {
         {/* Topo Direita: Legenda compacta + Alternador */}
         <div className="flex items-center gap-3">
           <div className="hidden sm:flex items-center gap-2.5 text-xs">
-            <div className="flex items-center gap-1.5 text-slate-600">
+            <div className="flex items-center gap-1.5 text-slate-600 dark:text-slate-300">
               <span className="w-2 h-2 rounded-full" style={{ backgroundColor: primaryColor }} />
               <span className="text-[11px] font-medium">Entrada</span>
             </div>
-            <div className="flex items-center gap-1.5 text-slate-600">
+            <div className="flex items-center gap-1.5 text-slate-600 dark:text-slate-300">
               <span className="w-2 h-2 rounded-full" style={{ backgroundColor: secondaryColor }} />
               <span className="text-[11px] font-medium">Saída</span>
             </div>
           </div>
 
-          <div className="flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200/60 shrink-0">
+          <div className="flex items-center bg-slate-100 dark:bg-slate-800 p-0.5 rounded-lg border border-slate-200/60 dark:border-slate-700 shrink-0">
             <button
               onClick={() => setViewMode('mensal')}
               className={`px-2 py-0.5 text-[11px] font-medium rounded-md transition-all cursor-pointer ${
                 viewMode === 'mensal'
-                  ? 'bg-white text-slate-900 shadow-2xs font-semibold'
-                  : 'text-slate-500 hover:text-slate-900'
+                  ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 shadow-2xs font-semibold'
+                  : 'text-slate-500 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100'
               }`}
             >
               Mensal
@@ -123,8 +123,8 @@ export const EntradaSaidaChart: React.FC = () => {
               onClick={() => setViewMode('acumulado')}
               className={`px-2 py-0.5 text-[11px] font-medium rounded-md transition-all cursor-pointer ${
                 viewMode === 'acumulado'
-                  ? 'bg-white text-slate-900 shadow-2xs font-semibold'
-                  : 'text-slate-500 hover:text-slate-900'
+                  ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 shadow-2xs font-semibold'
+                  : 'text-slate-500 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100'
               }`}
             >
               Acumulado
@@ -147,17 +147,17 @@ export const EntradaSaidaChart: React.FC = () => {
                   <stop offset="95%" stopColor={secondaryColor} stopOpacity={0.0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" vertical={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" vertical={false} />
               <XAxis
                 dataKey="mes"
-                stroke="#64748B"
-                tick={{ fill: '#64748B', fontSize: 11, fontWeight: 500 }}
+                stroke="var(--chart-axis)"
+                tick={{ fill: 'var(--chart-axis)', fontSize: 11, fontWeight: 500 }}
                 tickLine={false}
                 axisLine={false}
               />
               <YAxis
-                stroke="#64748B"
-                tick={{ fill: '#64748B', fontSize: 11, fontWeight: 500 }}
+                stroke="var(--chart-axis)"
+                tick={{ fill: 'var(--chart-axis)', fontSize: 11, fontWeight: 500 }}
                 tickLine={false}
                 axisLine={false}
               />
@@ -169,7 +169,7 @@ export const EntradaSaidaChart: React.FC = () => {
                 strokeWidth={2}
                 fillOpacity={1}
                 fill="url(#colorEntrada)"
-                activeDot={{ r: 4, stroke: '#FFFFFF', strokeWidth: 2, fill: primaryColor }}
+                activeDot={{ r: 4, stroke: 'var(--chart-point-ring)', strokeWidth: 2, fill: primaryColor }}
               />
               <Area
                 type="monotone"
@@ -179,7 +179,7 @@ export const EntradaSaidaChart: React.FC = () => {
                 strokeDasharray="4 4"
                 fillOpacity={1}
                 fill="url(#colorSaida)"
-                activeDot={{ r: 4, stroke: '#FFFFFF', strokeWidth: 2, fill: secondaryColor }}
+                activeDot={{ r: 4, stroke: 'var(--chart-point-ring)', strokeWidth: 2, fill: secondaryColor }}
               />
             </AreaChart>
           </ResponsiveContainer>
