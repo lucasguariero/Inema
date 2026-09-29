@@ -291,7 +291,32 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
           )}
         >
           {/* Filtro da navegação */}
-          {!isCollapsed && (
+          {isCollapsed ? (
+            <div className="p-3 pb-2 flex justify-center">
+              <Tooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    onClick={onToggleCollapse}
+                    className={cn(
+                      'h-10 w-10 inline-flex items-center justify-center rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 cursor-pointer',
+                      isDarkMode
+                        ? 'text-slate-400 hover:bg-slate-900 hover:text-white focus-visible:ring-emerald-500/50'
+                        : isVizoraGreen
+                        ? 'text-[#bce0d3] hover:bg-[#1f6853] hover:text-white focus-visible:ring-emerald-300/50'
+                        : isInemaLight
+                        ? 'text-[var(--nav-item-text)] hover:bg-[var(--nav-item-hover-bg)] hover:text-[var(--nav-item-selected-text)] focus-visible:ring-[var(--color-green-alpha-32)]'
+                        : 'text-[#9ec3cc] hover:bg-[#135467] hover:text-white focus-visible:ring-sky-300/50'
+                    )}
+                    aria-label="Abrir busca da sidebar"
+                  >
+                    <Search className="h-4 w-4" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="right" sideOffset={12}>Buscar no menu</TooltipContent>
+              </Tooltip>
+            </div>
+          ) : (
             <div className={cn("p-3 pb-2", isDarkMode ? "border-slate-800" : isVizoraGreen ? "border-[#206954]" : isInemaLight ? "" : "border-[#145366]")}>
               <div className="relative min-w-0 flex-1">
                 <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
@@ -755,14 +780,14 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
           {isCollapsed ? (
             <div
               className={cn(
-                'p-3 border-t shrink-0 flex items-center justify-center w-full transition-colors',
+                'p-3 border-t shrink-0 flex items-center justify-center w-full bg-transparent transition-colors',
                 isDarkMode
-                  ? 'bg-slate-950 border-slate-800'
+                  ? 'border-slate-800'
                   : isVizoraGreen
-                  ? 'bg-[#185846] border-[#206954]'
+                  ? 'border-[#206954]'
                   : isInemaLight
-                  ? 'bg-[var(--color-surface-default)] border-[var(--color-border-subtle)]'
-                  : 'bg-[#0c4353] border-[#145366]'
+                  ? 'border-[var(--color-border-subtle)]'
+                  : 'border-[#145366]'
               )}
             >
               <Tooltip delayDuration={0}>
@@ -774,15 +799,14 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                       alert('Assistente IA INEMA ativado. Em que posso auxiliá-lo com as demandas de Processos e Fiscalização do SEIA V2?');
                     }}
                     className={cn(
-                      'relative overflow-hidden h-10 w-10 flex items-center justify-center rounded-xl active:scale-95 text-white group cursor-pointer transition-all duration-300 border border-white/20',
-                      'bg-gradient-to-br from-[#005ea3] via-[#0284a8] to-[#0f9f75] hover:from-[#004f8a] hover:via-[#027494] hover:to-[#0d8a66]',
-                      'shadow-[inset_0_1px_0_rgba(255,255,255,0.28),_0_4px_14px_rgba(2,132,168,0.3)]'
+                      'h-10 w-10 flex items-center justify-center rounded-md active:scale-95 group cursor-pointer transition-colors',
+                      isDarkMode
+                        ? 'text-slate-400 hover:bg-slate-900 hover:text-white'
+                        : 'text-[var(--nav-item-text)] hover:bg-[var(--nav-item-hover-bg)] hover:text-[var(--nav-item-selected-text)]'
                     )}
                     aria-label="Assistente INEMA"
                   >
-                    <div className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center border border-white/30 shadow-xs backdrop-blur-xs">
-                      <Sparkles className="w-3.5 h-3.5 text-white group-hover:scale-110 group-hover:rotate-12 transition-all duration-300 drop-shadow-[0_0_6px_rgba(255,255,255,0.85)] shrink-0" />
-                    </div>
+                    <Sparkles className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={12}>
@@ -793,14 +817,14 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
           ) : (
             <div
               className={cn(
-                'p-3 border-t shrink-0 transition-colors',
+                'p-3 border-t shrink-0 bg-transparent transition-colors',
                 isDarkMode
-                  ? 'bg-slate-950 border-slate-800'
+                  ? 'border-slate-800'
                   : isVizoraGreen
-                  ? 'bg-[#185846] border-[#206954]'
+                  ? 'border-[#206954]'
                   : isInemaLight
-                  ? 'bg-[var(--color-surface-default)] border-[var(--color-border-subtle)]'
-                  : 'bg-[#0c4353] border-[#145366]'
+                  ? 'border-[var(--color-border-subtle)]'
+                  : 'border-[#145366]'
               )}
             >
               <button

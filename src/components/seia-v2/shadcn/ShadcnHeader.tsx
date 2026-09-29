@@ -41,10 +41,10 @@ export const ShadcnHeader: React.FC<HeaderProps> = ({
 
   return (
     <header className={cn(
-      "h-16 w-full min-w-0 shrink-0 flex items-center px-3 sm:px-4 lg:px-5 select-none transition-colors duration-200",
+      "relative h-16 w-full min-w-0 shrink-0 flex items-center px-3 sm:px-4 lg:px-5 select-none transition-colors duration-200",
       "bg-[var(--topbar-bg)] text-[var(--topbar-text)]"
     )}>
-      <div className="flex shrink-0 items-center gap-2">
+      <div className="relative z-10 flex shrink-0 items-center gap-2">
         <a
           href="/?rota=seia-v2"
           className="flex min-w-0 items-center"
@@ -80,41 +80,30 @@ export const ShadcnHeader: React.FC<HeaderProps> = ({
       </div>
 
       {/* Centro: Barra de busca omnibox global compacta */}
-      <div className="mx-2 flex min-w-0 flex-1 md:mx-3 lg:mx-6">
-        {isSidebarCollapsed ? (
-          <button
-            type="button"
-            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-white/85 transition-colors hover:bg-white/12 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 cursor-pointer"
-            aria-label="Buscar"
-            title="Buscar"
-          >
-            <Search className="h-4 w-4" />
-          </button>
-        ) : (
-          <>
-            <button
-              type="button"
-              className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-white/85 transition-colors hover:bg-white/12 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 cursor-pointer md:hidden"
-              aria-label="Buscar"
-              title="Buscar"
-            >
-              <Search className="h-4 w-4" />
-            </button>
-            <div className="group relative hidden w-full max-w-xl md:block">
-              <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-white/65 transition-colors group-focus-within:text-white" />
-              <input
-                type="search"
-                aria-label="Buscar processos, requerimentos SEIA ou atos"
-                placeholder="Buscar processos, requerimentos SEIA ou atos..."
-                className="w-full rounded-lg border border-white/18 bg-white/10 py-2 pl-8 pr-3 text-xs text-white placeholder:text-white/65 transition-all hover:bg-white/14 focus:border-white/45 focus:bg-white/16 focus:outline-none focus:ring-2 focus:ring-white/20"
-              />
-            </div>
-          </>
-        )}
+      <div className="mx-2 flex min-w-0 flex-1 md:hidden">
+        <button
+          type="button"
+          className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-white/85 transition-colors hover:bg-white/12 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 cursor-pointer"
+          aria-label="Busca geral"
+          title="Busca geral"
+        >
+          <Search className="h-4 w-4" />
+        </button>
+      </div>
+      <div className="group pointer-events-none absolute left-1/2 hidden w-[36rem] max-w-[40vw] -translate-x-1/2 md:block">
+        <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-white/65 transition-colors group-focus-within:text-white" />
+        <input
+          type="search"
+          aria-label="Busca geral"
+          placeholder="Buscar processos, requerimentos SEIA ou atos..."
+          className="pointer-events-auto w-full rounded-lg border border-white/18 bg-white/10 py-2 pl-8 pr-3 text-xs text-white placeholder:text-white/65 transition-all hover:bg-white/14 focus:border-white/45 focus:bg-white/16 focus:outline-none focus:ring-2 focus:ring-white/20"
+        />
       </div>
 
+      <div className="hidden min-w-0 flex-1 md:block" />
+
       {/* Lado direito: Dark mode toggle, Notificações e menu de perfil */}
-      <div className="ml-auto flex shrink-0 items-center gap-1.5 sm:gap-2">
+      <div className="relative z-10 ml-auto flex shrink-0 items-center gap-1.5 sm:gap-2">
         {/* Alternador Rápido de Dark Mode Direto no Topo */}
         <button
           onClick={toggleDarkMode}
