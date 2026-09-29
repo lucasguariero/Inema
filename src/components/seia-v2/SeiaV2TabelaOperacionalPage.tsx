@@ -21,6 +21,7 @@ import {
   ExternalLink
 } from 'lucide-react';
 import { CustomSelect, SelectOption } from './CustomSelect';
+import { SeiaV2Breadcrumb } from './SeiaV2Breadcrumb';
 
 interface ProcessoItem {
   id: string;
@@ -244,13 +245,13 @@ export const SeiaV2TabelaOperacionalPage: React.FC<SeiaV2TabelaOperacionalPagePr
       {/* Cabeçalho da Página */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
         <div>
-          <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
-            <span>Início</span>
-            <span>/</span>
-            <span>Atendimento e Cadastros</span>
-            <span>/</span>
-            <span className="text-slate-800 font-semibold">Pauta de Processos</span>
-          </div>
+          <SeiaV2Breadcrumb
+            items={[
+              { label: 'Início', href: '/?rota=seia-v2&tela=inicio' },
+              { label: 'Atendimento e Cadastros', href: '/?rota=seia-v2&tela=inicio' },
+              { label: 'Pauta de Processos' },
+            ]}
+          />
           <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight mt-1">
             Pauta Geral de Processos e Atos (SEIA V2)
           </h1>

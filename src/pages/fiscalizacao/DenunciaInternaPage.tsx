@@ -22,6 +22,7 @@ import {
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { SeiaV2Breadcrumb } from '@/components/seia-v2/SeiaV2Breadcrumb';
 import { FilamentSelect } from '@/components/filament';
 import {
   Dialog,
@@ -233,13 +234,14 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
       {/* Topo Oficial com Breadcrumb */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pt-1">
         <div>
-          <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 font-medium mb-1 select-none" aria-label="Breadcrumb">
-            <span className="text-slate-400 dark:text-slate-500">Início</span>
-            <span className="text-slate-300 dark:text-slate-600">/</span>
-            <span className="text-slate-500 dark:text-slate-400">Fiscalização</span>
-            <span className="text-slate-300 dark:text-slate-600">/</span>
-            <span className="text-slate-800 dark:text-slate-200 font-semibold">Denúncia Interna (DIFIS)</span>
-          </div>
+          <SeiaV2Breadcrumb
+            className="mb-1 select-none"
+            items={[
+              { label: 'Início', href: '/?rota=seia-v2&tela=inicio' },
+              { label: 'Fiscalização', href: '/?rota=seia-v2&tela=consulta-interna' },
+              { label: 'Denúncia Interna (DIFIS)' },
+            ]}
+          />
           <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight leading-tight">
             Cadastro de Denúncia Ambiental (DOR001)
           </h1>

@@ -15,6 +15,7 @@ import {
   X
 } from 'lucide-react';
 import { CustomSelect, SelectOption } from './CustomSelect';
+import { SeiaV2Breadcrumb } from './SeiaV2Breadcrumb';
 
 const tipologiaOptions: SelectOption[] = [
   { value: 'Agricultura Irrigada de Grãos e Fibras', label: 'Agricultura Irrigada de Grãos e Fibras' },
@@ -110,13 +111,13 @@ export const SeiaV2FormularioComplexoPage: React.FC<SeiaV2FormularioComplexoPage
       {/* Cabeçalho Oficial */}
       <div className="pb-4 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
-            <span>Início</span>
-            <span>/</span>
-            <span>Atendimento e Cadastros</span>
-            <span>/</span>
-            <span className="text-slate-800 font-semibold">Novo Requerimento</span>
-          </div>
+          <SeiaV2Breadcrumb
+            items={[
+              { label: 'Início', href: '/?rota=seia-v2&tela=inicio' },
+              { label: 'Atendimento e Cadastros', href: '/?rota=seia-v2&tela=inicio' },
+              { label: 'Novo Requerimento' },
+            ]}
+          />
           <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight mt-1">
             Requerimento Ambiental Unificado (SEIA V2)
           </h1>

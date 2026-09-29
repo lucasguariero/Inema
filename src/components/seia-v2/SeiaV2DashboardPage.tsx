@@ -14,6 +14,7 @@ import {
   ExternalLink,
   DollarSign
 } from 'lucide-react';
+import { SeiaV2Breadcrumb } from './SeiaV2Breadcrumb';
 
 export const SeiaV2DashboardPage: React.FC = () => {
   const [period, setPeriod] = useState<'2026' | '30d' | '7d'>('2026');
@@ -23,13 +24,13 @@ export const SeiaV2DashboardPage: React.FC = () => {
       {/* Cabeçalho da Página */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
         <div>
-          <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
-            <span>Início</span>
-            <span>/</span>
-            <span>Área de Trabalho</span>
-            <span>/</span>
-            <span className="text-slate-800 font-semibold">Painel Gerencial</span>
-          </div>
+          <SeiaV2Breadcrumb
+            items={[
+              { label: 'Início', href: '/?rota=seia-v2&tela=inicio' },
+              { label: 'Área de Trabalho', href: '/?rota=seia-v2&tela=inicio' },
+              { label: 'Painel Gerencial' },
+            ]}
+          />
           <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight mt-1">
             Painel Geral & Métricas do Analista
           </h1>
