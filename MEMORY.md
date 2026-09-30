@@ -155,3 +155,10 @@ Toda entrega de protótipo deve fornecer no relatório:
 1. **Pilar 1 — Explicação da Execução Técnica**: O que exatamente foi codificado, decisões de arquitetura de dados adotadas, componentes criados/ajustados e regras de negócio implementadas.
 2. **Pilar 2 — Explicação Detalhada dos Prints**: Mapeamento 1-a-1 de cada print capturado associado ao requisito exato do documento original (DOR, Guia UX ou Card) que ele comprova visualmente.
 3. **Pilar 3 — Declaração Explícita de "O que falta ainda" (Gaps / Limitações / Próximos Passos)**: No entendimento do agente, declarar com total transparência o que não foi implementado, o que depende de backend real (SEIA/PostgreSQL), o que está mockado e eventuais regras secundárias pendentes, permitindo ao GPT auditor do usuário validar se os requisitos foram compreendidos e executados corretamente.
+
+---
+
+## 9. Gestão Rigorosa de Background Scripts e Zero Tempo Ocioso
+
+- **Timeouts Rígidos e Auto-Encerramento**: É terminantemente proibido deixar scripts rodando soltos ou aguardar sem controle. Qualquer script (Playwright, crawler, build, preview) deve conter timeout máximo explícito (1 a 3 minutos), matar seus servidores filhos e chamar `process.exit(0)`.
+- **Estimativa e Conferência Ativa**: Ao disparar qualquer tarefa assíncrona, estipular a estimativa de tempo e checar imediatamente o término, validando o output sem deixar processos pendentes de uma sessão para outra.

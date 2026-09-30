@@ -123,8 +123,13 @@ async function main() {
   } catch (err) {
     console.error('Erro durante a captura:', err);
   } finally {
-    await browser.close();
-    server.kill();
+    try {
+      await browser.close();
+      if (server && server.pid) {
+        require('child_process').execSync(`taskkill /pid ${server.pid} /T /F`, { stdio: 'ignore' });
+      }
+    } catch (_) {}
+    process.exit(0);
   }
 }
 
