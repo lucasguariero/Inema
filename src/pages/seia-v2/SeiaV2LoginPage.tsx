@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Lock,
   User,
@@ -11,6 +11,7 @@ import {
   KeyRound,
   ShieldCheck,
   CheckCircle2,
+  Sparkles,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -43,6 +44,8 @@ export const SeiaV2LoginPage: React.FC<SeiaV2LoginPageProps> = ({ onLoginSuccess
   const [rememberMe, setRememberMe] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [transitionProgress, setTransitionProgress] = useState(0);
+  const [transitionStatus, setTransitionStatus] = useState('Iniciando sessão segura...');
   const [selectedRole, setSelectedRole] = useState<'servidor' | 'gestor' | 'cidadao'>('servidor');
   
   // Modals
@@ -76,26 +79,59 @@ export const SeiaV2LoginPage: React.FC<SeiaV2LoginPageProps> = ({ onLoginSuccess
     }
   };
 
+  useEffect(() => {
+    if (!isTransitioning) {
+      setTransitionProgress(0);
+      setTransitionStatus('Iniciando sessão segura...');
+      return;
+    }
+
+    // Etapa 1: Início imediato e perceptível
+    setTransitionProgress(15);
+    setTransitionStatus('Validando credenciais de acesso...');
+
+    const t1 = setTimeout(() => {
+      setTransitionProgress(42);
+      setTransitionStatus('Autenticando perfil institucional e permissões...');
+    }, 350);
+
+    const t2 = setTimeout(() => {
+      setTransitionProgress(75);
+      setTransitionStatus('Carregando ecossistema de módulos SEIA V2...');
+    }, 800);
+
+    const t3 = setTimeout(() => {
+      setTransitionProgress(100);
+      setTransitionStatus('Acesso autorizado! Redirecionando...');
+    }, 1350);
+
+    const t4 = setTimeout(() => {
+      if (onLoginSuccess) {
+        onLoginSuccess(selectedRole);
+      } else if (onNavigate) {
+        onNavigate('inicio');
+      } else {
+        window.location.href = '/?rota=seia-v2&tela=inicio';
+      }
+    }, 1750);
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+      clearTimeout(t4);
+    };
+  }, [isTransitioning, onLoginSuccess, onNavigate, selectedRole]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Passo 1: Autenticação rápida e disparo da animação de transição
+    // Feedback no botão e transição fluida para tela cheia
     setTimeout(() => {
       setIsLoading(false);
       setIsTransitioning(true);
-
-      // Passo 2: Abertura suave do sistema
-      setTimeout(() => {
-        if (onLoginSuccess) {
-          onLoginSuccess(selectedRole);
-        } else if (onNavigate) {
-          onNavigate('inicio');
-        } else {
-          window.location.href = '/?rota=seia-v2&tela=inicio';
-        }
-      }, 700);
-    }, 450);
+    }, 280);
   };
 
   const handlePublicServices = () => {
@@ -108,33 +144,88 @@ export const SeiaV2LoginPage: React.FC<SeiaV2LoginPageProps> = ({ onLoginSuccess
 
   return (
     <div className="relative min-h-screen w-full flex flex-col lg:grid lg:grid-cols-2 bg-white dark:bg-slate-950 font-sans text-slate-900 dark:text-slate-100 transition-colors duration-200 overflow-hidden">
-      {/* TRANSIÇÃO SUTIL E INSTITUCIONAL (ESTILO GLA / ZERO AI SLOP) */}
+      {/* TRANSIÇÃO MODERNA E INSTITUCIONAL (PADRÃO SEIA V2 / ZERO AI SLOP) */}
       {isTransitioning && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0A3327] text-white animate-in fade-in duration-300">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#07241C] text-white animate-in fade-in duration-300">
           {/* Imagem de Fundo (Cachoeira da Fumaça / Chapada Diamantina) */}
           <div
-            className="absolute inset-0 bg-cover bg-center mix-blend-overlay opacity-60 scale-105 transition-transform duration-700 ease-out"
+            className="absolute inset-0 bg-cover bg-center mix-blend-overlay opacity-55 scale-105 transition-transform duration-1000 ease-out"
             style={{
               backgroundImage: "url('/images/inema-banner.jpeg')",
             }}
           />
 
-          {/* Gradiente Institucional Degradê */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#06241B] via-[#0F4C3A]/85 to-[#0A3327]/90 backdrop-blur-[0.5px]" />
+          {/* Gradiente Institucional Degradê Suave */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#041A14] via-[#0A3327]/90 to-[#07251C]/95 backdrop-blur-[2px]" />
 
-          {/* Logo Central com Animação Fluida e Minimalista */}
-          <div className="relative z-10 flex flex-col items-center justify-center animate-in fade-in zoom-in-95 duration-400 ease-out">
-            <img
-              src={logoHorizontalWhite}
-              alt="INEMA - Governo da Bahia"
-              className="h-24 sm:h-28 md:h-32 w-auto drop-shadow-2xl"
-            />
-            {/* Micro-indicador minimalista de 3 pontos */}
-            <div className="mt-6 flex items-center gap-2 opacity-50">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-200 animate-pulse" />
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-200 animate-pulse [animation-delay:150ms]" />
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-200 animate-pulse [animation-delay:300ms]" />
+          {/* Container Central com Animação Fluida */}
+          <div className="relative z-10 flex flex-col items-center justify-center max-w-[430px] w-full px-6 animate-in fade-in zoom-in-95 duration-400 ease-out text-center">
+            {/* Logo Central com Brilho Suave */}
+            <div className="relative mb-6">
+              <div className="absolute -inset-4 rounded-full bg-emerald-500/15 blur-2xl pointer-events-none" />
+              <img
+                src={logoHorizontalWhite}
+                alt="INEMA - Governo da Bahia"
+                className="relative h-22 sm:h-26 md:h-30 w-auto drop-shadow-[0_10px_25px_rgba(0,0,0,0.5)]"
+              />
             </div>
+
+            {/* Subtítulo Institucional Minimalista */}
+            <p className="text-[11px] font-mono tracking-widest uppercase text-emerald-200/75 font-semibold mb-6">
+              Sistema Estadual de Informações Ambientais
+            </p>
+
+            {/* Card de Progresso Moderno e Translúcido */}
+            <div className="w-full bg-white/[0.08] backdrop-blur-md rounded-2xl p-5 border border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.4)]">
+              {/* Status e Porcentagem */}
+              <div className="w-full flex items-center justify-between text-xs mb-3">
+                <div className="flex items-center gap-2 text-emerald-100 font-medium">
+                  {transitionProgress === 100 ? (
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 animate-in zoom-in duration-200" />
+                  ) : (
+                    <Loader2 className="w-4 h-4 text-emerald-300 animate-spin" />
+                  )}
+                  <span className="truncate max-w-[320px] text-left text-xs">
+                    {transitionStatus}
+                  </span>
+                </div>
+                <span className="font-mono text-xs font-bold text-emerald-300 tabular-nums">
+                  {transitionProgress}%
+                </span>
+              </div>
+
+              {/* Barra de Progresso com Shimmer e Glow */}
+              <div className="w-full h-2.5 bg-black/40 rounded-full overflow-hidden p-0.5 border border-white/10 relative shadow-inner">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-[#0F4C3A] via-emerald-500 to-emerald-300 transition-all duration-400 ease-out relative shadow-[0_0_14px_rgba(52,211,153,0.65)] overflow-hidden"
+                  style={{ width: `${Math.max(6, transitionProgress)}%` }}
+                >
+                  {/* Linha de reflexo / brilho móvel */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-seia-shimmer" />
+                </div>
+              </div>
+
+              {/* Etapas de Validação (Micro-Badges Institucionais) */}
+              <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-emerald-200/60 font-mono">
+                <span className={transitionProgress >= 15 ? 'text-emerald-300 font-semibold' : ''}>
+                  • Credenciais
+                </span>
+                <span className={transitionProgress >= 42 ? 'text-emerald-300 font-semibold' : ''}>
+                  • Perfil
+                </span>
+                <span className={transitionProgress >= 75 ? 'text-emerald-300 font-semibold' : ''}>
+                  • Módulos
+                </span>
+                <span className={transitionProgress === 100 ? 'text-emerald-400 font-semibold' : ''}>
+                  • Acesso
+                </span>
+              </div>
+            </div>
+
+            {/* Rodapé Institucional */}
+            <p className="mt-6 text-[10px] tracking-wider uppercase text-emerald-200/40 font-medium">
+              Governo do Estado da Bahia • INEMA
+            </p>
           </div>
         </div>
       )}

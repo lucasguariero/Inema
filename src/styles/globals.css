@@ -666,3 +666,19 @@ textarea:focus {
 button, a, select, summary {
   transition: all 0.2s ease-in-out;
 }
+
+/* =========================================================================
+   ANIMAÇÃO DE SHIMMER INSTITUCIONAL SEIA V2 (LOGIN & LOADING PREMIUM)
+   ========================================================================= */
+@keyframes seia-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+.animate-seia-shimmer {
+  animation: seia-shimmer 2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+}
