@@ -124,7 +124,7 @@ export const CerhPage: React.FC<CerhPageProps> = ({ onNavigate }) => {
       <SeiaV2Breadcrumb
         items={[
           { label: 'Início', route: 'inicio', href: '/?rota=seia-v2&tela=inicio' },
-          { label: 'Regulação' },
+          { label: 'Requerimentos', route: 'cerh' },
           { label: 'Recursos Hídricos / CERH', route: viewMode !== 'pauta' ? 'cerh' : undefined },
           ...(viewMode === 'novo-cadastro' ? [{ label: 'Nova Declaração CERH' }] : []),
           ...(viewMode === 'detalhes' ? [{ label: selectedProcesso?.id || 'Ficha CERH' }] : []),

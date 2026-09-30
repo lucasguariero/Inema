@@ -200,7 +200,7 @@ export const SeiaDaesPage: React.FC<SeiaDaesPageProps> = ({ onNavigate }) => {
           <SeiaV2Breadcrumb
             items={[
               { label: 'Início', route: 'inicio', href: '/?rota=seia-v2&tela=inicio' },
-              { label: 'Financeiro & Arrecadação' },
+              { label: 'Financeiro', route: 'seia-daes' },
               { label: 'Emissão de DAE' },
             ]}
             onNavigate={onNavigate}

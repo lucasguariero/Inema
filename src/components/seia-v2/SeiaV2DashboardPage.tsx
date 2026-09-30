@@ -31,7 +31,7 @@ export const SeiaV2DashboardPage: React.FC<SeiaV2DashboardPageProps> = ({ onNavi
           <SeiaV2Breadcrumb
             items={[
               { label: 'Início', route: 'inicio', href: '/?rota=seia-v2&tela=inicio' },
-              { label: 'Regulação' },
+              { label: 'Relatórios Gerenciais', route: 'relatorios' },
               { label: 'Métricas do Analista' },
             ]}
             onNavigate={onNavigate}

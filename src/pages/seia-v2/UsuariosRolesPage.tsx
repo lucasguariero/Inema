@@ -245,8 +245,8 @@ export const UsuariosRolesPage: React.FC<UsuariosRolesPageProps> = ({ onNavigate
       <SeiaV2Breadcrumb
         items={[
           { label: 'Início', route: 'inicio', href: '/?rota=seia-v2&tela=inicio' },
-          { label: 'Segurança & Auditoria' },
-          { label: 'Gestão de Usuários & Perfis' },
+          { label: 'Administração', route: 'usuarios-roles' },
+          { label: 'Gestão de Usuários, Perfis e Auditoria' },
         ]}
         onNavigate={onNavigate}
       />

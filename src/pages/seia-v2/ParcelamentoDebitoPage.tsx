@@ -112,7 +112,7 @@ export const ParcelamentoDebitoPage: React.FC<ParcelamentoDebitoPageProps> = ({ 
       <SeiaV2Breadcrumb
         items={[
           { label: 'Início', route: 'inicio', href: '/?rota=seia-v2&tela=inicio' },
-          { label: 'Financeiro & Arrecadação' },
+          { label: 'Financeiro', route: 'parcelamento' },
           { label: 'Parcelamento de Débitos' },
         ]}
         onNavigate={onNavigate}

@@ -23,6 +23,15 @@ import { getCurrentScope } from '@/lib/scope';
 
 export function App() {
   const [activeRoute, setActiveRoute] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const host = window.location.hostname.toLowerCase();
+      const params = new URLSearchParams(window.location.search);
+      const v = params.get('v');
+      const r = params.get('rota') || params.get('route') || params.get('r');
+      if (host.includes('inema-lucas') || v === 'v2' || v === 'seia-v2' || r === 'seia-v2') {
+        return 'seia-v2';
+      }
+    }
     const scope = getCurrentScope();
     if (scope === 'ceuc') return 'ceuc';
     return scope === 'regulacao' ? 'relatorios' : 'seia-home';
@@ -40,9 +49,10 @@ export function App() {
     const vParam = params.get('v');
     const fluxoParam = params.get('fluxo');
     const path = window.location.pathname;
+    const host = window.location.hostname.toLowerCase();
     const scope = getCurrentScope();
 
-    if (vParam === 'v2' || vParam === 'seia-v2' || rotaParam === 'seia-v2' || path.includes('seia-v2')) {
+    if (host.includes('inema-lucas') || vParam === 'v2' || vParam === 'seia-v2' || rotaParam === 'seia-v2' || path.includes('seia-v2')) {
       setActiveRoute('seia-v2');
       return;
     }

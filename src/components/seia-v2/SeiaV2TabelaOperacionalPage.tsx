@@ -231,8 +231,8 @@ export const SeiaV2TabelaOperacionalPage: React.FC<SeiaV2TabelaOperacionalPagePr
           <SeiaV2Breadcrumb
             items={[
               { label: 'Início', route: 'inicio', href: '/?rota=seia-v2&tela=inicio' },
-              { label: 'Regulação' },
-              { label: 'Pauta de Processos' },
+              { label: 'Processos', route: 'tabela' },
+              { label: 'Pauta Geral de Processos' },
             ]}
             onNavigate={onNavigate}
           />

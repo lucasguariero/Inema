@@ -64,8 +64,8 @@ export const CertidaoDebitoPage: React.FC<CertidaoDebitoPageProps> = ({ onNaviga
       <SeiaV2Breadcrumb
         items={[
           { label: 'Início', route: 'inicio', href: '/?rota=seia-v2&tela=inicio' },
-          { label: 'Financeiro & Arrecadação' },
-          { label: 'Certidão de Débito (CND)' },
+          { label: 'Financeiro', route: 'certidao-debito' },
+          { label: 'Certidão de Débito Ambiental (CND)' },
         ]}
         onNavigate={onNavigate}
       />

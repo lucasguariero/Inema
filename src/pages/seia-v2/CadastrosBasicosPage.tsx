@@ -248,7 +248,7 @@ export const CadastrosBasicosPage: React.FC<CadastrosBasicosPageProps> = ({ onNa
       <SeiaV2Breadcrumb
         items={[
           { label: 'Início', route: 'inicio', href: '/?rota=seia-v2&tela=inicio' },
-          { label: 'Cadastros Básicos' },
+          { label: 'Meu Cadastro', route: 'cadastros-basicos' },
           { label: 'Pessoas & Empreendimentos' },
         ]}
         onNavigate={onNavigate}

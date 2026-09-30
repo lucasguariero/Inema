@@ -139,8 +139,8 @@ export const PautaEnquadramentoPage: React.FC<PautaEnquadramentoPageProps> = ({ 
       <SeiaV2Breadcrumb
         items={[
           { label: 'Início', route: 'inicio', href: '/?rota=seia-v2&tela=inicio' },
-          { label: 'Regulação' },
-          { label: 'Enquadramento & Triagem' },
+          { label: 'Enquadramento', route: 'enquadramento' },
+          { label: 'Pauta da Área & Triagem' },
         ]}
         onNavigate={onNavigate}
       />

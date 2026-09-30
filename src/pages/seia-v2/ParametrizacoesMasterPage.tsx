@@ -274,8 +274,8 @@ export const ParametrizacoesMasterPage: React.FC<ParametrizacoesMasterPageProps>
       <SeiaV2Breadcrumb
         items={[
           { label: 'Início', route: 'inicio', href: '/?rota=seia-v2&tela=inicio' },
-          { label: 'Parametrizações & Tabelas' },
-          { label: 'Tabelas Mestras & Tipologias' },
+          { label: 'Administração', route: 'parametrizacao' },
+          { label: 'Parametrizações & Tabelas Mestras' },
         ]}
         onNavigate={onNavigate}
       />

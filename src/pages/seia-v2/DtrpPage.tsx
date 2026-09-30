@@ -103,7 +103,7 @@ export const DtrpPage: React.FC<DtrpPageProps> = ({ onNavigate }) => {
       <SeiaV2Breadcrumb
         items={[
           { label: 'Início', route: 'inicio', href: '/?rota=seia-v2&tela=inicio' },
-          { label: 'Fiscalização' },
+          { label: 'Requerimentos', route: 'dtrp' },
           { label: 'Transporte de Resíduos (DTRP)' },
         ]}
         onNavigate={onNavigate}

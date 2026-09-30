@@ -64,7 +64,7 @@ export const CefirImoveisPage: React.FC<CefirImoveisPageProps> = ({ onNavigate }
       <SeiaV2Breadcrumb
         items={[
           { label: 'Início', route: 'inicio', href: '/?rota=seia-v2&tela=inicio' },
-          { label: 'Regulação' },
+          { label: 'Meu Cadastro', route: 'cadastros-basicos' },
           { label: 'Imóveis Rurais (CEFIR)' },
         ]}
         onNavigate={onNavigate}

@@ -173,7 +173,7 @@ export const CrasFaunaPage: React.FC<CrasFaunaPageProps> = ({ onNavigate }) => {
       <SeiaV2Breadcrumb
         items={[
           { label: 'Início', route: 'inicio', href: '/?rota=seia-v2&tela=inicio' },
-          { label: 'Gestão de Fauna' },
+          { label: 'Gestão de Fauna', route: 'cras' },
           { label: 'Animais & Prontuários (CRAS)' },
         ]}
         onNavigate={onNavigate}

@@ -115,7 +115,7 @@ export const SeiaV2FormularioComplexoPage: React.FC<SeiaV2FormularioComplexoPage
           <SeiaV2Breadcrumb
             items={[
               { label: 'Início', route: 'inicio', href: '/?rota=seia-v2&tela=inicio' },
-              { label: 'Regulação' },
+              { label: 'Requerimentos', route: 'formulario' },
               { label: 'Requerimento Unificado' },
             ]}
             onNavigate={onNavigate}

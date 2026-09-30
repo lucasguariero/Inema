@@ -48,8 +48,8 @@ export const Toolbar: React.FC<ToolbarProps> = ({
         <SeiaV2Breadcrumb
           items={[
             { label: 'Início', route: 'inicio', href: '/?rota=seia-v2&tela=inicio' },
-            { label: 'Ferramentas Gerenciais' },
-            { label: 'Relatórios Gerenciais' },
+            { label: 'Relatórios Gerenciais', route: 'relatorios', href: '/?rota=seia-v2&tela=relatorios' },
+            { label: 'Painel Executivo e Indicadores' },
           ]}
           onNavigate={onNavigate}
           className="mb-1.5"

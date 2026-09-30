@@ -22,6 +22,9 @@ import {
   Settings,
   Search,
   ChevronDown,
+  ChevronRight,
+  Building,
+  FileText,
   ExternalLink,
   X,
   Sparkles,
@@ -76,6 +79,8 @@ const ICON_MAP: Record<string, React.ElementType> = {
   PawPrint,
   History,
   Settings,
+  Building,
+  FileText,
   Layers,
   Table: TableIcon,
   FileSpreadsheet,
@@ -85,13 +90,6 @@ const getGroupForRoute = (route?: string) =>
   SEIA_V2_MENU_GROUPS.find((group) =>
     group.items.some((item) => item.route === route)
   )?.id;
-
-const SIDEBAR_SECTIONS = [
-  { label: 'Operação Ambiental', icon: 'FileCheck' },
-  { label: 'Serviços e Receita', icon: 'Globe' },
-  { label: 'Gestão e Controle', icon: 'BarChart3' },
-  { label: 'Configuração do Sistema', icon: 'Settings' },
-];
 
 export const ShadcnSidebar: React.FC<SidebarProps> = ({
   activeRoute = 'relatorios',
@@ -120,11 +118,11 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
     }
     if (isActive) {
       if (isVizoraGreen) return 'bg-[#22725b] text-white font-semibold shadow-xs border border-[#2c8d71]';
-      if (isInemaLight) return 'bg-[var(--nav-item-selected-bg)] text-[var(--nav-item-selected-text)] font-semibold';
+      if (isInemaLight) return 'bg-[#d1e1de] text-[#002f25] font-bold';
       return 'bg-[#165a6e] text-white font-semibold shadow-xs border border-[#207087]';
     }
     if (isVizoraGreen) return 'text-[#bce0d3] hover:bg-[#1f6853] hover:text-white font-medium';
-    if (isInemaLight) return 'text-[var(--nav-item-text)] hover:bg-[var(--nav-item-hover-bg)] hover:text-[var(--nav-item-selected-text)] font-medium';
+    if (isInemaLight) return 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 font-medium';
     return 'text-[#9ec3cc] hover:bg-[#135467] hover:text-white font-medium';
   };
 
@@ -136,27 +134,27 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
     }
     if (isActive) {
       if (isVizoraGreen) return 'bg-[#22725b] text-white font-semibold border-l-2 border-[#34D399] shadow-xs';
-      if (isInemaLight) return 'bg-[var(--nav-item-selected-bg)] text-[var(--nav-item-selected-text)] font-semibold';
+      if (isInemaLight) return 'bg-[#d1e1de] text-[#002f25] font-semibold border-l-2 border-[#0F4C3A]';
       return 'bg-[#165a6e] text-white font-semibold border-l-2 border-[#34D399] shadow-xs';
     }
     if (isVizoraGreen) return 'text-[#bce0d3] hover:bg-[#1f6853] hover:text-white font-medium cursor-pointer';
-    if (isInemaLight) return 'text-[var(--nav-item-text)] hover:bg-[var(--nav-item-hover-bg)] hover:text-[var(--nav-item-selected-text)] font-medium cursor-pointer';
+    if (isInemaLight) return 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 font-medium cursor-pointer';
     return 'text-[#9ec3cc] hover:bg-[#135467] hover:text-white font-medium cursor-pointer';
   };
 
   const getGroupBtnClass = (hasActiveChild: boolean) => {
     if (isDarkMode) {
       if (hasActiveChild) return 'text-white font-semibold bg-slate-900';
-      return 'text-slate-400 hover:bg-slate-900 hover:text-white font-semibold';
+      return 'text-slate-400 hover:bg-slate-900 hover:text-white font-medium';
     }
     if (hasActiveChild) {
       if (isVizoraGreen) return 'text-white font-semibold bg-[#1f6853]/70';
-      if (isInemaLight) return 'text-[var(--nav-item-selected-text)] font-semibold bg-[var(--nav-item-hover-bg)]';
+      if (isInemaLight) return 'text-[#002f25] font-semibold bg-slate-100/80';
       return 'text-white font-semibold bg-[#135467]/70';
     }
-    if (isVizoraGreen) return 'text-[#d2ede2] hover:bg-[#1f6853] hover:text-white font-semibold';
-    if (isInemaLight) return 'text-[var(--color-text-primary)] hover:bg-[var(--nav-item-hover-bg)] hover:text-[var(--nav-item-selected-text)] font-semibold';
-    return 'text-[#c6e1e8] hover:bg-[#135467] hover:text-white font-semibold';
+    if (isVizoraGreen) return 'text-[#d2ede2] hover:bg-[#1f6853] hover:text-white font-medium';
+    if (isInemaLight) return 'text-slate-700 hover:bg-slate-100 hover:text-slate-900 font-medium';
+    return 'text-[#c6e1e8] hover:bg-[#135467] hover:text-white font-medium';
   };
 
   // Um único módulo aberto por vez mantém a navegação curta e previsível.
@@ -164,7 +162,6 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
     const activeGroup = getGroupForRoute(activeRoute);
     return activeGroup ? { [activeGroup]: true } : {};
   });
-  const [openSection, setOpenSection] = useState<string | null>(null);
 
   useEffect(() => {
     const activeGroup = getGroupForRoute(activeRoute);
@@ -176,10 +173,6 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
 
   const toggleGroup = (groupId: string) => {
     setOpenGroups((prev) => (prev[groupId] ? {} : { [groupId]: true }));
-  };
-
-  const toggleSection = (section: string) => {
-    setOpenSection((current) => (current === section ? null : section));
   };
 
   const handleNav = (item: MenuItem | TopDirectItem, e?: React.MouseEvent) => {
@@ -215,9 +208,7 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
     const term = normalizeSearchText(searchFilter);
 
     return SEIA_V2_MENU_GROUPS.map((group) => {
-      const groupMatches =
-        normalizeSearchText(group.label).includes(term) ||
-        normalizeSearchText(group.section).includes(term);
+      const groupMatches = normalizeSearchText(group.label).includes(term);
 
       const matchingItems = group.items.filter(
         (item) =>
@@ -249,11 +240,6 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
   const isGroupExpanded = (groupId: string) => {
     if (searchFilter.trim()) return true;
     return !!openGroups[groupId];
-  };
-
-  const isSectionExpanded = (section: string) => {
-    if (searchFilter.trim()) return true;
-    return openSection === section;
   };
 
   const renderBadge = (badge?: string, variant?: string) => {
@@ -440,57 +426,54 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                 );
               })}
 
-              {/* Agrupamentos principais: os módulos aparecem ao expandir a sidebar. */}
-              {SIDEBAR_SECTIONS.map((section) => {
-                const SectionIcon = ICON_MAP[section.icon] || Layers;
-                const sectionGroups = SEIA_V2_MENU_GROUPS.filter(
-                  (group) => group.section === section.label
-                );
-                const isActive = sectionGroups.some(
-                  (group) =>
-                    activeRoute === group.route ||
-                    group.items.some((item) => item.route === activeRoute)
-                );
+              {/* Grupos e Módulos na Sidebar Colapsada */}
+              {SEIA_V2_MENU_GROUPS.map((group) => {
+                const GroupIcon = ICON_MAP[group.icon] || Sliders;
+                const isActive =
+                  activeRoute === group.route ||
+                  group.items.some((item) => item.route === activeRoute);
 
                 return (
-                  <React.Fragment key={section.label}>
-                    <Tooltip delayDuration={0}>
-                      <TooltipTrigger asChild>
-                        <button
-                          type="button"
-                          data-testid={`nav-section-${section.label}`}
-                          onClick={() => {
-                            setOpenSection(section.label);
+                  <Tooltip key={group.id} delayDuration={0}>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        data-testid={`nav-group-${group.id}`}
+                        onClick={() => {
+                          if (group.isDirectItem && group.route && onNavigate) {
+                            onNavigate(group.route);
+                          } else {
+                            toggleGroup(group.id);
                             onToggleCollapse?.();
-                          }}
-                          className={cn(
-                            'h-10 w-10 flex items-center justify-center rounded-md transition-all duration-150 cursor-pointer',
-                            isActive
-                              ? isDarkMode
-                                ? 'bg-slate-800 text-white font-bold shadow-xs border border-slate-700'
-                                : isVizoraGreen
-                                ? 'bg-[#22725b] text-white font-bold shadow-xs border border-[#2c8d71]'
-                                : isInemaLight
-                                ? 'bg-[var(--nav-item-selected-bg)] text-[var(--nav-item-selected-text)] font-bold'
-                                : 'bg-[#165a6e] text-white font-bold shadow-xs border border-[#207087]'
-                              : isDarkMode
-                              ? 'text-slate-400 hover:bg-slate-900 hover:text-white'
+                          }
+                        }}
+                        className={cn(
+                          'h-10 w-10 flex items-center justify-center rounded-md transition-all duration-150 cursor-pointer',
+                          isActive
+                            ? isDarkMode
+                              ? 'bg-slate-800 text-white font-bold shadow-xs border border-slate-700'
                               : isVizoraGreen
-                              ? 'text-[#bce0d3] hover:bg-[#1f6853] hover:text-white'
+                              ? 'bg-[#22725b] text-white font-bold shadow-xs border border-[#2c8d71]'
                               : isInemaLight
-                              ? 'text-[var(--nav-item-text)] hover:bg-[var(--nav-item-hover-bg)] hover:text-[var(--nav-item-selected-text)]'
-                              : 'text-[#9ec3cc] hover:bg-[#135467] hover:text-white'
-                          )}
-                          aria-label={section.label}
-                        >
-                          <SectionIcon className="w-4 h-4" />
-                        </button>
-                      </TooltipTrigger>
-                      <TooltipContent side="right" sideOffset={12}>
-                        {section.label}
-                      </TooltipContent>
-                    </Tooltip>
-                  </React.Fragment>
+                              ? 'bg-[#d1e1de] text-[#002f25] font-bold'
+                              : 'bg-[#165a6e] text-white font-bold shadow-xs border border-[#207087]'
+                            : isDarkMode
+                            ? 'text-slate-400 hover:bg-slate-900 hover:text-white'
+                            : isVizoraGreen
+                            ? 'text-[#bce0d3] hover:bg-[#1f6853] hover:text-white'
+                            : isInemaLight
+                            ? 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                            : 'text-[#9ec3cc] hover:bg-[#135467] hover:text-white'
+                        )}
+                        aria-label={group.label}
+                      >
+                        <GroupIcon className="w-4 h-4" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent side="right" sideOffset={12}>
+                      {group.label}
+                    </TooltipContent>
+                  </Tooltip>
                 );
               })}
             </nav>
@@ -568,57 +551,16 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                 </div>
               )}
 
-              {/* Seção 2: Grupos de Acordeão e Itens Oficiais */}
-              {filteredGroups.map((group, index) => {
+              {/* Grupos de Acordeão Oficiais do GLA (Fluxo Contínuo Sem Seções Artificiais) */}
+              {filteredGroups.map((group) => {
                 const GroupIcon = ICON_MAP[group.icon] || Sliders;
-                const startsSection = index === 0 || group.section !== filteredGroups[index - 1].section;
-                const sectionExpanded = isSectionExpanded(group.section);
-                const sectionHeading = startsSection ? (
-                  <button
-                    type="button"
-                    onClick={() => toggleSection(group.section)}
-                    aria-expanded={sectionExpanded}
-                    className={cn(
-                      'w-full flex items-center justify-between px-2.5 py-2.5 text-[10px] font-bold uppercase tracking-[0.12em] text-left cursor-pointer transition-colors',
-                      index > 0 ? 'mt-2 border-t' : 'mt-0',
-                      isDarkMode
-                        ? 'text-slate-500 border-slate-800 hover:text-slate-300'
-                        : isVizoraGreen
-                        ? 'text-[#97c7b6] border-[#206954] hover:text-white'
-                        : isInemaLight
-                        ? 'text-[var(--color-text-tertiary)] border-[var(--color-border-subtle)] hover:text-[var(--nav-item-selected-text)]'
-                        : 'text-[#7ea8b3] border-[#145366] hover:text-white'
-                    )}
-                  >
-                    <span>{group.section}</span>
-                    <ChevronDown
-                      className={cn(
-                        'h-3.5 w-3.5 shrink-0 transition-transform duration-200',
-                        sectionExpanded ? 'rotate-0' : '-rotate-90'
-                      )}
-                    />
-                  </button>
-                ) : null;
 
-                // Item Direto (ex.: Relatórios Gerenciais)
+                // Item Direto (ex.: Design System)
                 if (group.isDirectItem) {
                   const isDirectActive = activeRoute === group.route;
 
                   return (
-                    <React.Fragment key={group.id}>
-                      {sectionHeading}
-                      <div
-                        aria-hidden={!sectionExpanded}
-                        inert={!sectionExpanded ? true : undefined}
-                        className={cn(
-                          'grid transition-[grid-template-rows,opacity] duration-200 ease-out motion-reduce:transition-none',
-                          sectionExpanded
-                            ? 'grid-rows-[1fr] opacity-100'
-                            : 'grid-rows-[0fr] opacity-0 pointer-events-none'
-                        )}
-                      >
-                      <div className="min-h-0 overflow-hidden">
-                      <div className="pt-0.5">
+                    <div key={group.id} className="pt-0.5">
                       <a
                         id={group.htmlId || group.id}
                         data-testid={`nav-${group.label}`}
@@ -645,14 +587,14 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                                   : isVizoraGreen
                                   ? 'bg-[#298369] text-white shadow-xs'
                                   : isInemaLight
-                                  ? 'bg-[var(--sidebar-item-active-indicator)] text-white'
+                                  ? 'bg-[#0F4C3A] text-white'
                                   : 'bg-[#1d6b82] text-white shadow-xs'
                                 : isDarkMode
                                 ? 'bg-slate-900 text-slate-400 group-hover:bg-slate-800 group-hover:text-white'
                                 : isVizoraGreen
                                 ? 'bg-[#103d30] text-[#bce0d3] group-hover:bg-[#1f6853] group-hover:text-white'
                                 : isInemaLight
-                                ? 'bg-[var(--color-surface-hover)] text-[var(--color-text-tertiary)] group-hover:bg-[var(--sidebar-item-hover-bg)] group-hover:text-[var(--sidebar-item-active-text)]'
+                                ? 'bg-slate-100 text-slate-500 group-hover:bg-slate-200 group-hover:text-slate-800'
                                 : 'bg-[#083340] text-[#9ec3cc] group-hover:bg-[#135467] group-hover:text-white'
                             )}
                           >
@@ -672,17 +614,14 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                                   : isVizoraGreen
                                   ? 'bg-[#34D399]'
                                   : isInemaLight
-                                  ? 'bg-[var(--sidebar-item-active-indicator)]'
+                                  ? 'bg-[#0F4C3A]'
                                   : 'bg-[#34D399]'
                               )}
                             />
                           )}
                         </div>
                       </a>
-                      </div>
-                      </div>
-                      </div>
-                    </React.Fragment>
+                    </div>
                   );
                 }
 
@@ -692,21 +631,8 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                 );
 
                 return (
-                  <React.Fragment key={group.id}>
-                    {sectionHeading}
-                    <div
-                      aria-hidden={!sectionExpanded}
-                      inert={!sectionExpanded ? true : undefined}
-                      className={cn(
-                        'grid transition-[grid-template-rows,opacity] duration-200 ease-out motion-reduce:transition-none',
-                        sectionExpanded
-                          ? 'grid-rows-[1fr] opacity-100'
-                          : 'grid-rows-[0fr] opacity-0 pointer-events-none'
-                      )}
-                    >
-                    <div className="min-h-0 overflow-hidden">
-                    <div className="pt-0.5">
-                    {/* Cabeçalho do Grupo (Botão de Acordeão) */}
+                  <div key={group.id} className="pt-0.5">
+                    {/* Cabeçalho do Grupo (Botão de Acordeão com chevron no estilo GLA) */}
                     <button
                       id={`btn-${group.id}`}
                       data-testid={`nav-${group.label}`}
@@ -730,7 +656,7 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                                 : isVizoraGreen
                                 ? 'bg-[#298369] text-white border-[#298369]'
                                 : isInemaLight
-                                ? 'bg-[var(--nav-item-selected-bg)] text-[var(--nav-item-selected-text)] border-[var(--badge-success-border)]'
+                                ? 'bg-slate-200 border-slate-300 text-[#0F4C3A]'
                                 : 'bg-[#1d6b82] text-white border-[#1d6b82]'
                               : isDarkMode
                               ? 'bg-slate-900 border-slate-800 text-slate-400'
@@ -743,7 +669,7 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                         >
                           <GroupIcon className="w-3.5 h-3.5" />
                         </div>
-                        <span className="min-w-0 text-xs md:text-sm font-semibold leading-4">
+                        <span className="min-w-0 text-xs md:text-sm font-semibold leading-4 truncate">
                           {group.label}
                         </span>
                       </div>
@@ -751,10 +677,10 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                       <div className="flex items-center gap-1.5 shrink-0">
                         {renderBadge(group.badge, group.badgeVariant)}
                         {!group.disabled && (
-                          <ChevronDown
+                          <ChevronRight
                             className={cn(
                               'w-3.5 h-3.5 transition-transform duration-200 text-slate-400',
-                              expanded ? 'rotate-180' : ''
+                              expanded ? 'rotate-90 text-slate-600 dark:text-slate-200' : ''
                             )}
                           />
                         )}
@@ -773,54 +699,67 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                             : 'grid-rows-[0fr] opacity-0 pointer-events-none'
                         )}
                       >
-                      <div id={`group-${group.id}`} className={cn("min-h-0 overflow-hidden mt-1 ml-3.5 pl-3 border-l space-y-0.5", isDarkMode ? "border-slate-800" : isVizoraGreen ? "border-[#206954]" : isInemaLight ? "border-slate-200" : "border-[#145366]")}>
-                        {group.items.map((subItem) => {
-                          const isSubActive = activeRoute === subItem.route;
+                        <div
+                          id={`group-${group.id}`}
+                          className={cn(
+                            'min-h-0 overflow-hidden mt-1 ml-3.5 pl-3 border-l space-y-0.5',
+                            isDarkMode
+                              ? 'border-slate-800'
+                              : isVizoraGreen
+                              ? 'border-[#206954]'
+                              : isInemaLight
+                              ? 'border-slate-200'
+                              : 'border-[#145366]'
+                          )}
+                        >
+                          {group.items.map((subItem) => {
+                            const isSubActive = activeRoute === subItem.route;
 
-                          return (
-                            <a
-                              key={subItem.id}
-                              id={subItem.htmlId || subItem.id}
-                              data-testid={`subnav-${subItem.label}`}
-                              href={subItem.href || '#'}
-                              onClick={(e) => {
-                                if (subItem.disabled) {
-                                  e.preventDefault();
-                                } else if (subItem.route && onNavigate) {
-                                  e.preventDefault();
-                                  onNavigate(subItem.route);
-                                  if (onCloseMobile) onCloseMobile();
-                                }
-                              }}
-                              className={cn(
-                                'group flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-all duration-150',
-                                getSubItemClass(isSubActive, subItem.disabled)
-                              )}
-                              aria-disabled={subItem.disabled || undefined}
-                              tabIndex={subItem.disabled ? -1 : undefined}
-                            >
-                              <span className="truncate pr-1">{subItem.label}</span>
-
-                              <div className="flex items-center gap-1 shrink-0">
-                                {subItem.badge && (
-                                  <span
-                                    id={subItem.id === 'fisc-painel-interno-difis' ? 'sidebarBadgeEmergencias' : undefined}
-                                    className="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-[var(--color-status-critical)] text-white shadow-2xs"
-                                  >
-                                    {subItem.badge}
-                                  </span>
+                            return (
+                              <a
+                                key={subItem.id}
+                                id={subItem.htmlId || subItem.id}
+                                data-testid={`subnav-${subItem.label}`}
+                                href={subItem.href || '#'}
+                                onClick={(e) => {
+                                  if (subItem.disabled) {
+                                    e.preventDefault();
+                                  } else if (subItem.route && onNavigate) {
+                                    e.preventDefault();
+                                    onNavigate(subItem.route);
+                                    if (onCloseMobile) onCloseMobile();
+                                  }
+                                }}
+                                className={cn(
+                                  'group flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-all duration-150',
+                                  getSubItemClass(isSubActive, subItem.disabled)
                                 )}
-                              </div>
-                            </a>
-                          );
-                        })}
-                      </div>
+                                aria-disabled={subItem.disabled || undefined}
+                                tabIndex={subItem.disabled ? -1 : undefined}
+                              >
+                                <span className="truncate pr-1">{subItem.label}</span>
+
+                                <div className="flex items-center gap-1 shrink-0">
+                                  {subItem.badge && (
+                                    <span
+                                      id={
+                                        subItem.id === 'fisc-painel-interno-difis'
+                                          ? 'sidebarBadgeEmergencias'
+                                          : undefined
+                                      }
+                                      className="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-[var(--color-status-critical)] text-white shadow-2xs"
+                                    >
+                                      {subItem.badge}
+                                    </span>
+                                  )}
+                                </div>
+                              </a>
+                            );
+                          })}
+                        </div>
                       </div>
                     )}
-                    </div>
-                    </div>
-                    </div>
-                  </React.Fragment>
+                  </div>
                 );
               })}
 
@@ -899,43 +838,18 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                   alert('Assistente IA INEMA ativado. Em que posso auxiliá-lo com as demandas de Processos e Fiscalização do SEIA V2?');
                 }}
                 className={cn(
-                  'w-full flex items-center justify-between py-2 px-3 rounded-lg font-medium text-xs transition-all duration-200 active:scale-98 group cursor-pointer border',
+                  'w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-semibold text-xs md:text-sm transition-all duration-200 active:scale-98 group cursor-pointer shadow-xs',
                   isDarkMode
-                    ? 'bg-slate-800/90 hover:bg-slate-700/80 text-slate-200 border-slate-700/80 shadow-xs'
+                    ? 'bg-slate-800 hover:bg-slate-700 text-white border border-slate-700'
                     : isVizoraGreen
-                    ? 'bg-[#155342] hover:bg-[#1a624f] text-emerald-100 border-[#22725c] shadow-xs'
+                    ? 'bg-[#155342] hover:bg-[#1a624f] text-white'
                     : isInemaLight
-                    ? 'bg-emerald-50/80 hover:bg-emerald-100/70 text-[#0F4C3A] border-emerald-200/80 shadow-xs'
-                    : 'bg-slate-800/80 hover:bg-slate-700 text-slate-200 border-slate-700 shadow-xs'
+                    ? 'bg-[#002f25] hover:bg-[#0a473a] text-white'
+                    : 'bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white'
                 )}
               >
-                <div className="flex items-center gap-2">
-                  <div className={cn(
-                    'w-6 h-6 rounded-md flex items-center justify-center shrink-0 border',
-                    isDarkMode
-                      ? 'bg-slate-700/80 border-slate-600/80 text-emerald-400'
-                      : isVizoraGreen
-                      ? 'bg-[#1a624f] border-[#258068] text-emerald-300'
-                      : isInemaLight
-                      ? 'bg-white border-emerald-200 text-[#0F4C3A]'
-                      : 'bg-slate-700 border-slate-600 text-emerald-400'
-                  )}>
-                    <Sparkles className="w-3.5 h-3.5" />
-                  </div>
-                  <span className="font-semibold tracking-tight">Assistente INEMA</span>
-                </div>
-                <span className={cn(
-                  'px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider border',
-                  isDarkMode
-                    ? 'bg-slate-700/60 text-slate-300 border-slate-600/60'
-                    : isVizoraGreen
-                    ? 'bg-[#1a624f] text-emerald-200 border-[#258068]'
-                    : isInemaLight
-                    ? 'bg-emerald-100 text-[#0F4C3A] border-emerald-300/60'
-                    : 'bg-slate-700 text-slate-300 border-slate-600'
-                )}>
-                  IA
-                </span>
+                <Sparkles className="w-4 h-4 text-emerald-300 shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />
+                <span className="font-semibold tracking-tight">Assistente INEMA</span>
               </button>
             </div>
           )}
