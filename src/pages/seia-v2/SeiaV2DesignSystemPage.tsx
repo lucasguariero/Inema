@@ -126,6 +126,7 @@ const catalogSections: CatalogSection[] = [
   { id: 'wizard', label: 'Wizard', group: 'Componentes' },
   { id: 'feedback', label: 'Feedback e overlays', group: 'Componentes' },
   { id: 'patterns', label: 'Padrões de página', group: 'Composições' },
+  { id: 'templates', label: 'Templates de telas', group: 'Composições' },
   { id: 'accessibility', label: 'Acessibilidade', group: 'Diretrizes' },
 ];
 
@@ -244,6 +245,7 @@ export const SeiaV2DesignSystemPage: React.FC = () => {
   const [radioChoice, setRadioChoice] = useState('interno');
   const [checkboxState, setCheckboxState] = useState(true);
   const [interactiveButtonLoading, setInteractiveButtonLoading] = useState(false);
+  const [activeTemplateTab, setActiveTemplateTab] = useState<'dashboard' | 'tabela' | 'formulario' | 'detalhes' | 'cidadao'>('dashboard');
 
   const filteredSections = useMemo(() => {
     const term = navFilter.trim().toLowerCase();
@@ -1253,6 +1255,430 @@ export const SeiaV2DesignSystemPage: React.FC = () => {
                     </div>
                   </Specimen>
                 </div>
+              </section>
+
+              {/* SEÇÃO: TEMPLATES DE TELAS */}
+              <section id="templates" className="scroll-mt-8">
+                <SectionIntro
+                  title="Templates de telas (Arquétipos Oficiais)"
+                  description="Modelos canônicos de telas completas do SEIA V2. Toda nova funcionalidade deve obrigatoriamente se basear em um destes 5 arquétipos estruturais."
+                />
+
+                {/* Seletor de Arquétipos */}
+                <div className="flex flex-wrap items-center gap-2 border-b border-[var(--color-border-subtle)] pb-4 mb-6">
+                  {[
+                    { id: 'dashboard', label: '1. Dashboard Gerencial', icon: LayoutDashboard },
+                    { id: 'tabela', label: '2. Pauta / Data Grid', icon: FileSpreadsheet },
+                    { id: 'formulario', label: '3. Formulário / Wizard', icon: FileText },
+                    { id: 'detalhes', label: '4. Ficha / Detalhes de Processo', icon: Eye },
+                    { id: 'cidadao', label: '5. Portal Cidadão (Público)', icon: Globe },
+                  ].map((tab) => {
+                    const TabIcon = tab.icon;
+                    const isActive = activeTemplateTab === tab.id;
+                    return (
+                      <button
+                        key={tab.id}
+                        type="button"
+                        onClick={() => setActiveTemplateTab(tab.id as any)}
+                        className={cn(
+                          'flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer border',
+                          isActive
+                            ? 'bg-[#0F4C3A] text-white border-[#0F4C3A] shadow-xs'
+                            : 'bg-[var(--color-surface-default)] text-[var(--color-text-secondary)] border-[var(--color-border-default)] hover:bg-[var(--color-surface-hover)]'
+                        )}
+                      >
+                        <TabIcon className="h-4 w-4" />
+                        <span>{tab.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* TEMPLATE 1: DASHBOARD GERENCIAL */}
+                {activeTemplateTab === 'dashboard' && (
+                  <div className="space-y-6 animate-in fade-in-50 duration-200">
+                    <div className="rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-subtle)] p-4 text-xs space-y-1.5">
+                      <div className="flex items-center gap-2">
+                        <Badge color="success">Arquétipo Gerencial</Badge>
+                        <span className="font-semibold text-[var(--color-text-primary)]">Quando usar:</span>
+                        <span className="text-[var(--color-text-secondary)]">Telas de entrada das diretorias (DILIC, DIRRE, DIBIO, DIFIS) e relatórios executivos.</span>
+                      </div>
+                      <p className="text-[11px] text-[var(--color-text-tertiary)]">
+                        <strong>Regras de Ouro:</strong> Header com seletor temporal e botões de exportação; Grid de 4 a 6 KpiCards com micro-sparklines; Gráficos analíticos abaixo; Zero ícones colados em títulos.
+                      </p>
+                    </div>
+
+                    <Specimen title="Preview do Template: Dashboard Gerencial" badge="Template 1">
+                      <div className="space-y-6 bg-[var(--color-surface-canvas)] p-4 sm:p-6 rounded-xl border border-[var(--color-border-subtle)]">
+                        {/* Header do Template */}
+                        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-[var(--color-border-subtle)] pb-4">
+                          <div>
+                            <nav className="flex items-center gap-1.5 text-xs text-[var(--color-text-tertiary)] mb-1">
+                              <span>Início</span>
+                              <ChevronRight className="h-3 w-3" />
+                              <span className="font-semibold text-[var(--color-text-primary)]">Regulação Gerencial</span>
+                            </nav>
+                            <h3 className="text-xl font-bold text-[var(--color-text-primary)]">Painel Executivo de Processos</h3>
+                          </div>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <div className="flex items-center rounded-lg border border-[var(--color-border-default)] bg-[var(--color-surface-default)] p-0.5 text-xs">
+                              <button className="px-2.5 py-1 rounded-md bg-[#0F4C3A] text-white font-semibold">30d</button>
+                              <button className="px-2.5 py-1 rounded-md text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">7d</button>
+                              <button className="px-2.5 py-1 rounded-md text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">Ano</button>
+                            </div>
+                            <Button color="gray" size="sm"><Download className="h-3.5 w-3.5" /> Exportar</Button>
+                            <Button size="sm"><Plus className="h-3.5 w-3.5" /> Novo Requerimento</Button>
+                          </div>
+                        </div>
+
+                        {/* Grid de Métricas */}
+                        <div className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-4">
+                          <KpiCard title="Protocolados" value="1.245" trend={{ value: '+12%', isPositive: true }} icon={FileText} variant="emerald" />
+                          <KpiCard title="Em Análise" value="2.356" trend={{ value: '-3%', isPositive: false }} icon={Clock3} variant="slate" />
+                          <KpiCard title="Pendentes" value="873" trend={{ value: '+8%', isPositive: false }} icon={AlertCircle} variant="amber" />
+                          <KpiCard title="Vencidos" value="198" trend={{ value: '+15%', isPositive: false }} icon={ShieldAlert} variant="rose" />
+                        </div>
+
+                        {/* Área de Gráficos e Distribuição */}
+                        <div className="grid gap-4 lg:grid-cols-3">
+                          <div className="lg:col-span-2 rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-default)] p-4 shadow-2xs">
+                            <div className="flex items-center justify-between border-b border-[var(--color-border-subtle)] pb-3 mb-4">
+                              <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--color-text-primary)]">Entrada vs. Saída de Processos</h4>
+                              <Badge color="primary" size="xs">2026</Badge>
+                            </div>
+                            <div className="h-44 flex items-center justify-center border border-dashed border-[var(--color-border-subtle)] rounded-lg text-xs text-[var(--color-text-tertiary)]">
+                              Gráfico de Volume Mensal Integrado
+                            </div>
+                          </div>
+
+                          <div className="rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-default)] p-4 shadow-2xs">
+                            <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--color-text-primary)] border-b border-[var(--color-border-subtle)] pb-3 mb-4">
+                              Distribuição por Diretoria
+                            </h4>
+                            <div className="space-y-3 text-xs">
+                              {[
+                                ['DILIC (Licenciamento)', '1.254', '60%'],
+                                ['DIRRE (Recursos Hídricos)', '856', '25%'],
+                                ['DIBIO (Biodiversidade)', '642', '15%'],
+                              ].map(([dir, val, pct]) => (
+                                <div key={dir}>
+                                  <div className="flex justify-between mb-1">
+                                    <span className="text-[var(--color-text-secondary)]">{dir}</span>
+                                    <span className="font-semibold text-[var(--color-text-primary)]">{val}</span>
+                                  </div>
+                                  <div className="w-full bg-slate-200 dark:bg-slate-700 h-1.5 rounded-full overflow-hidden">
+                                    <div className="bg-[#0F4C3A] h-full" style={{ width: pct }} />
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </Specimen>
+                  </div>
+                )}
+
+                {/* TEMPLATE 2: PAUTA / DATA GRID */}
+                {activeTemplateTab === 'tabela' && (
+                  <div className="space-y-6 animate-in fade-in-50 duration-200">
+                    <div className="rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-subtle)] p-4 text-xs space-y-1.5">
+                      <div className="flex items-center gap-2">
+                        <Badge color="primary">Arquétipo Operacional</Badge>
+                        <span className="font-semibold text-[var(--color-text-primary)]">Quando usar:</span>
+                        <span className="text-[var(--color-text-secondary)]">Listagens de processos, autos de infração, agendamentos e consultas técnicas.</span>
+                      </div>
+                      <p className="text-[11px] text-[var(--color-text-tertiary)]">
+                        <strong>Regras de Ouro:</strong> A rota abre sempre na pauta (nunca em form vazio); Toolbar com busca instantânea e filtros; Status semânticos com dot; Paginação no rodapé.
+                      </p>
+                    </div>
+
+                    <Specimen title="Preview do Template: Pauta Operacional" badge="Template 2">
+                      <div className="space-y-4 bg-[var(--color-surface-canvas)] p-4 sm:p-6 rounded-xl border border-[var(--color-border-subtle)]">
+                        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-[var(--color-border-subtle)] pb-4">
+                          <div>
+                            <nav className="flex items-center gap-1.5 text-xs text-[var(--color-text-tertiary)] mb-1">
+                              <span>Início</span>
+                              <ChevronRight className="h-3 w-3" />
+                              <span className="font-semibold text-[var(--color-text-primary)]">Minhas Pendências</span>
+                            </nav>
+                            <h3 className="text-xl font-bold text-[var(--color-text-primary)]">Processos em Análise Técnica</h3>
+                          </div>
+                          <Button size="sm"><Plus className="h-3.5 w-3.5" /> Novo Processo</Button>
+                        </div>
+
+                        <FilamentTabs
+                          tabs={[
+                            { id: 'minhas', label: 'Minhas Pendências', badge: 12 },
+                            { id: 'unidade', label: 'Pauta da Unidade', badge: 98 },
+                            { id: 'concluidos', label: 'Concluídos' },
+                          ]}
+                          activeTab="minhas"
+                          onChange={() => {}}
+                        />
+
+                        <TableContainer
+                          toolbar={
+                            <div className="flex flex-col gap-3 p-3.5 sm:flex-row sm:items-center sm:justify-between border-b border-[var(--color-border-subtle)]">
+                              <div className="flex items-center gap-2">
+                                <Button color="gray" size="sm"><MoreHorizontal className="h-4 w-4" /> Ações em Lote</Button>
+                                <Button color="gray" size="sm"><Filter className="h-4 w-4" /> Filtros <Badge color="primary" size="xs">1</Badge></Button>
+                              </div>
+                              <div className="relative w-full sm:w-72">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
+                                <input placeholder="Buscar por protocolo ou interessado..." className={cn(fieldClass, 'h-8 pl-8 text-xs')} />
+                              </div>
+                            </div>
+                          }
+                          pagination={
+                            <div className="flex justify-between items-center text-xs text-[var(--color-text-tertiary)]">
+                              <span>Exibindo 3 de 12 registros</span>
+                              <div className="flex gap-1">
+                                <Button color="gray" size="xs">Anterior</Button>
+                                <Button size="xs">1</Button>
+                                <Button color="gray" size="xs">Próxima</Button>
+                              </div>
+                            </div>
+                          }
+                        >
+                          <table className="w-full text-left text-xs">
+                            <thead className="bg-[var(--table-header-bg)] border-b border-[var(--table-border)] text-[10px] font-bold uppercase tracking-wider text-[var(--color-text-tertiary)]">
+                              <tr>
+                                <th className="p-3 w-8"><input type="checkbox" className="rounded accent-[#0F4C3A]" /></th>
+                                <th className="p-3">Processo SEI</th>
+                                <th className="p-3">Interessado</th>
+                                <th className="p-3">Ato</th>
+                                <th className="p-3">Status</th>
+                                <th className="p-3 text-right">Ações</th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-[var(--table-border)]">
+                              {tableRows.slice(0, 3).map((r) => (
+                                <tr key={r.process} className="hover:bg-[var(--table-row-hover)]">
+                                  <td className="p-3"><input type="checkbox" className="rounded accent-[#0F4C3A]" /></td>
+                                  <td className="p-3 font-mono font-semibold text-[var(--color-text-primary)]">{r.process}</td>
+                                  <td className="p-3 text-[var(--color-text-secondary)]">{r.applicant}</td>
+                                  <td className="p-3 text-[var(--color-text-secondary)]">{r.type}</td>
+                                  <td className="p-3"><Badge color={r.status === 'Concluído' ? 'success' : r.status === 'Pendente' ? 'warning' : 'info'} dot>{r.status}</Badge></td>
+                                  <td className="p-3 text-right">
+                                    <div className="flex justify-end gap-1">
+                                      <Button color="gray" size="icon"><Eye className="h-3.5 w-3.5" /></Button>
+                                      <Button color="gray" size="icon"><Edit3 className="h-3.5 w-3.5" /></Button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </TableContainer>
+                      </div>
+                    </Specimen>
+                  </div>
+                )}
+
+                {/* TEMPLATE 3: FORMULÁRIO / WIZARD */}
+                {activeTemplateTab === 'formulario' && (
+                  <div className="space-y-6 animate-in fade-in-50 duration-200">
+                    <div className="rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-subtle)] p-4 text-xs space-y-1.5">
+                      <div className="flex items-center gap-2">
+                        <Badge color="warning">Arquétipo de Requerimento</Badge>
+                        <span className="font-semibold text-[var(--color-text-primary)]">Quando usar:</span>
+                        <span className="text-[var(--color-text-secondary)]">Formulários oficiais de licenciamento, outorga, cadastro de UCs e plantonistas.</span>
+                      </div>
+                      <p className="text-[11px] text-[var(--color-text-tertiary)]">
+                        <strong>Regras de Ouro:</strong> Header de documento com botão de voltar limpo; Stepper em chevron SVG (`FilamentWizard`); Seções modulares (`Section`); Ações fixas no rodapé.
+                      </p>
+                    </div>
+
+                    <Specimen title="Preview do Template: Requerimento com Stepper" badge="Template 3">
+                      <div className="space-y-4 bg-[var(--color-surface-canvas)] p-4 sm:p-6 rounded-xl border border-[var(--color-border-subtle)]">
+                        {/* Header de Documento */}
+                        <div className="flex items-center justify-between border-b border-[var(--color-border-subtle)] pb-4">
+                          <div className="flex items-center gap-3">
+                            <Button color="gray" size="sm" variant="ghost">
+                              <ChevronLeft className="h-4 w-4" /> Voltar aos Registros
+                            </Button>
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <span className="font-mono text-xs font-bold text-[#0F4C3A]">F-DUC-069-00</span>
+                                <Badge color="gray" size="xs">Rascunho</Badge>
+                              </div>
+                              <h3 className="text-base font-bold text-[var(--color-text-primary)]">Requerimento de Autorização de Pesquisa</h3>
+                            </div>
+                          </div>
+                          <Button color="gray" size="sm"><Download className="h-3.5 w-3.5" /> Salvar Rascunho</Button>
+                        </div>
+
+                        {/* Stepper Oficial */}
+                        <div className="overflow-hidden rounded-xl border border-[var(--color-border-default)]">
+                          <FilamentWizard
+                            steps={[
+                              { id: 1, label: '1. Identificação' },
+                              { id: 2, label: '2. Dados do Projeto' },
+                              { id: 3, label: '3. Anexos & ART' },
+                            ]}
+                            currentStep={2}
+                          />
+                          <div className="p-5 space-y-4 bg-[var(--color-surface-default)]">
+                            <Section heading="Identificação da Unidade de Conservação" description="Selecione a UC de incidência da pesquisa." icon={Building2} iconColor="primary">
+                              <div className="grid gap-4 sm:grid-cols-2 mt-2">
+                                <label className="text-xs font-semibold">
+                                  Unidade de Conservação (UC) *
+                                  <FilamentSelect value="parna" onChange={() => {}} options={['PARNA Chapada Diamantina', 'APA Baía de Todos os Santos', 'PESF Serra do Conduru']} />
+                                </label>
+                                <label className="text-xs font-semibold">
+                                  Coordenador da Pesquisa *
+                                  <input className={fieldClass} defaultValue="Dr. Marcos Vinicius Silva" />
+                                </label>
+                              </div>
+                            </Section>
+                          </div>
+                          <div className="flex justify-between items-center p-4 border-t border-[var(--color-border-subtle)] bg-[var(--color-surface-subtle)]">
+                            <Button color="gray"><ChevronLeft className="h-4 w-4" /> Voltar</Button>
+                            <Button>Avançar para Documentos <ChevronRight className="h-4 w-4" /></Button>
+                          </div>
+                        </div>
+                      </div>
+                    </Specimen>
+                  </div>
+                )}
+
+                {/* TEMPLATE 4: DETALHES DE PROCESSO */}
+                {activeTemplateTab === 'detalhes' && (
+                  <div className="space-y-6 animate-in fade-in-50 duration-200">
+                    <div className="rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-subtle)] p-4 text-xs space-y-1.5">
+                      <div className="flex items-center gap-2">
+                        <Badge color="info">Arquétipo de Análise / Ficha</Badge>
+                        <span className="font-semibold text-[var(--color-text-primary)]">Quando usar:</span>
+                        <span className="text-[var(--color-text-secondary)]">Visualização detalhada de processos, consulta cadastral e emissão de pareceres.</span>
+                      </div>
+                      <p className="text-[11px] text-[var(--color-text-tertiary)]">
+                        <strong>Regras de Ouro:</strong> Card de identificação no topo; Abas contextuais de tramitação; Painel lateral de timeline; CTAs de parecer e notificação.
+                      </p>
+                    </div>
+
+                    <Specimen title="Preview do Template: Ficha de Processo com Abas" badge="Template 4">
+                      <div className="space-y-4 bg-[var(--color-surface-canvas)] p-4 sm:p-6 rounded-xl border border-[var(--color-border-subtle)]">
+                        {/* Header do Processo */}
+                        <div className="bg-[var(--color-surface-default)] p-5 rounded-xl border border-[var(--color-border-default)] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <span className="font-mono text-base font-bold text-[var(--color-text-primary)]">SEIA-REG-2026/001245</span>
+                              <Badge color="info" dot>Em Análise Técnica</Badge>
+                              <Badge color="primary">Classe 3</Badge>
+                            </div>
+                            <p className="text-xs text-[var(--color-text-secondary)] mt-1">
+                              <strong>Interessado:</strong> Verde Vale Energia S.A. · <strong>Lotação:</strong> DILIC (Lucas Manager)
+                            </p>
+                          </div>
+                          <div className="flex gap-2">
+                            <Button color="gray" size="sm"><Edit3 className="h-3.5 w-3.5" /> Solicitar Complementação</Button>
+                            <Button size="sm"><FileCheck className="h-3.5 w-3.5" /> Emitir Parecer</Button>
+                          </div>
+                        </div>
+
+                        {/* Abas de Contexto */}
+                        <FilamentTabs
+                          tabs={[
+                            { id: 'dados', label: 'Dados do Processo' },
+                            { id: 'tramitacao', label: 'Histórico de Tramitação', badge: 5 },
+                            { id: 'documentos', label: 'Documentos Anexados', badge: 8 },
+                            { id: 'condicionantes', label: 'Condicionantes Ambientais' },
+                          ]}
+                          activeTab="dados"
+                          onChange={() => {}}
+                        />
+
+                        {/* Conteúdo em 2 Colunas */}
+                        <div className="grid gap-4 lg:grid-cols-3">
+                          <div className="lg:col-span-2 space-y-4">
+                            <Section heading="Resumo do Empreendimento" description="Dados consolidados do requerimento inicial." icon={FileText} iconColor="primary">
+                              <div className="grid gap-3 sm:grid-cols-2 text-xs">
+                                <div><span className="text-[var(--color-text-tertiary)] block">Atividade:</span><strong>Energia Solar Fotovoltaica</strong></div>
+                                <div><span className="text-[var(--color-text-tertiary)] block">Município:</span><strong>Barreiras / BA</strong></div>
+                                <div><span className="text-[var(--color-text-tertiary)] block">Área Total:</span><strong>450,00 hectares</strong></div>
+                                <div><span className="text-[var(--color-text-tertiary)] block">Vigência Solicitada:</span><strong>5 anos</strong></div>
+                              </div>
+                            </Section>
+                          </div>
+
+                          <div className="rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-default)] p-4 shadow-2xs">
+                            <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--color-text-primary)] border-b border-[var(--color-border-subtle)] pb-3 mb-3">
+                              Linha do Tempo
+                            </h4>
+                            <div className="space-y-3 text-xs">
+                              {[
+                                ['28/09/2026', 'Distribuído para análise técnica (DILIC)'],
+                                ['20/09/2026', 'Protocolado via SEI-BA'],
+                                ['18/09/2026', 'DAE compensado pelo financeiro'],
+                              ].map(([dt, desc]) => (
+                                <div key={dt} className="flex gap-2.5 items-start">
+                                  <div className="w-2 h-2 rounded-full bg-[#0F4C3A] mt-1 shrink-0" />
+                                  <div>
+                                    <span className="text-[10px] font-mono text-[var(--color-text-tertiary)] block">{dt}</span>
+                                    <span className="text-[var(--color-text-secondary)]">{desc}</span>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </Specimen>
+                  </div>
+                )}
+
+                {/* TEMPLATE 5: PORTAL CIDADÃO */}
+                {activeTemplateTab === 'cidadao' && (
+                  <div className="space-y-6 animate-in fade-in-50 duration-200">
+                    <div className="rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-subtle)] p-4 text-xs space-y-1.5">
+                      <div className="flex items-center gap-2">
+                        <Badge color="success">Arquétipo de Acesso Público</Badge>
+                        <span className="font-semibold text-[var(--color-text-primary)]">Quando usar:</span>
+                        <span className="text-[var(--color-text-secondary)]">Registro público de denúncias ambientais, emergências químicas e consulta pelo cidadão.</span>
+                      </div>
+                      <p className="text-[11px] text-[var(--color-text-tertiary)]">
+                        <strong>Regras de Ouro:</strong> Interface sem termos técnicos complexos; Orientação passo a passo; Upload visual com arrastar e soltar; Protocolo gerado em destaque.
+                      </p>
+                    </div>
+
+                    <Specimen title="Preview do Template: Fluxo Cidadão" badge="Template 5">
+                      <div className="max-w-2xl mx-auto space-y-5 bg-[var(--color-surface-canvas)] p-6 rounded-xl border border-[var(--color-border-subtle)]">
+                        <div className="text-center space-y-1.5 border-b border-[var(--color-border-subtle)] pb-4">
+                          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 text-[#0F4C3A] dark:text-emerald-400 text-xs font-semibold">
+                            <ShieldCheck className="w-3.5 h-3.5" />
+                            <span>Canal Oficial de Atendimento ao Cidadão</span>
+                          </div>
+                          <h3 className="text-xl font-bold text-[var(--color-text-primary)]">Registrar Denúncia Ambiental</h3>
+                          <p className="text-xs text-[var(--color-text-secondary)]">Sua manifestação é tratada de forma sigilosa pela equipe técnica de fiscalização.</p>
+                        </div>
+
+                        <div className="space-y-4 bg-[var(--color-surface-default)] p-5 rounded-xl border border-[var(--color-border-default)]">
+                          <label className="block space-y-1 text-xs font-semibold">
+                            Tipo de Ocorrência *
+                            <FilamentSelect value="desmate" onChange={() => {}} options={['Desmatamento Ilegal de Vegetação Nativa', 'Poluição de Curso d\'Água', 'Queimada não autorizada']} />
+                          </label>
+
+                          <label className="block space-y-1 text-xs font-semibold">
+                            Descrição da Ocorrência *
+                            <textarea className={cn(fieldClass, 'h-20 py-2')} placeholder="Informe o que aconteceu, pontos de referência e detalhes..." />
+                          </label>
+
+                          <div className="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-6 text-center hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors cursor-pointer">
+                            <Upload className="mx-auto h-8 w-8 text-slate-400 mb-2" />
+                            <p className="text-xs font-semibold text-[var(--color-text-primary)]">Clique ou arraste fotos e evidências aqui</p>
+                            <p className="text-[10px] text-[var(--color-text-tertiary)] mt-1">Formatos suportados: JPG, PNG, PDF (máx. 15MB)</p>
+                          </div>
+                        </div>
+
+                        <div className="flex justify-end gap-2">
+                          <Button color="gray">Cancelar</Button>
+                          <Button>Registrar e Gerar Protocolo <ArrowRight className="h-4 w-4" /></Button>
+                        </div>
+                      </div>
+                    </Specimen>
+                  </div>
+                )}
               </section>
 
               {/* SEÇÃO: DIRETRIZES DE ACESSIBILIDADE */}
