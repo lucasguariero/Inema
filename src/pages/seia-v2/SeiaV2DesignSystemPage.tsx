@@ -1,31 +1,54 @@
 import React, { useMemo, useState } from 'react';
 import {
   AlertCircle,
+  AlertTriangle,
+  ArrowDown,
+  ArrowRight,
+  ArrowUp,
+  Award,
   Bell,
   Boxes,
+  Building2,
+  Calendar,
   Check,
   CheckCircle2,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
+  Circle,
   CircleHelp,
   Clock3,
+  Code2,
   Copy,
   Download,
   Edit3,
   ExternalLink,
   Eye,
+  FileCheck,
+  FileSpreadsheet,
   FileText,
   Filter,
+  Globe,
+  HelpCircle,
   Info,
+  Layers,
   LayoutDashboard,
   LoaderCircle,
+  MapPin,
   Menu,
+  Minus,
   MoreHorizontal,
+  MoreVertical,
+  Move,
   PanelLeftClose,
+  Plus,
+  RotateCcw,
   Search,
+  Send,
   Settings,
+  Shield,
   ShieldAlert,
+  ShieldCheck,
   SlidersHorizontal,
   Sparkles,
   Trash2,
@@ -33,6 +56,7 @@ import {
   TrendingUp,
   Upload,
   UserRound,
+  Users,
   X,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -54,6 +78,15 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
   FilamentSelect,
   FilamentTabs,
   FilamentWizard,
@@ -65,7 +98,11 @@ import { KpiCard } from '@/components/dashboard/KpiCard';
 import { ShadcnHeader } from '@/components/seia-v2/shadcn/ShadcnHeader';
 import { cn } from '@/lib/utils';
 import seiaLogoWhite from '@/assets/seia-plataforma/svg/SEIA Plataforma - Logo EXP_HORIZONTAL_W.svg';
+import seiaLogoColor from '@/assets/seia-plataforma/svg/SEIA Plataforma - Logo EXP_HORIZONTAL_COR.svg';
+import seiaLogoGW from '@/assets/seia-plataforma/svg/SEIA Plataforma - Logo EXP_HORIZONTAL_G&W.svg';
 import seiaIconWhite from '@/assets/seia-plataforma/svg/SEIA Plataforma - Logo EXP_ICON_W.svg';
+import seiaIconColor from '@/assets/seia-plataforma/svg/SEIA Plataforma - Logo EXP_ICON_COR.svg';
+import seiaIconGW from '@/assets/seia-plataforma/svg/SEIA Plataforma - Logo EXP_ICON_G&W.svg';
 
 type CatalogSection = {
   id: string;
@@ -116,13 +153,18 @@ const greenTokens = [
 
 const semanticTokens = [
   ['Primary', '--color-brand-primary', 'var(--color-brand-primary)'],
+  ['Primary Subtle', '--color-brand-primary-subtle', 'var(--color-brand-primary-subtle)'],
   ['Canvas', '--color-surface-canvas', 'var(--color-surface-canvas)'],
   ['Surface', '--color-surface-default', 'var(--color-surface-default)'],
-  ['Texto', '--color-text-primary', 'var(--color-text-primary)'],
-  ['Borda', '--color-border-default', 'var(--color-border-default)'],
+  ['Surface Subtle', '--color-surface-subtle', 'var(--color-surface-subtle)'],
+  ['Texto Primário', '--color-text-primary', 'var(--color-text-primary)'],
+  ['Texto Secundário', '--color-text-secondary', 'var(--color-text-secondary)'],
+  ['Borda Padrão', '--color-border-default', 'var(--color-border-default)'],
+  ['Borda Foco', '--color-border-focus', 'var(--color-border-focus)'],
   ['Sucesso', '--color-status-success', 'var(--color-status-success)'],
   ['Alerta', '--color-status-warning', 'var(--color-status-warning)'],
-  ['Crítico', '--color-status-critical', 'var(--color-status-critical)'],
+  ['Crítico / Erro', '--color-status-critical', 'var(--color-status-critical)'],
+  ['Informativo', '--color-status-info', 'var(--color-status-info)'],
 ] as const;
 
 const iconCatalog = [
@@ -134,24 +176,34 @@ const iconCatalog = [
   ['Visualizar', Eye],
   ['Editar', Edit3],
   ['Excluir', Trash2],
-  ['Arquivo', FileText],
+  ['Documento', FileText],
+  ['Planilha', FileSpreadsheet],
   ['Download', Download],
   ['Upload', Upload],
+  ['Calendário', Calendar],
+  ['Localização', MapPin],
+  ['Processo', FileCheck],
+  ['Segurança', ShieldCheck],
+  ['Informação', Info],
   ['Ajuda', CircleHelp],
 ] as const;
 
 const tableRows = [
-  { process: 'SEIA-REG-2026/001245', applicant: 'Verde Vale Energia S.A.', type: 'Licenciamento', status: 'Em análise', unit: 'DILIC' },
-  { process: 'SEIA-REG-2026/001198', applicant: 'Cooperativa Rio Vivo', type: 'Outorga', status: 'Pendente', unit: 'DIRRE' },
-  { process: 'SEIA-REG-2026/001132', applicant: 'Bioflora Manejo Ltda.', type: 'Autorização', status: 'Concluído', unit: 'DIBIO' },
-  { process: 'SEIA-REG-2026/001089', applicant: 'Município de Lençóis', type: 'Licenciamento', status: 'Vencido', unit: 'DIREC' },
+  { process: 'SEIA-REG-2026/001245', applicant: 'Verde Vale Energia S.A.', type: 'Licenciamento Ambiental (LP+LI)', status: 'Em análise', unit: 'DILIC', date: '28/09/2026' },
+  { process: 'SEIA-REG-2026/001198', applicant: 'Cooperativa Agrícola Rio Vivo', type: 'Outorga Subterrânea', status: 'Pendente', unit: 'DIRRE', date: '25/09/2026' },
+  { process: 'SEIA-REG-2026/001132', applicant: 'Bioflora Manejo Sustentável Ltda.', type: 'Autorização de Manejo (AMF)', status: 'Concluído', unit: 'DIBIO', date: '22/09/2026' },
+  { process: 'SEIA-REG-2026/001089', applicant: 'Prefeitura Municipal de Lençóis', type: 'Licenciamento Simplificado (LS)', status: 'Vencido', unit: 'DIREC', date: '15/09/2026' },
+  { process: 'SEIA-REG-2026/000974', applicant: 'Mineração Serra Dourada S.A.', type: 'Renovação de Licença (RLO)', status: 'Em análise', unit: 'DILIC', date: '10/09/2026' },
 ];
 
-const fieldClass = 'w-full h-9 rounded-xl border border-[var(--input-border)] bg-[var(--input-bg)] px-3 text-sm text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] outline-none transition-colors hover:border-[var(--input-border-hover)] focus:border-[var(--input-border-focus)] focus:ring-2 focus:ring-[var(--color-green-alpha-20)] disabled:cursor-not-allowed disabled:opacity-55';
-const focusRing = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border-focus)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface-canvas)]';
+const fieldClass =
+  'w-full h-9 rounded-xl border border-[var(--input-border)] bg-[var(--input-bg)] px-3 text-sm text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] outline-none transition-colors hover:border-[var(--input-border-hover)] focus:border-[var(--input-border-focus)] focus:ring-2 focus:ring-[var(--color-green-alpha-20)] disabled:cursor-not-allowed disabled:opacity-55';
+
+const focusRing =
+  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border-focus)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface-canvas)]';
 
 const SectionIntro: React.FC<{ title: string; description: string }> = ({ title, description }) => (
-  <div className="mb-5 max-w-3xl">
+  <div className="mb-6 max-w-3xl">
     <h2 className="text-xl font-bold tracking-tight text-[var(--color-text-primary)]">{title}</h2>
     <p className="mt-1.5 text-sm leading-6 text-[var(--color-text-secondary)]">{description}</p>
   </div>
@@ -162,14 +214,15 @@ const Specimen: React.FC<{
   description?: string;
   children: React.ReactNode;
   className?: string;
-}> = ({ title, description, children, className }) => (
-  <div className={cn('overflow-hidden rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-default)]', className)}>
-    <div className="flex items-start justify-between gap-4 border-b border-[var(--color-border-subtle)] px-4 py-3">
+  badge?: string;
+}> = ({ title, description, children, className, badge = 'Componente' }) => (
+  <div className={cn('overflow-hidden rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-default)] shadow-2xs', className)}>
+    <div className="flex items-start justify-between gap-4 border-b border-[var(--color-border-subtle)] px-4 py-3 bg-[var(--color-surface-subtle)]/50">
       <div>
         <h3 className="text-sm font-semibold text-[var(--color-text-primary)]">{title}</h3>
         {description && <p className="mt-0.5 text-xs text-[var(--color-text-tertiary)]">{description}</p>}
       </div>
-      <Badge color="gray" size="xs">Componente</Badge>
+      <Badge color="gray" size="xs">{badge}</Badge>
     </div>
     <div className="p-4 sm:p-5">{children}</div>
   </div>
@@ -188,6 +241,9 @@ export const SeiaV2DesignSystemPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [switchOn, setSwitchOn] = useState(true);
+  const [radioChoice, setRadioChoice] = useState('interno');
+  const [checkboxState, setCheckboxState] = useState(true);
+  const [interactiveButtonLoading, setInteractiveButtonLoading] = useState(false);
 
   const filteredSections = useMemo(() => {
     const term = navFilter.trim().toLowerCase();
@@ -196,7 +252,7 @@ export const SeiaV2DesignSystemPage: React.FC = () => {
   }, [navFilter]);
 
   const visibleRows = tableRows.filter((row) =>
-    `${row.process} ${row.applicant} ${row.type} ${row.status}`.toLowerCase().includes(tableSearch.toLowerCase())
+    `${row.process} ${row.applicant} ${row.type} ${row.status} ${row.unit}`.toLowerCase().includes(tableSearch.toLowerCase())
   );
 
   const copyToken = async (token: string) => {
@@ -223,6 +279,11 @@ export const SeiaV2DesignSystemPage: React.FC = () => {
     }
   };
 
+  const handleInteractiveClick = () => {
+    setInteractiveButtonLoading(true);
+    setTimeout(() => setInteractiveButtonLoading(false), 1200);
+  };
+
   const groupedSections = filteredSections.reduce<Record<string, CatalogSection[]>>((acc, section) => {
     acc[section.group] = [...(acc[section.group] || []), section];
     return acc;
@@ -246,6 +307,7 @@ export const SeiaV2DesignSystemPage: React.FC = () => {
           />
         )}
 
+        {/* Sidebar exclusiva do Design System */}
         <aside
           className={cn(
             'fixed bottom-0 left-0 top-16 z-40 flex shrink-0 flex-col overflow-hidden bg-[var(--sidebar-bg)] transition-[width,transform] duration-200 ease-out lg:static lg:z-auto lg:h-full',
@@ -281,7 +343,7 @@ export const SeiaV2DesignSystemPage: React.FC = () => {
             )}
           </div>
 
-          <nav aria-label="Seções do design system" className={cn('flex-1 overflow-y-auto p-3', isSidebarCollapsed && 'lg:px-2')}>
+          <nav aria-label="Seções do design system" className={cn('flex-1 overflow-y-auto p-3 custom-scrollbar', isSidebarCollapsed && 'lg:px-2')}>
             {isSidebarCollapsed ? (
               <div className="hidden space-y-1 lg:block">
                 {Object.entries(groupedSections).map(([group, sections]) => {
@@ -337,541 +399,910 @@ export const SeiaV2DesignSystemPage: React.FC = () => {
           </div>
         </aside>
 
-        <main id="design-system-content" className="min-w-0 flex-1 overflow-y-auto">
+        {/* Conteúdo rolável da Documentação */}
+        <main id="design-system-content" className="min-w-0 flex-1 overflow-y-auto custom-scrollbar">
           <div className="mx-auto w-full max-w-[1800px] p-4 pb-24 sm:p-6 lg:p-8">
-      <div className="mb-6 flex flex-col gap-4 border-b border-[var(--color-border-default)] pb-6 2xl:flex-row 2xl:items-end 2xl:justify-between">
-        <div className="max-w-3xl">
-          <div className="mb-3 flex items-center gap-2">
-            <Badge color="success" dot>SEIA V2</Badge>
-            <Badge color="gray">Design System · 1.0</Badge>
-          </div>
-          <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-3xl">Design System INEMA</h1>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--color-text-secondary)]">
-            Biblioteca viva do SEIA Plataforma. Os exemplos abaixo usam os mesmos tokens, componentes e estados da Dashboard Gerencial de Regulação.
-          </p>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <Button color="gray" outlined onClick={() => jumpTo('accessibility')}>
-            <CircleHelp className="h-4 w-4" /> Diretrizes
-          </Button>
-          <Button onClick={() => jumpTo('patterns')}>
-            <LayoutDashboard className="h-4 w-4" /> Ver composições
-          </Button>
-        </div>
-      </div>
-
-      <div className="min-w-0 space-y-14">
-          <section id="overview" className="scroll-mt-8">
-            <SectionIntro title="Visão geral" description="Uma única linguagem para os fluxos internos e públicos do INEMA: clara, institucional, acessível e consistente nos temas claro e escuro." />
-            <div className="grid gap-4 md:grid-cols-3">
-              {[
-                ['Consistência', 'Tokens semânticos conectam marca, componentes e estados.'],
-                ['Reuso real', 'Os espécimes são instâncias dos componentes usados no produto.'],
-                ['Acessibilidade', 'Contraste, foco, teclado e mensagens fazem parte da definição.'],
-              ].map(([title, description]) => (
-                <div key={title} className="rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-default)] p-5">
-                  <CheckCircle2 className="h-5 w-5 text-[var(--color-status-success)]" />
-                  <h3 className="mt-3 text-sm font-semibold text-[var(--color-text-primary)]">{title}</h3>
-                  <p className="mt-1 text-xs leading-5 text-[var(--color-text-secondary)]">{description}</p>
+            {/* Header da Documentação */}
+            <div className="mb-8 flex flex-col gap-4 border-b border-[var(--color-border-default)] pb-6 2xl:flex-row 2xl:items-end 2xl:justify-between">
+              <div className="max-w-3xl">
+                <div className="mb-3 flex items-center gap-2">
+                  <Badge color="success" dot>SEIA V2</Badge>
+                  <Badge color="gray">Design System · v1.0</Badge>
+                  <Badge color="primary">Filament 3 Native</Badge>
                 </div>
-              ))}
-            </div>
-          </section>
-
-          <section id="brand" className="scroll-mt-8">
-            <SectionIntro title="Marca e assets" description="Assinaturas oficiais exportadas do SEIA Plataforma. Em topbars verdes, use sempre as versões brancas." />
-            <div className="grid gap-4 lg:grid-cols-2">
-              <Specimen title="Logo horizontal" description="Uso preferencial em topbar e autenticação.">
-                <div className="flex min-h-36 items-center justify-center rounded-xl bg-[var(--topbar-bg)] p-8">
-                  <img src={seiaLogoWhite} alt="SEIA Plataforma" className="h-14 max-w-full" />
-                </div>
-              </Specimen>
-              <Specimen title="Símbolo" description="Uso em sidebar recolhida e espaços compactos.">
-                <div className="flex min-h-36 items-center justify-center rounded-xl bg-[var(--topbar-bg)] p-8">
-                  <img src={seiaIconWhite} alt="Símbolo SEIA Plataforma" className="h-16 w-16" />
-                </div>
-              </Specimen>
-            </div>
-          </section>
-
-          <section id="colors" className="scroll-mt-8">
-            <SectionIntro title="Cores e tokens" description="O verde concentra identidade e ação; neutros organizam conteúdo. No dark mode, a base é carvão e o verde permanece como assinatura." />
-            <Specimen title="Escala primária INEMA" description="Primitivos de marca do 50 ao 950.">
-              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-11">
-                {greenTokens.map(([name, value]) => (
-                  <button key={name} onClick={() => copyToken(value)} className="group overflow-hidden rounded-lg border border-[var(--color-border-default)] text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border-focus)]">
-                    <span className="block h-14" style={{ backgroundColor: value }} />
-                    <span className="block bg-[var(--color-surface-default)] px-2 py-2">
-                      <span className="block text-[11px] font-semibold text-[var(--color-text-primary)]">{name}</span>
-                      <span className="block text-[9px] uppercase text-[var(--color-text-tertiary)]">{copiedToken === value ? 'Copiado' : value}</span>
-                    </span>
-                  </button>
-                ))}
+                <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-3xl">
+                  Design System INEMA
+                </h1>
+                <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--color-text-secondary)]">
+                  Catálogo vivo e referência de engenharia de interface do SEIA Plataforma. Todas as amostras utilizam tokens semânticos, componentes reais e padrões consolidados na Dashboard Gerencial de Regulação.
+                </p>
               </div>
-            </Specimen>
-            <Specimen title="Tokens semânticos" description="Use pelo papel, nunca pelo valor hexadecimal." className="mt-4">
-              <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-                {semanticTokens.map(([label, token, value]) => (
-                  <button key={token} onClick={() => copyToken(token)} className={cn('flex items-center gap-3 rounded-lg border border-[var(--color-border-default)] p-3 text-left transition-colors hover:bg-[var(--color-surface-hover)]', focusRing)}>
-                    <span className="h-9 w-9 shrink-0 rounded-lg border border-black/10" style={{ backgroundColor: value }} />
-                    <span className="min-w-0">
-                      <span className="block text-xs font-semibold text-[var(--color-text-primary)]">{label}</span>
-                      <span className="block truncate text-[10px] text-[var(--color-text-tertiary)]">{copiedToken === token ? 'Token copiado' : token}</span>
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </Specimen>
-            <Specimen title="Escalas de suporte" description="Neutros estruturam superfícies; laranja e vermelho ficam reservados a alerta e criticidade." className="mt-4">
-              <div className="space-y-4">
-                {[
-                  ['Neutro', ['#F8FAFC', '#E2E8F0', '#94A3B8', '#475569', '#0F172A', '#020617']],
-                  ['Alerta', ['#FFF7ED', '#FED7AA', '#FB923C', '#EA580C', '#9A3412', '#431407']],
-                  ['Crítico', ['#FFF1F2', '#FECDD3', '#FB7185', '#E11D48', '#9F1239', '#4C0519']],
-                ].map(([label, colors]) => (
-                  <div key={label as string} className="grid items-center gap-2 sm:grid-cols-[72px_1fr]">
-                    <span className="text-xs font-semibold text-[var(--color-text-secondary)]">{label as string}</span>
-                    <div className="grid grid-cols-6 overflow-hidden rounded-lg border border-[var(--color-border-default)]">
-                      {(colors as string[]).map((color) => <button key={color} onClick={() => copyToken(color)} className="h-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--color-border-focus)]" style={{ backgroundColor: color }} aria-label={`Copiar cor ${color}`} />)}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Specimen>
-          </section>
-
-          <section id="typography" className="scroll-mt-8">
-            <SectionIntro title="Tipografia" description="Inter é a família funcional do produto. A hierarquia privilegia leitura rápida, densidade controlada e números tabulares." />
-            <Specimen title="Escala tipográfica">
-              <div className="divide-y divide-[var(--color-border-subtle)]">
-                {[
-                  ['Título de página', '30 / 36 · 700', 'text-3xl font-bold tracking-tight'],
-                  ['Título de seção', '20 / 28 · 700', 'text-xl font-bold tracking-tight'],
-                  ['Título de componente', '14 / 20 · 600', 'text-sm font-semibold'],
-                  ['Corpo', '14 / 24 · 400', 'text-sm leading-6'],
-                  ['Legenda', '12 / 16 · 500', 'text-xs font-medium'],
-                  ['Dado tabular', '14 / 20 · 600', 'text-sm font-semibold tabular-nums'],
-                ].map(([label, meta, classes]) => (
-                  <div key={label} className="grid gap-2 py-4 sm:grid-cols-[180px_1fr] sm:items-baseline">
-                    <div>
-                      <p className="text-xs font-semibold text-[var(--color-text-primary)]">{label}</p>
-                      <p className="text-[10px] text-[var(--color-text-tertiary)]">{meta}</p>
-                    </div>
-                    <p className={cn(classes, 'text-[var(--color-text-primary)]')}>Gestão ambiental orientada por evidências</p>
-                  </div>
-                ))}
-              </div>
-            </Specimen>
-          </section>
-
-          <section id="spacing" className="scroll-mt-8">
-            <SectionIntro title="Espaçamento e forma" description="A base de 4 px controla ritmo, alinhamento, densidade e áreas de toque." />
-            <div className="grid gap-4 lg:grid-cols-2">
-              <Specimen title="Escala de espaçamento">
-                <div className="space-y-3">
-                  {[4, 8, 12, 16, 24, 32, 48].map((size) => (
-                    <div key={size} className="flex items-center gap-3">
-                      <span className="w-8 text-right text-[10px] font-medium tabular-nums text-[var(--color-text-tertiary)]">{size}</span>
-                      <span className="h-3 rounded-sm bg-[var(--color-brand-primary)]" style={{ width: `${size * 3}px` }} />
-                    </div>
-                  ))}
-                </div>
-              </Specimen>
-              <Specimen title="Raios e elevação">
-                <div className="grid grid-cols-2 gap-4">
-                  {[['8 px', 'rounded-lg'], ['12 px', 'rounded-xl'], ['16 px', 'rounded-2xl'], ['Pill', 'rounded-full']].map(([label, radius]) => (
-                    <div key={label} className={cn('flex h-20 items-center justify-center border border-[var(--color-border-default)] bg-[var(--color-surface-raised)] shadow-xs', radius)}>
-                      <span className="text-xs font-medium text-[var(--color-text-secondary)]">{label}</span>
-                    </div>
-                  ))}
-                </div>
-              </Specimen>
-            </div>
-          </section>
-
-          <section id="icons" className="scroll-mt-8">
-            <SectionIntro title="Ícones" description="Lucide, traço consistente e tamanhos de 16 px em controles, 20 px em destaques e 24 px apenas em superfícies amplas." />
-            <Specimen title="Biblioteca funcional">
-              <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-6">
-                {iconCatalog.map(([label, Icon]) => (
-                  <div key={label} className="flex min-h-24 flex-col items-center justify-center gap-2 rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface-subtle)] p-3 text-center">
-                    <Icon className="h-5 w-5 text-[var(--color-text-secondary)]" strokeWidth={1.8} />
-                    <span className="text-[10px] font-medium text-[var(--color-text-tertiary)]">{label}</span>
-                  </div>
-                ))}
-              </div>
-            </Specimen>
-          </section>
-
-          <section id="buttons" className="scroll-mt-8">
-            <SectionIntro title="Botões" description="A hierarquia de ações usa contraste, posição e linguagem direta; cor de status só aparece quando o significado exigir." />
-            <Specimen title="Variantes e estados">
-              <div className="space-y-5">
-                <div className="flex flex-wrap items-center gap-2">
-                  <Button>Salvar alterações</Button>
-                  <Button color="gray">Cancelar</Button>
-                  <Button color="primary" outlined>Ver detalhes</Button>
-                  <Button color="danger" outlined><Trash2 className="h-4 w-4" /> Excluir</Button>
-                  <Button color="gray" variant="ghost"><MoreHorizontal className="h-4 w-4" /> Mais ações</Button>
-                </div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <Button size="xs">Extra pequeno</Button>
-                  <Button size="sm">Pequeno</Button>
-                  <Button size="default">Padrão</Button>
-                  <Button size="lg">Grande</Button>
-                  <Button disabled>Desabilitado</Button>
-                  <Button><LoaderCircle className="h-4 w-4 animate-spin" /> Salvando</Button>
-                  <Button size="icon" aria-label="Configurações"><Settings className="h-4 w-4" /></Button>
-                </div>
-              </div>
-            </Specimen>
-          </section>
-
-          <section id="fields" className="scroll-mt-8">
-            <SectionIntro title="Campos e seleção" description="Rótulo sempre visível, placeholder apenas como apoio e mensagens de erro com instrução de recuperação." />
-            <Specimen title="Formulário" description="Estados padrão, preenchido, desabilitado, inválido e seleção pesquisável.">
-              <div className="grid gap-5 md:grid-cols-2">
-                <label className="space-y-1.5 text-xs font-semibold text-[var(--color-text-primary)]">
-                  Número do processo <span className="text-[var(--color-status-critical)]">*</span>
-                  <input className={fieldClass} placeholder="SEIA-REG-AAAA/000000" />
-                  <span className="block text-[10px] font-normal text-[var(--color-text-tertiary)]">Use o identificador completo do processo.</span>
-                </label>
-                <label className="space-y-1.5 text-xs font-semibold text-[var(--color-text-primary)]">
-                  Diretoria responsável
-                  <FilamentSelect
-                    value={selectValue}
-                    onChange={setSelectValue}
-                    searchable
-                    options={[
-                      { value: 'dilic', label: 'DILIC — Licenciamento Ambiental' },
-                      { value: 'dirre', label: 'DIRRE — Recursos Hídricos' },
-                      { value: 'dibio', label: 'DIBIO — Biodiversidade' },
-                    ]}
-                  />
-                </label>
-                <label className="space-y-1.5 text-xs font-semibold text-[var(--color-text-primary)]">
-                  Responsável
-                  <input className={fieldClass} value="Analista responsável" readOnly />
-                </label>
-                <label className="space-y-1.5 text-xs font-semibold text-[var(--color-text-disabled)]">
-                  Unidade de origem
-                  <input className={fieldClass} value="DIFIS / Coordenação" disabled readOnly />
-                </label>
-                <label className="space-y-1.5 text-xs font-semibold text-[var(--badge-critical-text)]">
-                  CPF / CNPJ
-                  <InputWrapper valid={false}>
-                    <input className="w-full bg-transparent px-3 py-2 text-sm outline-none" value="000.000.000-0" readOnly />
-                  </InputWrapper>
-                  <span className="flex items-center gap-1 text-[10px] font-normal"><AlertCircle className="h-3 w-3" /> Informe 11 ou 14 dígitos.</span>
-                </label>
-                <label className="space-y-1.5 text-xs font-semibold text-[var(--color-text-primary)]">
-                  Observações
-                  <textarea className={cn(fieldClass, 'h-24 resize-y py-2')} placeholder="Registre informações relevantes para a análise." />
-                </label>
-              </div>
-              <div className="mt-5 flex flex-wrap items-center gap-6 border-t border-[var(--color-border-subtle)] pt-5 text-xs text-[var(--color-text-secondary)]">
-                <label className="flex items-center gap-2"><input type="checkbox" defaultChecked className={cn('h-4 w-4 accent-[var(--color-brand-primary)]', focusRing)} /> Receber notificações</label>
-                <label className="flex items-center gap-2"><input type="radio" name="scope" defaultChecked className={cn('h-4 w-4 accent-[var(--color-brand-primary)]', focusRing)} /> Interno</label>
-                <label className="flex items-center gap-2"><input type="radio" name="scope" className={cn('h-4 w-4 accent-[var(--color-brand-primary)]', focusRing)} /> Público</label>
-                <button
-                  role="switch"
-                  aria-checked={switchOn}
-                  onClick={() => setSwitchOn((value) => !value)}
-                  className={cn('flex items-center gap-2 rounded-md', focusRing)}
-                >
-                  <span className={cn('relative h-5 w-9 rounded-full transition-colors', switchOn ? 'bg-[var(--color-brand-primary)]' : 'bg-[var(--color-neutral-300)]')}>
-                    <span className={cn('absolute top-0.5 h-4 w-4 rounded-full bg-white shadow-xs transition-transform', switchOn ? 'translate-x-[18px]' : 'translate-x-0.5')} />
-                  </span>
-                  Publicação automática
-                </button>
-              </div>
-            </Specimen>
-          </section>
-
-          <section id="badges" className="scroll-mt-8">
-            <SectionIntro title="Badges e estados" description="Pills comunicam estado, categoria ou contagem. Nunca substituem ações nem usam vermelho fora de criticidade." />
-            <Specimen title="Estados semânticos">
               <div className="flex flex-wrap items-center gap-2">
-                <Badge color="success" dot>Concluído</Badge>
-                <Badge color="warning" dot>Pendente</Badge>
-                <Badge color="danger" dot>Vencido</Badge>
-                <Badge color="info" dot>Em análise</Badge>
-                <Badge color="primary">Licenciamento</Badge>
-                <Badge color="gray">Rascunho</Badge>
-                <Badge color="gray" size="xs">Em breve</Badge>
-              </div>
-            </Specimen>
-          </section>
-
-          <section id="cards" className="scroll-mt-8">
-            <SectionIntro title="Cards e métricas" description="Cards agrupam informação relacionada; KPIs preservam leitura tabular, tendência e significado das cores." />
-            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-              <KpiCard title="Protocolados" value="1.245" trend={{ value: '+12%', isPositive: true }} icon={FileText} variant="emerald" />
-              <KpiCard title="Em Análise" value="2.356" trend={{ value: '-3%', isPositive: false }} icon={Clock3} variant="slate" />
-              <KpiCard title="Pendentes" value="873" trend={{ value: '+8%', isPositive: false }} icon={AlertCircle} variant="amber" />
-              <KpiCard title="Vencidos" value="198" trend={{ value: '+15%', isPositive: false }} icon={ShieldAlert} variant="rose" />
-            </div>
-            <div className="mt-4 grid gap-4 lg:grid-cols-2">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Seção de formulário</CardTitle>
-                  <CardDescription>Combina título, descrição, conteúdo e ações.</CardDescription>
-                </CardHeader>
-                <CardContent className="grid gap-3 sm:grid-cols-2">
-                  <input className={fieldClass} placeholder="Campo principal" />
-                  <input className={fieldClass} placeholder="Campo complementar" />
-                </CardContent>
-                <CardFooter className="justify-end gap-2"><Button color="gray">Cancelar</Button><Button>Salvar</Button></CardFooter>
-              </Card>
-              <Section heading="Seção recolhível" description="Conteúdo secundário que pode ser fechado sem perder contexto." collapsible icon={SlidersHorizontal} iconColor="primary">
-                <p className="text-sm leading-6 text-[var(--color-text-secondary)]">Use recolhimento em blocos longos e independentes. O título permanece como resumo do conteúdo.</p>
-              </Section>
-            </div>
-          </section>
-
-          <section id="navigation" className="scroll-mt-8">
-            <SectionIntro title="Navegação" description="Topbar institucional, sidebar orientada a módulos, breadcrumbs funcionais, abas e paginação." />
-            <div className="space-y-4">
-              <Specimen title="Topbar" description="Logo e controle da sidebar à esquerda, busca geral central e ações do usuário à direita.">
-                <div className="flex min-h-16 items-center gap-4 rounded-xl bg-[var(--topbar-bg)] px-4 text-[var(--topbar-text)]">
-                  <img src="/src/assets/seia-plataforma/svg/SEIA Plataforma - Logo EXP_HORIZONTAL_W.svg" alt="SEIA Plataforma" className="h-9 w-auto" />
-                  <button className={cn('rounded-lg p-2 hover:bg-white/10 focus-visible:ring-white', focusRing)} aria-label="Recolher sidebar"><PanelLeftClose className="h-4 w-4" /></button>
-                  <div className="mx-auto hidden w-full max-w-xl items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-xs text-white/75 md:flex">
-                    <Search className="h-4 w-4" /> Buscar processos, requerimentos SEIA ou atos...
-                  </div>
-                  <button className={cn('rounded-lg p-2 hover:bg-white/10 focus-visible:ring-white', focusRing)} aria-label="Notificações"><Bell className="h-4 w-4" /></button>
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-white/10 text-xs font-semibold">LM</span>
-                </div>
-              </Specimen>
-              <div className="grid gap-4 lg:grid-cols-2">
-                <Specimen title="Sidebar e grupos">
-                  <div className="mx-auto max-w-sm rounded-xl bg-[var(--sidebar-bg)] p-3 text-xs">
-                    {[
-                      [LayoutDashboard, 'Dashboard Gerencial', true],
-                      [FileText, 'Regulação', false],
-                      [ShieldAlert, 'Fiscalização', false],
-                      [Settings, 'Administração', false],
-                    ].map(([Icon, label, active]) => {
-                      const NavIcon = Icon as React.ElementType;
-                      return (
-                        <button key={label as string} className={cn('mb-1 flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left font-medium', focusRing, active ? 'bg-[var(--nav-item-selected-bg)] text-[var(--nav-item-selected-text)]' : 'text-[var(--nav-item-text)] hover:bg-[var(--nav-item-hover-bg)]')}>
-                          <NavIcon className="h-4 w-4" /> <span className="flex-1">{label as string}</span> {!active && <ChevronDown className="h-3.5 w-3.5" />}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </Specimen>
-                <Specimen title="Breadcrumb e abas">
-                  <nav className="flex items-center gap-2 text-xs text-[var(--color-text-secondary)]" aria-label="Breadcrumb">
-                    <a href="/?rota=seia-v2&tela=inicio" className={cn('rounded hover:text-[var(--color-text-link)] hover:underline', focusRing)}>Início</a>
-                    <ChevronRight className="h-3.5 w-3.5" />
-                    <a href="/?rota=seia-v2&tela=relatorios" className={cn('rounded hover:text-[var(--color-text-link)] hover:underline', focusRing)}>Regulação</a>
-                    <ChevronRight className="h-3.5 w-3.5" />
-                    <span className="font-semibold text-[var(--color-text-primary)]">Dashboard</span>
-                  </nav>
-                  <FilamentTabs
-                    className="mt-6"
-                    tabs={[{ id: 'visao-geral', label: 'Visão geral' }, { id: 'processos', label: 'Processos', badge: 24 }, { id: 'documentos', label: 'Documentos' }]}
-                    activeTab={activeTab}
-                    onChange={setActiveTab}
-                  />
-                  <div className="mt-6 flex items-center justify-between border-t border-[var(--color-border-subtle)] pt-4">
-                    <span className="text-xs text-[var(--color-text-tertiary)]">1–10 de 98 resultados</span>
-                    <div className="flex items-center">
-                      {[ChevronLeft, '1', '2', '3', ChevronRight].map((item, index) => typeof item === 'string' ? (
-                        <button key={item} className={cn('h-8 min-w-8 border-y border-r border-[var(--color-border-default)] text-xs first:border-l', focusRing, index === 1 ? 'bg-[var(--color-brand-primary-subtle)] font-semibold text-[var(--color-text-link)]' : 'text-[var(--color-text-secondary)]')}>{item}</button>
-                      ) : React.createElement(item, { key: index, className: cn('h-8 w-8 border-y border-r border-[var(--color-border-default)] p-2 text-[var(--color-text-secondary)] first:border-l', focusRing) }))}
-                    </div>
-                  </div>
-                </Specimen>
+                <Button color="gray" outlined onClick={() => jumpTo('accessibility')}>
+                  <CircleHelp className="h-4 w-4" /> Diretrizes de Acessibilidade
+                </Button>
+                <Button onClick={() => jumpTo('patterns')}>
+                  <LayoutDashboard className="h-4 w-4" /> Ver Composições
+                </Button>
               </div>
             </div>
-          </section>
 
-          <section id="table" className="scroll-mt-8">
-            <SectionIntro title="Tabelas" description="Busca, filtros, seleção, ordenação, estados, ações e paginação em uma composição responsiva." />
-            <TableContainer
-              toolbar={
-                <div className="flex flex-col gap-3 border-b border-[var(--color-border-subtle)] p-4 md:flex-row md:items-center md:justify-between">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <Button color="gray" size="sm"><MoreHorizontal className="h-4 w-4" /> Ações em lote</Button>
-                    <Button color="gray" size="sm"><Filter className="h-4 w-4" /> Filtros <Badge color="primary" size="xs">2</Badge></Button>
-                    <Button color="gray" size="sm"><SlidersHorizontal className="h-4 w-4" /> Colunas</Button>
-                  </div>
-                  <div className="relative w-full md:max-w-sm">
-                    <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-text-tertiary)]" />
-                    <label htmlFor="design-system-table-search" className="sr-only">Buscar processos na tabela de exemplo</label>
-                    <input id="design-system-table-search" value={tableSearch} onChange={(event) => setTableSearch(event.target.value)} placeholder="Buscar na tabela" className={cn(fieldClass, 'pl-9')} />
-                  </div>
-                </div>
-              }
-              pagination={
-                <div className="flex w-full flex-col gap-3 text-xs sm:flex-row sm:items-center sm:justify-between">
-                  <span className="text-[var(--color-text-tertiary)]">Exibindo {visibleRows.length} de 98 resultados</span>
-                  <div className="flex items-center gap-1"><Button color="gray" size="xs"><ChevronLeft className="h-3.5 w-3.5" /> Anterior</Button><Button size="xs">1</Button><Button color="gray" size="xs">2</Button><Button color="gray" size="xs">Próxima <ChevronRight className="h-3.5 w-3.5" /></Button></div>
-                </div>
-              }
-            >
-              {selectedRows.length > 0 && (
-                <div className="flex items-center justify-between gap-3 bg-[var(--color-brand-primary-subtle)] px-4 py-2 text-xs text-[var(--color-text-link)]">
-                  <span className="font-semibold">{selectedRows.length} registro(s) selecionado(s)</span>
-                  <button onClick={() => setSelectedRows([])} className={cn('rounded font-semibold hover:underline', focusRing)}>Limpar seleção</button>
-                </div>
-              )}
-              <table className="w-full min-w-[820px] text-left text-xs">
-                <thead className="border-b border-[var(--table-border)] bg-[var(--table-header-bg)] text-[10px] font-bold uppercase tracking-wider text-[var(--color-text-tertiary)]">
-                  <tr>
-                    <th className="p-4"><input type="checkbox" aria-label="Selecionar todos os processos" className={cn('h-4 w-4 accent-[var(--color-brand-primary)]', focusRing)} onChange={(event) => setSelectedRows(event.target.checked ? tableRows.map((row) => row.process) : [])} checked={selectedRows.length === tableRows.length} /></th>
-                    <th className="p-4">Processo</th><th className="p-4">Interessado</th><th className="p-4">Tipo</th><th className="p-4">Unidade</th><th className="p-4">Status</th><th className="p-4 text-right">Ações</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[var(--table-border)]">
-                  {visibleRows.map((row) => (
-                    <tr key={row.process} className="transition-colors hover:bg-[var(--table-row-hover)]">
-                      <td className="p-4"><input type="checkbox" aria-label={`Selecionar processo ${row.process}`} className={cn('h-4 w-4 accent-[var(--color-brand-primary)]', focusRing)} checked={selectedRows.includes(row.process)} onChange={() => setSelectedRows((current) => current.includes(row.process) ? current.filter((item) => item !== row.process) : [...current, row.process])} /></td>
-                      <td className="p-4 font-semibold text-[var(--color-text-primary)]">{row.process}</td>
-                      <td className="p-4 text-[var(--color-text-secondary)]">{row.applicant}</td>
-                      <td className="p-4 text-[var(--color-text-secondary)]">{row.type}</td>
-                      <td className="p-4 font-semibold text-[var(--color-text-secondary)]">{row.unit}</td>
-                      <td className="p-4"><Badge color={row.status === 'Concluído' ? 'success' : row.status === 'Pendente' ? 'warning' : row.status === 'Vencido' ? 'danger' : 'info'} dot>{row.status}</Badge></td>
-                      <td className="p-4"><div className="flex justify-end gap-1"><Button color="gray" size="icon" aria-label="Visualizar"><Eye className="h-4 w-4" /></Button><Button color="gray" size="icon" aria-label="Editar"><Edit3 className="h-4 w-4" /></Button><Button color="danger" outlined size="icon" aria-label="Excluir"><Trash2 className="h-4 w-4" /></Button></div></td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              {visibleRows.length === 0 && (
-                <div className="flex min-h-56 flex-col items-center justify-center p-8 text-center">
-                  <Search className="h-8 w-8 text-[var(--color-text-disabled)]" />
-                  <h3 className="mt-3 text-sm font-semibold text-[var(--color-text-primary)]">Nenhum processo encontrado</h3>
-                  <p className="mt-1 text-xs text-[var(--color-text-tertiary)]">Revise o termo de busca ou limpe os filtros ativos.</p>
-                  <Button color="gray" size="sm" className="mt-4" onClick={() => setTableSearch('')}>Limpar busca</Button>
-                </div>
-              )}
-            </TableContainer>
-          </section>
-
-          <section id="wizard" className="scroll-mt-8">
-            <SectionIntro title="Wizard" description="Etapas conectadas por divisórias em chevron, com concluído, atual e futuro claramente diferenciados." />
-            <Specimen title="Fluxo de requerimento" description="Clique em uma etapa para revisar os estados.">
-              <div className="overflow-hidden rounded-xl border border-[var(--color-border-default)]">
-                <FilamentWizard
-                  steps={[{ id: 1, label: 'Identificação' }, { id: 2, label: 'Tipo de Solicitação' }, { id: 3, label: 'Questionário' }, { id: 4, label: 'Documentos' }]}
-                  currentStep={wizardStep}
-                  onStepClick={setWizardStep}
+            <div className="min-w-0 space-y-16">
+              {/* SEÇÃO: VISÃO GERAL */}
+              <section id="overview" className="scroll-mt-8">
+                <SectionIntro
+                  title="Visão geral"
+                  description="Uma única linguagem para os fluxos internos e públicos do INEMA: clara, institucional, acessível e consistente nos modos claro e escuro."
                 />
-                <div className="grid gap-4 p-5 sm:grid-cols-2">
-                  <label className="space-y-1.5 text-xs font-semibold text-[var(--color-text-primary)]">Razão social<input className={fieldClass} placeholder="Nome do empreendimento" /></label>
-                  <label className="space-y-1.5 text-xs font-semibold text-[var(--color-text-primary)]">CPF / CNPJ<input className={fieldClass} placeholder="00.000.000/0000-00" /></label>
-                </div>
-                <div className="flex items-center justify-between border-t border-[var(--color-border-subtle)] p-4">
-                  <Button color="gray" disabled={wizardStep === 1} onClick={() => setWizardStep((step) => Math.max(1, step - 1))}><ChevronLeft className="h-4 w-4" /> Voltar</Button>
-                  <Button disabled={wizardStep === 4} onClick={() => setWizardStep((step) => Math.min(4, step + 1))}>Avançar <ChevronRight className="h-4 w-4" /></Button>
-                </div>
-              </div>
-            </Specimen>
-          </section>
-
-          <section id="feedback" className="scroll-mt-8">
-            <SectionIntro title="Feedback e overlays" description="Alertas, estados vazios, modal e painel de notificações dão retorno imediato sem perder o contexto." />
-            <div className="grid gap-4 lg:grid-cols-2">
-              <Specimen title="Mensagens e estados">
-                <div className="space-y-3">
+                <div className="grid gap-4 md:grid-cols-3">
                   {[
-                    [CheckCircle2, 'Solicitação salva com sucesso.', 'var(--badge-success-bg)', 'var(--badge-success-text)', 'var(--badge-success-border)'],
-                    [AlertCircle, 'Existem campos obrigatórios pendentes.', 'var(--badge-warning-bg)', 'var(--badge-warning-text)', 'var(--badge-warning-border)'],
-                    [Info, 'A análise será encaminhada para a unidade responsável.', 'var(--badge-info-bg)', 'var(--badge-info-text)', 'var(--badge-info-border)'],
-                  ].map(([Icon, text, background, color, border]) => {
-                    const AlertIcon = Icon as React.ElementType;
-                    return <div key={text as string} className="flex items-start gap-2 rounded-xl border p-3 text-xs" style={{ backgroundColor: background as string, color: color as string, borderColor: border as string }}><AlertIcon className="mt-0.5 h-4 w-4 shrink-0" /><span className="leading-5">{text as string}</span></div>;
+                    ['Consistência Estrita', 'Tokens semânticos unificados conectam identidade, componentes e estados sem divergências visuais.', Layers],
+                    ['Reuso de Primitivas Reais', 'Os espécimes são instâncias dos componentes que rodam diretamente nas telas do SEIA V2.', Boxes],
+                    ['Acessibilidade & Dense UI', 'Contraste WCAG AA, foco visível, navegação por teclado e densidade compacta para alta produtividade.', ShieldCheck],
+                  ].map(([title, description, Icon]) => {
+                    const CardIcon = Icon as React.ElementType;
+                    return (
+                      <div key={title as string} className="rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-default)] p-5 shadow-2xs">
+                        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--color-brand-primary-subtle)] text-[var(--color-text-link)]">
+                          <CardIcon className="h-5 w-5" />
+                        </div>
+                        <h3 className="mt-3.5 text-sm font-semibold text-[var(--color-text-primary)]">{title as string}</h3>
+                        <p className="mt-1 text-xs leading-5 text-[var(--color-text-secondary)]">{description as string}</p>
+                      </div>
+                    );
                   })}
                 </div>
-              </Specimen>
-              <Specimen title="Overlays interativos">
-                <div className="flex flex-wrap gap-2">
-                  <Button onClick={() => setIsModalOpen(true)}>Abrir modal</Button>
-                  <Button color="gray" aria-expanded={isNotificationOpen} aria-controls="design-system-notifications" onClick={() => setIsNotificationOpen((open) => !open)}><Bell className="h-4 w-4" /> Notificações <Badge color="danger" size="xs">3</Badge></Button>
+              </section>
+
+              {/* SEÇÃO: MARCA E ASSETS */}
+              <section id="brand" className="scroll-mt-8">
+                <SectionIntro
+                  title="Marca e assets"
+                  description="Assinaturas oficiais exportadas do SEIA Plataforma. Em topbars verdes (#0F4C3A), use estritamente as versões brancas."
+                />
+                <div className="grid gap-4 lg:grid-cols-2">
+                  <Specimen title="Logo Horizontal (Versão Branca)" description="Uso em topbar verde institucional e páginas de autenticação.">
+                    <div className="flex min-h-36 items-center justify-center rounded-xl bg-[var(--topbar-bg)] p-8">
+                      <img src={seiaLogoWhite} alt="SEIA Plataforma Horizontal Branco" className="h-12 max-w-full" />
+                    </div>
+                  </Specimen>
+                  <Specimen title="Símbolo Compacto (Versão Branca)" description="Uso em sidebar recolhida (32px), favicon e espaços reduzidos.">
+                    <div className="flex min-h-36 items-center justify-center rounded-xl bg-[var(--topbar-bg)] p-8">
+                      <img src={seiaIconWhite} alt="Símbolo SEIA Plataforma Branco" className="h-14 w-14" />
+                    </div>
+                  </Specimen>
+                  <Specimen title="Logo Horizontal (Versão Colorida)" description="Uso em documentos impressos, relatórios gerenciais e fundos claros.">
+                    <div className="flex min-h-36 items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-800/40 p-8 border border-dashed border-slate-200 dark:border-slate-700">
+                      <img src={seiaLogoColor} alt="SEIA Plataforma Horizontal Color" className="h-12 max-w-full" />
+                    </div>
+                  </Specimen>
+                  <Specimen title="Símbolo Compacto (Versão Colorida)" description="Uso em avatares de sistema, cards e ícones de atalho sobre fundo claro.">
+                    <div className="flex min-h-36 items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-800/40 p-8 border border-dashed border-slate-200 dark:border-slate-700">
+                      <img src={seiaIconColor} alt="Símbolo SEIA Plataforma Color" className="h-14 w-14" />
+                    </div>
+                  </Specimen>
                 </div>
-                {isNotificationOpen && (
-                  <div id="design-system-notifications" className="mt-4 overflow-hidden rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-default)] shadow-lg">
-                    <div className="flex items-center justify-between border-b border-[var(--color-border-subtle)] px-4 py-3"><div><h4 className="text-sm font-semibold text-[var(--color-text-primary)]">Notificações</h4><button className={cn('rounded text-[10px] font-semibold text-[var(--color-text-link)] hover:underline', focusRing)}>Marcar todas como lidas</button></div><button onClick={() => setIsNotificationOpen(false)} className={cn('rounded', focusRing)} aria-label="Fechar notificações"><X className="h-4 w-4 text-[var(--color-text-tertiary)]" /></button></div>
-                    <div className="divide-y divide-[var(--color-border-subtle)]">
+              </section>
+
+              {/* SEÇÃO: CORES E TOKENS */}
+              <section id="colors" className="scroll-mt-8">
+                <SectionIntro
+                  title="Cores e tokens"
+                  description="O verde (#0F4C3A) concentra identidade e ação principal; neutros organizam superfícies. No dark mode, a base é carvão neutro e o verde atua como assinatura."
+                />
+                <Specimen title="Escala Primária INEMA (Verde Institucional)" description="Clique em qualquer tom para copiar o valor hexadecimal.">
+                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-11">
+                    {greenTokens.map(([name, value]) => (
+                      <button
+                        key={name}
+                        onClick={() => copyToken(value)}
+                        className="group overflow-hidden rounded-lg border border-[var(--color-border-default)] text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border-focus)] transition-all hover:scale-102"
+                      >
+                        <span className="block h-14" style={{ backgroundColor: value }} />
+                        <span className="block bg-[var(--color-surface-default)] px-2 py-2">
+                          <span className="block text-[11px] font-semibold text-[var(--color-text-primary)]">{name}</span>
+                          <span className="block text-[9px] uppercase text-[var(--color-text-tertiary)]">{copiedToken === value ? 'Copiado!' : value}</span>
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </Specimen>
+
+                <Specimen title="Tokens Semânticos Universais" description="Utilize sempre pelo papel semântico, garantindo suporte automático a temas claro e escuro." className="mt-4">
+                  <div className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    {semanticTokens.map(([label, token, value]) => (
+                      <button
+                        key={token}
+                        onClick={() => copyToken(token)}
+                        className={cn('flex items-center gap-3 rounded-lg border border-[var(--color-border-default)] p-3 text-left transition-colors hover:bg-[var(--color-surface-hover)]', focusRing)}
+                      >
+                        <span className="h-8 w-8 shrink-0 rounded-lg border border-black/10 shadow-2xs" style={{ backgroundColor: value }} />
+                        <span className="min-w-0 flex-1">
+                          <span className="block text-xs font-semibold text-[var(--color-text-primary)] truncate">{label}</span>
+                          <span className="block truncate text-[10px] text-[var(--color-text-tertiary)] font-mono">{copiedToken === token ? 'Token copiado!' : token}</span>
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </Specimen>
+
+                <Specimen title="Escalas Funcionais de Suporte" description="Neutros estruturam hierarquia; Âmbar (Alerta), Vermelho (Crítico) e Azul (Informativo)." className="mt-4">
+                  <div className="space-y-4">
+                    {[
+                      ['Neutro', ['#F8FAFC', '#E2E8F0', '#94A3B8', '#475569', '#0F172A', '#020617']],
+                      ['Sucesso', ['#F0FDF4', '#DCFCE7', '#86EFAC', '#22C55E', '#15803D', '#14532D']],
+                      ['Alerta', ['#FFFBEB', '#FEF3C7', '#FDE68A', '#F59E0B', '#B45309', '#78350F']],
+                      ['Crítico', ['#FEF2F2', '#FEE2E2', '#FECACA', '#EF4444', '#B91C1C', '#7F1D1D']],
+                      ['Info', ['#F0F9FF', '#E0F2FE', '#BAE6FD', '#0284C7', '#0369A1', '#0C4A6E']],
+                    ].map(([label, colors]) => (
+                      <div key={label as string} className="grid items-center gap-2 sm:grid-cols-[80px_1fr]">
+                        <span className="text-xs font-semibold text-[var(--color-text-secondary)]">{label as string}</span>
+                        <div className="grid grid-cols-6 overflow-hidden rounded-lg border border-[var(--color-border-default)] shadow-2xs">
+                          {(colors as string[]).map((color) => (
+                            <button
+                              key={color}
+                              onClick={() => copyToken(color)}
+                              className="h-9 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--color-border-focus)] transition-opacity hover:opacity-90"
+                              style={{ backgroundColor: color }}
+                              aria-label={`Copiar cor ${color}`}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </Specimen>
+              </section>
+
+              {/* SEÇÃO: TIPOGRAFIA */}
+              <section id="typography" className="scroll-mt-8">
+                <SectionIntro
+                  title="Tipografia"
+                  description="Inter é a família tipográfica funcional do produto. A hierarquia privilegia leitura rápida, densidade controlada e números tabulares (tabular-nums) em processos e métricas."
+                />
+                <Specimen title="Escala Tipográfica & Hierarquia">
+                  <div className="divide-y divide-[var(--color-border-subtle)]">
+                    {[
+                      ['Display / Hero', '36 / 44 · 800', 'text-4xl font-extrabold tracking-tight'],
+                      ['Título de página (H1)', '30 / 36 · 700', 'text-3xl font-bold tracking-tight'],
+                      ['Título de seção (H2)', '20 / 28 · 700', 'text-xl font-bold tracking-tight'],
+                      ['Título de card (H3)', '15 / 22 · 600', 'text-sm sm:text-base font-semibold'],
+                      ['Corpo de texto padrão', '14 / 24 · 400', 'text-sm leading-6'],
+                      ['Legenda / Apoio', '12 / 16 · 500', 'text-xs font-medium'],
+                      ['Micro-rótulo / Badge', '10 / 14 · 700 uppercase', 'text-[10px] font-bold uppercase tracking-wider'],
+                      ['Dado Tabular / Protocolo', '14 / 20 · 600 font-mono', 'text-sm font-semibold font-mono tabular-nums'],
+                    ].map(([label, meta, classes]) => (
+                      <div key={label} className="grid gap-2 py-4 sm:grid-cols-[220px_1fr] sm:items-baseline">
+                        <div>
+                          <p className="text-xs font-semibold text-[var(--color-text-primary)]">{label}</p>
+                          <p className="text-[10px] font-mono text-[var(--color-text-tertiary)]">{meta}</p>
+                        </div>
+                        <p className={cn(classes, 'text-[var(--color-text-primary)] truncate')}>
+                          SEIA-REG-2026/001245 · Gestão Ambiental Integrada
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </Specimen>
+              </section>
+
+              {/* SEÇÃO: ESPAÇAMENTO E FORMA */}
+              <section id="spacing" className="scroll-mt-8">
+                <SectionIntro
+                  title="Espaçamento e forma"
+                  description="A grade modular de 4 px / 8 pt padroniza ritmo, densidade (Dense UI) e áreas de toque nos formulários e tabelas."
+                />
+                <div className="grid gap-4 lg:grid-cols-2">
+                  <Specimen title="Escala de Espaçamento Modular (Grade 4px)">
+                    <div className="space-y-3">
+                      {[4, 8, 12, 16, 20, 24, 32, 40, 48].map((size) => (
+                        <div key={size} className="flex items-center gap-3">
+                          <span className="w-12 text-right text-[11px] font-mono tabular-nums text-[var(--color-text-tertiary)]">{size}px</span>
+                          <span className="h-3.5 rounded-sm bg-[var(--color-brand-primary)]" style={{ width: `${size * 3}px` }} />
+                          <span className="text-[10px] text-[var(--color-text-tertiary)] font-mono">p-{size / 4}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </Specimen>
+                  <Specimen title="Raios de Arredondamento e Elevação">
+                    <div className="grid grid-cols-2 gap-3.5">
                       {[
-                        ['Análise distribuída', 'O processo 001245 foi atribuído a você.', 'Agora'],
-                        ['Prazo próximo', 'Uma atividade vence em 2 dias.', '12 min'],
-                        ['Exportação concluída', 'O relatório está pronto para download.', '1 h'],
-                      ].map(([title, description, time]) => <button key={title} className={cn('flex w-full gap-3 p-4 text-left hover:bg-[var(--color-surface-hover)]', focusRing)}><span className="mt-0.5 flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--color-brand-primary-subtle)] text-[var(--color-text-link)]"><Bell className="h-3.5 w-3.5" /></span><span className="min-w-0 flex-1"><span className="block text-xs font-semibold text-[var(--color-text-primary)]">{title}</span><span className="mt-0.5 block text-[10px] leading-4 text-[var(--color-text-secondary)]">{description}</span></span><span className="text-[9px] text-[var(--color-text-tertiary)]">{time}</span></button>)}
+                        ['6 px (rounded-md)', 'rounded-md', 'Badges e sub-itens'],
+                        ['8 px (rounded-lg)', 'rounded-lg', 'Botões e inputs'],
+                        ['12 px (rounded-xl)', 'rounded-xl', 'Cards e seções'],
+                        ['16 px (rounded-2xl)', 'rounded-2xl', 'Modais e containers'],
+                        ['Full (Pill)', 'rounded-full', 'Tags e contadores'],
+                      ].map(([label, radius, useCase]) => (
+                        <div key={label} className={cn('flex flex-col items-center justify-center p-4 border border-[var(--color-border-default)] bg-[var(--color-surface-raised)] shadow-2xs text-center', radius)}>
+                          <span className="text-xs font-semibold text-[var(--color-text-primary)]">{label}</span>
+                          <span className="text-[10px] text-[var(--color-text-tertiary)] mt-0.5">{useCase}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </Specimen>
+                </div>
+              </section>
+
+              {/* SEÇÃO: ÍCONES */}
+              <section id="icons" className="scroll-mt-8">
+                <SectionIntro
+                  title="Ícones"
+                  description="Biblioteca Lucide com traço de 1.75px. Tamanhos padronizados: 14/16px em botões e inputs, 20px em seções/headers e 24px em destaques."
+                />
+                <Specimen title="Catálogo de Ícones Funcionais SEIA">
+                  <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+                    {iconCatalog.map(([label, Icon]) => (
+                      <div key={label} className="flex min-h-20 flex-col items-center justify-center gap-1.5 rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface-subtle)] p-3 text-center transition-colors hover:border-[var(--color-border-focus)]">
+                        <Icon className="h-5 w-5 text-[var(--color-text-secondary)]" strokeWidth={1.75} />
+                        <span className="text-[11px] font-medium text-[var(--color-text-tertiary)]">{label}</span>
+                      </div>
+                    ))}
+                  </div>
+                </Specimen>
+              </section>
+
+              {/* SEÇÃO: BOTÕES */}
+              <section id="buttons" className="scroll-mt-8">
+                <SectionIntro
+                  title="Botões (Buttons)"
+                  description="Ações do Filament e shadcn integradas. Verde institucional (#0F4C3A) reservado à ação primária da tela; neutros estruturam ações secundárias."
+                />
+                <div className="space-y-4">
+                  <Specimen title="Variantes de Cor & Hierarquia (Solid vs Outlined)">
+                    <div className="flex flex-col gap-4">
+                      <div className="flex flex-wrap items-center gap-2.5">
+                        <Button color="primary">Primário (Salvar)</Button>
+                        <Button color="gray">Secundário (Cancelar)</Button>
+                        <Button color="primary" outlined>Outlined Primário</Button>
+                        <Button color="danger" outlined><Trash2 className="h-4 w-4" /> Excluir</Button>
+                        <Button color="warning" outlined><AlertTriangle className="h-4 w-4" /> Pendência</Button>
+                        <Button color="success"><Check className="h-4 w-4" /> Concluir</Button>
+                        <Button color="gray" variant="ghost"><MoreHorizontal className="h-4 w-4" /> Mais opções</Button>
+                      </div>
+                    </div>
+                  </Specimen>
+
+                  <Specimen title="Tamanhos Padronizados (Dense UI)">
+                    <div className="flex flex-wrap items-center gap-2.5">
+                      <Button size="xs">XS (28px)</Button>
+                      <Button size="sm">SM (32px)</Button>
+                      <Button size="default">Default / MD (36px)</Button>
+                      <Button size="lg">LG (40px)</Button>
+                      <Button size="xl">XL (44px)</Button>
+                      <Button size="icon" aria-label="Visualizar"><Eye className="h-4 w-4" /></Button>
+                      <Button size="icon" color="gray" aria-label="Editar"><Edit3 className="h-4 w-4" /></Button>
+                    </div>
+                  </Specimen>
+
+                  <Specimen title="Estados Interativos & Loading (Teste ao Clicar)">
+                    <div className="flex flex-wrap items-center gap-3">
+                      <Button onClick={handleInteractiveClick} disabled={interactiveButtonLoading}>
+                        {interactiveButtonLoading ? (
+                          <>
+                            <LoaderCircle className="h-4 w-4 animate-spin" /> Processando...
+                          </>
+                        ) : (
+                          <>
+                            <Send className="h-4 w-4" /> Clique para Testar Loading
+                          </>
+                        )}
+                      </Button>
+                      <Button disabled color="primary">Primário Desabilitado</Button>
+                      <Button disabled color="gray">Secundário Desabilitado</Button>
+                      <Button disabled color="danger" outlined>Excluir Desabilitado</Button>
+                    </div>
+                  </Specimen>
+                </div>
+              </section>
+
+              {/* SEÇÃO: CAMPOS E SELEÇÃO */}
+              <section id="fields" className="scroll-mt-8">
+                <SectionIntro
+                  title="Campos e formulários (Fields & Controls)"
+                  description="Rótulos explícitos, placeholders contextuais, feedback de validação em tempo real e seleção pesquisável (FilamentSelect)."
+                />
+                <Specimen title="Anatomia Completa de Formulário SEIA">
+                  <div className="grid gap-5 md:grid-cols-2">
+                    {/* Campo Padrão */}
+                    <label className="space-y-1.5 text-xs font-semibold text-[var(--color-text-primary)]">
+                      Número do Processo <span className="text-[var(--color-status-critical)]">*</span>
+                      <input className={fieldClass} placeholder="SEIA-REG-2026/000000" defaultValue="SEIA-REG-2026/001245" />
+                      <span className="block text-[10px] font-normal text-[var(--color-text-tertiary)]">
+                        Identificador único gerado automaticamente pelo protocolo.
+                      </span>
+                    </label>
+
+                    {/* Select Pesquisável */}
+                    <div className="space-y-1.5 text-xs font-semibold text-[var(--color-text-primary)]">
+                      <span>Diretoria Responsável</span>
+                      <FilamentSelect
+                        value={selectValue}
+                        onChange={setSelectValue}
+                        searchable
+                        options={[
+                          { value: 'dilic', label: 'DILIC — Diretoria de Licenciamento Ambiental', description: 'Processos de LP, LI, LO e RLO' },
+                          { value: 'dirre', label: 'DIRRE — Diretoria de Recursos Hídricos', description: 'Outorgas, CERH e Barragens' },
+                          { value: 'dibio', label: 'DIBIO — Diretoria de Biodiversidade', description: 'Autorizações de Fauna e Flora' },
+                          { value: 'difis', label: 'DIFIS — Diretoria de Fiscalização', description: 'Autos de infração e denúncias' },
+                        ]}
+                      />
+                    </div>
+
+                    {/* Campo com Ícone de Prefixo */}
+                    <div className="space-y-1.5 text-xs font-semibold text-[var(--color-text-primary)]">
+                      <span>Município do Empreendimento</span>
+                      <InputWrapper prefixIcon={MapPin}>
+                        <input className="w-full bg-transparent px-3 py-2 text-xs sm:text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 outline-none" placeholder="Ex: Barreiras" defaultValue="Barreiras" />
+                      </InputWrapper>
+                    </div>
+
+                    {/* Campo Desabilitado / ReadOnly */}
+                    <label className="space-y-1.5 text-xs font-semibold text-[var(--color-text-disabled)]">
+                      Unidade de Lotação (Bloqueado)
+                      <input className={fieldClass} value="DISUC / Coordenação de Unidades" disabled readOnly />
+                    </label>
+
+                    {/* Campo com Erro de Validação */}
+                    <div className="space-y-1.5 text-xs font-semibold text-[var(--badge-critical-text)]">
+                      <span>CPF / CNPJ do Requerente *</span>
+                      <InputWrapper valid={false} prefixIcon={AlertCircle}>
+                        <input className="w-full bg-transparent px-3 py-2 text-xs sm:text-sm outline-none text-rose-700 dark:text-rose-300" defaultValue="00.000.000/0000" />
+                      </InputWrapper>
+                      <span className="flex items-center gap-1 text-[10px] font-normal text-[var(--color-status-critical)]">
+                        <AlertCircle className="h-3 w-3 shrink-0" /> CNPJ incompleto. Verifique os dígitos verificadores.
+                      </span>
+                    </div>
+
+                    {/* Textarea */}
+                    <label className="space-y-1.5 text-xs font-semibold text-[var(--color-text-primary)]">
+                      Justificativa Técnica
+                      <textarea className={cn(fieldClass, 'h-24 resize-y py-2')} placeholder="Descreva os elementos técnicos da solicitação..." defaultValue="Empreendimento enquadrado na Classe 3 conforme porte e potencial poluidor." />
+                    </label>
+                  </div>
+
+                  {/* Checkbox, Radios e Switch */}
+                  <div className="mt-6 flex flex-wrap items-center justify-between gap-6 border-t border-[var(--color-border-subtle)] pt-5 text-xs text-[var(--color-text-secondary)]">
+                    <label className="flex items-center gap-2 cursor-pointer select-none">
+                      <input
+                        type="checkbox"
+                        checked={checkboxState}
+                        onChange={(e) => setCheckboxState(e.target.checked)}
+                        className={cn('h-4 w-4 rounded accent-[var(--color-brand-primary)]', focusRing)}
+                      />
+                      <span>Notificar interessado via SEI-BA</span>
+                    </label>
+
+                    <div className="flex items-center gap-4">
+                      <span className="font-semibold text-slate-700 dark:text-slate-300">Ambiente:</span>
+                      <label className="flex items-center gap-1.5 cursor-pointer select-none">
+                        <input
+                          type="radio"
+                          name="radioScope"
+                          value="interno"
+                          checked={radioChoice === 'interno'}
+                          onChange={() => setRadioChoice('interno')}
+                          className={cn('h-4 w-4 accent-[var(--color-brand-primary)]', focusRing)}
+                        />
+                        <span>Interno (GLA)</span>
+                      </label>
+                      <label className="flex items-center gap-1.5 cursor-pointer select-none">
+                        <input
+                          type="radio"
+                          name="radioScope"
+                          value="publico"
+                          checked={radioChoice === 'publico'}
+                          onChange={() => setRadioChoice('publico')}
+                          className={cn('h-4 w-4 accent-[var(--color-brand-primary)]', focusRing)}
+                        />
+                        <span>Público (Cidadão)</span>
+                      </label>
+                    </div>
+
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={switchOn}
+                      onClick={() => setSwitchOn((v) => !v)}
+                      className={cn('flex items-center gap-2.5 rounded-md cursor-pointer select-none', focusRing)}
+                    >
+                      <span className={cn('relative h-5 w-9 rounded-full transition-colors', switchOn ? 'bg-[var(--color-brand-primary)]' : 'bg-slate-300 dark:bg-slate-700')}>
+                        <span className={cn('absolute top-0.5 h-4 w-4 rounded-full bg-white shadow-xs transition-transform', switchOn ? 'translate-x-[18px]' : 'translate-x-0.5')} />
+                      </span>
+                      <span className="font-medium text-slate-800 dark:text-slate-200">Publicação no Diário Oficial</span>
+                    </button>
+                  </div>
+                </Specimen>
+              </section>
+
+              {/* SEÇÃO: BADGES E ESTADOS */}
+              <section id="badges" className="scroll-mt-8">
+                <SectionIntro
+                  title="Badges e estados"
+                  description="Pills semânticos comunicam status de processo, categoria ou contagem. Cada cor possui significado normativo estrito."
+                />
+                <div className="space-y-4">
+                  <Specimen title="Matriz de Status de Processo (com Dot Indicador)">
+                    <div className="flex flex-wrap items-center gap-2.5">
+                      <Badge color="success" dot>Concluído / Emitido</Badge>
+                      <Badge color="warning" dot>Pendente / Complementação</Badge>
+                      <Badge color="danger" dot>Vencido / Indeferido</Badge>
+                      <Badge color="info" dot>Em Análise Técnica</Badge>
+                      <Badge color="primary">Licenciamento LP+LI</Badge>
+                      <Badge color="gray">Rascunho</Badge>
+                    </div>
+                  </Specimen>
+
+                  <Specimen title="Tamanhos e Variantes">
+                    <div className="flex flex-wrap items-center gap-3">
+                      <Badge size="xs" color="primary">XS (10px)</Badge>
+                      <Badge size="sm" color="primary">SM (12px - Padrão)</Badge>
+                      <Badge size="md" color="primary">MD (14px)</Badge>
+                      <Badge color="success">Sem Dot</Badge>
+                      <Badge color="danger" dot>Com Dot</Badge>
+                    </div>
+                  </Specimen>
+                </div>
+              </section>
+
+              {/* SEÇÃO: CARDS E MÉTRICAS */}
+              <section id="cards" className="scroll-mt-8">
+                <SectionIntro
+                  title="Cards e métricas"
+                  description="KpiCards com micro-sparklines e seções recolhíveis (FilamentSection) para organização densa de informação."
+                />
+                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                  <KpiCard title="Protocolados" value="1.245" trend={{ value: '+12%', isPositive: true }} icon={FileText} variant="emerald" />
+                  <KpiCard title="Em Análise" value="2.356" trend={{ value: '-3%', isPositive: false }} icon={Clock3} variant="slate" />
+                  <KpiCard title="Pendentes" value="873" trend={{ value: '+8%', isPositive: false }} icon={AlertCircle} variant="amber" />
+                  <KpiCard title="Vencidos" value="198" trend={{ value: '+15%', isPositive: false }} icon={ShieldAlert} variant="rose" />
+                </div>
+
+                <div className="mt-4 grid gap-4 lg:grid-cols-2">
+                  <Section heading="Seção Recolhível (Filament Section)" description="Contém blocos de formulário que podem ser colapsados sem perder estado." collapsible icon={SlidersHorizontal} iconColor="primary">
+                    <p className="text-xs leading-5 text-[var(--color-text-secondary)]">
+                      O cabeçalho preserva o resumo do bloco quando recolhido. Padrão utilizado nas seções de enquadramento e condicionantes do SEIA V2.
+                    </p>
+                  </Section>
+
+                  <Card>
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-sm font-bold">Card Padrão shadcn/ui</CardTitle>
+                      <CardDescription className="text-xs">Estrutura com cabeçalho, corpo e rodapé integrado.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="text-xs text-slate-600 dark:text-slate-400">
+                      Utilizado em painéis de resumo lateral (Drawers) e blocos modulares de detalhamento.
+                    </CardContent>
+                    <CardFooter className="justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                      <Button color="gray" size="sm">Cancelar</Button>
+                      <Button size="sm">Salvar Registro</Button>
+                    </CardFooter>
+                  </Card>
+                </div>
+              </section>
+
+              {/* SEÇÃO: NAVEGAÇÃO */}
+              <section id="navigation" className="scroll-mt-8">
+                <SectionIntro
+                  title="Navegação"
+                  description="Topbar institucional em 100% da largura, sidebar recolhível com acordeão exclusivo, breadcrumbs e abas (FilamentTabs)."
+                />
+                <div className="space-y-4">
+                  <Specimen title="Topbar SEIA V2 (Header Institucional)">
+                    <div className="flex min-h-16 items-center gap-4 rounded-xl bg-[var(--topbar-bg)] px-4 text-white shadow-md">
+                      <img src={seiaLogoWhite} alt="SEIA Plataforma" className="h-8 w-auto" />
+                      <button className={cn('rounded-lg p-2 hover:bg-white/10 focus-visible:ring-white cursor-pointer', focusRing)} aria-label="Toggle Sidebar">
+                        <PanelLeftClose className="h-4 w-4" />
+                      </button>
+                      <div className="mx-auto hidden w-full max-w-xl items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-xs text-white/80 md:flex">
+                        <Search className="h-4 w-4 shrink-0" />
+                        <span>Buscar processos, requerimentos SEIA ou atos...</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button className={cn('rounded-lg p-2 hover:bg-white/10 focus-visible:ring-white relative', focusRing)} aria-label="Notificações">
+                          <Bell className="h-4 w-4" />
+                          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500" />
+                        </button>
+                        <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-white/15 text-xs font-bold">LM</span>
+                      </div>
+                    </div>
+                  </Specimen>
+
+                  <div className="grid gap-4 lg:grid-cols-2">
+                    <Specimen title="Breadcrumb Funcional">
+                      <nav className="flex items-center gap-2 text-xs text-[var(--color-text-secondary)]" aria-label="Breadcrumb de Exemplo">
+                        <a href="/?rota=seia-v2&tela=inicio" className={cn('rounded hover:text-[var(--color-text-link)] hover:underline', focusRing)}>Início</a>
+                        <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
+                        <a href="/?rota=seia-v2&tela=relatorios" className={cn('rounded hover:text-[var(--color-text-link)] hover:underline', focusRing)}>Regulação</a>
+                        <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
+                        <span className="font-semibold text-[var(--color-text-primary)]">Dashboard Gerencial</span>
+                      </nav>
+                    </Specimen>
+
+                    <Specimen title="Abas de Contexto (FilamentTabs)">
+                      <FilamentTabs
+                        tabs={[
+                          { id: 'visao-geral', label: 'Visão Geral' },
+                          { id: 'processos', label: 'Processos', badge: 24 },
+                          { id: 'documentos', label: 'Documentos' },
+                        ]}
+                        activeTab={activeTab}
+                        onChange={setActiveTab}
+                      />
+                    </Specimen>
+                  </div>
+                </div>
+              </section>
+
+              {/* SEÇÃO: TABELAS */}
+              <section id="table" className="scroll-mt-8">
+                <SectionIntro
+                  title="Tabelas (Data Grid)"
+                  description="Composição canônica do SEIA: busca debounced, filtros rápidos, ações em lote (bulk actions), seleção de linhas, ordenação e paginação."
+                />
+                <TableContainer
+                  toolbar={
+                    <div className="flex flex-col gap-3 border-b border-[var(--color-border-subtle)] p-4 md:flex-row md:items-center md:justify-between bg-[var(--color-surface-default)]">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button color="gray" size="sm" className="flex items-center gap-1.5">
+                              <MoreHorizontal className="h-4 w-4" /> Ações em Lote
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="start">
+                            <DropdownMenuLabel>Ações Disponíveis</DropdownMenuLabel>
+                            <DropdownMenuItem onClick={() => alert('Encaminhar lote')}>Encaminhar Processos</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => alert('Exportar selecionados')}>Exportar em Planilha</DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem className="text-rose-600">Arquivar Registros</DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+
+                        <Button color="gray" size="sm" className="flex items-center gap-1.5">
+                          <Filter className="h-4 w-4" /> Filtros <Badge color="primary" size="xs">2</Badge>
+                        </Button>
+                      </div>
+
+                      <div className="relative w-full md:max-w-sm">
+                        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-text-tertiary)]" />
+                        <label htmlFor="design-system-table-search-input" className="sr-only">Buscar processos na tabela</label>
+                        <input
+                          id="design-system-table-search-input"
+                          value={tableSearch}
+                          onChange={(event) => setTableSearch(event.target.value)}
+                          placeholder="Buscar por processo, interessado ou tipo..."
+                          className={cn(fieldClass, 'pl-9 text-xs')}
+                        />
+                      </div>
+                    </div>
+                  }
+                  pagination={
+                    <div className="flex w-full flex-col gap-3 text-xs sm:flex-row sm:items-center sm:justify-between">
+                      <span className="text-[var(--color-text-tertiary)]">
+                        Exibindo <strong>{visibleRows.length}</strong> de 98 processos cadastrados
+                      </span>
+                      <div className="flex items-center gap-1">
+                        <Button color="gray" size="xs"><ChevronLeft className="h-3.5 w-3.5" /> Anterior</Button>
+                        <Button size="xs">1</Button>
+                        <Button color="gray" size="xs">2</Button>
+                        <Button color="gray" size="xs">Próxima <ChevronRight className="h-3.5 w-3.5" /></Button>
+                      </div>
+                    </div>
+                  }
+                >
+                  {selectedRows.length > 0 && (
+                    <div className="flex items-center justify-between gap-3 bg-[var(--color-brand-primary-subtle)] px-4 py-2 text-xs text-[var(--color-text-link)] border-b border-[var(--color-border-subtle)]">
+                      <span className="font-semibold">{selectedRows.length} registro(s) selecionado(s)</span>
+                      <button onClick={() => setSelectedRows([])} className={cn('rounded font-semibold hover:underline cursor-pointer', focusRing)}>
+                        Limpar seleção
+                      </button>
+                    </div>
+                  )}
+
+                  <table className="w-full min-w-[860px] text-left text-xs">
+                    <thead className="border-b border-[var(--table-border)] bg-[var(--table-header-bg)] text-[10px] font-bold uppercase tracking-wider text-[var(--color-text-tertiary)]">
+                      <tr>
+                        <th className="p-4 w-10">
+                          <input
+                            type="checkbox"
+                            aria-label="Selecionar todos os processos"
+                            className={cn('h-4 w-4 rounded accent-[var(--color-brand-primary)]', focusRing)}
+                            onChange={(event) =>
+                              setSelectedRows(event.target.checked ? tableRows.map((r) => r.process) : [])
+                            }
+                            checked={selectedRows.length === tableRows.length}
+                          />
+                        </th>
+                        <th className="p-4">Processo</th>
+                        <th className="p-4">Interessado</th>
+                        <th className="p-4">Tipo de Ato</th>
+                        <th className="p-4">Unidade</th>
+                        <th className="p-4">Status</th>
+                        <th className="p-4 text-right">Ações</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[var(--table-border)]">
+                      {visibleRows.map((row) => (
+                        <tr key={row.process} className="transition-colors hover:bg-[var(--table-row-hover)]">
+                          <td className="p-4">
+                            <input
+                              type="checkbox"
+                              aria-label={`Selecionar processo ${row.process}`}
+                              className={cn('h-4 w-4 rounded accent-[var(--color-brand-primary)]', focusRing)}
+                              checked={selectedRows.includes(row.process)}
+                              onChange={() =>
+                                setSelectedRows((current) =>
+                                  current.includes(row.process)
+                                    ? current.filter((item) => item !== row.process)
+                                    : [...current, row.process]
+                                )
+                              }
+                            />
+                          </td>
+                          <td className="p-4 font-mono font-semibold text-[var(--color-text-primary)]">{row.process}</td>
+                          <td className="p-4 text-[var(--color-text-secondary)]">{row.applicant}</td>
+                          <td className="p-4 text-[var(--color-text-secondary)]">{row.type}</td>
+                          <td className="p-4 font-semibold text-[var(--color-text-secondary)]">{row.unit}</td>
+                          <td className="p-4">
+                            <Badge
+                              color={
+                                row.status === 'Concluído'
+                                  ? 'success'
+                                  : row.status === 'Pendente'
+                                  ? 'warning'
+                                  : row.status === 'Vencido'
+                                  ? 'danger'
+                                  : 'info'
+                              }
+                              dot
+                            >
+                              {row.status}
+                            </Badge>
+                          </td>
+                          <td className="p-4 text-right">
+                            <div className="flex justify-end gap-1">
+                              <Button color="gray" size="icon" aria-label="Visualizar"><Eye className="h-4 w-4" /></Button>
+                              <Button color="gray" size="icon" aria-label="Editar"><Edit3 className="h-4 w-4" /></Button>
+                              <Button color="danger" outlined size="icon" aria-label="Excluir"><Trash2 className="h-4 w-4" /></Button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+
+                  {visibleRows.length === 0 && (
+                    <div className="flex min-h-56 flex-col items-center justify-center p-8 text-center">
+                      <Search className="h-8 w-8 text-[var(--color-text-disabled)]" />
+                      <h3 className="mt-3 text-sm font-semibold text-[var(--color-text-primary)]">Nenhum processo encontrado</h3>
+                      <p className="mt-1 text-xs text-[var(--color-text-tertiary)]">Revise o termo de busca ou limpe os filtros aplicados.</p>
+                      <Button color="gray" size="sm" className="mt-4" onClick={() => setTableSearch('')}>Limpar busca</Button>
+                    </div>
+                  )}
+                </TableContainer>
+              </section>
+
+              {/* SEÇÃO: WIZARD */}
+              <section id="wizard" className="scroll-mt-8">
+                <SectionIntro
+                  title="Wizard (Stepper em Chevron)"
+                  description="Componente FilamentWizard oficial com divisórias em chevron SVG institucional. Etapas concluídas, ativa e futuras diferenciadas com clareza."
+                />
+                <Specimen title="Requerimento Ambiental Unificado (F-DUC)">
+                  <div className="overflow-hidden rounded-xl border border-[var(--color-border-default)]">
+                    <FilamentWizard
+                      steps={[
+                        { id: 1, label: '1. Identificação do Requerente' },
+                        { id: 2, label: '2. Enquadramento e Atos' },
+                        { id: 3, label: '3. Questionário Técnico' },
+                        { id: 4, label: '4. Documentos & Plantas' },
+                      ]}
+                      currentStep={wizardStep}
+                      onStepClick={setWizardStep}
+                    />
+                    <div className="grid gap-4 p-5 sm:grid-cols-2 bg-[var(--color-surface-default)]">
+                      <label className="space-y-1.5 text-xs font-semibold text-[var(--color-text-primary)]">
+                        Razão Social do Empreendimento
+                        <input className={fieldClass} placeholder="Nome do empreendimento" defaultValue="Complexo Solar Sertão da Bahia" />
+                      </label>
+                      <label className="space-y-1.5 text-xs font-semibold text-[var(--color-text-primary)]">
+                        CNPJ / Inscrição Estadual
+                        <input className={fieldClass} placeholder="00.000.000/0000-00" defaultValue="12.345.678/0001-90" />
+                      </label>
+                    </div>
+                    <div className="flex items-center justify-between border-t border-[var(--color-border-subtle)] p-4 bg-[var(--color-surface-subtle)]/50">
+                      <Button color="gray" disabled={wizardStep === 1} onClick={() => setWizardStep((s) => Math.max(1, s - 1))}>
+                        <ChevronLeft className="h-4 w-4" /> Etapa Anterior
+                      </Button>
+                      <span className="text-xs text-slate-500">Etapa {wizardStep} de 4</span>
+                      <Button disabled={wizardStep === 4} onClick={() => setWizardStep((s) => Math.min(4, s + 1))}>
+                        Próxima Etapa <ChevronRight className="h-4 w-4" />
+                      </Button>
                     </div>
                   </div>
-                )}
-              </Specimen>
-            </div>
-          </section>
+                </Specimen>
+              </section>
 
-          <section id="patterns" className="scroll-mt-8">
-            <SectionIntro title="Padrões de página" description="Composições prontas organizam cabeçalho, filtros, conteúdo e ações sem redesenhar cada módulo." />
-            <div className="space-y-4">
-              <Specimen title="Cabeçalho de página">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                  <div>
-                    <nav className="mb-2 flex items-center gap-2 text-xs text-[var(--color-text-tertiary)]"><span>Início</span><ChevronRight className="h-3 w-3" /><span>Regulação</span><ChevronRight className="h-3 w-3" /><span className="font-semibold text-[var(--color-text-primary)]">Pauta de Processos</span></nav>
-                    <h3 className="text-xl font-bold tracking-tight text-[var(--color-text-primary)]">Pauta de Processos</h3>
-                    <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Acompanhe distribuição, prazos e responsáveis pela análise.</p>
-                  </div>
-                  <div className="flex gap-2"><Button color="gray"><Download className="h-4 w-4" /> Exportar</Button><Button><FileText className="h-4 w-4" /> Novo requerimento</Button></div>
+              {/* SEÇÃO: FEEDBACK E OVERLAYS */}
+              <section id="feedback" className="scroll-mt-8">
+                <SectionIntro
+                  title="Feedback e overlays"
+                  description="Banners de alerta, modais de confirmação, dropdown menus e painel de notificações."
+                />
+                <div className="grid gap-4 lg:grid-cols-2">
+                  <Specimen title="Banners de Alerta e Mensagens">
+                    <div className="space-y-3">
+                      {[
+                        [CheckCircle2, 'Solicitação registrada com sucesso no sistema.', 'var(--badge-success-bg)', 'var(--badge-success-text)', 'var(--badge-success-border)'],
+                        [AlertTriangle, 'Existem condicionantes técnicas com vencimento em menos de 15 dias.', 'var(--badge-warning-bg)', 'var(--badge-warning-text)', 'var(--badge-warning-border)'],
+                        [AlertCircle, 'Acesso restrito: usuário sem permissão para homologação final.', 'var(--badge-critical-bg)', 'var(--badge-critical-text)', 'var(--badge-critical-border)'],
+                        [Info, 'O processo foi distribuído automaticamente para a DILIC.', 'var(--badge-info-bg)', 'var(--badge-info-text)', 'var(--badge-info-border)'],
+                      ].map(([Icon, text, background, color, border]) => {
+                        const AlertIcon = Icon as React.ElementType;
+                        return (
+                          <div
+                            key={text as string}
+                            className="flex items-start gap-2.5 rounded-xl border p-3.5 text-xs"
+                            style={{ backgroundColor: background as string, color: color as string, borderColor: border as string }}
+                          >
+                            <AlertIcon className="mt-0.5 h-4 w-4 shrink-0" />
+                            <span className="leading-relaxed">{text as string}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </Specimen>
+
+                  <Specimen title="Overlays & Diálogos Interativos">
+                    <div className="flex flex-wrap gap-2.5">
+                      <Button onClick={() => setIsModalOpen(true)}>
+                        <ExternalLink className="h-4 w-4" /> Abrir Modal de Encaminhamento
+                      </Button>
+                      <Button
+                        color="gray"
+                        aria-expanded={isNotificationOpen}
+                        aria-controls="design-system-notifications-panel"
+                        onClick={() => setIsNotificationOpen((o) => !o)}
+                      >
+                        <Bell className="h-4 w-4" /> Notificações <Badge color="danger" size="xs">3</Badge>
+                      </Button>
+                    </div>
+
+                    {isNotificationOpen && (
+                      <div id="design-system-notifications-panel" className="mt-4 overflow-hidden rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-default)] shadow-xl animate-in fade-in-0 zoom-in-95">
+                        <div className="flex items-center justify-between border-b border-[var(--color-border-subtle)] px-4 py-3 bg-[var(--color-surface-subtle)]">
+                          <div>
+                            <h4 className="text-sm font-semibold text-[var(--color-text-primary)]">Central de Notificações</h4>
+                          </div>
+                          <button onClick={() => setIsNotificationOpen(false)} className={cn('rounded p-1 hover:bg-slate-200 dark:hover:bg-slate-700', focusRing)} aria-label="Fechar">
+                            <X className="h-4 w-4 text-[var(--color-text-tertiary)]" />
+                          </button>
+                        </div>
+                        <div className="divide-y divide-[var(--color-border-subtle)]">
+                          {[
+                            ['Processo Distribuído', 'O processo SEIA-REG-2026/001245 foi atribuído à sua pauta.', 'Há 5 min'],
+                            ['Prazo de Condicionante', 'Empreendimento Rio Vivo possui prazo com vencimento próximo.', 'Há 30 min'],
+                            ['Parecer Técnico Aprovado', 'Minuta conclusiva homologada pela diretoria DILIC.', 'Há 2 h'],
+                          ].map(([title, desc, time]) => (
+                            <div key={title} className="p-3.5 hover:bg-[var(--color-surface-hover)] transition-colors flex gap-3 items-start cursor-pointer">
+                              <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--color-brand-primary-subtle)] text-[var(--color-text-link)]">
+                                <Bell className="h-3.5 w-3.5" />
+                              </span>
+                              <div className="min-w-0 flex-1">
+                                <p className="text-xs font-semibold text-[var(--color-text-primary)]">{title}</p>
+                                <p className="text-[11px] text-[var(--color-text-secondary)] mt-0.5">{desc}</p>
+                              </div>
+                              <span className="text-[10px] text-[var(--color-text-tertiary)] whitespace-nowrap">{time}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </Specimen>
                 </div>
-              </Specimen>
-              <Specimen title="Composição de dashboard" description="A mesma linguagem visual da Dashboard Gerencial de Regulação.">
-                <div className="grid gap-3 sm:grid-cols-3">
+              </section>
+
+              {/* SEÇÃO: PADRÕES DE PÁGINA */}
+              <section id="patterns" className="scroll-mt-8">
+                <SectionIntro
+                  title="Padrões de página (Composições)"
+                  description="Layouts prontos para dashboards gerenciais, pautas operacionais e formulários complexos, garantindo consistência estrutural."
+                />
+                <div className="space-y-4">
+                  <Specimen title="Padrão 1: Cabeçalho com Breadcrumb e Ações Primárias">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between border-b border-[var(--color-border-subtle)] pb-4">
+                      <div>
+                        <nav className="mb-2 flex items-center gap-2 text-xs text-[var(--color-text-tertiary)]">
+                          <span>Início</span>
+                          <ChevronRight className="h-3 w-3" />
+                          <span>Regulação</span>
+                          <ChevronRight className="h-3 w-3" />
+                          <span className="font-semibold text-[var(--color-text-primary)]">Pauta Operacional</span>
+                        </nav>
+                        <h3 className="text-xl font-bold tracking-tight text-[var(--color-text-primary)]">Pauta de Processos</h3>
+                        <p className="mt-1 text-xs text-[var(--color-text-secondary)]">Acompanhe distribuição, prazos regulatórios e responsáveis pela análise.</p>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button color="gray"><Download className="h-4 w-4" /> Exportar Relatório</Button>
+                        <Button><Plus className="h-4 w-4" /> Novo Requerimento</Button>
+                      </div>
+                    </div>
+                  </Specimen>
+
+                  <Specimen title="Padrão 2: Dashboard Gerencial Integrada">
+                    <div className="grid gap-3 sm:grid-cols-3">
+                      {[
+                        ['Entradas no Mês', '1.245', TrendingUp, 'text-[var(--color-status-success)]', '+12%'],
+                        ['Em Análise Técnica', '2.356', Clock3, 'text-[var(--color-status-info)]', '-3%'],
+                        ['Vencidos / Críticos', '198', TrendingDown, 'text-[var(--color-status-critical)]', '+15%'],
+                      ].map(([label, value, Icon, color, diff]) => {
+                        const MetricIcon = Icon as React.ElementType;
+                        return (
+                          <div key={label as string} className="rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-default)] p-4 shadow-2xs">
+                            <div className="flex items-center justify-between">
+                              <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-text-tertiary)]">{label as string}</span>
+                              <MetricIcon className={cn('h-4 w-4', color as string)} />
+                            </div>
+                            <div className="mt-2 flex items-baseline justify-between">
+                              <strong className="text-2xl font-mono font-bold tabular-nums text-[var(--color-text-primary)]">{value as string}</strong>
+                              <span className={cn('text-xs font-semibold', color as string)}>{diff as string}</span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </Specimen>
+                </div>
+              </section>
+
+              {/* SEÇÃO: DIRETRIZES DE ACESSIBILIDADE */}
+              <section id="accessibility" className="scroll-mt-8 pb-12">
+                <SectionIntro
+                  title="Acessibilidade e conformidade (WCAG 2.1 AA)"
+                  description="Critérios mínimos obrigatórios aplicados em todos os componentes e fluxos do SEIA Plataforma."
+                />
+                <div className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
                   {[
-                    ['Entradas', '1.245', TrendingUp, 'text-[var(--color-status-success)]'],
-                    ['Em análise', '2.356', Clock3, 'text-[var(--color-status-info)]'],
-                    ['Vencidos', '198', TrendingDown, 'text-[var(--color-status-critical)]'],
-                  ].map(([label, value, Icon, color]) => {
-                    const MetricIcon = Icon as React.ElementType;
-                    return <div key={label as string} className="rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-default)] p-4"><div className="flex items-center justify-between"><span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-text-tertiary)]">{label as string}</span><MetricIcon className={cn('h-4 w-4', color as string)} /></div><strong className="mt-2 block text-2xl tabular-nums text-[var(--color-text-primary)]">{value as string}</strong></div>;
-                  })}
+                    ['Contraste Rigoroso', 'Texto principal com contraste mínimo de 4.5:1 e texto grande/botões com 3:1 em relação ao fundo.'],
+                    ['Navegação por Teclado', 'Todos os controles recebem foco visível com ring verde suave e respondem a Tab, Enter, Space e Esc.'],
+                    ['Rótulos Persistentes', 'Formulários nunca dependem unicamente de placeholders. Todos os campos possuem labels descritivos.'],
+                    ['Design Responsivo', 'Layouts operam sem corte de conteúdo a partir de 320px e tabelas possuem rolagem horizontal suave.'],
+                    ['Modo Escuro Neutro', 'O dark mode utiliza tons de carvão e ardósia neutra, evitando cansaço visual e preservando a cor verde institucional.'],
+                    ['Redução de Movimento', 'Transições respeitam preferências do sistema operacional via media query prefers-reduced-motion.'],
+                  ].map(([title, description]) => (
+                    <div key={title} className="flex gap-3 rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-default)] p-4 shadow-2xs">
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-status-success)]" />
+                      <div>
+                        <h3 className="text-xs font-semibold text-[var(--color-text-primary)]">{title}</h3>
+                        <p className="mt-1 text-xs leading-5 text-[var(--color-text-secondary)]">{description}</p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div className="mt-3 grid h-48 place-items-center rounded-xl border border-dashed border-[var(--color-border-default)] bg-[var(--color-surface-subtle)] text-center">
-                  <div><LayoutDashboard className="mx-auto h-7 w-7 text-[var(--color-text-disabled)]" /><p className="mt-2 text-xs font-semibold text-[var(--color-text-secondary)]">Área para gráficos e análise operacional</p><p className="mt-1 text-[10px] text-[var(--color-text-tertiary)]">Grid, eixos e superfícies usam tokens semânticos.</p></div>
-                </div>
-              </Specimen>
-            </div>
-          </section>
-
-          <section id="accessibility" className="scroll-mt-8 pb-8">
-            <SectionIntro title="Acessibilidade e uso" description="Critérios mínimos para toda nova interface do SEIA Plataforma." />
-            <div className="grid gap-3 sm:grid-cols-2">
-              {[
-                ['Contraste', 'Texto comum com contraste mínimo de 4,5:1 e estados nunca dependentes apenas de cor.'],
-                ['Teclado', 'Ordem de foco lógica, controles operáveis e foco visível em todos os componentes.'],
-                ['Conteúdo', 'Rótulos persistentes, instruções objetivas e erros que explicam como corrigir.'],
-                ['Responsividade', 'Conteúdo preservado em 320 px; tabelas rolam sem cortar ações essenciais.'],
-                ['Movimento', 'Transições curtas e funcionais, respeitando preferências de redução de movimento.'],
-                ['Temas', 'Light e dark representam o mesmo produto; identidade verde sobre base neutra.'],
-              ].map(([title, description]) => (
-                <div key={title} className="flex gap-3 rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-default)] p-4">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-status-success)]" />
-                  <div><h3 className="text-xs font-semibold text-[var(--color-text-primary)]">{title}</h3><p className="mt-1 text-xs leading-5 text-[var(--color-text-secondary)]">{description}</p></div>
-                </div>
-              ))}
-            </div>
-          </section>
+              </section>
             </div>
           </div>
         </main>
       </div>
 
+      {/* Modal Interativo de Exemplo */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Confirmar encaminhamento</DialogTitle>
-            <DialogDescription>O processo será encaminhado para a unidade DILIC e ficará disponível na pauta do responsável.</DialogDescription>
+            <DialogTitle>Confirmar Encaminhamento de Processo</DialogTitle>
+            <DialogDescription>
+              O processo selecionado será formalmente distribuído para a diretoria DILIC.
+            </DialogDescription>
           </DialogHeader>
-          <div className="rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-subtle)] p-4 text-xs text-[var(--color-text-secondary)]">
-            <strong className="block text-[var(--color-text-primary)]">SEIA-REG-2026/001245</strong>
-            Verde Vale Energia S.A. · Licenciamento Ambiental
+          <div className="rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-subtle)] p-4 text-xs text-[var(--color-text-secondary)] space-y-1">
+            <strong className="block text-[var(--color-text-primary)] font-mono text-sm">SEIA-REG-2026/001245</strong>
+            <p>Verde Vale Energia S.A. · Licenciamento Ambiental (LP+LI)</p>
+            <p className="text-[10px] text-slate-400">Responsável Atual: Lucas Manager (DILIC)</p>
           </div>
-          <DialogFooter><Button color="gray" onClick={() => setIsModalOpen(false)}>Cancelar</Button><Button onClick={() => setIsModalOpen(false)}>Confirmar encaminhamento</Button></DialogFooter>
+          <DialogFooter className="gap-2">
+            <Button color="gray" onClick={() => setIsModalOpen(false)}>Cancelar</Button>
+            <Button onClick={() => setIsModalOpen(false)}>Confirmar Encaminhamento</Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
