@@ -28,6 +28,7 @@ import { FilamentTabs, FilamentTabItem } from '@/components/filament/Tabs';
 import { Section } from '@/components/filament/Section';
 import { InputWrapper } from '@/components/filament/InputWrapper';
 import { FilamentSelect } from '@/components/filament/Select';
+import { TableContainer, TableToolbar } from '@/components/filament/Table';
 import { KpiCard } from '@/components/dashboard/KpiCard';
 import { SeiaV2Breadcrumb } from '@/components/seia-v2/SeiaV2Breadcrumb';
 import {
@@ -241,51 +242,52 @@ export const CrasFaunaPage: React.FC<CrasFaunaPageProps> = ({ onNavigate }) => {
         <FilamentTabs items={tabs} activeTab={activeTab} onChange={setActiveTab} />
       </div>
 
-      {/* Toolbar */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 shadow-2xs">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="relative flex-1 max-w-md">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-            <input
-              type="text"
-              placeholder={`Buscar em ${tabs.find((t) => t.id === activeTab)?.label}...`}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-1.5 text-xs bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A]"
-            />
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" className="text-xs h-8 text-slate-600 dark:text-slate-300">
-              <Filter className="w-3.5 h-3.5 mr-1.5 text-slate-400" />
-              Filtrar por Classe / Grau
-            </Button>
-            <Button variant="outline" size="sm" className="text-xs h-8 text-slate-600 dark:text-slate-300">
-              <Download className="w-3.5 h-3.5 mr-1.5 text-slate-400" />
-              Livro de Registro (PDF)
-            </Button>
-          </div>
-        </div>
-      </div>
-
       {/* Tabela de Prontuários */}
       {activeTab === 'tratamento' && (
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
-                  <th className="py-3 px-4">Prontuário CRAS</th>
-                  <th className="py-3 px-4">Espécie (Científico / Comum)</th>
-                  <th className="py-3 px-4">Procedência & Apreensão</th>
-                  <th className="py-3 px-4">Recinto Atual</th>
-                  <th className="py-3 px-4">Marcação / Microchip</th>
-                  <th className="py-3 px-4">Status Clínico</th>
-                  <th className="py-3 px-4 text-right">Ações</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                {animaisMock.map((row) => (
+        <TableContainer
+          toolbar={
+            <TableToolbar
+              searchValue={searchQuery}
+              onSearchChange={setSearchQuery}
+              searchPlaceholder="Buscar por prontuário, espécie, recinto ou marcação..."
+              actions={
+                <div className="flex items-center gap-2">
+                  <Button variant="outline" size="sm" className="text-xs h-8 text-slate-600 dark:text-slate-300">
+                    <Filter className="w-3.5 h-3.5 mr-1.5 text-slate-400" />
+                    <span>Filtrar</span>
+                  </Button>
+                  <Button variant="outline" size="sm" className="text-xs h-8 text-slate-600 dark:text-slate-300">
+                    <Download className="w-3.5 h-3.5 mr-1.5 text-slate-400" />
+                    <span>Livro de Registro (PDF)</span>
+                  </Button>
+                </div>
+              }
+            />
+          }
+        >
+          <table className="w-full text-left text-xs">
+            <thead>
+              <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
+                <th className="py-3 px-4">Prontuário CRAS</th>
+                <th className="py-3 px-4">Espécie (Científico / Comum)</th>
+                <th className="py-3 px-4">Procedência & Apreensão</th>
+                <th className="py-3 px-4">Recinto Atual</th>
+                <th className="py-3 px-4">Marcação / Microchip</th>
+                <th className="py-3 px-4">Status Clínico</th>
+                <th className="py-3 px-4 text-right">Ações</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              {animaisMock
+                .filter(
+                  (row) =>
+                    !searchQuery ||
+                    row.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    row.especie.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    row.recinto.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    row.procedencia.toLowerCase().includes(searchQuery.toLowerCase())
+                )
+                .map((row) => (
                   <tr key={row.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors">
                     <td className="py-3 px-4 font-mono font-bold text-slate-900 dark:text-slate-100">
                       {row.id}
@@ -295,7 +297,7 @@ export const CrasFaunaPage: React.FC<CrasFaunaPageProps> = ({ onNavigate }) => {
                       <div className="font-semibold text-slate-900 dark:text-slate-100">{row.especie}</div>
                       <div className="flex items-center gap-2 mt-0.5">
                         <span className="text-[10px] text-slate-500">{row.classe}</span>
-                        <Badge variant="danger" className="text-[9px] py-0 px-1">
+                        <Badge color="danger" size="xs">
                           {row.grauAmeaca}
                         </Badge>
                       </div>
@@ -310,7 +312,7 @@ export const CrasFaunaPage: React.FC<CrasFaunaPageProps> = ({ onNavigate }) => {
                       {row.anilhaMicrochip}
                     </td>
                     <td className="py-3 px-4">
-                      <Badge variant={row.statusColor} className="text-[10px]">
+                      <Badge color={row.statusColor as any} dot size="xs">
                         {row.status}
                       </Badge>
                       <div className="text-[10px] text-slate-500 mt-1 truncate max-w-[180px]">
@@ -338,30 +340,51 @@ export const CrasFaunaPage: React.FC<CrasFaunaPageProps> = ({ onNavigate }) => {
                     </td>
                   </tr>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+            </tbody>
+          </table>
+        </TableContainer>
       )}
 
       {/* Aba de Admissões */}
       {activeTab === 'admissoes' && (
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
-                  <th className="py-3 px-4">Lote de Admissão</th>
-                  <th className="py-3 px-4">Data & Origem</th>
-                  <th className="py-3 px-4">Município</th>
-                  <th className="py-3 px-4">Quantitativo & Grupos</th>
-                  <th className="py-3 px-4">Termo / Auto DIFIS</th>
-                  <th className="py-3 px-4">Situação da Triagem</th>
-                  <th className="py-3 px-4 text-right">Ações</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                {admissoesMock.map((lote) => (
+        <TableContainer
+          toolbar={
+            <TableToolbar
+              searchValue={searchQuery}
+              onSearchChange={setSearchQuery}
+              searchPlaceholder="Buscar por lote, origem, município ou termo..."
+              actions={
+                <Button variant="outline" size="sm" className="text-xs h-8 text-slate-600 dark:text-slate-300">
+                  <Download className="w-3.5 h-3.5 mr-1.5 text-slate-400" />
+                  <span>Exportar Admissões</span>
+                </Button>
+              }
+            />
+          }
+        >
+          <table className="w-full text-left text-xs">
+            <thead>
+              <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
+                <th className="py-3 px-4">Lote de Admissão</th>
+                <th className="py-3 px-4">Data & Origem</th>
+                <th className="py-3 px-4">Município</th>
+                <th className="py-3 px-4">Quantitativo & Grupos</th>
+                <th className="py-3 px-4">Termo / Auto DIFIS</th>
+                <th className="py-3 px-4">Situação da Triagem</th>
+                <th className="py-3 px-4 text-right">Ações</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              {admissoesMock
+                .filter(
+                  (lote) =>
+                    !searchQuery ||
+                    lote.lote.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    lote.origem.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    lote.municipio.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    lote.termoApreensao.toLowerCase().includes(searchQuery.toLowerCase())
+                )
+                .map((lote) => (
                   <tr key={lote.lote} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors">
                     <td className="py-3 px-4 font-mono font-bold text-slate-900 dark:text-slate-100">
                       {lote.lote}
@@ -377,21 +400,20 @@ export const CrasFaunaPage: React.FC<CrasFaunaPageProps> = ({ onNavigate }) => {
                     </td>
                     <td className="py-3 px-4 font-mono text-slate-600 dark:text-slate-400">{lote.termoApreensao}</td>
                     <td className="py-3 px-4">
-                      <Badge variant="success" className="text-[10px]">
+                      <Badge color="success" dot size="xs">
                         {lote.status}
                       </Badge>
                     </td>
                     <td className="py-3 px-4 text-right">
-                      <Button variant="ghost" size="xs" className="h-7 text-xs text-slate-600">
-                        Ver Animais do Lote
+                      <Button variant="ghost" size="xs" className="h-7 text-xs text-slate-600 dark:text-slate-300">
+                        Ver Animais
                       </Button>
                     </td>
                   </tr>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+            </tbody>
+          </table>
+        </TableContainer>
       )}
 
       {/* Aba de Recintos */}

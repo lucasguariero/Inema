@@ -75,12 +75,16 @@ export interface TableContainerProps extends React.HTMLAttributes<HTMLDivElement
   toolbar?: React.ReactNode;
   pagination?: React.ReactNode;
   noScroll?: boolean;
+  heading?: React.ReactNode;
+  description?: React.ReactNode;
 }
 
 export const TableContainer: React.FC<TableContainerProps> = ({
   toolbar,
   pagination,
   noScroll = false,
+  heading,
+  description,
   children,
   className,
   ...props
@@ -93,6 +97,12 @@ export const TableContainer: React.FC<TableContainerProps> = ({
       )}
       {...props}
     >
+      {(heading || description) && (
+        <div className="px-5 py-4 border-b border-slate-100 dark:border-slate-800/80">
+          {heading && <h3 className="text-base font-semibold text-slate-900 dark:text-white">{heading}</h3>}
+          {description && <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{description}</p>}
+        </div>
+      )}
       {toolbar}
       <div className={noScroll ? 'w-full' : 'overflow-x-auto'}>{children}</div>
       {pagination && (

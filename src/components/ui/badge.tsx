@@ -7,32 +7,54 @@ export type FilamentBadgeSize = 'xs' | 'sm' | 'md';
 export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
   color?: FilamentBadgeColor;
   size?: FilamentBadgeSize;
-  variant?: 'default' | 'secondary' | 'outline' | 'emerald' | 'amber' | 'rose' | 'blue' | 'purple';
+  variant?:
+    | 'default'
+    | 'secondary'
+    | 'outline'
+    | 'emerald'
+    | 'amber'
+    | 'rose'
+    | 'blue'
+    | 'purple'
+    | 'success'
+    | 'warning'
+    | 'danger'
+    | 'primary'
+    | 'gray'
+    | 'info';
   dot?: boolean;
+  hasDot?: boolean;
 }
 
-function Badge({ className, color, size = 'sm', variant = 'default', dot = false, children, ...props }: BadgeProps) {
+function Badge({ className, color, size = 'sm', variant = 'default', dot = false, hasDot = false, children, ...props }: BadgeProps) {
+  const showDot = dot || hasDot;
   // Map variant to Filament color
   let effectiveColor: FilamentBadgeColor = color || 'primary';
 
   if (!color && variant) {
     switch (variant) {
+      case 'success':
       case 'emerald':
         effectiveColor = 'success';
         break;
+      case 'warning':
       case 'amber':
         effectiveColor = 'warning';
         break;
+      case 'danger':
       case 'rose':
         effectiveColor = 'danger';
         break;
+      case 'info':
       case 'blue':
         effectiveColor = 'info';
         break;
+      case 'gray':
       case 'secondary':
       case 'outline':
         effectiveColor = 'gray';
         break;
+      case 'primary':
       case 'default':
       default:
         effectiveColor = 'primary';
@@ -83,7 +105,7 @@ function Badge({ className, color, size = 'sm', variant = 'default', dot = false
       )}
       {...props}
     >
-      {dot && (
+      {showDot && (
         <span className={cn('h-1.5 w-1.5 rounded-full shrink-0', dotColors[effectiveColor])} />
       )}
       {children}

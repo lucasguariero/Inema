@@ -33,6 +33,7 @@ import { FilamentTabs, FilamentTabItem } from '@/components/filament/Tabs';
 import { Section } from '@/components/filament/Section';
 import { InputWrapper } from '@/components/filament/InputWrapper';
 import { FilamentSelect } from '@/components/filament/Select';
+import { TableContainer, TableToolbar } from '@/components/filament/Table';
 import { KpiCard } from '@/components/dashboard/KpiCard';
 import { SeiaV2Breadcrumb } from '@/components/seia-v2/SeiaV2Breadcrumb';
 import {
@@ -342,56 +343,57 @@ export const ParametrizacoesMasterPage: React.FC<ParametrizacoesMasterPageProps>
         <FilamentTabs items={tabs} activeTab={activeTab} onChange={setActiveTab} />
       </div>
 
-      {/* Toolbar com busca instantânea e filtros */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 shadow-2xs">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="relative flex-1 max-w-md">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-            <input
-              type="text"
-              placeholder={`Buscar em ${tabs.find((t) => t.id === activeTab)?.label}...`}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-1.5 text-xs bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A]"
-            />
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setFilterModalOpen(true)}
-              className="text-xs h-8 text-slate-600 dark:text-slate-300"
-            >
-              <Filter className="w-3.5 h-3.5 mr-1.5 text-slate-400" />
-              Filtros Avançados
-            </Button>
-            <Button variant="outline" size="sm" className="text-xs h-8 text-slate-600 dark:text-slate-300">
-              <Download className="w-3.5 h-3.5 mr-1.5 text-slate-400" />
-              Exportar Tabela (CSV)
-            </Button>
-          </div>
-        </div>
-      </div>
-
       {/* Conteúdo Dinâmico por Aba */}
       {activeTab === 'tipologias' && (
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
-                  <th className="py-3 px-4">Código & Divisão</th>
-                  <th className="py-3 px-4">Descrição da Atividade / Tipologia</th>
-                  <th className="py-3 px-4">Potencial Poluidor</th>
-                  <th className="py-3 px-4">Porte Enquadrado</th>
-                  <th className="py-3 px-4">Estudo Ambiental Base</th>
-                  <th className="py-3 px-4">Situação</th>
-                  <th className="py-3 px-4 text-right">Ações</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                {tipologiasMock.map((row) => (
+        <TableContainer
+          toolbar={
+            <TableToolbar
+              searchValue={searchQuery}
+              onSearchChange={setSearchQuery}
+              searchPlaceholder="Buscar por código, divisão, tipologia ou estudo..."
+              actions={
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setFilterModalOpen(true)}
+                    className="text-xs h-8 text-slate-600 dark:text-slate-300"
+                  >
+                    <Filter className="w-3.5 h-3.5 mr-1.5 text-slate-400" />
+                    Filtros Avançados
+                  </Button>
+                  <Button variant="outline" size="sm" className="text-xs h-8 text-slate-600 dark:text-slate-300">
+                    <Download className="w-3.5 h-3.5 mr-1.5 text-slate-400" />
+                    Exportar Tabela (CSV)
+                  </Button>
+                </div>
+              }
+            />
+          }
+        >
+          <table className="w-full text-left text-xs">
+            <thead>
+              <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
+                <th className="py-3 px-4">Código & Divisão</th>
+                <th className="py-3 px-4">Descrição da Atividade / Tipologia</th>
+                <th className="py-3 px-4">Potencial Poluidor</th>
+                <th className="py-3 px-4">Porte Enquadrado</th>
+                <th className="py-3 px-4">Estudo Ambiental Base</th>
+                <th className="py-3 px-4">Situação</th>
+                <th className="py-3 px-4 text-right">Ações</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              {tipologiasMock
+                .filter(
+                  (row) =>
+                    !searchQuery ||
+                    row.codigo.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    row.divisao.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    row.nome.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    row.estudoExigido.toLowerCase().includes(searchQuery.toLowerCase())
+                )
+                .map((row) => (
                   <tr key={row.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors">
                     <td className="py-3 px-4">
                       <div className="font-mono font-bold text-slate-900 dark:text-slate-100">{row.codigo}</div>
@@ -402,8 +404,9 @@ export const ParametrizacoesMasterPage: React.FC<ParametrizacoesMasterPageProps>
                     </td>
                     <td className="py-3 px-4">
                       <Badge
-                        variant={row.potencialPoluidor === 'Alto' ? 'danger' : 'warning'}
-                        className="text-[10px]"
+                        color={row.potencialPoluidor === 'Alto' ? 'danger' : 'warning'}
+                        dot
+                        size="xs"
                       >
                         {row.potencialPoluidor}
                       </Badge>
@@ -415,7 +418,7 @@ export const ParametrizacoesMasterPage: React.FC<ParametrizacoesMasterPageProps>
                       </span>
                     </td>
                     <td className="py-3 px-4">
-                      <Badge variant="success" className="text-[10px]">
+                      <Badge color="success" dot size="xs">
                         {row.status}
                       </Badge>
                     </td>
@@ -440,29 +443,50 @@ export const ParametrizacoesMasterPage: React.FC<ParametrizacoesMasterPageProps>
                     </td>
                   </tr>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+            </tbody>
+          </table>
+        </TableContainer>
       )}
 
       {activeTab === 'residuos' && (
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
-                  <th className="py-3 px-4">Código IBAMA</th>
-                  <th className="py-3 px-4">Descrição do Resíduo</th>
-                  <th className="py-3 px-4">Classificação NBR 10004</th>
-                  <th className="py-3 px-4">Estado Físico</th>
-                  <th className="py-3 px-4">Destinação Padrão</th>
-                  <th className="py-3 px-4">Situação</th>
-                  <th className="py-3 px-4 text-right">Ações</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                {residuosMock.map((row) => (
+        <TableContainer
+          toolbar={
+            <TableToolbar
+              searchValue={searchQuery}
+              onSearchChange={setSearchQuery}
+              searchPlaceholder="Buscar por código IBAMA, descrição ou classificação..."
+              actions={
+                <Button variant="outline" size="sm" className="text-xs h-8 text-slate-600 dark:text-slate-300">
+                  <Download className="w-3.5 h-3.5 mr-1.5 text-slate-400" />
+                  Exportar Tabela (CSV)
+                </Button>
+              }
+            />
+          }
+        >
+          <table className="w-full text-left text-xs">
+            <thead>
+              <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
+                <th className="py-3 px-4">Código IBAMA</th>
+                <th className="py-3 px-4">Descrição do Resíduo</th>
+                <th className="py-3 px-4">Classificação NBR 10004</th>
+                <th className="py-3 px-4">Estado Físico</th>
+                <th className="py-3 px-4">Destinação Padrão</th>
+                <th className="py-3 px-4">Situação</th>
+                <th className="py-3 px-4 text-right">Ações</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              {residuosMock
+                .filter(
+                  (row) =>
+                    !searchQuery ||
+                    row.codigoIbama.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    row.nome.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    row.classificacao.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    row.origem.toLowerCase().includes(searchQuery.toLowerCase())
+                )
+                .map((row) => (
                   <tr key={row.codigoIbama} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors">
                     <td className="py-3 px-4 font-mono font-bold text-slate-900 dark:text-slate-100">
                       {row.codigoIbama}
@@ -473,8 +497,9 @@ export const ParametrizacoesMasterPage: React.FC<ParametrizacoesMasterPageProps>
                     </td>
                     <td className="py-3 px-4">
                       <Badge
-                        variant={row.classificacao.includes('Classe I') ? 'danger' : 'gray'}
-                        className="text-[10px]"
+                        color={row.classificacao.includes('Classe I') ? 'danger' : 'gray'}
+                        dot
+                        size="xs"
                       >
                         {row.classificacao}
                       </Badge>
@@ -482,7 +507,7 @@ export const ParametrizacoesMasterPage: React.FC<ParametrizacoesMasterPageProps>
                     <td className="py-3 px-4 text-slate-600 dark:text-slate-300">{row.estadoFisico}</td>
                     <td className="py-3 px-4 text-slate-600 dark:text-slate-300">{row.destinacaoPadrao}</td>
                     <td className="py-3 px-4">
-                      <Badge variant="success" className="text-[10px]">
+                      <Badge color="success" dot size="xs">
                         {row.status}
                       </Badge>
                     </td>
@@ -507,29 +532,49 @@ export const ParametrizacoesMasterPage: React.FC<ParametrizacoesMasterPageProps>
                     </td>
                   </tr>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+            </tbody>
+          </table>
+        </TableContainer>
       )}
 
       {activeTab === 'produtos-perigosos' && (
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
-                  <th className="py-3 px-4">Número ONU</th>
-                  <th className="py-3 px-4">Nome Apropriado para Embarque</th>
-                  <th className="py-3 px-4">Classe de Risco</th>
-                  <th className="py-3 px-4">Nº de Risco</th>
-                  <th className="py-3 px-4">Guia / Ficha de Emergência</th>
-                  <th className="py-3 px-4">Exige DTRP</th>
-                  <th className="py-3 px-4 text-right">Ações</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                {produtosPerigososMock.map((row) => (
+        <TableContainer
+          toolbar={
+            <TableToolbar
+              searchValue={searchQuery}
+              onSearchChange={setSearchQuery}
+              searchPlaceholder="Buscar por número ONU, nome apropriado ou classe de risco..."
+              actions={
+                <Button variant="outline" size="sm" className="text-xs h-8 text-slate-600 dark:text-slate-300">
+                  <Download className="w-3.5 h-3.5 mr-1.5 text-slate-400" />
+                  Exportar Tabela (CSV)
+                </Button>
+              }
+            />
+          }
+        >
+          <table className="w-full text-left text-xs">
+            <thead>
+              <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
+                <th className="py-3 px-4">Número ONU</th>
+                <th className="py-3 px-4">Nome Apropriado para Embarque</th>
+                <th className="py-3 px-4">Classe de Risco</th>
+                <th className="py-3 px-4">Nº de Risco</th>
+                <th className="py-3 px-4">Guia / Ficha de Emergência</th>
+                <th className="py-3 px-4">Exige DTRP</th>
+                <th className="py-3 px-4 text-right">Ações</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              {produtosPerigososMock
+                .filter(
+                  (row) =>
+                    !searchQuery ||
+                    row.numeroOnu.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    row.nomeApropriado.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    row.classeRisco.toLowerCase().includes(searchQuery.toLowerCase())
+                )
+                .map((row) => (
                   <tr key={row.numeroOnu} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors">
                     <td className="py-3 px-4 font-mono font-bold text-rose-700 dark:text-rose-400">
                       {row.numeroOnu}
@@ -538,7 +583,7 @@ export const ParametrizacoesMasterPage: React.FC<ParametrizacoesMasterPageProps>
                       {row.nomeApropriado}
                     </td>
                     <td className="py-3 px-4">
-                      <Badge variant="warning" className="text-[10px]">
+                      <Badge color="warning" dot size="xs">
                         {row.classeRisco}
                       </Badge>
                     </td>
@@ -547,7 +592,7 @@ export const ParametrizacoesMasterPage: React.FC<ParametrizacoesMasterPageProps>
                     </td>
                     <td className="py-3 px-4 text-slate-600 dark:text-slate-300">{row.guiaEmergencia}</td>
                     <td className="py-3 px-4">
-                      <Badge variant="success" className="text-[10px]">
+                      <Badge color="success" dot size="xs">
                         {row.exigeDtrp}
                       </Badge>
                     </td>
@@ -572,29 +617,50 @@ export const ParametrizacoesMasterPage: React.FC<ParametrizacoesMasterPageProps>
                     </td>
                   </tr>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+            </tbody>
+          </table>
+        </TableContainer>
       )}
 
       {activeTab === 'setores' && (
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
-                  <th className="py-3 px-4">Sigla</th>
-                  <th className="py-3 px-4">Nome do Setor / Diretoria</th>
-                  <th className="py-3 px-4">Titular / Representante</th>
-                  <th className="py-3 px-4">E-mail Institucional</th>
-                  <th className="py-3 px-4">Setor Superior</th>
-                  <th className="py-3 px-4">Situação</th>
-                  <th className="py-3 px-4 text-right">Ações</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                {setoresMock.map((row) => (
+        <TableContainer
+          toolbar={
+            <TableToolbar
+              searchValue={searchQuery}
+              onSearchChange={setSearchQuery}
+              searchPlaceholder="Buscar por sigla, nome da diretoria, titular ou e-mail..."
+              actions={
+                <Button variant="outline" size="sm" className="text-xs h-8 text-slate-600 dark:text-slate-300">
+                  <Download className="w-3.5 h-3.5 mr-1.5 text-slate-400" />
+                  Exportar Tabela (CSV)
+                </Button>
+              }
+            />
+          }
+        >
+          <table className="w-full text-left text-xs">
+            <thead>
+              <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
+                <th className="py-3 px-4">Sigla</th>
+                <th className="py-3 px-4">Nome do Setor / Diretoria</th>
+                <th className="py-3 px-4">Titular / Representante</th>
+                <th className="py-3 px-4">E-mail Institucional</th>
+                <th className="py-3 px-4">Setor Superior</th>
+                <th className="py-3 px-4">Situação</th>
+                <th className="py-3 px-4 text-right">Ações</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              {setoresMock
+                .filter(
+                  (row) =>
+                    !searchQuery ||
+                    row.sigla.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    row.nome.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    row.titular.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    row.email.toLowerCase().includes(searchQuery.toLowerCase())
+                )
+                .map((row) => (
                   <tr key={row.sigla} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors">
                     <td className="py-3 px-4 font-mono font-bold text-[#0F4C3A] dark:text-emerald-400">
                       {row.sigla}
@@ -607,7 +673,7 @@ export const ParametrizacoesMasterPage: React.FC<ParametrizacoesMasterPageProps>
                     <td className="py-3 px-4 font-mono text-slate-600 dark:text-slate-400">{row.email}</td>
                     <td className="py-3 px-4 text-slate-600 dark:text-slate-300">{row.setorSuperior}</td>
                     <td className="py-3 px-4">
-                      <Badge variant="success" className="text-[10px]">
+                      <Badge color="success" dot size="xs">
                         {row.status}
                       </Badge>
                     </td>
@@ -632,43 +698,64 @@ export const ParametrizacoesMasterPage: React.FC<ParametrizacoesMasterPageProps>
                     </td>
                   </tr>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+            </tbody>
+          </table>
+        </TableContainer>
       )}
 
       {activeTab === 'orgaos-intervenientes' && (
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
-                  <th className="py-3 px-4">Órgão / Sigla</th>
-                  <th className="py-3 px-4">Razão Social & Nome Completo</th>
-                  <th className="py-3 px-4">Tipo de Manifestação</th>
-                  <th className="py-3 px-4">Prazo Legal Regulamentar</th>
-                  <th className="py-3 px-4">Convênio / Base Legal SEI</th>
-                  <th className="py-3 px-4">Situação</th>
-                  <th className="py-3 px-4 text-right">Ações</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                {orgaosMock.map((row) => (
+        <TableContainer
+          toolbar={
+            <TableToolbar
+              searchValue={searchQuery}
+              onSearchChange={setSearchQuery}
+              searchPlaceholder="Buscar por órgão, razão social, manifestação ou convênio..."
+              actions={
+                <Button variant="outline" size="sm" className="text-xs h-8 text-slate-600 dark:text-slate-300">
+                  <Download className="w-3.5 h-3.5 mr-1.5 text-slate-400" />
+                  Exportar Tabela (CSV)
+                </Button>
+              }
+            />
+          }
+        >
+          <table className="w-full text-left text-xs">
+            <thead>
+              <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
+                <th className="py-3 px-4">Órgão / Sigla</th>
+                <th className="py-3 px-4">Razão Social & Nome Completo</th>
+                <th className="py-3 px-4">Tipo de Manifestação</th>
+                <th className="py-3 px-4">Prazo Legal Regulamentar</th>
+                <th className="py-3 px-4">Convênio / Base Legal SEI</th>
+                <th className="py-3 px-4">Situação</th>
+                <th className="py-3 px-4 text-right">Ações</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              {orgaosMock
+                .filter(
+                  (row) =>
+                    !searchQuery ||
+                    row.sigla.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    row.nome.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    row.tipoManifestacao.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    row.convenio.toLowerCase().includes(searchQuery.toLowerCase())
+                )
+                .map((row) => (
                   <tr key={row.sigla} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors">
                     <td className="py-3 px-4 font-mono font-bold text-slate-900 dark:text-slate-100">
                       {row.sigla}
                     </td>
                     <td className="py-3 px-4 font-medium text-slate-800 dark:text-slate-200">{row.nome}</td>
                     <td className="py-3 px-4">
-                      <Badge variant="primary" className="text-[10px]">
+                      <Badge color="primary" dot size="xs">
                         {row.tipoManifestacao}
                       </Badge>
                     </td>
                     <td className="py-3 px-4 font-semibold text-slate-700 dark:text-slate-300">{row.prazoDias}</td>
                     <td className="py-3 px-4 text-slate-600 dark:text-slate-400">{row.convenio}</td>
                     <td className="py-3 px-4">
-                      <Badge variant="success" className="text-[10px]">
+                      <Badge color="success" dot size="xs">
                         {row.status}
                       </Badge>
                     </td>
@@ -693,10 +780,242 @@ export const ParametrizacoesMasterPage: React.FC<ParametrizacoesMasterPageProps>
                     </td>
                   </tr>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+            </tbody>
+          </table>
+        </TableContainer>
+      )}
+
+      {activeTab === 'legislacoes' && (
+        <TableContainer
+          toolbar={
+            <TableToolbar
+              searchValue={searchQuery}
+              onSearchChange={setSearchQuery}
+              searchPlaceholder="Buscar por norma, ementa, órgão ou ano..."
+              actions={
+                <Button className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs h-8 font-semibold">
+                  <Plus className="w-3.5 h-3.5 mr-1" />
+                  <span>+ Cadastrar Legislação</span>
+                </Button>
+              }
+            />
+          }
+        >
+          <table className="w-full text-left text-xs">
+            <thead>
+              <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
+                <th className="py-3 px-4">Norma / Ato</th>
+                <th className="py-3 px-4">Ementa / Síntese</th>
+                <th className="py-3 px-4">Esfera / Emissor</th>
+                <th className="py-3 px-4">Data Publicação</th>
+                <th className="py-3 px-4">Status</th>
+                <th className="py-3 px-4 text-right">Ações</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              {[
+                {
+                  ato: 'Portaria INEMA nº 25.753/2022',
+                  ementa: 'Regulamenta os procedimentos técnicos de Autorização de Supressão Vegetal (ASV) e Manejo de Fauna no âmbito estadual.',
+                  emissor: 'INEMA / Diretoria Geral',
+                  data: '15/12/2022',
+                  status: 'Vigente',
+                },
+                {
+                  ato: 'Decreto Estadual nº 14.024/2012',
+                  ementa: 'Regulamento da Lei Estadual nº 10.431/2006 (Política Estadual de Meio Ambiente e de Proteção à Biodiversidade).',
+                  emissor: 'Governo do Estado da Bahia',
+                  data: '06/06/2012',
+                  status: 'Vigente',
+                },
+                {
+                  ato: 'Resolução CEPRAM nº 4.570/2017',
+                  ementa: 'Dispõe sobre o enquadramento de atividades e empreendimentos dispensados de licenciamento ambiental (ANSLA).',
+                  emissor: 'CEPRAM / SEMA',
+                  data: '18/10/2017',
+                  status: 'Vigente',
+                },
+                {
+                  ato: 'Lei Estadual nº 11.631/2009',
+                  ementa: 'Institui a Taxa de Fiscalização Ambiental do Estado da Bahia (TFA) e altera tabela de atos regulatórios.',
+                  emissor: 'Assembleia Legislativa da Bahia',
+                  data: '30/12/2009',
+                  status: 'Vigente',
+                },
+              ].map((leg) => (
+                <tr key={leg.ato} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors">
+                  <td className="py-3 px-4 font-mono font-bold text-slate-900 dark:text-slate-100">{leg.ato}</td>
+                  <td className="py-3 px-4 max-w-md text-slate-700 dark:text-slate-300">{leg.ementa}</td>
+                  <td className="py-3 px-4 text-slate-600 dark:text-slate-400 font-medium">{leg.emissor}</td>
+                  <td className="py-3 px-4 font-mono text-slate-600 dark:text-slate-400">{leg.data}</td>
+                  <td className="py-3 px-4">
+                    <Badge color="success" dot size="xs">
+                      {leg.status}
+                    </Badge>
+                  </td>
+                  <td className="py-3 px-4 text-right">
+                    <Button variant="ghost" size="xs" className="text-[#0F4C3A] dark:text-emerald-400 font-semibold">
+                      <FileText className="w-3.5 h-3.5 mr-1" />
+                      <span>DOE</span>
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </TableContainer>
+      )}
+
+      {activeTab === 'tipos-documentos' && (
+        <TableContainer
+          toolbar={
+            <TableToolbar
+              searchValue={searchQuery}
+              onSearchChange={setSearchQuery}
+              searchPlaceholder="Buscar por código oficial, formulário ou diretoria..."
+              actions={
+                <Button className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs h-8 font-semibold">
+                  <Plus className="w-3.5 h-3.5 mr-1" />
+                  <span>+ Novo Modelo</span>
+                </Button>
+              }
+            />
+          }
+        >
+          <table className="w-full text-left text-xs">
+            <thead>
+              <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
+                <th className="py-3 px-4">Código do Documento</th>
+                <th className="py-3 px-4">Nome do Formulário / Modelo</th>
+                <th className="py-3 px-4">Módulo de Aplicação</th>
+                <th className="py-3 px-4">Obrigatoriedade</th>
+                <th className="py-3 px-4">Versão</th>
+                <th className="py-3 px-4">Status</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              {[
+                {
+                  codigo: 'F-DIPRE-ENQ-01',
+                  nome: 'Requerimento e Parecer Técnico de Enquadramento Prévio',
+                  modulo: 'Regulação / DIPRE',
+                  obrig: 'Obrigatório no Protocolo',
+                  versao: 'v3.2 (2026)',
+                  status: 'Ativo',
+                },
+                {
+                  codigo: 'F-DUC-069-00',
+                  nome: 'Formulário Oficial de Anuência em Unidade de Conservação',
+                  modulo: 'Biodiversidade / DISUC',
+                  obrig: 'Condicionado a UC',
+                  versao: 'v2.0 (2025)',
+                  status: 'Ativo',
+                },
+                {
+                  codigo: 'F-DIFIS-AUTO-02',
+                  nome: 'Auto de Infração e Termo de Notificação Ambiental',
+                  modulo: 'Fiscalização / DIFIS',
+                  obrig: 'Lavratura de Campo',
+                  versao: 'v4.1 (2026)',
+                  status: 'Ativo',
+                },
+                {
+                  codigo: 'F-DTRP-MAN-01',
+                  nome: 'Manifesto de Transporte de Cargas e Resíduos Perigosos',
+                  modulo: 'Transporte / DTRP',
+                  obrig: 'Obrigatório com QR Code',
+                  versao: 'v1.8 (2024)',
+                  status: 'Ativo',
+                },
+              ].map((doc) => (
+                <tr key={doc.codigo} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors">
+                  <td className="py-3 px-4 font-mono font-bold text-slate-900 dark:text-slate-100">{doc.codigo}</td>
+                  <td className="py-3 px-4 font-medium text-slate-800 dark:text-slate-200">{doc.nome}</td>
+                  <td className="py-3 px-4 text-slate-600 dark:text-slate-400">{doc.modulo}</td>
+                  <td className="py-3 px-4">
+                    <Badge color="primary" dot size="xs">{doc.obrig}</Badge>
+                  </td>
+                  <td className="py-3 px-4 font-mono text-slate-600 dark:text-slate-400">{doc.versao}</td>
+                  <td className="py-3 px-4">
+                    <Badge color="success" dot size="xs">{doc.status}</Badge>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </TableContainer>
+      )}
+
+      {activeTab === 'informativos' && (
+        <TableContainer
+          toolbar={
+            <TableToolbar
+              searchValue={searchQuery}
+              onSearchChange={setSearchQuery}
+              searchPlaceholder="Buscar por informativo, tela ou público..."
+              actions={
+                <Button className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs h-8 font-semibold">
+                  <Plus className="w-3.5 h-3.5 mr-1" />
+                  <span>+ Novo Informativo</span>
+                </Button>
+              }
+            />
+          }
+        >
+          <table className="w-full text-left text-xs">
+            <thead>
+              <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
+                <th className="py-3 px-4">Identificador</th>
+                <th className="py-3 px-4">Título do Informativo</th>
+                <th className="py-3 px-4">Tela / Local de Exibição</th>
+                <th className="py-3 px-4">Público-Alvo</th>
+                <th className="py-3 px-4">Vigência</th>
+                <th className="py-3 px-4">Status</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              {[
+                {
+                  id: 'INF-001',
+                  titulo: 'Manutenção Preventiva de Certificados Digitais do SEI',
+                  tela: 'Página Inicial & Topbar Geral',
+                  publico: 'Todos os Usuários',
+                  vigencia: '28/09 a 05/10/2026',
+                  status: 'Publicado',
+                },
+                {
+                  id: 'INF-002',
+                  titulo: 'Contagem regressiva de SLA (20 dias) ativada para DISUC',
+                  tela: 'Pauta de Enquadramento & UCs',
+                  publico: 'Técnicos e Gestores',
+                  vigencia: 'Indeterminada',
+                  status: 'Publicado',
+                },
+                {
+                  id: 'INF-003',
+                  titulo: 'Emissão imediata de CND automatizada sem taxa bancária',
+                  tela: 'Portal do Cidadão / CND',
+                  publico: 'Cidadãos e Empresas',
+                  vigencia: 'Até 31/12/2026',
+                  status: 'Publicado',
+                },
+              ].map((inf) => (
+                <tr key={inf.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors">
+                  <td className="py-3 px-4 font-mono font-bold text-slate-900 dark:text-slate-100">{inf.id}</td>
+                  <td className="py-3 px-4 font-semibold text-slate-800 dark:text-slate-200">{inf.titulo}</td>
+                  <td className="py-3 px-4 text-slate-600 dark:text-slate-400">{inf.tela}</td>
+                  <td className="py-3 px-4">
+                    <Badge color="primary" dot size="xs">{inf.publico}</Badge>
+                  </td>
+                  <td className="py-3 px-4 font-mono text-slate-600 dark:text-slate-400">{inf.vigencia}</td>
+                  <td className="py-3 px-4">
+                    <Badge color="success" dot size="xs">{inf.status}</Badge>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </TableContainer>
       )}
 
       {activeTab === 'financeiro-juros' && (

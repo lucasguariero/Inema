@@ -661,7 +661,7 @@ export const CadastroPlantonistaPage: React.FC<{ onNavigate?: (route: string) =>
  variant="default"
  size="sm"
  onClick={handleSalvar}
- className="bg-teal-700 hover:bg-teal-800 text-white text-xs font-semibold h-8"
+ className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs font-semibold h-8"
  >
  
  Salvar
@@ -825,7 +825,7 @@ export const CadastroPlantonistaPage: React.FC<{ onNavigate?: (route: string) =>
  variant="default"
  size="sm"
  onClick={() => setModalState((prev) => ({ ...prev, isOpen: false }))}
- className="bg-teal-700 hover:bg-teal-800 text-xs"
+ className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-xs"
  >
  OK
  </Button>

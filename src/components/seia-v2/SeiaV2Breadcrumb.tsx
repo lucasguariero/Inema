@@ -4,14 +4,16 @@ import { cn } from '@/lib/utils';
 export interface SeiaV2BreadcrumbItem {
   label: string;
   href?: string;
+  route?: string;
 }
 
 interface SeiaV2BreadcrumbProps {
   items: SeiaV2BreadcrumbItem[];
   className?: string;
+  onNavigate?: (route: string) => void;
 }
 
-export const SeiaV2Breadcrumb: React.FC<SeiaV2BreadcrumbProps> = ({ items, className }) => (
+export const SeiaV2Breadcrumb: React.FC<SeiaV2BreadcrumbProps> = ({ items, className, onNavigate }) => (
   <nav
     aria-label="Navegação estrutural"
     className={cn('flex items-center gap-1.5 text-xs font-medium text-slate-500 dark:text-slate-400', className)}
@@ -28,8 +30,14 @@ export const SeiaV2Breadcrumb: React.FC<SeiaV2BreadcrumbProps> = ({ items, class
             </span>
           ) : (
             <a
-              href={item.href}
-              className="rounded-sm text-slate-500 underline-offset-4 transition-colors hover:text-[var(--color-text-link)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--input-border-focus)] dark:text-slate-400"
+              href={item.href || '#'}
+              onClick={(e) => {
+                if (item.route && onNavigate) {
+                  e.preventDefault();
+                  onNavigate(item.route);
+                }
+              }}
+              className="rounded-sm text-slate-500 underline-offset-4 transition-colors hover:text-[var(--color-text-link)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--input-border-focus)] dark:text-slate-400 cursor-pointer"
             >
               {item.label}
             </a>

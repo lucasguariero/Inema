@@ -19,6 +19,9 @@ export interface RegistroFiscalizacao {
   cpfCnpj?: string;
   tecnicoResponsavel?: string;
   unidadeRegional: string;
+  dataAbertura?: string;
+  dataHoraRegistro?: string;
+  coordenadas?: string;
   historico: {
     data: string;
     titulo: string;

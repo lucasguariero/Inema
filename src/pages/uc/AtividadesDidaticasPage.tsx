@@ -399,7 +399,7 @@ export const AtividadesDidaticasPage: React.FC<{ onNavigate?: (route: string) =>
  "text-[10px]",
  p.tipo.includes('Tipo 1')
  ? "bg-emerald-50 text-emerald-700 border-emerald-200"
- : "bg-purple-50 text-purple-700 border-purple-200"
+ : "bg-sky-50 text-sky-700 border-sky-200 dark:bg-sky-950/40 dark:text-sky-300 dark:border-sky-800"
  )}
  >
  {p.tipo}

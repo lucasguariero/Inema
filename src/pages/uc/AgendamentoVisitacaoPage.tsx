@@ -1162,7 +1162,7 @@ export const AgendamentoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
  className={cn(
  "px-2.5 py-1 text-xs rounded-full border transition-all",
  selecionado
- ? "bg-teal-700 text-white border-teal-700 font-semibold"
+ ? "bg-[#0F4C3A] text-white border-[#0F4C3A] font-semibold"
  : "bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300"
  )}
  >
@@ -1329,7 +1329,7 @@ export const AgendamentoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
  variant="default"
  size="sm"
  onClick={handleAvancarEtapa}
- className="bg-teal-700 hover:bg-teal-800 text-white text-xs font-semibold"
+ className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs font-semibold"
  >
  Avançar
  <ArrowRight className="w-3.5 h-3.5 ml-1" />
@@ -1339,7 +1339,7 @@ export const AgendamentoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
  variant="default"
  size="sm"
  onClick={handleEnviarSolicitacao}
- className="bg-teal-700 hover:bg-teal-800 text-white text-xs font-semibold"
+ className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs font-semibold"
  >
  <Send className="w-3.5 h-3.5 mr-1" />
  Enviar Solicitação
@@ -1414,7 +1414,7 @@ export const AgendamentoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
  sol.status === 'Em Análise' && "bg-amber-50 text-amber-700 border-amber-200",
  sol.status === 'Reserva Preliminar' && "bg-emerald-50 text-emerald-700 border-emerald-200",
  sol.status === 'Aguardando Complementação' && "bg-blue-50 text-blue-700 border-blue-200",
- sol.status === 'Convertido em Processo' && "bg-purple-50 text-purple-700 border-purple-200",
+ sol.status === 'Convertido em Processo' && "bg-sky-50 text-sky-700 border-sky-200 dark:bg-sky-950/40 dark:text-sky-300 dark:border-sky-800",
  sol.status === 'Indeferido' && "bg-red-50 text-red-700 border-red-200",
  sol.status === 'Realizado' && "bg-slate-100 text-slate-700 border-slate-300"
  )}
@@ -1440,7 +1440,7 @@ export const AgendamentoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
  size="sm"
  onClick={() => handleAcaoGestor(sol.id, 'converter-processo')}
  title="Converter em Processo Formal SEI-BA"
- className="h-7 text-[11px] text-purple-700 border-purple-300 hover:bg-purple-50"
+ className="h-7 text-[11px] text-[#0F4C3A] border-[#0F4C3A]/30 hover:bg-[#0F4C3A]/10 dark:text-emerald-400 dark:border-emerald-800"
  >
  Processo SEI
  </Button>
@@ -1581,7 +1581,7 @@ export const AgendamentoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
  size="sm"
  onClick={handleConcluirCheckout}
  disabled={!checkoutLimpezaOk}
- className="bg-teal-700 hover:bg-teal-800 text-white text-xs font-semibold"
+ className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs font-semibold"
  >
  <Check className="w-3.5 h-3.5 mr-1" />
  Finalizar Check-out
@@ -1598,7 +1598,7 @@ export const AgendamentoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
  {modalState.tipo === 'sucesso' && <CheckCircle2 className="w-5 h-5 text-emerald-600" />}
  {modalState.tipo === 'erro' && <AlertTriangle className="w-5 h-5 text-red-600" />}
  {modalState.tipo === 'aviso' && <Info className="w-5 h-5 text-blue-600" />}
- {modalState.tipo === 'redirecionamento' && <Sparkles className="w-5 h-5 text-purple-600" />}
+ {modalState.tipo === 'redirecionamento' && <FileText className="w-5 h-5 text-[#0F4C3A] dark:text-emerald-400" />}
  <DialogTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
  {modalState.titulo}
  </DialogTitle>
@@ -1627,7 +1627,7 @@ export const AgendamentoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
  setModalState((prev) => ({ ...prev, isOpen: false }));
  modalState.acaoSecundaria?.();
  }}
- className="bg-purple-700 hover:bg-purple-800 text-white text-xs"
+ className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs"
  >
  Ir para Processo Dedicado
  </Button>
@@ -1637,7 +1637,7 @@ export const AgendamentoVisitacaoPage: React.FC<{ onNavigate?: (route: string) =
  variant="default"
  size="sm"
  onClick={() => setModalState((prev) => ({ ...prev, isOpen: false }))}
- className="bg-teal-700 hover:bg-teal-800 text-white text-xs"
+ className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs"
  >
  OK
  </Button>

@@ -6,11 +6,15 @@ import { useTheme } from '@/context/ThemeContext';
 export interface KpiCardProps {
   title: string;
   value: string | number;
-  trend?: {
-    value: string;
-    isPositive: boolean;
-    period?: string;
-  };
+  trend?:
+    | {
+        value: string;
+        isPositive: boolean;
+        period?: string;
+      }
+    | string;
+  trendType?: 'up' | 'down' | 'neutral';
+  chartData?: number[];
   icon?: LucideIcon;
   sparklineData?: number[];
   themeColor?: string;
@@ -24,15 +28,20 @@ export const KpiCard: React.FC<KpiCardProps> = ({
   title,
   value,
   trend,
+  trendType = 'up',
+  chartData,
   icon: Icon,
-  sparklineData = [10, 15, 12, 18, 16, 22, 25],
+  sparklineData,
   isSolid = false,
   variant,
   isSelected = false,
   onClick,
 }) => {
   const { theme, isDarkMode } = useTheme();
-  const isPositive = trend?.isPositive ?? true;
+  const rawSparkline = sparklineData || chartData || [10, 15, 12, 18, 16, 22, 25];
+  const isPositive = typeof trend === 'object' && trend !== null ? trend.isPositive : trendType !== 'down';
+  const trendText = typeof trend === 'object' && trend !== null ? trend.value : trend;
+  const trendPeriod = typeof trend === 'object' && trend !== null ? trend.period : '';
 
   // Determine explicit status type
   const isPendente = variant === 'amber' || title.toLowerCase().includes('pendente');
@@ -40,11 +49,11 @@ export const KpiCard: React.FC<KpiCardProps> = ({
   const isEmAnalise = variant === 'slate' || title.toLowerCase().includes('análise');
 
   // Sparkline SVG normalization
-  const min = Math.min(...sparklineData);
-  const max = Math.max(...sparklineData);
-  const points = sparklineData
+  const min = Math.min(...rawSparkline);
+  const max = Math.max(...rawSparkline);
+  const points = rawSparkline
     .map((val, idx) => {
-      const x = (idx / (sparklineData.length - 1)) * 52;
+      const x = (idx / (rawSparkline.length - 1)) * 52;
       const y = 16 - ((val - min) / (max - min || 1)) * 12;
       return `${x},${y}`;
     })
@@ -106,7 +115,7 @@ export const KpiCard: React.FC<KpiCardProps> = ({
 
       {/* Linha 3: Micro-sparkline ou variação percentual com cores estritas */}
       <div className="mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
-        {trend && (
+        {trendText && (
           <div className="flex items-center gap-1.5 min-w-0">
             <span
               className={cn(
@@ -125,11 +134,13 @@ export const KpiCard: React.FC<KpiCardProps> = ({
               ) : (
                 <TrendingDown className="w-3 h-3 shrink-0" />
               )}
-              {trend.value}
+              {trendText}
             </span>
-            <span className="text-[10px] text-slate-400 dark:text-slate-500 truncate">
-              {trend.period || 'vs. mês ant.'}
-            </span>
+            {trendPeriod && (
+              <span className="text-[10px] text-slate-400 dark:text-slate-500 truncate">
+                {trendPeriod}
+              </span>
+            )}
           </div>
         )}
 

@@ -73,7 +73,7 @@ export function initAntiCryptojackingProtection(): void {
   // Prevenir clickjacking no cliente caso os headers sejam removidos por proxies intermediários
   try {
     if (window.top && window.self !== window.top) {
-      window.top.location = window.self.location;
+      window.top.location.href = window.self.location.href;
     }
   } catch {
     // Ignora restrição cross-origin

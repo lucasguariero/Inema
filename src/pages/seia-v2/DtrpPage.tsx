@@ -22,6 +22,7 @@ import { FilamentTabs, FilamentTabItem } from '@/components/filament/Tabs';
 import { FilamentWizard, Step } from '@/components/filament/Wizard';
 import { Section } from '@/components/filament/Section';
 import { InputWrapper } from '@/components/filament/InputWrapper';
+import { TableContainer, TableToolbar } from '@/components/filament/Table';
 import { KpiCard } from '@/components/dashboard/KpiCard';
 import { SeiaV2Breadcrumb } from '@/components/seia-v2/SeiaV2Breadcrumb';
 import { PdfPreviewDrawer, PdfDocumentData } from '@/components/seia-v2/PdfPreviewDrawer';
@@ -33,6 +34,7 @@ interface DtrpPageProps {
 export const DtrpPage: React.FC<DtrpPageProps> = ({ onNavigate }) => {
   const [viewMode, setViewMode] = useState<'pauta' | 'novo-manifesto' | 'detalhes'>('pauta');
   const [activeTab, setActiveTab] = useState('manifestos');
+  const [searchTerm, setSearchTerm] = useState('');
   const [wizardStep, setWizardStep] = useState(1);
   const [selectedManifesto, setSelectedManifesto] = useState<any>(null);
   const [pdfDrawerOpen, setPdfDrawerOpen] = useState(false);
@@ -178,22 +180,51 @@ export const DtrpPage: React.FC<DtrpPageProps> = ({ onNavigate }) => {
           </div>
 
           {/* Tabela de Manifestos DTRP */}
-          <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead>
-                  <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
-                    <th className="py-3 px-4">Manifesto DTRP</th>
-                    <th className="py-3 px-4">Gerador / Transportador</th>
-                    <th className="py-3 px-4">Resíduo & Código ONU</th>
-                    <th className="py-3 px-4">Origem ➔ Destino</th>
-                    <th className="py-3 px-4">Veículo / Placa</th>
-                    <th className="py-3 px-4">Status</th>
-                    <th className="py-3 px-4 text-right">Ações</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                  {manifestosMock.map((row) => (
+          <TableContainer
+            toolbar={
+              <TableToolbar
+                searchValue={searchTerm}
+                onSearchChange={setSearchTerm}
+                searchPlaceholder="Buscar por manifesto, gerador, transportador, resíduo ou placa..."
+                actions={
+                  <Button variant="outline" size="sm" className="text-xs h-8 text-slate-600 dark:text-slate-300">
+                    <Download className="w-3.5 h-3.5 mr-1.5 text-slate-400" />
+                    <span>Exportar CSV</span>
+                  </Button>
+                }
+              />
+            }
+          >
+            <table className="w-full text-left text-xs">
+              <thead>
+                <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
+                  <th className="py-3 px-4">Manifesto DTRP</th>
+                  <th className="py-3 px-4">Gerador / Transportador</th>
+                  <th className="py-3 px-4">Resíduo & Código ONU</th>
+                  <th className="py-3 px-4">Origem ➔ Destino</th>
+                  <th className="py-3 px-4">Veículo / Placa</th>
+                  <th className="py-3 px-4">Status</th>
+                  <th className="py-3 px-4 text-right">Ações</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                {manifestosMock
+                  .filter((row) => {
+                    if (activeTab === 'transito') return row.status === 'Em Trânsito';
+                    if (activeTab === 'historico') return row.status === 'Concluído e Descarregado';
+                    return true;
+                  })
+                  .filter(
+                    (row) =>
+                      !searchTerm ||
+                      row.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                      row.gerador.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                      row.transportador.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                      row.residuo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                      row.placa.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                      row.origemDestino.toLowerCase().includes(searchTerm.toLowerCase())
+                  )
+                  .map((row) => (
                     <tr key={row.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
                       <td className="py-3.5 px-4 font-mono font-semibold text-slate-900 dark:text-slate-100">
                         {row.id}
@@ -214,7 +245,7 @@ export const DtrpPage: React.FC<DtrpPageProps> = ({ onNavigate }) => {
                         {row.placa}
                       </td>
                       <td className="py-3.5 px-4">
-                        <Badge variant={row.statusColor as any} hasDot className="text-[10px]">
+                        <Badge color={row.statusColor as any} dot size="xs">
                           {row.status}
                         </Badge>
                       </td>
@@ -259,10 +290,9 @@ export const DtrpPage: React.FC<DtrpPageProps> = ({ onNavigate }) => {
                       </td>
                     </tr>
                   ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+              </tbody>
+            </table>
+          </TableContainer>
         </div>
       )}
 
@@ -441,7 +471,7 @@ export const DtrpPage: React.FC<DtrpPageProps> = ({ onNavigate }) => {
                 <FileText className="w-3.5 h-3.5 mr-1.5" />
                 <span>Visualizar PDF Timbrado</span>
               </Button>
-              <Badge variant={selectedManifesto.statusColor as any}>{selectedManifesto.status}</Badge>
+              <Badge color={selectedManifesto.statusColor as any} dot size="xs">{selectedManifesto.status}</Badge>
             </div>
           </div>
 

@@ -30,6 +30,7 @@ import { Badge } from '@/components/ui/badge';
 import { FilamentTabs, TabItem } from '@/components/filament/Tabs';
 import { Section } from '@/components/filament/Section';
 import { InputWrapper } from '@/components/filament/InputWrapper';
+import { TableContainer, TableToolbar } from '@/components/filament/Table';
 import { KpiCard } from '@/components/dashboard/KpiCard';
 import { SeiaV2Breadcrumb } from '@/components/seia-v2/SeiaV2Breadcrumb';
 
@@ -376,41 +377,45 @@ export const CadastrosBasicosPage: React.FC<CadastrosBasicosPageProps> = ({ onNa
         />
       </div>
 
-      {/* Barra de Filtros Rápidos */}
-      <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs flex items-center justify-between gap-4">
-        <div className="relative flex-1 max-w-md">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input
-            type="text"
-            placeholder="Buscar por nome, CPF/CNPJ, conselho de classe, imóvel ou código..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A]"
+      {/* TABELA MESTRE UNIFICADA (TABLE CONTAINER + TOOLBAR) */}
+      <TableContainer
+        toolbar={
+          <TableToolbar
+            searchValue={searchTerm}
+            onSearchChange={setSearchTerm}
+            searchPlaceholder="Buscar por nome, CPF/CNPJ, conselho de classe, imóvel ou código..."
+            actions={
+              <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                Exibindo registros ativos
+              </span>
+            }
           />
-        </div>
-
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-slate-500 font-medium">Exibindo registros ativos</span>
-        </div>
-      </div>
-
-      {/* TAB 1: RESPONSÁVEIS TÉCNICOS */}
-      {activeTab === 'rt' && (
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
-                  <th className="py-3 px-4">Código / Registro</th>
-                  <th className="py-3 px-4">Responsável Técnico / CPF</th>
-                  <th className="py-3 px-4">Conselho & ART / TRT</th>
-                  <th className="py-3 px-4">Vínculo com Empresa</th>
-                  <th className="py-3 px-4">Situação & Manifestação</th>
-                  <th className="py-3 px-4 text-right">Ações</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                {rtList.map((rt) => (
+        }
+      >
+        {activeTab === 'rt' && (
+          <table className="w-full text-left text-xs">
+            <thead>
+              <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
+                <th className="py-3 px-4">Código / Registro</th>
+                <th className="py-3 px-4">Responsável Técnico / CPF</th>
+                <th className="py-3 px-4">Conselho & ART / TRT</th>
+                <th className="py-3 px-4">Vínculo com Empresa</th>
+                <th className="py-3 px-4">Situação & Manifestação</th>
+                <th className="py-3 px-4 text-right">Ações</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              {rtList
+                .filter(
+                  (rt) =>
+                    !searchTerm ||
+                    rt.codigo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    rt.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    rt.cpf.includes(searchTerm) ||
+                    rt.art.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    rt.vinculo.toLowerCase().includes(searchTerm.toLowerCase())
+                )
+                .map((rt) => (
                   <tr key={rt.codigo} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-colors">
                     <td className="py-3.5 px-4 font-mono font-semibold text-slate-900 dark:text-slate-100">
                       {rt.codigo}
@@ -426,10 +431,10 @@ export const CadastrosBasicosPage: React.FC<CadastrosBasicosPageProps> = ({ onNa
                     </td>
                     <td className="py-3.5 px-4">
                       <div className="font-medium text-slate-800 dark:text-slate-200">{rt.vinculo}</div>
-                      <div className="text-[11px] text-slate-500 truncate max-w-xs">{rt.permissoes}</div>
+                      <div className="text-[11px] text-slate-500 dark:text-slate-400 truncate max-w-xs">{rt.permissoes}</div>
                     </td>
                     <td className="py-3.5 px-4">
-                      <Badge variant={rt.statusColor as any} hasDot className="text-[10px]">
+                      <Badge color={rt.statusColor as any} dot size="xs">
                         {rt.situacao}
                       </Badge>
                       <div className="text-[10px] text-slate-400 mt-1">{rt.dataManifestacao}</div>
@@ -450,29 +455,33 @@ export const CadastrosBasicosPage: React.FC<CadastrosBasicosPageProps> = ({ onNa
                     </td>
                   </tr>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
+            </tbody>
+          </table>
+        )}
 
-      {/* TAB 2: REPRESENTANTES LEGAIS */}
-      {activeTab === 'representantes' && (
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
-                  <th className="py-3 px-4">Código</th>
-                  <th className="py-3 px-4">Representante Legal / CPF</th>
-                  <th className="py-3 px-4">Cadastro Representado</th>
-                  <th className="py-3 px-4">Documento Comprobatório</th>
-                  <th className="py-3 px-4">Situação</th>
-                  <th className="py-3 px-4 text-right">Ações</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                {representantesList.map((rep) => (
+        {activeTab === 'representantes' && (
+          <table className="w-full text-left text-xs">
+            <thead>
+              <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
+                <th className="py-3 px-4">Código</th>
+                <th className="py-3 px-4">Representante Legal / CPF</th>
+                <th className="py-3 px-4">Cadastro Representado</th>
+                <th className="py-3 px-4">Documento Comprobatório</th>
+                <th className="py-3 px-4">Situação</th>
+                <th className="py-3 px-4 text-right">Ações</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              {representantesList
+                .filter(
+                  (rep) =>
+                    !searchTerm ||
+                    rep.codigo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    rep.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    rep.cpf.includes(searchTerm) ||
+                    rep.cadastroRepresentado.toLowerCase().includes(searchTerm.toLowerCase())
+                )
+                .map((rep) => (
                   <tr key={rep.codigo} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
                     <td className="py-3.5 px-4 font-mono font-semibold text-slate-900 dark:text-slate-100">
                       {rep.codigo}
@@ -480,7 +489,7 @@ export const CadastrosBasicosPage: React.FC<CadastrosBasicosPageProps> = ({ onNa
                     </td>
                     <td className="py-3.5 px-4">
                       <div className="font-semibold text-slate-900 dark:text-slate-100">{rep.nome}</div>
-                      <div className="text-[11px] font-mono text-slate-500">{rep.cpf} • {rep.profissao}</div>
+                      <div className="text-[11px] font-mono text-slate-500 dark:text-slate-400">{rep.cpf} • {rep.profissao}</div>
                     </td>
                     <td className="py-3.5 px-4 font-medium text-slate-800 dark:text-slate-200">
                       {rep.cadastroRepresentado}
@@ -489,7 +498,7 @@ export const CadastrosBasicosPage: React.FC<CadastrosBasicosPageProps> = ({ onNa
                       {rep.documentoComprobatorio}
                     </td>
                     <td className="py-3.5 px-4">
-                      <Badge variant={rep.statusColor as any} hasDot className="text-[10px]">
+                      <Badge color={rep.statusColor as any} dot size="xs">
                         {rep.situacao}
                       </Badge>
                     </td>
@@ -501,29 +510,33 @@ export const CadastrosBasicosPage: React.FC<CadastrosBasicosPageProps> = ({ onNa
                     </td>
                   </tr>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
+            </tbody>
+          </table>
+        )}
 
-      {/* TAB 3: EMPREENDIMENTOS */}
-      {activeTab === 'empreendimentos' && (
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
-                  <th className="py-3 px-4">Código / Empreendimento</th>
-                  <th className="py-3 px-4">Requerente / Detentor</th>
-                  <th className="py-3 px-4">Localidade & Coordenadas</th>
-                  <th className="py-3 px-4">Tipologia Principal</th>
-                  <th className="py-3 px-4">Status</th>
-                  <th className="py-3 px-4 text-right">Ações</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                {empreendimentosList.map((emp) => (
+        {activeTab === 'empreendimentos' && (
+          <table className="w-full text-left text-xs">
+            <thead>
+              <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
+                <th className="py-3 px-4">Código / Empreendimento</th>
+                <th className="py-3 px-4">Requerente / Detentor</th>
+                <th className="py-3 px-4">Localidade & Coordenadas</th>
+                <th className="py-3 px-4">Tipologia Principal</th>
+                <th className="py-3 px-4">Status</th>
+                <th className="py-3 px-4 text-right">Ações</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              {empreendimentosList
+                .filter(
+                  (emp) =>
+                    !searchTerm ||
+                    emp.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    emp.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    emp.requerente.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    emp.localidade.toLowerCase().includes(searchTerm.toLowerCase())
+                )
+                .map((emp) => (
                   <tr key={emp.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
                     <td className="py-3.5 px-4">
                       <span className="font-mono text-[10px] text-slate-500 font-bold block">{emp.id}</span>
@@ -534,13 +547,13 @@ export const CadastrosBasicosPage: React.FC<CadastrosBasicosPageProps> = ({ onNa
                     </td>
                     <td className="py-3.5 px-4">
                       <div className="text-slate-800 dark:text-slate-200">{emp.localidade}</div>
-                      <div className="text-[11px] font-mono text-slate-500">{emp.coordenadas}</div>
+                      <div className="text-[11px] font-mono text-slate-500 dark:text-slate-400">{emp.coordenadas}</div>
                     </td>
                     <td className="py-3.5 px-4 text-slate-700 dark:text-slate-300">
                       {emp.tipologiaPrincipal}
                     </td>
                     <td className="py-3.5 px-4">
-                      <Badge variant={emp.statusColor as any} hasDot className="text-[10px]">
+                      <Badge color={emp.statusColor as any} dot size="xs">
                         {emp.status}
                       </Badge>
                     </td>
@@ -552,29 +565,32 @@ export const CadastrosBasicosPage: React.FC<CadastrosBasicosPageProps> = ({ onNa
                     </td>
                   </tr>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
+            </tbody>
+          </table>
+        )}
 
-      {/* TAB 4: PROPRIEDADES RURAIS (CEFIR) */}
-      {activeTab === 'propriedades' && (
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
-                  <th className="py-3 px-4">Código CEFIR / Imóvel</th>
-                  <th className="py-3 px-4">Área Total</th>
-                  <th className="py-3 px-4">Município</th>
-                  <th className="py-3 px-4">Reserva Legal & APP</th>
-                  <th className="py-3 px-4">Status SICAR</th>
-                  <th className="py-3 px-4 text-right">Ações</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                {propriedadesList.map((prop) => (
+        {activeTab === 'propriedades' && (
+          <table className="w-full text-left text-xs">
+            <thead>
+              <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
+                <th className="py-3 px-4">Código CEFIR / Imóvel</th>
+                <th className="py-3 px-4">Área Total</th>
+                <th className="py-3 px-4">Município</th>
+                <th className="py-3 px-4">Reserva Legal & APP</th>
+                <th className="py-3 px-4">Status SICAR</th>
+                <th className="py-3 px-4 text-right">Ações</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              {propriedadesList
+                .filter(
+                  (prop) =>
+                    !searchTerm ||
+                    prop.codigoCefir.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    prop.nomeImovel.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    prop.municipio.toLowerCase().includes(searchTerm.toLowerCase())
+                )
+                .map((prop) => (
                   <tr key={prop.codigoCefir} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
                     <td className="py-3.5 px-4">
                       <span className="font-mono font-bold text-slate-900 dark:text-slate-100 block">{prop.codigoCefir}</span>
@@ -588,10 +604,10 @@ export const CadastrosBasicosPage: React.FC<CadastrosBasicosPageProps> = ({ onNa
                     </td>
                     <td className="py-3.5 px-4">
                       <div className="text-slate-800 dark:text-slate-200">RL: {prop.reservaLegal}</div>
-                      <div className="text-[11px] text-slate-500">APP: {prop.app}</div>
+                      <div className="text-[11px] text-slate-500 dark:text-slate-400">APP: {prop.app}</div>
                     </td>
                     <td className="py-3.5 px-4">
-                      <Badge variant={prop.statusColor as any} hasDot className="text-[10px]">
+                      <Badge color={prop.statusColor as any} dot size="xs">
                         {prop.statusSicar}
                       </Badge>
                     </td>
@@ -603,29 +619,33 @@ export const CadastrosBasicosPage: React.FC<CadastrosBasicosPageProps> = ({ onNa
                     </td>
                   </tr>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
+            </tbody>
+          </table>
+        )}
 
-      {/* TAB 5: PROCURADORES */}
-      {activeTab === 'procuradores' && (
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
-                  <th className="py-3 px-4">Código / Nome</th>
-                  <th className="py-3 px-4">CPF / OAB</th>
-                  <th className="py-3 px-4">Outorgante Representado</th>
-                  <th className="py-3 px-4">Poderes Delegados</th>
-                  <th className="py-3 px-4">Vigência</th>
-                  <th className="py-3 px-4 text-right">Ações</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                {procuradoresList.map((proc) => (
+        {activeTab === 'procuradores' && (
+          <table className="w-full text-left text-xs">
+            <thead>
+              <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
+                <th className="py-3 px-4">Código / Nome</th>
+                <th className="py-3 px-4">CPF / OAB</th>
+                <th className="py-3 px-4">Outorgante Representado</th>
+                <th className="py-3 px-4">Poderes Delegados</th>
+                <th className="py-3 px-4">Vigência</th>
+                <th className="py-3 px-4 text-right">Ações</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              {procuradoresList
+                .filter(
+                  (proc) =>
+                    !searchTerm ||
+                    proc.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    proc.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    proc.cpf.includes(searchTerm) ||
+                    proc.vinculo.toLowerCase().includes(searchTerm.toLowerCase())
+                )
+                .map((proc) => (
                   <tr key={proc.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
                     <td className="py-3.5 px-4 font-semibold text-slate-900 dark:text-slate-100">
                       {proc.nome}
@@ -633,7 +653,7 @@ export const CadastrosBasicosPage: React.FC<CadastrosBasicosPageProps> = ({ onNa
                     </td>
                     <td className="py-3.5 px-4 font-mono text-slate-700 dark:text-slate-300">
                       {proc.cpf}
-                      <div className="text-[11px] text-slate-500">{proc.oab}</div>
+                      <div className="text-[11px] text-slate-500 dark:text-slate-400">{proc.oab}</div>
                     </td>
                     <td className="py-3.5 px-4 font-medium text-slate-800 dark:text-slate-200">
                       {proc.vinculo}
@@ -642,7 +662,7 @@ export const CadastrosBasicosPage: React.FC<CadastrosBasicosPageProps> = ({ onNa
                       {proc.poderes}
                     </td>
                     <td className="py-3.5 px-4">
-                      <Badge variant={proc.statusColor as any} hasDot className="text-[10px]">
+                      <Badge color={proc.statusColor as any} dot size="xs">
                         {proc.situacao}
                       </Badge>
                     </td>
@@ -654,34 +674,38 @@ export const CadastrosBasicosPage: React.FC<CadastrosBasicosPageProps> = ({ onNa
                     </td>
                   </tr>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
+            </tbody>
+          </table>
+        )}
 
-      {/* TAB 6: CONSULTORIAS */}
-      {activeTab === 'consultorias' && (
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
-                  <th className="py-3 px-4">Código / Razão Social</th>
-                  <th className="py-3 px-4">CNPJ</th>
-                  <th className="py-3 px-4">Responsável Técnico</th>
-                  <th className="py-3 px-4">Processos Ativos</th>
-                  <th className="py-3 px-4">Situação</th>
-                  <th className="py-3 px-4 text-right">Ações</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                {consultoriasList.map((cons) => (
+        {activeTab === 'consultorias' && (
+          <table className="w-full text-left text-xs">
+            <thead>
+              <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
+                <th className="py-3 px-4">Código / Razão Social</th>
+                <th className="py-3 px-4">CNPJ</th>
+                <th className="py-3 px-4">Responsável Técnico</th>
+                <th className="py-3 px-4">Processos Ativos</th>
+                <th className="py-3 px-4">Situação</th>
+                <th className="py-3 px-4 text-right">Ações</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              {consultoriasList
+                .filter(
+                  (cons) =>
+                    !searchTerm ||
+                    cons.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    cons.razaoSocial.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    cons.cnpj.includes(searchTerm) ||
+                    cons.responsavelTecnico.toLowerCase().includes(searchTerm.toLowerCase())
+                )
+                .map((cons) => (
                   <tr key={cons.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
                     <td className="py-3.5 px-4">
                       <span className="font-mono text-[10px] text-slate-400 block font-normal">{cons.id}</span>
                       <div className="font-semibold text-slate-900 dark:text-slate-100">{cons.razaoSocial}</div>
-                      <div className="text-[11px] text-slate-500">{cons.municipio}</div>
+                      <div className="text-[11px] text-slate-500 dark:text-slate-400">{cons.municipio}</div>
                     </td>
                     <td className="py-3.5 px-4 font-mono font-semibold text-slate-800 dark:text-slate-200">
                       {cons.cnpj}
@@ -693,7 +717,7 @@ export const CadastrosBasicosPage: React.FC<CadastrosBasicosPageProps> = ({ onNa
                       {cons.processosVinculados}
                     </td>
                     <td className="py-3.5 px-4">
-                      <Badge variant={cons.statusColor as any} hasDot className="text-[10px]">
+                      <Badge color={cons.statusColor as any} dot size="xs">
                         {cons.situacao}
                       </Badge>
                     </td>
@@ -705,11 +729,10 @@ export const CadastrosBasicosPage: React.FC<CadastrosBasicosPageProps> = ({ onNa
                     </td>
                   </tr>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
+            </tbody>
+          </table>
+        )}
+      </TableContainer>
 
       {/* MODAL 1: NOVO RESPONSÁVEL TÉCNICO */}
       {activeModal === 'novo-rt' && (

@@ -27,6 +27,7 @@ import { FilamentWizard, Step } from '@/components/filament/Wizard';
 import { Section } from '@/components/filament/Section';
 import { InputWrapper } from '@/components/filament/InputWrapper';
 import { FilamentSelect } from '@/components/filament/Select';
+import { TableContainer, TableToolbar } from '@/components/filament/Table';
 import { KpiCard } from '@/components/dashboard/KpiCard';
 import { SeiaV2Breadcrumb } from '@/components/seia-v2/SeiaV2Breadcrumb';
 
@@ -211,68 +212,96 @@ export const CerhPage: React.FC<CerhPageProps> = ({ onNavigate }) => {
             />
           </div>
 
-          {/* Toolbar de Filtros */}
-          <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs space-y-3">
-            <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
-              <div className="sm:col-span-5 relative">
-                <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                <input
-                  type="text"
-                  placeholder="Buscar por protocolo CERH, interessado, CPF/CNPJ ou rio..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A]"
-                />
-              </div>
-
-              <div className="sm:col-span-4">
-                <select
-                  value={filtroBacia}
-                  onChange={(e) => setFiltroBacia(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A]"
-                >
-                  <option value="todas">Todas as Bacias Hidrográficas</option>
-                  <option value="sf">Bacia do Rio São Francisco (RPGA)</option>
-                  <option value="paraguacu">Bacia do Rio Paraguaçu</option>
-                  <option value="contas">Bacia do Rio de Contas</option>
-                  <option value="itapicuru">Bacia do Rio Itapicuru</option>
-                  <option value="leste">Bacias do Recôncavo e Leste</option>
-                </select>
-              </div>
-
-              <div className="sm:col-span-3">
-                <select
-                  value={filtroTipo}
-                  onChange={(e) => setFiltroTipo(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A]"
-                >
-                  <option value="todos">Todos os Tipos de Interferência</option>
-                  <option value="subterranea">Captação Subterrânea (Poço)</option>
-                  <option value="superficial">Captação Superficial</option>
-                  <option value="efluente">Lançamento de Efluentes</option>
-                  <option value="barragem">Barramento / Canal</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
           {/* Tabela de Declarações CERH */}
-          <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead>
-                  <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
-                    <th className="py-3 px-4">Protocolo CERH</th>
-                    <th className="py-3 px-4">Interessado / CPF-CNPJ</th>
-                    <th className="py-3 px-4">Bacia & Manancial</th>
-                    <th className="py-3 px-4">Tipo de Interferência</th>
-                    <th className="py-3 px-4">Vazão & Finalidade</th>
-                    <th className="py-3 px-4">Status & SLA</th>
-                    <th className="py-3 px-4 text-right">Ações</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                  {declaracoesMock.map((row) => (
+          <TableContainer
+            toolbar={
+              <TableToolbar
+                searchValue={searchTerm}
+                onSearchChange={setSearchTerm}
+                searchPlaceholder="Buscar por protocolo CERH, interessado, CPF/CNPJ ou rio..."
+                activeFilterCount={(filtroBacia !== 'todas' ? 1 : 0) + (filtroTipo !== 'todos' ? 1 : 0)}
+                filters={
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                    <div>
+                      <label className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 block mb-1">
+                        Bacia Hidrográfica
+                      </label>
+                      <select
+                        value={filtroBacia}
+                        onChange={(e) => setFiltroBacia(e.target.value)}
+                        className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A]"
+                      >
+                        <option value="todas">Todas as Bacias Hidrográficas</option>
+                        <option value="sf">Bacia do Rio São Francisco (RPGA)</option>
+                        <option value="paraguacu">Bacia do Rio Paraguaçu</option>
+                        <option value="contas">Bacia do Rio de Contas</option>
+                        <option value="itapicuru">Bacia do Rio Itapicuru</option>
+                        <option value="leste">Bacias do Recôncavo e Leste</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 block mb-1">
+                        Tipo de Interferência
+                      </label>
+                      <select
+                        value={filtroTipo}
+                        onChange={(e) => setFiltroTipo(e.target.value)}
+                        className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A]"
+                      >
+                        <option value="todos">Todos os Tipos de Interferência</option>
+                        <option value="subterranea">Captação Subterrânea (Poço)</option>
+                        <option value="superficial">Captação Superficial</option>
+                        <option value="efluente">Lançamento de Efluentes</option>
+                        <option value="barragem">Barramento / Canal</option>
+                      </select>
+                    </div>
+                  </div>
+                }
+                actions={
+                  <Button variant="outline" size="sm" className="text-xs h-8">
+                    <Download className="w-3.5 h-3.5 mr-1 text-slate-500" />
+                    <span>Exportar</span>
+                  </Button>
+                }
+              />
+            }
+            pagination={
+              <div className="w-full flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                <span>Exibindo {declaracoesMock.length} de 1.420 declarações</span>
+                <div className="flex items-center gap-1">
+                  <Button variant="outline" size="xs" disabled>Anterior</Button>
+                  <Button variant="outline" size="xs" className="bg-[#0F4C3A] text-white">1</Button>
+                  <Button variant="outline" size="xs">2</Button>
+                  <Button variant="outline" size="xs">3</Button>
+                  <Button variant="outline" size="xs">Próxima</Button>
+                </div>
+              </div>
+            }
+          >
+            <table className="w-full text-left text-xs">
+              <thead>
+                <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
+                  <th className="py-3 px-4">Protocolo CERH</th>
+                  <th className="py-3 px-4">Interessado / CPF-CNPJ</th>
+                  <th className="py-3 px-4">Bacia & Manancial</th>
+                  <th className="py-3 px-4">Tipo de Interferência</th>
+                  <th className="py-3 px-4">Vazão & Finalidade</th>
+                  <th className="py-3 px-4">Status & SLA</th>
+                  <th className="py-3 px-4 text-right">Ações</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                {declaracoesMock
+                  .filter(
+                    (row) =>
+                      !searchTerm ||
+                      row.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                      row.interessado.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                      row.documento.includes(searchTerm) ||
+                      row.rio.toLowerCase().includes(searchTerm.toLowerCase())
+                  )
+                  .map((row) => (
                     <tr
                       key={row.id}
                       className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-colors"
@@ -287,7 +316,7 @@ export const CerhPage: React.FC<CerhPageProps> = ({ onNavigate }) => {
                       </td>
                       <td className="py-3.5 px-4">
                         <div className="text-slate-800 dark:text-slate-200 font-medium">{row.bacia}</div>
-                        <div className="text-[11px] text-slate-500">{row.rio}</div>
+                        <div className="text-[11px] text-slate-500 dark:text-slate-400">{row.rio}</div>
                       </td>
                       <td className="py-3.5 px-4">
                         <span className="inline-flex items-center px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium text-[11px]">
@@ -296,10 +325,10 @@ export const CerhPage: React.FC<CerhPageProps> = ({ onNavigate }) => {
                       </td>
                       <td className="py-3.5 px-4">
                         <div className="font-mono font-semibold text-slate-800 dark:text-slate-200">{row.vazao}</div>
-                        <div className="text-[11px] text-slate-500">{row.finalidade}</div>
+                        <div className="text-[11px] text-slate-500 dark:text-slate-400">{row.finalidade}</div>
                       </td>
                       <td className="py-3.5 px-4">
-                        <Badge variant={row.statusColor as any} hasDot className="text-[10px]">
+                        <Badge color={row.statusColor as any} dot size="xs">
                           {row.status}
                         </Badge>
                         <div className="text-[10px] text-slate-400 mt-1 font-mono">{row.sla}</div>
@@ -320,22 +349,9 @@ export const CerhPage: React.FC<CerhPageProps> = ({ onNavigate }) => {
                       </td>
                     </tr>
                   ))}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Paginação */}
-            <div className="p-3.5 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500">
-              <span>Exibindo 4 de 1.420 declarações</span>
-              <div className="flex items-center gap-1">
-                <Button variant="outline" size="xs" disabled>Anterior</Button>
-                <Button variant="outline" size="xs" className="bg-[#0F4C3A] text-white">1</Button>
-                <Button variant="outline" size="xs">2</Button>
-                <Button variant="outline" size="xs">3</Button>
-                <Button variant="outline" size="xs">Próxima</Button>
-              </div>
-            </div>
-          </div>
+              </tbody>
+            </table>
+          </TableContainer>
         </div>
       )}
 

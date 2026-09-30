@@ -58,7 +58,7 @@ export const DetalhesCompletosModal: React.FC<DetalhesCompletosModalProps> = ({
   const semTramitacao = Boolean(
     (item as any)?.semTramitacao ||
     item.processo?.includes('FORM-00319') ||
-    item.ultimaMovimentacao === 'Sem tramitação registrada'
+    (item as any)?.ultimaMovimentacao === 'Sem tramitação registrada'
   );
 
   // Mock dados complementares canônicos

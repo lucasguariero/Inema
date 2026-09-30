@@ -27,14 +27,16 @@ export const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
     const [uncontrolledChecked, setUncontrolledChecked] = React.useState(defaultChecked);
     const isChecked = controlledChecked !== undefined ? controlledChecked : uncontrolledChecked;
 
-    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleClick = (e?: React.MouseEvent) => {
       if (disabled) return;
       const next = !isChecked;
       if (controlledChecked === undefined) {
         setUncontrolledChecked(next);
       }
       onCheckedChange?.(next);
-      props.onClick?.(e);
+      if (e) {
+        props.onClick?.(e as React.MouseEvent<HTMLButtonElement>);
+      }
     };
 
     const switchControl = (
@@ -76,7 +78,7 @@ export const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
           {label && (
             <label
               htmlFor={id}
-              onClick={handleClick}
+              onClick={() => handleClick()}
               className={cn(
                 'text-xs sm:text-sm font-medium text-[var(--color-text-primary)] cursor-pointer leading-5 select-none',
                 disabled && 'cursor-not-allowed opacity-50'

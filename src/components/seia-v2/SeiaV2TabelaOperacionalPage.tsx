@@ -22,6 +22,9 @@ import {
 } from 'lucide-react';
 import { CustomSelect, SelectOption } from './CustomSelect';
 import { SeiaV2Breadcrumb } from './SeiaV2Breadcrumb';
+import { TableContainer, TableToolbar } from '@/components/filament/Table';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
 interface ProcessoItem {
   id: string;
@@ -187,33 +190,13 @@ export const SeiaV2TabelaOperacionalPage: React.FC<SeiaV2TabelaOperacionalPagePr
   const getStatusBadge = (status: ProcessoItem['status'], label: string) => {
     switch (status) {
       case 'deferido':
-        return (
-          <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[var(--badge-success-bg)] text-[var(--badge-success-text)] border border-[var(--badge-success-border)]">
-            <CheckCircle2 className="w-3 h-3 text-[var(--color-status-success)]" />
-            {label}
-          </span>
-        );
+        return <Badge color="success" dot size="xs">{label}</Badge>;
       case 'analise':
-        return (
-          <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[var(--badge-warning-bg)] text-[var(--badge-warning-text)] border border-[var(--badge-warning-border)]">
-            <Clock className="w-3 h-3 text-[var(--color-status-warning)]" />
-            {label}
-          </span>
-        );
+        return <Badge color="warning" dot size="xs">{label}</Badge>;
       case 'pendencia':
-        return (
-          <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[var(--badge-info-bg)] text-[var(--badge-info-text)] border border-[var(--badge-info-border)]">
-            <AlertTriangle className="w-3 h-3 text-[var(--color-status-info)]" />
-            {label}
-          </span>
-        );
+        return <Badge color="info" dot size="xs">{label}</Badge>;
       case 'indeferido':
-        return (
-          <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[var(--badge-critical-bg)] text-[var(--badge-critical-text)] border border-[var(--badge-critical-border)]">
-            <XCircle className="w-3 h-3 text-[var(--color-status-critical)]" />
-            {label}
-          </span>
-        );
+        return <Badge color="danger" dot size="xs">{label}</Badge>;
     }
   };
 
@@ -243,7 +226,7 @@ export const SeiaV2TabelaOperacionalPage: React.FC<SeiaV2TabelaOperacionalPagePr
   return (
     <div className="space-y-5">
       {/* Cabeçalho da Página */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
         <div>
           <SeiaV2Breadcrumb
             items={[
@@ -252,304 +235,298 @@ export const SeiaV2TabelaOperacionalPage: React.FC<SeiaV2TabelaOperacionalPagePr
               { label: 'Pauta de Processos' },
             ]}
           />
-          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight mt-1">
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight mt-1">
             Pauta Geral de Processos e Atos (SEIA V2)
           </h1>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
             Listagem unificada e controle operacional dos processos de regulação, fiscalização e outorga.
           </p>
         </div>
 
         <div className="flex items-center gap-2">
-          <button
+          <Button
+            variant="outline"
+            size="sm"
             onClick={() => alert('Exportando pauta em formato Excel (XLSX)...')}
-            className="h-9 px-3.5 text-xs font-semibold bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 rounded-lg transition-all duration-200 ease-in-out flex items-center gap-1.5 shadow-2xs cursor-pointer"
+            className="text-xs h-9 font-semibold text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700"
           >
-            <FileSpreadsheet className="w-3.5 h-3.5 text-[var(--color-text-link)]" />
+            <FileSpreadsheet className="w-3.5 h-3.5 mr-1.5 text-[var(--color-text-link)]" />
             <span>Exportar XLSX</span>
-          </button>
+          </Button>
           {onNavigate && (
-            <button
+            <Button
+              variant="primary"
+              size="sm"
               onClick={() => onNavigate('formulario')}
-              className="h-9 px-4 text-xs font-semibold bg-[var(--button-primary-bg)] hover:bg-[var(--button-primary-bg-hover)] active:bg-[var(--button-primary-bg-active)] text-[var(--button-primary-text)] rounded-lg transition-all duration-200 ease-in-out flex items-center gap-1.5 shadow-xs cursor-pointer"
+              className="text-xs h-9 font-semibold bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white shadow-xs"
             >
               <span>+ Novo Requerimento</span>
-            </button>
+            </Button>
           )}
         </div>
       </div>
 
       {/* ========================================================= */}
-      {/* FILTROS AVANÇADOS NO TOPO (PADRÃO FILAMENT TABLES)        */}
+      {/* TABELA OPERACIONAL CANÔNICA (TABLE CONTAINER + TOOLBAR)   */}
       {/* ========================================================= */}
-      <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs space-y-3">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 items-center">
-          {/* Busca Rápida */}
-          <div className="lg:col-span-4 relative">
-            <Search className="w-4 h-4 absolute left-2.5 top-2.5 text-slate-400 pointer-events-none" />
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Filtrar por SEI, requerente, município..."
-              className="w-full h-9 pl-9 pr-3 text-xs bg-white border border-slate-200 hover:border-slate-300 rounded-lg placeholder-slate-400 text-slate-700 shadow-2xs focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A] transition-all duration-200 ease-in-out"
-            />
-          </div>
-
-          {/* Filtro de Status Customizado */}
-          <div className="lg:col-span-3">
-            <CustomSelect
-              value={statusFilter}
-              onChange={setStatusFilter}
-              options={statusOptions}
-              placeholder="Todos os Status"
-            />
-          </div>
-
-          {/* Filtro de Diretoria Customizado */}
-          <div className="lg:col-span-3">
-            <CustomSelect
-              value={diretoriaFilter}
-              onChange={setDiretoriaFilter}
-              options={diretoriaOptions}
-              placeholder="Todas as Diretorias"
-            />
-          </div>
-
-          {/* Ação Limpar */}
-          <div className="lg:col-span-2 flex items-center justify-end">
-            <button
-              onClick={() => {
-                setSearchTerm('');
-                setStatusFilter('todos');
-                setDiretoriaFilter('todos');
-              }}
-              className="h-9 px-3 text-xs font-semibold text-slate-600 hover:text-[#0F4C3A] hover:bg-slate-100 rounded-lg border border-transparent hover:border-slate-200 transition-all duration-200 ease-in-out w-full cursor-pointer"
-            >
-              Limpar Filtros
-            </button>
-          </div>
-        </div>
-
-        {selectedIds.length > 0 && (
-          <div className="p-2.5 rounded-lg bg-[var(--color-brand-primary-subtle)] border border-[var(--badge-success-border)] text-xs text-[var(--color-brand-primary)] flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="font-bold">{selectedIds.length}</span>
-              <span>processos selecionados para ação em lote.</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <button className="px-2.5 py-1 text-[11px] font-bold bg-[var(--button-primary-bg)] text-[var(--button-primary-text)] rounded hover:bg-[var(--button-primary-bg-hover)]">
-                Distribuir em Lote
-              </button>
-              <button
-                onClick={() => setSelectedIds([])}
-                className="px-2.5 py-1 text-[11px] text-slate-600 hover:underline"
-              >
-                Desmarcar todos
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* ========================================================= */}
-      {/* TABELA OPERACIONAL DENSE UI (FILAMENT DATA GRID)          */}
-      {/* ========================================================= */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-xs">
-            <thead>
-              <tr className="bg-slate-50/80 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[11px]">
-                <th className="p-3 w-10 text-center">
-                  <input
-                    type="checkbox"
-                    checked={
-                      selectedIds.length === filteredProcessos.length &&
-                      filteredProcessos.length > 0
-                    }
-                    onChange={toggleSelectAll}
-                    className="rounded border-slate-300 text-[#0F4C3A] focus:ring-[#0F4C3A]"
+      <TableContainer
+        toolbar={
+          <TableToolbar
+            searchPlaceholder="Filtrar por SEI, requerente, município..."
+            searchValue={searchTerm}
+            onSearchChange={setSearchTerm}
+            activeFilterCount={(statusFilter !== 'todos' ? 1 : 0) + (diretoriaFilter !== 'todos' ? 1 : 0)}
+            filters={
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 items-center">
+                <div className="lg:col-span-5">
+                  <CustomSelect
+                    value={statusFilter}
+                    onChange={setStatusFilter}
+                    options={statusOptions}
+                    placeholder="Todos os Status"
                   />
-                </th>
-                <th className="p-3">Processo / Protocolo SEI</th>
-                <th className="p-3">Requerente / Empreendimento</th>
-                <th className="p-3">Ato Requerido</th>
-                <th className="p-3">Entrada & SLA</th>
-                <th className="p-3">Status</th>
-                <th className="p-3">Responsável</th>
-                <th className="p-3 text-right">Ações</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {filteredProcessos.map((proc) => {
-                const isSelected = selectedIds.includes(proc.id);
-
-                return (
-                  <tr
-                    key={proc.id}
-                    className={`transition-colors duration-150 ease-in-out ${
-                      isSelected ? 'bg-[#0F4C3A]/5 hover:bg-[#0F4C3A]/10' : 'hover:bg-slate-50/80'
-                    }`}
+                </div>
+                <div className="lg:col-span-5">
+                  <CustomSelect
+                    value={diretoriaFilter}
+                    onChange={setDiretoriaFilter}
+                    options={diretoriaOptions}
+                    placeholder="Todas as Diretorias"
+                  />
+                </div>
+                <div className="lg:col-span-2 flex items-center justify-end">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setStatusFilter('todos');
+                      setDiretoriaFilter('todos');
+                    }}
+                    className="w-full text-xs h-9"
                   >
-                    <td className="p-3 text-center">
-                      <input
-                        type="checkbox"
-                        checked={isSelected}
-                        onChange={() => toggleSelectOne(proc.id)}
-                        className="w-4 h-4 rounded border-slate-300 text-[#0F4C3A] focus:ring-2 focus:ring-[#0F4C3A]/20 transition-all duration-150 cursor-pointer"
-                      />
-                    </td>
-
-                    <td className="p-3">
-                      <span className="font-mono font-bold text-slate-800 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">
-                        {proc.sei}
-                      </span>
-                    </td>
-
-                    <td className="p-3">
-                      <div className="font-bold text-slate-800">{proc.requerente}</div>
-                      <div className="text-[11px] text-slate-500">
-                        {proc.empreendimento} • <strong className="text-slate-600">{proc.municipio}</strong>
-                      </div>
-                    </td>
-
-                    <td className="p-3">
-                      <span className="font-medium text-slate-700">{proc.tipoAto}</span>
-                    </td>
-
-                    <td className="p-3">
-                      <div className="font-mono text-slate-600">{proc.dataEntrada}</div>
-                      <div className="mt-0.5">
-                        {proc.slaDiasRestantes <= 5 ? (
-                          <span className="text-[10px] font-bold text-rose-600">
-                            SLA: {proc.slaDiasRestantes}d restantes!
-                          </span>
-                        ) : (
-                          <span className="text-[10px] text-slate-400">
-                            SLA: {proc.slaDiasRestantes}d restantes
-                          </span>
-                        )}
-                      </div>
-                    </td>
-
-                    <td className="p-3">
-                      {getStatusBadge(proc.status, proc.statusLabel)}
-                    </td>
-
-                    <td className="p-3 text-slate-600">
-                      {proc.analista}
-                    </td>
-
-                    <td className="p-3 text-right">
-                      <div className="inline-flex items-center gap-1">
-                        <button
-                          onClick={() => setSelectedProcesso(proc)}
-                          className="p-1.5 rounded-lg text-slate-400 hover:text-[#0F4C3A] hover:bg-slate-100 transition-all duration-200 ease-in-out cursor-pointer"
-                          title="Visualizar Detalhes"
-                        >
-                          <Eye className="w-3.5 h-3.5" />
-                        </button>
-                        <button
-                          className="p-1.5 rounded-lg text-[#0F4C3A] hover:bg-[#0F4C3A]/10 transition-all duration-200 ease-in-out cursor-pointer"
-                          title="Parecer Técnico"
-                        >
-                          <FileEdit className="w-3.5 h-3.5" />
-                        </button>
-                        <button
-                          className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-all duration-200 ease-in-out cursor-pointer"
-                          title="Histórico de Tramitação"
-                        >
-                          <History className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-
-              {filteredProcessos.length === 0 && (
-                <tr>
-                  <td colSpan={8} className="p-12 text-center text-slate-400">
-                    Nenhum processo encontrado para os filtros selecionados.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-
-        {/* ========================================================= */}
-        {/* RODAPÉ DA TABELA: PAGINAÇÃO COMPLETA                      */}
-        {/* ========================================================= */}
-        <div className="p-3 border-t border-slate-200 bg-slate-50/70 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-500">
-          <div className="flex items-center gap-2">
-            <span>Exibindo <strong>1 a {filteredProcessos.length}</strong> de <strong>142</strong> processos</span>
-            <span className="text-slate-300">•</span>
-            <div className="flex items-center gap-1.5">
-              <span>Por página:</span>
-              <div className="w-18">
-                <CustomSelect
-                  value={String(itemsPerPage)}
-                  onChange={(v) => setItemsPerPage(Number(v))}
-                  options={perPageOptions}
-                />
+                    Limpar Filtros
+                  </Button>
+                </div>
+              </div>
+            }
+            actions={
+              selectedIds.length > 0 ? (
+                <div className="flex items-center gap-2 text-xs">
+                  <Badge color="primary" size="xs">
+                    {selectedIds.length} selecionados
+                  </Badge>
+                  <Button size="xs" variant="primary" className="bg-[#0F4C3A] text-white">
+                    Distribuir em Lote
+                  </Button>
+                  <Button size="xs" variant="ghost" onClick={() => setSelectedIds([])}>
+                    Desmarcar
+                  </Button>
+                </div>
+              ) : null
+            }
+          />
+        }
+        pagination={
+          <div className="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-500 dark:text-slate-400">
+            <div className="flex items-center gap-2">
+              <span>Exibindo <strong>1 a {filteredProcessos.length}</strong> de <strong>142</strong> processos</span>
+              <span className="text-slate-300 dark:text-slate-700">•</span>
+              <div className="flex items-center gap-1.5">
+                <span>Por página:</span>
+                <div className="w-18">
+                  <CustomSelect
+                    value={String(itemsPerPage)}
+                    onChange={(v) => setItemsPerPage(Number(v))}
+                    options={perPageOptions}
+                  />
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="flex items-center gap-1">
-            <button
-              disabled={currentPage === 1}
-              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              className="p-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 hover:border-slate-300 disabled:opacity-40 transition-all duration-200 ease-in-out cursor-pointer"
-            >
-              <ChevronLeft className="w-3.5 h-3.5" />
-            </button>
-            <button className="px-2.5 py-1 rounded-lg bg-[var(--button-primary-bg)] text-[var(--button-primary-text)] font-bold font-mono text-xs shadow-2xs">
-              1
-            </button>
-            <button className="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 hover:border-slate-300 font-mono text-xs transition-all duration-200 ease-in-out cursor-pointer">
-              2
-            </button>
-            <button className="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 hover:border-slate-300 font-mono text-xs transition-all duration-200 ease-in-out cursor-pointer">
-              3
-            </button>
-            <span className="px-1 text-slate-400">...</span>
-            <button className="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 hover:border-slate-300 font-mono text-xs transition-all duration-200 ease-in-out cursor-pointer">
-              15
-            </button>
-            <button
-              onClick={() => setCurrentPage((p) => p + 1)}
-              className="p-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 hover:border-slate-300 transition-all duration-200 ease-in-out cursor-pointer"
-            >
-              <ChevronRight className="w-3.5 h-3.5" />
-            </button>
+            <div className="flex items-center gap-1">
+              <Button
+                variant="outline"
+                size="xs"
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                className="p-1 h-7 w-7"
+              >
+                <ChevronLeft className="w-3.5 h-3.5" />
+              </Button>
+              <Button size="xs" variant="primary" className="h-7 px-2.5 font-bold font-mono bg-[#0F4C3A] text-white">
+                1
+              </Button>
+              <Button size="xs" variant="outline" className="h-7 px-2.5 font-mono">
+                2
+              </Button>
+              <Button size="xs" variant="outline" className="h-7 px-2.5 font-mono">
+                3
+              </Button>
+              <span className="px-1 text-slate-400">...</span>
+              <Button size="xs" variant="outline" className="h-7 px-2.5 font-mono">
+                15
+              </Button>
+              <Button
+                variant="outline"
+                size="xs"
+                onClick={() => setCurrentPage((p) => p + 1)}
+                className="p-1 h-7 w-7"
+              >
+                <ChevronRight className="w-3.5 h-3.5" />
+              </Button>
+            </div>
           </div>
-        </div>
-      </div>
+        }
+      >
+        <table className="w-full text-left border-collapse text-xs">
+          <thead>
+            <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold text-[11px]">
+              <th className="p-3 w-10 text-center">
+                <input
+                  type="checkbox"
+                  checked={
+                    selectedIds.length === filteredProcessos.length &&
+                    filteredProcessos.length > 0
+                  }
+                  onChange={toggleSelectAll}
+                  className="rounded border-slate-300 dark:border-slate-700 text-[#0F4C3A] focus:ring-[#0F4C3A]"
+                />
+              </th>
+              <th className="p-3">Processo / Protocolo SEI</th>
+              <th className="p-3">Requerente / Empreendimento</th>
+              <th className="p-3">Ato Requerido</th>
+              <th className="p-3">Entrada & SLA</th>
+              <th className="p-3">Status</th>
+              <th className="p-3">Responsável</th>
+              <th className="p-3 text-right">Ações</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+            {filteredProcessos.map((proc) => {
+              const isSelected = selectedIds.includes(proc.id);
+
+              return (
+                <tr
+                  key={proc.id}
+                  className={`transition-colors duration-150 ease-in-out ${
+                    isSelected ? 'bg-[#0F4C3A]/5 hover:bg-[#0F4C3A]/10 dark:bg-emerald-950/20' : 'hover:bg-slate-50/80 dark:hover:bg-slate-800/40'
+                  }`}
+                >
+                  <td className="p-3 text-center">
+                    <input
+                      type="checkbox"
+                      checked={isSelected}
+                      onChange={() => toggleSelectOne(proc.id)}
+                      className="w-4 h-4 rounded border-slate-300 dark:border-slate-700 text-[#0F4C3A] focus:ring-2 focus:ring-[#0F4C3A]/20 transition-all duration-150 cursor-pointer"
+                    />
+                  </td>
+
+                  <td className="p-3">
+                    <span className="font-mono font-bold text-slate-800 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700">
+                      {proc.sei}
+                    </span>
+                  </td>
+
+                  <td className="p-3">
+                    <div className="font-bold text-slate-800 dark:text-slate-200">{proc.requerente}</div>
+                    <div className="text-[11px] text-slate-500 dark:text-slate-400">
+                      {proc.empreendimento} • <strong className="text-slate-600 dark:text-slate-300">{proc.municipio}</strong>
+                    </div>
+                  </td>
+
+                  <td className="p-3">
+                    <span className="font-medium text-slate-700 dark:text-slate-300">{proc.tipoAto}</span>
+                  </td>
+
+                  <td className="p-3">
+                    <div className="font-mono text-slate-600 dark:text-slate-400">{proc.dataEntrada}</div>
+                    <div className="mt-0.5">
+                      {proc.slaDiasRestantes <= 5 ? (
+                        <span className="text-[10px] font-bold text-rose-600 dark:text-rose-400">
+                          SLA: {proc.slaDiasRestantes}d restantes!
+                        </span>
+                      ) : (
+                        <span className="text-[10px] text-slate-400 dark:text-slate-500">
+                          SLA: {proc.slaDiasRestantes}d restantes
+                        </span>
+                      )}
+                    </div>
+                  </td>
+
+                  <td className="p-3">
+                    {getStatusBadge(proc.status, proc.statusLabel)}
+                  </td>
+
+                  <td className="p-3 text-slate-600 dark:text-slate-400">
+                    {proc.analista}
+                  </td>
+
+                  <td className="p-3 text-right">
+                    <div className="inline-flex items-center gap-1">
+                      <Button
+                        variant="ghost"
+                        size="xs"
+                        onClick={() => setSelectedProcesso(proc)}
+                        className="p-1.5 text-slate-400 hover:text-[#0F4C3A] dark:hover:text-emerald-400"
+                        title="Visualizar Detalhes"
+                      >
+                        <Eye className="w-3.5 h-3.5" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="xs"
+                        className="p-1.5 text-[#0F4C3A] dark:text-emerald-400 hover:bg-[#0F4C3A]/10"
+                        title="Parecer Técnico"
+                      >
+                        <FileEdit className="w-3.5 h-3.5" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="xs"
+                        className="p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
+                        title="Histórico de Tramitação"
+                      >
+                        <History className="w-3.5 h-3.5" />
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+
+            {filteredProcessos.length === 0 && (
+              <tr>
+                <td colSpan={8} className="p-12 text-center text-slate-400 dark:text-slate-500">
+                  Nenhum processo encontrado para os filtros selecionados.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </TableContainer>
 
       {/* ========================================================= */}
       {/* MODAL DE DETALHES DO PROCESSO (PADRÃO FILAMENT MODAL)     */}
       {/* ========================================================= */}
       {selectedProcesso && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
-          <div className="bg-white rounded-xl shadow-2xl border border-slate-200 w-full max-w-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+          <div className="bg-white dark:bg-slate-900 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-800 w-full max-w-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
             {/* Header do Modal */}
-            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+            <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/40">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono font-bold text-slate-900 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+                  <span className="text-xs font-mono font-bold text-slate-900 dark:text-slate-100 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">
                     {selectedProcesso.sei}
                   </span>
                   {getStatusBadge(selectedProcesso.status, selectedProcesso.statusLabel)}
                 </div>
-                <h3 className="text-base font-bold text-slate-900 mt-1">
+                <h3 className="text-base font-bold text-slate-900 dark:text-slate-100 mt-1">
                   {selectedProcesso.tipoAto}
                 </h3>
               </div>
               <button
                 onClick={() => setSelectedProcesso(null)}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -557,12 +534,12 @@ export const SeiaV2TabelaOperacionalPage: React.FC<SeiaV2TabelaOperacionalPagePr
 
             {/* Conteúdo do Modal */}
             <div className="p-6 space-y-4 text-xs">
-              <div className="grid grid-cols-2 gap-4 p-3.5 rounded-lg bg-slate-50 border border-slate-200/80">
+              <div className="grid grid-cols-2 gap-4 p-3.5 rounded-lg bg-slate-50 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-700/60">
                 <div>
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
                     Requerente
                   </span>
-                  <span className="font-semibold text-slate-800 text-sm mt-0.5 block">
+                  <span className="font-semibold text-slate-800 dark:text-slate-200 text-sm mt-0.5 block">
                     {selectedProcesso.requerente}
                   </span>
                 </div>
@@ -570,7 +547,7 @@ export const SeiaV2TabelaOperacionalPage: React.FC<SeiaV2TabelaOperacionalPagePr
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
                     Empreendimento & Município
                   </span>
-                  <span className="font-semibold text-slate-800 text-sm mt-0.5 block">
+                  <span className="font-semibold text-slate-800 dark:text-slate-200 text-sm mt-0.5 block">
                     {selectedProcesso.empreendimento} • {selectedProcesso.municipio}
                   </span>
                 </div>
@@ -578,7 +555,7 @@ export const SeiaV2TabelaOperacionalPage: React.FC<SeiaV2TabelaOperacionalPagePr
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
                     Data de Entrada no Sistema
                   </span>
-                  <span className="text-slate-700 mt-0.5 block">
+                  <span className="text-slate-700 dark:text-slate-300 mt-0.5 block">
                     {selectedProcesso.dataEntrada}
                   </span>
                 </div>
@@ -586,50 +563,54 @@ export const SeiaV2TabelaOperacionalPage: React.FC<SeiaV2TabelaOperacionalPagePr
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
                     Técnico Responsável
                   </span>
-                  <span className="text-slate-700 mt-0.5 block">
+                  <span className="text-slate-700 dark:text-slate-300 mt-0.5 block">
                     {selectedProcesso.analista} (DIRRE/COASP)
                   </span>
                 </div>
               </div>
 
-              <div className="p-3.5 rounded-lg border border-slate-200 space-y-2">
-                <span className="text-[11px] font-bold text-slate-700 block">
+              <div className="p-3.5 rounded-lg border border-slate-200 dark:border-slate-800 space-y-2">
+                <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block">
                   Última Tramitação Registrada
                 </span>
-                <p className="text-slate-600 leading-relaxed">
+                <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
                   Processo distribuído para análise técnica conforme Resolução CEPRAM nº 4.579/2018. Vistoria técnica realizada e aguardando complementação do laudo hidrogeológico pelo requerente.
                 </p>
-                <div className="flex items-center gap-2 pt-1 text-[11px] text-slate-500">
-                  <Clock className="w-3.5 h-3.5 text-amber-600" />
+                <div className="flex items-center gap-2 pt-1 text-[11px] text-slate-500 dark:text-slate-400">
+                  <Clock className="w-3.5 h-3.5 text-amber-500" />
                   <span>SLA Legal: restam <strong>{selectedProcesso.slaDiasRestantes} dias</strong> para conclusão do ato.</span>
                 </div>
               </div>
             </div>
 
             {/* Rodapé do Modal */}
-            <div className="px-6 py-3.5 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-              <button
+            <div className="px-6 py-3.5 bg-slate-50 dark:bg-slate-800/40 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={() => setSelectedProcesso(null)}
-                className="h-9 px-4 text-xs font-semibold bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
               >
                 Fechar
-              </button>
+              </Button>
 
               <div className="flex items-center gap-2">
-                <button
+                <Button
+                  variant="outline"
+                  size="sm"
                   onClick={() => alert(`Gerando Extrato do Processo ${selectedProcesso.sei}`)}
-                  className="h-9 px-3.5 text-xs font-semibold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-lg transition-colors flex items-center gap-1.5"
                 >
-                  <FileSpreadsheet className="w-3.5 h-3.5 text-slate-500" />
+                  <FileSpreadsheet className="w-3.5 h-3.5 mr-1.5 text-slate-500" />
                   <span>Extrato PDF</span>
-                </button>
-                <button
+                </Button>
+                <Button
+                  variant="primary"
+                  size="sm"
                   onClick={() => alert(`Redirecionando para SEI-BA: ${selectedProcesso.sei}`)}
-                  className="h-9 px-4 text-xs font-bold bg-[var(--button-primary-bg)] hover:bg-[var(--button-primary-bg-hover)] active:bg-[var(--button-primary-bg-active)] text-[var(--button-primary-text)] rounded-lg transition-colors flex items-center gap-1.5 shadow-2xs"
+                  className="bg-[#0F4C3A] text-white"
                 >
                   <span>Abrir no SEI-BA</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </button>
+                  <ExternalLink className="w-3.5 h-3.5 ml-1.5" />
+                </Button>
               </div>
             </div>
           </div>

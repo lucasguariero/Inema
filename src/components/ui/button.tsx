@@ -9,7 +9,17 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   asChild?: boolean;
   color?: FilamentButtonColor;
   outlined?: boolean;
-  variant?: 'default' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'pill';
+  variant?:
+    | 'default'
+    | 'secondary'
+    | 'outline'
+    | 'ghost'
+    | 'destructive'
+    | 'pill'
+    | 'primary'
+    | 'danger'
+    | 'warning'
+    | 'success';
   size?: FilamentButtonSize;
 }
 
@@ -23,6 +33,18 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     if (!color && variant) {
       switch (variant) {
+        case 'primary':
+          effectiveColor = 'primary';
+          break;
+        case 'danger':
+          effectiveColor = 'danger';
+          break;
+        case 'warning':
+          effectiveColor = 'warning';
+          break;
+        case 'success':
+          effectiveColor = 'success';
+          break;
         case 'secondary':
           effectiveColor = 'gray';
           break;

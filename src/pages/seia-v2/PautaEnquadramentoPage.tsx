@@ -26,6 +26,7 @@ import { Badge } from '@/components/ui/badge';
 import { FilamentTabs, TabItem } from '@/components/filament/Tabs';
 import { Section } from '@/components/filament/Section';
 import { InputWrapper } from '@/components/filament/InputWrapper';
+import { TableContainer, TableToolbar } from '@/components/filament/Table';
 import { KpiCard } from '@/components/dashboard/KpiCard';
 import { SeiaV2Breadcrumb } from '@/components/seia-v2/SeiaV2Breadcrumb';
 
@@ -215,37 +216,50 @@ export const PautaEnquadramentoPage: React.FC<PautaEnquadramentoPageProps> = ({ 
         />
       </div>
 
-      {/* Toolbar de Filtros */}
-      <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs flex items-center justify-between gap-4">
-        <div className="relative flex-1 max-w-md">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input
-            type="text"
-            placeholder="Buscar por requerimento, interessado, CPF/CNPJ ou ato..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A]"
-          />
-        </div>
-      </div>
-
       {/* TAB 1: PAUTA DE ENQUADRAMENTO */}
       {activeTab !== 'desbloqueios' && (
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
-                  <th className="py-3 px-4">Nº Requerimento</th>
-                  <th className="py-3 px-4">Requerente / CPF-CNPJ</th>
-                  <th className="py-3 px-4">Empreendimento & Local</th>
-                  <th className="py-3 px-4">Atos Pré-Enquadrados</th>
-                  <th className="py-3 px-4">Técnico & Situação</th>
-                  <th className="py-3 px-4 text-right">Ações</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                {processosMock.map((proc) => (
+        <TableContainer
+          toolbar={
+            <TableToolbar
+              searchValue={searchTerm}
+              onSearchChange={setSearchTerm}
+              searchPlaceholder="Buscar por requerimento, interessado, CPF/CNPJ ou ato..."
+              actions={
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setActiveModal('distribuir-lote')}
+                  className="text-xs h-8"
+                >
+                  <Users className="w-3.5 h-3.5 mr-1 text-[#0F4C3A]" />
+                  <span>Distribuir em Lote</span>
+                </Button>
+              }
+            />
+          }
+        >
+          <table className="w-full text-left text-xs">
+            <thead>
+              <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
+                <th className="py-3 px-4">Nº Requerimento</th>
+                <th className="py-3 px-4">Requerente / CPF-CNPJ</th>
+                <th className="py-3 px-4">Empreendimento & Local</th>
+                <th className="py-3 px-4">Atos Pré-Enquadrados</th>
+                <th className="py-3 px-4">Técnico & Situação</th>
+                <th className="py-3 px-4 text-right">Ações</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              {processosMock
+                .filter(
+                  (proc) =>
+                    !searchTerm ||
+                    proc.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    proc.requerente.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    proc.cnpj.includes(searchTerm) ||
+                    proc.atosPropostos.toLowerCase().includes(searchTerm.toLowerCase())
+                )
+                .map((proc) => (
                   <tr key={proc.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
                     <td className="py-3.5 px-4 font-mono font-bold text-slate-900 dark:text-slate-100">
                       {proc.id}
@@ -253,18 +267,18 @@ export const PautaEnquadramentoPage: React.FC<PautaEnquadramentoPageProps> = ({ 
                     </td>
                     <td className="py-3.5 px-4">
                       <div className="font-semibold text-slate-900 dark:text-slate-100">{proc.requerente}</div>
-                      <div className="text-[11px] font-mono text-slate-500">{proc.cnpj}</div>
+                      <div className="text-[11px] font-mono text-slate-500 dark:text-slate-400">{proc.cnpj}</div>
                     </td>
                     <td className="py-3.5 px-4">
                       <div className="text-slate-800 dark:text-slate-200 font-medium">{proc.empreendimento}</div>
-                      <div className="text-[11px] text-slate-500">{proc.municipio}</div>
+                      <div className="text-[11px] text-slate-500 dark:text-slate-400">{proc.municipio}</div>
                     </td>
                     <td className="py-3.5 px-4 text-slate-700 dark:text-slate-300">
                       <span className="font-medium text-[#0F4C3A] dark:text-emerald-400">{proc.atosPropostos}</span>
                     </td>
                     <td className="py-3.5 px-4">
                       <div className="font-medium text-slate-800 dark:text-slate-200">{proc.tecnicoResponsavel}</div>
-                      <Badge variant={proc.statusColor as any} hasDot className="text-[10px] mt-1">
+                      <Badge color={proc.statusColor as any} dot size="xs" className="mt-1">
                         {proc.situacao}
                       </Badge>
                       <div className="text-[10px] font-mono text-slate-400 mt-0.5">{proc.sla}</div>
@@ -285,29 +299,43 @@ export const PautaEnquadramentoPage: React.FC<PautaEnquadramentoPageProps> = ({ 
                     </td>
                   </tr>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+            </tbody>
+          </table>
+        </TableContainer>
       )}
 
       {/* TAB 2: DESBLOQUEIOS DA APE */}
       {activeTab === 'desbloqueios' && (
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
-                  <th className="py-3 px-4">Nº Protocolo Desbloqueio</th>
-                  <th className="py-3 px-4">Processo de Origem (SEI)</th>
-                  <th className="py-3 px-4">Requerente & Empreendimento</th>
-                  <th className="py-3 px-4">Motivo do Bloqueio</th>
-                  <th className="py-3 px-4">Situação</th>
-                  <th className="py-3 px-4 text-right">Ações</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                {desbloqueiosMock.map((desb) => (
+        <TableContainer
+          toolbar={
+            <TableToolbar
+              searchValue={searchTerm}
+              onSearchChange={setSearchTerm}
+              searchPlaceholder="Buscar por protocolo, processo SEI ou requerente..."
+            />
+          }
+        >
+          <table className="w-full text-left text-xs">
+            <thead>
+              <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
+                <th className="py-3 px-4">Nº Protocolo Desbloqueio</th>
+                <th className="py-3 px-4">Processo de Origem (SEI)</th>
+                <th className="py-3 px-4">Requerente & Empreendimento</th>
+                <th className="py-3 px-4">Motivo do Bloqueio</th>
+                <th className="py-3 px-4">Situação</th>
+                <th className="py-3 px-4 text-right">Ações</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              {desbloqueiosMock
+                .filter(
+                  (desb) =>
+                    !searchTerm ||
+                    desb.protocolo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    desb.processoOrigem.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    desb.requerente.toLowerCase().includes(searchTerm.toLowerCase())
+                )
+                .map((desb) => (
                   <tr key={desb.protocolo} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
                     <td className="py-3.5 px-4 font-mono font-bold text-slate-900 dark:text-slate-100">
                       {desb.protocolo}
@@ -318,13 +346,13 @@ export const PautaEnquadramentoPage: React.FC<PautaEnquadramentoPageProps> = ({ 
                     </td>
                     <td className="py-3.5 px-4">
                       <div className="font-semibold text-slate-900 dark:text-slate-100">{desb.requerente}</div>
-                      <div className="text-[11px] text-slate-500">{desb.empreendimento}</div>
+                      <div className="text-[11px] text-slate-500 dark:text-slate-400">{desb.empreendimento}</div>
                     </td>
                     <td className="py-3.5 px-4 text-rose-700 dark:text-rose-400 font-medium">
                       {desb.motivoBloqueio}
                     </td>
                     <td className="py-3.5 px-4">
-                      <Badge variant={desb.statusColor as any} hasDot className="text-[10px]">
+                      <Badge color={desb.statusColor as any} dot size="xs">
                         {desb.situacao}
                       </Badge>
                     </td>
@@ -336,10 +364,9 @@ export const PautaEnquadramentoPage: React.FC<PautaEnquadramentoPageProps> = ({ 
                     </td>
                   </tr>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+            </tbody>
+          </table>
+        </TableContainer>
       )}
 
       {/* MODAL 1: DISTRIBUIR EM LOTE */}

@@ -18,6 +18,7 @@ import { FilamentTabs, FilamentTabItem } from '@/components/filament/Tabs';
 import { FilamentWizard, Step } from '@/components/filament/Wizard';
 import { Section } from '@/components/filament/Section';
 import { InputWrapper } from '@/components/filament/InputWrapper';
+import { TableContainer, TableToolbar } from '@/components/filament/Table';
 import { SeiaV2Breadcrumb } from '@/components/seia-v2/SeiaV2Breadcrumb';
 
 interface AnslaPageProps {
@@ -27,6 +28,7 @@ interface AnslaPageProps {
 export const AnslaPage: React.FC<AnslaPageProps> = ({ onNavigate }) => {
   const [viewMode, setViewMode] = useState<'pauta' | 'novo-enquadramento'>('pauta');
   const [activeTab, setActiveTab] = useState('declaracoes');
+  const [searchTerm, setSearchTerm] = useState('');
   const [wizardStep, setWizardStep] = useState(1);
 
   const tabs: FilamentTabItem[] = [
@@ -102,45 +104,146 @@ export const AnslaPage: React.FC<AnslaPageProps> = ({ onNavigate }) => {
             <FilamentTabs items={tabs} activeTab={activeTab} onChange={setActiveTab} />
           </div>
 
-          <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs overflow-hidden">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
-                  <th className="py-3 px-4">Protocolo ANSLA</th>
-                  <th className="py-3 px-4">Requerente</th>
-                  <th className="py-3 px-4">Tipologia / Atividade</th>
-                  <th className="py-3 px-4">Município</th>
-                  <th className="py-3 px-4">Data de Emissão</th>
-                  <th className="py-3 px-4">Status</th>
-                  <th className="py-3 px-4 text-right">Ações</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                {anslaMock.map((row) => (
-                  <tr key={row.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
-                    <td className="py-3.5 px-4 font-mono font-semibold text-slate-900 dark:text-slate-100">
-                      {row.id}
-                    </td>
-                    <td className="py-3.5 px-4 font-semibold text-slate-900 dark:text-slate-100">{row.requerente}</td>
-                    <td className="py-3.5 px-4 text-slate-700 dark:text-slate-300">{row.tipologia}</td>
-                    <td className="py-3.5 px-4 text-slate-600">{row.municipio}</td>
-                    <td className="py-3.5 px-4 font-mono text-slate-500">{row.dataEmissao}</td>
-                    <td className="py-3.5 px-4">
-                      <Badge variant={row.statusColor as any} hasDot className="text-[10px]">
-                        {row.status}
-                      </Badge>
-                    </td>
-                    <td className="py-3.5 px-4 text-right">
-                      <Button variant="ghost" size="xs" className="text-[#0F4C3A]">
-                        <Download className="w-3.5 h-3.5 mr-1" />
-                        <span>Certificado</span>
-                      </Button>
-                    </td>
+          {activeTab === 'declaracoes' && (
+            <TableContainer
+              toolbar={
+                <TableToolbar
+                  searchValue={searchTerm}
+                  onSearchChange={setSearchTerm}
+                  searchPlaceholder="Buscar por protocolo, requerente, tipologia ou município..."
+                  actions={
+                    <Button variant="outline" size="sm" className="text-xs h-8">
+                      <Download className="w-3.5 h-3.5 mr-1 text-slate-500" />
+                      <span>Exportar Lista</span>
+                    </Button>
+                  }
+                />
+              }
+            >
+              <table className="w-full text-left text-xs">
+                <thead>
+                  <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
+                    <th className="py-3 px-4">Protocolo ANSLA</th>
+                    <th className="py-3 px-4">Requerente</th>
+                    <th className="py-3 px-4">Tipologia / Atividade</th>
+                    <th className="py-3 px-4">Município</th>
+                    <th className="py-3 px-4">Data de Emissão</th>
+                    <th className="py-3 px-4">Status</th>
+                    <th className="py-3 px-4 text-right">Ações</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                  {anslaMock
+                    .filter(
+                      (row) =>
+                        !searchTerm ||
+                        row.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        row.requerente.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        row.tipologia.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        row.municipio.toLowerCase().includes(searchTerm.toLowerCase())
+                    )
+                    .map((row) => (
+                      <tr key={row.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
+                        <td className="py-3.5 px-4 font-mono font-semibold text-slate-900 dark:text-slate-100">
+                          {row.id}
+                        </td>
+                        <td className="py-3.5 px-4 font-semibold text-slate-900 dark:text-slate-100">{row.requerente}</td>
+                        <td className="py-3.5 px-4 text-slate-700 dark:text-slate-300">{row.tipologia}</td>
+                        <td className="py-3.5 px-4 text-slate-600 dark:text-slate-400">{row.municipio}</td>
+                        <td className="py-3.5 px-4 font-mono text-slate-500 dark:text-slate-400">{row.dataEmissao}</td>
+                        <td className="py-3.5 px-4">
+                          <Badge color={row.statusColor as any} dot size="xs">
+                            {row.status}
+                          </Badge>
+                        </td>
+                        <td className="py-3.5 px-4 text-right">
+                          <Button variant="ghost" size="xs" className="text-[#0F4C3A] dark:text-emerald-400">
+                            <Download className="w-3.5 h-3.5 mr-1" />
+                            <span>Certificado</span>
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </TableContainer>
+          )}
+
+          {activeTab === 'catalogo' && (
+            <TableContainer
+              toolbar={
+                <TableToolbar
+                  searchValue={searchTerm}
+                  onSearchChange={setSearchTerm}
+                  searchPlaceholder="Buscar por tipologia, enquadramento ou base legal..."
+                  actions={
+                    <Button variant="outline" size="sm" className="text-xs h-8">
+                      <Download className="w-3.5 h-3.5 mr-1 text-slate-500" />
+                      <span>Baixar Catálogo Oficial</span>
+                    </Button>
+                  }
+                />
+              }
+            >
+              <table className="w-full text-left text-xs">
+                <thead>
+                  <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
+                    <th className="py-3 px-4">Código / Item</th>
+                    <th className="py-3 px-4">Tipologia / Atividade</th>
+                    <th className="py-3 px-4">Critério de Dispensa & Limites</th>
+                    <th className="py-3 px-4">Fundamento Legal</th>
+                    <th className="py-3 px-4">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                  {[
+                    {
+                      id: 'DISP-001',
+                      nome: 'Silos e Armazéns de Grãos até 10.000 t',
+                      criterio: 'Capacidade estática total inferior a 10.000 toneladas, sem queima de biomassa',
+                      baseLegal: 'Decreto Estadual nº 14.024/2012, Art. 8º',
+                      status: 'Dispensada de Licença',
+                    },
+                    {
+                      id: 'DISP-002',
+                      nome: 'Usinas Fotovoltaicas em Telhados / Coberturas',
+                      criterio: 'Instalação predial sem ampliação de área de solo nem supressão vegetal',
+                      baseLegal: 'Resolução CEPRAM nº 4.570/2017',
+                      status: 'Dispensada de Licença',
+                    },
+                    {
+                      id: 'DISP-003',
+                      nome: 'Manutenção de Estradas Vicinais Rurais',
+                      criterio: 'Sem alargamento de faixa de domínio e sem movimentação de terra > 500 m³',
+                      baseLegal: 'Portaria INEMA nº 19.822/2021',
+                      status: 'Dispensada de Licença',
+                    },
+                    {
+                      id: 'DISP-004',
+                      nome: 'Piscicultura Familiar em Tanque-Rede',
+                      criterio: 'Volume útil de até 1.000 m³ em corpos d’água públicos ou privados',
+                      baseLegal: 'Instrução Normativa Conjunta SEMA/INEMA nº 02/2020',
+                      status: 'Dispensada de Licença',
+                    },
+                  ].map((cat) => (
+                    <tr key={cat.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
+                      <td className="py-3.5 px-4 font-mono font-semibold text-slate-900 dark:text-slate-100">
+                        {cat.id}
+                      </td>
+                      <td className="py-3.5 px-4 font-semibold text-slate-900 dark:text-slate-100">{cat.nome}</td>
+                      <td className="py-3.5 px-4 text-slate-700 dark:text-slate-300">{cat.criterio}</td>
+                      <td className="py-3.5 px-4 font-mono text-[11px] text-slate-600 dark:text-slate-400">{cat.baseLegal}</td>
+                      <td className="py-3.5 px-4">
+                        <Badge color="success" dot size="xs">
+                          {cat.status}
+                        </Badge>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </TableContainer>
+          )}
         </div>
       )}
 
@@ -196,13 +299,13 @@ export const AnslaPage: React.FC<AnslaPageProps> = ({ onNavigate }) => {
           )}
 
           {wizardStep === 3 && (
-            <div className="bg-emerald-50 border border-emerald-200 p-8 rounded-2xl text-center space-y-4">
-              <CheckCircle2 className="w-12 h-12 text-emerald-600 mx-auto" />
-              <h3 className="text-base font-bold text-emerald-950">Atividade Enquadrada como Não Sujeita a Licenciamento</h3>
-              <p className="text-xs text-emerald-800 max-w-md mx-auto">
+            <div className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200/80 dark:border-emerald-900/40 p-8 rounded-xl text-center space-y-4">
+              <CheckCircle2 className="w-12 h-12 text-emerald-600 dark:text-emerald-400 mx-auto" />
+              <h3 className="text-base font-bold text-emerald-950 dark:text-emerald-100">Atividade Enquadrada como Não Sujeita a Licenciamento</h3>
+              <p className="text-xs text-emerald-800 dark:text-emerald-300 max-w-md mx-auto">
                 Sua declaração foi processada com sucesso. O certificado oficial de dispensa possui fé pública e validade indeterminada.
               </p>
-              <Button onClick={() => setViewMode('pauta')} className="bg-[#0F4C3A] text-white">
+              <Button onClick={() => setViewMode('pauta')} className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs h-9 font-semibold">
                 Emitir Declaração de Dispensa (PDF)
               </Button>
             </div>

@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { FilamentTabs, FilamentTabItem } from '@/components/filament/Tabs';
 import { Section } from '@/components/filament/Section';
+import { TableContainer, TableToolbar } from '@/components/filament/Table';
 import { KpiCard } from '@/components/dashboard/KpiCard';
 import { SeiaV2Breadcrumb } from '@/components/seia-v2/SeiaV2Breadcrumb';
 
@@ -23,6 +24,7 @@ interface CefirImoveisPageProps {
 
 export const CefirImoveisPage: React.FC<CefirImoveisPageProps> = ({ onNavigate }) => {
   const [activeTab, setActiveTab] = useState('inscritos');
+  const [searchTerm, setSearchTerm] = useState('');
   const [selectedImovel, setSelectedImovel] = useState<any>(null);
 
   const tabs: FilamentTabItem[] = [
@@ -83,7 +85,21 @@ export const CefirImoveisPage: React.FC<CefirImoveisPageProps> = ({ onNavigate }
         <FilamentTabs items={tabs} activeTab={activeTab} onChange={setActiveTab} />
       </div>
 
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs overflow-hidden">
+      <TableContainer
+        toolbar={
+          <TableToolbar
+            searchValue={searchTerm}
+            onSearchChange={setSearchTerm}
+            searchPlaceholder="Buscar por código CEFIR, denominação, proprietário..."
+            actions={
+              <Button variant="outline" size="sm" className="text-xs h-8">
+                <Download className="w-3.5 h-3.5 mr-1 text-slate-500" />
+                <span>Exportar SHP / CSV</span>
+              </Button>
+            }
+          />
+        }
+      >
         <table className="w-full text-left text-xs">
           <thead>
             <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
@@ -97,29 +113,37 @@ export const CefirImoveisPage: React.FC<CefirImoveisPageProps> = ({ onNavigate }
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-            {imoveisMock.map((row) => (
-              <tr key={row.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
-                <td className="py-3.5 px-4 font-mono font-semibold text-slate-900 dark:text-slate-100">{row.id}</td>
-                <td className="py-3.5 px-4 font-semibold text-slate-900 dark:text-slate-100">{row.denominacao}</td>
-                <td className="py-3.5 px-4 text-slate-700 dark:text-slate-300">{row.proprietario}</td>
-                <td className="py-3.5 px-4 font-mono text-slate-800 dark:text-slate-200">{row.areaTotal} ({row.moduloFiscal})</td>
-                <td className="py-3.5 px-4 text-[11px] text-slate-600">RL: {row.reservaLegal} • APP: {row.app}</td>
-                <td className="py-3.5 px-4">
-                  <Badge variant={row.statusColor as any} hasDot className="text-[10px]">
-                    {row.status}
-                  </Badge>
-                </td>
-                <td className="py-3.5 px-4 text-right">
-                  <Button variant="ghost" size="xs" onClick={() => setSelectedImovel(row)} className="text-[#0F4C3A]">
-                    <Eye className="w-3.5 h-3.5 mr-1" />
-                    <span>Mapa</span>
-                  </Button>
-                </td>
-              </tr>
-            ))}
+            {imoveisMock
+              .filter(
+                (row) =>
+                  !searchTerm ||
+                  row.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                  row.denominacao.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                  row.proprietario.toLowerCase().includes(searchTerm.toLowerCase())
+              )
+              .map((row) => (
+                <tr key={row.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
+                  <td className="py-3.5 px-4 font-mono font-semibold text-slate-900 dark:text-slate-100">{row.id}</td>
+                  <td className="py-3.5 px-4 font-semibold text-slate-900 dark:text-slate-100">{row.denominacao}</td>
+                  <td className="py-3.5 px-4 text-slate-700 dark:text-slate-300">{row.proprietario}</td>
+                  <td className="py-3.5 px-4 font-mono text-slate-800 dark:text-slate-200">{row.areaTotal} ({row.moduloFiscal})</td>
+                  <td className="py-3.5 px-4 text-[11px] text-slate-600 dark:text-slate-400">RL: {row.reservaLegal} • APP: {row.app}</td>
+                  <td className="py-3.5 px-4">
+                    <Badge color={row.statusColor as any} dot size="xs">
+                      {row.status}
+                    </Badge>
+                  </td>
+                  <td className="py-3.5 px-4 text-right">
+                    <Button variant="ghost" size="xs" onClick={() => setSelectedImovel(row)} className="text-[#0F4C3A] dark:text-emerald-400">
+                      <Eye className="w-3.5 h-3.5 mr-1" />
+                      <span>Mapa</span>
+                    </Button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
-      </div>
+      </TableContainer>
     </div>
   );
 };

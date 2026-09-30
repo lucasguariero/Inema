@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 
-export interface InputWrapperProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface InputWrapperProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'prefix'> {
   label?: React.ReactNode;
   required?: boolean;
   hint?: React.ReactNode;

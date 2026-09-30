@@ -583,7 +583,7 @@ export const AcompanhamentoPautaTab: React.FC<AcompanhamentoPautaTabProps> = ({
               onChange={(e) =>
                 onFiltrosChange?.({
                   ...filtros,
-                  diasMin: e.target.value ? Number(e.target.value) : undefined
+                  diasMin: e.target.value
                 })
               }
               className="w-12 h-8 px-1 text-xs text-center rounded-lg border border-slate-300 bg-white text-slate-800 focus:outline-hidden"
@@ -597,7 +597,7 @@ export const AcompanhamentoPautaTab: React.FC<AcompanhamentoPautaTabProps> = ({
               onChange={(e) =>
                 onFiltrosChange?.({
                   ...filtros,
-                  diasMax: e.target.value ? Number(e.target.value) : undefined
+                  diasMax: e.target.value
                 })
               }
               className="w-12 h-8 px-1 text-xs text-center rounded-lg border border-slate-300 bg-white text-slate-800 focus:outline-hidden"

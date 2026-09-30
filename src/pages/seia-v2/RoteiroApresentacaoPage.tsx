@@ -649,7 +649,7 @@ export const RoteiroApresentacaoPage: React.FC<{ onNavigate?: (route: string) =>
                                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-semibold">
                                   {item.tempoSugerido}
                                 </span>
-                                <Badge variant="gray" className="text-[10px]">
+                                <Badge color="gray" dot size="xs">
                                   {item.tagMapeada}
                                 </Badge>
                               </div>

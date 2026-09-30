@@ -1043,7 +1043,7 @@ export const TramitacoesPeriodoTab: React.FC<TramitacoesPeriodoTabProps> = ({
                         paddingAngle={4}
                       >
                         {MOCK_ANUAL_DIRRE_FAMILIAS.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
+                          <Cell key={`cell-${index}`} fill={entry.fill || (entry as any).color} />
                         ))}
                       </Pie>
                       <Tooltip

@@ -18,6 +18,7 @@ import { FilamentTabs, FilamentTabItem } from '@/components/filament/Tabs';
 import { FilamentWizard, Step } from '@/components/filament/Wizard';
 import { Section } from '@/components/filament/Section';
 import { InputWrapper } from '@/components/filament/InputWrapper';
+import { TableContainer, TableToolbar } from '@/components/filament/Table';
 import { KpiCard } from '@/components/dashboard/KpiCard';
 import { SeiaV2Breadcrumb } from '@/components/seia-v2/SeiaV2Breadcrumb';
 import { PdfPreviewDrawer, PdfDocumentData } from '@/components/seia-v2/PdfPreviewDrawer';
@@ -29,6 +30,7 @@ interface ParcelamentoDebitoPageProps {
 export const ParcelamentoDebitoPage: React.FC<ParcelamentoDebitoPageProps> = ({ onNavigate }) => {
   const [viewMode, setViewMode] = useState<'pauta' | 'novo-parcelamento'>('pauta');
   const [activeTab, setActiveTab] = useState('ativos');
+  const [searchTerm, setSearchTerm] = useState('');
   const [wizardStep, setWizardStep] = useState(1);
   const [numeroParcelas, setNumeroParcelas] = useState(24);
   const [pdfDrawerOpen, setPdfDrawerOpen] = useState(false);
@@ -48,6 +50,62 @@ export const ParcelamentoDebitoPage: React.FC<ParcelamentoDebitoPageProps> = ({ 
     { id: 2, label: 'Simulação do Plano', description: 'Parcelas e vencimentos' },
     { id: 3, label: 'Confissão de Dívida', description: 'Assinatura e carnê DAE' },
   ];
+
+  const contratosMock = [
+    {
+      id: 'PARC-2026-0089',
+      requerente: 'Agropecuária Vale do São Francisco Ltda.',
+      cnpj: '12.345.678/0001-90',
+      autoInfracao: '2025/0812-AI',
+      valorTotal: 'R$ 48.000,00',
+      plano: '06 / 24 parcelas',
+      valorParcela: 'R$ 2.000,00',
+      vencimento: '10/10/2026',
+      status: 'Em Dia',
+      statusColor: 'success',
+      categoria: 'ativos',
+    },
+    {
+      id: 'PARC-2026-0045',
+      requerente: 'Cerâmica Santa Luzia Eireli',
+      cnpj: '08.192.831/0001-44',
+      autoInfracao: '2024/1102-AI',
+      valorTotal: 'R$ 72.000,00',
+      plano: '14 / 36 parcelas',
+      valorParcela: 'R$ 2.000,00',
+      vencimento: 'Atrasado (12 dias)',
+      status: 'Parcela em Atraso',
+      statusColor: 'danger',
+      categoria: 'atraso',
+    },
+    {
+      id: 'PARC-2025-0012',
+      requerente: 'Mineração Morro Dourado S.A.',
+      cnpj: '33.411.092/0001-18',
+      autoInfracao: '2023/0419-AI',
+      valorTotal: 'R$ 120.000,00',
+      plano: '24 / 24 parcelas',
+      valorParcela: 'R$ 5.000,00',
+      vencimento: 'Quitado em 15/08/2026',
+      status: 'Quitado',
+      statusColor: 'gray',
+      categoria: 'quitados',
+    },
+  ];
+
+  const filteredContratos = contratosMock.filter((c) => {
+    if (activeTab === 'ativos' && c.categoria !== 'ativos') return false;
+    if (activeTab === 'atraso' && c.categoria !== 'atraso') return false;
+    if (activeTab === 'quitados' && c.categoria !== 'quitados') return false;
+    if (!searchTerm) return true;
+    const term = searchTerm.toLowerCase();
+    return (
+      c.id.toLowerCase().includes(term) ||
+      c.requerente.toLowerCase().includes(term) ||
+      c.cnpj.includes(term) ||
+      c.autoInfracao.toLowerCase().includes(term)
+    );
+  });
 
   return (
     <div className="space-y-6">
@@ -117,11 +175,90 @@ export const ParcelamentoDebitoPage: React.FC<ParcelamentoDebitoPageProps> = ({ 
             <FilamentTabs items={tabs} activeTab={activeTab} onChange={setActiveTab} />
           </div>
 
-          <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs p-6 text-center text-xs text-slate-500">
-            <CreditCard className="w-8 h-8 text-slate-400 mx-auto mb-2" />
-            <h3 className="font-bold text-slate-800 dark:text-slate-200">Painel de Contratos de Parcelamento</h3>
-            <p className="mt-1">Gerenciamento automatizado de conciliação bancária SEFAZ e alertas de atraso.</p>
-          </div>
+          <TableContainer
+            toolbar={
+              <TableToolbar
+                searchValue={searchTerm}
+                onSearchChange={setSearchTerm}
+                searchPlaceholder="Buscar por contrato, contribuinte, CNPJ ou auto de infração..."
+                actions={
+                  <Button variant="outline" size="sm" className="text-xs h-8 text-slate-600 dark:text-slate-300">
+                    <Download className="w-3.5 h-3.5 mr-1.5 text-slate-400" />
+                    Exportar Extrato (CSV)
+                  </Button>
+                }
+              />
+            }
+          >
+            <table className="w-full text-left text-xs">
+              <thead>
+                <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
+                  <th className="py-3 px-4">Termo / Acordo</th>
+                  <th className="py-3 px-4">Contribuinte / CNPJ</th>
+                  <th className="py-3 px-4">Origem / Auto de Infração</th>
+                  <th className="py-3 px-4">Valor Consolidado</th>
+                  <th className="py-3 px-4">Plano & Parcela</th>
+                  <th className="py-3 px-4">Situação</th>
+                  <th className="py-3 px-4 text-right">Ações</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                {filteredContratos.map((c) => (
+                  <tr key={c.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
+                    <td className="py-3.5 px-4 font-mono font-bold text-slate-900 dark:text-slate-100">
+                      {c.id}
+                      <div className="text-[10px] text-slate-400 font-normal">Venc: {c.vencimento}</div>
+                    </td>
+                    <td className="py-3.5 px-4">
+                      <div className="font-semibold text-slate-900 dark:text-slate-100">{c.requerente}</div>
+                      <div className="text-[11px] font-mono text-slate-500">{c.cnpj}</div>
+                    </td>
+                    <td className="py-3.5 px-4 font-mono text-slate-700 dark:text-slate-300">
+                      {c.autoInfracao}
+                    </td>
+                    <td className="py-3.5 px-4 font-mono font-bold text-[#0F4C3A] dark:text-emerald-400">
+                      {c.valorTotal}
+                    </td>
+                    <td className="py-3.5 px-4">
+                      <div className="font-medium text-slate-800 dark:text-slate-200">{c.plano}</div>
+                      <div className="text-[11px] text-slate-500">{c.valorParcela} / mês</div>
+                    </td>
+                    <td className="py-3.5 px-4">
+                      <Badge color={c.statusColor as any} dot size="xs">
+                        {c.status}
+                      </Badge>
+                    </td>
+                    <td className="py-3.5 px-4 text-right">
+                      <div className="flex items-center justify-end gap-1">
+                        <Button
+                          variant="ghost"
+                          size="xs"
+                          onClick={() => {
+                            setPdfData({
+                              tipo: 'DAE',
+                              titulo: 'Carnê de Parcelamento DAE (Documento de Arrecadação Estadual)',
+                              codigoDocumento: c.id,
+                              interessado: c.requerente,
+                              cpfCnpj: c.cnpj,
+                              dataEmissao: '30/09/2026',
+                              validade: c.vencimento,
+                              autenticidadeToken: 'DAE-BARCODE-PARC-2026',
+                              status: 'Emitido',
+                            });
+                            setPdfDrawerOpen(true);
+                          }}
+                          className="text-[#0F4C3A] dark:text-emerald-400"
+                        >
+                          <FileText className="w-3.5 h-3.5 mr-1" />
+                          <span>DAEs</span>
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </TableContainer>
         </div>
       )}
 
@@ -195,7 +332,7 @@ export const ParcelamentoDebitoPage: React.FC<ParcelamentoDebitoPageProps> = ({ 
                   <span className="text-xs text-slate-500">Valor Estimado de Cada Parcela:</span>
                   <p className="font-mono text-lg font-bold text-[#0F4C3A]">R$ {valorParcela} / mês</p>
                 </div>
-                <Badge variant="success" className="text-xs">Sem juros moratórios adicionais no plano padrão</Badge>
+                <Badge color="success" dot size="xs">Sem juros moratórios adicionais no plano padrão</Badge>
               </div>
             </Section>
           )}

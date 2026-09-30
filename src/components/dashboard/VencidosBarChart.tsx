@@ -49,14 +49,14 @@ const CustomTooltip = ({ active, payload }: any) => {
 
 export const VencidosBarChart: React.FC = () => {
   return (
-    <Card className="relative flex flex-col justify-between border-rose-200/80 dark:border-rose-900/50 hover:border-rose-300 dark:hover:border-rose-800 transition-all duration-300 shadow-2xs dark:bg-slate-900">
+    <Card className="relative flex flex-col justify-between border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-300 shadow-2xs dark:bg-slate-900">
       <CardHeader className="flex flex-row items-start justify-between pb-2 pr-10">
         <div>
           <div className="flex items-center gap-2">
             <CardTitle className="text-sm font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
               <span>Processos Vencidos por Unidade</span>
             </CardTitle>
-            <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-rose-50 dark:bg-rose-950/50 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-900/60">
+            <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800/50">
               {totalVencidos} Total
             </span>
           </div>
@@ -64,7 +64,7 @@ export const VencidosBarChart: React.FC = () => {
             Quantidade de processos vencidos por unidade
           </CardDescription>
         </div>
-        <div className="absolute top-3.5 right-3.5 w-7 h-7 rounded-lg bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 border border-rose-200/80 dark:border-rose-900/60 flex items-center justify-center shrink-0 shadow-2xs">
+        <div className="absolute top-3.5 right-3.5 w-7 h-7 rounded-lg bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border border-rose-200/80 dark:border-rose-800/50 flex items-center justify-center shrink-0 shadow-2xs">
           <AlertTriangle className="w-3.5 h-3.5" />
         </div>
       </CardHeader>

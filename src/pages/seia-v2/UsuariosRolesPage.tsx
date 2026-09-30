@@ -31,6 +31,7 @@ import { FilamentTabs, FilamentTabItem } from '@/components/filament/Tabs';
 import { Section } from '@/components/filament/Section';
 import { InputWrapper } from '@/components/filament/InputWrapper';
 import { FilamentSelect } from '@/components/filament/Select';
+import { TableContainer, TableToolbar } from '@/components/filament/Table';
 import { KpiCard } from '@/components/dashboard/KpiCard';
 import { SeiaV2Breadcrumb } from '@/components/seia-v2/SeiaV2Breadcrumb';
 import {
@@ -107,7 +108,7 @@ export const UsuariosRolesPage: React.FC<UsuariosRolesPageProps> = ({ onNavigate
       perfil: 'Responsável Técnico (ART)',
       status: 'Ativo',
       ultimoAcesso: '28/09/2026 às 14:15',
-      avatarBg: 'bg-purple-700',
+      avatarBg: 'bg-slate-700',
     },
     {
       id: 'USR-0099',
@@ -313,51 +314,53 @@ export const UsuariosRolesPage: React.FC<UsuariosRolesPageProps> = ({ onNavigate
         <FilamentTabs items={tabs} activeTab={activeTab} onChange={setActiveTab} />
       </div>
 
-      {/* Toolbar com busca */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 shadow-2xs">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="relative flex-1 max-w-md">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-            <input
-              type="text"
-              placeholder={`Buscar em ${tabs.find((t) => t.id === activeTab)?.label}...`}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-1.5 text-xs bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A]"
-            />
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" className="text-xs h-8 text-slate-600 dark:text-slate-300">
-              <Filter className="w-3.5 h-3.5 mr-1.5 text-slate-400" />
-              Filtrar por Lotação
-            </Button>
-            <Button variant="outline" size="sm" className="text-xs h-8 text-slate-600 dark:text-slate-300">
-              <Download className="w-3.5 h-3.5 mr-1.5 text-slate-400" />
-              Exportar Relatório (CSV)
-            </Button>
-          </div>
-        </div>
-      </div>
-
       {/* Conteúdo por Aba */}
       {activeTab === 'usuarios' && (
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
-                  <th className="py-3 px-4">Usuário & Contato</th>
-                  <th className="py-3 px-4">CPF</th>
-                  <th className="py-3 px-4">Lotação / Entidade</th>
-                  <th className="py-3 px-4">Perfil RBAC</th>
-                  <th className="py-3 px-4">Último Acesso</th>
-                  <th className="py-3 px-4">Situação</th>
-                  <th className="py-3 px-4 text-right">Ações</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                {usuariosMock.map((row) => (
+        <TableContainer
+          toolbar={
+            <TableToolbar
+              searchValue={searchQuery}
+              onSearchChange={setSearchQuery}
+              searchPlaceholder="Buscar por usuário, e-mail, CPF, lotação ou perfil..."
+              actions={
+                <div className="flex items-center gap-2">
+                  <Button variant="outline" size="sm" className="text-xs h-8 text-slate-600 dark:text-slate-300">
+                    <Filter className="w-3.5 h-3.5 mr-1.5 text-slate-400" />
+                    Filtrar por Lotação
+                  </Button>
+                  <Button variant="outline" size="sm" className="text-xs h-8 text-slate-600 dark:text-slate-300">
+                    <Download className="w-3.5 h-3.5 mr-1.5 text-slate-400" />
+                    Exportar Relatório (CSV)
+                  </Button>
+                </div>
+              }
+            />
+          }
+        >
+          <table className="w-full text-left text-xs">
+            <thead>
+              <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
+                <th className="py-3 px-4">Usuário & Contato</th>
+                <th className="py-3 px-4">CPF</th>
+                <th className="py-3 px-4">Lotação / Entidade</th>
+                <th className="py-3 px-4">Perfil RBAC</th>
+                <th className="py-3 px-4">Último Acesso</th>
+                <th className="py-3 px-4">Situação</th>
+                <th className="py-3 px-4 text-right">Ações</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              {usuariosMock
+                .filter(
+                  (row) =>
+                    !searchQuery ||
+                    row.nome.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    row.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    row.cpf.includes(searchQuery) ||
+                    row.setor.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    row.perfil.toLowerCase().includes(searchQuery.toLowerCase())
+                )
+                .map((row) => (
                   <tr key={row.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors">
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-2.5">
@@ -384,7 +387,7 @@ export const UsuariosRolesPage: React.FC<UsuariosRolesPageProps> = ({ onNavigate
                     </td>
                     <td className="py-3 px-4 text-slate-600 dark:text-slate-400">{row.ultimoAcesso}</td>
                     <td className="py-3 px-4">
-                      <Badge variant={row.status === 'Ativo' ? 'success' : 'danger'} className="text-[10px]">
+                      <Badge color={row.status === 'Ativo' ? 'success' : 'danger'} dot size="xs">
                         {row.status}
                       </Badge>
                     </td>
@@ -418,10 +421,9 @@ export const UsuariosRolesPage: React.FC<UsuariosRolesPageProps> = ({ onNavigate
                     </td>
                   </tr>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+            </tbody>
+          </table>
+        </TableContainer>
       )}
 
       {activeTab === 'roles' && (
@@ -429,20 +431,22 @@ export const UsuariosRolesPage: React.FC<UsuariosRolesPageProps> = ({ onNavigate
           {rolesMock.map((role) => (
             <div
               key={role.id}
-              className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 shadow-2xs hover:border-[#0F4C3A]/50 transition-all flex flex-col justify-between"
+              className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-2xs hover:border-[#0F4C3A]/50 transition-all flex flex-col justify-between"
             >
               <div>
-                <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100 dark:border-slate-800">
-                  <div className="font-mono text-[10px] text-slate-500 font-bold">{role.id}</div>
-                  <Badge variant="primary" className="text-[10px]">
+                <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-800/20 flex items-center justify-between">
+                  <div className="font-mono text-[10px] text-slate-500 dark:text-slate-400 font-bold">{role.id}</div>
+                  <Badge color="primary" dot size="xs">
                     {role.nivel}
                   </Badge>
                 </div>
-                <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100 mb-1">{role.nome}</h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mb-3">{role.descricao}</p>
+                <div className="p-4">
+                  <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100 mb-1">{role.nome}</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">{role.descricao}</p>
+                </div>
               </div>
 
-              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-600 dark:text-slate-400">
+              <div className="px-4 py-2.5 border-t border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-800/20 flex items-center justify-between text-xs text-slate-600 dark:text-slate-400">
                 <div>
                   <span className="font-semibold text-slate-800 dark:text-slate-200">{role.usuariosVinculados}</span>{' '}
                   usuários
@@ -458,22 +462,45 @@ export const UsuariosRolesPage: React.FC<UsuariosRolesPageProps> = ({ onNavigate
       )}
 
       {activeTab === 'atos-ambientais' && (
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
-                  <th className="py-3 px-4">Número da Portaria / Ato</th>
-                  <th className="py-3 px-4">Processo SEI-BA</th>
-                  <th className="py-3 px-4">Interessado / Empreendimento</th>
-                  <th className="py-3 px-4">Categoria do Ato</th>
-                  <th className="py-3 px-4">Município</th>
-                  <th className="py-3 px-4">Publicação DOE</th>
-                  <th className="py-3 px-4 text-right">Ações</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                {atosAmbientaisMock.map((row) => (
+        <TableContainer
+          toolbar={
+            <TableToolbar
+              searchValue={searchQuery}
+              onSearchChange={setSearchQuery}
+              searchPlaceholder="Buscar por portaria, processo SEI, interessado ou município..."
+              actions={
+                <Button variant="outline" size="sm" className="text-xs h-8 text-slate-600 dark:text-slate-300">
+                  <Download className="w-3.5 h-3.5 mr-1.5 text-slate-400" />
+                  Exportar DOE (CSV)
+                </Button>
+              }
+            />
+          }
+        >
+          <table className="w-full text-left text-xs">
+            <thead>
+              <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
+                <th className="py-3 px-4">Número da Portaria / Ato</th>
+                <th className="py-3 px-4">Processo SEI-BA</th>
+                <th className="py-3 px-4">Interessado / Empreendimento</th>
+                <th className="py-3 px-4">Categoria do Ato</th>
+                <th className="py-3 px-4">Município</th>
+                <th className="py-3 px-4">Publicação DOE</th>
+                <th className="py-3 px-4 text-right">Ações</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              {atosAmbientaisMock
+                .filter(
+                  (row) =>
+                    !searchQuery ||
+                    row.numeroPortaria.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    row.processoSei.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    row.interessado.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    row.tipoAto.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    row.municipio.toLowerCase().includes(searchQuery.toLowerCase())
+                )
+                .map((row) => (
                   <tr key={row.numeroPortaria} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors">
                     <td className="py-3 px-4 font-bold text-slate-900 dark:text-slate-100">
                       {row.numeroPortaria}
@@ -483,7 +510,7 @@ export const UsuariosRolesPage: React.FC<UsuariosRolesPageProps> = ({ onNavigate
                       {row.interessado}
                     </td>
                     <td className="py-3 px-4">
-                      <Badge variant="primary" className="text-[10px]">
+                      <Badge color="primary" dot size="xs">
                         {row.tipoAto}
                       </Badge>
                     </td>
@@ -503,36 +530,51 @@ export const UsuariosRolesPage: React.FC<UsuariosRolesPageProps> = ({ onNavigate
                     </td>
                   </tr>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+            </tbody>
+          </table>
+        </TableContainer>
       )}
 
       {activeTab === 'auditoria' && (
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs overflow-hidden">
-          <div className="p-3.5 bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs">
-            <div className="font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
-              <History className="w-4 h-4 text-[#0F4C3A]" />
-              <span>Trilha de Auditoria Imutável (Event Sourcing & Audit Log)</span>
-            </div>
-            <span className="text-[11px] text-slate-500">Registros sincronizados em tempo real</span>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="bg-slate-50/40 dark:bg-slate-800/40 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
-                  <th className="py-3 px-4">Timestamp</th>
-                  <th className="py-3 px-4">ID do Evento</th>
-                  <th className="py-3 px-4">Usuário Responsável</th>
-                  <th className="py-3 px-4">IP / Origem</th>
-                  <th className="py-3 px-4">Operação Executada</th>
-                  <th className="py-3 px-4">Módulo</th>
-                  <th className="py-3 px-4 text-right">Diff</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800 font-mono text-[11px]">
-                {auditLogsMock.map((log) => (
+        <TableContainer
+          toolbar={
+            <TableToolbar
+              searchValue={searchQuery}
+              onSearchChange={setSearchQuery}
+              searchPlaceholder="Buscar por evento, usuário, IP ou operação..."
+              actions={
+                <Button variant="outline" size="sm" className="text-xs h-8 text-slate-600 dark:text-slate-300">
+                  <Download className="w-3.5 h-3.5 mr-1.5 text-slate-400" />
+                  Exportar Logs
+                </Button>
+              }
+            />
+          }
+        >
+          <table className="w-full text-left text-xs">
+            <thead>
+              <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-semibold">
+                <th className="py-3 px-4">Timestamp</th>
+                <th className="py-3 px-4">ID do Evento</th>
+                <th className="py-3 px-4">Usuário Responsável</th>
+                <th className="py-3 px-4">IP / Origem</th>
+                <th className="py-3 px-4">Operação Executada</th>
+                <th className="py-3 px-4">Módulo</th>
+                <th className="py-3 px-4 text-right">Diff</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800 font-mono text-[11px]">
+              {auditLogsMock
+                .filter(
+                  (log) =>
+                    !searchQuery ||
+                    log.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    log.usuario.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    log.ip.includes(searchQuery) ||
+                    log.acao.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    log.detalhes.toLowerCase().includes(searchQuery.toLowerCase())
+                )
+                .map((log) => (
                   <tr key={log.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors">
                     <td className="py-3 px-4 text-slate-500">{log.timestamp}</td>
                     <td className="py-3 px-4 font-bold text-slate-800 dark:text-slate-200">{log.id}</td>
@@ -550,16 +592,15 @@ export const UsuariosRolesPage: React.FC<UsuariosRolesPageProps> = ({ onNavigate
                     </td>
                     <td className="py-3 px-4 font-sans text-slate-600 dark:text-slate-400">{log.modulo}</td>
                     <td className="py-3 px-4 text-right font-sans">
-                      <Button variant="ghost" size="xs" className="h-7 text-xs text-slate-600">
+                      <Button variant="ghost" size="xs" className="h-7 text-xs text-slate-600 dark:text-slate-400">
                         Ver JSON
                       </Button>
                     </td>
                   </tr>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+            </tbody>
+          </table>
+        </TableContainer>
       )}
 
       {/* Modal de Novo Usuário */}

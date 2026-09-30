@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export interface SectionProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface SectionProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
   heading?: React.ReactNode;
   title?: React.ReactNode;
   description?: React.ReactNode;

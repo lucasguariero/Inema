@@ -744,7 +744,7 @@ export const CadastroEscalaPage: React.FC<{ onNavigate?: (route: string) => void
  variant="default"
  size="sm"
  onClick={handleSalvar}
- className="bg-teal-700 hover:bg-teal-800 text-white text-xs font-semibold"
+ className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs font-semibold"
  >
  <CheckCircle2 className="w-3.5 h-3.5 mr-1" />
  Salvar Escala
@@ -916,7 +916,7 @@ export const CadastroEscalaPage: React.FC<{ onNavigate?: (route: string) => void
  variant="default"
  size="sm"
  onClick={() => setModalState((prev) => ({ ...prev, isOpen: false }))}
- className="bg-teal-700 hover:bg-teal-800 text-xs text-white"
+ className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-xs text-white"
  >
  OK
  </Button>

@@ -55,15 +55,15 @@ export const TabelaRegistros: React.FC<TabelaRegistrosProps> = ({
         );
       case 'Em Fiscalização':
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-purple-50 text-purple-800 border border-purple-200">
-            <span className="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
             <span>Em Fiscalização</span>
           </span>
         );
       case 'Em Vistoria':
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-800 border border-indigo-200">
-            <span className="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-sky-50 text-sky-800 border border-sky-200">
+            <span className="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
             <span>Em Vistoria</span>
           </span>
         );

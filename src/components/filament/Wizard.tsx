@@ -5,6 +5,9 @@ import { Check } from 'lucide-react';
 export interface WizardStep {
   id: string | number;
   label: string;
+  description?: string;
+  isCompleted?: boolean;
+  isCurrent?: boolean;
 }
 
 export interface FilamentWizardProps {

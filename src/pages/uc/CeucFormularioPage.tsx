@@ -353,7 +353,7 @@ export const CeucFormularioPage: React.FC<CeucFormularioPageProps> = ({
                   <GlaSelect
                     label="Grupo de Manejo *"
                     value={grupoManejo}
-                    onChange={(e) => setGrupoManejo(e.target.value)}
+                    onChange={(e) => setGrupoManejo(e.target.value as 'Proteção Integral' | 'Uso Sustentável')}
                     options={[
                       { value: 'Proteção Integral', label: 'Proteção Integral' },
                       { value: 'Uso Sustentável', label: 'Uso Sustentável' }

@@ -5,7 +5,8 @@ export interface TabItem {
   id: string;
   label: string;
   badge?: string | number;
-  badgeColor?: 'default' | 'primary' | 'warning' | 'danger';
+  badgeColor?: 'default' | 'primary' | 'warning' | 'danger' | 'success' | 'gray' | 'sage';
+  badgeVariant?: string;
 }
 
 export type FilamentTabItem = TabItem;

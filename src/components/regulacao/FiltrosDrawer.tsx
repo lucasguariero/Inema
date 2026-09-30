@@ -467,7 +467,7 @@ export const FiltrosDrawer: React.FC<FiltrosDrawerProps> = ({
                         onChange={(e) =>
                           setLocalPauta({
                             ...localPauta,
-                            diasMin: e.target.value ? Number(e.target.value) : undefined
+                            diasMin: e.target.value
                           })
                         }
                         className="w-full text-xs py-1.5 px-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none"
@@ -483,7 +483,7 @@ export const FiltrosDrawer: React.FC<FiltrosDrawerProps> = ({
                         onChange={(e) =>
                           setLocalPauta({
                             ...localPauta,
-                            diasMax: e.target.value ? Number(e.target.value) : undefined
+                            diasMax: e.target.value
                           })
                         }
                         className="w-full text-xs py-1.5 px-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-[#0F4C3A] outline-none"

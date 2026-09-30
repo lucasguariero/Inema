@@ -1132,7 +1132,7 @@ export const PesquisaCientificaPage: React.FC<{ onNavigate?: (route: string) => 
  </Button>
  <Button
  size="sm"
- className="bg-teal-700 hover:bg-teal-800 text-white"
+ className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white"
  onClick={() => {
  if (!formTitulo.trim()) {
  alert(' Preencha os campos obrigatórios para continuar.');
@@ -1328,7 +1328,7 @@ export const PesquisaCientificaPage: React.FC<{ onNavigate?: (route: string) => 
  </Button>
  <Button
  size="sm"
- className="bg-teal-700 hover:bg-teal-800 text-white"
+ className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white"
  onClick={() => setEtapaForm(3)}
  >
  Avançar para Coleta e Salvaguardas
@@ -1492,7 +1492,7 @@ export const PesquisaCientificaPage: React.FC<{ onNavigate?: (route: string) => 
  </Button>
  <Button
  size="sm"
- className="bg-teal-700 hover:bg-teal-800 text-white"
+ className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white"
  onClick={() => setEtapaForm(4)}
  >
  Avançar para Cronograma & Localização
@@ -1580,7 +1580,7 @@ export const PesquisaCientificaPage: React.FC<{ onNavigate?: (route: string) => 
  </Button>
  <Button
  size="sm"
- className="bg-teal-700 hover:bg-teal-800 text-white"
+ className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white"
  onClick={() => setEtapaForm(5)}
  >
  Avançar para Instrução Documental
@@ -1613,7 +1613,7 @@ export const PesquisaCientificaPage: React.FC<{ onNavigate?: (route: string) => 
  <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
  <tr>
  <td className="p-3 font-medium">Projeto de Pesquisa Científica Detalhado (PDF)</td>
- <td className="p-3"><Badge className="bg-teal-700 text-white text-[10px]">Obrigatório</Badge></td>
+ <td className="p-3"><Badge className="bg-[#0F4C3A] text-white text-[10px]">Obrigatório</Badge></td>
  <td className="p-3 text-emerald-600 font-medium flex items-center gap-1">
  <CheckCircle2 className="w-3.5 h-3.5" /> projeto_completo_inema_2026.pdf
  </td>
@@ -1623,7 +1623,7 @@ export const PesquisaCientificaPage: React.FC<{ onNavigate?: (route: string) => 
  </tr>
  <tr>
  <td className="p-3 font-medium">Carta de Anuência Institucional (Coordenação / Reitoria)</td>
- <td className="p-3"><Badge className="bg-teal-700 text-white text-[10px]">Obrigatório</Badge></td>
+ <td className="p-3"><Badge className="bg-[#0F4C3A] text-white text-[10px]">Obrigatório</Badge></td>
  <td className="p-3 text-emerald-600 font-medium flex items-center gap-1">
  <CheckCircle2 className="w-3.5 h-3.5" /> anuencia_institucional_ufba.pdf
  </td>
@@ -1633,7 +1633,7 @@ export const PesquisaCientificaPage: React.FC<{ onNavigate?: (route: string) => 
  </tr>
  <tr>
  <td className="p-3 font-medium">Termo de Compromisso e Responsabilidade do Pesquisador</td>
- <td className="p-3"><Badge className="bg-teal-700 text-white text-[10px]">Obrigatório</Badge></td>
+ <td className="p-3"><Badge className="bg-[#0F4C3A] text-white text-[10px]">Obrigatório</Badge></td>
  <td className="p-3 text-emerald-600 font-medium flex items-center gap-1">
  <CheckCircle2 className="w-3.5 h-3.5" /> termo_compromisso_assinado.pdf
  </td>
@@ -1686,7 +1686,7 @@ export const PesquisaCientificaPage: React.FC<{ onNavigate?: (route: string) => 
  </Button>
  <Button
  size="sm"
- className="bg-teal-700 hover:bg-teal-800 text-white"
+ className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white"
  onClick={() => setModalConfirmacaoAberto(true)}
  >
  <Send className="w-4 h-4 mr-1.5" />
@@ -1985,7 +1985,7 @@ export const PesquisaCientificaPage: React.FC<{ onNavigate?: (route: string) => 
  </Button>
  <Button
  size="sm"
- className="bg-teal-700 hover:bg-teal-800 text-white"
+ className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white"
  onClick={handleConfirmarSubmissao}
  >
  Confirmar e Protocolar
@@ -2015,7 +2015,7 @@ export const PesquisaCientificaPage: React.FC<{ onNavigate?: (route: string) => 
  <DialogFooter className="justify-center">
  <Button
  size="sm"
- className="bg-teal-700 hover:bg-teal-800 text-white"
+ className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white"
  onClick={() => {
  setModalSucessoAberto(false);
  setActiveTab('painel');
@@ -2102,7 +2102,7 @@ export const PesquisaCientificaPage: React.FC<{ onNavigate?: (route: string) => 
  </Button>
  <Button
  size="sm"
- className="bg-teal-700 hover:bg-teal-800 text-white"
+ className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white"
  onClick={handleSalvarDecisao}
  >
  Salvar Deliberação
@@ -2153,7 +2153,7 @@ export const PesquisaCientificaPage: React.FC<{ onNavigate?: (route: string) => 
  </Button>
  <Button
  size="sm"
- className="bg-teal-700 hover:bg-teal-800 text-white"
+ className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white"
  onClick={handleEnviarRelatorio}
  >
  Protocolar Relatório
@@ -2241,7 +2241,7 @@ export const PesquisaCientificaPage: React.FC<{ onNavigate?: (route: string) => 
  </Button>
  <Button
  size="sm"
- className="bg-teal-700 hover:bg-teal-800 text-white"
+ className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white"
  onClick={handleCadastrarPublicacao}
  >
  Cadastrar Publicação

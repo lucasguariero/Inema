@@ -899,19 +899,41 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                   alert('Assistente IA INEMA ativado. Em que posso auxiliá-lo com as demandas de Processos e Fiscalização do SEIA V2?');
                 }}
                 className={cn(
-                  'relative overflow-hidden w-full flex items-center justify-between py-2.5 px-3.5 rounded-xl text-white font-medium text-xs transition-all duration-300 active:scale-98 group cursor-pointer border border-white/20',
-                  'bg-gradient-to-r from-[#005ea3] via-[#0284a8] to-[#0f9f75] hover:from-[#004f8a] hover:via-[#027494] hover:to-[#0d8a66]',
-                  'shadow-[inset_0_1px_0_rgba(255,255,255,0.28),_0_4px_16px_rgba(2,132,168,0.3)] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.38),_0_6px_22px_rgba(15,159,117,0.42)]'
+                  'w-full flex items-center justify-between py-2 px-3 rounded-lg font-medium text-xs transition-all duration-200 active:scale-98 group cursor-pointer border',
+                  isDarkMode
+                    ? 'bg-slate-800/90 hover:bg-slate-700/80 text-slate-200 border-slate-700/80 shadow-xs'
+                    : isVizoraGreen
+                    ? 'bg-[#155342] hover:bg-[#1a624f] text-emerald-100 border-[#22725c] shadow-xs'
+                    : isInemaLight
+                    ? 'bg-emerald-50/80 hover:bg-emerald-100/70 text-[#0F4C3A] border-emerald-200/80 shadow-xs'
+                    : 'bg-slate-800/80 hover:bg-slate-700 text-slate-200 border-slate-700 shadow-xs'
                 )}
               >
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
-                <div className="flex items-center gap-2 relative z-10">
-                  <div className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center border border-white/30 shadow-xs backdrop-blur-xs">
-                    <Sparkles className="w-3.5 h-3.5 text-white group-hover:scale-110 group-hover:rotate-12 transition-all duration-300 drop-shadow-[0_0_6px_rgba(255,255,255,0.85)]" />
+                <div className="flex items-center gap-2">
+                  <div className={cn(
+                    'w-6 h-6 rounded-md flex items-center justify-center shrink-0 border',
+                    isDarkMode
+                      ? 'bg-slate-700/80 border-slate-600/80 text-emerald-400'
+                      : isVizoraGreen
+                      ? 'bg-[#1a624f] border-[#258068] text-emerald-300'
+                      : isInemaLight
+                      ? 'bg-white border-emerald-200 text-[#0F4C3A]'
+                      : 'bg-slate-700 border-slate-600 text-emerald-400'
+                  )}>
+                    <Sparkles className="w-3.5 h-3.5" />
                   </div>
-                  <span className="font-semibold tracking-wide text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]">Assistente INEMA</span>
+                  <span className="font-semibold tracking-tight">Assistente INEMA</span>
                 </div>
-                <span className="relative z-10 px-1.5 py-0.5 rounded-full bg-white/20 backdrop-blur-xs text-[9px] font-black uppercase tracking-wider text-white border border-white/30 shadow-xs">
+                <span className={cn(
+                  'px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider border',
+                  isDarkMode
+                    ? 'bg-slate-700/60 text-slate-300 border-slate-600/60'
+                    : isVizoraGreen
+                    ? 'bg-[#1a624f] text-emerald-200 border-[#258068]'
+                    : isInemaLight
+                    ? 'bg-emerald-100 text-[#0F4C3A] border-emerald-300/60'
+                    : 'bg-slate-700 text-slate-300 border-slate-600'
+                )}>
                   IA
                 </span>
               </button>
