@@ -1,0 +1,9 @@
+.vercel
+.figma_chrome_profile
+node_modules
+test-results
+playwright-report
+qa
+prints_hibrido
+prints_regulacao
+tmp

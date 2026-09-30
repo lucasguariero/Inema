@@ -1,0 +1,790 @@
+=== PAGE 1 ===
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR004 – Módulo Fiscalização – Cadastro de Emergência Química Externa |  Página 1 de 14 
+| Acto Soluções em Tecnologia Ltda   
+  
+Documento de Requisitos 
+DOR004 – Módulo Fiscalização – Cadastro de Emergência Química Externa 
+PONTO FOCAL E-MAIL 
+Paula Maiana Santana Martins  Paula.martins@inema.ba.gov.br 
+ 
+Este documento de requisitos tem como objetivo permitir especificar os requisitos e 
+funcionalidades do sistema, por meio dele é possível que os clientes e usuários realizarem sua 
+validação e aprovação, além de dar o suporte aos desenvolvedores para construir o que foi 
+desenhado. 
+ 
+ATUALIZAÇÕES: 
+DATA AUTOR EMAIL DESCRIÇÃO VERSÃO 
+22/08/2026 Naiane Biset Naianae.biset@acto.com.br Criação 1.0 
+25/08/2026 Naiane Biset Naianae.biset@acto.com.br Alteração 1.2 
+02/09/2026 Naiane Biset Naianae.biset@acto.com.br Alteração 1.3 
+04/09/2026 Naiane Biset Naianae.biset@acto.com.br Alteração 1.4 
+ 
+
+=== PAGE 2 ===
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR004 – Módulo Fiscalização – Cadastro de Emergência Química Externa |  Página 2 de 14 
+| Acto Soluções em Tecnologia Ltda   
+  
+SUMÁRIO 
+ 
+INTRODUÇÃO AO CASO DE USO ............................................................................................................ 3 
+DOCUMENTOS RELACIONADOS ............................................................................................................. 3 
+DICIONÁRIO DE SIGLAS E ABREVIAÇÕES ................................................................................................ 3 
+MAPEAMENTO DO FLUXO DE PROCESSO .............................................................................................. 4 
+ATORES ............................................................................................................................................... 4 
+CASOS DE USO ....................................................................................................................................... 4 
+REGRAS DE NEGÓCIO GERAIS ............................................................................................................ 6 
+LISTA DE MENSAGENS ..................................................................................................................... 10 
+LISTA DE LEGENDAS ......................................................................................................................... 11 
+ESPECIFICAÇÃO DE INTERFACE (UI/UX) ........................................................................................... 11 
+PROTOTIPAÇAO DE TELAS .................................................................................................................... 13 
+TL001 – Tela de Cadastro de Emergência Química Externa ............................................................ 13 
+OBSERVAÇÕES ...................................................................................................................................... 14 
+CONCLUSÃO ......................................................................................................................................... 14 
+ASSINATURA E TERMO DE ACEITE ....................................................................................................... 14 
+ 
+ 
+
+=== PAGE 3 ===
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR004 – Módulo Fiscalização – Cadastro de Emergência Química Externa |  Página 3 de 14 
+| Acto Soluções em Tecnologia Ltda   
+  
+INTRODUÇÃO AO CASO DE USO 
+Este caso de uso especifica o cadastro e o gerenciamento de emergências químicas por usuário externo. O 
+fluxo começa com autenticação pelo Gov.br e cadastro básico no primeiro acesso. O usuário informa seu 
+vínculo com a empresa responsável, consulta os dados pessoais importados, caracteriza a emergência e 
+sua localização e finaliza o registro. Antes da gravação, o sistema valida campos obrigatórios e 
+coordenadas, solicita confirmação e permite finalizar ou revisar. Na conclusão, gera o Registro de 
+Emergência (RE), atribui status “Emergência Registrada”, até que o call Center associe de forma oculta um 
+técnico plantonista segundo município e escala, dispara alertas e encaminha o RE à pauta do gestor. 
+DOCUMENTOS RELACIONADOS 
+ TR - Anexo I 
+ Contrato nº 035/2025 – INEMA / ACTO BR Soluções em Tecnologia LTDA 
+DICIONÁRIO DE SIGLAS E ABREVIAÇÕES 
+DICIONÁRIO DE SIGLAS E ABREVIAÇÕES 
+Gov.br Plataforma de autenticação do Governo 
+Federal 
+INEMA Instituto do Meio Ambiente e Recursos 
+Hídricos 
+RE Registro de Emergência RD Registro de Denúncia 
+RC Registro de Comunicado RPEQ Relatório Preliminar de Emergência 
+Química 
+TEC/EMER Tipo de processo citado; significado por 
+extenso [Pendente de Alinhamento] 
+OBR/OBG Obrigatório 
+OPR/OPC Opcional CEP Código de Endereçamento Postal 
+CPF Cadastro de Pessoas Físicas CNPJ Cadastro Nacional da Pessoa Jurídica 
+UTM Universal Transversa de Mercator ETA/ETE Estação de Tratamento de Água/Estação de 
+Tratamento de Esgoto 
+JPEG/JPG Formato de imagem Joint Photographic 
+Experts Group 
+PNG Portable Network Graphics 
+BMP Bitmap MP3/MP4 Formatos multimídia 
+PDF Portable Document Format DOC/DOCX Formatos de documento de texto 
+TXT Arquivo de texto XLS/XLSX Formatos de planilha 
+SHP/SHX/DBF
+/PRJ 
+Arquivos do formato Shapefile KML/KMZ Formatos de dados geográficos 
+
+=== PAGE 4 ===
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR004 – Módulo Fiscalização – Cadastro de Emergência Química Externa |  Página 4 de 14 
+| Acto Soluções em Tecnologia Ltda   
+  
+ZIP Formato compactado APA Área de Proteção Ambiental 
+ 
+MAPEAMENTO DO FLUXO DE PROCESSO 
+ATORES 
+LISTA DE ATORES 
+Núm. Ator Descrição Pré-requisitos Tipo 
+01 Usuário externo/ 
+comunicante 
+Cadastra a emergência, informa vínculo 
+empresarial, consulta registros e anexa 
+os relatórios permitidos. 
+Autenticação pelo Gov.br e cadastro 
+básico concluído. Externo 
+02 Equipe do Call 
+Center 
+Consulta o RE no status Emergência 
+Registrada, associa o técnico plantonista 
+e participa do fluxo de alerta. 
+Autenticação pelo Gov.br e cadastro 
+básico concluído.Acesso à 
+funcionalidade de consulta e 
+associação. 
+Interno 
+03 Técnico plantonista 
+É associado ao RE conforme escala e 
+município e recebe o alerta da 
+emergência. 
+Cadastro de plantonista e escala 
+aplicável. Interno 
+04 Gestor de plantão Recebe o alerta referente ao RE. Definição como gestor do plantão. Interno 
+05 Gestor de 
+Fiscalização 
+Recebe o RE na pauta e executa as 
+ações posteriores. 
+Perfil de gestão no módulo de 
+Fiscalização. Interno 
+06 
+Coordenador/Diret
+oria/área do 
+INEMA 
+Pode receber RE ou processo 
+encaminhado pelo gestor. Perfil e permissão correspondentes. Interno 
+07 Empresa 
+responsável 
+Empresa com a qual o comunicante 
+pode possuir vínculo ou cuja 
+identificação pode ser informada. 
+Informação fornecida pelo 
+comunicante. Externo 
+08 
+Cidadão 
+comum/Força 
+Policial/Outra 
+instituição 
+Classificação utilizada quando o 
+comunicante não possui vínculo com a 
+empresa responsável. 
+Seleção no formulário conforme 
+RN004. Externo 
+Externo = Ator que não faz parte do negócio (Ex.: Cliente – Requisitante) 
+Interno = Ator que participa do negócio (Ex.: Funcionário – Analista) 
+CASOS DE USO 
+Cenários  
+Cenário Dado que Ação Resposta do Sistema 
+
+=== PAGE 5 ===
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR004 – Módulo Fiscalização – Cadastro de Emergência Química Externa |  Página 5 de 14 
+| Acto Soluções em Tecnologia Ltda   
+  
+Cenário Dado que Ação Resposta do Sistema 
+ Acessar cadastro O usuário externo está autenticado 
+e cadastrado 
+Acessar o módulo Fiscalização 
+e iniciar uma emergência 
+O sistema exibe o formulário de cadastro 
+de emergência química externa 
+Declarar vínculo 
+empresarial 
+A seção Informações sobre empresa 
+está aberta 
+Responder SIM à pergunta de 
+vínculo 
+O sistema habilita e exige Nome da 
+empresa e Cargo 
+Declarar ausência 
+de vínculo 
+A seção Informações sobre empresa 
+está aberta 
+Responder NÃO à pergunta de 
+vínculo 
+O sistema exige uma classificação e aplica a 
+condição de Outras instituições 
+Importar 
+comunicante 
+O cadastro básico do usuário está 
+disponível Abrir o formulário O sistema importa e apresenta os dados 
+pessoais do comunicante 
+Caracterizar 
+emergência O formulário está aberto Informar constatação, tipo e 
+descrição 
+O sistema valida os campos e aplica o 
+catálogo da RN027 
+Anexar evidências A emergência está em edição Carregar um ou vários 
+arquivos 
+O sistema aceita os formatos previstos e 
+apresenta MSG005 
+Registrar 
+localização O formulário está aberto 
+Informar município, endereço, 
+ponto de referência e área 
+atingida 
+O sistema valida os campos obrigatórios, 
+permite selecionar de uma a três áreas 
+atingidas e exibe os tooltips definidos para 
+Comunidade Tradicional e Unidade de 
+Conservação. 
+Informar 
+coordenadas A seção Localização está em edição Informar uma ou mais 
+coordenadas 
+O sistema converte e salva as coordenadas 
+em grau decimal 
+Finalizar cadastro 
+incompleto Existe campo obrigatório vazio Acionar Finalizar Emergência O sistema impede a conclusão e apresenta 
+MSG001 
+Finalizar sem 
+coordenadas 
+Os obrigatórios estão preenchidos e 
+não há coordenadas Acionar Finalizar Emergência O sistema apresenta MSG002 antes da 
+confirmação final 
+Revisar registro A MSG003 está sendo exibida Escolher NÃO 
+O sistema retorna ao formulário, mantém 
+integralmente os dados e permite a 
+continuidade da edição, conforme a 
+RN015. 
+Finalizar registro A MSG003 está sendo exibida Escolher SIM 
+O sistema salva, gera o RE, atribui 
+Emergência Registrada e apresenta 
+MSG004 
+Associar 
+plantonista 
+O RE está no status Emergência 
+Registrada 
+A equipe do Call Center 
+selecionar o técnico conforme 
+escala e município 
+O sistema associa o plantonista e altera o 
+status para Análise Técnica 
+Enviar alertas O plantonista foi associado ao RE Salvar a associação O sistema envia MSG006 aos destinatários 
+definidos e anexa o formulário RE 
+Consultar registros O usuário está autenticado Abrir a tela de consulta O sistema exibe seus RE, RD e respectivos 
+status 
+
+=== PAGE 6 ===
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR004 – Módulo Fiscalização – Cadastro de Emergência Química Externa |  Página 6 de 14 
+| Acto Soluções em Tecnologia Ltda   
+  
+Cenário Dado que Ação Resposta do Sistema 
+Abrir processo O RE possui processo gerado Clicar no número ou status O sistema redireciona para Meus 
+Processos mantendo a associação 
+Anexar rpeq O comunicante declarou vínculo 
+empresarial e o re está salvo Anexar o relatório preliminar O sistema vincula o rpeq ao re ou ao 
+processo 
+Anexar relatório 
+conclusivo 
+Existe RE ou processo em qualquer 
+status Anexar o relatório conclusivo O sistema valida o formato e vincula o 
+arquivo 
+Anexar relatório 
+complementar 
+Existe RE ou processo em qualquer 
+status 
+Anexar o relatório 
+complementar 
+O sistema valida o formato e vincula o 
+arquivo 
+Excluir registro Existe um RE passível de exclusão Acionar Excluir Emergência O sistema apresenta MSG007; SIM exclui e 
+NÃO retorna sem alteração 
+Avaliar RE na 
+pauta 
+O RE foi encaminhado à pauta do 
+gestor Selecionar uma ação de gestão O sistema executa a ação prevista no fluxo 
+de gestão documentado 
+ 
+REGRAS DE NEGÓCIO GERAIS 
+Num. Nome Descrição  
+RN001 Unicidade do formulário 
+O sistema deve permitir somente uma emergência química por formulário. 
+Cada finalização deve produzir um único Registro de Emergência, e o mesmo 
+formulário não pode originar mais de um RE. 
+RN002 Identificação obrigatória 
+Para registrar um RE, o usuário externo deve estar autenticado pelo Gov.br, 
+concluir o cadastro básico no primeiro acesso e permanecer identificado. 
+Nome/Razão Social e Telefone/Celular são obrigatórios e importados do 
+cadastro; CPF/CNPJ, outro telefone e e-mail são exibidos quando disponíveis. 
+A ausência de obrigatório impede finalizar e aciona MSG001. 
+RN003 Vínculo empresarial – resposta SIM 
+A pergunta sobre vínculo com a empresa responsável é obrigatória. Se a 
+resposta for SIM, o sistema deve habilitar Nome da empresa, obrigatório com 
+até 500 caracteres, e Cargo, obrigatório com até 200 caracteres. Sem esses 
+campos, deve impedir finalizar e exibir MSG001. 
+RN004 Vínculo empresarial – resposta NÃO 
+Se a resposta sobre vínculo for NÃO, o sistema deve exigir uma opção: 
+Cidadão comum, Força Policial ou Outras instituições. Cidadão comum e Força 
+Policial não habilitam campo adicional. Outras instituições habilita descrição 
+obrigatória de até 500 caracteres; sua ausência impede finalizar e aciona 
+MSG001. 
+RN005 Empresa responsável informada 
+O campo Sabe informar o nome da empresa responsável pela emergência 
+química é opcional e deve aceitar texto de até 500 caracteres. Seu 
+preenchimento não substitui Nome da empresa quando o usuário declarar 
+vínculo = SIM. 
+
+=== PAGE 7 ===
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR004 – Módulo Fiscalização – Cadastro de Emergência Química Externa |  Página 7 de 14 
+| Acto Soluções em Tecnologia Ltda   
+  
+Num. Nome Descrição  
+RN006 Numeração do RE 
+Ao finalizar a emergência química, o sistema deve gerar o número do Registro 
+de Emergência no padrão ano.número sequencial de seis dígitos/INEMA/RE, 
+conforme o exemplo 2026.000000/INEMA/RE. O número sequencial deve ser 
+reiniciado a cada ano. 
+RN007 Status inicial 
+Após a finalização inicial, o sistema deve atribuir ao RE o status Emergência 
+Registrada, manter o número vinculado ao registro e disponibilizá-lo para 
+associação do plantonista pela equipe do Call Center. Depois que o Call Center 
+associar e salvar o técnico plantonista, o sistema deve alterar o status para 
+Análise Técnica e encaminhar o RE à pauta do gestor. 
+RN008 Caracterização obrigatória 
+Data e hora da Constatação, Tipo da Emergência Química e Descrição são 
+obrigatórios. O tipo deve ser uma das 15 opções do catálogo da RN027, 
+incluindo Outros, e a descrição deve aceitar até 7.000 caracteres. A ausência 
+de qualquer obrigatório deve impedir a finalização e apresentar MSG001. 
+RN009 Anexos da emergência 
+O sistema deve permitir vários arquivos opcionais e de formatos diferentes: 
+JPEG, JPG, PNG, BMP, MP3, MP4, PDF, DOC, DOCX, TXT, XLS, XLSX, SHP, SHX, 
+DBF, PRJ, KML, KMZ e ZIP. Deve exibir MSG005 fixa abaixo do campo. 
+RN010 Localização obrigatória 
+Município, Endereço/Local, Ponto de referência e Área Atingida são 
+obrigatórios; Ponto de referência aceita até 1.000 caracteres. CEP, Bairro e 
+Número são opcionais. A ausência de obrigatório impede finalizar e aciona 
+MSG001. 
+RN011 Coordenadas 
+Coordenadas são opcionais e podem ser múltiplas. Devem aceitar 
+Geográfica/Grau Decimal, Grau/Min/Seg, UTM 23 ou UTM 24, com latitude e 
+longitude de até 10 caracteres numéricos. O sistema deve converter e salvar 
+em grau decimal. Sem coordenadas, deve exibir MSG002 e solicitar 
+confirmação antes de finalizar. 
+ 
+RN012 
+ 
+Área atingida 
+O sistema deve exigir a seleção de uma e permitir até três áreas dentre as 
+opções da fonte. A descrição do cenário é opcional e aceita até 1.000 
+caracteres. Sem área selecionada, deve impedir finalizar e acionar MSG001. 
+RN013 Lista de itens do catálogo de áreas 
+atingidas 
+Conforme a RN012, o usuário deve selecionar de um a três itens. O catálogo 
+de Área Atingida deve apresentar: Área Urbana; Distrito; Assentamento Rural; 
+Comunidade Indígena; Área Industrial; Dutovia; Colônia de Pescadores; 
+Comunidade Tradicional; Povoado; Posto de Combustível; Recurso Hídrico; 
+Rodovia; Área de Marinha; e Unidade de Conservação.  
+RN014 Validação e confirmação 
+Ao acionar Finalizar Emergência, o sistema deve validar todos os campos 
+obrigatórios e apresentar MSG001 quando houver ausência. Em seguida, deve 
+verificar as coordenadas e apresentar MSG002 quando não informadas. Antes 
+da gravação definitiva, deve apresentar MSG003 e exigir a escolha SIM ou 
+NÃO. 
+RN015 Revisar ou finalizar Na MSG003, se o usuário escolher NÃO, o sistema deve retornar ao 
+
+=== PAGE 8 ===
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR004 – Módulo Fiscalização – Cadastro de Emergência Química Externa |  Página 8 de 14 
+| Acto Soluções em Tecnologia Ltda   
+  
+Num. Nome Descrição  
+formulário, manter integralmente os dados e permitir a continuidade da 
+edição. Se escolher SIM, deve finalizar, gerar o RE, atribuir Emergência 
+Registrada, apresentar MSG004 e retornar ao registro salvo. A mudança para 
+Análise Técnica ocorre após a associação do plantonista, conforme RN007, 
+RN017 e RN018. 
+RN016 Legendas 
+O sistema deve apresentar legendas nos campos e utilizar os textos da Lista 
+de Legendas para Constatação, Descrição, Anexos, Município, Endereço, Área 
+Atingida, Coordenadas, Técnico indicado, Nome da empresa, Cargo, Outras 
+instituições e Descrição do cenário. Para os itens Comunidade Tradicional e 
+Unidade de Conservação do campo Área Atingida, deve utilizar os tooltips 
+definidos na RN031 e nas LEG013 e LEG014. Os campos sem legenda definida 
+devem ser alinhados antes da implementação. 
+RN017 Associação do plantonista 
+Após a finalização, o sistema deve manter o RE no status Emergência 
+Registrada até que a equipe do Call Center associe o técnico plantonista. A 
+associação deve ser realizada na funcionalidade de consulta, utilizando a lista 
+ordenada conforme RN018. Ao salvar o técnico, o sistema deve atualizar o 
+status para Análise Técnica. 
+RN018 Critérios do plantonista 
+Para associar o plantonista, o sistema deve consultar a lista por município e 
+período da escala. A ordenação deve priorizar: primeiro, plantonistas cuja 
+escala contemple a data da emergência e cujo município seja igual ao da 
+ocorrência; depois, os demais plantonistas com escala aplicável. A equipe do 
+Call Center deve selecionar um técnico para concluir a associação. 
+RN019 Alertas por e-mail 
+Depois que o técnico plantonista for associado e a associação for salva, o 
+sistema deve enviar e-mail ao técnico associado, ao gestor de plantão e ao 
+Call Center, utilizando a MSG006 e identificando o número do RE. Os 
+destinatários e o momento do envio devem permanecer destacados para 
+validação do fluxo. 
+RN020 Formulário RE no e-mail 
+O e-mail de alerta relacionado à RN019 deve conter o formulário do Registro 
+de Emergência anexado e manter associação com o número do RE 
+correspondente. 
+RN021 Consulta do usuário 
+O sistema deve exibir ao usuário externo seus Registros de Emergência, 
+Registros de Denúncia e respectivos status na tela de consulta. Os critérios de 
+ordenação, filtros, paginação e atualização serão detalhados em um DOR 
+especifico. 
+RN022 Acesso a Meus Processos 
+Quando um RE possuir processo gerado, o usuário deve poder clicar no 
+número ou status do registro para ser redirecionado à tela Meus Processos. O 
+acesso deve manter a associação ao processo correspondente. 
+RN023 Relatório RPEQ Após salvar o RE, se o comunicante declarou vínculo com a empresa, o 
+sistema deve permitir anexar o Relatório Preliminar de Emergência Química 
+
+=== PAGE 9 ===
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR004 – Módulo Fiscalização – Cadastro de Emergência Química Externa |  Página 9 de 14 
+| Acto Soluções em Tecnologia Ltda   
+  
+Num. Nome Descrição  
+na tela do RE ou no processo gerado. O upload é opcional e deve aceitar JPEG, 
+JPG, PNG, BMP, PDF, DOC, DOCX, TXT, XLS, XLSX e ZIP. 
+RN024 Relatórios conclusivos e 
+complementares 
+O sistema deve permitir que o usuário anexe o Relatório Conclusivo de 
+Emergência Química a qualquer momento e em qualquer status, mantendo-o 
+vinculado ao RE ou ao processo. O upload é opcional e deve aceitar JPEG, JPG, 
+PNG, BMP, PDF, DOC, DOCX, TXT, XLS, XLSX e ZIP. 
+ 
+RN025 Anexos complementares 
+O sistema deve permitir anexar o Relatório Complementar a qualquer 
+momento e em qualquer status, mantendo-o vinculado ao RE ou ao processo. 
+O upload é opcional e deve aceitar JPEG, JPG, PNG, BMP, MP3, MP4, PDF, 
+DOC, DOCX, TXT, XLS, XLSX, SHP, SHX, DBF, PRJ, KML, KMZ e ZIP. 
+ 
+RN026 Preenchimento por CEP Ao preencher CEP, o sistema deve buscar a base dos Correios e preencher 
+automaticamente o endereço.  
+RN027 Lista de itens do catálogo do Tipo de 
+Emergência 
+O catálogo do Tipo da Emergência Química deve permitir selecionar um item 
+entre:  
+ Acidente no transporte rodoviário de produtos químicos;  
+ Acidente em via férrea;  
+ Acidente industrial em planta química ou petroquímica;  
+ Incidente no modal aquaviário ou terminal marítimo;  
+ Lançamento ou descarte irregular de efluentes ou produtos 
+químicos;  
+ Vazamento em sistema subterrâneo de combustíveis;  
+ Ocorrência com produto químico perigoso em ETA/ETE;  
+ Efluente de barragem de rejeitos;  
+ Efluente de barragem de aterro industrial ou sanitário;  
+ Ruptura ou falha em sistema de contenção;  
+ Mortandade de peixes ou fauna aquática por contaminação;  
+ Pluma de contaminação;  
+ Mancha de origem desconhecida;  
+ Afloramento de contaminantes;  
+ Outros. 
+ 
+RN028 Tipo de Emergência Química 
+O usuário deve selecionar exatamente um Tipo da Emergência Química no 
+catálogo da RN027. Quando selecionar Outros, o sistema deve habilitar um 
+campo de descrição do tipo e exigir seu preenchimento antes da finalização. 
+RN029 Exclusão do Registro de Emergência 
+Antes de excluir o Registro de Emergência, o sistema deve apresentar 
+MSG007 e exigir a escolha SIM ou NÃO. Se o usuário escolher SIM, o registro 
+deve ser excluído definitivamente. Se escolher NÃO, o sistema deve cancelar 
+a operação, preservar todos os dados e retornar ao formulário. 
+RN030 Vínculo do técnico indicado com o 
+fluxo externo 
+O campo Técnico indicado não deve ser apresentado ao usuário externo 
+durante o cadastro inicial. Ele deve ficar disponível à equipe do Call Center 
+
+=== PAGE 10 ===
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR004 – Módulo Fiscalização – Cadastro de Emergência Química Externa |  Página 10 de 14 
+| Acto Soluções em Tecnologia Ltda   
+  
+Num. Nome Descrição  
+depois que o RE assumir o status Emergência Registrada, conforme RN017 e 
+RN018. A legenda LEG008 deve ser aplicada nessa etapa interna. 
+RN031 Tooltips dos itens da Área Atingida 
+No campo Área Atingida, o sistema deve disponibilizar texto de ajuda 
+contextual para dois itens do catálogo da RN013. Para Comunidade 
+Tradicional, deve exibir o tooltip “Ribeirinha, Quilombo, Pescadores e 
+outros...”. Para Unidade de Conservação, deve exibir o tooltip “Parques, APA 
+entre outros...”. Os tooltips devem ser acessíveis quando o usuário posicionar 
+o ponteiro ou o foco sobre o respectivo item e não devem alterar a seleção 
+realizada. 
+ 
+LISTA DE MENSAGENS 
+Num. Ação Tipo Regra de Negócio Texto 
+MSG001 Finalizar com campo obrigatório 
+ausente Alerta 
+RN002, RN003, 
+RN004, RN008, 
+RN010, RN012, RN014 
+e RN028 
+Preencher campos obrigatórios! 
+MSG002 Finalizar sem coordenadas Confirmação RN011 e RN014 
+Informamos que a ausência desse dado 
+pode comprometer a apuração da 
+Emergência Química registrada! Deseja 
+continuar? 
+MSG003 Confirmar finalização Confirmação RN014 e RN015 
+Após finalizar o registro da emergência 
+química, não será possível realizar 
+alterações! Deseja continuar? 
+MSG004 Finalização concluída Sucesso RN006, RN007 e 
+RN015 
+Registro de Emergência Química 
+cadastrado com sucesso! Nº de Registro: 
+2026.000000/INEMA/RE 
+MSG005 Orientação de anexos Informativa 
+fixa RN009 
+São aceitos documentos de texto (.pdf, 
+.doc, .docx, .txt), imagens (.jpeg, .jpg, 
+.png, .bmp), planilhas (.xls, .xlsx), 
+multimídia (.mp3, .mp4), shape (.shp, 
+.shx, .dbf, .prj), .kml, .kmz e .zip. 
+MSG006 Alerta aos responsáveis E-mail RN019 e RN020 Nova Emergência Química registrada! Nº 
+de Registro: 2026.000000/INEMA/RE 
+MSG007 Excluir Registro de Emergência Confirmação RN029 Deseja excluir o registro de emergência 
+definitivamente? 
+
+=== PAGE 11 ===
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR004 – Módulo Fiscalização – Cadastro de Emergência Química Externa |  Página 11 de 14 
+| Acto Soluções em Tecnologia Ltda   
+  
+ 
+LISTA DE LEGENDAS 
+Codigo Campo  Texto 
+LEG001 Data e hora da Constatação Registre aqui a data e hora em que foi observada a emergência 
+LEG002 Descrição Descreva aqui seu relato em detalhes sobre a emergência 
+LEG003 Anexos Adicione arquivos que complementem ou documentem a demanda ou o 
+fato, como capturas de conversas, vídeos e fotos 
+LEG004 Município Selecione o município da emergência 
+LEG005 Endereço Informe o endereço da emergência 
+LEG006 Área Atingida Selecione a área da emergência 
+LEG007 Coordenadas Caso não saiba as coordenadas, preencha o campo com zero 
+LEG008 Técnico indicado Selecione o técnico plantonista para análise da emergência 
+LEG009 Nome da empresa Descreva o nome da empresa em que você trabalha 
+LEG010 Cargo Descreva o cargo atual que você exerce 
+LEG011 Outras instituições Descreva o nome da instituição 
+LEG012 Descrição do cenário Descreva a área ou o cenário da área atingida 
+LEG013 Comunidade Tradicional Ribeirinha, Quilombo, Pescadores e outros... 
+LEG014 Unidade de Conservação Parques, APA entre outros... 
+ESPECIFICAÇÃO DE INTERFACE (UI/UX) 
+Seção Campo/ Elemento UI Tipo de 
+componente 
+Obrigatório Regra/Comportamento 
+Detalhes do Registro Cabeçalho Texto fixo Não se aplica  Apresentar o número do registro gerado 
+conforme RN006. 
+Informações sobre 
+empresa Possui vínculo? Seleção 
+SIM/NÃO Sim SIM aplica RN003; NÃO aplica RN004. 
+Informações sobre 
+empresa Nome da empresa Texto Condicional Obrigatório se vínculo = SIM; até 500 
+caracteres. RN003 e LEG009 
+Informações sobre 
+empresa Cargo Texto Condicional Obrigatório se vínculo = SIM; até 200 
+caracteres. RN003 e LEG010 
+Informações sobre 
+empresa Tipo sem vínculo Lista Condicional Cidadão comum, Força Policial ou Outras 
+instituições. RN004 
+Informações sobre 
+empresa Outras instituições Texto Condicional Obrigatório quando selecionada; até 500 
+caracteres. RN004 e LEG011 
+Informações sobre 
+empresa 
+Nome da empresa 
+responsável Texto Não Aceitar até 500 caracteres conforme 
+RN005. 
+
+=== PAGE 12 ===
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR004 – Módulo Fiscalização – Cadastro de Emergência Química Externa |  Página 12 de 14 
+| Acto Soluções em Tecnologia Ltda   
+  
+Seção Campo/ Elemento UI Tipo de 
+componente 
+Obrigatório Regra/Comportamento 
+Comunicante Nome/Razão Social Dado 
+importado Sim Importado do cadastro básico. RN002 
+Comunicante Telefone/Celular Dado 
+importado Sim Importado do cadastro básico. RN002 
+Comunicante CPF/CNPJ Dado 
+importado Não Exibir quando houver. RN002 
+Comunicante Outro Telefone/Celular Dado 
+importado Não Exibir quando houver. RN002 
+Comunicante E-mail Dado 
+importado Não Exibir quando houver. RN002 
+Detalhes da Emergência Data/hora da 
+Constatação Data/hora Sim RN008 e LEG001 
+Detalhes da Emergência Tipo da Emergência 
+Química Lista Sim Selecionar um dos 15 itens da RN027. 
+Detalhes da Emergência Descrição do tipo 
+Outros Texto Condicional Exibir e exigir quando Tipo = Outros. 
+RN028 
+Detalhes da Emergência Descrição Área de texto Sim Até 7.000 caracteres. RN008 e LEG002 
+Detalhes da Emergência Anexos Upload 
+múltiplo Não RN009, MSG005 e LEG003 
+Localização Município Lista Sim RN010 e LEG004 
+Localização CEP Texto Não Preencher endereço conforme RN026. 
+Localização Endereço/Local Texto Sim RN010 e LEG005 
+Localização Bairro Texto Não Campo complementar do endereço. 
+Localização Número Texto Não Campo complementar do endereço. 
+Localização Ponto de referência Área de texto Sim Até 1.000 caracteres. RN010 
+Localização Tipo de coordenada Lista Condicional Apresentar formatos da RN011. 
+Localização Latitude/Longitude Numérico Condicional Até 10 caracteres cada; permitir zero. 
+RN011 e LEG007 
+Localização Incluir nova 
+coordenada Botão Não Adicionar conjunto conforme RN011 e 
+BOT002. 
+Localização Área Atingida Multisseleção Sim 
+Selecionar de uma a três opções do 
+catálogo da RN013. Exibir os tooltips de 
+Comunidade Tradicional e Unidade de 
+Conservação conforme RN031, LEG013 e 
+LEG014. LEG006. 
+
+=== PAGE 13 ===
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR004 – Módulo Fiscalização – Cadastro de Emergência Química Externa |  Página 13 de 14 
+| Acto Soluções em Tecnologia Ltda   
+  
+Seção Campo/ Elemento UI Tipo de 
+componente 
+Obrigatório Regra/Comportamento 
+Localização Descrição do cenário Área de texto Não Até 1.000 caracteres. RN012 e LEG012 
+Tratamento interno Técnico indicado Lista de 
+plantonistas Condicional 
+Visível somente ao Call Center após 
+Emergência Registrada. RN017, RN018, 
+RN030 e LEG008 
+Consulta RE/RD e status Lista Não se aplica  Exibir registros e status conforme RN021. 
+Consulta Número/status com 
+processo Link Condicional Redirecionar conforme RN022. 
+Relatórios RPEQ Upload Condicional Disponível com vínculo empresarial. 
+RN023 
+Relatórios Relatório Conclusivo Upload Não Disponível em qualquer status. RN024 
+Relatórios Relatório 
+Complementar Upload Não Disponível em qualquer status. RN025 
+Rodapé Finalizar Emergência Botão Não se aplica  Executar RN014 e RN015 por meio do 
+BOT001. 
+Rodapé Excluir Emergência Botão Não se aplica  Executar RN029 por meio do BOT003. 
+PROTOTIPAÇAO DE TELAS 
+TL001 – Tela de Cadastro de Emergência Química Externa 
+ 
+*Imagens meramente ilustrativas para apresentação de campos e botões. Pode haver divergências de layout com o sistema. 
+ 
+Cod  Campo Descrição Regra de Negócio Texto (máscara) Tipo 
+BOT001 
+Rodapé Finalizar a 
+emergência 
+química 
+Validar obrigatórios com MSG001; verificar 
+coordenadas com MSG002; apresentar 
+MSG003; se SIM, salvar, gerar RE, atribuir 
+Emergência Registrada e apresentar MSG004; 
+se NÃO, retornar à edição preservando os 
+dados conforme RN015. 
+Finalizar 
+Emergência 
+Botão 
+BOT002 
+Seção de 
+coordenadas 
+Adicionar 
+novo conjunto 
+de 
+coordenadas 
+Incluir novo conjunto de Tipo de coordenada 
+e Latitude/Longitude, permitindo múltiplas 
+coordenadas conforme RN011. 
+Incluir nova 
+coordenada 
+Botão 
+BOT003 
+Rodapé Excluir o 
+Registro de 
+Emergência 
+Apresentar MSG007 conforme RN029; se 
+SIM, excluir definitivamente; se NÃO, 
+cancelar e retornar ao formulário 
+preservando os dados. 
+Excluir 
+Emergência 
+Botão 
+
+=== PAGE 14 ===
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR004 – Módulo Fiscalização – Cadastro de Emergência Química Externa |  Página 14 de 14 
+| Acto Soluções em Tecnologia Ltda   
+  
+OBSERVAÇÕES 
+Esta especificação utiliza exclusivamente 4.Requisitos fiscalização emergência externa.docx. O 
+detalhamento da pauta do gestor e do técnico está fora deste DOR. O detalhamento da pauta do gestor e 
+do técnico será objeto de levantamento próprio. Até decisão formal, esses pontos não devem ser 
+implementados por inferência 
+CONCLUSÃO 
+O DOR consolida os requisitos do cadastro externo de emergência química, incluindo autenticação e 
+identificação obrigatórias, vínculo empresarial, dados importados do comunicante, caracterização e 
+localização, anexos, coordenadas, validações, geração do RE, status Análise Técnica, associação oculta do 
+plantonista, alertas, relatórios, consulta e encaminhamento à pauta. A implementação deve respeitar 
+integralmente as regras detalhadas, mensagens, legendas, obrigatoriedades e condicionais.  
+ASSINATURA E TERMO DE ACEITE 
+ 
+ 
+______________________________ 
+Assinatura 
+Coordenação de Tecnologia da Informação e Comunicação - COTIC 
+INEMA - Instituto do Meio Ambiente e Recursos Hídricos 

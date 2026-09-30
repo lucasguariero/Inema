@@ -1,0 +1,11 @@
+.vercel
+.env*
+.playwright-mcp
+donut-test.png
+test_*.png
+node_modules/
+test-results/
+playwright-report/
+qa/screenshots/
+
+

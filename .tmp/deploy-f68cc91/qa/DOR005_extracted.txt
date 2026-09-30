@@ -1,0 +1,484 @@
+--- PÁGINA 1 ---
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR005– Módulo Fiscalização– Consulta de Registro Interno   Página 1 de 10 
+Acto Soluções em Tecnologia Ltda   
+  
+Documento de Requisitos 
+DOR005 – Módulo Fiscalização – Consulta de Registros Internos 
+PONTO FOCAL E-MAIL 
+Paula Maiana Santana Martins  Paula.martins@inema.ba.gov.br 
+ 
+Este documento especifica a consulta interna unificada de denúncias ambientais e emergências 
+químicas, incluindo filtros, ordenação, listagem, histórico, geração de PDF e anexação de relatórios. 
+Seu objetivo é apoiar a validação pelos usuários e orientar o desenvolvimento e os testes da 
+funcionalidade. 
+ 
+ATUALIZAÇÕES: 
+DATA AUTOR EMAIL DESCRIÇÃO VERSÃO 
+03/09/2026 Naiane Biset Santos Naiane.biset@acto.com.br Criação  1.0 
+04/09/2026 Naiane Biset Santos Naiane.biset@acto.com.br 
+Renomeação do 
+filtro Unidade 
+Regional para 
+Unidade 
+1.1 
+04/09/2026 Naiane Biset Santos Naiane.biset@acto.com.br Alteração 1.2 
+ 
+--- PÁGINA 2 ---
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR005– Módulo Fiscalização– Consulta de Registro Interno   Página 2 de 10 
+Acto Soluções em Tecnologia Ltda   
+  
+SUMÁRIO 
+ 
+INTRODUÇÃO AO CASO DE USO ............................................................................................................ 3 
+DOCUMENTOS RELACIONADOS ............................................................................................................. 3 
+DICIONÁRIO DE SIGLAS E ABREVIAÇÕES ................................................................................................ 3 
+MAPEAMENTO DO FLUXO DE PROCESSO .............................................................................................. 3 
+ATORES ............................................................................................................................................... 3 
+CASOS DE USO ....................................................................................................................................... 4 
+REGRAS DE NEGÓCIO GERAIS ............................................................................................................ 4 
+LISTA DE MENSAGENS ....................................................................................................................... 6 
+LISTA DE LEGENDAS ........................................................................................................................... 7 
+ESPECIFICAÇÃO DE INTERFACE (UI/UX) ............................................................................................. 7 
+PROTOTIPAÇAO DE TELAS ...................................................................................................................... 8 
+TL001 – Tela de Consulta de Registros Internos ................................................................................ 8 
+OBSERVAÇÕES ........................................................................................................................................ 9 
+Os catálogos, permissões, limites de tamanho dos anexos e quantidade de itens por página devem 
+seguir as definições corporativas do sistema. As imagens de protótipo, quando incluídas, são 
+meramente ilustrativas. ......................................................................................................................... 9 
+CONCLUSÃO ........................................................................................................................................... 9 
+A funcionalidade deverá oferecer consulta rastreável, segura e eficiente dos RD e RE, mantendo 
+coerência entre filtros, listagem, ações, histórico e permissões de acesso. ......................................... 9 
+ASSINATURA E TERMO DE ACEITE ......................................................................................................... 9 
+ 
+ 
+--- PÁGINA 3 ---
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR005– Módulo Fiscalização– Consulta de Registro Interno   Página 3 de 10 
+Acto Soluções em Tecnologia Ltda   
+  
+INTRODUÇÃO AO CASO DE USO 
+O usuário interno autenticado acessa a consulta, combina filtros e visualiza os registros autorizados. A tela 
+prioriza emergências ainda no status Emergência Registrada, permite abrir detalhes, baixar o formulário 
+em PDF, anexar relatórios aplicáveis e consultar o histórico completo de eventos. 
+DOCUMENTOS RELACIONADOS 
+ TR - Anexo I 
+ Contrato nº 035/2025 – INEMA / ACTO BR Soluções em Tecnologia LTDA 
+DICIONÁRIO DE SIGLAS E ABREVIAÇÕES 
+DICIONÁRIO DE SIGLAS E ABREVIAÇÕES 
+DOR Documento de Requisitos RE Registro de Emergência Química 
+RD Registro de Denúncia Ambiental PDF Portable Document Format 
+UI/UX Interface e Experiência do Usuário   
+ 
+MAPEAMENTO DO FLUXO DE PROCESSO 
+ATORES 
+LISTA DE ATORES 
+Núm. Ator Descrição Pré-requisitos Tipo 
+AT001 
+Call 
+Center/funcio
+nário DIFIS 
+Consulta registros e executa 
+ações permitidas pelo seu perfil. 
+Estar autenticado e possuir permissão no 
+módulo Fiscalização. Interno 
+AT002 Técnico 
+Plantonista 
+Associado ao Registro de 
+Emergência. 
+Possuir cadastro ativo e vínculo com o 
+registro. Interno 
+AT003 Gestor/Coorde
+nador 
+Consulta o conjunto autorizado 
+de registros e acompanha status, 
+unidade, pauta e histórico. 
+Estar autenticado com perfil de gestão. Interno 
+Usuário externo não participa deste caso de uso. O acesso à funcionalidade é restrito aos perfis internos autorizados. 
+Usuário interno autenticado que consulta denúncias e emergências e executa somente as ações autorizadas para seu perfil. 
+--- PÁGINA 4 ---
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR005– Módulo Fiscalização– Consulta de Registro Interno   Página 4 de 10 
+Acto Soluções em Tecnologia Ltda   
+  
+CASOS DE USO 
+Cenários  
+Dado que Ação Resposta sistema  
+O usuário interno está 
+autenticado e autorizado. Acessa Consultar registros. Exibe filtros, indicador de emergências e a consulta padrão 
+conforme RN007. 
+A tela de consulta está 
+disponível. 
+Preenche um ou mais filtros e 
+aciona Consultar. 
+Valida os campos, combina os filtros e apresenta resultados 
+totalizados e paginados. 
+O usuário selecionou 
+Emergência Química. 
+Acessa o filtro Tipo da Emergência 
+Química. 
+Habilita e carrega o catálogo de tipos ativos. 
+Existem filtros preenchidos. Aciona Limpar filtros. Limpa os valores e restaura a consulta padrão. 
+A consulta retornou registros. Aciona Visualizar em uma linha. Abre os detalhes do registro, respeitando sua permissão. 
+A consulta retornou registros. Aciona Baixar PDF. Gera e disponibiliza o formulário vigente do RD ou RE. 
+O registro é um RE e o usuário 
+possui permissão. 
+Aciona uma opção de anexar 
+relatório. 
+Solicita arquivo, valida o formato, confirma o envio e registra 
+o evento no histórico. 
+O registro possui eventos. Aciona Histórico. Exibe eventos e anexos em ordem cronológica decrescente. 
+Nenhum registro atende aos 
+filtros. Aciona Consultar. Mantém os filtros e apresenta MSG004. 
+Ocorre falha técnica. Executa consulta, download ou 
+envio. 
+Preserva o contexto e apresenta a mensagem de erro 
+correspondente. 
+ 
+REGRAS DE NEGÓCIO GERAIS 
+Num. Nome Descrição  
+RN001 Acesso à consulta interna Permitir acesso somente a usuário interno autenticado e autorizado para 
+consultar registros de fiscalização. 
+RN002 Escopo da consulta 
+Apresentar, em uma única consulta, os Registros de Denúncia Ambiental 
+(RD) e os Registros de Emergência Química (RE) aos quais o usuário 
+possua permissão de acesso. 
+RN003 Filtros disponíveis 
+Disponibilizar os filtros Status, Número do registro, M unicípio, Tipo de 
+registro, Tipo da Emergência Química, Período do registro, Palavra- chave, 
+Eixo Temático, Técnico Plantonista associado, Comunicante e Unidade. 
+RN004 Dependência do tipo de emergência 
+Habilitar o filtro Tipo da Emergência Química somente quando o Tipo de 
+registro selecionado for Emergência Química; ao alterar para outro tipo, 
+limpar o valor dependente. 
+RN005 Validação do período Permitir consulta por data inicial e final do registro. Não aceitar data 
+--- PÁGINA 5 ---
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR005– Módulo Fiscalização– Consulta de Registro Interno   Página 5 de 10 
+Acto Soluções em Tecnologia Ltda   
+  
+Num. Nome Descrição  
+inicial posterior à data final nem período futuro. 
+RN006 Consulta combinada 
+Aplicar simultaneamente todos os filtros preenchidos, utilizando a 
+condição E entre eles; filtros não preenchidos não devem restringir o 
+resultado. 
+RN007 Consulta padrão 
+Quando nenhum filtro for informado, exibir primeiro os RE com status 
+Emergência Registrada e, em seguida, os demais registros, ordenados do 
+mais recente para o mais antigo dentro de cada grupo. 
+RN008 Ordenação filtrada 
+Quando houver filtros, ordenar os resultados por Tipo de registro e, 
+dentro de cada tipo, por Data do registro em ordem decrescente, salvo 
+ordenação explícita do usuário. 
+RN009 Dados da listagem Exibir Número do registro, Data e hora do registro, Tipo do registro, Tipo 
+da entrada, Município, Status/Situação e Ações. 
+RN010 Paginação e totalização Paginar a lista de resultados e informar o total de registros encontrados. A 
+mudança de página deve preservar os filtros aplicados. 
+RN011 Indicador de emergências 
+Exibir junto ao título Consultar registros um indicador com a quantidade 
+atual de RE no status Emergência Registrada. Atualizar o indicador após 
+inclusão ou mudança de status e apresentar zero quando não houver 
+registros. 
+RN012 Abertura do registro Permitir visualizar os detalhes do registro selecionado, respeitando o 
+perfil de acesso e sem alterar seus dados por meio da tela de consulta. 
+RN013 Download em PDF Permitir gerar e baixar o formulário do RD ou RE selecionado em PDF, 
+mantendo o número e os dados vigentes do registro. 
+RN014 Anexação de relatórios 
+Disponibilizar, para RE e conforme permissão do usuário, as ações Anexar 
+Relatório Preliminar, Anexar Relatório Conclusivo e Anexar Relatório 
+Complementar. 
+RN015 Formatos de anexos 
+Aceitar imagens JPEG, JPG, PNG e BMP; multimídia MP3 e MP4; 
+documentos PDF, DOC, DOCX e TXT; plan ilhas XLS e XLSX; arquivos 
+geoespaciais SHP, SHX, DBF, PRJ, KML e KMZ; e ZIP. 
+RN016 Confirmação de anexo 
+Antes de concluir o envio, exigir arquivo válido e o tipo de relatório; após 
+sucesso, vincular o anexo ao RE, registrar usuário, data e hora e atualiz ar o 
+histórico. 
+RN017 Histórico 
+Exibir em ordem cronológica decrescente os eventos e anexos do registro, 
+contendo data e hora, usuário responsável, ação realizada, tipo e nome 
+do arquivo quando aplicável. 
+RN018 Limpeza de filtros Ao acionar Limpar filtros, restaurar todos os campos ao estado inicial e 
+executar novamente a consulta padrão definida na RN007. 
+RN019 Resultado vazio Quando nenhum registro atender aos filtros, manter os filtros 
+--- PÁGINA 6 ---
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR005– Módulo Fiscalização– Consulta de Registro Interno   Página 6 de 10 
+Acto Soluções em Tecnologia Ltda   
+  
+Num. Nome Descrição  
+preenchidos e apresentar MSG004 sem exibir linhas na listagem. 
+RN020 Tratamento de falha 
+Em caso de falha na consulta, download ou envio de anexo, não duplicar 
+operações, preservar os filtros e dados informados e apresentar 
+mensagem de erro apropriada. 
+RN021 Catálogos e dados mestres Carregar Status, Município, Tipo de registro, Tipo da Emergência, Eixo 
+Temático, Técnico e Unidade a partir dos respectivos cadastros ativos. 
+RN022 Pesquisa textual 
+Aplicar Palavra-chave sobre os campos textuais pesquisáveis do registro e 
+permitir busca do Comunicante por nome/razão social ou CPF/CNPJ, 
+conforme permissão para dados pessoais. 
+RN023 Unidade 
+O filtro Unidade deve considerar a unidade de destino registrada no 
+encaminhamento do processo ou no encaminhamento direto do registro. 
+O sistema deve retornar o registro quando a unidade selecionada 
+corresponder à unidade para a qual o processo ou o próprio registro foi 
+encaminhado. 
+RN024 Auditoria e segurança Registrar consultas sensíveis, downloads e inclusões de anexos em trilha 
+de auditoria, protegendo dados pessoais conforme o perfil do usuário. 
+ 
+LISTA DE MENSAGENS 
+Num. Ação Tipo Regra de Negócio Texto 
+MSG001 Consultar com período 
+inválido Alerta RN005 A data inicial não pode ser posterior à data final. 
+MSG002 Consultar com data futura Alerta RN005 O período do registro não pode conter data futura. 
+MSG003 Falha ao consultar Erro RN020 Não foi possível consultar os registros. Tente 
+novamente. 
+MSG004 Consulta sem resultados Informativa RN019 Nenhum registro foi encontrado para os filtros 
+informados. 
+MSG005 Arquivo inválido Alerta RN015 e RN016 O arquivo selecionado possui formato não permitido.  
+MSG006 Anexo obrigatório Alerta RN016 Selecione um arquivo para continuar. 
+MSG007 Confirmar envio do relatório Confirmação RN016 Deseja anexar este relatório ao registro? 
+MSG008 Relatório anexado Sucesso RN016 e RN017 Relatório anexado com sucesso. 
+MSG009 Falha ao anexar Erro RN020 Não foi possível anexar o relatório. Tente novamente.  
+MSG010 Falha no download Erro RN020 Não foi possível gerar o PDF do registro. Tente 
+novamente. 
+MSG011 Acesso não autorizado Alerta RN001, RN012 e Você não possui permissão para realizar esta ação. 
+--- PÁGINA 7 ---
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR005– Módulo Fiscalização– Consulta de Registro Interno   Página 7 de 10 
+Acto Soluções em Tecnologia Ltda   
+  
+Num. Ação Tipo Regra de Negócio Texto 
+RN024 
+MSG012 Orientação de formatos Informativa 
+fixa RN015 
+Formatos aceitos: JPEG, JPG, PNG, BMP, MP3, MP4, 
+PDF, DOC, DOCX, TXT, XLS, XLSX, SHP, SHX, DBF, PRJ, 
+KML, KMZ e ZIP. 
+ 
+LISTA DE LEGENDAS 
+Codigo Campo  Texto 
+LEG001 Status Selecione a situação atual do registro. 
+LEG002 Número do registro Informe o número completo ou parte identificável do RD ou 
+RE. 
+LEG003 Município Selecione o município onde ocorreu a denúncia ou 
+emergência. 
+LEG004 Tipo de registro Selecione Denúncia Ambiental ou Emergência Química. 
+LEG005 Tipo da Emergência Química Disponível quando o tipo de registro for Emergência Química. 
+LEG006 Período do registro Informe as datas inicial e final de cadastramento no sistema. 
+LEG007 Palavra-chave Pesquise termos presentes nos campos textuais do registro. 
+LEG008 Eixo Temático Selecione o eixo definido pelo gestor na Pauta do Gestor. 
+LEG009 Técnico Plantonista associado Selecione o técnico vinculado ao atendimento do registro. 
+LEG010 Comunicante Pesquise pelo nome, razão social ou CPF/CNPJ do 
+comunicante. 
+LEG011 Unidade Selecione a unidade para a qual o processo ou o registro foi 
+encaminhado. 
+LEG012 Indicador de emergências Quantidade de emergências no status Emergência Registrada. 
+LEG013 Histórico Consulte eventos e anexos do registro, do mais recente para o 
+mais antigo. 
+ESPECIFICAÇÃO DE INTERFACE (UI/UX) 
+Seção Campo/ Elemento 
+UI 
+Tipo de 
+componente 
+Obrigatório Regra/Comportamento 
+Menu 
+lateral 
+Consultar registros Título e indicador Não se aplica Exibir contador de RE em Emergência Registrada. 
+RN011 e LEG012. 
+Filtros Status Lista Não Carregar status ativos. RN003 e RN021; LEG001. 
+Filtros Número do registro Texto Não Pesquisar RD ou RE. RN003; LEG002. 
+Filtros Município Lista pesquisável Não Carregar municípios ativos. RN003 e RN021; 
+--- PÁGINA 8 ---
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR005– Módulo Fiscalização– Consulta de Registro Interno   Página 8 de 10 
+Acto Soluções em Tecnologia Ltda   
+  
+Seção Campo/ Elemento 
+UI 
+Tipo de 
+componente 
+Obrigatório Regra/Comportamento 
+LEG003. 
+Filtros Tipo de registro Lista Não Denúncia Ambiental ou Emergência Química. 
+RN003; LEG004. 
+Filtros Tipo da Emergência 
+Química 
+Lista Condicional Habilitar somente para Emergência Química. 
+RN004 e RN021; LEG005. 
+Filtros Data inicial / Data 
+final 
+Data Não Validar intervalo conforme RN005; LEG006. 
+Filtros Palavra-chave Texto Não Aplicar pesquisa textual conforme RN022; LEG007. 
+Filtros Eixo Temático Lista pesquisável Não Carregar eixos ativos da Pauta do Gestor. RN021; 
+LEG008. 
+Filtros Técnico Plantonista 
+associado 
+Lista pesquisável Não Carregar técnicos ativos. RN021; LEG009. 
+Filtros Comunicante Texto Não Pesquisar conforme RN022 e proteger dados 
+conforme RN024; LEG010. 
+Filtros Unidade Lista pesquisável Não Considerar a unidade de destino do 
+encaminhamento do processo ou do próprio 
+registro. RN023; LEG011. 
+Resultados Total de registros Texto Não se aplica Exibir total encontrado. RN010. 
+Resultados Lista de registros Tabela paginada Não se aplica Exibir colunas e ordenação conforme RN007 a 
+RN010. 
+Resultados Ações Menu por linha Condicional Exibir apenas ações permitidas e aplicáveis ao 
+tipo/status. RN012 a RN017 e RN024. 
+Anexo Tipo de relatório Lista Sim Preliminar, Conclusivo ou Complementar. RN014 e 
+RN016. 
+Anexo Arquivo Upload Sim Validar formatos. RN015, RN016 e MSG012. 
+Histórico Eventos do registro Lista Não se aplica Exibir metadados conforme RN017 e LEG013. 
+PROTOTIPAÇAO DE TELAS 
+TL001 – Tela de Consulta de Registros Internos 
+ 
+*Imagens meramente ilustrativas para apresentação de campos e botões. Pode haver divergências de layout com o sistema. 
+ 
+Cod  Campo Descrição Regra de Negócio Texto 
+(máscara) Tipo 
+BOT001 Filtros Executar a pesquisa Validar RN005; aplicar RN006 a RN010 Consultar Botão 
+--- PÁGINA 9 ---
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR005– Módulo Fiscalização– Consulta de Registro Interno   Página 9 de 10 
+Acto Soluções em Tecnologia Ltda   
+  
+OBSERVAÇÕES  
+Os catálogos, permissões, limites de tamanho dos anexos e quantidade de itens por página devem seguir 
+as definições corporativas do sistema. As imagens de protótipo, quando incluídas, são meramente 
+ilustrativas. 
+ 
+CONCLUSÃO 
+A funcionalidade deverá oferecer consulta rastreável, segura e eficiente dos RD e RE, mantendo coerência 
+entre filtros, listagem, ações, histórico e permissões de acesso. 
+ 
+ASSINATURA E TERMO DE ACEITE 
+ 
+ 
+______________________________ 
+e RN019; em falha, aplicar RN020. 
+BOT002 Filtros Restaurar a consulta 
+inicial 
+Limpar todos os filtros e executar 
+RN018. Limpar filtros Botão 
+secundário 
+BOT003 Ações do 
+registro Abrir os detalhes Abrir registro em modo de visualização 
+conforme RN012 e RN024. Visualizar Ícone/ 
+Botão 
+BOT004 Ações do 
+registro 
+Gerar o formulário 
+em PDF 
+Executar RN013; em falha, exibir 
+MSG010. Baixar PDF Ícone/ 
+Botão 
+BOT005 Ações do 
+RE 
+Incluir relatório 
+preliminar 
+Disponibilizar conforme RN014; validar 
+RN015 e RN016. 
+Anexar 
+relatório 
+preliminar 
+Item de 
+menu 
+BOT006 Ações do 
+RE 
+Incluir relatório 
+conclusivo 
+Disponibilizar conforme RN014; validar 
+RN015 e RN016. 
+Anexar 
+relatório 
+conclusivo 
+Item de 
+menu 
+BOT007 Ações do 
+RE 
+Incluir relatório 
+complementar 
+Disponibilizar conforme RN014; validar 
+RN015 e RN016. 
+Anexar 
+relatório 
+complementar 
+Item de 
+menu 
+BOT008 Ações do 
+registro 
+Consultar eventos e 
+anexos Exibir o histórico conforme RN017. Histórico Ícone/ 
+Botão 
+BOT009 Modal de 
+anexo Concluir o envio Validar arquivo, apresentar MSG007 e, 
+se confirmado, executar RN016. Anexar Botão 
+BOT010 Modal de 
+anexo Cancelar o envio Fechar o modal sem anexar arquivo 
+nem alterar o registro. Cancelar Botão 
+secundário 
+BOT011 Paginação Navegar entre 
+páginas Preservar filtros e aplicar RN010. Anterior / 
+Próxima Botão 
+--- PÁGINA 10 ---
+‘   
+   
+Projeto:  
+PROJETO NOVO SEIA - Sistema Integrado de Gestão Ambiental - INEMA 
+ 
+ 
+DOR005– Módulo Fiscalização– Consulta de Registro Interno   Página 10 de 10 
+Acto Soluções em Tecnologia Ltda   
+  
+Assinatura 
+Coordenação de Tecnologia da Informação e Comunicação - COTIC 
+INEMA - Instituto do Meio Ambiente e Recursos Hídricos 

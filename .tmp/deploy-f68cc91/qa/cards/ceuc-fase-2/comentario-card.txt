@@ -1,0 +1,8 @@
+Fala equipe! Finalizei o desenvolvimento da Fase 2 do CEUC (TL002 — Estrutura do Formulário e Aba 1: Informações Gerais e Territoriais).
+
+Link do protótipo: https://inema.acto.com.br/?modulo=ceuc
+
+Resolvido: Ativação das ações "+ Nova UC" e "Editar", implementando a transição completa para a tela de cadastro/edição (TL002) construída 100% com o Design System GLA/Filament. O formulário contém o cabeçalho oficial com breadcrumb canônico e badges dinâmicos de status, a barra de navegação com as 5 abas do DOR036 e o conteúdo completo da Aba 1 (Print 01), com Seção 1 (Dados Básicos, datas automáticas, enquadramento SNUC e upload de atos regulamentares) e Seção 2 (Área em hectares, biomas, RPGA, território de identidade, chips de municípios e percentual de regularização fundiária).
+Abas e fluxo: As abas subsequentes (Instrumentos de Gestão, Zonas de Manejo, Conselho e Infraestrutura) já foram estruturadas com placeholders institucionais acolhedores (Print 02). A ação "Salvar Rascunho" persiste os dados na listagem com notificação toast (Print 03) e a ação "Editar" carrega os dados completos da UC selecionada (Print 04).
+Com isso, considero a Fase 2 do CEUC pronta e homologada.
+Fico à disposição se precisarem de mais detalhes!

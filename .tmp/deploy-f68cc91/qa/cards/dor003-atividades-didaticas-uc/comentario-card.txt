@@ -1,0 +1,7 @@
+Fala time! Retestei e homologuei o prototipo e fluxo do card de "DOR003 - Modulo Gestao de Unidades de Conservacao - Autorizacao para Realizacao de Atividades Didaticas em UC (AAD Tipos 1 e 2)". Segue o resultado:
+
+Resolvido: Implementado o painel gerencial TL007 com indicadores de processos AAD ativos e novos requerimentos (Print 01). No formulario de requerimento, validamos com sucesso o enquadramento dinamico entre AAD Tipo 1 (sem coleta - rito simplificado com plano de aula e lista de alunos, Print 02) e AAD Tipo 2 (com coleta/captura de material biologico, exigindo taxonomia, metodologia amostral, salvaguardas e indicacao de instituicao fiel depositaria, Print 03). Testei a submissao com geracao do protocolo formal e exibicao da mensagem de cientificacao MSG003 (Print 04). Por fim, na analise e emissao tecnica (TL005 e TL006), verifiquei a geracao da Autorizacao Didatica conclusiva com condicionantes ambientais especificas e download do documento oficial (Print 05).
+Nao resolvido: Nenhum ponto pendente. Todas as regras de enquadramento (RN001 a RN007), campos e telas operacionais (TL001 a TL007) estao rigorosamente alinhadas ao DOR003.
+Fora do escopo deste card: As atividades de pesquisa cientifica pura (Pesc) sao contempladas no DOR004 e as visitas/eventos amplos no DOR002.
+Com isso, considero este card resolvido e validado.
+Fico a disposicao se precisar de mais detalhes de qualquer um desses pontos.

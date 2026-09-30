@@ -1,0 +1,142 @@
+{
+  "topDirectItems": [],
+  "menuGroups": [
+    {
+      "id": "seia-hibrido",
+      "label": "SEIA Plataforma (Híbrido)",
+      "icon": "Layers",
+      "materialIcon": "dashboard_customize",
+      "defaultOpen": true,
+      "htmlId": "subSeiaHibrido",
+      "items": [
+        {
+          "id": "seia-home",
+          "label": "Central SEIA (Home)",
+          "href": "/?rota=seia-home",
+          "route": "seia-home",
+          "badge": "NOVO",
+          "htmlId": "menu-seia-home"
+        },
+        {
+          "id": "seia-daes",
+          "label": "Gestão de DAEs",
+          "href": "/?rota=seia-daes",
+          "route": "seia-daes",
+          "badge": "SEFAZ",
+          "htmlId": "menu-seia-daes"
+        }
+      ]
+    },
+    {
+      "id": "regulacao",
+      "label": "Regulação",
+      "icon": "FileCheck",
+      "materialIcon": "assignment",
+      "defaultOpen": true,
+      "htmlId": "subRegulacao",
+      "items": [
+        {
+          "id": "relatorios",
+          "label": "Relatórios de Regulação",
+          "href": "/?rota=relatorios",
+          "route": "relatorios",
+          "badge": "NOVO",
+          "htmlId": "menu-relatorios"
+        },
+        {
+          "id": "dashboard-gerencial",
+          "label": "Dashboard Gerencial",
+          "href": "/?rota=dashboard",
+          "route": "dashboard",
+          "badge": "NOVO",
+          "htmlId": "menu-dashboard"
+        }
+      ]
+    },
+    {
+      "id": "fiscalizacao",
+      "label": "Fiscalização",
+      "icon": "ShieldAlert",
+      "materialIcon": "fact_check",
+      "defaultOpen": true,
+      "htmlId": "subFiscalizacao",
+      "items": [
+        {
+          "id": "fisc-consulta-cidadao",
+          "label": "Consulta Cidadão",
+          "href": "/?rota=consulta-externa",
+          "route": "consulta-externa",
+          "htmlId": "menu-consulta-externa"
+        },
+        {
+          "id": "fisc-painel-interno-difis",
+          "label": "Painel Interno DIFIS",
+          "href": "/?rota=consulta-interna",
+          "route": "consulta-interna",
+          "htmlId": "menu-consulta-interna"
+        },
+        {
+          "id": "fisc-plantonista",
+          "label": "Cadastro de Plantonista",
+          "href": "/?rota=fisc-plantonista",
+          "route": "fisc-plantonista",
+          "htmlId": "menu-fisc-plantonista"
+        },
+        {
+          "id": "fisc-escala",
+          "label": "Escala de Plantonistas",
+          "href": "/?rota=fisc-escala",
+          "route": "fisc-escala",
+          "htmlId": "menu-fisc-escala"
+        }
+      ]
+    },
+    {
+      "id": "unidades-conservacao",
+      "label": "Unidades de Conservação",
+      "icon": "Trees",
+      "materialIcon": "forest",
+      "defaultOpen": true,
+      "htmlId": "subUC",
+      "items": [
+        {
+          "id": "ceuc-consulta",
+          "label": "Cadastro de UC (CEUC)",
+          "href": "/?rota=ceuc",
+          "route": "ceuc",
+          "badge": "NOVO",
+          "badgeVariant": "sage",
+          "htmlId": "menu-ceuc-consulta"
+        },
+        {
+          "id": "uc-agendamento",
+          "label": "Agendamento de Visitação",
+          "href": "/?rota=uc-agendamento",
+          "route": "uc-agendamento",
+          "htmlId": "menu-uc-agendamento"
+        },
+        {
+          "id": "uc-autorizacao-visitacao",
+          "label": "Autorização de Eventos (AAV)",
+          "href": "/?rota=uc-autorizacao-visitacao",
+          "route": "uc-autorizacao-visitacao",
+          "htmlId": "menu-uc-autorizacao-visitacao"
+        },
+        {
+          "id": "uc-atividades-didaticas",
+          "label": "Atividades Didáticas (AAD)",
+          "href": "/?rota=uc-atividades-didaticas",
+          "route": "uc-atividades-didaticas",
+          "htmlId": "menu-uc-atividades-didaticas"
+        },
+        {
+          "id": "uc-pesquisa-cientifica",
+          "label": "Pesquisa Científica (Pesc)",
+          "href": "/?rota=uc-pesquisa-cientifica",
+          "route": "uc-pesquisa-cientifica",
+          "htmlId": "menu-uc-pesquisa-cientifica"
+        }
+      ]
+    }
+  ]
+}

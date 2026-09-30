@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Novo SEIA | Plano Executivo de Go-Live 2026 — INEMA / ACTO</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    @media print {
+      .no-print { display: none !important; }
+      body { background: white !important; color: black !important; }
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen antialiased selection:bg-emerald-500 selection:text-white">
+
+  <!-- TOP BAR EXECUTIVO -->
+  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
+          <span class="material-symbols-outlined text-2xl">rocket_launch</span>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg font-extrabold tracking-tight text-white">Novo SEIA</h1>
+            <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Plano Executivo</span>
+            <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">Revisão Crítica</span>
+          </div>
+          <p class="text-xs text-slate-400">Planejamento Reverso Ancorado no Go-Live — <strong>07 de Dezembro de 2026</strong></p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 no-print">
+        <button onclick="window.print()" class="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 border border-slate-700 flex items-center gap-1.5 transition-colors cursor-pointer">
+          <span class="material-symbols-outlined text-sm">print</span>
+          Exportar PDF / Imprimir
+        </button>
+        <div class="px-3 py-1.5 rounded-lg bg-emerald-950/60 border border-emerald-800/80 text-emerald-300 text-xs font-mono font-bold flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+          ACTO • INEMA
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-6 py-8 space-y-10">
+
+    <!-- HERO KPI CARDS -->
+    <section class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div class="bg-slate-900/60 border border-slate-800 p-4 rounded-2xl relative overflow-hidden">
+        <div class="text-[11px] uppercase tracking-wider font-semibold text-slate-400">Data Imutável de Go-Live</div>
+        <div class="text-2xl font-extrabold text-white mt-1 font-mono">07/12/2026</div>
+        <div class="text-[11px] text-emerald-400 mt-1 flex items-center gap-1">
+          <span class="material-symbols-outlined text-xs">lock</span> Desligamento do SEIA Legado
+        </div>
+      </div>
+
+      <div class="bg-slate-900/60 border border-slate-800 p-4 rounded-2xl relative overflow-hidden">
+        <div class="text-[11px] uppercase tracking-wider font-semibold text-slate-400">Entrega p/ Homologação</div>
+        <div class="text-2xl font-extrabold text-amber-400 mt-1 font-mono">23/11/2026</div>
+        <div class="text-[11px] text-amber-300/80 mt-1">10 dias úteis de validação final</div>
+      </div>
+
+      <div class="bg-slate-900/60 border border-slate-800 p-4 rounded-2xl relative overflow-hidden">
+        <div class="text-[11px] uppercase tracking-wider font-semibold text-slate-400">Frentes de Trabalho</div>
+        <div class="text-2xl font-extrabold text-blue-400 mt-1 font-mono">4 Frentes</div>
+        <div class="text-[11px] text-blue-300/80 mt-1">Regulação no caminho crítico</div>
+      </div>
+
+      <div class="bg-slate-900/60 border border-slate-800 p-4 rounded-2xl relative overflow-hidden">
+        <div class="text-[11px] uppercase tracking-wider font-semibold text-slate-400">Nível de Alerta / Risco</div>
+        <div class="text-2xl font-extrabold text-rose-400 mt-1 font-mono">Alto (Buffer 0)</div>
+        <div class="text-[11px] text-rose-300/80 mt-1">Regulação P4 entrega 3d antes de HML</div>
+      </div>
+    </section>
+
+    <!-- ALERTA DE DIAGNÓSTICO: ERROS ENCONTRADOS NO DOCUMENTO ORIGINAL -->
+    <section class="bg-gradient-to-r from-rose-950/40 via-slate-900 to-amber-950/30 border border-rose-800/40 rounded-2xl p-6 shadow-xl">
+      <div class="flex items-start gap-4">
+        <div class="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center justify-center shrink-0 mt-0.5">
+          <span class="material-symbols-outlined text-xl">troubleshoot</span>
+        </div>
+        <div class="space-y-3">
+          <div>
+            <h2 class="text-base font-bold text-white flex items-center gap-2">
+              Diagnóstico de Inconsistências no Documento da Analista
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-rose-500/20 text-rose-300 font-bold border border-rose-500/30">4 Inconsistências Críticas</span>
+            </h2>
+            <p class="text-xs text-slate-300 mt-1">
+              A IA utilizada pela analista estruturou os dados brutos, porém cometeu falhas severas de governança de projetos, ordenação e nomenclatura técnica:
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+            <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 space-y-1">
+              <span class="text-rose-400 font-bold flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">cancel</span>
+                1. "Definir escopo" no dia da entrega de homologação
+              </span>
+              <p class="text-slate-400 text-[11px] leading-relaxed">
+                Nas Frentes 2 e 3, a data para <em>"Definir com a área pacotes para o go-live"</em> e <em>"Revisão do mínimo de go-live"</em> está marcada para <strong>23/11</strong>. No planejamento reverso, o escopo do go-live precisa ser congelado <strong>no mínimo 4 semanas antes</strong>, e não no mesmo dia da entrega formal para homologação.
+              </p>
+            </div>
+
+            <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 space-y-1">
+              <span class="text-rose-400 font-bold flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">cancel</span>
+                2. Erro de ordenação cronológica na tabela (Página 2)
+              </span>
+              <p class="text-slate-400 text-[11px] leading-relaxed">
+                A linha <strong>14/10 (Fiscalização P1)</strong> foi posicionada <strong>antes</strong> de <strong>09/10 (Regulação P2)</strong> no Calendário Mestre. Uma tabela cronológica com inversão de datas compromete a credibilidade em reuniões de diretoria.
+              </p>
+            </div>
+
+            <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 space-y-1">
+              <span class="text-rose-400 font-bold flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">cancel</span>
+                3. Erro conceitual: "Espinha de Peixe"
+              </span>
+              <p class="text-slate-400 text-[11px] leading-relaxed">
+                O diagrama inferior foi batizado de <em>"Espinha de Peixe"</em>. Diagrama de Ishikawa (Espinha de Peixe) serve para <strong>análise de causa e efeito (6M)</strong>. O gráfico apresentado é uma <strong>Linha do Tempo / Timeline Alternada</strong> (Roadmap Linear de Marcos).
+              </p>
+            </div>
+
+            <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 space-y-1">
+              <span class="text-rose-400 font-bold flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">cancel</span>
+                4. Módulo DISUC/UC fantasma e buffer zero de estabilização
+              </span>
+              <p class="text-slate-400 text-[11px] leading-relaxed">
+                O módulo DISUC/UC aparece no Gantt sem data de início/fim e <strong>não consta na tabela de entregas</strong>. Além disso, Regulação Pacote 04 conclui na sexta-feira <strong>20/11</strong> e no dia <strong>23/11</strong> já inicia homologação, gerando risco crítico sem janela de sustentação.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GANTT VISUAL EXECUTIVO REDESENHADO -->
+    <section class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-4">
+        <div>
+          <h2 class="text-base font-bold text-white flex items-center gap-2">
+            <span class="material-symbols-outlined text-emerald-400">view_timeline</span>
+            Cronograma Executivo Integrado (Gantt Reverso)
+          </h2>
+          <p class="text-xs text-slate-400">Visão temporal alinhada por frentes estratégicas e marcos de transição</p>
+        </div>
+        <div class="flex items-center gap-3 text-xs">
+          <div class="flex items-center gap-1.5 text-slate-400">
+            <span class="w-3 h-3 rounded bg-blue-500"></span> Caminho Crítico (Regulação)
+          </div>
+          <div class="flex items-center gap-1.5 text-slate-400">
+            <span class="w-3 h-3 rounded bg-emerald-500"></span> Módulos Estratégicos
+          </div>
+          <div class="flex items-center gap-1.5 text-slate-400">
+            <span class="w-3 h-3 rounded bg-purple-500"></span> Paralelos / Trabalho Livre
+          </div>
+        </div>
+      </div>
+
+      <!-- TIMELINE HEADER -->
+      <div class="space-y-4">
+        <!-- RULER DE MESES -->
+        <div class="grid grid-cols-12 gap-1 text-[11px] font-mono text-center font-bold border-b border-slate-800 pb-2">
+          <div class="col-span-3 text-slate-400">SETEMBRO 2026</div>
+          <div class="col-span-4 text-slate-400">OUTUBRO 2026</div>
+          <div class="col-span-4 text-slate-400">NOVEMBRO 2026</div>
+          <div class="col-span-1 text-emerald-400">DEZ</div>
+        </div>
+
+        <!-- FRENTE 1 -->
+        <div class="bg-slate-950/60 p-4 rounded-xl border border-blue-900/40 space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded bg-blue-500/20 text-blue-400 font-mono text-[10px] font-bold border border-blue-500/30">FRENTE 1</span>
+              <span class="font-bold text-sm text-white">Módulo de Regulação</span>
+              <span class="text-xs text-blue-400 font-medium">(Espinha Dorsal do Go-Live)</span>
+            </div>
+            <span class="text-[11px] font-mono text-slate-400">18/09 → 20/11</span>
+          </div>
+
+          <div class="space-y-2">
+            <!-- P01 -->
+            <div class="flex items-center gap-3 text-xs">
+              <span class="w-24 text-[11px] text-slate-400 font-mono shrink-0">Pacote 01</span>
+              <div class="flex-1 bg-slate-900 h-6 rounded-lg overflow-hidden relative flex items-center">
+                <div class="bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-bold h-full flex items-center px-3 rounded shadow" style="width: 25%;">
+                  Até 18/09 • Pacote 01 Concluído
+                </div>
+              </div>
+            </div>
+            <!-- P02 -->
+            <div class="flex items-center gap-3 text-xs">
+              <span class="w-24 text-[11px] text-slate-400 font-mono shrink-0">Pacote 02</span>
+              <div class="flex-1 bg-slate-900 h-6 rounded-lg overflow-hidden relative flex items-center">
+                <div class="bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-bold h-full flex items-center px-3 rounded shadow ml-[20%]" style="width: 28%;">
+                  18/09 → 09/10 • Pacote 02 Concluído
+                </div>
+              </div>
+            </div>
+            <!-- P03 -->
+            <div class="flex items-center gap-3 text-xs">
+              <span class="w-24 text-[11px] text-slate-400 font-mono shrink-0">Pacote 03</span>
+              <div class="flex-1 bg-slate-900 h-6 rounded-lg overflow-hidden relative flex items-center">
+                <div class="bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-bold h-full flex items-center px-3 rounded shadow ml-[40%]" style="width: 32%;">
+                  09/10 → 04/11 • Pacote 03 Concluído
+                </div>
+              </div>
+            </div>
+            <!-- P04 -->
+            <div class="flex items-center gap-3 text-xs">
+              <span class="w-24 text-[11px] text-slate-400 font-mono shrink-0">Pacote 04</span>
+              <div class="flex-1 bg-slate-900 h-6 rounded-lg overflow-hidden relative flex items-center">
+                <div class="bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] font-bold h-full flex items-center px-3 rounded shadow ml-[52%]" style="width: 33%;">
+                  23/10 → 20/11 • Pacote 04 Final (Crítico)
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FRENTE 2 -->
+        <div class="bg-slate-950/60 p-4 rounded-xl border border-emerald-900/40 space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-mono text-[10px] font-bold border border-emerald-500/30">FRENTE 2</span>
+              <span class="font-bold text-sm text-white">Módulo de Fiscalização (DIFIS)</span>
+              <span class="text-xs text-emerald-400 font-medium">(Desenvolvimento Contínuo / DOR001 a DOR005)</span>
+            </div>
+            <span class="text-[11px] font-mono text-slate-400">14/10 → 23/11</span>
+          </div>
+
+          <div class="space-y-2">
+            <div class="flex items-center gap-3 text-xs">
+              <span class="w-24 text-[11px] text-slate-400 font-mono shrink-0">Pacote 01</span>
+              <div class="flex-1 bg-slate-900 h-6 rounded-lg overflow-hidden relative flex items-center">
+                <div class="bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-bold h-full flex items-center px-3 rounded shadow ml-[20%]" style="width: 25%;">
+                  Até 14/10 • Pacote 01 Fiscalização
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 text-xs">
+              <span class="w-24 text-[11px] text-slate-400 font-mono shrink-0">Alinhamento</span>
+              <div class="flex-1 bg-slate-900 h-6 rounded-lg overflow-hidden relative flex items-center">
+                <div class="bg-emerald-800/80 text-emerald-200 text-[10px] font-bold h-full flex items-center px-3 rounded border border-emerald-600/50 ml-[45%]" style="width: 40%;">
+                  Congelamento do Escopo de Go-Live com a Área (Recomendado: até 23/10, não 23/11)
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FRENTE 3 -->
+        <div class="bg-slate-950/60 p-4 rounded-xl border border-amber-900/40 space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 font-mono text-[10px] font-bold border border-amber-500/30">FRENTE 3</span>
+              <span class="font-bold text-sm text-white">Escopo Mínimo de Go-Live (Sustentação & Integrações)</span>
+            </div>
+            <span class="text-[11px] font-mono text-slate-400">11/09 → 23/11</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+            <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-between">
+              <span class="text-slate-300">ANSLA (Não Sujeita a Licenciamento)</span>
+              <span class="font-mono text-emerald-400 text-[10px] font-bold">11/09</span>
+            </div>
+            <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-between">
+              <span class="text-slate-300">CERH (Recursos Hídricos)</span>
+              <span class="font-mono text-emerald-400 text-[10px] font-bold">23/10</span>
+            </div>
+            <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-between">
+              <span class="text-slate-300">SICAR Federal + DAE/SEFAZ</span>
+              <span class="font-mono text-amber-400 text-[10px] font-bold">23/11</span>
+            </div>
+          </div>
+          <div class="text-[11px] text-slate-400 bg-slate-900/80 p-2.5 rounded-lg border border-slate-800/80 flex items-center gap-2">
+            <span class="material-symbols-outlined text-sm text-amber-400">info</span>
+            <strong>Transversais em paralelo:</strong> Cadastros Básicos • Consulta Pública • Financeiro • Auditoria • Administração.
+          </div>
+        </div>
+
+        <!-- FRENTE 4 -->
+        <div class="bg-slate-950/60 p-4 rounded-xl border border-purple-900/40 space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-400 font-mono text-[10px] font-bold border border-purple-500/30">FRENTE 4</span>
+              <span class="font-bold text-sm text-white">Módulos em Paralelo (Trabalho Livre / Não Bloqueante)</span>
+            </div>
+            <span class="text-[11px] font-mono text-purple-300">Sem impacto direto na virada</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+            <div class="p-2 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-between">
+              <span class="text-slate-300">SISPASS (Avifauna)</span>
+              <span class="font-mono text-purple-400 text-[10px] font-bold">11/09</span>
+            </div>
+            <div class="p-2 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-between">
+              <span class="text-slate-300">Gestão de Fauna e CETAS</span>
+              <span class="font-mono text-purple-400 text-[10px] font-bold">28/09</span>
+            </div>
+            <div class="p-2 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-between">
+              <span class="text-slate-300">DISUC / Unidades Conservação</span>
+              <span class="font-mono text-slate-500 text-[10px]">Data a definir</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- FASE DE HOMOLOGAÇÃO & GO-LIVE (CRÍTICO) -->
+        <div class="bg-gradient-to-r from-amber-950/50 via-slate-900 to-emerald-950/50 p-4 rounded-xl border border-emerald-500/40 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
+              <span class="material-symbols-outlined">verified</span>
+            </div>
+            <div>
+              <div class="font-bold text-sm text-white">Janela de Homologação Integrada</div>
+              <div class="text-xs text-slate-400">23/11 a 04/12 (10 dias úteis de bateria de testes com usuários-chave)</div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">
+              <span class="material-symbols-outlined">power_settings_new</span>
+            </div>
+            <div>
+              <div class="font-bold text-sm text-emerald-400 font-mono">07/12/2026 — GO-LIVE OFICIAL</div>
+              <div class="text-xs text-slate-300">Desligamento do SEIA Legado & Virada em Produção</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CALENDÁRIO MESTRE DE DATAS CORRIGIDO -->
+    <section class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div>
+          <h2 class="text-base font-bold text-white flex items-center gap-2">
+            <span class="material-symbols-outlined text-blue-400">calendar_month</span>
+            Calendário Mestre de Datas (Cronologia Corrigida)
+          </h2>
+          <p class="text-xs text-slate-400">Ordenação temporal rigorosa e classificação de criticidade para o Go-Live</p>
+        </div>
+        <span class="text-xs text-slate-400 font-mono">16 Marcos Mapeados</span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="border-b border-slate-800 bg-slate-950/60 text-slate-400 font-semibold uppercase text-[10px] tracking-wider">
+              <th class="py-3 px-3.5">Data</th>
+              <th class="py-3 px-2">Dia</th>
+              <th class="py-3 px-3.5">Entrega / Marco Estratégico</th>
+              <th class="py-3 px-3">Frente</th>
+              <th class="py-3 px-3">Tipo</th>
+              <th class="py-3 px-3 text-right">Status / Risco</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800/60 font-medium">
+            <tr class="hover:bg-slate-800/30">
+              <td class="py-2.5 px-3.5 font-mono font-bold text-white">11/09</td>
+              <td class="py-2.5 px-2 text-slate-400">Sex</td>
+              <td class="py-2.5 px-3.5 text-slate-200">ANSLA — Atividade não Sujeita a Licenciamento</td>
+              <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-950 text-amber-300 border border-amber-800">Frente 3</span></td>
+              <td class="py-2.5 px-3 text-slate-400">Entrega</td>
+              <td class="py-2.5 px-3 text-right text-emerald-400">Concluído</td>
+            </tr>
+
+            <tr class="hover:bg-slate-800/30">
+              <td class="py-2.5 px-3.5 font-mono font-bold text-white">11/09</td>
+              <td class="py-2.5 px-2 text-slate-400">Sex</td>
+              <td class="py-2.5 px-3.5 text-slate-200">Módulo SISPASS (Sistema de Monitoramento da Avifauna)</td>
+              <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-950 text-purple-300 border border-purple-800">Frente 4</span></td>
+              <td class="py-2.5 px-3 text-slate-400">Entrega</td>
+              <td class="py-2.5 px-3 text-right text-emerald-400">Concluído</td>
+            </tr>
+
+            <tr class="hover:bg-slate-800/30 bg-blue-950/20">
+              <td class="py-2.5 px-3.5 font-mono font-bold text-blue-400">18/09</td>
+              <td class="py-2.5 px-2 text-slate-400">Sex</td>
+              <td class="py-2.5 px-3.5 text-white font-semibold">Módulo de Regulação | Pacote 01</td>
+              <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-950 text-blue-300 border border-blue-800">Frente 1</span></td>
+              <td class="py-2.5 px-3 text-blue-300">Entrega Crítica</td>
+              <td class="py-2.5 px-3 text-right text-emerald-400">Concluído</td>
+            </tr>
+
+            <tr class="hover:bg-slate-800/30">
+              <td class="py-2.5 px-3.5 font-mono font-bold text-white">28/09</td>
+              <td class="py-2.5 px-2 text-slate-400">Seg</td>
+              <td class="py-2.5 px-3.5 text-slate-200">Módulo de Gestão de Fauna e CETAS</td>
+              <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-950 text-purple-300 border border-purple-800">Frente 4</span></td>
+              <td class="py-2.5 px-3 text-slate-400">Entrega</td>
+              <td class="py-2.5 px-3 text-right text-emerald-400">Concluído</td>
+            </tr>
+
+            <tr class="hover:bg-slate-800/30 bg-blue-950/20">
+              <td class="py-2.5 px-3.5 font-mono font-bold text-blue-400">09/10</td>
+              <td class="py-2.5 px-2 text-slate-400">Sex</td>
+              <td class="py-2.5 px-3.5 text-white font-semibold">Módulo de Regulação | Pacote 02</td>
+              <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-950 text-blue-300 border border-blue-800">Frente 1</span></td>
+              <td class="py-2.5 px-3 text-blue-300">Entrega Crítica</td>
+              <td class="py-2.5 px-3 text-right text-emerald-400">Concluído</td>
+            </tr>
+
+            <!-- CORREÇÃO DE ORDENAÇÃO: 14/10 após 09/10 -->
+            <tr class="hover:bg-slate-800/30 bg-emerald-950/20 border-l-2 border-emerald-500">
+              <td class="py-2.5 px-3.5 font-mono font-bold text-emerald-400">14/10</td>
+              <td class="py-2.5 px-2 text-slate-400">Qua</td>
+              <td class="py-2.5 px-3.5 text-white font-semibold">
+                Módulo de Fiscalização | Pacote 01 (DOR001 a DOR005)
+                <span class="text-[10px] text-emerald-400 block font-normal">Posição corrigida (estava invertida na versão original)</span>
+              </td>
+              <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950 text-emerald-300 border border-emerald-800">Frente 2</span></td>
+              <td class="py-2.5 px-3 text-emerald-300">Entrega</td>
+              <td class="py-2.5 px-3 text-right text-emerald-400 font-bold">100% Finalizado</td>
+            </tr>
+
+            <tr class="hover:bg-slate-800/30">
+              <td class="py-2.5 px-3.5 font-mono font-bold text-white">23/10</td>
+              <td class="py-2.5 px-2 text-slate-400">Sex</td>
+              <td class="py-2.5 px-3.5 text-slate-200">Módulo CERH — Cadastro Estadual de Usuários de Recursos Hídricos</td>
+              <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-950 text-amber-300 border border-amber-800">Frente 3</span></td>
+              <td class="py-2.5 px-3 text-slate-400">Entrega</td>
+              <td class="py-2.5 px-3 text-right text-slate-400">Em andamento</td>
+            </tr>
+
+            <tr class="hover:bg-slate-800/30 bg-blue-950/20">
+              <td class="py-2.5 px-3.5 font-mono font-bold text-blue-400">04/11</td>
+              <td class="py-2.5 px-2 text-slate-400">Qua</td>
+              <td class="py-2.5 px-3.5 text-white font-semibold">Módulo de Regulação | Pacote 03</td>
+              <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-950 text-blue-300 border border-blue-800">Frente 1</span></td>
+              <td class="py-2.5 px-3 text-blue-300">Entrega Crítica</td>
+              <td class="py-2.5 px-3 text-right text-amber-400">Planejado</td>
+            </tr>
+
+            <tr class="hover:bg-slate-800/30 bg-blue-950/20 border-l-2 border-rose-500">
+              <td class="py-2.5 px-3.5 font-mono font-bold text-rose-400">20/11</td>
+              <td class="py-2.5 px-2 text-slate-400">Sex</td>
+              <td class="py-2.5 px-3.5 text-white font-semibold">
+                Módulo de Regulação | Pacote 04
+                <span class="text-[10px] text-rose-300 block font-normal">Ponto de Maior Tensão (termina 3 dias antes da Homologação)</span>
+              </td>
+              <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-950 text-blue-300 border border-blue-800">Frente 1</span></td>
+              <td class="py-2.5 px-3 text-rose-400 font-bold">Entrega Crítica</td>
+              <td class="py-2.5 px-3 text-right text-rose-400 font-bold">Alerta Vermelho</td>
+            </tr>
+
+            <tr class="hover:bg-slate-800/30 bg-amber-950/30 font-semibold">
+              <td class="py-3 px-3.5 font-mono font-extrabold text-amber-400 text-sm">23/11</td>
+              <td class="py-3 px-2 text-amber-300">Seg</td>
+              <td class="py-3 px-3.5 text-amber-200">
+                ⭐ MARCO CRÍTICO: Entrega Planejada para Homologação Integrada
+                <span class="text-[10px] text-slate-400 block font-normal">Pacotes consolidados + SICAR Federal + DAE/SEFAZ</span>
+              </td>
+              <td class="py-3 px-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-900 text-amber-200 border border-amber-700">Todas</span></td>
+              <td class="py-3 px-3 text-amber-300 font-bold">Marco Crítico</td>
+              <td class="py-3 px-3 text-right text-amber-300">Gate de Qualidade</td>
+            </tr>
+
+            <tr class="hover:bg-slate-800/30 bg-emerald-950/40 font-semibold">
+              <td class="py-3 px-3.5 font-mono font-extrabold text-emerald-400 text-sm">07/12</td>
+              <td class="py-3 px-2 text-emerald-300">Seg</td>
+              <td class="py-3 px-3.5 text-emerald-200">
+                🚀 GO-LIVE OFICIAL — SEIA LEGADO DESLIGADO
+                <span class="text-[10px] text-emerald-300/70 block font-normal">Virada de chave institucional do Estado da Bahia</span>
+              </td>
+              <td class="py-3 px-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-900 text-emerald-200 border border-emerald-700">Geral</span></td>
+              <td class="py-3 px-3 text-emerald-300 font-bold">Marco Fatal</td>
+              <td class="py-3 px-3 text-right text-emerald-400 font-bold">Virada em Prod</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ROADMAP DE MARCOS (REPRESENTAÇÃO CORRETA E ELEGANTE DA TIMELINE) -->
+    <section class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6">
+      <div>
+        <h2 class="text-base font-bold text-white flex items-center gap-2">
+          <span class="material-symbols-outlined text-teal-400">timeline</span>
+          Roadmap de Marcos Estratégicos (Substituição da "Espinha de Peixe")
+        </h2>
+        <p class="text-xs text-slate-400">Fluxo cronológico e encadeamento de dependências até o desligamento do legado</p>
+      </div>
+
+      <div class="relative py-4">
+        <!-- LINHA CENTRAL -->
+        <div class="absolute top-1/2 left-0 right-0 h-1 bg-slate-800 -translate-y-1/2 hidden md:block"></div>
+        <div class="absolute top-1/2 left-0 w-3/4 h-1 bg-gradient-to-r from-emerald-500 via-blue-500 to-amber-500 -translate-y-1/2 hidden md:block"></div>
+
+        <div class="grid grid-cols-1 md:grid-cols-6 gap-3 relative z-10">
+          <!-- Marco 1 -->
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 shadow space-y-1">
+            <div class="text-[10px] font-mono text-emerald-400 font-bold">11/09 • 18/09</div>
+            <div class="text-xs font-bold text-white">Fundação Inicial</div>
+            <div class="text-[10px] text-slate-400">ANSLA + SISPASS + Regulação P01</div>
+          </div>
+
+          <!-- Marco 2 -->
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 shadow space-y-1">
+            <div class="text-[10px] font-mono text-emerald-400 font-bold">28/09 • 09/10</div>
+            <div class="text-xs font-bold text-white">Fauna & Regulação P2</div>
+            <div class="text-[10px] text-slate-400">CETAS + 2º bloco regulatório</div>
+          </div>
+
+          <!-- Marco 3 -->
+          <div class="bg-slate-950 p-3 rounded-xl border border-emerald-500/50 shadow space-y-1 bg-emerald-950/20">
+            <div class="text-[10px] font-mono text-emerald-400 font-bold">14/10 • 23/10</div>
+            <div class="text-xs font-bold text-emerald-300">Fiscalização & CERH</div>
+            <div class="text-[10px] text-slate-400">Módulo DIFIS + Recursos Hídricos</div>
+          </div>
+
+          <!-- Marco 4 -->
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 shadow space-y-1">
+            <div class="text-[10px] font-mono text-blue-400 font-bold">04/11 • 20/11</div>
+            <div class="text-xs font-bold text-white">Regulação P03 & P04</div>
+            <div class="text-[10px] text-slate-400">Fechamento do núcleo do SEIA</div>
+          </div>
+
+          <!-- Marco 5 -->
+          <div class="bg-slate-950 p-3 rounded-xl border border-amber-500/60 shadow space-y-1 bg-amber-950/30">
+            <div class="text-[10px] font-mono text-amber-400 font-bold">23/11</div>
+            <div class="text-xs font-bold text-amber-300">Homologação Oficial</div>
+            <div class="text-[10px] text-slate-400">Integração SEFAZ + SICAR</div>
+          </div>
+
+          <!-- Marco 6 -->
+          <div class="bg-gradient-to-br from-emerald-900/60 to-teal-950 p-3 rounded-xl border border-emerald-400 shadow-lg space-y-1">
+            <div class="text-[10px] font-mono text-emerald-300 font-bold">07/12/2026</div>
+            <div class="text-xs font-extrabold text-white">GO-LIVE GERAL</div>
+            <div class="text-[10px] text-emerald-200">SEIA Legado Desligado</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RECOMENDAÇÕES EXECUTIVAS PARA A ANALISTA -->
+    <section class="bg-slate-900/50 border border-slate-800 rounded-2xl p-6">
+      <h3 class="text-sm font-bold text-white mb-3 flex items-center gap-2">
+        <span class="material-symbols-outlined text-emerald-400">recommend</span>
+        Recomendações Executivas para Repassar à Analista
+      </h3>
+      <ol class="list-decimal list-inside space-y-2 text-xs text-slate-300">
+        <li><strong>Substituir o termo "Espinha de Peixe" por "Roadmap Cronológico de Marcos"</strong>: Espinha de Peixe é ferramenta de causa e efeito (Ishikawa), o que causa ruído técnico com gerentes e diretores.</li>
+        <li><strong>Adiantar o congelamento do escopo de Fiscalização</strong>: Mudar de <em>"Definir até 23/11"</em> para <em>"Definir até 23/10"</em>. Em 23/11 o escopo já tem que estar pronto para testes integrados.</li>
+        <li><strong>Corrigir a ordem de 14/10 e 09/10 na tabela</strong>: Garantir ordenação puramente ascendente por data.</li>
+        <li><strong>Incluir o módulo DISUC/UC na tabela de datas</strong>: Módulo desenhado no gráfico deve ter correspondente na tabela, com status "A definir" ou data estimada.</li>
+        <li><strong>Criar um plano de contenção para os 10 dias de Homologação (23/11 a 04/12)</strong>: Definir critérios mínimos de aceite (*Definition of Done*) para evitar que bugs críticos em 03/12 ameacem o desligamento do legado no dia 07/12.</li>
+      </ol>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-slate-800 py-6 text-center text-xs text-slate-500">
+    INEMA • ACTO Soluções em Tecnologia — Planejamento de Transição Novo SEIA 2026
+  </footer>
+
+</body>
+</html>

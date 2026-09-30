@@ -1,0 +1,272 @@
+[
+  {
+    "id": "01-dashboard-azul-petroleo",
+    "fileName": "01-dashboard-azul-petroleo.png",
+    "title": "Dashboard Executivo - Sidebar Azul Petróleo (#0c4353)",
+    "category": "dashboard",
+    "device": "Desktop (1440x900)",
+    "isDark": false,
+    "liveUrl": "https://inema-six.vercel.app/?route=relatorios&theme=verde-azul"
+  },
+  {
+    "id": "02-dashboard-verde",
+    "fileName": "02-dashboard-verde.png",
+    "title": "Dashboard Executivo - Sidebar Verde Floresta (#0F4C3A)",
+    "category": "dashboard",
+    "device": "Desktop (1440x900)",
+    "isDark": false,
+    "liveUrl": "https://inema-six.vercel.app/?route=relatorios&theme=verde"
+  },
+  {
+    "id": "03-dashboard-branca",
+    "fileName": "03-dashboard-branca.png",
+    "title": "Dashboard Executivo - Sidebar Branca Institucional",
+    "category": "dashboard",
+    "device": "Desktop (1440x900)",
+    "isDark": false,
+    "liveUrl": "https://inema-six.vercel.app/?route=relatorios&theme=branca"
+  },
+  {
+    "id": "04-dashboard-dark",
+    "fileName": "04-dashboard-dark.png",
+    "title": "Dashboard Executivo - Modo Escuro (Dark Mode)",
+    "category": "dashboard",
+    "device": "Desktop (1440x900)",
+    "isDark": true,
+    "liveUrl": "https://inema-six.vercel.app/?route=relatorios&dark=true"
+  },
+  {
+    "id": "05-dashboard-filtros",
+    "fileName": "05-dashboard-filtros.png",
+    "title": "Dashboard Executivo - Painel Lateral de Filtros Avançados",
+    "category": "dashboard",
+    "device": "Desktop (1440x900)",
+    "isDark": false,
+    "liveUrl": "https://inema-six.vercel.app/?route=relatorios"
+  },
+  {
+    "id": "06-relatorios-antigo",
+    "fileName": "06-relatorios-antigo.png",
+    "title": "Relatórios Gerenciais - Versão Antiga Sincronizada (Doc Requisitos)",
+    "category": "dashboard",
+    "device": "Desktop (1440x900)",
+    "isDark": false,
+    "liveUrl": "https://inema-six.vercel.app/relatorios-antigo"
+  },
+  {
+    "id": "07-denuncia-interna-light",
+    "fileName": "07-denuncia-interna-light.png",
+    "title": "Fiscalização: Denúncia Interna (DOR001 - Atendente)",
+    "category": "fiscalizacao-interna",
+    "device": "Desktop (1440x900)",
+    "isDark": false,
+    "liveUrl": "https://inema-six.vercel.app/?route=atendente"
+  },
+  {
+    "id": "08-denuncia-interna-dark",
+    "fileName": "08-denuncia-interna-dark.png",
+    "title": "Fiscalização: Denúncia Interna (DOR001 - Dark Mode)",
+    "category": "fiscalizacao-interna",
+    "device": "Desktop (1440x900)",
+    "isDark": true,
+    "liveUrl": "https://inema-six.vercel.app/?route=atendente&dark=true"
+  },
+  {
+    "id": "09-denuncia-externa-light",
+    "fileName": "09-denuncia-externa-light.png",
+    "title": "Fiscalização: Denúncia Cidadão (DOR002 - Anônima/Identificada)",
+    "category": "fiscalizacao-cidadao",
+    "device": "Desktop (1440x900)",
+    "isDark": false,
+    "liveUrl": "https://inema-six.vercel.app/?route=cidadao"
+  },
+  {
+    "id": "10-denuncia-externa-dark",
+    "fileName": "10-denuncia-externa-dark.png",
+    "title": "Fiscalização: Denúncia Cidadão (DOR002 - Dark Mode)",
+    "category": "fiscalizacao-cidadao",
+    "device": "Desktop (1440x900)",
+    "isDark": true,
+    "liveUrl": "https://inema-six.vercel.app/?route=cidadao&dark=true"
+  },
+  {
+    "id": "11-emergencia-interna-light",
+    "fileName": "11-emergencia-interna-light.png",
+    "title": "Emergência Química: Cadastro Interno (DOR003 - Plantão DIFIS 24h)",
+    "category": "fiscalizacao-interna",
+    "device": "Desktop (1440x900)",
+    "isDark": false,
+    "liveUrl": "https://inema-six.vercel.app/?route=emergencia-interna"
+  },
+  {
+    "id": "12-emergencia-interna-dark",
+    "fileName": "12-emergencia-interna-dark.png",
+    "title": "Emergência Química: Cadastro Interno (DOR003 - Dark Mode)",
+    "category": "fiscalizacao-interna",
+    "device": "Desktop (1440x900)",
+    "isDark": true,
+    "liveUrl": "https://inema-six.vercel.app/?route=emergencia-interna&dark=true"
+  },
+  {
+    "id": "13-emergencia-externa-light",
+    "fileName": "13-emergencia-externa-light.png",
+    "title": "Emergência Química: Comunicação Externa (DOR004 - Transportador/Indústria)",
+    "category": "fiscalizacao-cidadao",
+    "device": "Desktop (1440x900)",
+    "isDark": false,
+    "liveUrl": "https://inema-six.vercel.app/?route=emergencia-externa"
+  },
+  {
+    "id": "14-emergencia-externa-dark",
+    "fileName": "14-emergencia-externa-dark.png",
+    "title": "Emergência Química: Comunicação Externa (DOR004 - Dark Mode)",
+    "category": "fiscalizacao-cidadao",
+    "device": "Desktop (1440x900)",
+    "isDark": true,
+    "liveUrl": "https://inema-six.vercel.app/?route=emergencia-externa&dark=true"
+  },
+  {
+    "id": "15-consulta-externa-light",
+    "fileName": "15-consulta-externa-light.png",
+    "title": "Acompanhamento Cidadão: Consulta de Denúncias e Emergências",
+    "category": "fiscalizacao-cidadao",
+    "device": "Desktop (1440x900)",
+    "isDark": false,
+    "liveUrl": "https://inema-six.vercel.app/?route=consulta-externa"
+  },
+  {
+    "id": "16-consulta-externa-dark",
+    "fileName": "16-consulta-externa-dark.png",
+    "title": "Acompanhamento Cidadão: Consulta Cidadão (Dark Mode)",
+    "category": "fiscalizacao-cidadao",
+    "device": "Desktop (1440x900)",
+    "isDark": true,
+    "liveUrl": "https://inema-six.vercel.app/?route=consulta-externa&dark=true"
+  },
+  {
+    "id": "17-consulta-interna-light",
+    "fileName": "17-consulta-interna-light.png",
+    "title": "Operações DIFIS: Painel Técnico Centralizado e Pauta Fiscal",
+    "category": "fiscalizacao-interna",
+    "device": "Desktop (1440x900)",
+    "isDark": false,
+    "liveUrl": "https://inema-six.vercel.app/?route=consulta-interna"
+  },
+  {
+    "id": "18-consulta-interna-dark",
+    "fileName": "18-consulta-interna-dark.png",
+    "title": "Operações DIFIS: Painel Técnico Centralizado (Dark Mode)",
+    "category": "fiscalizacao-interna",
+    "device": "Desktop (1440x900)",
+    "isDark": true,
+    "liveUrl": "https://inema-six.vercel.app/?route=consulta-interna&dark=true"
+  },
+  {
+    "id": "m01-dashboard-mobile-light",
+    "fileName": "m01-dashboard-mobile-light.png",
+    "title": "Mobile: Dashboard Executivo (iPhone 13 - Modo Claro)",
+    "category": "mobile",
+    "device": "Mobile iPhone 13 (390x844)",
+    "isDark": false,
+    "liveUrl": "https://inema-six.vercel.app/?route=relatorios"
+  },
+  {
+    "id": "m02-dashboard-mobile-dark",
+    "fileName": "m02-dashboard-mobile-dark.png",
+    "title": "Mobile: Dashboard Executivo (iPhone 13 - Dark Mode)",
+    "category": "mobile",
+    "device": "Mobile iPhone 13 (390x844)",
+    "isDark": true,
+    "liveUrl": "https://inema-six.vercel.app/?route=relatorios&dark=true"
+  },
+  {
+    "id": "m03-denuncia-interna-mobile-light",
+    "fileName": "m03-denuncia-interna-mobile-light.png",
+    "title": "Mobile: Denúncia Interna DOR001 (iPhone 13 - Modo Claro)",
+    "category": "mobile",
+    "device": "Mobile iPhone 13 (390x844)",
+    "isDark": false,
+    "liveUrl": "https://inema-six.vercel.app/?route=atendente"
+  },
+  {
+    "id": "m04-denuncia-interna-mobile-dark",
+    "fileName": "m04-denuncia-interna-mobile-dark.png",
+    "title": "Mobile: Denúncia Interna DOR001 (iPhone 13 - Dark Mode)",
+    "category": "mobile",
+    "device": "Mobile iPhone 13 (390x844)",
+    "isDark": true,
+    "liveUrl": "https://inema-six.vercel.app/?route=atendente&dark=true"
+  },
+  {
+    "id": "m05-denuncia-externa-mobile-light",
+    "fileName": "m05-denuncia-externa-mobile-light.png",
+    "title": "Mobile: Denúncia Cidadão DOR002 (iPhone 13 - Modo Claro)",
+    "category": "mobile",
+    "device": "Mobile iPhone 13 (390x844)",
+    "isDark": false,
+    "liveUrl": "https://inema-six.vercel.app/?route=cidadao"
+  },
+  {
+    "id": "m06-denuncia-externa-mobile-dark",
+    "fileName": "m06-denuncia-externa-mobile-dark.png",
+    "title": "Mobile: Denúncia Cidadão DOR002 (iPhone 13 - Dark Mode)",
+    "category": "mobile",
+    "device": "Mobile iPhone 13 (390x844)",
+    "isDark": true,
+    "liveUrl": "https://inema-six.vercel.app/?route=cidadao&dark=true"
+  },
+  {
+    "id": "m07-emergencia-interna-mobile-light",
+    "fileName": "m07-emergencia-interna-mobile-light.png",
+    "title": "Mobile: Emergência Química DOR003 (iPhone 13 - Modo Claro)",
+    "category": "mobile",
+    "device": "Mobile iPhone 13 (390x844)",
+    "isDark": false,
+    "liveUrl": "https://inema-six.vercel.app/?route=emergencia-interna"
+  },
+  {
+    "id": "m08-emergencia-interna-mobile-dark",
+    "fileName": "m08-emergencia-interna-mobile-dark.png",
+    "title": "Mobile: Emergência Química DOR003 (iPhone 13 - Dark Mode)",
+    "category": "mobile",
+    "device": "Mobile iPhone 13 (390x844)",
+    "isDark": true,
+    "liveUrl": "https://inema-six.vercel.app/?route=emergencia-interna&dark=true"
+  },
+  {
+    "id": "m09-consulta-externa-mobile-light",
+    "fileName": "m09-consulta-externa-mobile-light.png",
+    "title": "Mobile: Consulta Cidadão (iPhone 13 - Modo Claro)",
+    "category": "mobile",
+    "device": "Mobile iPhone 13 (390x844)",
+    "isDark": false,
+    "liveUrl": "https://inema-six.vercel.app/?route=consulta-externa"
+  },
+  {
+    "id": "m10-consulta-externa-mobile-dark",
+    "fileName": "m10-consulta-externa-mobile-dark.png",
+    "title": "Mobile: Consulta Cidadão (iPhone 13 - Dark Mode)",
+    "category": "mobile",
+    "device": "Mobile iPhone 13 (390x844)",
+    "isDark": true,
+    "liveUrl": "https://inema-six.vercel.app/?route=consulta-externa&dark=true"
+  },
+  {
+    "id": "m11-consulta-interna-mobile-light",
+    "fileName": "m11-consulta-interna-mobile-light.png",
+    "title": "Mobile: Painel Técnico DIFIS (iPhone 13 - Modo Claro)",
+    "category": "mobile",
+    "device": "Mobile iPhone 13 (390x844)",
+    "isDark": false,
+    "liveUrl": "https://inema-six.vercel.app/?route=consulta-interna"
+  },
+  {
+    "id": "m12-consulta-interna-mobile-dark",
+    "fileName": "m12-consulta-interna-mobile-dark.png",
+    "title": "Mobile: Painel Técnico DIFIS (iPhone 13 - Dark Mode)",
+    "category": "mobile",
+    "device": "Mobile iPhone 13 (390x844)",
+    "isDark": true,
+    "liveUrl": "https://inema-six.vercel.app/?route=consulta-interna&dark=true"
+  }
+]

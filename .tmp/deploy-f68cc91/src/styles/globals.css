@@ -1,0 +1,644 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+html {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+:root {
+  /* Primitive tokens: verde oficial do INEMA/SEIA em 700 (#0F4C3A). */
+  --color-green-50: #f2f8f5;
+  --color-green-100: #ddece5;
+  --color-green-200: #bbd8ca;
+  --color-green-300: #8ebba7;
+  --color-green-400: #5e987f;
+  --color-green-500: #35785f;
+  --color-green-600: #1f6049;
+  --color-green-700: #0f4c3a;
+  --color-green-800: #0c3d2f;
+  --color-green-900: #092f24;
+  --color-green-950: #041a14;
+
+  --color-green-alpha-100: rgb(15 76 58 / 100%);
+  --color-green-alpha-72: rgb(15 76 58 / 72%);
+  --color-green-alpha-56: rgb(15 76 58 / 56%);
+  --color-green-alpha-32: rgb(15 76 58 / 32%);
+  --color-green-alpha-20: rgb(15 76 58 / 20%);
+  --color-green-alpha-08: rgb(15 76 58 / 8%);
+
+  --color-red-50: #fff1f2;
+  --color-red-100: #ffe4e6;
+  --color-red-200: #fecdd3;
+  --color-red-300: #fda4af;
+  --color-red-400: #fb7185;
+  --color-red-500: #f43f5e;
+  --color-red-600: #e11d48;
+  --color-red-700: #be123c;
+  --color-red-800: #9f1239;
+  --color-red-900: #881337;
+  --color-red-950: #4c0519;
+
+  --color-orange-50: #fff7ed;
+  --color-orange-100: #ffedd5;
+  --color-orange-200: #fed7aa;
+  --color-orange-300: #fdba74;
+  --color-orange-400: #fb923c;
+  --color-orange-500: #f97316;
+  --color-orange-600: #ea580c;
+  --color-orange-700: #c2410c;
+  --color-orange-800: #9a3412;
+  --color-orange-900: #7c2d12;
+  --color-orange-950: #431407;
+
+  --color-neutral-0: #ffffff;
+  --color-neutral-50: #f8fafc;
+  --color-neutral-100: #f1f5f9;
+  --color-neutral-200: #e2e8f0;
+  --color-neutral-300: #cbd5e1;
+  --color-neutral-400: #94a3b8;
+  --color-neutral-500: #64748b;
+  --color-neutral-600: #475569;
+  --color-neutral-700: #334155;
+  --color-neutral-800: #1e293b;
+  --color-neutral-900: #0f172a;
+  --color-neutral-950: #020617;
+
+  /* Semantic tokens. */
+  --color-brand-primary: var(--color-green-700);
+  --color-brand-primary-hover: var(--color-green-800);
+  --color-brand-primary-active: var(--color-green-900);
+  --color-brand-primary-subtle: var(--color-green-50);
+  --color-brand-primary-muted: var(--color-green-alpha-20);
+  --color-brand-on-primary: var(--color-neutral-0);
+
+  --color-action-primary: var(--color-brand-primary);
+  --color-action-primary-hover: var(--color-brand-primary-hover);
+  --color-action-primary-active: var(--color-brand-primary-active);
+  --color-action-primary-disabled: var(--color-neutral-300);
+  --color-action-secondary: var(--color-neutral-0);
+  --color-action-secondary-hover: var(--color-neutral-50);
+  --color-action-secondary-active: var(--color-neutral-100);
+
+  --color-surface-canvas: #f7faf6;
+  --color-surface-default: var(--color-neutral-0);
+  --color-surface-raised: var(--color-neutral-0);
+  --color-surface-subtle: var(--color-green-50);
+  --color-surface-selected: var(--color-green-alpha-08);
+  --color-surface-hover: var(--color-neutral-100);
+  --color-surface-inverse: var(--color-neutral-950);
+
+  --color-text-primary: var(--color-neutral-900);
+  --color-text-secondary: var(--color-neutral-600);
+  --color-text-tertiary: var(--color-neutral-500);
+  --color-text-disabled: var(--color-neutral-400);
+  --color-text-inverse: var(--color-neutral-0);
+  --color-text-link: var(--color-green-700);
+  --color-text-link-hover: var(--color-green-900);
+
+  --color-border-subtle: var(--color-neutral-100);
+  --color-border-default: var(--color-neutral-200);
+  --color-border-strong: var(--color-neutral-300);
+  --color-border-focus: var(--color-green-700);
+
+  --color-status-success: var(--color-green-600);
+  --color-status-success-subtle: var(--color-green-50);
+  --color-status-warning: var(--color-orange-700);
+  --color-status-warning-subtle: var(--color-orange-50);
+  --color-status-critical: var(--color-red-700);
+  --color-status-critical-subtle: var(--color-red-50);
+  --color-status-info: var(--color-neutral-700);
+  --color-status-info-subtle: var(--color-neutral-100);
+
+  /* Component tokens. */
+  --button-primary-bg: var(--color-action-primary);
+  --button-primary-bg-hover: var(--color-action-primary-hover);
+  --button-primary-bg-active: var(--color-action-primary-active);
+  --button-primary-text: var(--color-brand-on-primary);
+  --button-secondary-bg: var(--color-action-secondary);
+  --button-secondary-bg-hover: var(--color-action-secondary-hover);
+  --button-secondary-border: var(--color-border-strong);
+  --button-secondary-text: var(--color-text-secondary);
+
+  --input-bg: var(--color-surface-default);
+  --input-border: var(--color-border-default);
+  --input-border-hover: var(--color-border-strong);
+  --input-border-focus: var(--color-border-focus);
+  --input-text: var(--color-text-primary);
+  --input-placeholder: var(--color-text-tertiary);
+
+  --card-bg: var(--color-surface-default);
+  --card-border: var(--color-border-default);
+  --card-title: var(--color-text-primary);
+  --card-text: var(--color-text-secondary);
+
+  --sidebar-bg: var(--color-surface-canvas);
+  --sidebar-text: var(--color-text-secondary);
+  --sidebar-item-hover-bg: var(--color-green-alpha-08);
+  --sidebar-item-active-bg: var(--color-green-100);
+  --sidebar-item-active-text: var(--color-green-800);
+  --sidebar-item-active-indicator: var(--color-green-700);
+
+  --topbar-bg: var(--color-green-700);
+  --topbar-text: var(--color-brand-on-primary);
+  --topbar-icon: var(--color-brand-on-primary);
+  --topbar-divider: rgb(255 255 255 / 25%);
+
+  --badge-success-bg: var(--color-status-success-subtle);
+  --badge-success-text: var(--color-green-800);
+  --badge-success-border: var(--color-green-200);
+  --badge-warning-bg: var(--color-status-warning-subtle);
+  --badge-warning-text: var(--color-orange-800);
+  --badge-warning-border: var(--color-orange-200);
+  --badge-critical-bg: var(--color-status-critical-subtle);
+  --badge-critical-text: var(--color-red-800);
+  --badge-critical-border: var(--color-red-200);
+  --badge-info-bg: var(--color-status-info-subtle);
+  --badge-info-text: var(--color-status-info);
+  --badge-info-border: var(--color-neutral-200);
+
+  --table-bg: var(--color-surface-default);
+  --table-header-bg: var(--color-neutral-50);
+  --table-row-hover: var(--color-surface-hover);
+  --table-row-selected: var(--color-surface-selected);
+  --table-border: var(--color-border-default);
+
+  --nav-item-text: var(--color-text-secondary);
+  --nav-item-hover-bg: var(--sidebar-item-hover-bg);
+  --nav-item-selected-bg: var(--sidebar-item-active-bg);
+  --nav-item-selected-text: var(--sidebar-item-active-text);
+  --nav-item-selected-indicator: var(--sidebar-item-active-indicator);
+
+  --data-primary: var(--color-green-700);
+  --data-secondary: var(--color-green-500);
+  --data-tertiary: var(--color-green-300);
+  --data-quaternary: var(--color-neutral-600);
+  --data-neutral: var(--color-neutral-300);
+
+  --chart-grid: var(--color-neutral-100);
+  --chart-axis: var(--color-neutral-500);
+  --chart-label: var(--color-neutral-700);
+  --chart-point-ring: var(--color-neutral-0);
+
+  /* Azul permanece como escala de domínio, nunca como primary. */
+  --blue-50: #eff6ff;
+  --blue-100: #dbeafe;
+  --blue-200: #bfdbfe;
+  --blue-300: #93c5fd;
+  --blue-400: #60a5fa;
+  --blue-500: #0073C4;
+  --blue-600: #005ea3;
+  --blue-700: #004a82;
+  --blue-800: #003e6b;
+  --blue-900: #003358;
+
+  /* Aliases legados para migração gradual. */
+  --green-50: var(--color-green-50);
+  --green-100: var(--color-green-100);
+  --green-200: var(--color-green-200);
+  --green-300: var(--color-green-300);
+  --green-400: var(--color-green-400);
+  --green-500: var(--color-green-500);
+  --green-600: var(--color-green-600);
+  --green-700: var(--color-green-700);
+  --green-800: var(--color-green-800);
+  --green-900: var(--color-green-900);
+
+  /* Dark Forest (Apenas para Sidebars Escuras e fundos pesados) */
+  --forest-800: #0a2720; 
+  --forest-900: #061814;
+  --forest-950: #020b09;
+
+  /* Slate Neutros */
+  --slate-50: #f8fafc;
+  --slate-100: #f1f5f9;
+  --slate-200: #e2e8f0;
+  --slate-300: #cbd5e1;
+  --slate-400: #94a3b8;
+  --slate-500: #64748b;
+  --slate-600: #475569;
+  --slate-700: #334155;
+  --slate-800: #1e293b;
+  --slate-900: #0f172a;
+
+  --bg-page: var(--color-surface-canvas);
+  --bg-card: var(--color-surface-default);
+  --border-color: var(--color-border-default);
+  --text-primary: var(--color-text-primary);
+  --text-secondary: var(--color-text-secondary);
+  --primary-default: var(--color-action-primary);
+  --primary-hover: var(--color-action-primary-hover);
+  --accent-default: var(--color-brand-primary);
+
+  /* Retrocompatibilidade com variáveis legadas */
+  --inema-primary: var(--color-brand-primary);
+  --inema-primary-hover: var(--color-brand-primary-hover);
+  --inema-primary-dark: var(--color-brand-primary-active);
+  --inema-sage: var(--color-brand-primary-subtle);
+  --inema-sage-dark: var(--color-green-200);
+  --inema-surface: var(--color-surface-canvas);
+  --inema-border: var(--color-border-default);
+}
+
+.dark {
+  /* Dark mode: carvão neutro como base; verde reservado para identidade e ação. */
+  --color-slate-50: var(--color-zinc-50);
+  --color-slate-100: var(--color-zinc-100);
+  --color-slate-200: var(--color-zinc-200);
+  --color-slate-300: var(--color-zinc-300);
+  --color-slate-400: var(--color-zinc-400);
+  --color-slate-500: var(--color-zinc-500);
+  --color-slate-600: var(--color-zinc-600);
+  --color-slate-700: var(--color-zinc-700);
+  --color-slate-800: var(--color-zinc-800);
+  --color-slate-900: var(--color-zinc-900);
+  --color-slate-950: var(--color-zinc-950);
+  --color-gray-50: var(--color-zinc-50);
+  --color-gray-100: var(--color-zinc-100);
+  --color-gray-200: var(--color-zinc-200);
+  --color-gray-300: var(--color-zinc-300);
+  --color-gray-400: var(--color-zinc-400);
+  --color-gray-500: var(--color-zinc-500);
+  --color-gray-600: var(--color-zinc-600);
+  --color-gray-700: var(--color-zinc-700);
+  --color-gray-800: var(--color-zinc-800);
+  --color-gray-900: var(--color-zinc-900);
+  --color-gray-950: var(--color-zinc-950);
+
+  --color-brand-primary: var(--color-green-600);
+  --color-brand-primary-hover: var(--color-green-500);
+  --color-brand-primary-active: var(--color-green-700);
+  --color-brand-primary-subtle: rgb(31 96 73 / 32%);
+  --color-brand-primary-muted: rgb(94 152 127 / 28%);
+  --color-brand-on-primary: var(--color-green-50);
+  --color-action-primary-disabled: var(--color-zinc-700);
+  --color-action-secondary: var(--color-zinc-900);
+  --color-action-secondary-hover: var(--color-zinc-800);
+  --color-action-secondary-active: var(--color-zinc-700);
+  --color-surface-canvas: var(--color-zinc-950);
+  --color-surface-default: var(--color-zinc-900);
+  --color-surface-raised: var(--color-zinc-800);
+  --color-surface-subtle: var(--color-zinc-800);
+  --color-surface-selected: rgb(53 120 95 / 28%);
+  --color-surface-hover: var(--color-zinc-800);
+  --color-surface-inverse: var(--color-zinc-50);
+  --color-text-primary: var(--color-zinc-50);
+  --color-text-secondary: var(--color-zinc-300);
+  --color-text-tertiary: var(--color-zinc-400);
+  --color-text-disabled: var(--color-zinc-500);
+  --color-text-inverse: var(--color-zinc-950);
+  --color-text-link: var(--color-green-300);
+  --color-text-link-hover: var(--color-green-200);
+  --color-border-subtle: var(--color-zinc-800);
+  --color-border-default: var(--color-zinc-700);
+  --color-border-strong: var(--color-zinc-600);
+  --color-border-focus: var(--color-green-400);
+  --color-status-success: var(--color-green-300);
+  --color-status-success-subtle: rgb(31 96 73 / 34%);
+  --color-status-warning: var(--color-orange-300);
+  --color-status-warning-subtle: rgb(67 20 7 / 72%);
+  --color-status-critical: var(--color-red-300);
+  --color-status-critical-subtle: rgb(76 5 25 / 72%);
+  --color-status-info: var(--color-zinc-300);
+  --color-status-info-subtle: var(--color-zinc-800);
+  --badge-success-bg: rgb(31 96 73 / 38%);
+  --badge-success-text: var(--color-green-200);
+  --badge-success-border: var(--color-green-600);
+  --badge-warning-bg: rgb(67 20 7 / 72%);
+  --badge-warning-text: var(--color-orange-200);
+  --badge-warning-border: var(--color-orange-700);
+  --badge-critical-bg: rgb(76 5 25 / 72%);
+  --badge-critical-text: var(--color-red-200);
+  --badge-critical-border: var(--color-red-700);
+  --badge-info-bg: var(--color-zinc-800);
+  --badge-info-text: var(--color-zinc-200);
+  --badge-info-border: var(--color-zinc-700);
+  --sidebar-bg: var(--color-zinc-950);
+  --sidebar-text: var(--color-zinc-300);
+  --sidebar-item-hover-bg: var(--color-zinc-900);
+  --sidebar-item-active-bg: var(--color-green-900);
+  --sidebar-item-active-text: var(--color-green-100);
+  --sidebar-item-active-indicator: var(--color-green-400);
+  --topbar-bg: var(--color-green-950);
+  --table-header-bg: var(--color-zinc-800);
+  --table-row-hover: var(--color-zinc-800);
+  --table-row-selected: rgb(53 120 95 / 24%);
+  --data-primary: var(--color-green-400);
+  --data-secondary: var(--color-zinc-400);
+  --data-tertiary: var(--color-green-600);
+  --data-quaternary: var(--color-zinc-500);
+  --data-neutral: var(--color-zinc-700);
+  --chart-grid: var(--color-zinc-800);
+  --chart-axis: var(--color-zinc-500);
+  --chart-label: var(--color-zinc-300);
+  --chart-point-ring: var(--color-zinc-900);
+}
+
+@theme {
+  --color-inema-blue-50: #eff6ff;
+  --color-inema-blue-100: #dbeafe;
+  --color-inema-blue-200: #bfdbfe;
+  --color-inema-blue-300: #93c5fd;
+  --color-inema-blue-400: #60a5fa;
+  --color-inema-blue-500: #0073C4;
+  --color-inema-blue-600: #005ea3;
+  --color-inema-blue-700: #004a82;
+  --color-inema-blue-800: #003e6b;
+  --color-inema-blue-900: #003358;
+
+  --color-inema-green-50: #f2f8f5;
+  --color-inema-green-100: #ddece5;
+  --color-inema-green-200: #bbd8ca;
+  --color-inema-green-300: #8ebba7;
+  --color-inema-green-400: #5e987f;
+  --color-inema-green-500: #35785f;
+  --color-inema-green-600: #1f6049;
+  --color-inema-green-700: #0f4c3a;
+  --color-inema-green-800: #0c3d2f;
+  --color-inema-green-900: #092f24;
+  --color-inema-green-950: #041a14;
+
+  --color-forest-800: #0a2720;
+  --color-forest-900: #061814;
+  --color-forest-950: #020b09;
+
+  --color-blue-50: #eff6ff;
+  --color-blue-100: #dbeafe;
+  --color-blue-200: #bfdbfe;
+  --color-blue-300: #93c5fd;
+  --color-blue-400: #60a5fa;
+  --color-blue-500: #0073C4;
+  --color-blue-600: #005ea3;
+  --color-blue-700: #004a82;
+  --color-blue-800: #003e6b;
+  --color-blue-900: #003358;
+
+  --color-green-50: #f2f8f5;
+  --color-green-100: #ddece5;
+  --color-green-200: #bbd8ca;
+  --color-green-300: #8ebba7;
+  --color-green-400: #5e987f;
+  --color-green-500: #35785f;
+  --color-green-600: #1f6049;
+  --color-green-700: #0f4c3a;
+  --color-green-800: #0c3d2f;
+  --color-green-900: #092f24;
+  --color-green-950: #041a14;
+
+  --color-brand: var(--color-brand-primary);
+  --color-brand-hover: var(--color-brand-primary-hover);
+}
+
+body {
+  background-color: var(--color-surface-canvas);
+  color: var(--color-text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Compatibilidade para telas SEIA V2 que ainda usam utilitários claros sem variante dark. */
+.dark .seia-v2-content .bg-white {
+  background-color: var(--color-surface-default) !important;
+}
+
+.dark .seia-v2-content .bg-slate-50,
+.dark .seia-v2-content .bg-slate-50\/50,
+.dark .seia-v2-content .bg-slate-50\/70,
+.dark .seia-v2-content .bg-slate-50\/80 {
+  background-color: var(--color-surface-raised) !important;
+}
+
+.dark .seia-v2-content .bg-slate-100,
+.dark .seia-v2-content .bg-slate-200 {
+  background-color: var(--color-surface-subtle) !important;
+}
+
+.dark .seia-v2-content .bg-emerald-50,
+.dark .seia-v2-content .bg-emerald-50\/50,
+.dark .seia-v2-content .bg-emerald-100 {
+  background-color: var(--color-surface-selected) !important;
+}
+
+.dark .seia-v2-content .text-slate-900,
+.dark .seia-v2-content .text-slate-800 {
+  color: var(--color-text-primary) !important;
+}
+
+.dark .seia-v2-content .text-slate-700,
+.dark .seia-v2-content .text-slate-600 {
+  color: var(--color-text-secondary) !important;
+}
+
+.dark .seia-v2-content .text-slate-500,
+.dark .seia-v2-content .text-slate-400 {
+  color: var(--color-text-tertiary) !important;
+}
+
+.dark .seia-v2-content [class~="text-[#0F4C3A]"],
+.dark .seia-v2-content .text-emerald-800 {
+  color: var(--color-text-link) !important;
+}
+
+.dark .seia-v2-content .border-slate-100,
+.dark .seia-v2-content .border-slate-200,
+.dark .seia-v2-content .border-slate-200\/80 {
+  border-color: var(--color-border-default) !important;
+}
+
+.dark .seia-v2-content .border-slate-300,
+.dark .seia-v2-content .border-emerald-200,
+.dark .seia-v2-content .border-emerald-300 {
+  border-color: var(--color-border-strong) !important;
+}
+
+.dark .seia-v2-content .divide-slate-100 > :not(:last-child),
+.dark .seia-v2-content .divide-slate-200 > :not(:last-child) {
+  border-color: var(--color-border-subtle) !important;
+}
+
+.dark .seia-v2-content .hover\:bg-slate-50:hover,
+.dark .seia-v2-content .hover\:bg-slate-50\/50:hover,
+.dark .seia-v2-content .hover\:bg-slate-50\/80:hover,
+.dark .seia-v2-content .hover\:bg-slate-100:hover {
+  background-color: var(--color-surface-hover) !important;
+}
+
+.dark .seia-v2-content input:not([type="checkbox"]):not([type="radio"]),
+.dark .seia-v2-content textarea,
+.dark .seia-v2-content select {
+  background-color: var(--input-bg);
+  border-color: var(--input-border);
+  color: var(--input-text);
+}
+
+.dark .seia-v2-content input:not([type="checkbox"]):not([type="radio"]):focus,
+.dark .seia-v2-content textarea:focus,
+.dark .seia-v2-content select:focus {
+  border-color: var(--input-border-focus) !important;
+  box-shadow: 0 0 0 2px rgb(94 152 127 / 24%) !important;
+}
+
+/* Tipografia de números tabulares para dashboards */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Glassmorphism & Brilho sutil */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.glass-dropdown {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.1), 0 4px 12px -2px rgba(15, 23, 42, 0.05);
+}
+
+/* Efeito de Shimmer / Brilho suave */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite;
+}
+
+/* Scrollbar ultra-fina moderna */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-strong);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-disabled);
+}
+
+/* Custom Scrollbars temáticos para a Sidebar (acompanham a cor do seletor) */
+.sidebar-scroll-blue {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(158, 195, 204, 0.28) transparent;
+}
+.sidebar-scroll-blue::-webkit-scrollbar {
+  width: 5px;
+}
+.sidebar-scroll-blue::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sidebar-scroll-blue::-webkit-scrollbar-thumb {
+  background: rgba(158, 195, 204, 0.25);
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+.sidebar-scroll-blue::-webkit-scrollbar-thumb:hover {
+  background: rgba(158, 195, 204, 0.55);
+}
+
+.sidebar-scroll-green {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(188, 224, 211, 0.28) transparent;
+}
+.sidebar-scroll-green::-webkit-scrollbar {
+  width: 5px;
+}
+.sidebar-scroll-green::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sidebar-scroll-green::-webkit-scrollbar-thumb {
+  background: rgba(188, 224, 211, 0.25);
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+.sidebar-scroll-green::-webkit-scrollbar-thumb:hover {
+  background: rgba(188, 224, 211, 0.55);
+}
+
+.sidebar-scroll-white {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.3) transparent;
+}
+.sidebar-scroll-white::-webkit-scrollbar {
+  width: 5px;
+}
+.sidebar-scroll-white::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sidebar-scroll-white::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.28);
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+.sidebar-scroll-white::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.5);
+}
+
+.sidebar-scroll-dark {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
+.sidebar-scroll-dark::-webkit-scrollbar {
+  width: 5px;
+}
+.sidebar-scroll-dark::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sidebar-scroll-dark::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+.sidebar-scroll-dark::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* =========================================================================
+   REFINO ENTERPRISE SEIA V2 (ZERO AZUL NATIVO & MICROINTERAÇÕES TALL/SHADCN)
+   ========================================================================= */
+
+/* Morte ao azul nativo do navegador em checkboxes, radios e foco */
+input[type="checkbox"],
+input[type="radio"],
+input[type="range"] {
+  accent-color: var(--color-action-primary) !important;
+}
+
+/* Reset de contorno azul padrão do navegador para todos os elementos interativos */
+*:focus-visible {
+  outline: none !important;
+}
+
+/* Inputs, Textareas e Selects elegantes com focus ring suave */
+input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="reset"]),
+textarea {
+  transition: all 0.2s ease-in-out;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="reset"]):focus,
+textarea:focus {
+  outline: none !important;
+  border-color: var(--input-border-focus) !important;
+  box-shadow: 0 0 0 2px var(--color-green-alpha-20) !important;
+}
+
+/* Transições universais suaves em botões, links e células interativas */
+button, a, select, summary {
+  transition: all 0.2s ease-in-out;
+}

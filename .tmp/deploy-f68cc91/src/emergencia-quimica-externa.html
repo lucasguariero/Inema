@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Emergência Química Externa - INEMA / SEIA</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries&v=20240828"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface": "#f8f9fb",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f3f4f6",
+                        "surface-container": "#edeef0",
+                        "on-surface": "#191c1e",
+                        "on-surface-variant": "#404945",
+                        "primary": "#002f25",
+                        "primary-container": "#0a473a",
+                        "inema-green": "#0F4C3A",
+                        "inema-green-hover": "#0c3b2e",
+                        "inema-sage": "#E2ECE9",
+                        "inema-sage-dark": "#c7dbd6",
+                        "error": "#ba1a1a",
+                        "sidebar-active": "#d1e1de"
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9fb; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+        .has-tooltip:hover .tooltip-box { visibility: visible; opacity: 1; }
+    </style>
+    <link rel="stylesheet" href="css/design-system.css">
+</head>
+<body class="bg-[#F8FAFC] text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- ============================================ -->
+    <!-- HEADER SUPERIOR (Design System INEMA 60px) -->
+    <!-- ============================================ -->
+    <header class="h-[60px] bg-[#0F4C3A] text-white fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 lg:px-6 shadow-xs">
+        <!-- Esquerda: Hambúrguer + Logo INEMA / SEIA -->
+                <div class="flex items-center gap-3">
+            <button class="w-10 h-10 rounded-lg hover:bg-white/10 flex items-center justify-center text-white transition-colors" onclick="toggleSidebar()" aria-label="Menu principal">
+                <span class="material-symbols-outlined text-2xl">menu</span>
+            </button>
+            <a href="index.html" class="flex items-center">
+                <img src="logo.svg" alt="INEMA" class="h-10 w-auto">
+            </a>
+        </div>
+
+        <!-- Direita: Busca em pílula, Notificações com badge, Perfil LM -->
+        <div class="flex items-center gap-3 ml-auto">
+            <div class="relative hidden md:block">
+                <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-white/60 text-lg">search</span>
+                <input type="text" placeholder="Buscar no sistema..." class="w-72 pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-full text-white placeholder-white/60 text-xs focus:outline-none focus:bg-white/15 focus:border-white/40 transition-all">
+            </div>
+
+            <button class="w-10 h-10 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center text-white relative transition-colors" aria-label="Notificações">
+                <span class="material-symbols-outlined text-xl">notifications</span>
+                <span class="absolute -top-1 -right-1 w-5 h-5 bg-error text-white rounded-full text-[11px] flex items-center justify-center font-bold shadow-xs">3</span>
+            </button>
+
+            <div class="flex items-center gap-2 pl-1">
+                <button class="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 transition-colors" title="Lucas Manager - Administrador">
+                    <div class="w-9 h-9 bg-white/20 border border-white/30 rounded-full flex items-center justify-center text-white font-bold text-xs tracking-wider">
+                        LM
+                    </div>
+                    <span class="hidden xl:inline-block text-xs text-white font-medium text-left leading-tight">
+                        Lucas Manager
+                        <span class="block text-[10px] text-white/70 font-normal">Administrador</span>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============================================ -->
+    <!-- CASCA PRINCIPAL (Sidebar + Conteúdo) -->
+    <!-- ============================================ -->
+    <div class="flex pt-[60px] min-h-screen bg-[#F8FAFC]">
+                                                                <!-- Overlay Mobile -->
+        <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-30 hidden lg:hidden" style="top: 60px;"></div>
+
+        <!-- Sidebar Lateral Padronizada (280px) -->
+        <aside id="sidebar" class="w-[280px] bg-white border-r border-[#E5E7EB] flex flex-col fixed top-[60px] bottom-0 left-0 z-40 transition-transform duration-200 -translate-x-full lg:translate-x-0">
+            <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+                <!-- 1. Item Principal: Início -->
+                <a href="index.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium transition-colors duration-150">
+                    <span class="material-symbols-outlined text-xl text-slate-500">home</span>
+                    <span class="text-sm font-medium">Início</span>
+                </a>
+
+                <!-- 2. Módulo Principal (Expansível / Accordion Ativo): Fiscalização -->
+                <div class="pt-1">
+                    <button onclick="toggleSubmenu('subFiscalizacao', 'iconFiscalizacao')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-[#0F4C3A] bg-[#E2ECE9] font-semibold transition-colors duration-150">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-xl text-[#0F4C3A]">fact_check</span>
+                            <span class="text-sm font-semibold">Fiscalização</span>
+                        </div>
+                        <span id="iconFiscalizacao" class="material-symbols-outlined text-lg text-[#0F4C3A] transition-transform duration-200 rotate-180">expand_more</span>
+                    </button>
+                    
+                    <div id="subFiscalizacao" class="mt-2 border-l-2 border-slate-200 ml-4 pl-3 space-y-4">
+                        <!-- Subgrupo: DENÚNCIAS -->
+                        <div>
+                            <div class="text-slate-400 font-semibold text-[11px] tracking-wider uppercase px-3 pt-2 pb-1">
+                                Denúncias
+                            </div>
+                            <div class="space-y-1 mt-1">
+                                <a href="fiscalizacao.html" id="menu-atendente" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                                    <span>Atendente</span>
+                                </a>
+                                <a href="fiscalizacao.html?fluxo=externo" id="menu-cidadao" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                                    <span>Formulário Cidadão</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Subgrupo: EMERGÊNCIAS QUÍMICAS -->
+                        <div>
+                            <div class="text-slate-400 font-semibold text-[11px] tracking-wider uppercase px-3 pt-2 pb-1">
+                                Emergências Químicas
+                            </div>
+                            <div class="space-y-1 mt-1">
+                                <a href="emergencia-quimica.html?fluxo=interna" id="menu-emerg-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                                    <span>Cadastro Interno</span>
+                                </a>
+                                <a href="emergencia-quimica-externa.html" id="menu-emerg-externa" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 bg-[#E2ECE9] text-[#0F4C3A] font-semibold rounded-lg">
+                                    <span>Registro Externo</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Subgrupo: CONSULTAS -->
+                        <div>
+                            <div class="text-slate-400 font-semibold text-[11px] tracking-wider uppercase px-3 pt-2 pb-1">
+                                Consultas
+                            </div>
+                            <div class="space-y-1 mt-1">
+                                <a href="consulta-externa.html" id="menu-consulta-externa" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                                    <span>Consulta Cidadão</span>
+                                </a>
+                                <a href="consulta-interna.html" id="menu-consulta-interna" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium rounded-lg">
+                                    <span>Painel Interno DIFIS</span>
+                                    <span class="bg-rose-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full" id="sidebarBadgeEmergencias">3</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Módulo: Relatórios Gerenciais -->
+                <div class="pt-1">
+                    <a href="relatorios.html" id="menu-relatorios" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium transition-colors duration-150">
+                        <span class="material-symbols-outlined text-xl text-slate-500">bar_chart</span>
+                        <span class="text-sm font-medium">Relatórios Gerenciais</span>
+                    </a>
+                </div>
+            </nav>
+
+            <!-- Rodapé Fixo da Sidebar: Assistente INEMA -->
+            <div class="p-3 border-t border-slate-200 bg-white">
+                <button onclick="alert('Assistente IA INEMA ativado. Em que posso auxiliá-lo com as demandas de Fiscalização e SEIA?')" class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#0F4C3A] text-white font-medium text-xs hover:bg-[#0c3d2e] transition-colors shadow-xs group">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-amber-300 group-hover:rotate-12 transition-transform shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+                        <path d="M5 3v4"/>
+                        <path d="M19 17v4"/>
+                        <path d="M3 5h4"/>
+                        <path d="M17 19h4"/>
+                    </svg>
+                    <span>Assistente INEMA</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- ============================================ -->
+        <!-- CONTEÚDO PRINCIPAL -->
+        <!-- ============================================ -->
+        <main class="flex-1 lg:ml-[280px] p-4 lg:p-8 overflow-y-auto">
+            
+            <!-- Breadcrumb e Atalhos Rápidos -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+                <nav class="flex items-center gap-2 text-xs text-slate-500">
+                    <a href="index.html" class="hover:text-inema-green">Início</a>
+                    <span>/</span>
+                    <a href="fiscalizacao.html" class="hover:text-inema-green">Fiscalização</a>
+                    <span>/</span>
+                    <span class="text-slate-800 font-semibold">Emergência Química Externa</span>
+                </nav>
+
+                <div class="flex items-center gap-2">
+                    <a href="consulta-externa.html" class="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-inema-green transition-colors flex items-center gap-1.5 shadow-2xs">
+                        <span class="material-symbols-outlined text-base">search</span>
+                        <span>Ir para Meus Registros</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Banner do Protocolo e Status -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-amber-50 border border-amber-200 text-amber-800 rounded-full text-xs font-semibold mb-2">
+                        <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                        <span>Portal do Comunicante / Cidadão Externo</span>
+                    </div>
+                    <h1 class="text-2xl font-bold text-slate-800 tracking-tight">
+                        Cadastro de Emergência Química Externa
+                    </h1>
+                    <p class="text-xs text-slate-500 mt-1">
+                        Comunique formalmente ocorrências com produtos perigosos para atendimento prioritário do INEMA.
+                    </p>
+                </div>
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-right shrink-0">
+                    <span class="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Número do Registro (RE)</span>
+                    <span id="badgeNumeroRE" class="text-base font-bold text-emerald-800 ">
+                        A gerar na finalização
+                    </span>
+                    <span class="block text-[11px] text-slate-500 mt-0.5">
+                        Status: <strong id="badgeStatusRE" class="text-amber-700">Rascunho</strong>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Card Gov.br do Comunicante -->
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-inema-green text-white flex items-center justify-center font-bold text-sm shadow-xs">
+                        GS
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-slate-800 text-sm">Giovani Silva</span>
+                            <span class="px-2 py-0.5 bg-blue-100 text-blue-800 text-[10px] font-bold rounded-full">Gov.br Ouro</span>
+                        </div>
+                        <span class="text-xs text-slate-500 ">CPF: 529.982.247-25 | giovani.silva@exemplo.com.br</span>
+                    </div>
+                </div>
+                <div class="text-xs text-slate-600 flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-lg border border-emerald-200/60">
+                    <span class="material-symbols-outlined text-base text-emerald-700">verified_user</span>
+                    <span>Identidade Gov.br validada</span>
+                </div>
+            </div>
+
+            <!-- FORMULÁRIO PRINCIPAL DOR004 -->
+            <form id="formEmergenciaExterna" onsubmit="event.preventDefault(); handleFinalizarEmergencia();" class="bg-white rounded-xl shadow-sm border border-slate-200 divide-y divide-slate-100">
+                
+                <!-- SEÇÃO 1: Informações sobre a Empresa & Vínculo -->
+                <div class="p-6 space-y-4">
+                    <div class="flex items-center gap-2.5 text-inema-green font-bold text-base border-b pb-2">
+                        <span class="material-symbols-outlined text-xl">business</span>
+                        <h2>1. Informações sobre a Empresa</h2>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-2">
+                                Você possui vínculo com a empresa responsável pela ocorrência? <span class="text-red-500">*</span>
+                            </label>
+                            <div class="flex gap-6">
+                                <label class="flex items-center gap-2 text-xs text-slate-800 cursor-pointer font-medium">
+                                    <input type="radio" name="vinculoEmpresa" value="SIM" onchange="toggleVinculoEmpresa('SIM')" class="text-inema-green focus:ring-inema-green">
+                                    <span>Sim</span>
+                                </label>
+                                <label class="flex items-center gap-2 text-xs text-slate-800 cursor-pointer font-medium">
+                                    <input type="radio" name="vinculoEmpresa" value="NÃO" checked onchange="toggleVinculoEmpresa('NÃO')" class="text-inema-green focus:ring-inema-green">
+                                    <span>Não</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Condicional SIM: Nome da Empresa e Cargo -->
+                        <div id="blocoVinculoSim" class="hidden grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">
+                                    Nome da empresa <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" id="campoNomeEmpresa" maxlength="500" placeholder="Descreva o nome da empresa em que você trabalha" class="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green">
+                                <span class="text-[10px] text-slate-400 mt-1 block">Descreva o nome da empresa em que você trabalha</span>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">
+                                    Cargo <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" id="campoCargo" maxlength="200" placeholder="Descreva o cargo atual que você exerce" class="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green">
+                                <span class="text-[10px] text-slate-400 mt-1 block">Descreva o cargo atual que você exerce</span>
+                            </div>
+                        </div>
+
+                        <!-- Condicional NÃO: Combobox Cidadão comum, Força Policial, Outras instituições -->
+                        <div id="blocoVinculoNao" class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">
+                                    Você está comunicando como: <span class="text-red-500">*</span>
+                                </label>
+                                <select id="campoClassificacaoSemVinculo" onchange="toggleOutrasInstituicoes(this.value)" class="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green">
+                                    <option value="Cidadão comum">Cidadão comum</option>
+                                    <option value="Força Policial">Força Policial</option>
+                                    <option value="Outras instituições">Outras instituições</option>
+                                </select>
+                            </div>
+                            <div id="blocoOutrasInstituicoes" class="hidden">
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">
+                                    Nome da Instituição <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" id="campoOutrasInstituicoes" maxlength="500" placeholder="Descreva o nome da instituição" class="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green">
+                                <span class="text-[10px] text-slate-400 mt-1 block">Descreva o nome da instituição</span>
+                            </div>
+                        </div>
+
+                        <!-- Campo Permanente: Empresa Responsável Informada -->
+                        <div>
+                            <label class="block text-xs font-medium text-slate-700 mb-1">
+                                Sabe informar o nome da empresa responsável pela emergência química? (Opcional)
+                            </label>
+                            <input type="text" id="campoEmpresaResponsavelInformada" maxlength="500" placeholder="Caso saiba, informe a razão social ou nome da empresa causadora" class="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green">
+                            <span class="text-[10px] text-slate-400 mt-0.5 block">Aceita até 500 caracteres. Não substitui o campo Nome da Empresa quando houver vínculo = SIM.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO 2: Dados do Comunicante -->
+                <div class="p-6 space-y-4">
+                    <div class="flex items-center gap-2.5 text-inema-green font-bold text-base border-b pb-2">
+                        <span class="material-symbols-outlined text-xl">person</span>
+                        <h2>2. Dados do Comunicante</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">
+                                Nome / Razão Social <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" disabled value="Giovani Silva" class="w-full text-xs bg-slate-50 text-slate-700 rounded-lg border-slate-200 cursor-not-allowed font-medium">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">CPF / CNPJ</label>
+                            <input type="text" disabled value="529.982.247-25" class="w-full text-xs bg-slate-50 text-slate-700 rounded-lg border-slate-200 cursor-not-allowed ">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">
+                                Telefone / Celular <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" id="campoTelefone" value="(71) 98845-1234" placeholder="(00) 00000-0000" class="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-700 mb-1">Outro Telefone / Celular</label>
+                            <input type="text" id="campoOutroTelefone" placeholder="(00) 0000-0000" class="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-700 mb-1">E-mail</label>
+                            <input type="email" disabled value="giovani.silva@exemplo.com.br" class="w-full text-xs bg-slate-50 text-slate-700 rounded-lg border-slate-200 cursor-not-allowed">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO 3: Detalhes da Emergência Química -->
+                <div class="p-6 space-y-4">
+                    <div class="flex items-center gap-2.5 text-inema-green font-bold text-base border-b pb-2">
+                        <span class="material-symbols-outlined text-xl">warning</span>
+                        <h2>3. Detalhes da Ocorrência</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">
+                                Data e hora da Constatação <span class="text-red-500">*</span>
+                            </label>
+                            <input type="datetime-local" id="campoDataHoraConstatacao" class="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green">
+                            <span class="text-[10px] text-slate-400 mt-1 block">Registre aqui a data e hora em que foi observada a emergência (não aceita data futura)</span>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">
+                                Tipo da Emergência Química <span class="text-red-500">*</span>
+                            </label>
+                            <select id="campoTipoEmergencia" onchange="handleTipoEmergenciaChange(this.value)" class="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green">
+                                <option value="">-- Selecione o Tipo no Catálogo Oficial --</option>
+                                <option value="Acidente no transporte rodoviário de produtos químicos">Acidente no transporte rodoviário de produtos químicos</option>
+                                <option value="Acidente em via férrea">Acidente em via férrea</option>
+                                <option value="Acidente industrial em planta química ou petroquímica">Acidente industrial em planta química ou petroquímica</option>
+                                <option value="Incidente no modal aquaviário ou terminal marítimo">Incidente no modal aquaviário ou terminal marítimo</option>
+                                <option value="Lançamento ou descarte irregular de efluentes ou produtos químicos">Lançamento ou descarte irregular de efluentes ou produtos químicos</option>
+                                <option value="Vazamento em sistema subterrâneo de combustíveis">Vazamento em sistema subterrâneo de combustíveis</option>
+                                <option value="Ocorrência com produto químico perigoso em ETA/ETE">Ocorrência com produto químico perigoso em ETA/ETE</option>
+                                <option value="Efluente de barragem de rejeitos">Efluente de barragem de rejeitos</option>
+                                <option value="Efluente de barragem de aterro industrial ou sanitário">Efluente de barragem de aterro industrial ou sanitário</option>
+                                <option value="Ruptura ou falha em sistema de contenção">Ruptura ou falha em sistema de contenção</option>
+                                <option value="Mortandade de peixes ou fauna aquática por contaminação">Mortandade de peixes ou fauna aquática por contaminação</option>
+                                <option value="Pluma de contaminação">Pluma de contaminação</option>
+                                <option value="Mancha de origem desconhecida">Mancha de origem desconhecida</option>
+                                <option value="Afloramento de contaminantes">Afloramento de contaminantes</option>
+                                <option value="Outros">Outros</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Condicional Outros -->
+                    <div id="blocoDescricaoOutros" class="hidden">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">
+                            Descrição do tipo <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="campoDescricaoTipoOutros" maxlength="500" placeholder="Especifique detalhadamente a tipologia da emergência ocorrida" class="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green">
+                        <span class="text-[10px] text-slate-400 mt-0.5 block">Obrigatório quando selecionado 'Outros'</span>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="block text-xs font-semibold text-slate-700">
+                                Descrição do Fato <span class="text-red-500">*</span>
+                            </label>
+                            <span id="charCountDescricao" class="text-[11px] text-slate-400 ">0 / 7.000 caracteres</span>
+                        </div>
+                        <textarea id="campoDescricao" rows="4" maxlength="7000" oninput="atualizarContadorDescricao(this)" placeholder="Descreva aqui seu relato em detalhes sobre a emergência, substâncias envolvidas, impactos aparentes e providências adotadas..." class="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green"></textarea>
+                        <span class="text-[10px] text-slate-400 mt-0.5 block">Descreva aqui seu relato em detalhes sobre a emergência</span>
+                    </div>
+
+                    <!-- Upload de Anexos -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">
+                            Anexos da Emergência (Opcional)
+                        </label>
+                        <p class="text-[11px] text-slate-500 mb-2">
+                            Adicione arquivos que complementem ou documentem a demanda ou o fato, como capturas de conversas, vídeos e fotos.
+                        </p>
+                        <input type="file" id="inputAnexosIniciais" multiple class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-inema-sage file:text-inema-green hover:file:bg-inema-sage-dark">
+                        <div class="mt-2 p-2.5 bg-white rounded-lg border border-slate-200 text-[10px] text-slate-600">
+                            <strong>Formatos aceitos:</strong> São aceitos documentos de texto (.pdf, .doc, .docx, .txt), imagens (.jpeg, .jpg, .png, .bmp), planilhas (.xls, .xlsx), multimídia (.mp3, .mp4), shape (.shp, .shx, .dbf, .prj), .kml, .kmz e .zip.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO 4: Localização e Áreas Atingidas -->
+                <div class="p-6 space-y-4">
+                    <div class="flex items-center gap-2.5 text-inema-green font-bold text-base border-b pb-2">
+                        <span class="material-symbols-outlined text-xl">pin_drop</span>
+                        <h2>4. Localização da Ocorrência</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">
+                                Município <span class="text-red-500">*</span>
+                            </label>
+                            <select id="campoMunicipio" class="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green">
+                                <option value="Salvador">Salvador</option>
+                                <option value="Camaçari">Camaçari</option>
+                                <option value="Feira de Santana">Feira de Santana</option>
+                                <option value="Simões Filho">Simões Filho</option>
+                                <option value="Candeias">Candeias</option>
+                                <option value="Dias d'Ávila">Dias d'Ávila</option>
+                                <option value="Lauro de Freitas">Lauro de Freitas</option>
+                                <option value="Ilhéus">Ilhéus</option>
+                                <option value="Itabuna">Itabuna</option>
+                                <option value="Vitória da Conquista">Vitória da Conquista</option>
+                                <option value="Barreiras">Barreiras</option>
+                                <option value="Juazeiro">Juazeiro</option>
+                            </select>
+                            <span class="text-[10px] text-slate-400 mt-1 block">Selecione o município da emergência</span>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-medium text-slate-700 mb-1">CEP (Auto-preenchimento)</label>
+                            <input type="text" id="campoCep" oninput="buscarCepSimulado(this.value)" placeholder="40020-000" class="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green ">
+                            <span class="text-[10px] text-slate-400 mt-0.5 block">Ex: 40020-000 preenche Salvador Centro</span>
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">
+                                Endereço / Local <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" id="campoEndereco" placeholder="Informe o logradouro, rodovia, km ou identificação física" class="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green">
+                            <span class="text-[10px] text-slate-400 mt-0.5 block">Informe o endereço da emergência</span>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-medium text-slate-700 mb-1">Bairro</label>
+                            <input type="text" id="campoBairro" placeholder="Bairro ou distrito" class="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-medium text-slate-700 mb-1">Número</label>
+                            <input type="text" id="campoNumero" placeholder="S/N se não houver" class="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green">
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">
+                                Ponto de Referência <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" id="campoPontoReferencia" maxlength="1000" placeholder="Próximo a empresas, pontes, postos ou marcos geográficos conhecidos" class="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green">
+                            <span class="text-[10px] text-slate-400 mt-0.5 block">RN010 - Aceita até 1.000 caracteres</span>
+                        </div>
+                    </div>
+
+                    <!-- ÁREAS ATINGIDAS -->
+                    <div class="pt-3">
+                        <div class="flex items-center justify-between mb-2">
+                            <label class="block text-xs font-semibold text-slate-700">
+                                Área Atingida (Selecione de 1 a 3 opções) <span class="text-red-500">*</span>
+                            </label>
+                            <span id="badgeContagemAreas" class="text-xs font-bold text-inema-green bg-inema-sage px-2 py-0.5 rounded-full">
+                                0 de 3 selecionadas
+                            </span>
+                        </div>
+
+                        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5" id="gridAreasAtingidas">
+                            <!-- Injetado via JS ou renderizado com tooltips -->
+                        </div>
+                        <span class="text-[10px] text-slate-400 mt-1 block">LEG006 - Selecione a área da emergência (mínimo 1, máximo 3)</span>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-slate-700 mb-1">
+                            Descrição do Cenário (Opcional)
+                        </label>
+                        <textarea id="campoDescricaoCenario" rows="2" maxlength="1000" placeholder="Descreva a área ou o cenário da área atingida" class="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green"></textarea>
+                    </div>
+
+                    <!-- COORDENADAS GEOGRÁFICAS -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-lg text-inema-green">explore</span>
+                                <span class="text-xs font-bold text-slate-800">Coordenadas Geográficas (Opcional)</span>
+                            </div>
+                            <span class="text-[11px] text-slate-500">Caso não saiba as coordenadas, pode preencher com zero</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                            <select id="selectTipoCoordenada" class="text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green">
+                                <option value="Geográfica / Grau Decimal">Geográfica / Grau Decimal</option>
+                                <option value="Grau/Min/Seg">Grau/Min/Seg</option>
+                                <option value="UTM 23">UTM 23</option>
+                                <option value="UTM 24">UTM 24</option>
+                            </select>
+                            <input type="text" id="inputCoordLatitude" maxlength="10" placeholder="Latitude (ex: -12.9714)" class="text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green ">
+                            <div class="flex gap-2">
+                                <input type="text" id="inputCoordLongitude" maxlength="10" placeholder="Longitude (ex: -38.5014)" class="w-full text-xs rounded-lg border-slate-300 focus:border-inema-green focus:ring-inema-green ">
+                                <button type="button" onclick="adicionarCoordenada()" class="px-3 py-1.5 bg-inema-green text-white text-xs font-semibold rounded-lg hover:bg-inema-green-hover shrink-0">
+                                    + Incluir
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Lista de coordenadas adicionadas -->
+                        <div id="listaCoordenadasAdicionadas" class="space-y-1.5 pt-1"></div>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO 5: Tratamento Interno -->
+                <!-- REGRA O campo "Técnico indicado" NÃO é apresentado ao usuário externo durante o cadastro -->
+
+                <!-- SEÇÃO PÓS-FINALIZAÇÃO: Relatórios Regulatórios -->
+                <div id="secaoRelatoriosPosFinalizacao" class="hidden p-6 space-y-4 bg-slate-50/50">
+                    <div class="flex items-center gap-2.5 text-inema-green font-bold text-base border-b pb-2">
+                        <span class="material-symbols-outlined text-xl">folder_shared</span>
+                        <h2>Relatórios Regulatórios de Emergência Química</h2>
+                    </div>
+
+                    <p class="text-xs text-slate-600">
+                        Após a finalização da ocorrência, você poderá anexar relatórios regulatórios preliminares, conclusivos ou complementares.
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                        <!-- RPEQ -->
+                        <div id="cardRpeq" class="p-4 bg-white rounded-xl border border-slate-200 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="font-bold text-xs text-slate-800">Relatório Preliminar (RPEQ)</span>
+                                <span class="material-symbols-outlined text-inema-green text-lg">timer</span>
+                            </div>
+                            <p id="msgRpeqCondicional" class="text-[11px] text-slate-500">
+                                O Relatório Preliminar de Emergência Química (RPEQ) é solicitado apenas a quem declarou vínculo com a empresa responsável.
+                            </p>
+                            <button type="button" id="btnUploadRpeq" onclick="abrirModalUpload('Preliminar')" class="w-full py-1.5 bg-inema-green text-white text-xs font-semibold rounded-lg hover:bg-inema-green-hover flex items-center justify-center gap-1">
+                                <span class="material-symbols-outlined text-sm">upload_file</span>
+                                <span>Anexar RPEQ</span>
+                            </button>
+                        </div>
+
+                        <!-- Relatório Conclusivo -->
+                        <div class="p-4 bg-white rounded-xl border border-slate-200 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="font-bold text-xs text-slate-800">Relatório Conclusivo</span>
+                                <span class="material-symbols-outlined text-inema-green text-lg">task_alt</span>
+                            </div>
+                            <p class="text-[11px] text-slate-500">
+                                Disponível para envio a qualquer momento e em qualquer status.
+                            </p>
+                            <button type="button" onclick="abrirModalUpload('Conclusivo')" class="w-full py-1.5 bg-inema-green text-white text-xs font-semibold rounded-lg hover:bg-inema-green-hover flex items-center justify-center gap-1">
+                                <span class="material-symbols-outlined text-sm">upload_file</span>
+                                <span>Anexar Conclusivo</span>
+                            </button>
+                        </div>
+
+                        <!-- Relatório Complementar -->
+                        <div class="p-4 bg-white rounded-xl border border-slate-200 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="font-bold text-xs text-slate-800">Relatório Complementar</span>
+                                <span class="material-symbols-outlined text-inema-green text-lg">note_add</span>
+                            </div>
+                            <p class="text-[11px] text-slate-500">
+                                Adicione laudos adicionais, análises físico-químicas e dados de campo.
+                            </p>
+                            <button type="button" onclick="abrirModalUpload('Complementar')" class="w-full py-1.5 bg-inema-green text-white text-xs font-semibold rounded-lg hover:bg-inema-green-hover flex items-center justify-center gap-1">
+                                <span class="material-symbols-outlined text-sm">upload_file</span>
+                                <span>Anexar Complementar</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Lista de relatórios já enviados -->
+                    <div id="containerRelatoriosEnviados" class="hidden space-y-2 pt-2">
+                        <span class="text-xs font-bold text-slate-700 block">Arquivos Regulatórios Anexados:</span>
+                        <div id="listaRelatoriosEnviados" class="space-y-1.5"></div>
+                    </div>
+                </div>
+
+                <!-- RODAPÉ DE AÇÕES -->
+                <div id="rodapeAcoes" class="p-6 bg-slate-50 flex items-center justify-between rounded-b-xl gap-3">
+                    <button type="button" onclick="abrirModalExclusao()" class="px-4 py-2 border border-red-300 text-red-600 rounded-lg text-xs font-semibold hover:bg-red-50 transition-colors flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-base">delete</span>
+                        <span>Excluir Emergência</span>
+                    </button>
+
+                    <div class="flex items-center gap-3">
+                        <button type="button" onclick="salvarRascunho()" class="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg text-xs font-semibold hover:bg-white transition-colors">
+                            Salvar Rascunho
+                        </button>
+                        <button type="submit" class="px-6 py-2 bg-inema-green text-white rounded-lg text-xs font-bold hover:bg-inema-green-hover transition-colors shadow-sm flex items-center gap-2">
+                            <span class="material-symbols-outlined text-base">check_circle</span>
+                            <span>Finalizar Emergência</span>
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+
+        </main>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- MODAIS DE CONTROLE E VALIDAÇÃO -->
+    <!-- ============================================ -->
+
+    <!-- Modal MSG001: Alerta Campos Obrigatórios -->
+    <div id="modalMsg001" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-xs">
+        <div class="bg-white rounded-xl max-w-md w-full p-6 space-y-4 shadow-xl border border-slate-200">
+            <div class="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto">
+                <span class="material-symbols-outlined text-2xl">priority_high</span>
+            </div>
+            <div class="text-center space-y-2">
+                <h3 class="text-lg font-bold text-slate-800">Atenção</h3>
+                <p class="text-sm text-slate-700 font-semibold">
+                    Preencher campos obrigatórios!
+                </p>
+                <p id="detalhesMsg001" class="text-xs text-slate-500">
+                    Por favor, preencha todos os campos obrigatórios assinalados com asterisco (*) para continuar.
+                </p>
+            </div>
+            <button type="button" onclick="fecharModal('modalMsg001')" class="w-full py-2 bg-inema-green text-white font-bold rounded-lg text-xs hover:bg-inema-green-hover">
+                Entendido, vou preencher
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal MSG002: Alerta Ausência de Coordenadas -->
+    <div id="modalMsg002" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-xs">
+        <div class="bg-white rounded-xl max-w-md w-full p-6 space-y-4 shadow-xl border border-slate-200">
+            <div class="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto">
+                <span class="material-symbols-outlined text-2xl">location_off</span>
+            </div>
+            <div class="text-center space-y-2">
+                <h3 class="text-lg font-bold text-slate-800">Ausência de Coordenadas</h3>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    Informamos que a ausência desse dado pode comprometer a apuração da Emergência Química registrada! Deseja continuar?
+                </p>
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button type="button" onclick="fecharModal('modalMsg002')" class="flex-1 py-2 border border-slate-300 text-slate-700 font-semibold rounded-lg text-xs hover:bg-slate-50">
+                    Adicionar Coordenadas
+                </button>
+                <button type="button" onclick="fecharModal('modalMsg002'); abrirModal('modalMsg003');" class="flex-1 py-2 bg-inema-green text-white font-bold rounded-lg text-xs hover:bg-inema-green-hover">
+                    Continuar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal MSG003: Confirmação Definitiva -->
+    <div id="modalMsg003" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-xs">
+        <div class="bg-white rounded-xl max-w-md w-full p-6 space-y-4 shadow-xl border border-slate-200">
+            <div class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto">
+                <span class="material-symbols-outlined text-2xl">help_outline</span>
+            </div>
+            <div class="text-center space-y-2">
+                <h3 class="text-lg font-bold text-slate-800">Confirmar Finalização</h3>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    Após finalizar o registro da emergência química, não será possível realizar alterações! Deseja continuar?
+                </p>
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button type="button" onclick="fecharModal('modalMsg003')" class="flex-1 py-2 border border-slate-300 text-slate-700 font-semibold rounded-lg text-xs hover:bg-slate-50">
+                    Não
+                </button>
+                <button type="button" onclick="concluirRegistroDefinitivo()" class="flex-1 py-2 bg-inema-green text-white font-bold rounded-lg text-xs hover:bg-inema-green-hover">
+                    Sim
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal MSG004: Sucesso de Finalização -->
+    <div id="modalMsg004" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-xs">
+        <div class="bg-white rounded-xl max-w-md w-full p-6 space-y-4 shadow-xl border border-slate-200">
+            <div class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto">
+                <span class="material-symbols-outlined text-2xl">verified</span>
+            </div>
+            <div class="text-center space-y-2">
+                <h3 class="text-lg font-bold text-slate-800">Registro Concluído!</h3>
+                <p class="text-xs text-slate-600">
+                    Registro de Emergência Química cadastrado com sucesso!
+                </p>
+                <div id="textoNumeroREGerado" class="p-3 bg-slate-50 rounded-lg border border-slate-200 mt-2 font-bold text-inema-green text-sm">
+                    Nº de Registro: 2026.000004/INEMA/RE
+                </div>
+                <p class="text-[11px] text-slate-500 mt-1">
+                    Status atribuído: <strong>Emergência Registrada</strong>. Acompanhe a tramitação pela Consulta de Registros Externos.
+                </p>
+            </div>
+            <div class="flex flex-col gap-2 pt-2">
+                <button type="button" onclick="fecharModal('modalMsg004')" class="w-full py-2 bg-inema-green text-white font-bold rounded-lg text-xs hover:bg-inema-green-hover">
+                    Permanecer na Ocorrência
+                </button>
+                <a href="consulta-externa.html" class="w-full py-2 text-center border border-slate-300 text-slate-700 font-semibold rounded-lg text-xs hover:bg-slate-50">
+                    Ir para Meus Registros
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal MSG007: Exclusão Definitiva -->
+    <div id="modalMsg007" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-xs">
+        <div class="bg-white rounded-xl max-w-md w-full p-6 space-y-4 shadow-xl border border-slate-200">
+            <div class="w-12 h-12 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto">
+                <span class="material-symbols-outlined text-2xl">delete_forever</span>
+            </div>
+            <div class="text-center space-y-2">
+                <h3 class="text-lg font-bold text-slate-800">Excluir Registro</h3>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    Deseja excluir o registro de emergência definitivamente? Esta ação não pode ser desfeita.
+                </p>
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button type="button" onclick="fecharModal('modalMsg007')" class="flex-1 py-2 border border-slate-300 text-slate-700 font-semibold rounded-lg text-xs hover:bg-slate-50">
+                    Não
+                </button>
+                <button type="button" onclick="confirmarExclusao()" class="flex-1 py-2 bg-red-600 text-white font-bold rounded-lg text-xs hover:bg-red-700">
+                    Sim
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Upload de Relatório -->
+    <div id="modalUploadRelatorio" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-xs">
+        <div class="bg-white rounded-xl max-w-md w-full p-6 space-y-4 shadow-xl border border-slate-200">
+            <div class="flex items-center justify-between border-b pb-2">
+                <h3 class="text-sm font-bold text-inema-green flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-lg">upload_file</span>
+                    <span id="tituloModalUpload">Anexar Relatório</span>
+                </h3>
+                <button type="button" onclick="fecharModal('modalUploadRelatorio')" class="text-slate-400 hover:text-slate-700">
+                    <span class="material-symbols-outlined text-lg">close</span>
+                </button>
+            </div>
+
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Arquivo para Envio <span class="text-red-500">*</span></label>
+                    <input type="file" id="inputArquivoRelatorio" class="block w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-inema-sage file:text-inema-green">
+                </div>
+                <div class="p-2 bg-slate-50 rounded text-[10px] text-slate-500">
+                    Formatos aceitos: PDF, DOCX, XLSX, JPG, PNG, ZIP, SHP (máx 50MB).
+                </div>
+            </div>
+
+            <div class="flex gap-2 pt-2 border-t">
+                <button type="button" onclick="fecharModal('modalUploadRelatorio')" class="flex-1 py-2 border border-slate-300 text-slate-700 font-semibold rounded-lg text-xs hover:bg-slate-50">
+                    Cancelar
+                </button>
+                <button type="button" onclick="confirmarUploadRelatorio()" class="flex-1 py-2 bg-inema-green text-white font-bold rounded-lg text-xs hover:bg-inema-green-hover">
+                    Anexar Relatório
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- JAVASCRIPT REATIVO DOR004 -->
+    <!-- ============================================ -->
+    <script>
+        const CHAVE_STORAGE = 'INEMA_SEIA_REGISTROS_EXTERNOS';
+        const CHAVE_RASCUNHO = 'INEMA_DOR004_RASCUNHO';
+
+        // Catálogo das 14 Áreas Atingidas
+        const CATALOGO_AREAS = [
+            { nome: 'Área Urbana', tooltip: null },
+            { nome: 'Distrito', tooltip: null },
+            { nome: 'Assentamento Rural', tooltip: null },
+            { nome: 'Comunidade Indígena', tooltip: null },
+            { nome: 'Área Industrial', tooltip: null },
+            { nome: 'Dutovia', tooltip: null },
+            { nome: 'Colônia de Pescadores', tooltip: null },
+            { nome: 'Comunidade Tradicional', tooltip: 'Ribeirinha, Quilombo, Pescadores e outros...' },
+            { nome: 'Povoado', tooltip: null },
+            { nome: 'Posto de Combustível', tooltip: null },
+            { nome: 'Recurso Hídrico', tooltip: null },
+            { nome: 'Rodovia', tooltip: null },
+            { nome: 'Área de Marinha', tooltip: null },
+            { nome: 'Unidade de Conservação', tooltip: 'Parques, APA entre outros...' }
+        ];
+
+        let areasSelecionadas = [];
+        let coordenadasAdicionadas = [];
+        let relatoriosSalvos = [];
+        let registroFinalizadoAtual = null;
+        let tipoRelatorioEmUpload = 'Preliminar';
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            renderizarGridAreas();
+            // Trava de data futura no campo de data da constatação
+            const hojeIso = new Date().toISOString().slice(0, 16);
+            document.getElementById('campoDataHoraConstatacao').max = hojeIso;
+            recuperarRascunho();
+        });
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
+
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.add('-translate-x-full');
+            document.getElementById('sidebarOverlay').classList.add('hidden');
+        }
+
+        function toggleSubmenu(param1, param2) {
+            if (typeof param1 === 'string') {
+                const el = document.getElementById(param1);
+                const icon = param2 ? document.getElementById(param2) : null;
+                if (el) el.classList.toggle('hidden');
+                if (icon) icon.classList.toggle('rotate-180');
+            } else if (param1 && param1.nodeType) {
+                const parent = param1.closest('li') || param1.parentElement;
+                const ul = parent ? parent.querySelector('ul') : null;
+                const icon = param1.querySelector('.material-symbols-outlined:last-child');
+                if (ul) ul.classList.toggle('hidden');
+                if (icon) icon.classList.toggle('rotate-180');
+            }
+        }
+
+        // Renderiza Checkboxes das Áreas Atingidas com Tooltips
+        function renderizarGridAreas() {
+            const grid = document.getElementById('gridAreasAtingidas');
+            grid.innerHTML = CATALOGO_AREAS.map(item => `
+                <label class="flex items-center gap-2 p-2 rounded-lg border text-xs cursor-pointer transition-all border-slate-200 hover:border-slate-300 text-slate-700 area-item" data-area="${item.nome}">
+                    <input type="checkbox" value="${item.nome}" onchange="handleAreaChange(this)" class="rounded text-inema-green focus:ring-inema-green">
+                    <span>${item.nome}</span>
+                    ${item.tooltip ? `
+                        <span class="material-symbols-outlined text-xs text-slate-400 ml-auto" title="${item.tooltip}">info</span>
+                    ` : ''}
+                </label>
+            `).join('');
+        }
+
+        function handleAreaChange(chk) {
+            if (chk.checked) {
+                if (areasSelecionadas.length >= 3) {
+                    chk.checked = false;
+                    alert('Você pode selecionar no máximo 3 áreas atingidas.');
+                    return;
+                }
+                areasSelecionadas.push(chk.value);
+            } else {
+                areasSelecionadas = areasSelecionadas.filter(a => a !== chk.value);
+            }
+
+            // Atualiza contagem e estilização
+            document.getElementById('badgeContagemAreas').innerText = `${areasSelecionadas.length} de 3 selecionadas`;
+
+            // Estiliza selecionados e bloqueia quando atinge 3
+            document.querySelectorAll('.area-item').forEach(lbl => {
+                const area = lbl.getAttribute('data-area');
+                const isSel = areasSelecionadas.includes(area);
+                const input = lbl.querySelector('input');
+                if (isSel) {
+                    lbl.className = 'flex items-center gap-2 p-2 rounded-lg border text-xs cursor-pointer transition-all border-inema-green bg-inema-sage/40 text-inema-green font-semibold area-item';
+                    input.disabled = false;
+                } else if (areasSelecionadas.length >= 3) {
+                    lbl.className = 'flex items-center gap-2 p-2 rounded-lg border text-xs cursor-not-allowed transition-all opacity-40 border-slate-200 text-slate-400 area-item';
+                    input.disabled = true;
+                } else {
+                    lbl.className = 'flex items-center gap-2 p-2 rounded-lg border text-xs cursor-pointer transition-all border-slate-200 hover:border-slate-300 text-slate-700 area-item';
+                    input.disabled = false;
+                }
+            });
+        }
+
+        // Vínculo Empresa SIM/NÃO
+        function toggleVinculoEmpresa(val) {
+            const blocoSim = document.getElementById('blocoVinculoSim');
+            const blocoNao = document.getElementById('blocoVinculoNao');
+            if (val === 'SIM') {
+                blocoSim.classList.remove('hidden');
+                blocoNao.classList.add('hidden');
+            } else {
+                blocoSim.classList.add('hidden');
+                blocoNao.classList.remove('hidden');
+            }
+        }
+
+        function toggleOutrasInstituicoes(val) {
+            const blocoOutras = document.getElementById('blocoOutrasInstituicoes');
+            if (val === 'Outras instituições') {
+                blocoOutras.classList.remove('hidden');
+            } else {
+                blocoOutras.classList.add('hidden');
+            }
+        }
+
+        // Tipo Emergência: Condicional Outros
+        function handleTipoEmergenciaChange(val) {
+            const blocoOutros = document.getElementById('blocoDescricaoOutros');
+            if (val === 'Outros') {
+                blocoOutros.classList.remove('hidden');
+            } else {
+                blocoOutros.classList.add('hidden');
+            }
+        }
+
+        function atualizarContadorDescricao(el) {
+            document.getElementById('charCountDescricao').innerText = `${el.value.length} / 7.000 caracteres`;
+        }
+
+        // Busca CEP simulada
+        function buscarCepSimulado(val) {
+            const clean = val.replace(/\D/g, '');
+            if (clean === '40020000') {
+                document.getElementById('campoMunicipio').value = 'Salvador';
+                document.getElementById('campoBairro').value = 'Centro';
+                document.getElementById('campoEndereco').value = 'Rua Chile';
+                document.getElementById('campoPontoReferencia').value = 'Próximo ao Elevador Lacerda';
+            } else if (clean === '42800000') {
+                document.getElementById('campoMunicipio').value = 'Camaçari';
+                document.getElementById('campoBairro').value = 'Pólo Petroquímico';
+                document.getElementById('campoEndereco').value = 'Via Matoim';
+            }
+        }
+
+        // Adicionar Coordenada
+        function adicionarCoordenada() {
+            const tipo = document.getElementById('selectTipoCoordenada').value;
+            const lat = document.getElementById('inputCoordLatitude').value.trim();
+            const lng = document.getElementById('inputCoordLongitude').value.trim();
+
+            if (!lat && !lng) {
+                alert('Informe latitude e longitude ou zero.');
+                return;
+            }
+
+            const item = { id: Date.now(), tipo, lat, lng };
+            coordenadasAdicionadas.push(item);
+            document.getElementById('inputCoordLatitude').value = '';
+            document.getElementById('inputCoordLongitude').value = '';
+            renderizarCoordenadas();
+        }
+
+        function renderizarCoordenadas() {
+            const box = document.getElementById('listaCoordenadasAdicionadas');
+            box.innerHTML = coordenadasAdicionadas.map((c, i) => `
+                <div class="flex items-center justify-between text-xs bg-white p-2 rounded-lg border border-slate-200">
+                    <span class=" text-slate-700">
+                        #${i + 1} [${c.tipo}]: Lat ${c.lat}, Long ${c.lng}
+                    </span>
+                    <button type="button" onclick="removerCoordenada(${c.id})" class="text-red-600 hover:text-red-800 text-xs font-bold">
+                        Remover
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function removerCoordenada(id) {
+            coordenadasAdicionadas = coordenadasAdicionadas.filter(c => c.id !== id);
+            renderizarCoordenadas();
+        }
+
+        // Modais helpers
+        function abrirModal(id) {
+            const el = document.getElementById(id);
+            if (el) el.classList.remove('hidden');
+        }
+
+        function fecharModal(id) {
+            const el = document.getElementById(id);
+            if (el) el.classList.add('hidden');
+        }
+
+        // Validação e Finalização
+        function handleFinalizarEmergencia() {
+            const vinculo = document.querySelector('input[name="vinculoEmpresa"]:checked').value;
+            const nomeEmpresa = document.getElementById('campoNomeEmpresa').value.trim();
+            const cargo = document.getElementById('campoCargo').value.trim();
+            const semVinculo = document.getElementById('campoClassificacaoSemVinculo').value;
+            const outrasInst = document.getElementById('campoOutrasInstituicoes').value.trim();
+
+            const telefone = document.getElementById('campoTelefone').value.trim();
+            const dataConstatacao = document.getElementById('campoDataHoraConstatacao').value;
+            const tipoEmergencia = document.getElementById('campoTipoEmergencia').value;
+            const descOutros = document.getElementById('campoDescricaoTipoOutros').value.trim();
+            const descricao = document.getElementById('campoDescricao').value.trim();
+
+            const municipio = document.getElementById('campoMunicipio').value;
+            const endereco = document.getElementById('campoEndereco').value.trim();
+            const pontoRef = document.getElementById('campoPontoReferencia').value.trim();
+
+            // Validação de Obrigatórios
+            let erros = [];
+            if (!telefone) erros.push('Telefone / Celular');
+            if (vinculo === 'SIM') {
+                if (!nomeEmpresa) erros.push('Nome da empresa');
+                if (!cargo) erros.push('Cargo');
+            } else {
+                if (semVinculo === 'Outras instituições' && !outrasInst) erros.push('Nome da instituição');
+            }
+            if (!dataConstatacao) erros.push('Data e hora da Constatação');
+            if (!tipoEmergencia) erros.push('Tipo da Emergência Química');
+            if (tipoEmergencia === 'Outros' && !descOutros) erros.push('Descrição do tipo Outros');
+            if (!descricao) erros.push('Descrição do Fato');
+            if (!municipio) erros.push('Município');
+            if (!endereco) erros.push('Endereço / Local');
+            if (!pontoRef) erros.push('Ponto de Referência');
+            if (areasSelecionadas.length === 0) erros.push('Área Atingida (mínimo 1)');
+
+            if (erros.length > 0) {
+                document.getElementById('detalhesMsg001').innerText = `Campos pendentes: ${erros.join(', ')}.`;
+                abrirModal('modalMsg001');
+                return;
+            }
+
+            // Validação de Coordenadas
+            if (coordenadasAdicionadas.length === 0) {
+                abrirModal('modalMsg002');
+                return;
+            }
+
+            // Confirmação Definitiva (MSG003)
+            abrirModal('modalMsg003');
+        }
+
+        // Concluir Registro Definitivo
+        function concluirRegistroDefinitivo() {
+            fecharModal('modalMsg003');
+
+            // Gerar RE aleatório (ex: 2026.000004/INEMA/RE)
+            const seq = Math.floor(100000 + Math.random() * 900000);
+            const numeroRE = `2026.${seq}/INEMA/RE`;
+
+            const vinculo = document.querySelector('input[name="vinculoEmpresa"]:checked').value;
+            const registro = {
+                id: 're-' + Date.now(),
+                numeroRegistro: numeroRE,
+                tipoRegistro: 'Emergência Química (RE)',
+                dataHoraCadastro: new Date().toLocaleString('pt-BR', { 
+                    day: '2-digit', month: '2-digit', year: 'numeric', 
+                    hour: '2-digit', minute: '2-digit' 
+                }),
+                dataHoraIso: new Date().toISOString(),
+                municipio: document.getElementById('campoMunicipio').value,
+                status: 'Emergência Registrada',
+                tipoEmergenciaQuimica: document.getElementById('campoTipoEmergencia').value,
+                descricaoTipoOutros: document.getElementById('campoDescricaoTipoOutros').value,
+                descricao: document.getElementById('campoDescricao').value,
+                pontoReferencia: document.getElementById('campoPontoReferencia').value,
+                endereco: document.getElementById('campoEndereco').value,
+                bairro: document.getElementById('campoBairro').value,
+                numero: document.getElementById('campoNumero').value,
+                cep: document.getElementById('campoCep').value,
+                descricaoCenario: document.getElementById('campoDescricaoCenario').value,
+                areasAtingidas: [...areasSelecionadas],
+                coordenadas: coordenadasAdicionadas.map(c => ({
+                    tipo: c.tipo,
+                    latitude: c.lat,
+                    longitude: c.lng,
+                    latDecimal: c.lat,
+                    lngDecimal: c.lng
+                })),
+                comunicante: {
+                    nomeRazaoSocial: 'Giovani Silva',
+                    cpfCnpj: '529.982.247-25',
+                    telefone: document.getElementById('campoTelefone').value,
+                    outroTelefone: document.getElementById('campoOutroTelefone').value,
+                    email: 'giovani.silva@exemplo.com.br',
+                    vinculoEmpresa: vinculo,
+                    nomeEmpresaTrabalho: vinculo === 'SIM' ? document.getElementById('campoNomeEmpresa').value : undefined,
+                    cargo: vinculo === 'SIM' ? document.getElementById('campoCargo').value : undefined,
+                    classificacaoSemVinculo: vinculo === 'NÃO' ? document.getElementById('campoClassificacaoSemVinculo').value : undefined,
+                    outrasInstituicoesNome: document.getElementById('campoOutrasInstituicoes').value,
+                    empresaResponsavelInformada: document.getElementById('campoEmpresaResponsavelInformada').value
+                },
+                relatoriosAnexados: [],
+                historico: [
+                    {
+                        id: 'hist-1',
+                        dataHora: new Date().toLocaleString('pt-BR'),
+                        usuario: 'Giovani Silva (Gov.br)',
+                        acao: 'Registro de Emergência Química Finalizado',
+                        detalhes: `Status inicial atribuído: Emergência Registrada. Protocolo: ${numeroRE}`
+                    }
+                ]
+            };
+
+            // Salvar no LocalStorage para sincronização com DOR005.1
+            try {
+                const registros = JSON.parse(localStorage.getItem(CHAVE_STORAGE) || '[]');
+                registros.unshift(registro);
+                localStorage.setItem(CHAVE_STORAGE, JSON.stringify(registros));
+                localStorage.removeItem(CHAVE_RASCUNHO);
+            } catch (err) {
+                console.error('Erro storage:', err);
+            }
+
+            registroFinalizadoAtual = registro;
+
+            // Atualizar cabeçalho e badges
+            document.getElementById('badgeNumeroRE').innerText = numeroRE;
+            document.getElementById('badgeStatusRE').innerText = 'Emergência Registrada';
+            document.getElementById('textoNumeroREGerado').innerText = `Nº de Registro: ${numeroRE}`;
+
+            // Exibir modal de sucesso MSG004
+            abrirModal('modalMsg004');
+
+            // Transição para modo de leitura / pós-finalização
+            bloquearFormularioModoLeitura(vinculo);
+        }
+
+        function bloquearFormularioModoLeitura(vinculo) {
+            // Desabilitar campos do formulário
+            document.querySelectorAll('#formEmergenciaExterna input, #formEmergenciaExterna select, #formEmergenciaExterna textarea').forEach(el => {
+                el.disabled = true;
+            });
+            // Ocultar botões de finalizar e excluir
+            document.getElementById('rodapeAcoes').classList.add('hidden');
+            // Exibir seção de relatórios
+            const secaoRelatorios = document.getElementById('secaoRelatoriosPosFinalizacao');
+            secaoRelatorios.classList.remove('hidden');
+
+            // se declarou vínculo = SIM, habilita RPEQ; se NÃO, desabilita
+            const btnRpeq = document.getElementById('btnUploadRpeq');
+            const msgRpeq = document.getElementById('msgRpeqCondicional');
+            if (vinculo === 'SIM') {
+                btnRpeq.disabled = false;
+                msgRpeq.innerText = 'Envio de Relatório Preliminar de Emergência Química liberado para quem declarou vínculo empresarial.';
+                msgRpeq.className = 'text-[11px] text-emerald-700 font-semibold';
+            } else {
+                btnRpeq.disabled = true;
+                btnRpeq.classList.add('opacity-40', 'cursor-not-allowed');
+                msgRpeq.innerText = 'O Relatório Preliminar de Emergência Química (RPEQ) é solicitado apenas a quem declarou vínculo com a empresa responsável.';
+            }
+        }
+
+        // Upload de Relatórios Regulatórios
+        function abrirModalUpload(tipo) {
+            tipoRelatorioEmUpload = tipo;
+            document.getElementById('tituloModalUpload').innerText = `Anexar Relatório ${tipo}`;
+            document.getElementById('inputArquivoRelatorio').value = '';
+            abrirModal('modalUploadRelatorio');
+        }
+
+        function confirmarUploadRelatorio() {
+            const input = document.getElementById('inputArquivoRelatorio');
+            if (!input.files || input.files.length === 0) {
+                alert('Selecione um arquivo para continuar.');
+                return;
+            }
+
+            const file = input.files[0];
+            const novoRel = {
+                id: 'rel-' + Date.now(),
+                tipo: tipoRelatorioEmUpload,
+                nomeArquivo: file.name,
+                tamanhoBytes: file.size,
+                dataHoraEnvio: new Date().toLocaleString('pt-BR', { 
+                    day: '2-digit', month: '2-digit', year: 'numeric', 
+                    hour: '2-digit', minute: '2-digit' 
+                }),
+                usuarioEnvio: 'Giovani Silva (Gov.br)'
+            };
+
+            relatoriosSalvos.push(novoRel);
+
+            // Atualizar no storage
+            if (registroFinalizadoAtual) {
+                try {
+                    const registros = JSON.parse(localStorage.getItem(CHAVE_STORAGE) || '[]');
+                    const idx = registros.findIndex(r => r.id === registroFinalizadoAtual.id);
+                    if (idx !== -1) {
+                        registros[idx].relatoriosAnexados.push(novoRel);
+                        registros[idx].historico.push({
+                            id: 'hist-' + Date.now(),
+                            dataHora: new Date().toLocaleString('pt-BR'),
+                            usuario: 'Giovani Silva (Gov.br)',
+                            acao: `Relatório ${tipoRelatorioEmUpload} Anexado`,
+                            detalhes: `Arquivo: ${file.name}`
+                        });
+                        localStorage.setItem(CHAVE_STORAGE, JSON.stringify(registros));
+                    }
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+
+            fecharModal('modalUploadRelatorio');
+            renderizarRelatoriosEnviados();
+            alert('Relatório anexado com sucesso!');
+        }
+
+        function renderizarRelatoriosEnviados() {
+            const cont = document.getElementById('containerRelatoriosEnviados');
+            const lista = document.getElementById('listaRelatoriosEnviados');
+            if (relatoriosSalvos.length > 0) {
+                cont.classList.remove('hidden');
+                lista.innerHTML = relatoriosSalvos.map(r => `
+                    <div class="p-2.5 bg-white rounded-lg border border-slate-200 flex items-center justify-between text-xs">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-base text-inema-green">description</span>
+                            <div>
+                                <span class="font-bold text-slate-800">${r.tipo}: ${r.nomeArquivo}</span>
+                                <span class="text-[10px] text-slate-400 block ">Enviado em ${r.dataHoraEnvio}</span>
+                            </div>
+                        </div>
+                        <span class="px-2 py-0.5 bg-emerald-50 text-emerald-800 rounded text-[10px] font-bold">Anexado</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Rascunho
+        function salvarRascunho() {
+            const dados = {
+                vinculo: document.querySelector('input[name="vinculoEmpresa"]:checked')?.value,
+                nomeEmpresa: document.getElementById('campoNomeEmpresa').value,
+                cargo: document.getElementById('campoCargo').value,
+                semVinculo: document.getElementById('campoClassificacaoSemVinculo').value,
+                outrasInst: document.getElementById('campoOutrasInstituicoes').value,
+                empresaResp: document.getElementById('campoEmpresaResponsavelInformada').value,
+                telefone: document.getElementById('campoTelefone').value,
+                outroTel: document.getElementById('campoOutroTelefone').value,
+                dataConstatacao: document.getElementById('campoDataHoraConstatacao').value,
+                tipoEmergencia: document.getElementById('campoTipoEmergencia').value,
+                descOutros: document.getElementById('campoDescricaoTipoOutros').value,
+                descricao: document.getElementById('campoDescricao').value,
+                municipio: document.getElementById('campoMunicipio').value,
+                cep: document.getElementById('campoCep').value,
+                endereco: document.getElementById('campoEndereco').value,
+                bairro: document.getElementById('campoBairro').value,
+                numero: document.getElementById('campoNumero').value,
+                pontoRef: document.getElementById('campoPontoReferencia').value,
+                areas: areasSelecionadas,
+                coords: coordenadasAdicionadas
+            };
+            localStorage.setItem(CHAVE_RASCUNHO, JSON.stringify(dados));
+            alert('Rascunho salvo com sucesso!');
+        }
+
+        function recuperarRascunho() {
+            try {
+                const r = localStorage.getItem(CHAVE_RASCUNHO);
+                if (!r) return;
+                const d = JSON.parse(r);
+                if (d.vinculo) {
+                    const radio = document.querySelector(`input[name="vinculoEmpresa"][value="${d.vinculo}"]`);
+                    if (radio) { radio.checked = true; toggleVinculoEmpresa(d.vinculo); }
+                }
+                if (d.nomeEmpresa) document.getElementById('campoNomeEmpresa').value = d.nomeEmpresa;
+                if (d.cargo) document.getElementById('campoCargo').value = d.cargo;
+                if (d.semVinculo) {
+                    document.getElementById('campoClassificacaoSemVinculo').value = d.semVinculo;
+                    toggleOutrasInstituicoes(d.semVinculo);
+                }
+                if (d.outrasInst) document.getElementById('campoOutrasInstituicoes').value = d.outrasInst;
+                if (d.empresaResp) document.getElementById('campoEmpresaResponsavelInformada').value = d.empresaResp;
+                if (d.telefone) document.getElementById('campoTelefone').value = d.telefone;
+                if (d.outroTel) document.getElementById('campoOutroTelefone').value = d.outroTel;
+                if (d.dataConstatacao) document.getElementById('campoDataHoraConstatacao').value = d.dataConstatacao;
+                if (d.tipoEmergencia) {
+                    document.getElementById('campoTipoEmergencia').value = d.tipoEmergencia;
+                    handleTipoEmergenciaChange(d.tipoEmergencia);
+                }
+                if (d.descOutros) document.getElementById('campoDescricaoTipoOutros').value = d.descOutros;
+                if (d.descricao) {
+                    document.getElementById('campoDescricao').value = d.descricao;
+                    atualizarContadorDescricao(document.getElementById('campoDescricao'));
+                }
+                if (d.municipio) document.getElementById('campoMunicipio').value = d.municipio;
+                if (d.cep) document.getElementById('campoCep').value = d.cep;
+                if (d.endereco) document.getElementById('campoEndereco').value = d.endereco;
+                if (d.bairro) document.getElementById('campoBairro').value = d.bairro;
+                if (d.numero) document.getElementById('campoNumero').value = d.numero;
+                if (d.pontoRef) document.getElementById('campoPontoReferencia').value = d.pontoRef;
+                if (d.areas && Array.isArray(d.areas)) {
+                    d.areas.forEach(a => {
+                        const chk = document.querySelector(`input[value="${a}"]`);
+                        if (chk) { chk.checked = true; handleAreaChange(chk); }
+                    });
+                }
+                if (d.coords && Array.isArray(d.coords)) {
+                    coordenadasAdicionadas = d.coords;
+                    renderizarCoordenadas();
+                }
+            } catch (e) {
+                console.error('Erro ao recuperar rascunho:', e);
+            }
+        }
+
+        // Exclusão Definitiva
+        function abrirModalExclusao() {
+            abrirModal('modalMsg007');
+        }
+
+        function confirmarExclusao() {
+            fecharModal('modalMsg007');
+            localStorage.removeItem(CHAVE_RASCUNHO);
+            alert('Registro excluído definitivamente.');
+            window.location.reload();
+        }
+    </script>
+</body>
+</html>

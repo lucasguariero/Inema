@@ -1,0 +1,132 @@
+{
+  "outputDirectory": "dist",
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "rota"
+        }
+      ],
+      "destination": "/index.html"
+    },
+    {
+      "source": "/",
+      "destination": "/relatorios-antigo.html"
+    },
+    {
+      "source": "/layout-antigo",
+      "destination": "/relatorios-antigo.html"
+    },
+    {
+      "source": "/conceito-01",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/conceito-02",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/conceito-03",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/proposta-01",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/proposta-02",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/inema-light",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/inema-forest",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/proposta-verde-azul",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/proposta-verde",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/sidebar-verde-azul",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/sidebar-verde",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/fiscalizacao/(.*)",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/fiscalizacao",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/atendente",
+      "destination": "/index.html?rota=atendente"
+    },
+    {
+      "source": "/cidadao",
+      "destination": "/index.html?rota=cidadao"
+    },
+    {
+      "source": "/emergencia-interna",
+      "destination": "/index.html?rota=emergencia-interna"
+    },
+    {
+      "source": "/emergencia-externa",
+      "destination": "/index.html?rota=emergencia-externa"
+    },
+    {
+      "source": "/consulta-externa",
+      "destination": "/index.html?rota=consulta-externa"
+    },
+    {
+      "source": "/consulta-interna",
+      "destination": "/index.html?rota=consulta-interna"
+    },
+    {
+      "source": "/fisc-plantonista",
+      "destination": "/index.html?rota=fisc-plantonista"
+    },
+    {
+      "source": "/fisc-escala",
+      "destination": "/index.html?rota=fisc-escala"
+    },
+    {
+      "source": "/uc-agendamento",
+      "destination": "/index.html?rota=uc-agendamento"
+    },
+    {
+      "source": "/uc-autorizacao-visitacao",
+      "destination": "/index.html?rota=uc-autorizacao-visitacao"
+    },
+    {
+      "source": "/uc-atividades-didaticas",
+      "destination": "/index.html?rota=uc-atividades-didaticas"
+    },
+    {
+      "source": "/uc-pesquisa-cientifica",
+      "destination": "/index.html?rota=uc-pesquisa-cientifica"
+    },
+    {
+      "source": "/fauna",
+      "destination": "/fauna.html"
+    },
+    {
+      "source": "/gestao-fauna",
+      "destination": "/fauna.html"
+    }
+  ]
+}

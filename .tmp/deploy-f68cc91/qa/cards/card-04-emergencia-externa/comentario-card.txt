@@ -1,0 +1,17 @@
+﻿Fala time! Retestei o card completo de "Fiscalização — Registro de Emergência Externa" (DOR004). Segue o resultado:
+
+Resolvido: testei o acesso sem autenticação pelo /servicos-online, cliquei em "Registrar Emergência Química" e confirmei a abertura do modal explicativo sem redirecionamento abrupto, seguido da simulação de login Gov.br com CPF preenchido (Print 01).
+Resolvido: confirmei que no cabeçalho consta "Nº de Registro: A gerar na finalização" sem gerar número prematuro na abertura, e validei que o campo "Técnico plantonista" está totalmente ausente para o cidadão externo (Print 02).
+Resolvido: testei a condicional de vínculo com a empresa: com Vínculo = Sim surgem "Nome da empresa" (500 car.) e "Cargo" (200 car.) (Print 03); com Vínculo = Não surgem as classificações (Cidadão comum, Força Policial, Outras Instituições); e o campo "Sabe informar o nome da empresa responsável?" permaneceu visível em ambos os cenários.
+Resolvido: confirmei o bloqueio de edição dos dados importados do comunicante (Nome, CPF, E-mail bloqueados, Telefone editável), o bloqueio nativo de datas futuras na constatação, a obrigatoriedade da descrição ao selecionar Tipo = Outros, e o autocompletar do CEP 40020-000 para Salvador - BA, Centro, Rua Chile (Print 04).
+Resolvido: testei a seleção de áreas atingidas e confirmei o bloqueio ao tentar marcar a 4ª opção (limite de 3 áreas respeitado).
+Resolvido: ao avançar sem preencher coordenadas, o sistema exibiu o alerta modal MSG002 informando o risco da ausência do dado (Print 05), seguido da confirmação MSG003 que preserva os dados ao clicar em "Não".
+Resolvido: confirmei a finalização gerando o registro definitivo 2026.000004/INEMA/RE, a transição da tela para modo leitura com botões Finalizar/Excluir ocultados, e a seção de Relatórios bloqueando o RPEQ para quem declarou sem vínculo (Print 06).
+Resolvido: acessei com o login de Gestor (111.111.111-11), localizei o RE na pauta de Fiscalização > Associar Técnico, executei a ação "Corrigir vínculo" alterando para "Sim" com empresa "Petroquímica Camaçari S.A." e cargo "Gerente de Operações", e o sistema gravou com sucesso (Print 07).
+Resolvido: retornei ao portal com o comunicante, abri o RE e confirmei que o RPEQ foi desbloqueado, permitindo o envio de PDF com toast de confirmação (Print 08).
+Resolvido: na pauta de Associar Técnico, validei a ordenação dos plantonistas (plantonistas de Salvador listados no topo), selecionei a técnica Carla Mendes e confirmei a associação, alterando o status do RE para "Análise Técnica" com envio de alertas (Print 09).
+Resolvido: em Meus Registros do comunicante, confirmei a atualização em tempo real do badge para "Análise Técnica" (Print 10).
+Resolvido: iniciei um novo rascunho com dados parciais, confirmei a persistência após recarregar a página e testei o botão "Excluir Emergência", validando a confirmação via MSG007 e a exclusão definitiva do rascunho sem afetar os registros finalizados (Print 11).
+
+Com isso, considero este card resolvido e homologado.
+Fico à disposição se precisarem de mais detalhes de qualquer um dos pontos.

@@ -1,0 +1,16 @@
+Fala equipe! Finalizei o refino cirúrgico de UI/UX e alinhamento de negócio do CEUC (TL001 e TL002).
+
+Link do protótipo: https://inema.acto.com.br/?modulo=ceuc
+
+Resolvido:
+1. Filtro de Gestor na TL001 integrado na barra de filtros da tabela, alinhado com Categoria e Município (Print 01).
+2. Cabeçalho limpo na TL002: erradicação do breadcrumb duplicado e inclusão das ações "Salvar Rascunho" e "Avançar" diretamente no topo direito ao lado de "Voltar à Lista", acabando com a rolagem forçada (Print 02).
+3. Abas Filament (GlaTabs) limpas, sem a repetição dos badges de "Em breve" (Print 02).
+4. Duplo enquadramento normativo com o label "Categoria de Manejo (SEUC/SNUC) *" (Print 02).
+5. Inclusão do campo numérico "População Estimada (Famílias/Habitantes)" em Informações Geográficas (Print 03).
+6. Campo dedicado "Observações / Status Fundiário" para registro de terras públicas e desapropriações (Print 03).
+7. Chips de municípios com flex-wrap garantindo que poligonais com múltiplos municípios não estourem o layout (Print 03).
+8. Ação "Visualizar" com modal em arquivos anexados (RN006), permitindo conferir o decreto/norma cadastrada (Print 04).
+
+Com isso, o CEUC está 100% calibrado com o DOR036 e pronto para a reunião de validação.
+Fico à disposição!

@@ -1,0 +1,7 @@
+Fala time! Retestei e homologuei o prototipo e fluxo do card de "DOR002 - Modulo Gestao de Unidades de Conservacao - Autorizacao Previa para Visitacao em UC / Eventos (AAV / APV)". Segue o resultado:
+
+Resolvido: Implementado o fluxo formal do processo administrativo AAV integrado ao SEI-BA (Print 01), contemplando o painel TL007 com indicadores gerenciais e controle do SLA legal de 20 dias (RN010). Na tela de analise tecnica TL005 e instrucao documental TL004, estao integrados todos os modelos padronizados do acervo (F-DUC-066 Lista de Documentos, F-DUC-067 Termo de Compromisso, F-DUC-068 Plano de Atividade, ART e Seguro de Acidentes) e o checklist de conformidade com o Plano de Manejo (Print 02). Validei a acao decisória com formulacao de condicionantes ambientais e emissao da Portaria formal com a mensagem normativa MSG008 (Print 03), gerando o ato administrativo publicado e habilitando o download em PDF (Print 04).
+Nao resolvido: Nenhum ponto pendente. Todos os requisitos (RN001 a RN017), modelos documentais (F-DUC-066 a F-DUC-074) e mensagens operacionais foram integralmente implementados.
+Fora do escopo deste card: O agendamento operacional preliminar e tratado no DOR001, e os processos didaticos especificos (AAD) no DOR003.
+Com isso, considero este card resolvido e validado.
+Fico a disposicao se precisar de mais detalhes de qualquer um desses pontos.

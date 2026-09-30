@@ -1,0 +1,32 @@
+Fazer o Módulo Gestão de Fauna
+Dia 1 até a morte do animal, tem que ser registrado
+Ele tem um tipo de RG
+
+Quando ele é admitido na unidade regional do inema
+Eles pegam o animal, veem como ta a saúde, passa pelo veterinário
+Eles tem que seguir por uma área de CETAs
+
+CETAs = principal setor de cadastro e adm dos animais, grupo principal do gestão de faunas
+
+Eles que irão gerar o numero CETAs, fazem marcação do animal, identificar espécie, classificação
+
+Unidade regional = unidade/áreas de apoio, posto avançado
+
+CETAs = time principal, recebem os animais das unidades regionais e postos avançados, registram, marcam, catalogam
+
+-
+
+Cadastros Transversais, CETAS, ASAS, ZOO, GUARDIÃO e Relatórios/Auditoria
+
+Módulos de Apoio (cadastros transversais):
+
+CETAs (animal silvestre)
+AASAS = área de soltura (publica/privada) - vc cadastra sua fazenda e vira uma AASA autorizacda e pode ter animais silvestres lá
+Guardião = pessoas físicas/jurídicas que tem o registro de um animal (tem que cuidar certinho de todos e sofre vistoria)
+Zoológico (animal cativeiro, modulo a parte) = doação, de outro zoológico, pode ter vindo de área publica (tem q ter no mínimo um cadastro no CETAs), vai ficar pra sempre lá, e tudo oq acontece com ele tem q ter registro (transferência, tratamento, saúde, morte). Quando ele morre eles podem até doar a carcaça pra pesquisa cientifica, tem q ser registrado que virou uso cientifico, e a universidade etc. Sempre terá um veterinário em todo o processo.
+
+Um animal pode ser pesado N vezes no mês
+Um animal passa por consulta veterinária o tempo todo
+Tem que ter histórico de tudo
+
+Veterinários e técnicos tem que fazer upload dos documentos todos (fotos, registro dos documentos)
