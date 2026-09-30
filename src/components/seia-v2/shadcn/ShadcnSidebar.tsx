@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import {
   Home,
   FilePlus2,
@@ -81,6 +81,11 @@ const ICON_MAP: Record<string, React.ElementType> = {
   FileSpreadsheet,
 };
 
+const getGroupForRoute = (route?: string) =>
+  SEIA_V2_MENU_GROUPS.find((group) =>
+    group.items.some((item) => item.route === route)
+  )?.id;
+
 export const ShadcnSidebar: React.FC<SidebarProps> = ({
   activeRoute = 'relatorios',
   isCollapsed = false,
@@ -148,9 +153,15 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
   };
 
   // Um único módulo aberto por vez mantém a navegação curta e previsível.
-  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
-    regulacao: true,
+  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() => {
+    const activeGroup = getGroupForRoute(activeRoute);
+    return activeGroup ? { [activeGroup]: true } : {};
   });
+
+  useEffect(() => {
+    const activeGroup = getGroupForRoute(activeRoute);
+    setOpenGroups(activeGroup ? { [activeGroup]: true } : {});
+  }, [activeRoute]);
 
   // Filtro de busca instantâneo
   const [searchFilter, setSearchFilter] = useState('');
@@ -274,7 +285,7 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
         className={cn(
           'flex flex-col fixed top-16 bottom-0 left-0 z-40 lg:static lg:z-auto lg:h-full shrink-0 transition-all duration-200 ease-in-out shadow-xl lg:shadow-none overflow-hidden',
           isDarkMode
-            ? 'bg-slate-950 border-r border-slate-800 text-slate-300'
+            ? 'bg-slate-950 border-r-0 text-slate-300'
             : isVizoraGreen
             ? 'bg-[#185846] border-r border-[#206954] text-[#bce0d3]'
             : isInemaLight
@@ -454,7 +465,10 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                           id={`btn-${group.id}`}
                           data-testid={`nav-${group.label}`}
                           onClick={() => {
-                            if (!group.disabled && onToggleCollapse) onToggleCollapse();
+                            if (!group.disabled) {
+                              setOpenGroups({ [group.id]: true });
+                              onToggleCollapse?.();
+                            }
                           }}
                           disabled={group.disabled}
                           className={cn(
@@ -662,6 +676,8 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                       data-testid={`nav-${group.label}`}
                       onClick={() => toggleGroup(group.id)}
                       disabled={group.disabled}
+                      aria-expanded={expanded}
+                      aria-controls={`group-${group.id}`}
                       className={cn(
                         'w-full flex items-center justify-between px-2.5 py-2 rounded-xl transition-all duration-150 cursor-pointer text-left',
                         getGroupBtnClass(hasActiveChild),
@@ -711,7 +727,7 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
 
                     {/* Subitens Expansíveis */}
                     {expanded && !group.disabled && (
-                      <div className={cn("mt-1 ml-3.5 pl-3 border-l space-y-0.5", isDarkMode ? "border-slate-800" : isVizoraGreen ? "border-[#206954]" : isInemaLight ? "border-slate-200" : "border-[#145366]")}>
+                      <div id={`group-${group.id}`} className={cn("mt-1 ml-3.5 pl-3 border-l space-y-0.5", isDarkMode ? "border-slate-800" : isVizoraGreen ? "border-[#206954]" : isInemaLight ? "border-slate-200" : "border-[#145366]")}>
                         {group.items.map((subItem) => {
                           const isSubActive = activeRoute === subItem.route;
 

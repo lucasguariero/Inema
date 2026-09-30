@@ -535,7 +535,7 @@ body {
 /* Custom Scrollbars temáticos para a Sidebar (acompanham a cor do seletor) */
 .sidebar-scroll-blue {
   scrollbar-width: thin;
-  scrollbar-color: rgba(158, 195, 204, 0.28) transparent;
+  scrollbar-color: transparent transparent;
 }
 .sidebar-scroll-blue::-webkit-scrollbar {
   width: 5px;
@@ -544,17 +544,23 @@ body {
   background: transparent;
 }
 .sidebar-scroll-blue::-webkit-scrollbar-thumb {
-  background: rgba(158, 195, 204, 0.25);
+  background: transparent;
   border-radius: 9999px;
   transition: background 0.2s ease;
 }
+.sidebar-scroll-blue:hover::-webkit-scrollbar-thumb,
+.sidebar-scroll-blue:focus-within::-webkit-scrollbar-thumb,
 .sidebar-scroll-blue::-webkit-scrollbar-thumb:hover {
   background: rgba(158, 195, 204, 0.55);
+}
+.sidebar-scroll-blue:hover,
+.sidebar-scroll-blue:focus-within {
+  scrollbar-color: rgba(158, 195, 204, 0.55) transparent;
 }
 
 .sidebar-scroll-green {
   scrollbar-width: thin;
-  scrollbar-color: rgba(188, 224, 211, 0.28) transparent;
+  scrollbar-color: transparent transparent;
 }
 .sidebar-scroll-green::-webkit-scrollbar {
   width: 5px;
@@ -563,17 +569,23 @@ body {
   background: transparent;
 }
 .sidebar-scroll-green::-webkit-scrollbar-thumb {
-  background: rgba(188, 224, 211, 0.25);
+  background: transparent;
   border-radius: 9999px;
   transition: background 0.2s ease;
 }
+.sidebar-scroll-green:hover::-webkit-scrollbar-thumb,
+.sidebar-scroll-green:focus-within::-webkit-scrollbar-thumb,
 .sidebar-scroll-green::-webkit-scrollbar-thumb:hover {
   background: rgba(188, 224, 211, 0.55);
+}
+.sidebar-scroll-green:hover,
+.sidebar-scroll-green:focus-within {
+  scrollbar-color: rgba(188, 224, 211, 0.55) transparent;
 }
 
 .sidebar-scroll-white {
   scrollbar-width: thin;
-  scrollbar-color: rgba(148, 163, 184, 0.3) transparent;
+  scrollbar-color: transparent transparent;
 }
 .sidebar-scroll-white::-webkit-scrollbar {
   width: 5px;
@@ -582,17 +594,23 @@ body {
   background: transparent;
 }
 .sidebar-scroll-white::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.28);
+  background: transparent;
   border-radius: 9999px;
   transition: background 0.2s ease;
 }
+.sidebar-scroll-white:hover::-webkit-scrollbar-thumb,
+.sidebar-scroll-white:focus-within::-webkit-scrollbar-thumb,
 .sidebar-scroll-white::-webkit-scrollbar-thumb:hover {
   background: rgba(100, 116, 139, 0.5);
+}
+.sidebar-scroll-white:hover,
+.sidebar-scroll-white:focus-within {
+  scrollbar-color: rgba(100, 116, 139, 0.5) transparent;
 }
 
 .sidebar-scroll-dark {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+  scrollbar-color: transparent transparent;
 }
 .sidebar-scroll-dark::-webkit-scrollbar {
   width: 5px;
@@ -601,12 +619,18 @@ body {
   background: transparent;
 }
 .sidebar-scroll-dark::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
+  background: transparent;
   border-radius: 9999px;
   transition: background 0.2s ease;
 }
+.sidebar-scroll-dark:hover::-webkit-scrollbar-thumb,
+.sidebar-scroll-dark:focus-within::-webkit-scrollbar-thumb,
 .sidebar-scroll-dark::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.35);
+}
+.sidebar-scroll-dark:hover,
+.sidebar-scroll-dark:focus-within {
+  scrollbar-color: rgba(255, 255, 255, 0.35) transparent;
 }
 
 /* =========================================================================
