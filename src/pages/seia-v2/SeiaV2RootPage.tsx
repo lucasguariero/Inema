@@ -47,12 +47,11 @@ export const SeiaV2RootPage: React.FC = () => {
       if (tela === 'emergencia-externa') return 'emergencia-externa';
       if (tela === 'consulta-externa') return 'consulta-externa';
       if (tela === 'consulta-interna') return 'consulta-interna';
-      if (tela === 'relatorios' || tela === 'dashboard') return 'relatorios';
-      if (tela === 'apresentacao' || tela === 'pitch' || tela === 'roteiro') return 'apresentacao';
-      if (tela === 'cadastros' || tela === 'responsaveis-tecnicos' || tela === 'empreendimentos') return 'cadastros-basicos';
-      if (tela === 'pauta-enquadramento' || tela === 'pauta-area') return 'enquadramento';
-      if (tela === 'parametrizacoes' || tela === 'tipologias' || tela === 'residuos') return 'parametrizacao';
-      if (tela === 'usuarios' || tela === 'roles' || tela === 'administracao') return 'usuarios-roles';
+      if (tela === 'cadastros' || tela === 'cadastros-basicos' || tela === 'responsaveis-tecnicos' || tela === 'empreendimentos') return 'cadastros-basicos';
+      if (tela === 'pauta-enquadramento' || tela === 'enquadramento' || tela === 'pauta-area') return 'enquadramento';
+      if (tela === 'parametrizacoes' || tela === 'parametrizacao' || tela === 'parametrizacoes-master' || tela === 'tipologias' || tela === 'residuos') return 'parametrizacao';
+      if (tela === 'usuarios' || tela === 'usuarios-roles' || tela === 'roles' || tela === 'administracao') return 'usuarios-roles';
+      if (tela === 'cras' || tela === 'cras-fauna' || tela === 'fauna') return 'cras';
       return tela;
     }
     return 'inicio';
@@ -119,19 +118,27 @@ export const SeiaV2RootPage: React.FC = () => {
       case 'parcelamento':
         return <ParcelamentoDebitoPage onNavigate={handleNavigate} />;
       case 'cras':
+      case 'cras-fauna':
+      case 'fauna':
         return <CrasFaunaPage onNavigate={handleNavigate} />;
       case 'cefir':
+      case 'cefir-imoveis':
         return <CefirImoveisPage onNavigate={handleNavigate} />;
       case 'sispass':
+      case 'sispass-perfis':
         return <SispassPerfisPage onNavigate={handleNavigate} />;
       case 'cadastros-basicos':
       case 'cadastros':
+      case 'responsaveis-tecnicos':
         return <CadastrosBasicosPage onNavigate={handleNavigate} />;
       case 'enquadramento':
       case 'pauta-enquadramento':
+      case 'pauta-area':
         return <PautaEnquadramentoPage onNavigate={handleNavigate} />;
       case 'parametrizacao':
       case 'parametrizacoes':
+      case 'parametrizacoes-master':
+      case 'tipologias':
         return <ParametrizacoesMasterPage onNavigate={handleNavigate} />;
       case 'usuarios-roles':
       case 'usuarios':

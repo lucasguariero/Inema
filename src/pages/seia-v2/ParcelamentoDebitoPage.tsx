@@ -20,6 +20,7 @@ import { Section } from '@/components/filament/Section';
 import { InputWrapper } from '@/components/filament/InputWrapper';
 import { KpiCard } from '@/components/dashboard/KpiCard';
 import { SeiaV2Breadcrumb } from '@/components/seia-v2/SeiaV2Breadcrumb';
+import { PdfPreviewDrawer, PdfDocumentData } from '@/components/seia-v2/PdfPreviewDrawer';
 
 interface ParcelamentoDebitoPageProps {
   onNavigate?: (route: string) => void;
@@ -30,6 +31,8 @@ export const ParcelamentoDebitoPage: React.FC<ParcelamentoDebitoPageProps> = ({ 
   const [activeTab, setActiveTab] = useState('ativos');
   const [wizardStep, setWizardStep] = useState(1);
   const [numeroParcelas, setNumeroParcelas] = useState(24);
+  const [pdfDrawerOpen, setPdfDrawerOpen] = useState(false);
+  const [pdfData, setPdfData] = useState<PdfDocumentData | null>(null);
 
   const valorTotalDebito = 48000.0;
   const valorParcela = (valorTotalDebito / numeroParcelas).toFixed(2);
@@ -205,9 +208,47 @@ export const ParcelamentoDebitoPage: React.FC<ParcelamentoDebitoPageProps> = ({ 
                 O Termo de Compromisso e Confissão de Dívida e o carnê de DAEs em <strong>{numeroParcelas}x de R$ {valorParcela}</strong> estão disponíveis para download e pagamento.
               </p>
               <div className="flex justify-center gap-2">
-                <Button variant="outline" size="sm">Baixar Termo Assinado (.pdf)</Button>
-                <Button size="sm" onClick={() => setViewMode('pauta')} className="bg-[#0F4C3A] text-white">
-                  Baixar Carnê de DAEs (.pdf)
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setPdfData({
+                      tipo: 'CONFISSAO_DIVIDA',
+                      titulo: 'Termo de Compromisso e Confissão de Dívida Ambiental',
+                      codigoDocumento: 'TCD-INEMA-2026-0089',
+                      interessado: 'Agropecuária Vale do São Francisco Ltda.',
+                      cpfCnpj: '12.345.678/0001-90',
+                      dataEmissao: new Date().toLocaleDateString('pt-BR'),
+                      validade: `Plano em ${numeroParcelas} meses`,
+                      autenticidadeToken: 'TCD-CONF-2026-9921',
+                      status: 'Aprovado',
+                    });
+                    setPdfDrawerOpen(true);
+                  }}
+                >
+                  <FileText className="w-4 h-4 mr-1.5" />
+                  <span>Visualizar Termo Assinado (.pdf)</span>
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    setPdfData({
+                      tipo: 'DAE',
+                      titulo: 'Carnê de Parcelamento DAE (Documento de Arrecadação Estadual)',
+                      codigoDocumento: `CARNE-DAE-2026-${numeroParcelas}X`,
+                      interessado: 'Agropecuária Vale do São Francisco Ltda.',
+                      cpfCnpj: '12.345.678/0001-90',
+                      dataEmissao: new Date().toLocaleDateString('pt-BR'),
+                      validade: `Parcela 01/${numeroParcelas} - Venc. 10/10/2026`,
+                      autenticidadeToken: 'DAE-BARCODE-85800000001-4',
+                      status: 'Emitido',
+                    });
+                    setPdfDrawerOpen(true);
+                  }}
+                  className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white"
+                >
+                  <Download className="w-4 h-4 mr-1.5" />
+                  <span>Baixar Carnê de DAEs (.pdf)</span>
                 </Button>
               </div>
             </div>
@@ -225,6 +266,13 @@ export const ParcelamentoDebitoPage: React.FC<ParcelamentoDebitoPageProps> = ({ 
           </div>
         </div>
       )}
+
+      {/* Drawer / Modal Oficial de Pré-Visualização PDF */}
+      <PdfPreviewDrawer
+        open={pdfDrawerOpen}
+        onOpenChange={setPdfDrawerOpen}
+        data={pdfData}
+      />
     </div>
   );
 };

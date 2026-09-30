@@ -24,6 +24,7 @@ import { Section } from '@/components/filament/Section';
 import { InputWrapper } from '@/components/filament/InputWrapper';
 import { KpiCard } from '@/components/dashboard/KpiCard';
 import { SeiaV2Breadcrumb } from '@/components/seia-v2/SeiaV2Breadcrumb';
+import { PdfPreviewDrawer, PdfDocumentData } from '@/components/seia-v2/PdfPreviewDrawer';
 
 interface DtrpPageProps {
   onNavigate?: (route: string) => void;
@@ -34,6 +35,8 @@ export const DtrpPage: React.FC<DtrpPageProps> = ({ onNavigate }) => {
   const [activeTab, setActiveTab] = useState('manifestos');
   const [wizardStep, setWizardStep] = useState(1);
   const [selectedManifesto, setSelectedManifesto] = useState<any>(null);
+  const [pdfDrawerOpen, setPdfDrawerOpen] = useState(false);
+  const [pdfData, setPdfData] = useState<PdfDocumentData | null>(null);
 
   const tabs: FilamentTabItem[] = [
     { id: 'manifestos', label: 'Manifestos Ativos', badge: '342', badgeVariant: 'primary' },
@@ -216,18 +219,43 @@ export const DtrpPage: React.FC<DtrpPageProps> = ({ onNavigate }) => {
                         </Badge>
                       </td>
                       <td className="py-3.5 px-4 text-right">
-                        <Button
-                          variant="ghost"
-                          size="xs"
-                          onClick={() => {
-                            setSelectedManifesto(row);
-                            setViewMode('detalhes');
-                          }}
-                          className="text-[#0F4C3A] dark:text-emerald-400"
-                        >
-                          <Eye className="w-3.5 h-3.5 mr-1" />
-                          <span>Detalhes</span>
-                        </Button>
+                        <div className="flex items-center justify-end gap-1">
+                          <Button
+                            variant="ghost"
+                            size="xs"
+                            onClick={() => {
+                              setPdfData({
+                                tipo: 'DTRP',
+                                titulo: 'Declaração de Transporte de Resíduos Perigosos (DTRP)',
+                                codigoDocumento: row.id,
+                                interessado: `${row.gerador} / ${row.transportador}`,
+                                cpfCnpj: '00.123.456/0001-89',
+                                dataEmissao: row.dataEmissao,
+                                validade: row.validade,
+                                autenticidadeToken: 'DTRP-AUT-9921-X81',
+                                status: 'Válido',
+                              });
+                              setPdfDrawerOpen(true);
+                            }}
+                            className="text-slate-600 dark:text-slate-400"
+                            title="Visualizar PDF Oficial"
+                          >
+                            <FileText className="w-3.5 h-3.5 mr-1" />
+                            <span>PDF</span>
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="xs"
+                            onClick={() => {
+                              setSelectedManifesto(row);
+                              setViewMode('detalhes');
+                            }}
+                            className="text-[#0F4C3A] dark:text-emerald-400 font-semibold"
+                          >
+                            <Eye className="w-3.5 h-3.5 mr-1" />
+                            <span>Detalhes</span>
+                          </Button>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -390,7 +418,31 @@ export const DtrpPage: React.FC<DtrpPageProps> = ({ onNavigate }) => {
                 {selectedManifesto.id}
               </span>
             </div>
-            <Badge variant={selectedManifesto.statusColor as any}>{selectedManifesto.status}</Badge>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-xs"
+                onClick={() => {
+                  setPdfData({
+                    tipo: 'DTRP',
+                    titulo: 'Declaração de Transporte de Resíduos Perigosos (DTRP)',
+                    codigoDocumento: selectedManifesto.id,
+                    interessado: `${selectedManifesto.gerador} / ${selectedManifesto.transportador}`,
+                    cpfCnpj: '00.123.456/0001-89',
+                    dataEmissao: selectedManifesto.dataEmissao,
+                    validade: selectedManifesto.validade,
+                    autenticidadeToken: 'DTRP-AUT-9921-X81',
+                    status: 'Válido',
+                  });
+                  setPdfDrawerOpen(true);
+                }}
+              >
+                <FileText className="w-3.5 h-3.5 mr-1.5" />
+                <span>Visualizar PDF Timbrado</span>
+              </Button>
+              <Badge variant={selectedManifesto.statusColor as any}>{selectedManifesto.status}</Badge>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -427,6 +479,13 @@ export const DtrpPage: React.FC<DtrpPageProps> = ({ onNavigate }) => {
           </div>
         </div>
       )}
+
+      {/* Drawer / Modal Oficial de Pré-Visualização PDF */}
+      <PdfPreviewDrawer
+        open={pdfDrawerOpen}
+        onOpenChange={setPdfDrawerOpen}
+        data={pdfData}
+      />
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ShadcnHeader } from './ShadcnHeader';
 import { ShadcnSidebar } from './ShadcnSidebar';
+import { GlobalCommandPalette } from '@/components/seia-v2/GlobalCommandPalette';
 import { useTheme } from '@/context/ThemeContext';
 import { cn } from '@/lib/utils';
 
@@ -18,6 +19,7 @@ export const ShadcnAppShell: React.FC<AppShellProps> = ({
   const { isDarkMode } = useTheme();
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
 
   const handleToggleSidebar = () => {
     if (typeof window !== 'undefined' && window.innerWidth < 1024) {
@@ -33,6 +35,13 @@ export const ShadcnAppShell: React.FC<AppShellProps> = ({
         isSidebarCollapsed={isSidebarCollapsed}
         isMobileSidebarOpen={isMobileSidebarOpen}
         onToggleSidebar={handleToggleSidebar}
+        onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
+      />
+
+      <GlobalCommandPalette
+        open={isCommandPaletteOpen}
+        onOpenChange={setIsCommandPaletteOpen}
+        onNavigate={onNavigate || (() => {})}
       />
 
       <div className="flex flex-1 min-h-0 min-w-0 overflow-hidden">

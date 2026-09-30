@@ -29,6 +29,8 @@ import { InputWrapper } from '@/components/filament/InputWrapper';
 import { KpiCard } from '@/components/dashboard/KpiCard';
 import { SeiaV2Breadcrumb } from '@/components/seia-v2/SeiaV2Breadcrumb';
 
+import { PdfPreviewDrawer, PdfDocumentData } from '@/components/seia-v2/PdfPreviewDrawer';
+
 interface PautaEnquadramentoPageProps {
   onNavigate?: (route: string) => void;
 }
@@ -38,6 +40,24 @@ export const PautaEnquadramentoPage: React.FC<PautaEnquadramentoPageProps> = ({ 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProcesso, setSelectedProcesso] = useState<any>(null);
   const [activeModal, setActiveModal] = useState<string | null>(null);
+  const [pdfPreviewData, setPdfPreviewData] = useState<PdfDocumentData | null>(null);
+  const [isPdfDrawerOpen, setIsPdfDrawerOpen] = useState(false);
+
+  const handleOpenParecerPdf = (proc: any) => {
+    setPdfPreviewData({
+      tipo: 'PARECER_ENQUADRAMENTO',
+      titulo: 'PARECER TÉCNICO DE ENQUADRAMENTO AMBIENTAL (F-DIPRE-ENQ-01)',
+      codigoDocumento: `ENQ-${proc.id || '2026-09124'}`,
+      interessado: proc.requerente || 'Agropecuária Vale Verde S.A.',
+      cpfCnpj: proc.cnpj || '04.892.112/0001-90',
+      processoSei: `088.0001.2026.${proc.id?.replace(/\D/g, '') || '09124'}-1`,
+      dataEmissao: '30/09/2026',
+      validade: '12 meses para protocolo dos estudos',
+      autenticidadeToken: 'DIPRE-BA-2026-ENQ-9811',
+      status: 'Aprovado',
+    });
+    setIsPdfDrawerOpen(true);
+  };
 
   const tabs: TabItem[] = [
     { id: 'todos', label: 'Pauta da Área', badge: '27', badgeColor: 'primary' },
@@ -410,13 +430,31 @@ export const PautaEnquadramentoPage: React.FC<PautaEnquadramentoPageProps> = ({ 
               </InputWrapper>
             </div>
 
-            <div className="flex justify-end gap-2 pt-3 border-t">
-              <Button variant="outline" size="sm" onClick={() => setActiveModal(null)}>Salvar Minuta</Button>
-              <Button size="sm" onClick={() => setActiveModal(null)} className="bg-[#0F4C3A] text-white">Emitir e Notificar Requerente</Button>
+            <div className="flex items-center justify-between pt-3 border-t">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleOpenParecerPdf(selectedProcesso)}
+                className="text-xs text-slate-700 dark:text-slate-300"
+              >
+                <FileText className="w-3.5 h-3.5 mr-1.5 text-[#0F4C3A]" />
+                Visualizar Parecer Timbrado (PDF)
+              </Button>
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm" onClick={() => setActiveModal(null)}>Salvar Minuta</Button>
+                <Button size="sm" onClick={() => setActiveModal(null)} className="bg-[#0F4C3A] text-white">Emitir e Notificar Requerente</Button>
+              </div>
             </div>
           </div>
         </div>
       )}
+
+      {/* Drawer de Visualização de PDF Timbrado */}
+      <PdfPreviewDrawer
+        open={isPdfDrawerOpen}
+        onOpenChange={setIsPdfDrawerOpen}
+        data={pdfPreviewData}
+      />
     </div>
   );
 };

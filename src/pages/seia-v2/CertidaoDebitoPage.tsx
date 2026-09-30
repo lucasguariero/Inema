@@ -18,6 +18,7 @@ import { FilamentTabs, FilamentTabItem } from '@/components/filament/Tabs';
 import { Section } from '@/components/filament/Section';
 import { InputWrapper } from '@/components/filament/InputWrapper';
 import { SeiaV2Breadcrumb } from '@/components/seia-v2/SeiaV2Breadcrumb';
+import { PdfPreviewDrawer, PdfDocumentData } from '@/components/seia-v2/PdfPreviewDrawer';
 
 interface CertidaoDebitoPageProps {
   onNavigate?: (route: string) => void;
@@ -28,6 +29,8 @@ export const CertidaoDebitoPage: React.FC<CertidaoDebitoPageProps> = ({ onNaviga
   const [documentoConsulta, setDocumentoConsulta] = useState('');
   const [isConsulting, setIsConsulting] = useState(false);
   const [certidaoGerada, setCertidaoGerada] = useState<any>(null);
+  const [pdfDrawerOpen, setPdfDrawerOpen] = useState(false);
+  const [pdfData, setPdfData] = useState<PdfDocumentData | null>(null);
 
   const tabs: FilamentTabItem[] = [
     { id: 'emissao-rapida', label: 'Emissão Rápida (Cidadão / Empresa)', badge: 'Online', badgeVariant: 'primary' },
@@ -178,11 +181,46 @@ export const CertidaoDebitoPage: React.FC<CertidaoDebitoPageProps> = ({ onNaviga
               </div>
 
               <div className="flex items-center justify-end gap-2 pt-2">
-                <Button variant="outline" size="sm" className="text-xs">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-xs"
+                  onClick={() => {
+                    setPdfData({
+                      tipo: 'CND',
+                      titulo: 'Certidão Negativa de Débitos Ambientais (CND)',
+                      codigoDocumento: certidaoGerada.numeroCertidao,
+                      interessado: certidaoGerada.requerente,
+                      cpfCnpj: certidaoGerada.cnpj,
+                      dataEmissao: certidaoGerada.dataEmissao,
+                      validade: certidaoGerada.validade,
+                      autenticidadeToken: certidaoGerada.codigoAutenticidade,
+                      status: 'Válido',
+                    });
+                    setPdfDrawerOpen(true);
+                  }}
+                >
                   <Printer className="w-4 h-4 mr-1.5" />
-                  <span>Imprimir Certidão</span>
+                  <span>Visualizar / Imprimir PDF</span>
                 </Button>
-                <Button size="sm" className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs font-semibold">
+                <Button
+                  size="sm"
+                  className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs font-semibold"
+                  onClick={() => {
+                    setPdfData({
+                      tipo: 'CND',
+                      titulo: 'Certidão Negativa de Débitos Ambientais (CND)',
+                      codigoDocumento: certidaoGerada.numeroCertidao,
+                      interessado: certidaoGerada.requerente,
+                      cpfCnpj: certidaoGerada.cnpj,
+                      dataEmissao: certidaoGerada.dataEmissao,
+                      validade: certidaoGerada.validade,
+                      autenticidadeToken: certidaoGerada.codigoAutenticidade,
+                      status: 'Válido',
+                    });
+                    setPdfDrawerOpen(true);
+                  }}
+                >
                   <Download className="w-4 h-4 mr-1.5" />
                   <span>Baixar Certidão Oficial em PDF</span>
                 </Button>
@@ -199,6 +237,13 @@ export const CertidaoDebitoPage: React.FC<CertidaoDebitoPageProps> = ({ onNaviga
           <p className="mt-1">14 solicitações aguardando baixa manual de débitos ou decisão de recurso.</p>
         </div>
       )}
+
+      {/* Drawer / Modal Oficial de Pré-Visualização PDF */}
+      <PdfPreviewDrawer
+        open={pdfDrawerOpen}
+        onOpenChange={setPdfDrawerOpen}
+        data={pdfData}
+      />
     </div>
   );
 };
