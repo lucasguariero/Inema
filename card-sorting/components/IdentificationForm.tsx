@@ -56,10 +56,10 @@ export const IdentificationForm: React.FC<IdentificationFormProps> = ({ onStart 
           <CardHeader className="border-b border-slate-100 pb-4">
             <CardTitle className="text-base font-bold text-slate-800 flex items-center gap-2">
               <Building2 className="w-4 h-4 text-[#0F4C3A]" />
-              Identificação do Stakeholder
+              Identificação do Participante
             </CardTitle>
             <CardDescription className="text-xs text-slate-500">
-              Preencha suas informações para iniciarmos a dinâmica de agrupamento dos cartões.
+              Preencha suas informações para iniciarmos a dinâmica de organização dos menus do sistema.
             </CardDescription>
           </CardHeader>
 
@@ -98,7 +98,7 @@ export const IdentificationForm: React.FC<IdentificationFormProps> = ({ onStart 
                   if (error) setError('');
                 }}
               >
-                <option value="">Selecione seu departamento...</option>
+                <option value="">Selecione sua diretoria ou área...</option>
                 {DEPARTMENTS.map((dept) => (
                   <option key={dept.value} value={dept.value}>
                     {dept.label}
@@ -114,10 +114,10 @@ export const IdentificationForm: React.FC<IdentificationFormProps> = ({ onStart 
                 Como funciona a dinâmica:
               </div>
               <ul className="list-disc pl-4 space-y-1 text-[11px] leading-relaxed">
-                <li>Você verá <strong>15 cartões</strong> representando módulos do sistema atual.</li>
-                <li>Crie os <strong>Grupos / Menus</strong> com os nomes que fizerem mais sentido para o seu dia a dia.</li>
+                <li>Você verá os <strong>20 cartões</strong> representando os módulos reais mapeados para a nova plataforma SEIA.</li>
+                <li>Crie os <strong>Grupos / Menus</strong> com os nomes que fizerem mais sentido para o seu dia a dia e fluxo de trabalho.</li>
                 <li>Arraste e solte os cartões dentro dos grupos que você criou.</li>
-                <li>Finalize clicando em <strong>Salvar Estrutura</strong> para registrar sua proposta no banco.</li>
+                <li>Finalize clicando em <strong>Salvar Estrutura</strong> para registrar sua proposta.</li>
               </ul>
             </div>
           </CardContent>
@@ -125,7 +125,7 @@ export const IdentificationForm: React.FC<IdentificationFormProps> = ({ onStart 
           <CardFooter className="border-t border-slate-100 pt-4 flex justify-end">
             <Button
               type="submit"
-              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#0F4C3A] hover:bg-[#0b382b] text-white"
+              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#0F4C3A] hover:bg-[#0b382b] text-white cursor-pointer"
             >
               <span>Iniciar Card Sorting</span>
               <ArrowRight className="w-4 h-4" />
@@ -134,9 +134,9 @@ export const IdentificationForm: React.FC<IdentificationFormProps> = ({ onStart 
         </form>
       </Card>
 
-      <div className="mt-8 flex items-center gap-2 text-[11px] text-slate-400 font-mono">
+      <div className="mt-8 flex items-center gap-2 text-[11px] text-slate-400 font-sans">
         <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-        <span>Ambiente Oficial de Pesquisa UX • INEMA / Acto</span>
+        <span>Pesquisa de Arquitetura de Informação • INEMA</span>
       </div>
     </div>
   );

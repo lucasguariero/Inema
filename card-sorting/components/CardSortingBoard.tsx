@@ -58,10 +58,11 @@ export const CardSortingBoard: React.FC<CardSortingBoardProps> = ({
 
   const [cards] = useState<Record<string, CardItem>>(initialCardsMap);
 
-  // Grupos criados pelo usuário
+  // Grupos criados pelo usuário (iniciados com 3 sugestões editáveis)
   const [groups, setGroups] = useState<GroupContainer[]>([
-    { id: 'group-1', name: 'Atendimento & Fiscalização', createdAt: new Date().toISOString() },
-    { id: 'group-2', name: 'Regulação & Outorga', createdAt: new Date().toISOString() },
+    { id: 'group-1', name: 'Regulação & Processos', createdAt: new Date().toISOString() },
+    { id: 'group-2', name: 'Fiscalização & Emergências', createdAt: new Date().toISOString() },
+    { id: 'group-3', name: 'Biodiversidade & Unidades de Conservação', createdAt: new Date().toISOString() },
   ]);
 
   // Estrutura de containers: 'unassigned' + cada group.id
@@ -69,6 +70,7 @@ export const CardSortingBoard: React.FC<CardSortingBoardProps> = ({
     unassigned: INITIAL_MODULES.map((c) => c.id),
     'group-1': [],
     'group-2': [],
+    'group-3': [],
   });
 
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
@@ -81,7 +83,8 @@ export const CardSortingBoard: React.FC<CardSortingBoardProps> = ({
   const [isSaving, setIsSaving] = useState(false);
   const [submittedData, setSubmittedData] = useState<CardSortingSubmission | null>(null);
   const [saveStatusMessage, setSaveStatusMessage] = useState<string>('');
-  const [copiedJson, setCopiedJson] = useState(false);
+  const [copiedSummary, setCopiedSummary] = useState(false);
+  const [showTechnicalDetails, setShowTechnicalDetails] = useState(false);
 
   // Sensores do DnD Kit (distância mínima de 5px para não disparar em cliques)
   const sensors = useSensors(
@@ -276,9 +279,9 @@ export const CardSortingBoard: React.FC<CardSortingBoardProps> = ({
     setSubmittedData(submissionPayload);
 
     if (result.persistedToSupabase) {
-      setSaveStatusMessage('Estrutura persistida com sucesso no Supabase!');
+      setSaveStatusMessage('Sua proposta de organização foi registrada com sucesso.');
     } else {
-      setSaveStatusMessage('Estrutura salva localmente e pronta para sincronização com Supabase.');
+      setSaveStatusMessage('Sua proposta de organização foi gravada com sucesso.');
     }
 
     try {
@@ -293,11 +296,38 @@ export const CardSortingBoard: React.FC<CardSortingBoardProps> = ({
     }
   };
 
-  const handleCopyJson = () => {
+  const handleCopySummary = () => {
     if (!submittedData) return;
-    navigator.clipboard.writeText(JSON.stringify(submittedData, null, 2));
-    setCopiedJson(true);
-    setTimeout(() => setCopiedJson(false), 2000);
+    const textLines = [
+      `PROPOSTA DE ARQUITETURA DE INFORMAÇÃO — SEIA V2`,
+      `Participante: ${submittedData.participant_name} (${submittedData.participant_department})`,
+      `Data de Submissão: ${new Date(submittedData.submitted_at).toLocaleString('pt-BR')}`,
+      `Total de Grupos: ${submittedData.summary.total_groups} | Módulos Alocados: ${submittedData.summary.assigned_cards}/${submittedData.summary.total_cards} (${submittedData.summary.assigned_percentage}%)`,
+      ``,
+      `--- GRUPOS E MÓDULOS PROPOSTOS ---`
+    ];
+
+    submittedData.structure_payload.groups.forEach((g, idx) => {
+      textLines.push(`\n${idx + 1}. [${g.group_name}] (${g.cards.length} módulos)`);
+      if (g.cards.length === 0) {
+        textLines.push(`   (Nenhum módulo alocado)`);
+      } else {
+        g.cards.forEach((c) => {
+          textLines.push(`   • [${c.code || 'MOD'}] ${c.title}`);
+        });
+      }
+    });
+
+    if (submittedData.structure_payload.unassigned_cards.length > 0) {
+      textLines.push(`\n--- MÓDULOS NÃO ALOCADOS (${submittedData.structure_payload.unassigned_cards.length}) ---`);
+      submittedData.structure_payload.unassigned_cards.forEach((c) => {
+        textLines.push(`   • [${c.code || 'MOD'}] ${c.title}`);
+      });
+    }
+
+    navigator.clipboard.writeText(textLines.join('\n'));
+    setCopiedSummary(true);
+    setTimeout(() => setCopiedSummary(false), 2500);
   };
 
   const handleDownloadJson = () => {
@@ -499,67 +529,131 @@ export const CardSortingBoard: React.FC<CardSortingBoardProps> = ({
         </DragOverlay>
       </DndContext>
 
-      {/* Modal de Conclusão e Exportação do JSON */}
+      {/* Modal de Conclusão e Resumo da Estrutura */}
       {submittedData && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-2xl w-full border border-slate-200 shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-            <div className="bg-emerald-50 p-6 border-b border-emerald-100 flex items-start justify-between">
+          <div className="bg-white rounded-2xl max-w-2xl w-full border border-slate-200 shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
+            <div className="bg-emerald-50 p-5 sm:p-6 border-b border-emerald-100 flex items-start justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-[#0F4C3A] text-white flex items-center justify-center shadow-md">
+                <div className="w-11 h-11 rounded-xl bg-[#0F4C3A] text-white flex items-center justify-center shadow-md shrink-0">
                   <CheckCircle2 className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-slate-900">
-                    Estrutura Salva com Sucesso!
+                  <h3 className="text-base sm:text-lg font-bold text-slate-900">
+                    Proposta Registrada com Sucesso!
                   </h3>
                   <p className="text-xs text-emerald-800 mt-0.5">
-                    {saveStatusMessage}
+                    Obrigado pela colaboração! Sua organização servirá de insumo direto para o menu do novo SEIA.
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setSubmittedData(null)}
-                className="text-slate-400 hover:text-slate-600 p-1 rounded-md"
+                className="text-slate-400 hover:text-slate-600 p-1.5 rounded-md hover:bg-emerald-100/50 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="p-6 space-y-4">
+            <div className="p-5 sm:p-6 space-y-4 overflow-y-auto flex-1">
               {/* Resumo de Métricas */}
               <div className="grid grid-cols-3 gap-3">
-                <div className="bg-slate-50 p-3 rounded-lg border border-slate-200 text-center">
-                  <div className="text-[11px] text-slate-500 font-medium">Grupos Definidos</div>
+                <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 text-center">
+                  <div className="text-[11px] text-slate-500 font-medium">Grupos Criados</div>
                   <div className="text-lg font-bold text-slate-800 font-mono mt-0.5">
                     {submittedData.summary.total_groups}
                   </div>
                 </div>
-                <div className="bg-slate-50 p-3 rounded-lg border border-slate-200 text-center">
+                <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 text-center">
                   <div className="text-[11px] text-slate-500 font-medium">Módulos Alocados</div>
                   <div className="text-lg font-bold text-[#0F4C3A] font-mono mt-0.5">
                     {submittedData.summary.assigned_cards} / {submittedData.summary.total_cards}
                   </div>
                 </div>
-                <div className="bg-slate-50 p-3 rounded-lg border border-slate-200 text-center">
-                  <div className="text-[11px] text-slate-500 font-medium">Taxa de Conclusão</div>
+                <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 text-center">
+                  <div className="text-[11px] text-slate-500 font-medium">Conclusão</div>
                   <div className="text-lg font-bold text-slate-800 font-mono mt-0.5">
                     {submittedData.summary.assigned_percentage}%
                   </div>
                 </div>
               </div>
 
-              {/* Pré-visualização do Payload JSON */}
-              <div className="space-y-1.5">
-                <div className="flex items-center justify-between text-xs text-slate-600 font-semibold">
+              {/* Lista dos Grupos Definidos pelo Participante */}
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between text-xs text-slate-700 font-semibold">
                   <span className="flex items-center gap-1.5">
-                    <Code2 className="w-3.5 h-3.5 text-[#0F4C3A]" />
-                    Payload Estruturado para o Supabase:
+                    <Building2 className="w-3.5 h-3.5 text-[#0F4C3A]" />
+                    Estrutura de Menus Proposta:
                   </span>
-                  <span className="text-[10px] text-slate-400 font-mono">schema: card_sorting_submissions</span>
+                  <span className="text-[11px] text-slate-500 font-normal">
+                    {submittedData.summary.total_groups} categorias
+                  </span>
                 </div>
-                <pre className="bg-slate-900 text-slate-100 p-3.5 rounded-lg text-[11px] font-mono overflow-x-auto max-h-56 leading-relaxed border border-slate-800">
-                  {JSON.stringify(submittedData, null, 2)}
-                </pre>
+
+                <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
+                  {submittedData.structure_payload.groups.map((group, idx) => (
+                    <div
+                      key={group.group_id}
+                      className="p-3 rounded-xl border border-slate-200 bg-slate-50/60 flex flex-col gap-2"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                          <span className="w-4 h-4 rounded-full bg-emerald-100 text-[#0F4C3A] text-[10px] flex items-center justify-center font-mono">
+                            {idx + 1}
+                          </span>
+                          {group.group_name}
+                        </span>
+                        <Badge variant="secondary" className="text-[10px] font-mono">
+                          {group.cards.length} {group.cards.length === 1 ? 'módulo' : 'módulos'}
+                        </Badge>
+                      </div>
+
+                      {group.cards.length > 0 ? (
+                        <div className="flex flex-wrap gap-1.5 pt-1">
+                          {group.cards.map((card) => (
+                            <span
+                              key={card.id}
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-white border border-slate-200 text-[11px] text-slate-700 font-medium shadow-2xs"
+                            >
+                              {card.code && (
+                                <span className="font-mono text-[9px] text-slate-500">{card.code}</span>
+                              )}
+                              <span>{card.title}</span>
+                            </span>
+                          ))}
+                        </div>
+                      ) : (
+                        <span className="text-[11px] text-slate-400 italic">Nenhum cartão alocado neste grupo.</span>
+                      )}
+                    </div>
+                  ))}
+
+                  {submittedData.structure_payload.unassigned_cards.length > 0 && (
+                    <div className="p-3 rounded-xl border border-amber-200 bg-amber-50/60 flex flex-col gap-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-amber-900">
+                          Módulos Não Alocados
+                        </span>
+                        <Badge variant="secondary" className="text-[10px] font-mono text-amber-800 bg-amber-100">
+                          {submittedData.structure_payload.unassigned_cards.length} restantes
+                        </Badge>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5 pt-1">
+                        {submittedData.structure_payload.unassigned_cards.map((card) => (
+                          <span
+                            key={card.id}
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-white border border-amber-200 text-[11px] text-slate-700 font-medium"
+                          >
+                            {card.code && (
+                              <span className="font-mono text-[9px] text-slate-500">{card.code}</span>
+                            )}
+                            <span>{card.title}</span>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -569,21 +663,29 @@ export const CardSortingBoard: React.FC<CardSortingBoardProps> = ({
               </div>
               <div className="flex items-center gap-2">
                 <Button
-                  onClick={handleCopyJson}
+                  onClick={handleCopySummary}
                   variant="outline"
                   size="sm"
-                  className="flex items-center gap-1.5 text-xs"
+                  className="flex items-center gap-1.5 text-xs cursor-pointer"
                 >
                   <Copy className="w-3.5 h-3.5" />
-                  <span>{copiedJson ? 'Copiado!' : 'Copiar JSON'}</span>
+                  <span>{copiedSummary ? 'Resumo Copiado!' : 'Copiar Resumo'}</span>
                 </Button>
                 <Button
                   onClick={handleDownloadJson}
+                  variant="outline"
                   size="sm"
-                  className="bg-[#0F4C3A] hover:bg-[#0b382b] text-white flex items-center gap-1.5 text-xs font-semibold"
+                  className="flex items-center gap-1.5 text-xs cursor-pointer"
                 >
                   <Download className="w-3.5 h-3.5" />
-                  <span>Baixar Arquivo JSON</span>
+                  <span>Baixar JSON</span>
+                </Button>
+                <Button
+                  onClick={() => setSubmittedData(null)}
+                  size="sm"
+                  className="bg-[#0F4C3A] hover:bg-[#0b382b] text-white flex items-center gap-1.5 text-xs font-semibold cursor-pointer"
+                >
+                  <span>Concluir</span>
                 </Button>
               </div>
             </div>
