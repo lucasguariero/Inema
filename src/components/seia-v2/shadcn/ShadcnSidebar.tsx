@@ -86,6 +86,13 @@ const getGroupForRoute = (route?: string) =>
     group.items.some((item) => item.route === route)
   )?.id;
 
+const SIDEBAR_SECTIONS = [
+  { label: 'Operação Ambiental', icon: 'FileCheck' },
+  { label: 'Serviços e Receita', icon: 'Globe' },
+  { label: 'Gestão e Controle', icon: 'BarChart3' },
+  { label: 'Configuração do Sistema', icon: 'Settings' },
+];
+
 export const ShadcnSidebar: React.FC<SidebarProps> = ({
   activeRoute = 'relatorios',
   isCollapsed = false,
@@ -419,34 +426,28 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                 );
               })}
 
-              {/* Módulos Oficiais e Agrupamentos */}
-              {SEIA_V2_MENU_GROUPS.map((group, index) => {
-                const GroupIcon = ICON_MAP[group.icon] || Sliders;
-                const startsSection = index === 0 || group.section !== SEIA_V2_MENU_GROUPS[index - 1].section;
-                const isDirectActive = activeRoute === group.route;
-                const hasActiveChild = group.items?.some(
-                  (it) => it.route && it.route === activeRoute
+              {/* Agrupamentos principais: os módulos aparecem ao expandir a sidebar. */}
+              {SIDEBAR_SECTIONS.map((section) => {
+                const SectionIcon = ICON_MAP[section.icon] || Layers;
+                const sectionGroups = SEIA_V2_MENU_GROUPS.filter(
+                  (group) => group.section === section.label
                 );
-                const isActive = isDirectActive || hasActiveChild;
+                const isActive = sectionGroups.some(
+                  (group) =>
+                    activeRoute === group.route ||
+                    group.items.some((item) => item.route === activeRoute)
+                );
 
                 return (
-                  <React.Fragment key={group.id}>
-                    {startsSection && (
-                      <div className="my-2 h-px w-7 shrink-0 bg-[var(--color-border-subtle)]" aria-hidden="true" />
-                    )}
+                  <React.Fragment key={section.label}>
                     <Tooltip delayDuration={0}>
                       <TooltipTrigger asChild>
-                        {group.isDirectItem ? (
-                        <a
-                          id={group.htmlId || group.id}
-                          data-testid={`nav-${group.label}`}
-                          href={group.href || '#'}
-                          onClick={(e) => {
-                            if (group.route && onNavigate) {
-                              e.preventDefault();
-                              onNavigate(group.route);
-                              if (onCloseMobile) onCloseMobile();
-                            }
+                        <button
+                          type="button"
+                          data-testid={`nav-section-${section.label}`}
+                          onClick={() => {
+                            setOpenSection(section.label);
+                            onToggleCollapse?.();
                           }}
                           className={cn(
                             'h-10 w-10 flex items-center justify-center rounded-md transition-all duration-150 cursor-pointer',
@@ -466,49 +467,13 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                               ? 'text-[var(--nav-item-text)] hover:bg-[var(--nav-item-hover-bg)] hover:text-[var(--nav-item-selected-text)]'
                               : 'text-[#9ec3cc] hover:bg-[#135467] hover:text-white'
                           )}
-                          aria-label={group.label}
+                          aria-label={section.label}
                         >
-                          <GroupIcon className="w-4 h-4" />
-                        </a>
-                      ) : (
-                        <button
-                          id={`btn-${group.id}`}
-                          data-testid={`nav-${group.label}`}
-                          onClick={() => {
-                            if (!group.disabled) {
-                              setOpenSection(group.section);
-                              setOpenGroups({ [group.id]: true });
-                              onToggleCollapse?.();
-                            }
-                          }}
-                          disabled={group.disabled}
-                          className={cn(
-                            'h-10 w-10 flex items-center justify-center rounded-md transition-all duration-150 cursor-pointer',
-                            isActive
-                              ? isDarkMode
-                                ? 'bg-slate-800 text-white font-bold shadow-xs border border-slate-700'
-                                : isVizoraGreen
-                                ? 'bg-[#22725b] text-white font-bold shadow-xs border border-[#2c8d71]'
-                                : isInemaLight
-                                ? 'bg-[var(--nav-item-selected-bg)] text-[var(--nav-item-selected-text)] font-bold'
-                                : 'bg-[#165a6e] text-white font-bold shadow-xs border border-[#207087]'
-                              : isDarkMode
-                              ? 'text-slate-400 hover:bg-slate-900 hover:text-white'
-                              : isVizoraGreen
-                              ? 'text-[#bce0d3] hover:bg-[#1f6853] hover:text-white'
-                              : isInemaLight
-                              ? 'text-[var(--nav-item-text)] hover:bg-[var(--nav-item-hover-bg)] hover:text-[var(--nav-item-selected-text)]'
-                              : 'text-[#9ec3cc] hover:bg-[#135467] hover:text-white',
-                            group.disabled && 'opacity-45 cursor-not-allowed'
-                          )}
-                          aria-label={group.label}
-                        >
-                          <GroupIcon className="w-4 h-4" />
+                          <SectionIcon className="w-4 h-4" />
                         </button>
-                        )}
                       </TooltipTrigger>
                       <TooltipContent side="right" sideOffset={12}>
-                        {group.section} · {group.label}
+                        {section.label}
                       </TooltipContent>
                     </Tooltip>
                   </React.Fragment>
@@ -621,12 +586,6 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                   </button>
                 ) : null;
 
-                if (!sectionExpanded) {
-                  return startsSection ? (
-                    <React.Fragment key={group.id}>{sectionHeading}</React.Fragment>
-                  ) : null;
-                }
-
                 // Item Direto (ex.: Relatórios Gerenciais)
                 if (group.isDirectItem) {
                   const isDirectActive = activeRoute === group.route;
@@ -634,6 +593,17 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                   return (
                     <React.Fragment key={group.id}>
                       {sectionHeading}
+                      <div
+                        aria-hidden={!sectionExpanded}
+                        inert={!sectionExpanded ? true : undefined}
+                        className={cn(
+                          'grid transition-[grid-template-rows,opacity] duration-200 ease-out motion-reduce:transition-none',
+                          sectionExpanded
+                            ? 'grid-rows-[1fr] opacity-100'
+                            : 'grid-rows-[0fr] opacity-0 pointer-events-none'
+                        )}
+                      >
+                      <div className="min-h-0 overflow-hidden">
                       <div className="pt-0.5">
                       <a
                         id={group.htmlId || group.id}
@@ -696,6 +666,8 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                         </div>
                       </a>
                       </div>
+                      </div>
+                      </div>
                     </React.Fragment>
                   );
                 }
@@ -708,6 +680,17 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                 return (
                   <React.Fragment key={group.id}>
                     {sectionHeading}
+                    <div
+                      aria-hidden={!sectionExpanded}
+                      inert={!sectionExpanded ? true : undefined}
+                      className={cn(
+                        'grid transition-[grid-template-rows,opacity] duration-200 ease-out motion-reduce:transition-none',
+                        sectionExpanded
+                          ? 'grid-rows-[1fr] opacity-100'
+                          : 'grid-rows-[0fr] opacity-0 pointer-events-none'
+                      )}
+                    >
+                    <div className="min-h-0 overflow-hidden">
                     <div className="pt-0.5">
                     {/* Cabeçalho do Grupo (Botão de Acordeão) */}
                     <button
@@ -765,8 +748,18 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                     </button>
 
                     {/* Subitens Expansíveis */}
-                    {expanded && !group.disabled && (
-                      <div id={`group-${group.id}`} className={cn("mt-1 ml-3.5 pl-3 border-l space-y-0.5", isDarkMode ? "border-slate-800" : isVizoraGreen ? "border-[#206954]" : isInemaLight ? "border-slate-200" : "border-[#145366]")}>
+                    {!group.disabled && (
+                      <div
+                        aria-hidden={!expanded}
+                        inert={!expanded ? true : undefined}
+                        className={cn(
+                          'grid transition-[grid-template-rows,opacity] duration-200 ease-out motion-reduce:transition-none',
+                          expanded
+                            ? 'grid-rows-[1fr] opacity-100'
+                            : 'grid-rows-[0fr] opacity-0 pointer-events-none'
+                        )}
+                      >
+                      <div id={`group-${group.id}`} className={cn("min-h-0 overflow-hidden mt-1 ml-3.5 pl-3 border-l space-y-0.5", isDarkMode ? "border-slate-800" : isVizoraGreen ? "border-[#206954]" : isInemaLight ? "border-slate-200" : "border-[#145366]")}>
                         {group.items.map((subItem) => {
                           const isSubActive = activeRoute === subItem.route;
 
@@ -808,7 +801,10 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                           );
                         })}
                       </div>
+                      </div>
                     )}
+                    </div>
+                    </div>
                     </div>
                   </React.Fragment>
                 );
