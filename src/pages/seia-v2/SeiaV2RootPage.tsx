@@ -90,9 +90,13 @@ export const SeiaV2RootPage: React.FC = () => {
 
   return (
     <ThemeProvider>
-      <ShadcnAppShell activeRoute={activeSubRoute} onNavigate={handleNavigate}>
-        {renderContent()}
-      </ShadcnAppShell>
+      {activeSubRoute === 'design-system' ? (
+        <SeiaV2DesignSystemPage />
+      ) : (
+        <ShadcnAppShell activeRoute={activeSubRoute} onNavigate={handleNavigate}>
+          {renderContent()}
+        </ShadcnAppShell>
+      )}
     </ThemeProvider>
   );
 };

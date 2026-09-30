@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import {
   AlertCircle,
   Bell,
+  Boxes,
   Check,
   CheckCircle2,
   ChevronDown,
@@ -61,7 +62,10 @@ import {
   TableContainer,
 } from '@/components/filament';
 import { KpiCard } from '@/components/dashboard/KpiCard';
+import { ShadcnHeader } from '@/components/seia-v2/shadcn/ShadcnHeader';
 import { cn } from '@/lib/utils';
+import seiaLogoWhite from '@/assets/seia-plataforma/svg/SEIA Plataforma - Logo EXP_HORIZONTAL_W.svg';
+import seiaIconWhite from '@/assets/seia-plataforma/svg/SEIA Plataforma - Logo EXP_ICON_W.svg';
 
 type CatalogSection = {
   id: string;
@@ -87,6 +91,14 @@ const catalogSections: CatalogSection[] = [
   { id: 'patterns', label: 'Padrões de página', group: 'Composições' },
   { id: 'accessibility', label: 'Acessibilidade', group: 'Diretrizes' },
 ];
+
+const catalogGroupIcons: Record<string, React.ElementType> = {
+  Começar: LayoutDashboard,
+  Fundações: SlidersHorizontal,
+  Componentes: Boxes,
+  Composições: PanelLeftClose,
+  Diretrizes: ShieldAlert,
+};
 
 const greenTokens = [
   ['50', '#F2F8F5'],
@@ -164,6 +176,8 @@ const Specimen: React.FC<{
 );
 
 export const SeiaV2DesignSystemPage: React.FC = () => {
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [navFilter, setNavFilter] = useState('');
   const [copiedToken, setCopiedToken] = useState('');
   const [selectValue, setSelectValue] = useState('dilic');
@@ -192,7 +206,21 @@ export const SeiaV2DesignSystemPage: React.FC = () => {
   };
 
   const jumpTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const target = document.getElementById(id);
+    const container = document.getElementById('design-system-content');
+    if (target && container) {
+      const top = target.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop - 24;
+      container.scrollTo({ top, behavior: 'smooth' });
+    }
+    setIsMobileSidebarOpen(false);
+  };
+
+  const toggleSidebar = () => {
+    if (window.innerWidth < 1024) {
+      setIsMobileSidebarOpen((open) => !open);
+    } else {
+      setIsSidebarCollapsed((collapsed) => !collapsed);
+    }
   };
 
   const groupedSections = filteredSections.reduce<Record<string, CatalogSection[]>>((acc, section) => {
@@ -201,7 +229,116 @@ export const SeiaV2DesignSystemPage: React.FC = () => {
   }, {});
 
   return (
-    <div className="relative w-full">
+    <div className="flex h-screen w-screen flex-col overflow-hidden bg-[var(--color-surface-canvas)] text-[var(--color-text-primary)]">
+      <ShadcnHeader
+        isSidebarCollapsed={isSidebarCollapsed}
+        isMobileSidebarOpen={isMobileSidebarOpen}
+        onToggleSidebar={toggleSidebar}
+      />
+
+      <div className="flex min-h-0 flex-1 overflow-hidden">
+        {isMobileSidebarOpen && (
+          <button
+            type="button"
+            aria-label="Fechar navegação do Design System"
+            onClick={() => setIsMobileSidebarOpen(false)}
+            className="fixed inset-x-0 bottom-0 top-16 z-30 bg-slate-950/55 backdrop-blur-xs lg:hidden"
+          />
+        )}
+
+        <aside
+          className={cn(
+            'fixed bottom-0 left-0 top-16 z-40 flex shrink-0 flex-col overflow-hidden bg-[var(--sidebar-bg)] transition-[width,transform] duration-200 ease-out lg:static lg:z-auto lg:h-full',
+            isMobileSidebarOpen ? 'w-72 translate-x-0' : 'w-72 -translate-x-full lg:translate-x-0',
+            isSidebarCollapsed ? 'lg:w-16' : 'lg:w-72'
+          )}
+        >
+          <div className={cn('border-b border-[var(--color-border-subtle)] p-3', isSidebarCollapsed && 'lg:px-2')}>
+            {isSidebarCollapsed ? (
+              <div className="hidden h-9 items-center justify-center rounded-lg bg-[var(--nav-item-selected-bg)] text-xs font-black text-[var(--nav-item-selected-text)] lg:flex">DS</div>
+            ) : (
+              <>
+                <div className="mb-3 px-1">
+                  <p className="text-sm font-bold text-[var(--color-text-primary)]">Design System</p>
+                  <p className="text-[10px] font-medium text-[var(--color-text-tertiary)]">SEIA Plataforma · v1.0</p>
+                </div>
+                <div className="relative">
+                  <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[var(--color-text-tertiary)]" />
+                  <input
+                    value={navFilter}
+                    onChange={(event) => setNavFilter(event.target.value)}
+                    placeholder="Filtrar catálogo"
+                    className={cn(fieldClass, 'h-8 pl-8 pr-8 text-xs')}
+                    aria-label="Filtrar seções do design system"
+                  />
+                  {navFilter && (
+                    <button onClick={() => setNavFilter('')} className={cn('absolute right-2.5 top-1/2 -translate-y-1/2 rounded text-[var(--color-text-tertiary)]', focusRing)} aria-label="Limpar filtro">
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+
+          <nav aria-label="Seções do design system" className={cn('flex-1 overflow-y-auto p-3', isSidebarCollapsed && 'lg:px-2')}>
+            {isSidebarCollapsed ? (
+              <div className="hidden space-y-1 lg:block">
+                {Object.entries(groupedSections).map(([group, sections]) => {
+                  const GroupIcon = catalogGroupIcons[group] || Boxes;
+                  return (
+                    <button
+                      key={group}
+                      type="button"
+                      title={group}
+                      aria-label={group}
+                      onClick={() => jumpTo(sections[0].id)}
+                      className="flex h-10 w-full items-center justify-center rounded-lg text-[var(--nav-item-text)] transition-colors hover:bg-[var(--nav-item-hover-bg)] hover:text-[var(--nav-item-selected-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-green-alpha-32)]"
+                    >
+                      <GroupIcon className="h-4 w-4" />
+                    </button>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {Object.entries(groupedSections).map(([group, sections]) => (
+                  <div key={group}>
+                    <p className="mb-1.5 px-2 text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--color-text-tertiary)]">{group}</p>
+                    <div className="space-y-0.5">
+                      {sections.map((section) => (
+                        <button
+                          key={section.id}
+                          onClick={() => jumpTo(section.id)}
+                          className="w-full rounded-lg px-2 py-1.5 text-left text-xs font-medium text-[var(--nav-item-text)] transition-colors hover:bg-[var(--nav-item-hover-bg)] hover:text-[var(--nav-item-selected-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-green-alpha-32)]"
+                        >
+                          {section.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </nav>
+
+          <div className={cn('shrink-0 border-t border-[var(--color-border-subtle)] p-3', isSidebarCollapsed && 'lg:px-2')}>
+            <a
+              href="/?rota=seia-v2"
+              title="Voltar ao SEIA V2"
+              className={cn(
+                'flex h-9 items-center rounded-lg text-xs font-semibold text-[var(--nav-item-text)] transition-colors hover:bg-[var(--nav-item-hover-bg)] hover:text-[var(--nav-item-selected-text)]',
+                isSidebarCollapsed ? 'justify-center px-0' : 'gap-2 px-2'
+              )}
+            >
+              <ExternalLink className="h-4 w-4 shrink-0" />
+              {!isSidebarCollapsed && <span>Voltar ao SEIA V2</span>}
+            </a>
+          </div>
+        </aside>
+
+        <main id="design-system-content" className="min-w-0 flex-1 overflow-y-auto">
+          <div className="mx-auto w-full max-w-[1800px] p-4 pb-24 sm:p-6 lg:p-8">
       <div className="mb-6 flex flex-col gap-4 border-b border-[var(--color-border-default)] pb-6 2xl:flex-row 2xl:items-end 2xl:justify-between">
         <div className="max-w-3xl">
           <div className="mb-3 flex items-center gap-2">
@@ -223,55 +360,7 @@ export const SeiaV2DesignSystemPage: React.FC = () => {
         </div>
       </div>
 
-      <label className="mb-6 block space-y-1.5 text-xs font-semibold text-[var(--color-text-primary)] xl:hidden">
-        Navegar pelo catálogo
-        <select
-          className={cn(fieldClass, 'appearance-none bg-[linear-gradient(45deg,transparent_50%,var(--color-text-tertiary)_50%),linear-gradient(135deg,var(--color-text-tertiary)_50%,transparent_50%)] bg-[position:calc(100%-16px)_15px,calc(100%-11px)_15px] bg-[size:5px_5px,5px_5px] bg-no-repeat pr-10')}
-          defaultValue="overview"
-          onChange={(event) => jumpTo(event.target.value)}
-        >
-          {catalogSections.map((section) => <option key={section.id} value={section.id}>{section.group} — {section.label}</option>)}
-        </select>
-      </label>
-
-      <div className="grid items-start gap-8 xl:grid-cols-[220px_minmax(0,1fr)]">
-        <aside className="sticky top-0 hidden max-h-[calc(100vh-6rem)] overflow-y-auto pr-2 xl:block">
-          <div className="relative mb-4">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[var(--color-text-tertiary)]" />
-            <input
-              value={navFilter}
-              onChange={(event) => setNavFilter(event.target.value)}
-              placeholder="Filtrar catálogo"
-              className={cn(fieldClass, 'h-8 pl-8 pr-8 text-xs')}
-              aria-label="Filtrar seções do design system"
-            />
-            {navFilter && (
-              <button onClick={() => setNavFilter('')} className={cn('absolute right-2.5 top-1/2 -translate-y-1/2 rounded text-[var(--color-text-tertiary)]', focusRing)} aria-label="Limpar filtro">
-                <X className="h-3.5 w-3.5" />
-              </button>
-            )}
-          </div>
-          <nav aria-label="Seções do design system" className="space-y-4">
-            {Object.entries(groupedSections).map(([group, sections]) => (
-              <div key={group}>
-                <p className="mb-1.5 px-2 text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--color-text-tertiary)]">{group}</p>
-                <div className="space-y-0.5">
-                  {sections.map((section) => (
-                    <button
-                      key={section.id}
-                      onClick={() => jumpTo(section.id)}
-                      className="w-full rounded-lg px-2 py-1.5 text-left text-xs font-medium text-[var(--nav-item-text)] transition-colors hover:bg-[var(--nav-item-hover-bg)] hover:text-[var(--nav-item-selected-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-green-alpha-32)]"
-                    >
-                      {section.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </nav>
-        </aside>
-
-        <main className="min-w-0 space-y-14">
+      <div className="min-w-0 space-y-14">
           <section id="overview" className="scroll-mt-8">
             <SectionIntro title="Visão geral" description="Uma única linguagem para os fluxos internos e públicos do INEMA: clara, institucional, acessível e consistente nos temas claro e escuro." />
             <div className="grid gap-4 md:grid-cols-3">
@@ -294,12 +383,12 @@ export const SeiaV2DesignSystemPage: React.FC = () => {
             <div className="grid gap-4 lg:grid-cols-2">
               <Specimen title="Logo horizontal" description="Uso preferencial em topbar e autenticação.">
                 <div className="flex min-h-36 items-center justify-center rounded-xl bg-[var(--topbar-bg)] p-8">
-                  <img src="/src/assets/seia-plataforma/svg/SEIA Plataforma - Logo EXP_HORIZONTAL_W.svg" alt="SEIA Plataforma" className="h-14 max-w-full" />
+                  <img src={seiaLogoWhite} alt="SEIA Plataforma" className="h-14 max-w-full" />
                 </div>
               </Specimen>
               <Specimen title="Símbolo" description="Uso em sidebar recolhida e espaços compactos.">
                 <div className="flex min-h-36 items-center justify-center rounded-xl bg-[var(--topbar-bg)] p-8">
-                  <img src="/src/assets/seia-plataforma/svg/SEIA Plataforma - Logo EXP_ICON_W.svg" alt="Símbolo SEIA Plataforma" className="h-16 w-16" />
+                  <img src={seiaIconWhite} alt="Símbolo SEIA Plataforma" className="h-16 w-16" />
                 </div>
               </Specimen>
             </div>
@@ -767,6 +856,8 @@ export const SeiaV2DesignSystemPage: React.FC = () => {
               ))}
             </div>
           </section>
+            </div>
+          </div>
         </main>
       </div>
 
