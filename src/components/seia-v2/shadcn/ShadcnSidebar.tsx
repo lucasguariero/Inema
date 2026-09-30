@@ -157,6 +157,7 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
     const activeGroup = getGroupForRoute(activeRoute);
     return activeGroup ? { [activeGroup]: true } : {};
   });
+  const [openSection, setOpenSection] = useState<string | null>(null);
 
   useEffect(() => {
     const activeGroup = getGroupForRoute(activeRoute);
@@ -168,6 +169,10 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
 
   const toggleGroup = (groupId: string) => {
     setOpenGroups((prev) => (prev[groupId] ? {} : { [groupId]: true }));
+  };
+
+  const toggleSection = (section: string) => {
+    setOpenSection((current) => (current === section ? null : section));
   };
 
   const handleNav = (item: MenuItem | TopDirectItem, e?: React.MouseEvent) => {
@@ -223,6 +228,11 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
   const isGroupExpanded = (groupId: string) => {
     if (searchFilter.trim()) return true;
     return !!openGroups[groupId];
+  };
+
+  const isSectionExpanded = (section: string) => {
+    if (searchFilter.trim()) return true;
+    return openSection === section;
   };
 
   const renderBadge = (badge?: string, variant?: string) => {
@@ -466,6 +476,7 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                           data-testid={`nav-${group.label}`}
                           onClick={() => {
                             if (!group.disabled) {
+                              setOpenSection(group.section);
                               setOpenGroups({ [group.id]: true });
                               onToggleCollapse?.();
                             }
@@ -582,11 +593,39 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
               {filteredGroups.map((group, index) => {
                 const GroupIcon = ICON_MAP[group.icon] || Sliders;
                 const startsSection = index === 0 || group.section !== filteredGroups[index - 1].section;
+                const sectionExpanded = isSectionExpanded(group.section);
                 const sectionHeading = startsSection ? (
-                  <div className={cn('px-2.5 pb-1.5 text-[10px] font-bold uppercase tracking-[0.12em]', index > 0 ? 'pt-4 mt-3 border-t' : 'pt-2', isDarkMode ? 'text-slate-500 border-slate-800' : isVizoraGreen ? 'text-[#97c7b6] border-[#206954]' : isInemaLight ? 'text-[var(--color-text-tertiary)] border-[var(--color-border-subtle)]' : 'text-[#7ea8b3] border-[#145366]')}>
-                    {group.section}
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => toggleSection(group.section)}
+                    aria-expanded={sectionExpanded}
+                    className={cn(
+                      'w-full flex items-center justify-between px-2.5 py-2.5 text-[10px] font-bold uppercase tracking-[0.12em] text-left cursor-pointer transition-colors',
+                      index > 0 ? 'mt-2 border-t' : 'mt-0',
+                      isDarkMode
+                        ? 'text-slate-500 border-slate-800 hover:text-slate-300'
+                        : isVizoraGreen
+                        ? 'text-[#97c7b6] border-[#206954] hover:text-white'
+                        : isInemaLight
+                        ? 'text-[var(--color-text-tertiary)] border-[var(--color-border-subtle)] hover:text-[var(--nav-item-selected-text)]'
+                        : 'text-[#7ea8b3] border-[#145366] hover:text-white'
+                    )}
+                  >
+                    <span>{group.section}</span>
+                    <ChevronDown
+                      className={cn(
+                        'h-3.5 w-3.5 shrink-0 transition-transform duration-200',
+                        sectionExpanded ? 'rotate-0' : '-rotate-90'
+                      )}
+                    />
+                  </button>
                 ) : null;
+
+                if (!sectionExpanded) {
+                  return startsSection ? (
+                    <React.Fragment key={group.id}>{sectionHeading}</React.Fragment>
+                  ) : null;
+                }
 
                 // Item Direto (ex.: Relatórios Gerenciais)
                 if (group.isDirectItem) {
