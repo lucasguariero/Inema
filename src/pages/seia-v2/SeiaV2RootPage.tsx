@@ -13,6 +13,15 @@ import { ConsultaExternaPage } from '@/pages/fiscalizacao/ConsultaExternaPage';
 import { ConsultaInternaPage } from '@/pages/fiscalizacao/ConsultaInternaPage';
 import { SeiaDaesPage } from '@/pages/hibrido/SeiaDaesPage';
 import { SeiaV2DesignSystemPage } from '@/pages/seia-v2/SeiaV2DesignSystemPage';
+import { CerhPage } from '@/pages/seia-v2/CerhPage';
+import { DtrpPage } from '@/pages/seia-v2/DtrpPage';
+import { ReposicaoFlorestalPage } from '@/pages/seia-v2/ReposicaoFlorestalPage';
+import { CertidaoDebitoPage } from '@/pages/seia-v2/CertidaoDebitoPage';
+import { AnslaPage } from '@/pages/seia-v2/AnslaPage';
+import { ParcelamentoDebitoPage } from '@/pages/seia-v2/ParcelamentoDebitoPage';
+import { CrasFaunaPage } from '@/pages/seia-v2/CrasFaunaPage';
+import { CefirImoveisPage } from '@/pages/seia-v2/CefirImoveisPage';
+import { SispassPerfisPage } from '@/pages/seia-v2/SispassPerfisPage';
 
 export const SeiaV2RootPage: React.FC = () => {
   const [activeSubRoute, setActiveSubRoute] = useState<string>('inicio');
@@ -78,6 +87,28 @@ export const SeiaV2RootPage: React.FC = () => {
         return <ConsultaInternaPage onNavigate={handleNavigate} />;
       case 'seia-daes':
         return <SeiaDaesPage onNavigate={handleNavigate} />;
+      case 'cerh':
+      case 'outorga':
+        return <CerhPage onNavigate={handleNavigate} />;
+      case 'dtrp':
+        return <DtrpPage onNavigate={handleNavigate} />;
+      case 'reposicao-florestal':
+      case 'crf':
+        return <ReposicaoFlorestalPage onNavigate={handleNavigate} />;
+      case 'certidao-debito':
+      case 'cnd':
+        return <CertidaoDebitoPage onNavigate={handleNavigate} />;
+      case 'ansla':
+      case 'dispensa':
+        return <AnslaPage onNavigate={handleNavigate} />;
+      case 'parcelamento':
+        return <ParcelamentoDebitoPage onNavigate={handleNavigate} />;
+      case 'cras':
+        return <CrasFaunaPage onNavigate={handleNavigate} />;
+      case 'cefir':
+        return <CefirImoveisPage onNavigate={handleNavigate} />;
+      case 'sispass':
+        return <SispassPerfisPage onNavigate={handleNavigate} />;
       case 'design-system':
         return <SeiaV2DesignSystemPage />;
       case 'inicio':

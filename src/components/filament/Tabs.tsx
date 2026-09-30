@@ -8,8 +8,11 @@ export interface TabItem {
   badgeColor?: 'default' | 'primary' | 'warning' | 'danger';
 }
 
+export type FilamentTabItem = TabItem;
+
 interface FilamentTabsProps {
-  tabs: TabItem[];
+  tabs?: TabItem[];
+  items?: TabItem[];
   activeTab: string;
   onChange: (tabId: string) => void;
   className?: string;
@@ -17,10 +20,12 @@ interface FilamentTabsProps {
 
 export const FilamentTabs: React.FC<FilamentTabsProps> = ({
   tabs,
+  items,
   activeTab,
   onChange,
   className
 }) => {
+  const tabList = tabs || items || [];
   return (
     <nav
       aria-label="Abas de navegação"
@@ -29,7 +34,7 @@ export const FilamentTabs: React.FC<FilamentTabsProps> = ({
         className
       )}
     >
-      {tabs.map((tab) => {
+      {tabList.map((tab) => {
         const isActive = activeTab === tab.id;
         return (
           <button

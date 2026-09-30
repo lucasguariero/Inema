@@ -4,8 +4,9 @@ import { cn } from '@/lib/utils';
 
 export interface SectionProps extends React.HTMLAttributes<HTMLDivElement> {
   heading?: React.ReactNode;
+  title?: React.ReactNode;
   description?: React.ReactNode;
-  icon?: React.ElementType;
+  icon?: React.ElementType | React.ReactNode;
   iconColor?: 'primary' | 'gray' | 'danger' | 'warning' | 'success' | 'info';
   collapsible?: boolean;
   defaultCollapsed?: boolean;
@@ -16,8 +17,9 @@ export interface SectionProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export const Section: React.FC<SectionProps> = ({
   heading,
+  title,
   description,
-  icon: Icon,
+  icon,
   iconColor = 'gray',
   collapsible = false,
   defaultCollapsed = false,
@@ -29,6 +31,7 @@ export const Section: React.FC<SectionProps> = ({
   ...props
 }) => {
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed);
+  const sectionHeading = heading || title;
 
   const iconColorStyles = {
     primary: 'text-[var(--color-text-link)]',
@@ -39,7 +42,24 @@ export const Section: React.FC<SectionProps> = ({
     info: 'text-sky-600 dark:text-sky-400',
   };
 
-  const hasHeader = heading || description || Icon || headerActions || collapsible;
+  const hasHeader = sectionHeading || description || icon || headerActions || collapsible;
+
+  const renderIcon = () => {
+    if (!icon) return null;
+    if (React.isValidElement(icon)) {
+      return (
+        <div className={cn('fi-section-header-icon shrink-0', iconColorStyles[iconColor])}>
+          {icon}
+        </div>
+      );
+    }
+    const IconComponent = icon as React.ElementType;
+    return (
+      <div className={cn('fi-section-header-icon shrink-0', iconColorStyles[iconColor])}>
+        <IconComponent className="w-5 h-5" />
+      </div>
+    );
+  };
 
   return (
     <div
@@ -60,15 +80,11 @@ export const Section: React.FC<SectionProps> = ({
           onClick={collapsible ? () => setIsCollapsed(!isCollapsed) : undefined}
         >
           <div className="flex items-center gap-2.5 min-w-0 flex-1">
-            {Icon && (
-              <div className={cn('fi-section-header-icon shrink-0', iconColorStyles[iconColor])}>
-                <Icon className="w-5 h-5" />
-              </div>
-            )}
+            {renderIcon()}
             <div className="min-w-0">
-              {heading && (
+              {sectionHeading && (
                 <h3 className="fi-section-header-heading text-sm sm:text-base font-semibold text-slate-950 dark:text-white leading-6 tracking-tight truncate">
-                  {heading}
+                  {sectionHeading}
                 </h3>
               )}
               {description && (

@@ -2,6 +2,9 @@ import * as React from 'react';
 import { cn } from '@/lib/utils';
 
 export interface InputWrapperProps extends React.HTMLAttributes<HTMLDivElement> {
+  label?: React.ReactNode;
+  required?: boolean;
+  hint?: React.ReactNode;
   prefix?: React.ReactNode;
   prefixIcon?: React.ElementType;
   suffix?: React.ReactNode;
@@ -13,6 +16,9 @@ export interface InputWrapperProps extends React.HTMLAttributes<HTMLDivElement> 
 export const InputWrapper = React.forwardRef<HTMLDivElement, InputWrapperProps>(
   (
     {
+      label,
+      required,
+      hint,
       prefix,
       prefixIcon: PrefixIcon,
       suffix,
@@ -25,7 +31,7 @@ export const InputWrapper = React.forwardRef<HTMLDivElement, InputWrapperProps>(
     },
     ref
   ) => {
-    return (
+    const inputContent = (
       <div
         ref={ref}
         className={cn(
@@ -55,6 +61,21 @@ export const InputWrapper = React.forwardRef<HTMLDivElement, InputWrapperProps>(
         )}
       </div>
     );
+
+    if (label) {
+      return (
+        <div className="space-y-1.5 w-full">
+          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+            {label}
+            {required && <span className="text-rose-500 ml-0.5">*</span>}
+          </label>
+          {inputContent}
+          {hint && <p className="text-[11px] text-slate-400">{hint}</p>}
+        </div>
+      );
+    }
+
+    return inputContent;
   }
 );
 
