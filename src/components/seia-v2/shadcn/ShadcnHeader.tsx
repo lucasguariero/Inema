@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   PanelLeftClose,
   PanelLeftOpen,
@@ -23,6 +23,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { GlobalCommandPalette } from '@/components/seia-v2/GlobalCommandPalette';
 import { useTheme } from '@/context/ThemeContext';
 import { cn } from '@/lib/utils';
 
@@ -40,12 +41,32 @@ export const ShadcnHeader: React.FC<HeaderProps> = ({
   onOpenCommandPalette,
 }) => {
   const { isDarkMode, toggleDarkMode } = useTheme();
+  const [internalCommandPaletteOpen, setInternalCommandPaletteOpen] = useState(false);
+
+  const handleOpenSearch = () => {
+    if (onOpenCommandPalette) {
+      onOpenCommandPalette();
+    } else {
+      setInternalCommandPaletteOpen(true);
+    }
+  };
 
   return (
     <header className={cn(
       "relative h-16 w-full min-w-0 shrink-0 flex items-center px-3 sm:px-4 lg:px-5 select-none transition-colors duration-200",
       "bg-[var(--topbar-bg)] text-[var(--topbar-text)]"
     )}>
+      {/* Fallback Command Palette quando o Header for instanciado sem provider externo */}
+      {!onOpenCommandPalette && (
+        <GlobalCommandPalette
+          open={internalCommandPaletteOpen}
+          onOpenChange={setInternalCommandPaletteOpen}
+          onNavigate={(route) => {
+            window.location.href = `/?rota=seia-v2&tela=${route}`;
+          }}
+        />
+      )}
+
       <div className="relative z-10 flex shrink-0 items-center gap-2">
         <a
           href="/?rota=seia-v2"
@@ -81,14 +102,14 @@ export const ShadcnHeader: React.FC<HeaderProps> = ({
         </button>
       </div>
 
-      {/* Centro: Barra de busca omnibox global compacta com atalho Ctrl+K */}
+      {/* Centro: Barra de busca omnibox global compacta */}
       <div className="mx-2 flex min-w-0 flex-1 md:hidden">
         <button
           type="button"
-          onClick={onOpenCommandPalette}
+          onClick={handleOpenSearch}
           className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-white/85 transition-colors hover:bg-white/12 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 cursor-pointer"
-          aria-label="Busca geral (Ctrl+K)"
-          title="Busca geral (Ctrl+K)"
+          aria-label="Buscar no sistema"
+          title="Buscar no sistema"
         >
           <Search className="h-4 w-4" />
         </button>
@@ -97,13 +118,11 @@ export const ShadcnHeader: React.FC<HeaderProps> = ({
         <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-white/65 transition-colors group-focus-within:text-white" />
         <button
           type="button"
-          onClick={onOpenCommandPalette}
-          className="pointer-events-auto w-full flex items-center justify-between rounded-lg border border-white/18 bg-white/10 py-2 pl-8 pr-2.5 text-xs text-white/75 transition-all hover:bg-white/14 hover:border-white/35 focus:border-white/45 focus:bg-white/16 focus:outline-none cursor-pointer"
+          onClick={handleOpenSearch}
+          className="pointer-events-auto w-full flex items-center justify-between rounded-lg border border-white/18 bg-white/10 py-2 pl-8 pr-3 text-xs text-white/75 transition-all hover:bg-white/14 hover:border-white/35 focus:border-white/45 focus:bg-white/16 focus:outline-none cursor-pointer text-left"
         >
-          <span>Buscar processos, requerimentos SEIA ou atos...</span>
-          <kbd className="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-mono font-medium text-white/90 bg-white/15 border border-white/20 rounded shadow-2xs">
-            Ctrl K
-          </kbd>
+          <span className="truncate">Buscar processos, requerimentos SEIA ou atos...</span>
+          <Search className="h-3.5 w-3.5 text-white/50 shrink-0 ml-2" />
         </button>
       </div>
 

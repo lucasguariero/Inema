@@ -14,6 +14,8 @@ export interface FilamentWizardProps {
   className?: string;
 }
 
+export type Step = WizardStep;
+
 export function FilamentWizard({
   steps,
   currentStep,
@@ -60,9 +62,9 @@ export function FilamentWizard({
                 className={cn(
                   'fi-sc-wizard-header-step-icon-ctn w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-semibold shrink-0 transition-colors',
                   isActive
-                    ? 'border-2 border-[#005B52] text-[#005B52] bg-white dark:bg-gray-900'
+                    ? 'border-2 border-[#0F4C3A] text-[#0F4C3A] dark:border-emerald-400 dark:text-emerald-400 bg-white dark:bg-gray-900'
                     : isCompleted
-                    ? 'border-2 border-[#005B52] bg-[#005B52] text-white'
+                    ? 'border-2 border-[#0F4C3A] bg-[#0F4C3A] dark:border-emerald-500 dark:bg-emerald-600 text-white'
                     : 'border-2 border-gray-300 text-gray-400 bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-gray-500'
                 )}
               >
@@ -90,9 +92,14 @@ export function FilamentWizard({
               </div>
             </button>
 
-            {/* Active bottom border indicator (exact Filament design) */}
+            {/* Active bottom border indicator - stops at the chevron separator base when not the last step */}
             {isActive && (
-              <div className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-[#005B52]" />
+              <div
+                className={cn(
+                  'absolute bottom-0 left-0 h-[2.5px] bg-[#0F4C3A] dark:bg-emerald-400 z-10',
+                  idx < steps.length - 1 ? 'right-4 sm:right-5' : 'right-0'
+                )}
+              />
             )}
 
             {/* Separator Chevron SVG (exact GLA design) */}
@@ -118,3 +125,4 @@ export function FilamentWizard({
     </ol>
   );
 }
+

@@ -90,7 +90,23 @@ export const GlobalCommandPalette: React.FC<GlobalCommandPaletteProps> = ({
       icon: isDarkMode ? Sun : Moon,
     },
 
-    // Navegação
+    // Navegação Principal & Telas
+    {
+      id: 'cmd-inicio',
+      category: 'Navegação',
+      label: 'Visão Geral / Início',
+      description: 'Painel inicial integrado do SEIA V2',
+      route: 'inicio',
+      icon: FolderKanban,
+    },
+    {
+      id: 'cmd-relatorios',
+      category: 'Navegação',
+      label: 'Relatórios Gerenciais & Indicadores',
+      description: 'Dashboard analítico, gráficos de aging e metas',
+      route: 'relatorios',
+      icon: Layers,
+    },
     {
       id: 'cmd-pauta',
       category: 'Navegação',
@@ -126,6 +142,14 @@ export const GlobalCommandPalette: React.FC<GlobalCommandPaletteProps> = ({
       badge: 'CRAS',
     },
     {
+      id: 'cmd-sispass',
+      category: 'Navegação',
+      label: 'Criadores SISPASS / Passeriformes',
+      description: 'Gestão de anilhas e transferências de aves',
+      route: 'sispass',
+      icon: PawPrint,
+    },
+    {
       id: 'cmd-cerh',
       category: 'Navegação',
       label: 'Recursos Hídricos / CERH & Outorgas',
@@ -135,6 +159,33 @@ export const GlobalCommandPalette: React.FC<GlobalCommandPaletteProps> = ({
       badge: 'CERH',
     },
     {
+      id: 'cmd-ansla',
+      category: 'Navegação',
+      label: 'Dispensa de Licenciamento (ANSLA)',
+      description: 'Atividades de baixo impacto e declaração online',
+      route: 'ansla',
+      icon: FileCheck,
+      badge: 'ANSLA',
+    },
+    {
+      id: 'cmd-cefir',
+      category: 'Navegação',
+      label: 'Cadastro de Imóveis Rurais (CEFIR)',
+      description: 'Consulta e regularização de imóveis rurais',
+      route: 'cefir',
+      icon: FileText,
+      badge: 'CEFIR',
+    },
+    {
+      id: 'cmd-reposicao',
+      category: 'Navegação',
+      label: 'Reposição Florestal (CRF)',
+      description: 'Créditos de reposição e plano de corte',
+      route: 'reposicao-florestal',
+      icon: Compass,
+      badge: 'CRF',
+    },
+    {
       id: 'cmd-dtrp',
       category: 'Navegação',
       label: 'Transporte de Resíduos Perigosos (DTRP)',
@@ -142,6 +193,14 @@ export const GlobalCommandPalette: React.FC<GlobalCommandPaletteProps> = ({
       route: 'dtrp',
       icon: FileText,
       badge: 'DIFIS',
+    },
+    {
+      id: 'cmd-consulta-difis',
+      category: 'Navegação',
+      label: 'Consultar Registros de Fiscalização',
+      description: 'Painel interno de denúncias e autos de infração',
+      route: 'consulta-interna',
+      icon: ShieldAlert,
     },
     {
       id: 'cmd-parametrizacao',
@@ -168,6 +227,14 @@ export const GlobalCommandPalette: React.FC<GlobalCommandPaletteProps> = ({
       icon: Landmark,
     },
     {
+      id: 'cmd-parcelamento',
+      category: 'Navegação',
+      label: 'Parcelamento de Débitos e Multas',
+      description: 'Simulação e emissão de parcelas de autos',
+      route: 'parcelamento-debito',
+      icon: Landmark,
+    },
+    {
       id: 'cmd-design-system',
       category: 'Navegação',
       label: 'Catálogo do Design System SEIA V2',
@@ -175,6 +242,14 @@ export const GlobalCommandPalette: React.FC<GlobalCommandPaletteProps> = ({
       route: 'design-system',
       icon: Layers,
       badge: 'V2',
+    },
+    {
+      id: 'cmd-roteiro',
+      category: 'Navegação',
+      label: 'Roteiro de Apresentação & Mapeamento',
+      description: 'Demonstração executiva dos fluxos SEIA V2',
+      route: 'roteiro',
+      icon: Layers,
     },
 
     // Processos Recentes
@@ -207,12 +282,23 @@ export const GlobalCommandPalette: React.FC<GlobalCommandPaletteProps> = ({
     },
   ];
 
+  // Normalização para busca por aproximação insensível a acentos
+  const normalizeSearchText = (text: string) =>
+    (text || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim();
+
   const filteredCommands = commands.filter((cmd) => {
-    const q = query.toLowerCase();
+    if (!query.trim()) return true;
+    const q = normalizeSearchText(query);
     return (
-      cmd.label.toLowerCase().includes(q) ||
-      cmd.category.toLowerCase().includes(q) ||
-      (cmd.description && cmd.description.toLowerCase().includes(q))
+      normalizeSearchText(cmd.label).includes(q) ||
+      normalizeSearchText(cmd.category).includes(q) ||
+      (cmd.description && normalizeSearchText(cmd.description).includes(q)) ||
+      (cmd.badge && normalizeSearchText(cmd.badge).includes(q)) ||
+      (cmd.route && normalizeSearchText(cmd.route).includes(q))
     );
   });
 
@@ -222,7 +308,11 @@ export const GlobalCommandPalette: React.FC<GlobalCommandPaletteProps> = ({
     if (cmd.action) {
       cmd.action();
     } else if (cmd.route) {
-      onNavigate(cmd.route);
+      if (onNavigate) {
+        onNavigate(cmd.route);
+      } else {
+        window.location.href = `/?rota=seia-v2&tela=${cmd.route}`;
+      }
     }
   };
 
@@ -253,19 +343,6 @@ export const GlobalCommandPalette: React.FC<GlobalCommandPaletteProps> = ({
     setSelectedIndex(0);
   }, [query]);
 
-  // Global Ctrl+K / Cmd+K listener
-  useEffect(() => {
-    const handleGlobalKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
-        e.preventDefault();
-        onOpenChange(!open);
-      }
-    };
-
-    window.addEventListener('keydown', handleGlobalKeyDown);
-    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
-  }, [open, onOpenChange]);
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="w-[94vw] sm:max-w-2xl max-h-[85vh] p-0 overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl rounded-2xl flex flex-col">
@@ -274,7 +351,7 @@ export const GlobalCommandPalette: React.FC<GlobalCommandPaletteProps> = ({
           <Search className="w-5 h-5 text-[#0F4C3A] dark:text-emerald-400 shrink-0" />
           <input
             type="text"
-            placeholder="Digite para buscar telas, processos, módulos ou ações (Ctrl+K)..."
+            placeholder="Digite para buscar telas, módulos, processos ou ações..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             autoFocus

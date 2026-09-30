@@ -200,18 +200,30 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
     }
   };
 
-  // Filtragem dos itens de menu em tempo real
+  // Normalização para busca por aproximação (insensível a acentos, cedilhas e maiúsculas/minúsculas)
+  const normalizeSearchText = (text: string) =>
+    (text || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim();
+
+  // Filtragem dos itens de menu em tempo real por aproximação
   const filteredGroups = useMemo(() => {
     if (!searchFilter.trim()) return SEIA_V2_MENU_GROUPS;
 
-    const term = searchFilter.toLowerCase().trim();
+    const term = normalizeSearchText(searchFilter);
 
     return SEIA_V2_MENU_GROUPS.map((group) => {
-      const groupMatches = group.label.toLowerCase().includes(term);
+      const groupMatches =
+        normalizeSearchText(group.label).includes(term) ||
+        normalizeSearchText(group.section).includes(term);
+
       const matchingItems = group.items.filter(
         (item) =>
-          item.label.toLowerCase().includes(term) ||
-          (item.subgroup && item.subgroup.toLowerCase().includes(term))
+          normalizeSearchText(item.label).includes(term) ||
+          (item.subgroup && normalizeSearchText(item.subgroup).includes(term)) ||
+          (item.badge && normalizeSearchText(item.badge).includes(term))
       );
 
       if (groupMatches || matchingItems.length > 0) {
@@ -226,9 +238,11 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
 
   const filteredDirectItems = useMemo(() => {
     if (!searchFilter.trim()) return TOP_DIRECT_ITEMS;
-    const term = searchFilter.toLowerCase().trim();
-    return TOP_DIRECT_ITEMS.filter((item) =>
-      item.label.toLowerCase().includes(term)
+    const term = normalizeSearchText(searchFilter);
+    return TOP_DIRECT_ITEMS.filter(
+      (item) =>
+        normalizeSearchText(item.label).includes(term) ||
+        (item.badge && normalizeSearchText(item.badge).includes(term))
     );
   }, [searchFilter]);
 

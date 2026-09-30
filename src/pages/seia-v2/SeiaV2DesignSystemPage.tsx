@@ -92,6 +92,7 @@ import {
   FilamentWizard,
   InputWrapper,
   Section,
+  Switch,
   TableContainer,
 } from '@/components/filament';
 import { KpiCard } from '@/components/dashboard/KpiCard';
@@ -800,18 +801,14 @@ export const SeiaV2DesignSystemPage: React.FC = () => {
                       </label>
                     </div>
 
-                    <button
-                      type="button"
-                      role="switch"
-                      aria-checked={switchOn}
-                      onClick={() => setSwitchOn((v) => !v)}
-                      className={cn('flex items-center gap-2.5 rounded-md cursor-pointer select-none', focusRing)}
-                    >
-                      <span className={cn('relative h-5 w-9 rounded-full transition-colors', switchOn ? 'bg-[var(--color-brand-primary)]' : 'bg-slate-300 dark:bg-slate-700')}>
-                        <span className={cn('absolute top-0.5 h-4 w-4 rounded-full bg-white shadow-xs transition-transform', switchOn ? 'translate-x-[18px]' : 'translate-x-0.5')} />
-                      </span>
-                      <span className="font-medium text-slate-800 dark:text-slate-200">Publicação no Diário Oficial</span>
-                    </button>
+                    <div className="pt-1">
+                      <Switch
+                        checked={switchOn}
+                        onCheckedChange={setSwitchOn}
+                        label="Publicação no Diário Oficial"
+                        description="Publicar atos automaticamente após assinatura digital"
+                      />
+                    </div>
                   </div>
                 </Specimen>
               </section>
