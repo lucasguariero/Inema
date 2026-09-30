@@ -263,8 +263,8 @@ export const CadastrosBasicosPage: React.FC<CadastrosBasicosPageProps> = ({ onNa
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
-          <Button variant="outline" size="sm" className="text-xs h-9">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+          <Button variant="outline" size="sm" className="text-xs h-9 w-full sm:w-auto">
             <Download className="w-3.5 h-3.5 mr-1.5" />
             <span>Exportar Base</span>
           </Button>
@@ -272,7 +272,7 @@ export const CadastrosBasicosPage: React.FC<CadastrosBasicosPageProps> = ({ onNa
           {activeTab === 'rt' && (
             <Button
               onClick={() => setActiveModal('novo-rt')}
-              className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs h-9 font-semibold shadow-xs"
+              className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs h-9 font-semibold shadow-xs w-full sm:w-auto"
             >
               <Plus className="w-4 h-4 mr-1.5" />
               <span>+ Vincular Responsável Técnico</span>
@@ -282,7 +282,7 @@ export const CadastrosBasicosPage: React.FC<CadastrosBasicosPageProps> = ({ onNa
           {activeTab === 'representantes' && (
             <Button
               onClick={() => setActiveModal('novo-rep')}
-              className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs h-9 font-semibold shadow-xs"
+              className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs h-9 font-semibold shadow-xs w-full sm:w-auto"
             >
               <Plus className="w-4 h-4 mr-1.5" />
               <span>+ Adicionar Representante Legal</span>
@@ -292,7 +292,7 @@ export const CadastrosBasicosPage: React.FC<CadastrosBasicosPageProps> = ({ onNa
           {activeTab === 'empreendimentos' && (
             <Button
               onClick={() => setActiveModal('novo-emp')}
-              className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs h-9 font-semibold shadow-xs"
+              className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs h-9 font-semibold shadow-xs w-full sm:w-auto"
             >
               <Plus className="w-4 h-4 mr-1.5" />
               <span>+ Novo Empreendimento</span>

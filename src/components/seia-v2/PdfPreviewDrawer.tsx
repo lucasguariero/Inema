@@ -54,37 +54,38 @@ export const PdfPreviewDrawer: React.FC<PdfPreviewDrawerProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl p-0 overflow-hidden bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 shadow-2xl rounded-2xl max-h-[90vh] flex flex-col">
+      <DialogContent className="w-[96vw] sm:max-w-4xl p-0 overflow-hidden bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 shadow-2xl rounded-2xl max-h-[92vh] flex flex-col">
         {/* Toolbar de Controle do Documento */}
-        <div className="bg-slate-900 text-white px-5 py-3 flex items-center justify-between shrink-0">
-          <div className="flex items-center gap-3">
-            <FileText className="w-5 h-5 text-emerald-400" />
-            <div>
-              <div className="text-xs font-bold text-slate-100">{data.titulo}</div>
-              <div className="text-[11px] font-mono text-slate-400">{data.codigoDocumento}</div>
+        <div className="bg-slate-900 text-white px-3 sm:px-5 py-2.5 sm:py-3 flex items-center justify-between shrink-0 gap-2">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <FileText className="w-5 h-5 text-emerald-400 shrink-0" />
+            <div className="min-w-0">
+              <div className="text-xs font-bold text-slate-100 truncate">{data.titulo}</div>
+              <div className="text-[10px] sm:text-[11px] font-mono text-slate-400 truncate">{data.codigoDocumento}</div>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             <Button
               variant="outline"
               size="sm"
               onClick={handlePrint}
-              className="text-xs h-8 bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700"
+              className="text-xs h-8 px-2 sm:px-3 bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700"
             >
-              <Printer className="w-3.5 h-3.5 mr-1.5" />
-              Imprimir
+              <Printer className="w-3.5 h-3.5 sm:mr-1.5" />
+              <span className="hidden sm:inline">Imprimir</span>
             </Button>
             <Button
               size="sm"
-              className="text-xs h-8 bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white font-semibold"
+              className="text-xs h-8 px-2.5 sm:px-3 bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white font-semibold"
             >
-              <Download className="w-3.5 h-3.5 mr-1.5" />
-              Baixar PDF Oficial
+              <Download className="w-3.5 h-3.5 sm:mr-1.5" />
+              <span className="hidden sm:inline">Baixar PDF Oficial</span>
+              <span className="sm:hidden">Baixar</span>
             </Button>
             <button
               onClick={() => onOpenChange(false)}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors ml-2"
+              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
@@ -92,8 +93,8 @@ export const PdfPreviewDrawer: React.FC<PdfPreviewDrawerProps> = ({
         </div>
 
         {/* Visualizador de Folha A4 Simulado */}
-        <div className="p-6 overflow-y-auto flex-1 bg-slate-200/60 dark:bg-slate-950 flex justify-center">
-          <div className="w-full max-w-2xl bg-white dark:bg-slate-900 shadow-lg rounded-sm border border-slate-300 dark:border-slate-800 p-8 sm:p-12 text-slate-900 dark:text-slate-100 space-y-6 text-xs font-serif leading-relaxed">
+        <div className="p-3 sm:p-6 overflow-y-auto flex-1 bg-slate-200/60 dark:bg-slate-950 flex justify-center">
+          <div className="w-full max-w-2xl bg-white dark:bg-slate-900 shadow-lg rounded-sm border border-slate-300 dark:border-slate-800 p-4 sm:p-8 md:p-12 text-slate-900 dark:text-slate-100 space-y-4 sm:space-y-6 text-xs font-serif leading-relaxed">
             {/* Cabeçalho Oficial do Estado da Bahia */}
             <div className="text-center pb-4 border-b-2 border-slate-900 dark:border-slate-100 space-y-1">
               <div className="font-sans font-bold text-xs uppercase tracking-wider text-slate-700 dark:text-slate-300">

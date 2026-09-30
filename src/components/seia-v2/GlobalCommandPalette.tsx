@@ -268,9 +268,9 @@ export const GlobalCommandPalette: React.FC<GlobalCommandPaletteProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl p-0 overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl rounded-2xl">
+      <DialogContent className="w-[94vw] sm:max-w-2xl max-h-[85vh] p-0 overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl rounded-2xl flex flex-col">
         {/* Header do Omnisearch */}
-        <div className="flex items-center px-4 py-3.5 border-b border-slate-200 dark:border-slate-800 gap-3">
+        <div className="flex items-center px-3.5 sm:px-4 py-3 sm:py-3.5 border-b border-slate-200 dark:border-slate-800 gap-2.5 sm:gap-3 shrink-0">
           <Search className="w-5 h-5 text-[#0F4C3A] dark:text-emerald-400 shrink-0" />
           <input
             type="text"

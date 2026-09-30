@@ -290,10 +290,10 @@ export const ParametrizacoesMasterPage: React.FC<ParametrizacoesMasterPageProps>
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2.5 w-full sm:w-auto">
           <Button
             onClick={() => setCreateModalOpen(true)}
-            className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs h-9 font-semibold shadow-2xs"
+            className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs h-9 font-semibold shadow-2xs w-full sm:w-auto"
           >
             <Plus className="w-4 h-4 mr-1.5" />
             <span>+ Novo Registro Parametrizado</span>
