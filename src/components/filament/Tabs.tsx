@@ -30,7 +30,7 @@ export const FilamentTabs: React.FC<FilamentTabsProps> = ({
     <nav
       aria-label="Abas de navegação"
       className={cn(
-        'fi-tabs flex items-center gap-x-6 border-b border-slate-200 dark:border-slate-800 -mb-px',
+        'fi-tabs flex items-center gap-x-4 sm:gap-x-6 border-b border-slate-200 dark:border-slate-800 -mb-px overflow-x-auto scrollbar-none select-none',
         className
       )}
     >
@@ -44,7 +44,7 @@ export const FilamentTabs: React.FC<FilamentTabsProps> = ({
             aria-selected={isActive}
             onClick={() => onChange(tab.id)}
             className={cn(
-              'group relative flex items-center gap-x-2 py-3 text-sm font-medium transition-colors outline-none cursor-pointer border-b-2',
+              'group relative flex items-center gap-x-2 py-3 text-xs sm:text-sm font-medium transition-colors outline-none cursor-pointer border-b-2 whitespace-nowrap shrink-0',
               isActive
                 ? 'border-[var(--color-border-focus)] text-[var(--color-text-link)] font-semibold'
                 : 'border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 hover:border-slate-300 dark:hover:border-slate-700'

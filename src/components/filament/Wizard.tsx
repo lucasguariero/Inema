@@ -29,7 +29,7 @@ export function FilamentWizard({
     <ol
       role="list"
       className={cn(
-        'fi-sc-wizard-header flex items-stretch overflow-x-auto border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 select-none scrollbar-none',
+        'fi-sc-wizard-header flex items-stretch overflow-x-auto border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 select-none scrollbar-none touch-pan-x',
         className
       )}
     >
@@ -41,7 +41,7 @@ export function FilamentWizard({
           <li
             key={step.id}
             className={cn(
-              'fi-sc-wizard-header-step relative flex-1 flex items-center min-w-[140px] sm:min-w-[170px] h-[72px]',
+              'fi-sc-wizard-header-step relative flex-1 flex items-center min-w-[125px] sm:min-w-[160px] h-[64px] sm:h-[72px]',
               isActive && 'fi-active',
               isCompleted && 'fi-completed'
             )}

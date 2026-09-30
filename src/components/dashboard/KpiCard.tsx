@@ -77,8 +77,8 @@ export const KpiCard: React.FC<KpiCardProps> = ({
       )}
     >
       {/* Linha 1: Label em caixa alta suave com ícone sutil à direita */}
-      <div className="flex items-center justify-between gap-2">
-        <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 tracking-wider uppercase truncate">
+      <div className="flex items-center justify-between gap-1.5">
+        <span className="text-[11px] sm:text-xs font-semibold text-slate-500 dark:text-slate-400 tracking-normal sm:tracking-wider uppercase line-clamp-1">
           {title}
         </span>
         {Icon && (
