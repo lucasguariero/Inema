@@ -92,11 +92,12 @@ export function FilamentWizard({
               </div>
             </button>
 
-            {/* Active bottom border indicator - stops at the chevron separator base when not the last step */}
+            {/* Active bottom border indicator - perfectly aligned to chevron separator bases on both sides */}
             {isActive && (
               <div
                 className={cn(
-                  'absolute bottom-0 left-0 h-[2.5px] bg-[#0F4C3A] dark:bg-emerald-400 z-10',
+                  'absolute bottom-0 h-[2.5px] bg-[#0F4C3A] dark:bg-emerald-400 z-10',
+                  idx > 0 ? '-left-4 sm:-left-5' : 'left-0',
                   idx < steps.length - 1 ? 'right-4 sm:right-5' : 'right-0'
                 )}
               />
