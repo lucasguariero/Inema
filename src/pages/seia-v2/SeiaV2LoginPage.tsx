@@ -9,6 +9,8 @@ import {
   Moon,
   Loader2,
   KeyRound,
+  ShieldCheck,
+  CheckCircle2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -40,6 +42,7 @@ export const SeiaV2LoginPage: React.FC<SeiaV2LoginPageProps> = ({ onLoginSuccess
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [selectedRole, setSelectedRole] = useState<'servidor' | 'gestor' | 'cidadao'>('servidor');
   
   // Modals
@@ -77,16 +80,22 @@ export const SeiaV2LoginPage: React.FC<SeiaV2LoginPageProps> = ({ onLoginSuccess
     e.preventDefault();
     setIsLoading(true);
 
+    // Passo 1: Autenticação rápida e disparo da animação de transição
     setTimeout(() => {
       setIsLoading(false);
-      if (onLoginSuccess) {
-        onLoginSuccess(selectedRole);
-      } else if (onNavigate) {
-        onNavigate('inicio');
-      } else {
-        window.location.href = '/?rota=seia-v2&tela=inicio';
-      }
-    }, 600);
+      setIsTransitioning(true);
+
+      // Passo 2: Abertura suave do sistema
+      setTimeout(() => {
+        if (onLoginSuccess) {
+          onLoginSuccess(selectedRole);
+        } else if (onNavigate) {
+          onNavigate('inicio');
+        } else {
+          window.location.href = '/?rota=seia-v2&tela=inicio';
+        }
+      }, 700);
+    }, 450);
   };
 
   const handlePublicServices = () => {
@@ -98,7 +107,43 @@ export const SeiaV2LoginPage: React.FC<SeiaV2LoginPageProps> = ({ onLoginSuccess
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col lg:grid lg:grid-cols-2 bg-white dark:bg-slate-950 font-sans text-slate-900 dark:text-slate-100 transition-colors duration-200">
+    <div className="relative min-h-screen w-full flex flex-col lg:grid lg:grid-cols-2 bg-white dark:bg-slate-950 font-sans text-slate-900 dark:text-slate-100 transition-colors duration-200 overflow-hidden">
+      {/* OVERLAY DE TRANSIÇÃO CINEMÁTICA PARA O SISTEMA */}
+      {isTransitioning && (
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#0A3327] text-white animate-in fade-in zoom-in-95 duration-500">
+          <div
+            className="absolute inset-0 bg-cover bg-center mix-blend-overlay opacity-30 scale-105 transition-transform duration-1000"
+            style={{ backgroundImage: "url('/images/inema-banner.jpeg')" }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#06241B] via-[#0F4C3A]/90 to-[#0A3327]/95" />
+
+          <div className="relative z-10 flex flex-col items-center space-y-5 max-w-sm px-6 text-center animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="relative">
+              <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-2xl">
+                <ShieldCheck className="w-8 h-8 text-emerald-300 animate-pulse" />
+              </div>
+              <div className="absolute -inset-2 rounded-2xl bg-emerald-400/20 blur-xl -z-10 animate-ping" />
+            </div>
+
+            <div className="space-y-1.5">
+              <img
+                src={logoHorizontalWhite}
+                alt="INEMA - Governo da Bahia"
+                className="h-10 w-auto mx-auto drop-shadow-md"
+              />
+              <p className="text-sm font-medium text-emerald-100">
+                Sessão autorizada • Acessando o SEIA V2...
+              </p>
+            </div>
+
+            {/* Barra de carregamento suave */}
+            <div className="w-48 h-1.5 bg-white/20 rounded-full overflow-hidden">
+              <div className="h-full bg-emerald-400 rounded-full animate-[progress_0.7s_ease-in-out_forwards] transition-all" style={{ width: '100%' }} />
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* PAINEL ESQUERDO (Banner Institucional com Overlay Verde Inema - Estilo GLA) */}
       <div className="relative hidden lg:flex flex-col justify-center items-center p-12 overflow-hidden bg-[#0A3327] text-white">
         {/* Imagem de Fundo (Cachoeira da Fumaça / Chapada Diamantina) */}
@@ -208,26 +253,21 @@ export const SeiaV2LoginPage: React.FC<SeiaV2LoginPageProps> = ({ onLoginSuccess
             </div>
           </div>
 
-          {/* Formulário Oficial */}
+          {/* Formulário Oficial com Componentes Padrão Filament */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Campo CPF */}
-            <div className="space-y-1.5">
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-                CPF<span className="text-rose-500 ml-0.5">*</span>
-              </label>
-              <div className="relative">
-                <input
-                  type="text"
-                  required
-                  placeholder="000.000.000-00"
-                  value={cpf}
-                  onChange={handleCpfChange}
-                  className="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A] font-mono transition-colors"
-                />
-              </div>
-            </div>
+            {/* Campo CPF com InputWrapper */}
+            <InputWrapper label="CPF" required>
+              <input
+                type="text"
+                required
+                placeholder="000.000.000-00"
+                value={cpf}
+                onChange={handleCpfChange}
+                className="w-full px-3 py-2 text-xs sm:text-sm bg-transparent border-0 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none font-mono"
+              />
+            </InputWrapper>
 
-            {/* Campo Senha */}
+            {/* Campo Senha com InputWrapper e toggle de visibilidade */}
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
@@ -241,23 +281,27 @@ export const SeiaV2LoginPage: React.FC<SeiaV2LoginPageProps> = ({ onLoginSuccess
                   Esqueceu sua senha?
                 </button>
               </div>
-              <div className="relative">
+              <InputWrapper
+                suffix={
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer focus:outline-none"
+                    title={showPassword ? "Ocultar senha" : "Ver senha"}
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                }
+              >
                 <input
                   type={showPassword ? 'text' : 'password'}
                   required
                   placeholder="Digite sua senha"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-3.5 pr-10 py-2.5 text-xs sm:text-sm bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A] transition-colors"
+                  className="w-full px-3 py-2 text-xs sm:text-sm bg-transparent border-0 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none"
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
-                >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
-              </div>
+              </InputWrapper>
             </div>
 
             {/* Checkbox Lembrar de Mim */}
@@ -276,10 +320,10 @@ export const SeiaV2LoginPage: React.FC<SeiaV2LoginPageProps> = ({ onLoginSuccess
             {/* Botão Primário de Login */}
             <Button
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || isTransitioning}
               className="w-full bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white font-semibold text-xs sm:text-sm h-10 rounded-lg transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer"
             >
-              {isLoading ? (
+              {isLoading || isTransitioning ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
                   <span>Autenticando no SEIA...</span>
