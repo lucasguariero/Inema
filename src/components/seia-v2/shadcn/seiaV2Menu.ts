@@ -127,6 +127,7 @@ export const SEIA_V2_MENU_GROUPS: MenuGroup[] = [
     items: [
       { id: 'relatorios-gerenciais', label: 'Relatórios Gerenciais', href: seiaHref('relatorios'), route: 'relatorios' },
       { id: 'indicadores-analista', label: 'Indicadores do Analista', href: seiaHref('seia-painel'), route: 'seia-painel' },
+      { id: 'roteiro-apresentacao-thays', label: 'Roteiro de Apresentação (Call Thays)', href: seiaHref('apresentacao'), route: 'apresentacao', badge: 'Guia', badgeVariant: 'sage' },
     ],
   },
   {

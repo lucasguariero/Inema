@@ -22,6 +22,7 @@ import { ParcelamentoDebitoPage } from '@/pages/seia-v2/ParcelamentoDebitoPage';
 import { CrasFaunaPage } from '@/pages/seia-v2/CrasFaunaPage';
 import { CefirImoveisPage } from '@/pages/seia-v2/CefirImoveisPage';
 import { SispassPerfisPage } from '@/pages/seia-v2/SispassPerfisPage';
+import { RoteiroApresentacaoPage } from '@/pages/seia-v2/RoteiroApresentacaoPage';
 
 export const SeiaV2RootPage: React.FC = () => {
   const [activeSubRoute, setActiveSubRoute] = useState<string>('inicio');
@@ -41,6 +42,7 @@ export const SeiaV2RootPage: React.FC = () => {
       if (tela === 'consulta-externa') return 'consulta-externa';
       if (tela === 'consulta-interna') return 'consulta-interna';
       if (tela === 'relatorios' || tela === 'dashboard') return 'relatorios';
+      if (tela === 'apresentacao' || tela === 'pitch' || tela === 'roteiro') return 'apresentacao';
       return tela;
     }
     return 'inicio';
@@ -109,6 +111,10 @@ export const SeiaV2RootPage: React.FC = () => {
         return <CefirImoveisPage onNavigate={handleNavigate} />;
       case 'sispass':
         return <SispassPerfisPage onNavigate={handleNavigate} />;
+      case 'apresentacao':
+      case 'pitch':
+      case 'roteiro':
+        return <RoteiroApresentacaoPage onNavigate={handleNavigate} />;
       case 'design-system':
         return <SeiaV2DesignSystemPage />;
       case 'inicio':
