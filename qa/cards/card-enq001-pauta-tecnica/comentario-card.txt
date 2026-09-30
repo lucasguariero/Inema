@@ -1,0 +1,8 @@
+﻿Fala equipe! Retestei o card de "ENQ001 – Pauta Técnica de Enquadramento e Históricos (spec 048)". Segue o resultado:
+
+Resolvido: Na tela da Pauta Técnica (/pauta-tecnica-enquadramento), validei as abas de status (Todos, Aguardando, Em Análise, Pendências) e a listagem dos processos atribuídos com colunas completas (Requerimento, Data Abertura, Requerente, Empreendimento, Atos, Situação e Ações). No menu de ações do requerimento 2026.011.000011/INEMA/TS0002, testei os fluxos de Tramitar (com seleção obrigatória de técnico de destino e justificativa), Devolver para a Pauta da Área com confirmação e Cancelamento com justificativa obrigatória.
+
+Resolvido: No modal de Histórico, confirmei a exibição completa do cabeçalho com CPF/CNPJ (19762424018), Razão Social, Empreendimento, Número do Requerimento e CEFIR/CAR, além da navegação pelas abas de Histórico de Tramitação (registrando retenção e mudanças de status com data/hora) e Histórico de Notificações.
+
+Com isso, considero este card homologado e resolvido.
+Fico à disposição se precisar de mais detalhes.

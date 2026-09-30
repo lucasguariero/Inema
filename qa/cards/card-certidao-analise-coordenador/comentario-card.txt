@@ -1,0 +1,8 @@
+Fala equipe! Retestei o card de "Certidão de Débito Ambiental – Análise do Coordenador (TL006 / TL007)". Segue o resultado:
+
+Resolvido: Na tela "Minha pauta" do coordenador (/minha-pauta-certidao-debito), conferi a listagem dos processos aguardando consolidação da coordenação com as colunas Nº do Processo, Data, Ato (Certidão de Débito Ambiental), Requerente, Etapa e o menu de ações, além da busca textual rápida e do tratamento de estado vazio ("Sem registros").
+
+Resolvido: Na tela de Análise da Certidão pelo Coordenador (TL007), validei o cabeçalho em somente leitura com dados consolidados do requerente e o resumo das pendências apuradas. Testei as ações da coordenação: visualização da prévia da certidão em rascunho com a marca d'água "RASCUNHO", a devolução do processo para o técnico responsável, o download da certidão oficial e o fluxo de upload e assinatura digital concluindo a etapa e tramitando o registro para a tela de Processos Finalizados (/processos-finalizados-certidao-debito).
+
+Com isso, considero este card homologado e resolvido.
+Fico à disposição se precisar de mais detalhes.

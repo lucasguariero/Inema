@@ -1,0 +1,8 @@
+﻿Fala @daniela-vargas! Retestei o card de "DTRP — Etapa 02: Resíduos Perigosos". Segue o resultado:
+
+Resolvido: acessei a Etapa 02 (Questionário DQC) na edição do requerimento DTRP e validei a implementação completa das regras de negócio previstas. A seleção de formas de tratamento e disposição final disponibilizou a lista completa com checkboxes (armazenamento, aterro industrial, coprocessamento, incineração, tratamento biológico, físico-químico, etc.) acompanhada do campo de pesquisa para filtragem. O campo de cadastro no SINIR apresentou as opções em rádio "Sim" e "Não" com a lógica de comprovação documental.
+
+Resolvido: a seleção de resíduos a partir do catálogo ABNT NBR 10.004 funcionou com busca assíncrona e adição do registro (exibindo código D001, nome Resíduos Inflamáveis e periculosidade Classe I – Perigoso). Na caracterização individual, confirmei a presença dos campos obrigatórios: Quantidade média anual, Estado Físico (Sólido, Líquido, Gases Contidos, Pastoso/Lodo, Emulsão), Acondicionamento (códigos oficiais E01 a E08) e Tipo de Veículo (Carga, Tanque), garantindo a consistência das informações antes da continuidade da solicitação.
+
+Com isso, considero este card homologado e resolvido.
+Fico à disposição se precisar de mais detalhes.

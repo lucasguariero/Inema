@@ -1,0 +1,12 @@
+Fala @dev! Retestei o card "5. Licença Ambiental por Adesão e Compromisso (LAC) – Roteiro, Emergências e Base Operacional (TL006)". Segue o resultado:
+
+Resolvido:
+- Seleção e Enquadramento: Seleção da LAC na Etapa 02 do Requerimento ("Autorização por Adesão e Compromisso - LAC"), trilha carregada e empreendimento selecionado na Etapa 01 com indicador de Base Operacional definido como "Não" (Prints 01 e 02).
+- Roteiro de Transporte e Geometria: Validação obrigatória ativa disparando a mensagem "O arquivo de shapefile com o roteiro de transporte é obrigatório." (MSG015) ao tentar avançar sem arquivo (Print 03). O upload de ZIP contendo SHP, SHX, DBF e PRJ em projeção SIRGAS 2000 (geometria tipo linha) foi aceito e validado perfeitamente (Print 04).
+- Atendimento a Emergências (Próprio vs Terceiros): Validação obrigatória ativa disparando MSG016 quando não selecionado. Ao selecionar atendimento próprio, avança diretamente. Pra contraste, ao selecionar "Atendimento por terceiros", o sistema exibe dinamicamente o formulário completo da contratada (CNPJ, Razão Social, Telefones, Número do Contrato, Vigência e Upload do Contrato em PDF) bloqueando envio se pendente (Print 05).
+- Finalização do Fluxo: Requerimento concluído com sucesso gerando protocolo oficial (2026.046.000046/INEMA/REQ) e exibindo a mensagem "Requerimento finalizado com sucesso. Sua solicitação foi encaminhada para análise da ATEND (Etapa de Enquadramento)." (Print 06).
+
+Fora do escopo deste card: Os campos completos de detalhamento da Base Operacional (que competem a PBI futuro conforme indicação da tela).
+
+Com isso, considero este card RESOLVIDO e APROVADO em HML.
+Evidências completas no anexos.zip. Fico à disposição se precisar de mais detalhes!

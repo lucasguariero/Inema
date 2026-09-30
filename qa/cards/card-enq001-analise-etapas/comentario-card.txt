@@ -1,0 +1,8 @@
+﻿Fala @equipe-dev! Retestei o card de "ENQ001 — Análise das Etapas do Requerimento e Tratamento de Pendências (spec 049)". Segue o resultado:
+
+Resolvido: realizei a retenção do requerimento 2026.011.000011/INEMA/TS0002 na Pauta da Área com confirmação no modal, verificando a movimentação automática para a Pauta Técnica com a mensagem "O requerimento 2026.011.000011/INEMA/TS0002 foi retido com sucesso e movido para a sua Pauta Técnica.". Ao acionar "Efetuar Enquadramento", o sistema iniciou a análise com sucesso ("O enquadramento do requerimento 2026.011.000011/INEMA/TS0002 foi iniciado."), fixando o cabeçalho com número de requerimento, CPF/CNPJ, requerente e indicativo de processo "Não formado".
+
+Resolvido: validei a navegação pelas 4 etapas iniciais (Identificação, Tipo de Solicitação, Localização e Questionário) em modo somente-leitura. Na etapa de Identificação, testei a aprovação da análise atualizando o veredito para "Aprovada" e acionei o botão "Reprovar", confirmando a abertura do modal "Reprovar Etapa — Identificação" com a listagem de checkboxes item a item (Perfil de representação, Dados do representado, Contato para solicitação) e campo de justificativa individual. Na etapa de Localização e Questionário, os dados declarados e documentos anexos foram carregados para visualização sem ações de aprovação precoce de documentos, mantendo a regra documentada. O botão de "Histórico de Tramitações" também abriu perfeitamente o log de eventos do requerimento.
+
+Com isso, considero este card homologado e resolvido.
+Fico à disposição se precisar de mais detalhes.

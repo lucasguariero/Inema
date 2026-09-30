@@ -1,0 +1,10 @@
+Fala @guariero! Retestei o card de "SISPASS: Gatilho para Nova Homologação após Alteração Cadastral". Segue o resultado:
+
+Resolvido: O fluxo de alteração de dados cadastrais no formulário de Meu Cadastro (Dados Pessoais) permite a edição dos dados e finalização com sucesso, exibindo a mensagem "Cadastro realizado com sucesso! Seus dados foram salvos. Você será redirecionado para o painel principal" (Print 02).
+
+Não resolvido:
+- A transição automática para a situação "Pendente de nova homologação" não ocorreu. Antes da alteração, o usuário possuía os perfis de Responsável Técnico e Criador Amador na situação "Deferido" (Print 01). Após alterar o telefone de (18) 99999-8888 para (71) 98888-7777 e salvar com sucesso na Etapa 4, acessei "Meus Perfis" e ambos os perfis permaneceram inalterados como "Deferido", sem migrar para "Pendente de nova homologação" e sem disponibilizar a ação de reenvio (Print 03).
+- A pendência também não refletiu na visão do analista em "Pauta Geral de Perfis" (/validar-documentos): os perfis continuam como "Deferido" e o contador da aba "Pendentes" permaneceu zerado (Print 04).
+
+Com isso, considero este card NÃO RESOLVIDO em HML.
+Prints e evidências anexados em anexos.zip. Fico à disposição se precisar de mais detalhes!

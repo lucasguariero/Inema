@@ -1,0 +1,12 @@
+Fala @dev! Retestei o card de "Ajustes SISPASS - Calendario" após a publicação da branch em HML. Segue o resultado:
+
+Resolvido:
+- Limpeza dos campos de endereço no CEP: Ao alternar de um CEP completo para um CEP genérico de município (sem logradouro/bairro específico), os campos de Logradouro e Bairro agora são devidamente limpos na tela, e o Município é atualizado corretamente sem reter o endereço anterior (Print 01).
+- Fotos na tela de Análise: Na visão do analista em Validação de Calendário Anual, a tabela "Documentos Apresentados" agora exibe tanto o Laudo Técnico Assinado quanto as 4 fotos do local do evento (Fachada, Local do Evento, Telhado e Ventilação) (Print 02).
+- Análise em aba única sem aba "Documentos" separada e coluna renomeada para "Documento" mantidas com sucesso (Print 03).
+
+Não resolvido: Nenhum ponto impeditivo identificado nesta build.
+Fora do escopo deste card: Campos preenchidos manualmente (Número, Complemento, Coordenadas) que mantêm valor entre buscas de CEP.
+
+Com isso, considero este card RESOLVIDO e APROVADO em HML.
+Fico à disposição!

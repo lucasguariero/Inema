@@ -1,0 +1,14 @@
+﻿Fala @giovani! Retestei o card de "Rótulos, Navegação e Validações Divergentes do Requisito — Silos e Armazéns". Segue o resultado da homologação:
+
+Resolvido: o rótulo da operação foi corrigido com sucesso de "Aerização de insumos" para "Armazém de insumos", conforme exigido pelo RG009 do Documento de Requisitos (Print 02).
+Resolvido: o nome da funcionalidade foi padronizado em "Atividades Não Sujeitas a Licenciamento Ambiental" em todo o percurso: menu lateral, título das páginas, trilha de navegação (breadcrumb) e cabeçalhos de cadastro e edição (Print 01).
+Resolvido: a seção de CNAE agora apresenta o texto de apoio correto "Classificação Nacional de Atividades Econômicas correspondente à atividade declarada. Selecione ao menos um CNAE.", e o avanço sem seleção bloqueia de fato com a mensagem obrigatória MSG002 ("Selecione pelo menos um CNAE.") (Print 03).
+Resolvido: a reatividade do Livewire via validateOnly() foi validada com sucesso, limpando dinamicamente as mensagens de erro em tempo real ao corrigir os campos obrigatórios (combustível, coordenadas e identificação CDA).
+Resolvido: a renderização condicional dos módulos críticos (MR235/MR259) está 100% funcional. Ao marcar Queima = Sim, as opções de combustível exibem Óleo e removem Lenha; ao marcar Utiliza Água = Sim, lista Captação de Água de Chuva/Pluviométrica e Concessionária; ao marcar Tratamento de Efluentes = Sim, renderiza as 8 opções (DAFA, ETE, Fossa, Sumidouro, CSAO, Wetland, Filtros e Outros); e ao marcar Medidas de Emissões = Sim, renderiza todas as 7 medidas de controle (Print 02 e Print 04).
+Resolvido: a persistência e a esteira de acompanhamento em Meus Processos mantêm íntegros os processos em rascunho e os concluídos (Print 05).
+Resolvido: a tela de Visualizar (/ansla/anslas/32) exibe com fidelidade absoluta todos os blocos gravados: Dados Básicos (com "Utiliza Água: Sim"), Caracterização da Atividade (com tabela completa de Responsáveis Técnicos, CNAEs, Unidades Armazenadoras com coordenadas SIRGAS2000, efluentes e emissões) e aba de Documentos e Estudos com o Certificado de Dispensa gerado (Print 06).
+
+Fora do escopo deste card: nenhuma anomalia impeditiva encontrada no fluxo de cadastro, edição ou visualização de Silos e Armazéns.
+
+Com isso, considero este card homologado e 100% resolvido.
+Fico à disposição se precisar de mais detalhes de qualquer um desses pontos.

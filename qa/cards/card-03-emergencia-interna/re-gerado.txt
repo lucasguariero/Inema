@@ -1,0 +1,125 @@
+Início
+Iniciar Requerimento
+Meus Processos
+Notificações
+Acesso Público
+Análise
+Enquadramento
+Análise Técnica
+Fiscalização
+Nova Denúncia
+Minhas Denúncias
+Denúncia Cidadão
+Nova Emergência
+Minhas Emergências
+Minhas Análises
+Associar Técnico
+Processos
+SISPASS
+Financeiro
+Meu Cadastro
+Atividades Não Sujeitas a Licenciamento Ambiental
+Requerimentos
+Administração
+Configurações
+Auditoria
+Gestão de Fauna
+Diretoria de Desenvolvimento
+Assistente INEMA
+Nova Emergência Química
+2026.000033/INEMA/RE
+
+Registro de Emergência Química. As informações são gravadas ao finalizar — não há salvamento parcial.
+
+Meus registros
+Detalhes do Registro
+Origem*
+Selecione a origem
+Selecione o local de recebimento da emergência
+Data e Hora do comunicado*
+Registre aqui a data e hora do comunicado da emergência ao INEMA
+Número original
+Número do ofício, número da manifestação, número do registro, número do protocolo e outros
+Detalhes da Emergência Química
+Início da ocorrência*
+Registre aqui a data e hora da ocorrência
+Fim da ocorrência*
+Deixe em branco se a ocorrência for pontual
+Tipo da Emergência Química*
+Selecione o tipo da Emergência Química
+Selecione um dos tipos previstos; use "Outros" quando nenhum se aplicar
+Descrição*
+Descreva aqui seu relato em detalhes sobre a emergência
+Anexos
+Adicione arquivos que complementem ou documentem a demanda ou o fato, como capturas de conversas, vídeos e fotos
+Arraste e solte os arquivos ou Clique aqui
+São aceitos documentos de texto (.pdf, .doc, .docx, .txt), imagens (.jpeg, .jpg, .png, .bmp), planilhas (.xls, .xlsx), multimídia (.mp3, .mp4), shape (.shp, .shx, .dbf, .prj), .kml, .kmz e .zip.
+Localização
+CEP
+Informe o CEP para preencher o endereço automaticamente
+Município*
+Selecione o município da emergência
+Selecione o município da emergência
+Endereço/Local*
+Informe o endereço da emergência
+Número
+Bairro
+Ponto de referência*
+Área Atingida*
+Área Urbana
+Distrito
+Assentamento Rural
+Comunidade Indígena
+Área Industrial
+Dutovia
+Colônia de Pescadores
+Comunidade Tradicional
+
+Ribeirinha, Quilombo, Pescadores e outros...
+
+Povoado
+Posto de Combustível
+Recurso Hídrico
+Rodovia
+Área de Marinha
+Unidade de Conservação
+
+Parques, APA entre outros...
+
+Selecione a área da emergência (de uma a 3 opções)
+Descrição do cenário
+Descreva a área ou o cenário da área atingida (opcional)
+Coordenadas
+
+Opcional. Sem coordenada, ou com coordenada zerada, o sistema pede confirmação ao finalizar.
+
+Usar minha localização
+Coordenadas
+Incluir nova coordenada
+Comunicante
+Nome/Razão Social*
+CPF/CNPJ
+Opcional
+Telefone/Celular*
+Outro Telefone/Celular
+Opcional
+E-mail
+Opcional
+Vínculo com a empresa responsável pela emergência química*
+
+Sim
+
+Não
+
+Informações Adicionais
+
+Disponível depois que a emergência for finalizada (RN018).
+
+Informação adicional
+Opcional, até 1000 caracteres
+Anexo adicional
+Arraste e solte os arquivos ou Clique aqui
+Opcional
+Excluir Emergência
+Registrar informação adicional
+Finalizar Emergência

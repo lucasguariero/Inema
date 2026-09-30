@@ -1,0 +1,14 @@
+﻿Fala @giovani! Retestei o card de "Fiscalização - Registro de Emergência interna (DOR003)". Segue o resultado:
+
+Resolvido: testei a validação de datas invertidas na Escala de Plantão (20/09/2026 a 08/09/2026) e confirmei que o sistema bloqueia o avanço com a mensagem "O fim do plantão não pode ser anterior ao início." (Print 01).
+Resolvido: confirmei o funcionamento do filtro "Vigente em" na listagem de escalas, retornando apenas os plantões ativos na data informada (Print 02).
+Resolvido: testei a tentativa de finalização sem preenchimento de coordenadas geográficas e confirmei a exibição do alerta modal com a mensagem "Coordenadas não informadas. Informamos que a ausência desse dado pode comprometer a apuração da Emergência Química registrada!", com a opção "Voltar e informar" funcionando perfeitamente (Print 03).
+Resolvido: realizei o fluxo completo de cadastro com dados válidos (RE 2026.000017/INEMA/RE) com origem Call Center, CEP 40020-000 (preenchendo automaticamente Salvador, Rua Chile, Centro), seleção de 3 áreas atingidas, coordenadas decimais e comunicante. Ao confirmar a finalização ("Sim, finalizar"), o sistema exibiu a mensagem de sucesso com o número do RE gerado e atualizou a situação para "Emergência Registrada" (Print 04).
+Resolvido: realizei a associação do técnico plantonista Bruno Carvalho via "Associar Técnico" e, acessando com o login dele, confirmei a notificação, a atualização do badge contador no menu Minhas Análises e o registro formal da ciência com carimbo de data e hora (Print 05).
+Resolvido: testei o registro de Informações Adicionais no registro após finalizado, confirmando o histórico acumulativo com autor e data/hora sem permissão de edição/exclusão (Print 06).
+Resolvido: testei a exclusão da emergência com o modal de confirmação "Deseja excluir o registro de emergência definitivamente?". O botão "Não" preservou os dados e a confirmação com "Sim, excluir" removeu com sucesso o registro da listagem (Print 07).
+
+Fora do escopo deste card: ao tentar cadastrar uma escala para um plantonista que já possui escala com período sobreposto, a aplicação retorna erro 500 (UniqueConstraintViolationException) em vez de exibir uma mensagem amigável de validação de duplicidade de período.
+
+Com isso, considero este card resolvido.
+Fico à disposição se precisar de mais detalhes de qualquer um desses pontos.

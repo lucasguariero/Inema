@@ -46,7 +46,7 @@ export const TOP_DIRECT_ITEMS: TopDirectItem[] = [
   { id: 'inicio', label: 'Início', href: seiaHref('inicio'), route: 'inicio', icon: 'Home' },
   { id: 'novo-requerimento', label: 'Novo Requerimento', href: seiaHref('formulario'), route: 'formulario', icon: 'FilePlus2' },
   { id: 'meus-processos', label: 'Meus Processos', href: seiaHref('tabela'), route: 'tabela', icon: 'FolderKanban' },
-  { id: 'meus-cadastros', label: 'Meus Cadastros', href: '#', icon: 'UserCircle', badge: 'Em breve', disabled: true },
+  { id: 'meus-cadastros', label: 'Meus Cadastros', href: seiaHref('cadastros-basicos'), route: 'cadastros-basicos', icon: 'UserCircle' },
 ];
 
 export const SEIA_V2_MENU_GROUPS: MenuGroup[] = [
@@ -58,6 +58,7 @@ export const SEIA_V2_MENU_GROUPS: MenuGroup[] = [
     defaultOpen: true,
     items: [
       { id: 'regulacao-pauta', label: 'Pauta de Processos', href: seiaHref('tabela'), route: 'tabela' },
+      { id: 'regulacao-enquadramento', label: 'Enquadramento & Triagem', href: seiaHref('enquadramento'), route: 'enquadramento', badge: 'DIPRE', badgeVariant: 'sage' },
       { id: 'regulacao-requerimento', label: 'Requerimento Unificado', href: seiaHref('formulario'), route: 'formulario' },
       { id: 'regulacao-cerh', label: 'Recursos Hídricos / CERH', href: seiaHref('cerh'), route: 'cerh', badge: 'CERH', badgeVariant: 'sage' },
       { id: 'regulacao-ansla', label: 'Dispensa ANSLA', href: seiaHref('ansla'), route: 'ansla' },
@@ -131,34 +132,37 @@ export const SEIA_V2_MENU_GROUPS: MenuGroup[] = [
     ],
   },
   {
-    id: 'auditoria',
-    label: 'Auditoria',
-    section: 'Gestão e Controle',
-    icon: 'History',
-    badge: 'Em breve',
-    badgeVariant: 'slate',
-    disabled: true,
-    items: [],
-  },
-  {
     id: 'cadastros-basicos',
     label: 'Cadastros Básicos',
     section: 'Configuração do Sistema',
     icon: 'Files',
-    badge: 'Em breve',
-    badgeVariant: 'slate',
-    disabled: true,
-    items: [],
+    items: [
+      { id: 'cad-rt', label: 'Responsáveis Técnicos', href: seiaHref('cadastros-basicos'), route: 'cadastros-basicos' },
+      { id: 'cad-rep', label: 'Representantes Legais', href: seiaHref('cadastros-basicos'), route: 'cadastros-basicos' },
+      { id: 'cad-emp', label: 'Empreendimentos', href: seiaHref('cadastros-basicos'), route: 'cadastros-basicos' },
+    ],
+  },
+  {
+    id: 'parametrizacoes',
+    label: 'Parametrizações & Tabelas',
+    section: 'Configuração do Sistema',
+    icon: 'Sliders',
+    items: [
+      { id: 'param-tipologias', label: 'Tipologias & Divisões', href: seiaHref('parametrizacao'), route: 'parametrizacao' },
+      { id: 'param-residuos', label: 'Resíduos & Classes IBAMA', href: seiaHref('parametrizacao'), route: 'parametrizacao' },
+      { id: 'param-setores', label: 'Setores & Organograma', href: seiaHref('parametrizacao'), route: 'parametrizacao' },
+    ],
   },
   {
     id: 'administracao',
-    label: 'Administração',
+    label: 'Administração & Acessos',
     section: 'Configuração do Sistema',
     icon: 'Settings',
-    badge: 'Em breve',
-    badgeVariant: 'slate',
-    disabled: true,
-    items: [],
+    items: [
+      { id: 'admin-usuarios', label: 'Usuários do Sistema', href: seiaHref('usuarios-roles'), route: 'usuarios-roles' },
+      { id: 'admin-roles', label: 'Perfis de Acesso (RBAC)', href: seiaHref('usuarios-roles'), route: 'usuarios-roles' },
+      { id: 'admin-auditoria', label: 'Trilha de Auditoria (Logs)', href: seiaHref('usuarios-roles'), route: 'usuarios-roles' },
+    ],
   },
   {
     id: 'design-system',

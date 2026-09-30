@@ -23,6 +23,10 @@ import { CrasFaunaPage } from '@/pages/seia-v2/CrasFaunaPage';
 import { CefirImoveisPage } from '@/pages/seia-v2/CefirImoveisPage';
 import { SispassPerfisPage } from '@/pages/seia-v2/SispassPerfisPage';
 import { RoteiroApresentacaoPage } from '@/pages/seia-v2/RoteiroApresentacaoPage';
+import { CadastrosBasicosPage } from '@/pages/seia-v2/CadastrosBasicosPage';
+import { PautaEnquadramentoPage } from '@/pages/seia-v2/PautaEnquadramentoPage';
+import { ParametrizacoesMasterPage } from '@/pages/seia-v2/ParametrizacoesMasterPage';
+import { UsuariosRolesPage } from '@/pages/seia-v2/UsuariosRolesPage';
 
 export const SeiaV2RootPage: React.FC = () => {
   const [activeSubRoute, setActiveSubRoute] = useState<string>('inicio');
@@ -43,6 +47,10 @@ export const SeiaV2RootPage: React.FC = () => {
       if (tela === 'consulta-interna') return 'consulta-interna';
       if (tela === 'relatorios' || tela === 'dashboard') return 'relatorios';
       if (tela === 'apresentacao' || tela === 'pitch' || tela === 'roteiro') return 'apresentacao';
+      if (tela === 'cadastros' || tela === 'responsaveis-tecnicos' || tela === 'empreendimentos') return 'cadastros-basicos';
+      if (tela === 'pauta-enquadramento' || tela === 'pauta-area') return 'enquadramento';
+      if (tela === 'parametrizacoes' || tela === 'tipologias' || tela === 'residuos') return 'parametrizacao';
+      if (tela === 'usuarios' || tela === 'roles' || tela === 'administracao') return 'usuarios-roles';
       return tela;
     }
     return 'inicio';
@@ -111,6 +119,21 @@ export const SeiaV2RootPage: React.FC = () => {
         return <CefirImoveisPage onNavigate={handleNavigate} />;
       case 'sispass':
         return <SispassPerfisPage onNavigate={handleNavigate} />;
+      case 'cadastros-basicos':
+      case 'cadastros':
+        return <CadastrosBasicosPage onNavigate={handleNavigate} />;
+      case 'enquadramento':
+      case 'pauta-enquadramento':
+        return <PautaEnquadramentoPage onNavigate={handleNavigate} />;
+      case 'parametrizacao':
+      case 'parametrizacoes':
+        return <ParametrizacoesMasterPage onNavigate={handleNavigate} />;
+      case 'usuarios-roles':
+      case 'usuarios':
+      case 'roles':
+      case 'administracao':
+      case 'auditoria':
+        return <UsuariosRolesPage onNavigate={handleNavigate} />;
       case 'apresentacao':
       case 'pitch':
       case 'roteiro':

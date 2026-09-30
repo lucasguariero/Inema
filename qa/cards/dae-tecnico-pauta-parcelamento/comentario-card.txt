@@ -1,0 +1,1 @@
+Fala! Retestei a pauta técnica de parcelamento. As permissões existem no cadastro, mas a pauta não está disponível no menu administrativo e o módulo do requerente ainda aparece como "Em breve". Com isso, o card segue pendente. (Print 01)

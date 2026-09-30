@@ -1,95 +1,83 @@
-﻿# Checklist de Teste e Homologação — DOR003 (Emergência Química Interna)
+﻿# Checklist de Teste — DOR003: Fiscalização - Registro de Emergência Interna
 
-> **Ambiente**: https://gla-inema-hml.acto.com.br/  
-> **Card**: 3 - Fiscalização - Registro de Emergência interna  
-> **Data**: 2026-09-09  
-> **Líder de QA**: Lucas Guariero  
-> **Status Geral**: 🟡 Em Fila / Pronto para Execução
-
----
-
-## 👥 Perfis e Credenciais de Teste
-
-| Perfil | CPF | Senha | Finalidade no Teste |
-|---|---|---|---|
-| **Admin** | `000.000.000-00` | `admin123` | Parametrização: Cadastro de Plantonista, Escala de Plantão e Permissões |
-| **Gestor** | `111.111.111-11` | `gestor123` | Abertura do RE interno, preenchimento, finalização, info adicional e exclusão |
-| **Call Center** | `123.456.789-01` | `@Callcenter123` | Associação do técnico plantonista na fila de atendimento |
-| **Plantonista (Bruno Carvalho)** | `196.000.000-42` | `@Plantao123` | Verificação de Minhas Análises, sino de notificações e PDF anexo |
+**Card:** 3- Fiscalização- Registro de Emergência interna (DOR003)  
+**Ambiente:** `https://gla-inema-hml.acto.com.br/`  
+**Data da Homologação:** 10/09/2026  
+**Status Geral:** ✅ **RESOLVIDO / HOMOLOGADO COM SUCESSO**  
+**RE de Teste Criado e Validado:** `2026.000017/INEMA/RE`
 
 ---
 
-## 📋 Matriz de Testes — DOR003
+## 1. Cadastro de Plantonista & Duplicidade (Admin)
+- [x] Login com Admin (`000.000.000-00` / `admin123`)
+- [x] Acesso a `Administração › Fiscalização › Plantonistas › Cadastrar Plantonista`
+- [x] Selecionar técnico já cadastrado e salvar
+- [x] **Validação**: Sistema recusa com alerta de duplicidade informando que o técnico já está cadastrado como plantonista (`Print 01 - Recusa duplicidade plantonista.png`).
 
-### Bloco 1: Parametrização de Plantonistas (Admin)
-- [ ] **1.1** Login como Admin (`000.000.000-00` / `admin123`)
-- [ ] **1.2** Acessar *Administração › Fiscalização › Plantonistas › Cadastrar Plantonista*
-- [ ] **1.3** Selecionar um técnico na lista e salvar
-- [ ] **1.4** Tentar cadastrar o mesmo técnico novamente -> validar que o sistema recusa a duplicidade
+---
 
-### Bloco 2: Parametrização de Escala de Plantão (Admin)
-- [ ] **2.1** Acessar *Administração › Fiscalização › Escalas de Plantão › Cadastrar Escala*
-- [ ] **2.2** Selecionar o plantonista cadastrado
-- [ ] **2.3** Em *Municípios cobertos*, selecionar Salvador (e opcionalmente outros)
-- [ ] **2.4** Definir Início: `08/09/2026` e Fim: `20/09/2026`
-- [ ] **2.5** Teste de validação: inverter datas (Fim anterior ao Início) -> sistema deve recusar
-- [ ] **2.6** Salvar a escala de plantão com datas válidas
-- [ ] **2.7** Testar filtro *Vigente em*:
-  - Data `15/09/2026` -> a escala deve aparecer
-  - Data `15/10/2026` -> a escala NÃO deve aparecer
+## 2. Cadastro de Escala de Plantão & Validações (Admin)
+- [x] Acesso a `Administração › Fiscalização › Escalas de Plantão › Cadastrar Escala`
+- [x] Seleção de Plantonista (Bruno Carvalho) e Município coberto (Salvador)
+- [x] **Validação Datas Invertidas**: Início 20/09/2026 e Fim 08/09/2026 recusado com a mensagem `"O fim do plantão não pode ser anterior ao início."` (`Print 01`).
+- [x] **Gravação Válida**: Início 01/10/2026 a 15/10/2026 gravada com sucesso (`Print 03 - Escala salva com sucesso.png`).
+- [x] **Filtros na Listagem**: Filtro "Vigente em" aplicado para 15/09/2026 (exibe escalas ativas - `Print 02`) e para 15/11/2026 (retorna estado vazio "Sem registros" - `Print 05`).
+- [!] **Observação (Fora do Escopo)**: Ao tentar duplicar período para um mesmo plantonista, a aplicação estoura Erro 500 (`UniqueConstraintViolationException`) em vez de validação amigável.
 
-### Bloco 3: Segurança e Usuário Call Center (Admin)
-- [ ] **3.1** Acessar *Administração › Segurança › Usuários*
-- [ ] **3.2** Localizar usuário Call Center e validar atribuição ao grupo *Equipe de Call Center*
+---
 
-### Bloco 4: Abertura de Nova Emergência Interna (Gestor)
-- [ ] **4.1** Login como Gestor (`111.111.111-11` / `gestor123`)
-- [ ] **4.2** Acessar *Fiscalização › Nova Emergência*
-- [ ] **4.3** Validar no cabeçalho o número `2026.0000XX/INEMA/RE` gerado na abertura (RN002 / CA002)
-- [ ] **4.4** Recarregar a página (`F5`) e validar que um NOVO número é gerado a cada abertura (RN001)
+## 3. Segurança e Grupos de Usuários
+- [x] Acesso a `Administração › Segurança › Usuários`
+- [x] Visualização do grupo "Equipe de Call Center" e usuários vinculados (`Print 06 - Seguranca usuarios Call Center.png`).
 
-### Bloco 5: Preenchimento do Formulário Interno
-- [ ] **5.1** Campo *Origem*: validar as 8 opções da RN004 e selecionar *Call Center*
-- [ ] **5.2** Data/Hora do comunicado: informar data entre `08/09` e `20/09/2026`; testar data futura -> deve recusar
-- [ ] **5.3** Tipo da Emergência: selecionar *Outros* -> validar campo de descrição obrigatório (RN024)
-- [ ] **5.4** Trocar para outro tipo -> validar que a descrição personalizada não é gravada
-- [ ] **5.5** Anexos: enviar PDF e validar legenda informativa fixa MSG005
-- [ ] **5.6** CEP: digitar `40020-000` -> autocompletar Salvador - BA, Centro, Rua Chile (RN019)
-- [ ] **5.7** Área Atingida: marcar 3 opções; tentar a 4ª -> bloqueio imediato (máx. 3 áreas, RN010)
-- [ ] **5.8** Tooltips de área: conferir textos em *Comunidade Tradicional* e *Unidade de Conservação* (RN029)
-- [ ] **5.9** Coordenadas múltiplas:
-  - 1ª coordenada em Grau Decimal: Lat `-12.9777` / Long `-38.5016`
-  - Clicar em *Incluir nova coordenada*
-  - 2ª coordenada em UTM 23S: E `550000` / N `8565000`
-- [ ] **5.10** Comunicante: máscara dinâmica telefone fixo vs celular; Vínculo = Não exibe *Nome da empresa* (RN025/RN026)
+---
 
-### Bloco 6: Validações e Finalização da Emergência
-- [ ] **6.1** Validação 1: clicar em *Finalizar Emergência* com obrigatório vazio -> `MSG001` com destaque no campo
-- [ ] **6.2** Validação 2: com obrigatórios preenchidos e sem coordenadas -> modal de alerta `MSG002`
-- [ ] **6.3** Validação 3: exibição do modal `MSG003` -> clicar em *Não* -> preserva dados intactos
-- [ ] **6.4** Finalização: clicar em *Sim* na `MSG003` -> exibir `MSG004` com o número do RE
-- [ ] **6.5** Validar atribuição do status **Emergência Registrada**
+## 4. Geração Automática do Número do RE
+- [x] Acesso a `Fiscalização › Nova Emergência` como Gestor (`111.111.111-11`)
+- [x] Número do RE já visível no cabeçalho antes do preenchimento (`Print 07 - Numero RE gerado antes de preencher.png`).
+- [x] Ao recarregar (F5), um novo número sequencial é gerado e o anterior descartado (`Print 08 - F5 gera novo numero RE sequencial.png`).
 
-### Bloco 7: Associação do Técnico Plantonista (Call Center / Gestor)
-- [ ] **7.1** Acessar *Fiscalização › Associar Técnico*
-- [ ] **7.2** Localizar o RE gerado na fila
-- [ ] **7.3** Clicar em *Associar técnico* e verificar a ordenação dos técnicos:
-  - 1º plantonistas em Salvador
-  - 2º plantonistas nos demais municípios
-- [ ] **7.4** Selecionar técnico e salvar -> status altera para **Análise Técnica**
+---
 
-### Bloco 8: Alertas e Caixa de Análises do Plantonista (Bruno Carvalho)
-- [ ] **8.1** Login como Bruno Carvalho (`196.000.000-42` / `@Plantao123`)
-- [ ] **8.2** Acessar *Fiscalização › Minhas Análises*: verificar indicador numérico vermelho no menu
-- [ ] **8.3** Abrir sino de notificações: aviso em vermelho com botão *Abrir*
-- [ ] **8.4** Clicar em *Abrir*: abre a tela com o registro e o contador no menu diminui imediatamente
-- [ ] **8.5** Validar recebimento de e-mail / alerta com o formulário do RE em PDF anexado (RN016 / RN017)
+## 5. Validações do Formulário de Emergência Química
+- [x] **Origem da Denúncia**: 8 opções disponíveis conforme requisito; selecionado Call Center.
+- [x] **Data/Hora Futura**: Bloqueio de data futura (`Print 09 - Recusa data futura.png`).
+- [x] **Tipo "Outros"**: Exibição dinâmica obrigatória do campo de descrição livre; limpeza do texto ao trocar de tipo (`Print 10 - Tipo Outros descricao obrigatoria.png`).
+- [x] **Anexos**: Arquivos não suportados recusados pelo componente com aviso de tipo inválido (`Print 11 - Recusa anexo invalido MSG005.png`); anexo PDF aceito com sucesso.
+- [x] **CEP 40020-000**: Preenchimento automático de Salvador, Rua Chile, Centro (`Print 12 - Preenchimento automatico CEP.png`).
+- [x] **Áreas Atingidas**: Seleção de 3 áreas com bloqueio ao tentar marcar a 4ª (`Print 13 - Limite 3 areas atingidas.png`).
+- [x] **Coordenadas**: Decimal Latitude -12.9777 e Longitude -38.5016 preenchidas (`Print 14 - Coordenadas preenchidas.png`).
+- [x] **Comunicante**: Vínculo "Não" abre campo da empresa responsável (`Print 15 - Comunicante vinculo Nao empresa.png`).
 
-### Bloco 9: Informações Adicionais e Exclusão (Gestor)
-- [ ] **9.1** Login como Gestor (`111.111.111-11`)
-- [ ] **9.2** Acessar *Fiscalização › Minhas Emergências* e clicar em *Abrir* no RE finalizado
-- [ ] **9.3** Validar modo leitura: 4 primeiras seções bloqueadas e botão Finalizar ausente
-- [ ] **9.4** Seção *Informações Adicionais*: registrar 1ª informação; registrar 2ª informação
-- [ ] **9.5** Validar que ficam acumuladas abaixo com autor e data, sem alterar a descrição original do RE
-- [ ] **9.6** Clicar em *Excluir Emergência* -> validar modal `MSG007` -> clicar em *Não* -> dados preservados
-- [ ] **9.7** Clicar em *Excluir Emergência* -> responder *Sim* -> validar exclusão definitiva do registro
+---
+
+## 6. Validações de Finalização
+- [x] **Campos Vazios**: Bloqueio com alerta MSG001 (`Print 16 - Bloqueio campos obrigatorios MSG001.png`).
+- [x] **Sem Coordenadas**: Exibição do alerta modal MSG002 ("Coordenadas não informadas...") com ação "Voltar e informar" (`Print 03`).
+- [x] **Confirmação MSG003**: Clicar "Não, revisar" mantém a tela e dados intactos (`Print 19 - Clicar Nao mantem tela.png`).
+- [x] **Conclusão com Sucesso**: Clicar "Sim, finalizar" grava o registro gerando RE `2026.000017/INEMA/RE`, exibindo notificação MSG004 e atualizando status para "Emergência Registrada" (`Print 04`).
+
+---
+
+## 7. Associação de Técnico Plantonista (Gestor)
+- [x] Acesso a `Fiscalização › Associar Técnico`
+- [x] Localização do RE `2026.000017/INEMA/RE`
+- [x] Plantonistas de Salvador (Bruno Carvalho e Carla Mendes) ordenados no modal (`Print 21 - Plantonistas ordenados no topo.png`).
+- [x] Associação de Bruno Carvalho salva com sucesso; situação transiciona para "Análise Técnica" (`Print 22 - Status Analise Tecnica.png`).
+
+---
+
+## 8. Notificação e Ciência pelo Plantonista (Bruno Carvalho)
+- [x] Login com Bruno Carvalho (`196.000.000-42` / `@Plantao123`)
+- [x] Badge numérico no menu `Fiscalização › Minhas Análises` e notificação no cabeçalho.
+- [x] Registro `2026.000017/INEMA/RE` com indicador `• Aguardando sua ciência`.
+- [x] Ao visualizar os detalhes da análise, ciência formal é registrada com carimbo de data/hora (`10/09/2026 12:54`) e contador do menu decresce (`Print 05`).
+
+---
+
+## 9. Informações Adicionais e Exclusão (Gestor)
+- [x] Login como Gestor; abertura do RE em `Minhas Emergências`.
+- [x] 4 seções principais bloqueadas em modo somente leitura e botão Finalizar desabilitado (`Print 25 - RE finalizada somente leitura.png`).
+- [x] Registro de 2 informações adicionais acumulativas com data/hora e autor (`Print 06`).
+- [x] Botão `Excluir Emergência` abre modal de confirmação MSG007 (`Print 07`).
+- [x] "Não" preserva o registro intacto; "Sim, excluir" remove definitivamente o RE da listagem (`Print 28 - Registro excluido com sucesso.png`).

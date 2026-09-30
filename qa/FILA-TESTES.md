@@ -1,4 +1,4 @@
-﻿# 🎯 Fila de Homologação e Testes Automatizados — GLA Inema
+# 🎯 Fila de Homologação e Testes Automatizados — GLA Inema
 
 > **Líder de QA**: Lucas Guariero  
 > **Ambiente**: https://gla-inema-hml.acto.com.br/  
@@ -8,11 +8,11 @@
 
 ## 📋 Painel da Fila de Cards
 
-| # | Card / Funcionalidade | Tipo | Status | Checklist / Especificação |
-|---|---|---|:---:|---|
-| **04** | Fiscalização — Registro de Emergência Externa (DOR004) | Nova Funcionalidade | ✅ **HOMOLOGADO (100% PASS)** | [checklist-DOR004.md](qa/checklists/checklist-DOR004.md) |
-| **03** | Fiscalização — Registro de Emergência Interna (DOR003) | Nova Funcionalidade | ⏳ **PRONTO NA FILA** | [checklist-DOR003.md](qa/checklists/checklist-DOR003.md) |
-| **05** | ANSLA — Silos e Armazéns (Rótulos, Navegação e Validações) | Correção de Bug / Reteste | ⏳ **PRONTO NA FILA** | [checklist-ANSLA-silos-armazens.md](qa/checklists/checklist-ANSLA-silos-armazens.md) |
+| # | Card / Funcionalidade | Tipo | Status | Checklist / Especificação | Pasta do Card |
+|---|---|---|:---:|---|---|
+| **04** | Fiscalização — Registro de Emergência Externa (DOR004) | Nova Funcionalidade | ✅ **HOMOLOGADO (100% PASS)** | [checklist-DOR004.md](qa/checklists/checklist-DOR004.md) | `qa/cards/card-04-emergencia-externa/` |
+| **03** | Fiscalização — Registro de Emergência Interna (DOR003) | Nova Funcionalidade | ✅ **HOMOLOGADO (100% PASS)** | [checklist-DOR003.md](qa/checklists/checklist-DOR003.md) | `qa/cards/card-03-emergencia-interna/` |
+| **05** | ANSLA — Silos e Armazéns (Rótulos, Navegação e Validações) | Correção de Bug / Reteste | ✅ **HOMOLOGADO (100% PASS)** | [checklist-ANSLA-silos-armazens.md](qa/checklists/checklist-ANSLA-silos-armazens.md) | `qa/cards/card-05-silos-armazens/` |
 
 ---
 

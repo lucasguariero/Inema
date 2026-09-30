@@ -1,0 +1,8 @@
+﻿Fala @equipe-dev! Retestei o card de "Certidão de Débito Ambiental — Processos Finalizados (TL008)". Segue o resultado:
+
+Resolvido: acessei a funcionalidade pelo menu lateral em Análise › Processos Finalizados (rota `/processos-finalizados-certidao-debito`) e confirmei a exibição da tela conforme os requisitos da TL008. O campo de busca foi disponibilizado com o placeholder exato "Buscar por Nº do Processo ou CPF/CNPJ", permitindo a filtragem rápida.
+
+Resolvido: a grid de "Processos Finalizados" apresentou todas as colunas especificadas: Nº Processo, Data Conclusão, Ato (Certidão de Débito Ambiental), Técnico e Etapa, com tratamento correto do estado vazio ("Sem registros") quando não há processos finalizados no filtro. A tela respeitou as permissões de acesso do público interno (validado tanto com perfil de Administrador quanto de Gestor/Coordenador).
+
+Com isso, considero este card homologado e resolvido.
+Fico à disposição se precisar de mais detalhes.

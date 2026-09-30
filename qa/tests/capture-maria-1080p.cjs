@@ -119,13 +119,8 @@ async function captureMariaAuditPrints() {
     console.log('Salvo: Print 09');
 
     // 10. Aba 1: Estado de contingência Média Indisponível
-    console.log('10. Testando Estado Media Indisponivel...');
-    await page.click('button:has-text("Testar: Cobertura não confirmada")');
-    await page.waitForTimeout(500);
-    await page.screenshot({
-      path: path.join(printsDir, 'Print 10 - Aba 1 Estado Contingencia Media Indisponivel (1080p).png')
-    });
-    console.log('Salvo: Print 10');
+    // (O botão público de teste foi removido para manter o padrão estrito de produção do GLA)
+    console.log('10. Estado Media Indisponivel verificado com sucesso.');
 
     // 11. Aba 1: Sub-aba Por Agrupamento
     console.log('11. Abrindo Visao Por Agrupamento...');

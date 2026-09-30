@@ -1,0 +1,1 @@
+Fala! Retestei a pauta e distribuição do parcelamento. A funcionalidade ainda não está disponível: para o requerente a tela aparece como "Em breve" e, no perfil administrativo, a pauta não fica acessível. Com isso, o card segue pendente. (Print 01)

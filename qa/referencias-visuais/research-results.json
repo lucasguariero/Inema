@@ -1,0 +1,225 @@
+[
+  {
+    "name": "watershed",
+    "url": "https://watershed.com",
+    "styles": {
+      "bodyBg": "rgb(255, 255, 255)",
+      "fontFamily": "messinaSans, \"messinaSans Fallback\"",
+      "bgColors": [
+        "rgb(255, 255, 255)",
+        "rgb(4, 19, 48)",
+        "rgb(83, 40, 80)",
+        "rgba(255, 255, 255, 0.98)",
+        "rgb(245, 247, 250)",
+        "rgb(38, 92, 255)",
+        "rgb(29, 115, 104)",
+        "rgb(35, 44, 64)",
+        "rgb(255, 153, 102)",
+        "rgb(101, 141, 253)"
+      ],
+      "textColors": [
+        "rgb(0, 0, 0)",
+        "rgb(102, 108, 128)",
+        "rgb(245, 247, 250)",
+        "rgb(255, 175, 210)",
+        "rgb(190, 199, 218)",
+        "rgb(36, 38, 51)",
+        "rgb(11, 36, 113)",
+        "rgb(255, 255, 255)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(122, 132, 153)"
+      ],
+      "borderColors": [
+        "rgb(0, 0, 0)",
+        "rgb(102, 108, 128)",
+        "rgb(245, 247, 250)",
+        "rgb(255, 175, 210)",
+        "rgb(190, 199, 218)",
+        "rgb(36, 38, 51)",
+        "rgb(11, 36, 113)",
+        "rgb(255, 255, 255)",
+        "rgb(122, 132, 153)",
+        "rgb(230, 235, 245)"
+      ]
+    },
+    "screenshot": "ref-watershed.png"
+  },
+  {
+    "name": "pachama",
+    "url": "https://pachama.com",
+    "styles": {
+      "bodyBg": "rgb(255, 255, 255)",
+      "fontFamily": "sans-serif",
+      "bgColors": [
+        "rgb(255, 255, 255)",
+        "rgb(147, 233, 240)",
+        "rgb(38, 71, 77)",
+        "rgb(8, 41, 47)",
+        "rgba(255, 255, 255, 0)"
+      ],
+      "textColors": [
+        "rgb(0, 0, 0)",
+        "rgb(0, 0, 238)",
+        "rgb(8, 41, 47)",
+        "rgb(255, 255, 255)",
+        "rgb(0, 168, 67)"
+      ],
+      "borderColors": [
+        "rgb(0, 0, 0)",
+        "rgb(0, 0, 238)",
+        "rgb(8, 41, 47)",
+        "rgb(255, 255, 255)",
+        "rgb(0, 168, 67)"
+      ]
+    },
+    "screenshot": "ref-pachama.png"
+  },
+  {
+    "name": "sylvera",
+    "url": "https://www.sylvera.com",
+    "styles": {
+      "bodyBg": "rgb(1, 49, 29)",
+      "fontFamily": "Arial, sans-serif",
+      "bgColors": [
+        "rgb(1, 49, 29)",
+        "rgb(251, 250, 247)",
+        "rgba(255, 255, 255, 0)",
+        "rgb(191, 241, 2)",
+        "rgba(1, 49, 29, 0.1)",
+        "rgb(51, 51, 51)",
+        "rgb(250, 128, 114)",
+        "rgb(255, 255, 255)"
+      ],
+      "textColors": [
+        "rgb(0, 0, 0)",
+        "rgb(51, 51, 51)",
+        "rgb(1, 49, 29)",
+        "rgb(255, 255, 255)",
+        "rgb(250, 128, 114)",
+        "rgb(85, 120, 104)"
+      ],
+      "borderColors": [
+        "rgb(0, 0, 0)",
+        "rgb(51, 51, 51)",
+        "rgb(1, 49, 29)",
+        "rgb(255, 255, 255)",
+        "rgb(250, 128, 114)",
+        "rgb(85, 120, 104)",
+        "rgb(1, 49, 29) rgb(225, 222, 208)",
+        "rgb(1, 49, 29) rgb(1, 49, 29) rgb(239, 237, 228)"
+      ]
+    },
+    "screenshot": "ref-sylvera.png"
+  },
+  {
+    "name": "tremor",
+    "url": "https://www.tremor.so",
+    "styles": {
+      "bodyBg": "rgba(0, 0, 0, 0)",
+      "fontFamily": "__GeistSans_fb8f2c, __GeistSans_Fallback_fb8f2c",
+      "bgColors": [
+        "rgb(255, 255, 255)",
+        "oklab(0.999994 0.0000455678 0.0000200868 / 0.9)",
+        "rgb(0, 0, 0)",
+        "oklch(0.623 0.214 259.815)",
+        "oklab(0.932 -0.00796618 -0.0309926 / 0.7)",
+        "oklab(0.985 -0.00075442 -0.00185226 / 0.4)"
+      ],
+      "textColors": [
+        "rgb(0, 0, 0)",
+        "rgb(255, 255, 255)",
+        "rgba(0, 0, 0, 0)",
+        "oklch(0.21 0.034 264.665)",
+        "oklch(0.373 0.034 259.733)",
+        "oklch(0.278 0.033 256.848)",
+        "oklch(0.546 0.245 262.881)",
+        "oklch(0.446 0.03 256.802)",
+        "oklch(0.707 0.022 261.325)",
+        "oklch(0.551 0.027 264.364)"
+      ],
+      "borderColors": [
+        "rgb(0, 0, 0)",
+        "oklch(0.928 0.006 264.531)",
+        "rgb(255, 255, 255)",
+        "oklch(0.21 0.034 264.665)",
+        "oklch(0.373 0.034 259.733)",
+        "oklch(0.278 0.033 256.848)",
+        "oklch(0.546 0.245 262.881)",
+        "oklch(0.446 0.03 256.802)",
+        "oklch(0.707 0.022 261.325)",
+        "oklch(0.872 0.01 258.338)"
+      ]
+    },
+    "screenshot": "ref-tremor.png"
+  },
+  {
+    "name": "ramp",
+    "url": "https://ramp.com",
+    "styles": {
+      "bodyBg": "lab(100 0 0)",
+      "fontFamily": "lausanne, \"lausanne Fallback\"",
+      "bgColors": [
+        "lab(100 0 0)",
+        "rgba(255, 255, 255, 0.5)",
+        "lab(8.86531 0.515342 0.18619)",
+        "rgba(255, 255, 255, 0.05)",
+        "lab(92.1406 -20.4979 84.7726)",
+        "rgba(33, 33, 33, 0.05)",
+        "lab(2.83994 0.367254 0.969091)",
+        "lab(95.604 0.426412 1.20401)",
+        "rgba(33, 33, 33, 0.024)",
+        "rgb(255, 255, 255)"
+      ],
+      "textColors": [
+        "rgb(0, 0, 0)",
+        "lab(2.83994 0.367254 0.969091)",
+        "lab(100 0 0)",
+        "lab(2.83994 0.367254 0.969091 / 0.6)"
+      ],
+      "borderColors": [
+        "rgb(0, 0, 0)",
+        "lab(2.83994 0.367254 0.969091)",
+        "lab(2.83994 0.367254 0.969091) lab(2.83994 0.367254 0.969091) rgba(33, 33, 33, 0.05)",
+        "lab(100 0 0)",
+        "rgba(255, 255, 255, 0)",
+        "lab(2.83994 0.367254 0.969091 / 0.6)",
+        "rgba(33, 33, 33, 0.1)"
+      ]
+    },
+    "screenshot": "ref-ramp.png"
+  },
+  {
+    "name": "incident_io",
+    "url": "https://incident.io",
+    "styles": {
+      "bodyBg": "rgb(255, 255, 255)",
+      "fontFamily": "STKBureauSans, \"STKBureauSans Fallback\", ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "bgColors": [
+        "rgb(255, 255, 255)",
+        "rgb(90, 10, 23)",
+        "rgb(109, 21, 35)",
+        "rgb(248, 245, 240)",
+        "rgb(242, 85, 51)",
+        "rgba(255, 255, 255, 0.8)"
+      ],
+      "textColors": [
+        "rgb(0, 0, 0)",
+        "rgb(255, 255, 255)",
+        "rgb(22, 22, 24)",
+        "rgba(22, 22, 24, 0.66)",
+        "rgb(242, 85, 51)",
+        "rgb(17, 24, 39)",
+        "rgb(107, 114, 128)",
+        "rgba(22, 22, 24, 0.4)",
+        "rgb(75, 85, 99)",
+        "rgb(247, 247, 248)"
+      ],
+      "borderColors": [
+        "rgb(229, 231, 235)",
+        "rgba(255, 255, 255, 0.1)",
+        "rgba(22, 22, 24, 0.08)"
+      ]
+    },
+    "screenshot": "ref-incident_io.png"
+  }
+]

@@ -1,0 +1,5 @@
+Fala @dev! O card "3. REG010 - Implementar análise de desbloqueio da APE pela ATEND (TL005)" encontra-se bloqueado para testes em HML devido a impedimento no fluxo da TL001 (Card 1 da APE).
+
+Cenário: O avanço do formulário está bloqueado na seleção do empreendimento rural por validação do CEFIR/CAR (que mesmo informado manualmente com CEFIR ativo não remove a trava impeditiva).
+Como as telas TL003 a TL006 dependem do avanço do requerimento, este card permanece aguardando a liberação do Card 1 para validação técnica completa.
+Fico no aguardo do ajuste para executar o reteste imediato!

@@ -1,0 +1,8 @@
+﻿Fala equipe! Retestei o card de "DAE - REQUERENTE – SOLICITAÇÃO DE PARCELAMENTO". Segue o resultado:
+
+Resolvido: Percorri o fluxo completo do wizard em 3 etapas em /parcelamento/solicitar. Na Etapa 01 (Participantes), selecionei "Quem sou eu? → Requerente", adicionei o partícipe à listagem com preenchimento automático do cadastro (CPF 000.000.000-00 - Administrador do Sistema) e confirmei o bloqueio correto de avanço quando a lista de participantes está vazia.
+
+Resolvido: Na Etapa 02 (Processo), conferi o alerta informativo sobre a Certidão de Débito, a inclusão de número de processo alfanumérico e a persistência integral dos dados ao navegar entre as etapas via botões Anterior e Próximo. Na Etapa 03 (Resumo), validei as tabelas consolidadas em modo leitura, o banner de notificações, a declaração de veracidade das informações e o controle do botão Finalizar Pedido.
+
+Com isso, considero este card homologado e resolvido.
+Fico à disposição se precisar de mais detalhes.

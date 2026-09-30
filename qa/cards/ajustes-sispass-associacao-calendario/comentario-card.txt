@@ -1,0 +1,11 @@
+Fala @hugo.felipe! Retestei o card de "Ajustes após testes SISPASS — Associação e Calendário". Segue o resultado:
+
+Resolvido:
+- Cadastro de Associação: Confirmada a remoção completa do campo CTF na tela de cadastro de novo perfil de Associação, permitindo avançar normalmente com a seleção do CNPJ vinculado e Responsável Técnico (Print 01).
+- Cadastro de Calendário Anual: Campo "CNPJ responsável pelo calendário" implementado e exibindo exclusivamente os CNPJs vinculados ao usuário logado ("12.345.678/0001-90 — Agro Bahia Comercial Ltda") (Print 02).
+- Análise de Calendário e Laudo Técnico: Na análise técnica do analista, a seção "Documentos Apresentados" exibe perfeitamente todas as fotos do local (Fachada, Local do Evento, Telhado, Ventilação) com ações de visualização/download, além do Laudo Técnico assinado (Print 03).
+- Convites de Associação: Os convites respondidos permanecem acessíveis na listagem para consulta do histórico de ações (Print 04).
+- Restrição de Anexos: Documentos do SISPASS exigindo PDF e fotos do Calendário aceitando imagens.
+
+Com isso, considero este card RESOLVIDO e APROVADO em HML.
+Evidências anexadas em anexos.zip. Fico à disposição!
