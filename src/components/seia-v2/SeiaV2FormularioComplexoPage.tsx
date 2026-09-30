@@ -114,10 +114,11 @@ export const SeiaV2FormularioComplexoPage: React.FC<SeiaV2FormularioComplexoPage
         <div>
           <SeiaV2Breadcrumb
             items={[
-              { label: 'Início', href: '/?rota=seia-v2&tela=inicio' },
-              { label: 'Atendimento e Cadastros', href: '/?rota=seia-v2&tela=inicio' },
-              { label: 'Novo Requerimento' },
+              { label: 'Início', route: 'inicio', href: '/?rota=seia-v2&tela=inicio' },
+              { label: 'Regulação' },
+              { label: 'Requerimento Unificado' },
             ]}
+            onNavigate={onNavigate}
           />
           <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight mt-1">
             Requerimento Ambiental Unificado (SEIA V2)

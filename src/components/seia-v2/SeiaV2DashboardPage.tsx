@@ -16,7 +16,11 @@ import {
 } from 'lucide-react';
 import { SeiaV2Breadcrumb } from './SeiaV2Breadcrumb';
 
-export const SeiaV2DashboardPage: React.FC = () => {
+interface SeiaV2DashboardPageProps {
+  onNavigate?: (route: string) => void;
+}
+
+export const SeiaV2DashboardPage: React.FC<SeiaV2DashboardPageProps> = ({ onNavigate }) => {
   const [period, setPeriod] = useState<'2026' | '30d' | '7d'>('2026');
 
   return (
@@ -26,10 +30,11 @@ export const SeiaV2DashboardPage: React.FC = () => {
         <div>
           <SeiaV2Breadcrumb
             items={[
-              { label: 'Início', href: '/?rota=seia-v2&tela=inicio' },
-              { label: 'Área de Trabalho', href: '/?rota=seia-v2&tela=inicio' },
-              { label: 'Painel Gerencial' },
+              { label: 'Início', route: 'inicio', href: '/?rota=seia-v2&tela=inicio' },
+              { label: 'Regulação' },
+              { label: 'Métricas do Analista' },
             ]}
+            onNavigate={onNavigate}
           />
           <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight mt-1">
             Painel Geral & Métricas do Analista

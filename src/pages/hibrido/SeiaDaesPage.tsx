@@ -31,6 +31,7 @@ import {
   GlaPagination
 } from '@/components/common/GlaTable';
 import { StatsOverviewWidget } from '@/components/filament/StatsOverviewWidget';
+import { SeiaV2Breadcrumb } from '@/components/seia-v2/SeiaV2Breadcrumb';
 import { MOCK_DAES, DaeItem } from '@/data/hibridoMock';
 
 interface SeiaDaesPageProps {
@@ -196,7 +197,15 @@ export const SeiaDaesPage: React.FC<SeiaDaesPageProps> = ({ onNavigate }) => {
       {/* 2. CABEÇALHO COM AÇÕES PRIMÁRIAS */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-200">
         <div>
-          <div className="flex items-center gap-2">
+          <SeiaV2Breadcrumb
+            items={[
+              { label: 'Início', route: 'inicio', href: '/?rota=seia-v2&tela=inicio' },
+              { label: 'Financeiro & Arrecadação' },
+              { label: 'Emissão de DAE' },
+            ]}
+            onNavigate={onNavigate}
+          />
+          <div className="flex items-center gap-2 mt-1">
             <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
               Gestão de DAEs — Arrecadação Estadual
             </h1>

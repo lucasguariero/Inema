@@ -28,6 +28,7 @@ import { PautaEnquadramentoPage } from '@/pages/seia-v2/PautaEnquadramentoPage';
 import { ParametrizacoesMasterPage } from '@/pages/seia-v2/ParametrizacoesMasterPage';
 import { UsuariosRolesPage } from '@/pages/seia-v2/UsuariosRolesPage';
 import { SeiaV2LoginPage } from '@/pages/seia-v2/SeiaV2LoginPage';
+import { SeiaV2InicioPage } from '@/pages/seia-v2/SeiaV2InicioPage';
 
 export const SeiaV2RootPage: React.FC = () => {
   const [activeSubRoute, setActiveSubRoute] = useState<string>('inicio');
@@ -38,6 +39,8 @@ export const SeiaV2RootPage: React.FC = () => {
     const tela = params.get('tela') || params.get('tab') || params.get('subrota');
     if (tela) {
       if (tela === 'login' || tela === 'auth' || tela === 'entrar') return 'login';
+      if (tela === 'inicio' || tela === 'home') return 'inicio';
+      if (tela === 'relatorios' || tela === 'dashboard' || tela === 'gerencial') return 'relatorios';
       if (tela === 'formulario' || tela === 'form' || tela === 'novo') return 'formulario';
       if (tela === 'tabela' || tela === 'pauta' || tela === 'processos') return 'tabela';
       if (tela === 'seia-painel' || tela === 'painel') return 'seia-painel';
@@ -86,7 +89,7 @@ export const SeiaV2RootPage: React.FC = () => {
       case 'formulario':
         return <SeiaV2FormularioComplexoPage onNavigate={handleNavigate} />;
       case 'seia-painel':
-        return <SeiaV2DashboardPage />;
+        return <SeiaV2DashboardPage onNavigate={handleNavigate} />;
       case 'atendente':
         return <DenunciaInternaPage onNavigate={handleNavigate} />;
       case 'cidadao':
@@ -152,11 +155,12 @@ export const SeiaV2RootPage: React.FC = () => {
         return <RoteiroApresentacaoPage onNavigate={handleNavigate} />;
       case 'design-system':
         return <SeiaV2DesignSystemPage />;
-      case 'inicio':
       case 'relatorios':
       case 'dashboard':
+        return <DashboardPage onNavigate={handleNavigate} />;
+      case 'inicio':
       default:
-        return <DashboardPage />;
+        return <SeiaV2InicioPage onNavigate={handleNavigate} />;
     }
   };
 

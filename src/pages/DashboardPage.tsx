@@ -27,6 +27,7 @@ import { VencidosBarChart } from '@/components/dashboard/VencidosBarChart';
 import { FilterDrawer, FilterState } from '@/components/dashboard/FilterDrawer';
 import { Card, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { SeiaV2Breadcrumb } from '@/components/seia-v2/SeiaV2Breadcrumb';
 import {
   Dialog,
   DialogContent,
@@ -99,7 +100,11 @@ const processosVencidosIniciais: ProcessoVencido[] = [
   },
 ];
 
-export const DashboardPage: React.FC = () => {
+interface DashboardPageProps {
+  onNavigate?: (route: string) => void;
+}
+
+export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
   const { themeConfig, isDarkMode } = useTheme();
 
   const [selectedPeriod, setSelectedPeriod] = useState('30d');
@@ -180,6 +185,7 @@ export const DashboardPage: React.FC = () => {
         onSelectUnit={setSelectedUnit}
         onOpenFilters={() => setIsFilterDrawerOpen(true)}
         activeFilterCount={activeFilterCount}
+        onNavigate={onNavigate}
       />
 
       {/* Banner de Filtros Ativos */}

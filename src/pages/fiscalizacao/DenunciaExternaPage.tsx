@@ -138,10 +138,11 @@ export const DenunciaExternaPage: React.FC<{ onNavigate?: (route: string) => voi
           <SeiaV2Breadcrumb
             className="mb-1 select-none"
             items={[
-              { label: 'Início', href: '/?rota=seia-v2&tela=inicio' },
-              { label: 'Fiscalização', href: '/?rota=seia-v2&tela=consulta-externa' },
-              { label: 'Denúncia Cidadão' },
+              { label: 'Início', route: 'inicio', href: '/?rota=seia-v2&tela=inicio' },
+              { label: 'Acesso Público' },
+              { label: 'Registrar Denúncia' },
             ]}
+            onNavigate={onNavigate}
           />
           <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
             Canal de Denúncia Ambiental Cidadã

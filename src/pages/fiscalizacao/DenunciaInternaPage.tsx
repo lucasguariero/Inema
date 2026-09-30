@@ -237,10 +237,11 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
           <SeiaV2Breadcrumb
             className="mb-1 select-none"
             items={[
-              { label: 'Início', href: '/?rota=seia-v2&tela=inicio' },
-              { label: 'Fiscalização', href: '/?rota=seia-v2&tela=consulta-interna' },
-              { label: 'Denúncia Interna (DIFIS)' },
+              { label: 'Início', route: 'inicio', href: '/?rota=seia-v2&tela=inicio' },
+              { label: 'Fiscalização' },
+              { label: 'Nova Denúncia' },
             ]}
+            onNavigate={onNavigate}
           />
           <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight leading-tight">
             Cadastro de Denúncia Ambiental (DOR001)

@@ -230,10 +230,11 @@ export const SeiaV2TabelaOperacionalPage: React.FC<SeiaV2TabelaOperacionalPagePr
         <div>
           <SeiaV2Breadcrumb
             items={[
-              { label: 'Início', href: '/?rota=seia-v2&tela=inicio' },
-              { label: 'Atendimento e Cadastros', href: '/?rota=seia-v2&tela=inicio' },
+              { label: 'Início', route: 'inicio', href: '/?rota=seia-v2&tela=inicio' },
+              { label: 'Regulação' },
               { label: 'Pauta de Processos' },
             ]}
+            onNavigate={onNavigate}
           />
           <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight mt-1">
             Pauta Geral de Processos e Atos (SEIA V2)

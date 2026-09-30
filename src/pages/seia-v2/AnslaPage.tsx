@@ -67,9 +67,9 @@ export const AnslaPage: React.FC<AnslaPageProps> = ({ onNavigate }) => {
     <div className="space-y-6">
       <SeiaV2Breadcrumb
         items={[
-          { label: 'Início', route: 'inicio' },
-          { label: 'Regulação Ambiental', route: 'tabela' },
-          { label: 'Dispensa de Licença (ANSLA)' },
+          { label: 'Início', route: 'inicio', href: '/?rota=seia-v2&tela=inicio' },
+          { label: 'Regulação' },
+          { label: 'Dispensa ANSLA' },
         ]}
         onNavigate={onNavigate}
       />

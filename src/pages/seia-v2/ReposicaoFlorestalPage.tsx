@@ -83,8 +83,8 @@ export const ReposicaoFlorestalPage: React.FC<ReposicaoFlorestalPageProps> = ({ 
     <div className="space-y-6">
       <SeiaV2Breadcrumb
         items={[
-          { label: 'Início', route: 'inicio' },
-          { label: 'Biodiversidade & Florestas', route: 'reposicao-florestal' },
+          { label: 'Início', route: 'inicio', href: '/?rota=seia-v2&tela=inicio' },
+          { label: 'Biodiversidade & UCs' },
           { label: 'Reposição Florestal (CRF)' },
         ]}
         onNavigate={onNavigate}

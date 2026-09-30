@@ -431,8 +431,9 @@ export const RoteiroApresentacaoPage: React.FC<{ onNavigate?: (route: string) =>
       {/* Breadcrumb */}
       <SeiaV2Breadcrumb
         items={[
-          { label: 'Início', route: 'inicio' },
-          { label: 'Roteiro de Apresentação Executiva (Call Thays)' },
+          { label: 'Início', route: 'inicio', href: '/?rota=seia-v2&tela=inicio' },
+          { label: 'Ferramentas Gerenciais' },
+          { label: 'Roteiro de Apresentação' },
         ]}
         onNavigate={onNavigate}
       />

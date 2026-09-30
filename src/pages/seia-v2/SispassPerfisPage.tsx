@@ -94,9 +94,9 @@ export const SispassPerfisPage: React.FC<SispassPerfisPageProps> = ({ onNavigate
     <div className="space-y-6">
       <SeiaV2Breadcrumb
         items={[
-          { label: 'Início', route: 'inicio' },
-          { label: 'Biodiversidade & Fauna', route: 'sispass' },
-          { label: 'SISPASS — Manejo de Fauna' },
+          { label: 'Início', route: 'inicio', href: '/?rota=seia-v2&tela=inicio' },
+          { label: 'Gestão de Fauna' },
+          { label: 'Criadores SISPASS' },
         ]}
         onNavigate={onNavigate}
       />
