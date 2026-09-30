@@ -1,1 +1,0 @@
-Fala! Retestei a análise técnica da solicitação de parcelamento. A tela de análise não está acessível no perfil administrativo e o fluxo de solicitação do requerente ainda aparece como "Em breve". Com isso, o card segue pendente. (Print 01)

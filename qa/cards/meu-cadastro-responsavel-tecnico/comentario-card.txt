@@ -1,1 +1,0 @@
-Fala! Retestei a funcionalidade de Responsável Técnico em Meu Cadastro. A listagem e os detalhes carregaram corretamente, a busca por CPF inexistente foi tratada e o sistema impediu o usuário de se vincular como responsável do próprio cadastro. Com isso, considero o card aprovado.

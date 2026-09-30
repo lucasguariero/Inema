@@ -1,12 +1,24 @@
+# Dependencies & Build
+node_modules/
+dist/
 .vercel
 .env*
-.playwright-mcp
-donut-test.png
-test_*.png
-node_modules/
+*.log
+*.tmp
+*.zip
+*.jsonl
+
+# Internal QA, Audits, Screenshots & Scripts (Local Only)
+qa/
+scripts/
+prints_*/
 test-results/
 playwright-report/
-qa/screenshots/
+.playwright-mcp
 .figma_chrome_profile/
 
-
+# Root test prints & assets
+donut-test.png
+test_*.png
+*.m4a
+gdrive*

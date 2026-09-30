@@ -1,1 +1,0 @@
-Fala! Retestei a solicitação e o acompanhamento de parcelamento pelo requerente. A tela continua como "Em breve" e o botão "Solicitar Parcelamento" permanece desabilitado, então o fluxo não pode ser iniciado. Com isso, o card segue pendente. (Print 01)

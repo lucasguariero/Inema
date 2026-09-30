@@ -1,8 +1,0 @@
-﻿Fala @daniela-vargas! Retestei a geração do Resumo do Requerimento em PDF na DTRP. Segue o resultado:
-
-Resolvido: na tela de visualização de um requerimento finalizado, o botão "Baixar resumo em PDF" fica disponível no topo e faz o download direto do documento. Fiz o contraste com um requerimento em rascunho e o botão não aparece, respeitando a regra de só liberar o resumo após a conclusão.
-
-Resolvido: o PDF gerado segue fielmente o padrão institucional do SEIA/INEMA. O documento traz o número formatado no cabeçalho, os dados de identificação e rastreabilidade, entidade destinatária, pontos de coleta e transportadoras. Na tabela de resíduos, cada item é exibido com sua caracterização completa (classe, quantidade, estado físico, acondicionamento e veículo), acompanhado do texto da declaração e dos dados de auditoria do aceite eletrônico.
-
-Com isso, considero este card homologado e resolvido.
-Fico à disposição se precisar de mais detalhes.

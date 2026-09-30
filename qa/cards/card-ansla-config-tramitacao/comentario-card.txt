@@ -1,8 +1,0 @@
-﻿Fala @matheus-ariel! Retestei as regras de configuração de Tipo de Atividade e o impacto em processos em tramitação no ANSLA. Segue o resultado:
-
-Resolvido: acessei a edição de uma atividade que já possui processos em andamento (ANSLA-001) e o sistema já bloqueia alterações no Código e Nome com o aviso de que já existem solicitações abertas vinculadas a esses dados. Na aba Setor, o sistema exibe o aviso claro de congelamento: "Esta atividade já possui solicitações em trâmite ou concluídas. As alterações feitas aqui valem apenas para solicitações enviadas a partir de agora: processos já em tramitação mantêm a configuração vigente no momento em que foram enviados.". Ou seja, a regra de congelar o que já está em trâmite e aplicar a nova configuração apenas para novos requerimentos já está ativa e funcionando.
-
-Resolvido: na aba Setor, a Ordem de Análise funciona de forma estritamente sequencial linha a linha (1, 2, 3...), garantindo que a tramitação ocorra de um setor por vez conforme definido no documento de requisitos, sem concorrência de múltiplos setores na mesma ordem.
-
-Com isso, considero este ponto alinhado e homologado.
-Fico à disposição se precisar de mais detalhes.

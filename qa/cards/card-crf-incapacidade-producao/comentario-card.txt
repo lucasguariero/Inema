@@ -1,8 +1,0 @@
-﻿Fala @equipe-dev! Retestei o cenário de Incapacidade de Produção de Volume Vinculado a Crédito de Reposição Florestal no módulo CRF. Segue o resultado:
-
-Resolvido: acertei o fluxo completo com o usuário Admin e o empreendimento DTRP Demonstração. Ao selecionar a opção de incapacidade de produção e Grande Consumidor = "Não", o formulário abre todos os campos previstos, incluindo os anexos obrigatórios de Relatório Técnico Comprobatório e ART, os motivos da incapacidade e a memória de cálculo.
-
-Resolvido: validei o cálculo da regularização informando 100 m³ e o sistema calculou com precisão absoluta: R$ 1.800,00 de valor base (100 m³ × R$ 18,00/m³) + R$ 360,00 de adicional de 20% do Art. 51, totalizando exatamente R$ 2.160,00 devidos ao FERFA. Os campos de portaria e processo administrativo mantiveram o comportamento padrão esperado como somente leitura.
-
-Com isso, considero este card homologado e resolvido.
-Fico à disposição se precisar de mais detalhes.

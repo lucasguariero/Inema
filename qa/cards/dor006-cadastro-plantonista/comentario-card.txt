@@ -1,1 +1,0 @@
-Fala! Retestei o cadastro de plantonista. Validei obrigatoriedade, CPF não localizado, recuperação dos dados, cadastro com sucesso, bloqueio de duplicidade e restrição de acesso para usuário externo. Os cenários passaram. A exclusão não foi executada para preservar os dados do ambiente. Com isso, considero o card aprovado nos cenários permitidos.

@@ -1,1 +1,0 @@
-Fala! Retestei o cadastro de templates de documentos com o perfil administrador. Mesmo com as permissões do recurso existentes, a funcionalidade não aparece nos menus e o acesso retorna 404. Com isso, o card segue pendente. (Print 01)

@@ -1,8 +1,0 @@
-﻿Fala @equipe-dev! Retestei o card de "ENQ001 — Enquadramento de Atos e Validação Documental (spec 050)". Segue o resultado:
-
-Resolvido: na tela de Efetuar Enquadramento do requerimento 2026.011.000011/INEMA/TS0002, acessei a 5ª aba "05. Enquadramento" e validei a presença da seção de "Atos Recomendados" com o indicativo orientativo do sistema, a seção "Atos Enquadrados" e a área de "Informações de Pagamento".
-
-Resolvido: acionei o botão "Adicionar Ato", confirmando a abertura do modal "Adicionar Ato" com o campo de busca assíncrona "Buscar ato*", permitindo pesquisar os atos ambientais oficiais semeados conforme o catálogo institucional. As ações de submissão e cancelamento do modal responderam perfeitamente sem erros de interface ou quebras de tela.
-
-Com isso, considero este card homologado e resolvido.
-Fico à disposição se precisar de mais detalhes.

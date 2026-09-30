@@ -1,8 +1,0 @@
-﻿Fala equipe! Retestei o card de "DAE - REQUERENTE – ACESSO E CONSULTA DO PARCELAMENTO". Segue o resultado:
-
-Resolvido: Acessei a funcionalidade pelo menu Requerimentos › Parcelamento (/parcelamento) e validei a renderização correta dos quatro painéis expansíveis (Informações, Documentação Exigida, Valor e Prazos) com os textos extraídos do DR003. Confirmei que o botão "Solicitar Parcelamento" encontra-se desabilitado com o aviso de disponibilidade conforme a decisão de projeto alinhada para este primeiro card, além do botão Voltar operando normalmente.
-
-Resolvido: Na tela "Meus Processos" (/meus-processos), conferi a listagem com as seis abas de status (Todos padrão, Rascunho, Aguardando Pagamento, Em Análise, Pendentes e Concluído), a estrutura das colunas ordenáveis (Nº Processo, Data Formação, Ato e Etapa), o campo de busca e a apresentação dos registros vinculados ao usuário autenticado.
-
-Com isso, considero este card homologado e resolvido.
-Fico à disposição se precisar de mais detalhes.

@@ -1,8 +1,0 @@
-Fala equipe! Retestei o card de "Certidão de Débito Ambiental – Análise da Solicitação (TL003 / TL004 / TL005)". Segue o resultado:
-
-Resolvido: Na tela da Pauta Técnico (/pauta-tecnica-certidao-debito), validei o acesso direto e a atuação com perfis de Técnico e Admin/Gestor (bypass administrativo), com a grid exibindo as colunas Nº Processo, Data Entrada, Requerente, Status e menu de ações com suporte às ações de abertura da análise e Download do Processo (RG010/TL002 C008).
-
-Resolvido: Na tela de Análise da Solicitação, conferi a exibição em modo leitura dos dados consolidados do requerente e as abas "Análise" e "Resumo". No modal de "Adicionar Pendência" (TL004), validei o preenchimento de Processo, Origem, Indicador de Dívida Ativa e Valor, bem como a determinação automática da conclusão na aba "Resumo" (TL005) diferenciando Certidão Negativa, Positiva com Efeito Negativo e Positiva, visualização do PDF gerado e gravação de finalização (RG009/MSG004).
-
-Com isso, considero este card homologado e resolvido.
-Fico à disposição se precisar de mais detalhes.

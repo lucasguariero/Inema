@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/prepare_legacy_pages.js && vite build && node scripts/copy_concept_pages.js",
+    "build": "node build/prepare_legacy_pages.js && vite build && node build/copy_concept_pages.js",
     "preview": "vite preview",
     "test": "playwright test"
   },
