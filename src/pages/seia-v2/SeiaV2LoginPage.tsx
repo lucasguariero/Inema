@@ -108,37 +108,32 @@ export const SeiaV2LoginPage: React.FC<SeiaV2LoginPageProps> = ({ onLoginSuccess
 
   return (
     <div className="relative min-h-screen w-full flex flex-col lg:grid lg:grid-cols-2 bg-white dark:bg-slate-950 font-sans text-slate-900 dark:text-slate-100 transition-colors duration-200 overflow-hidden">
-      {/* OVERLAY DE TRANSIÇÃO CINEMÁTICA PARA O SISTEMA */}
+      {/* TRANSIÇÃO SUTIL E INSTITUCIONAL (ESTILO GLA / ZERO AI SLOP) */}
       {isTransitioning && (
-        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#0A3327] text-white animate-in fade-in zoom-in-95 duration-500">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0A3327] text-white animate-in fade-in duration-300">
+          {/* Imagem de Fundo (Cachoeira da Fumaça / Chapada Diamantina) */}
           <div
-            className="absolute inset-0 bg-cover bg-center mix-blend-overlay opacity-30 scale-105 transition-transform duration-1000"
-            style={{ backgroundImage: "url('/images/inema-banner.jpeg')" }}
+            className="absolute inset-0 bg-cover bg-center mix-blend-overlay opacity-60 scale-105 transition-transform duration-700 ease-out"
+            style={{
+              backgroundImage: "url('/images/inema-banner.jpeg')",
+            }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#06241B] via-[#0F4C3A]/90 to-[#0A3327]/95" />
 
-          <div className="relative z-10 flex flex-col items-center space-y-5 max-w-sm px-6 text-center animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="relative">
-              <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-2xl">
-                <ShieldCheck className="w-8 h-8 text-emerald-300 animate-pulse" />
-              </div>
-              <div className="absolute -inset-2 rounded-2xl bg-emerald-400/20 blur-xl -z-10 animate-ping" />
-            </div>
+          {/* Gradiente Institucional Degradê */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#06241B] via-[#0F4C3A]/85 to-[#0A3327]/90 backdrop-blur-[0.5px]" />
 
-            <div className="space-y-1.5">
-              <img
-                src={logoHorizontalWhite}
-                alt="INEMA - Governo da Bahia"
-                className="h-10 w-auto mx-auto drop-shadow-md"
-              />
-              <p className="text-sm font-medium text-emerald-100">
-                Sessão autorizada • Acessando o SEIA V2...
-              </p>
-            </div>
-
-            {/* Barra de carregamento suave */}
-            <div className="w-48 h-1.5 bg-white/20 rounded-full overflow-hidden">
-              <div className="h-full bg-emerald-400 rounded-full animate-[progress_0.7s_ease-in-out_forwards] transition-all" style={{ width: '100%' }} />
+          {/* Logo Central com Animação Fluida e Minimalista */}
+          <div className="relative z-10 flex flex-col items-center justify-center animate-in fade-in zoom-in-95 duration-400 ease-out">
+            <img
+              src={logoHorizontalWhite}
+              alt="INEMA - Governo da Bahia"
+              className="h-24 sm:h-28 md:h-32 w-auto drop-shadow-2xl"
+            />
+            {/* Micro-indicador minimalista de 3 pontos */}
+            <div className="mt-6 flex items-center gap-2 opacity-50">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-200 animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-200 animate-pulse [animation-delay:150ms]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-200 animate-pulse [animation-delay:300ms]" />
             </div>
           </div>
         </div>
