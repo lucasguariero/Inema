@@ -27,7 +27,16 @@ Temos duas frentes de trabalho com propósitos, linguagens visuais e links estri
 
 ---
 
-## 2. Identidade Visual Inviolável (Anti-AI-Slop)
+## 2. Padrão Mandatório de Prototipagem SEIA V2 (Design System Inviolável)
+
+Qualquer IA ou desenvolvedor atuando no SEIA V2 deve seguir rigorosamente:
+- **Reuso Mandatório**: Reutilizar as primitivas e componentes já existentes em `src/components/ui/`, `src/components/filament/`, `src/components/dashboard/` e `src/components/seia-v2/` (`Button`, `Badge`, `InputWrapper`, `FilamentSelect`, `Section`, `FilamentWizard`, `TableContainer`, `KpiCard`, `Dialog`, `DropdownMenu`).
+- **Criação de Novos Componentes**: Devem seguir estritamente as regras do Design System (`#0F4C3A` para primários, variáveis semânticas CSS, `rounded-xl`/`rounded-lg`, Dense UI `h-9`/`h-8`, foco com anel verde suave `ring-[var(--color-green-alpha-20)]`, dark mode nativo e importação de SVGs oficiais sem `/src/`).
+- **Catálogo Oficial Vivo**: `https://inema.acto.com.br/?rota=seia-v2&tela=design-system`.
+
+---
+
+## 3. Identidade Visual Inviolável (Anti-AI-Slop)
 
 - **Cor Primária Institucional**: `#0F4C3A` (hover: `#0c3d2e`, active: `#092e23`). Usada em botões primários de ação, indicador ativo de abas e bordas semânticas.
 - **Cores Estritamente Proibidas**:

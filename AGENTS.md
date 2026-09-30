@@ -86,6 +86,36 @@ Temos duas trilhas de desenvolvimento e apresentação completamente distintas q
 
 ---
 
+# 🏛️ PADRÃO MANDATÓRIO DE PROTOTIPAGEM SEIA V2 (DESIGN SYSTEM INVIOLÁVEL)
+
+Todo e qualquer modelo de IA (Antigravity, Gemini, GPT, Claude, etc.) ou engenheiro que for desenvolver ou prototipar telas para o **SEIA V2 (INEMA)** DEVE OBRIGATORIAMENTE seguir estas diretrizes:
+
+### 1. Reuso Obrigatório dos Componentes do Design System (Zero Gambiarra / Zero AI Slop)
+- É TERMINANTEMENTE PROIBIDO criar componentes descartáveis, HTML cru sem estilização, estilos inline ad-hoc ou componentes desconectados da identidade visual oficial.
+- Toda tela do SEIA V2 deve ser construída importando e reutilizando as primitivas e componentes já refinados do nosso Design System:
+  - **Botões (`Button`)**: `src/components/ui/button.tsx` — variantes solid/outlined (`primary` `#0F4C3A`, `gray`, `danger`, `warning`, `success`), tamanhos `xs`, `sm`, `default`/`md`, `lg`, estados loading (`LoaderCircle`) e disabled.
+  - **Badges e Status (`Badge`)**: `src/components/ui/badge.tsx` — cores semânticas (`success`, `warning`, `danger`, `info`, `primary`, `gray`), com e sem `dot`.
+  - **Inputs & Wrappers (`InputWrapper`)**: `src/components/filament/InputWrapper.tsx` — prefixos/sufixos com ícones ou texto, feedback de validação `valid=false` com mensagem explicativa e foco com anel suave.
+  - **Selects Pesquisáveis (`FilamentSelect`)**: `src/components/filament/Select.tsx` — popover com busca em tempo real, teclado e descrições.
+  - **Seções Modulares (`Section` / `FilamentSection`)**: `src/components/filament/Section.tsx` — seções recolhíveis (`collapsible`), cabeçalhos com ícones, `headerActions` e `footer`.
+  - **Wizard / Stepper (`FilamentWizard`)**: `src/components/filament/Wizard.tsx` — stepper oficial com divisórias em chevron SVG institucional. NUNCA recriar outro stepper.
+  - **Tabelas & Data Grid (`TableContainer` / `TableToolbar`)**: `src/components/filament/Table.tsx` — toolbar com busca debounced, filtros com contagem, ações em lote (`DropdownMenu`), seleção múltipla e paginação.
+  - **Cards & Métricas (`KpiCard` / `StatsOverviewWidget`)**: `src/components/dashboard/KpiCard.tsx`, `src/components/filament/StatsOverviewWidget.tsx` — métricas com micro-sparklines e tendências.
+  - **Navegação & Breadcrumbs (`ShadcnHeader`, `ShadcnSidebar`, `FilamentTabs`, `SeiaV2Breadcrumb`)**: topbar verde em 100% da largura, sidebar com acordeão exclusivo (apenas 1 aberto por vez), abas underline com badges.
+  - **Modais & Overlays (`Dialog`, `DropdownMenu`)**: `src/components/ui/dialog.tsx`, `src/components/ui/dropdown-menu.tsx`.
+
+### 2. Criação de Novos Componentes (Baseados Estritamente nos Parâmetros do Design System)
+- Caso um fluxo específico necessite de um componente ou padrão que **ainda não exista exatamente pronto**, o agente DEVE criar um novo componente seguindo RIGOROSAMENTE as regras e tokens refinados do Design System:
+  - **Cores & Tokens**: Usar as variáveis CSS semânticas (`var(--color-brand-primary)`, `var(--color-surface-default)`, `var(--input-border-focus)`, etc.) e o verde institucional `#0F4C3A` como cor primária.
+  - **Geometria & Raios**: `rounded-xl` para containers/cards/seções, `rounded-lg` para botões e inputs, `rounded-md` para badges e popovers, `rounded-full` para pills.
+  - **Densidade (Dense UI)**: Alturas padronizadas de `h-9` (36px) ou `h-8` (32px) para botões e inputs, tipografia `text-xs` ou `text-sm`.
+  - **Foco & Microinterações**: Transições suaves (`transition-colors duration-150` ou `duration-200`) e foco visível `focus-visible:ring-2 focus-visible:ring-[var(--color-green-alpha-20)]`.
+  - **Suporte Dual-Theme**: 100% compatível com Light Mode e Dark Mode neutro (carvão/ardósia).
+  - **Assets & Logos**: NUNCA usar caminhos literais com `/src/`. Importar sempre os SVGs oficiais de `src/assets/seia-plataforma/svg/`.
+  - **Catálogo de Referência**: A rota viva oficial do Design System é `https://inema.acto.com.br/?rota=seia-v2&tela=design-system`.
+
+---
+
 # 🚀 Padrão Oficial de Prototipagem GLA / INEMA (Super Prompt & Regras de Ouro)
 
 Sempre que o usuário enviar um Documento de Requisito (DORxxx, DRxxx, card, issue, texto ou PDF) para criar ou refatorar protótipos de telas do INEMA/GLA, execute AUTOMATICAMENTE este protocolo de excelência de ponta a ponta:

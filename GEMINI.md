@@ -10,6 +10,28 @@
 
 ---
 
+# 🏛️ PADRÃO MANDATÓRIO DE PROTOTIPAGEM SEIA V2 (DESIGN SYSTEM INVIOLÁVEL)
+
+Todo e qualquer modelo de IA (Antigravity, Gemini, GPT, Claude, etc.) ou desenvolvedor que for implementar ou prototipar interfaces para o **SEIA V2 (INEMA)** DEVE OBRIGATORIAMENTE seguir estas regras:
+
+1. **Reuso Obrigatório dos Componentes Existentes**:
+   - `Button` (`src/components/ui/button.tsx`): variantes solid/outlined (`primary` `#0F4C3A`, `gray`, `danger`, `warning`, `success`), tamanhos `xs`, `sm`, `default`/`md`, `lg`, estados loading (`LoaderCircle`) e disabled.
+   - `Badge` (`src/components/ui/badge.tsx`): cores semânticas (`success`, `warning`, `danger`, `info`, `primary`, `gray`), com e sem `dot`.
+   - `InputWrapper` & inputs (`src/components/filament/InputWrapper.tsx`): prefixos/sufixos com ícones ou texto, feedback `valid=false` e anel de foco verde suave.
+   - `FilamentSelect` (`src/components/filament/Select.tsx`): popover pesquisável com teclado e descrições.
+   - `Section` (`src/components/filament/Section.tsx`): seções recolhíveis (`collapsible`), ícones, `headerActions` e `footer`.
+   - `FilamentWizard` (`src/components/filament/Wizard.tsx`): stepper com divisórias em chevron SVG institucional. NUNCA recriar outro stepper.
+   - `TableContainer` & `TableToolbar` (`src/components/filament/Table.tsx`): toolbar com busca debounced, filtros com contagem, ações em lote (`DropdownMenu`), seleção múltipla e paginação.
+   - `KpiCard` & `StatsOverviewWidget` (`src/components/dashboard/KpiCard.tsx`, `src/components/filament/StatsOverviewWidget.tsx`): métricas com micro-sparklines.
+   - `ShadcnHeader` & `ShadcnSidebar` (`src/components/seia-v2/shadcn/`): topbar verde em 100% da largura, sidebar com acordeão exclusivo.
+   - `Dialog` (`src/components/ui/dialog.tsx`) & `DropdownMenu` (`src/components/ui/dropdown-menu.tsx`).
+
+2. **Criação de Novos Componentes (Estritamente nos Parâmetros do Design System)**:
+   - Caso um componente não exista pronto, construa-o com as variáveis semânticas (`var(--color-brand-primary)`, `var(--color-surface-default)`, `var(--input-border-focus)`), paleta `#0F4C3A`, raios `rounded-xl`/`rounded-lg`, densidade compacta `h-9`/`h-8`, foco `ring-2 ring-[var(--color-green-alpha-20)]`, dark mode nativo e sem caminhos literais com `/src/` (importar SVGs oficiais de `src/assets/seia-plataforma/svg/`).
+   - Referência oficial viva: `https://inema.acto.com.br/?rota=seia-v2&tela=design-system`.
+
+---
+
 # 🚀 Protocolo Padrão de Prototipagem GLA / INEMA (Super Prompt Automático)
 
 Sempre que o usuário enviar um Documento de Requisito (DORxxx, DRxxx, card, issue, texto ou PDF) para prototipar ou ajustar telas, execute AUTOMATICAMENTE este protocolo:
