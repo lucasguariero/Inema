@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { CustomSelect, SelectOption } from './CustomSelect';
 import { SeiaV2Breadcrumb } from './SeiaV2Breadcrumb';
+import { FilamentWizard } from '@/components/filament/Wizard';
 
 const tipologiaOptions: SelectOption[] = [
   { value: 'Agricultura Irrigada de Grãos e Fibras', label: 'Agricultura Irrigada de Grãos e Fibras' },
@@ -139,47 +140,12 @@ export const SeiaV2FormularioComplexoPage: React.FC<SeiaV2FormularioComplexoPage
       {/* ========================================================= */}
       {/* STEPPER WIZARD NATIVO FILAMENT                            */}
       {/* ========================================================= */}
-      <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
-          {steps.map((s) => {
-            const isDone = currentStep > s.num;
-            const isCurrent = currentStep === s.num;
-
-            return (
-              <button
-                key={s.num}
-                onClick={() => setCurrentStep(s.num)}
-                className={`flex items-center gap-2.5 p-2 rounded-lg text-left transition-all duration-200 ease-in-out cursor-pointer ${
-                  isCurrent
-                    ? 'bg-emerald-50 border border-emerald-300 shadow-2xs'
-                    : isDone
-                    ? 'bg-slate-50 hover:bg-slate-100 border border-slate-200'
-                    : 'opacity-60 hover:opacity-100'
-                }`}
-              >
-                <div
-                  className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold font-mono shrink-0 transition-colors duration-200 ${
-                    isCurrent
-                      ? 'bg-[#0F4C3A] text-white shadow-xs'
-                      : isDone
-                      ? 'bg-emerald-600 text-white'
-                      : 'bg-slate-200 text-slate-600'
-                  }`}
-                >
-                  {isDone ? '✓' : s.num}
-                </div>
-                <div className="truncate">
-                  <div className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">
-                    Etapa 0{s.num}
-                  </div>
-                  <div className={`text-xs font-bold truncate ${isCurrent ? 'text-[#0F4C3A]' : 'text-slate-700'}`}>
-                    {s.label}
-                  </div>
-                </div>
-              </button>
-            );
-          })}
-        </div>
+      <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs">
+        <FilamentWizard
+          steps={steps.map((step) => ({ id: step.num, label: step.label }))}
+          currentStep={currentStep}
+          onStepClick={setCurrentStep}
+        />
       </div>
 
       {/* ========================================================= */}
