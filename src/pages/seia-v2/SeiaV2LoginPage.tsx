@@ -5,17 +5,10 @@ import {
   Eye,
   EyeOff,
   Globe,
-  ArrowRight,
-  ShieldCheck,
-  CheckCircle2,
-  AlertCircle,
-  HelpCircle,
   Sun,
   Moon,
   Loader2,
-  Sparkles,
   KeyRound,
-  FileCheck2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -106,8 +99,8 @@ export const SeiaV2LoginPage: React.FC<SeiaV2LoginPageProps> = ({ onLoginSuccess
 
   return (
     <div className="min-h-screen w-full flex flex-col lg:grid lg:grid-cols-2 bg-white dark:bg-slate-950 font-sans text-slate-900 dark:text-slate-100 transition-colors duration-200">
-      {/* PAINEL ESQUERDO (Banner Institucional com Overlay Verde Inema) */}
-      <div className="relative hidden lg:flex flex-col justify-between p-12 overflow-hidden bg-[#0A3327] text-white">
+      {/* PAINEL ESQUERDO (Banner Institucional com Overlay Verde Inema - Estilo GLA) */}
+      <div className="relative hidden lg:flex flex-col justify-center items-center p-12 overflow-hidden bg-[#0A3327] text-white">
         {/* Imagem de Fundo (Cachoeira da Fumaça / Chapada Diamantina) */}
         <div
           className="absolute inset-0 bg-cover bg-center mix-blend-overlay opacity-60 transition-transform duration-1000 scale-105"
@@ -119,46 +112,13 @@ export const SeiaV2LoginPage: React.FC<SeiaV2LoginPageProps> = ({ onLoginSuccess
         {/* Gradiente Institucional Degradê */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#06241B] via-[#0F4C3A]/85 to-[#0A3327]/90 backdrop-blur-[0.5px]" />
 
-        {/* Topo Esquerdo: Tag do Sistema */}
-        <div className="relative z-10 flex items-center justify-between">
-          <div className="flex items-center gap-2.5 bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/15">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-xs font-medium tracking-wide uppercase">Sistema Oficial SEIA V2</span>
-          </div>
-
-          <span className="text-xs text-white/70 font-mono">Governo da Bahia</span>
-        </div>
-
-        {/* Centro Esquerdo: Logo Institucional e Apresentação */}
-        <div className="relative z-10 max-w-lg space-y-6 my-auto">
-          <div className="space-y-4">
-            <img
-              src={logoHorizontalWhite}
-              alt="SEIA Plataforma - INEMA"
-              className="h-14 w-auto drop-shadow-md"
-            />
-            <p className="text-sm sm:text-base text-emerald-100/90 leading-relaxed font-light">
-              Sistema Estadual de Informações Ambientais e Recursos Hídricos. Plataforma integrada de regulação,
-              licenciamento, fiscalização e gestão ambiental da Bahia.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3 pt-2">
-            <div className="bg-white/10 backdrop-blur-md p-3.5 rounded-xl border border-white/10 space-y-1">
-              <div className="text-lg font-bold font-mono">100% Digital</div>
-              <div className="text-xs text-emerald-200/80">Processos e autos integrados</div>
-            </div>
-            <div className="bg-white/10 backdrop-blur-md p-3.5 rounded-xl border border-white/10 space-y-1">
-              <div className="text-lg font-bold font-mono">Segurança SEI</div>
-              <div className="text-xs text-emerald-200/80">Assinatura e conformidade legal</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Rodapé Esquerdo: Direitos e Versão */}
-        <div className="relative z-10 flex items-center justify-between text-xs text-white/60 pt-4 border-t border-white/10">
-          <span>© {new Date().getFullYear()} INEMA • SEMA Bahia</span>
-          <span className="font-mono text-[11px]">v2.6.4 (Homologação)</span>
+        {/* Logo Institucional Centralizado e Proeminente */}
+        <div className="relative z-10 flex flex-col items-center justify-center max-w-md text-center">
+          <img
+            src={logoHorizontalWhite}
+            alt="INEMA - Governo da Bahia"
+            className="h-24 sm:h-28 md:h-32 w-auto drop-shadow-xl"
+          />
         </div>
       </div>
 
@@ -205,13 +165,10 @@ export const SeiaV2LoginPage: React.FC<SeiaV2LoginPageProps> = ({ onLoginSuccess
             </p>
           </div>
 
-          {/* Seletor Rápido de Perfis Padrão (Demo Fill) */}
+          {/* Seletor Rápido de Perfis de Demonstração (Demo Fill) */}
           <div className="mb-6 p-3 bg-slate-50 dark:bg-slate-900/90 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2">
-            <div className="flex items-center justify-between text-[11px] font-semibold text-slate-600 dark:text-slate-400">
-              <span className="flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-[#0F4C3A] dark:text-emerald-400" />
-                Usuário Padrão de Demonstração:
-              </span>
+            <div className="flex items-center justify-between text-[11px] font-medium text-slate-600 dark:text-slate-400">
+              <span>Usuário Padrão de Demonstração:</span>
               <span className="text-[10px] text-slate-400">Clique para alternar</span>
             </div>
             <div className="grid grid-cols-3 gap-1.5">
@@ -345,7 +302,7 @@ export const SeiaV2LoginPage: React.FC<SeiaV2LoginPageProps> = ({ onLoginSuccess
 
           {/* Bloco de Serviços Públicos Cidadão */}
           <div className="space-y-3 text-center">
-            <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+            <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-normal">
               Não tem acesso ao sistema? Consulte licenças, registre uma denúncia ambiental ou uma emergência química no portal público.
             </p>
 
@@ -361,9 +318,9 @@ export const SeiaV2LoginPage: React.FC<SeiaV2LoginPageProps> = ({ onLoginSuccess
           </div>
         </div>
 
-        {/* Rodapé Direto Mobile */}
-        <div className="text-center lg:text-right text-[11px] text-slate-400 font-mono">
-          SEIA V2 • INEMA • Governo da Bahia
+        {/* Rodapé discreto em cantinho mostrando que a versão é ambiente de homologação / não oficial */}
+        <div className="text-center lg:text-right text-[10px] text-slate-400 dark:text-slate-600 font-mono">
+          Ambiente de Homologação / Demonstração • Versão não oficial
         </div>
       </div>
 
