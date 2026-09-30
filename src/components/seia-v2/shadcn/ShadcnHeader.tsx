@@ -177,9 +177,11 @@ export const ShadcnHeader: React.FC<HeaderProps> = ({
 
             <DropdownMenuSeparator className="bg-slate-100 dark:bg-slate-800 my-1" />
 
-            <DropdownMenuItem className="text-[var(--badge-critical-text)] focus:text-[var(--badge-critical-text)] focus:bg-[var(--badge-critical-bg)] cursor-pointer text-xs">
-              <LogOut className="w-3.5 h-3.5 text-[var(--color-status-critical)]" />
-              <span>Encerrar Sessão</span>
+            <DropdownMenuItem asChild className="text-[var(--badge-critical-text)] focus:text-[var(--badge-critical-text)] focus:bg-[var(--badge-critical-bg)] cursor-pointer text-xs">
+              <a href="/?rota=seia-v2&tela=login" className="flex items-center gap-2 w-full py-1 px-2">
+                <LogOut className="w-3.5 h-3.5 text-[var(--color-status-critical)]" />
+                <span>Encerrar Sessão / Trocar Usuário</span>
+              </a>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

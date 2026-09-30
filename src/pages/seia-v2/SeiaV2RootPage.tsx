@@ -27,6 +27,7 @@ import { CadastrosBasicosPage } from '@/pages/seia-v2/CadastrosBasicosPage';
 import { PautaEnquadramentoPage } from '@/pages/seia-v2/PautaEnquadramentoPage';
 import { ParametrizacoesMasterPage } from '@/pages/seia-v2/ParametrizacoesMasterPage';
 import { UsuariosRolesPage } from '@/pages/seia-v2/UsuariosRolesPage';
+import { SeiaV2LoginPage } from '@/pages/seia-v2/SeiaV2LoginPage';
 
 export const SeiaV2RootPage: React.FC = () => {
   const [activeSubRoute, setActiveSubRoute] = useState<string>('inicio');
@@ -36,6 +37,7 @@ export const SeiaV2RootPage: React.FC = () => {
     const params = new URLSearchParams(window.location.search);
     const tela = params.get('tela') || params.get('tab') || params.get('subrota');
     if (tela) {
+      if (tela === 'login' || tela === 'auth' || tela === 'entrar') return 'login';
       if (tela === 'formulario' || tela === 'form' || tela === 'novo') return 'formulario';
       if (tela === 'tabela' || tela === 'pauta' || tela === 'processos') return 'tabela';
       if (tela === 'seia-painel' || tela === 'painel') return 'seia-painel';
@@ -77,6 +79,9 @@ export const SeiaV2RootPage: React.FC = () => {
 
   const renderContent = () => {
     switch (activeSubRoute) {
+      case 'login':
+      case 'auth':
+        return <SeiaV2LoginPage onNavigate={handleNavigate} onLoginSuccess={() => handleNavigate('inicio')} />;
       case 'tabela':
         return <SeiaV2TabelaOperacionalPage onNavigate={handleNavigate} />;
       case 'formulario':
@@ -150,7 +155,9 @@ export const SeiaV2RootPage: React.FC = () => {
 
   return (
     <ThemeProvider>
-      {activeSubRoute === 'design-system' ? (
+      {activeSubRoute === 'login' || activeSubRoute === 'auth' ? (
+        <SeiaV2LoginPage onNavigate={handleNavigate} onLoginSuccess={() => handleNavigate('inicio')} />
+      ) : activeSubRoute === 'design-system' ? (
         <SeiaV2DesignSystemPage />
       ) : (
         <ShadcnAppShell activeRoute={activeSubRoute} onNavigate={handleNavigate}>
