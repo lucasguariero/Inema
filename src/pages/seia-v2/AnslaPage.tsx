@@ -11,6 +11,7 @@ import {
   HelpCircle,
   Eye,
   FileText,
+  MapPin,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -262,37 +263,42 @@ export const AnslaPage: React.FC<AnslaPageProps> = ({ onNavigate }) => {
           <FilamentWizard steps={wizardSteps} currentStep={wizardStep} onStepClick={setWizardStep} />
 
           {wizardStep === 1 && (
-            <Section title="1. Seleção da Atividade Dispensada" icon={<Building2 className="w-4 h-4 text-[#0F4C3A]" />}>
+            <Section title="1. Seleção da Atividade Dispensada" icon={<Building2 className="w-4 h-4 text-[#0F4C3A] dark:text-emerald-400" />}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <InputWrapper label="Tipologia da Atividade *" required>
-                  <select className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
-                    <option>Silos e Armazéns de Grãos até 10.000 t</option>
-                    <option>Usinas Solares Fotovoltaicas em Telhados / Coberturas</option>
-                    <option>Manutenção Periódica de Estradas Vicinais Sem Supressão</option>
-                    <option>Agroindústria Familiar de Polpa de Frutas</option>
+                <InputWrapper label="Tipologia da Atividade" required>
+                  <select className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 focus:outline-none dark:text-slate-100 cursor-pointer">
+                    <option value="silos">Silos e Armazéns de Grãos até 10.000 t</option>
+                    <option value="solar">Usinas Solares Fotovoltaicas em Telhados / Coberturas</option>
+                    <option value="vicinais">Manutenção Periódica de Estradas Vicinais Sem Supressão</option>
+                    <option value="agro">Agroindústria Familiar de Polpa de Frutas</option>
                   </select>
                 </InputWrapper>
-                <InputWrapper label="Município de Instalação *" required>
-                  <input type="text" defaultValue="Irecê" className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800" />
+                <InputWrapper label="Município de Instalação" required prefixIcon={MapPin}>
+                  <input
+                    type="text"
+                    defaultValue="Irecê"
+                    className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
+                    placeholder="Informe o município..."
+                  />
                 </InputWrapper>
               </div>
             </Section>
           )}
 
           {wizardStep === 2 && (
-            <Section title="2. Critérios de Não-Incidência Ambiental" icon={<CheckCircle2 className="w-4 h-4 text-[#0F4C3A]" />}>
+            <Section title="2. Critérios de Não-Incidência Ambiental" icon={<CheckCircle2 className="w-4 h-4 text-[#0F4C3A] dark:text-emerald-400" />}>
               <div className="space-y-3 text-xs">
-                <label className="flex items-center gap-2 p-3 border rounded-lg bg-slate-50 dark:bg-slate-800/40">
-                  <input type="checkbox" defaultChecked className="rounded text-[#0F4C3A]" />
-                  <span>A atividade não realizará supressão de vegetação nativa (ASV).</span>
+                <label className="flex items-center gap-3 p-3.5 border border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50/50 dark:bg-slate-850 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer">
+                  <input type="checkbox" defaultChecked className="rounded border-slate-300 dark:border-slate-700 text-[#0F4C3A] focus:ring-[#0F4C3A] w-4 h-4 cursor-pointer" />
+                  <span className="text-slate-700 dark:text-slate-300 font-medium">A atividade não realizará supressão de vegetação nativa (ASV).</span>
                 </label>
-                <label className="flex items-center gap-2 p-3 border rounded-lg bg-slate-50 dark:bg-slate-800/40">
-                  <input type="checkbox" defaultChecked className="rounded text-[#0F4C3A]" />
-                  <span>A atividade não está localizada em Área de Preservação Permanente (APP) ou Unidade de Conservação.</span>
+                <label className="flex items-center gap-3 p-3.5 border border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50/50 dark:bg-slate-850 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer">
+                  <input type="checkbox" defaultChecked className="rounded border-slate-300 dark:border-slate-700 text-[#0F4C3A] focus:ring-[#0F4C3A] w-4 h-4 cursor-pointer" />
+                  <span className="text-slate-700 dark:text-slate-300 font-medium">A atividade não está localizada em Área de Preservação Permanente (APP) ou Unidade de Conservação.</span>
                 </label>
-                <label className="flex items-center gap-2 p-3 border rounded-lg bg-slate-50 dark:bg-slate-800/40">
-                  <input type="checkbox" defaultChecked className="rounded text-[#0F4C3A]" />
-                  <span>A atividade não ultrapassa os limites de porte previstos no Decreto Estadual nº 14.024/2012.</span>
+                <label className="flex items-center gap-3 p-3.5 border border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50/50 dark:bg-slate-850 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer">
+                  <input type="checkbox" defaultChecked className="rounded border-slate-300 dark:border-slate-700 text-[#0F4C3A] focus:ring-[#0F4C3A] w-4 h-4 cursor-pointer" />
+                  <span className="text-slate-700 dark:text-slate-300 font-medium">A atividade não ultrapassa os limites de porte previstos no Decreto Estadual nº 14.024/2012.</span>
                 </label>
               </div>
             </Section>

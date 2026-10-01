@@ -32,6 +32,7 @@ import {
 } from '@/components/common/GlaTable';
 import { StatsOverviewWidget } from '@/components/filament/StatsOverviewWidget';
 import { SeiaV2Breadcrumb } from '@/components/seia-v2/SeiaV2Breadcrumb';
+import { Badge } from '@/components/ui/badge';
 import { MOCK_DAES, DaeItem } from '@/data/hibridoMock';
 
 interface SeiaDaesPageProps {
@@ -436,22 +437,19 @@ export const SeiaDaesPage: React.FC<SeiaDaesPageProps> = ({ onNavigate }) => {
                     {/* Situação */}
                     <GlaTd align="center">
                       {isPago && (
-                        <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800">
-                          <CheckCircle2 className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                          <span>Pago</span>
-                        </span>
+                        <Badge color="success" size="sm" dot>
+                          Pago
+                        </Badge>
                       )}
                       {isEmitido && (
-                        <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800">
-                          <Clock className="w-3 h-3 text-amber-600 dark:text-amber-400" />
-                          <span>Emitido</span>
-                        </span>
+                        <Badge color="warning" size="sm" dot>
+                          Emitido
+                        </Badge>
                       )}
                       {isVencido && (
-                        <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-800">
-                          <AlertTriangle className="w-3 h-3 text-rose-600 dark:text-rose-400" />
-                          <span>Vencido</span>
-                        </span>
+                        <Badge color="danger" size="sm" dot>
+                          Vencido
+                        </Badge>
                       )}
                     </GlaTd>
 

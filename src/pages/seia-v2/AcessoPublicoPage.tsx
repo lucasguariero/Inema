@@ -21,6 +21,7 @@ import {
 import { SeiaV2Breadcrumb } from '@/components/seia-v2/SeiaV2Breadcrumb';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { TableContainer, TableToolbar } from '@/components/filament';
 import {
   Dialog,
   DialogContent,
@@ -223,18 +224,19 @@ export const AcessoPublicoPage: React.FC<AcessoPublicoPageProps> = ({ onNavigate
     });
   }, [consultas, searchTerm, categoriaFilter]);
 
-  const getBadgeClass = (variant: ConsultaPublicaItem['categoriaVariant']) => {
+  const getBadgeColor = (variant: ConsultaPublicaItem['categoriaVariant']) => {
     switch (variant) {
-      case 'blue':
-        return 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800';
       case 'emerald':
-        return 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800';
-      case 'rose':
-        return 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800';
+        return 'success' as const;
       case 'amber':
-        return 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800';
+        return 'warning' as const;
+      case 'rose':
+        return 'danger' as const;
       case 'purple':
-        return 'bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-950/40 dark:text-indigo-300 dark:border-indigo-800';
+        return 'primary' as const;
+      case 'blue':
+      default:
+        return 'info' as const;
     }
   };
 
@@ -347,52 +349,35 @@ export const AcessoPublicoPage: React.FC<AcessoPublicoPageProps> = ({ onNavigate
       </div>
 
       {/* Histórico de Consultas (Card com Tabela do step01-portal.png) */}
-      <div id="tabela-consultas" className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-xs overflow-hidden">
-        {/* Header do Card com Barra de Busca */}
-        <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white dark:bg-slate-900">
-          <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">
-            Histórico de Consultas
-          </h2>
-
-          <div className="flex items-center gap-2">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
-              <input
-                type="text"
-                placeholder="Pesquisar portaria, município..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="h-9 pl-9 pr-7 text-xs sm:text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#0F4C3A] w-52 sm:w-64 transition-all"
-              />
-              {searchTerm && (
-                <button
-                  type="button"
-                  onClick={() => setSearchTerm('')}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+      <TableContainer
+        id="tabela-consultas"
+        heading="Histórico de Consultas"
+        description="Relação de portarias, licenças e atos expedidos disponíveis para consulta pública"
+        toolbar={
+          <TableToolbar
+            searchValue={searchTerm}
+            onSearchChange={setSearchTerm}
+            searchPlaceholder="Pesquisar portaria, município..."
+            actions={
+              <div className="flex items-center gap-2">
+                <select
+                  value={categoriaFilter}
+                  onChange={(e) => setCategoriaFilter(e.target.value)}
+                  className="h-9 px-2.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-[#0F4C3A] cursor-pointer"
                 >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              )}
-            </div>
-
-            <select
-              value={categoriaFilter}
-              onChange={(e) => setCategoriaFilter(e.target.value)}
-              className="h-9 px-2.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-[#0F4C3A] cursor-pointer"
-            >
-              <option value="todos">Todas categorias</option>
-              <option value="LP">LP – Licença Prévia</option>
-              <option value="LO">LO – Licença de Operação</option>
-              <option value="LU">LU – Licença Unificada</option>
-              <option value="ASV">ASV – Supressão Vegetal</option>
-              <option value="OUT">OUT – Outorga Hídrica</option>
-            </select>
-          </div>
-        </div>
-
-        {/* Tabela de Consultas Públicas */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+                  <option value="todos">Todas categorias</option>
+                  <option value="LP">LP – Licença Prévia</option>
+                  <option value="LO">LO – Licença de Operação</option>
+                  <option value="LU">LU – Licença Unificada</option>
+                  <option value="ASV">ASV – Supressão Vegetal</option>
+                  <option value="OUT">OUT – Outorga Hídrica</option>
+                </select>
+              </div>
+            }
+          />
+        }
+      >
+        <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/40 dark:bg-slate-800/20">
                 <th className="py-3.5 px-4 text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
@@ -437,15 +422,7 @@ export const AcessoPublicoPage: React.FC<AcessoPublicoPageProps> = ({ onNavigate
                     {/* Categoria */}
                     <td className="py-3.5 px-4 whitespace-nowrap">
                       <Badge
-                        color={
-                          item.categoriaVariant === 'emerald'
-                            ? 'success'
-                            : item.categoriaVariant === 'amber'
-                            ? 'warning'
-                            : item.categoriaVariant === 'rose'
-                            ? 'danger'
-                            : 'info'
-                        }
+                        color={getBadgeColor(item.categoriaVariant)}
                         size="xs"
                       >
                         {item.categoriaLabel}
@@ -508,8 +485,7 @@ export const AcessoPublicoPage: React.FC<AcessoPublicoPageProps> = ({ onNavigate
               )}
             </tbody>
           </table>
-        </div>
-      </div>
+      </TableContainer>
 
       {/* Modal 1: Detalhes da Portaria / Licença */}
       <Dialog open={!!selectedConsulta} onOpenChange={(open) => !open && setSelectedConsulta(null)}>
@@ -517,13 +493,9 @@ export const AcessoPublicoPage: React.FC<AcessoPublicoPageProps> = ({ onNavigate
           <DialogHeader className="pr-8">
             <div className="flex items-center gap-2 mb-1.5">
               {selectedConsulta && (
-                <span
-                  className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getBadgeClass(
-                    selectedConsulta.categoriaVariant
-                  )}`}
-                >
+                <Badge color={getBadgeColor(selectedConsulta.categoriaVariant)} size="sm">
                   {selectedConsulta.categoriaLabel}
-                </span>
+                </Badge>
               )}
               <span className="text-xs text-slate-400 font-mono">
                 Validade até {selectedConsulta?.encerramento}

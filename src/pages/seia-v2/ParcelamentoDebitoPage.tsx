@@ -293,7 +293,7 @@ export const ParcelamentoDebitoPage: React.FC<ParcelamentoDebitoPageProps> = ({ 
                   </div>
                   <span className="font-mono font-bold text-slate-900 dark:text-slate-100">R$ 16.000,00</span>
                 </div>
-                <div className="p-3 rounded-xl bg-emerald-50 dark:bg-slate-800 border border-emerald-200 flex justify-between font-bold text-emerald-950 dark:text-emerald-300">
+                <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 flex justify-between font-bold text-emerald-950 dark:text-emerald-300">
                   <span>Valor Total Consolidado do Débito:</span>
                   <span className="font-mono">R$ 48.000,00</span>
                 </div>
@@ -338,10 +338,10 @@ export const ParcelamentoDebitoPage: React.FC<ParcelamentoDebitoPageProps> = ({ 
           )}
 
           {wizardStep === 3 && (
-            <div className="bg-emerald-50 border border-emerald-200 p-8 rounded-2xl text-center space-y-4">
-              <CheckCircle2 className="w-12 h-12 text-emerald-600 mx-auto" />
-              <h3 className="text-base font-bold text-emerald-950">Acordo de Parcelamento Gerado com Sucesso!</h3>
-              <p className="text-xs text-emerald-800 max-w-md mx-auto">
+            <div className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200/80 dark:border-emerald-900/40 p-8 rounded-2xl text-center space-y-4">
+              <CheckCircle2 className="w-12 h-12 text-emerald-600 dark:text-emerald-400 mx-auto" />
+              <h3 className="text-base font-bold text-emerald-950 dark:text-emerald-100">Acordo de Parcelamento Gerado com Sucesso!</h3>
+              <p className="text-xs text-emerald-800 dark:text-emerald-300 max-w-md mx-auto">
                 O Termo de Compromisso e Confissão de Dívida e o carnê de DAEs em <strong>{numeroParcelas}x de R$ {valorParcela}</strong> estão disponíveis para download e pagamento.
               </p>
               <div className="flex justify-center gap-2">

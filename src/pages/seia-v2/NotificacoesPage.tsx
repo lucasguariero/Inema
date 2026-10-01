@@ -17,6 +17,8 @@ import {
 } from 'lucide-react';
 import { SeiaV2Breadcrumb } from '@/components/seia-v2/SeiaV2Breadcrumb';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { TableContainer } from '@/components/filament';
 import {
   Dialog,
   DialogContent,
@@ -398,7 +400,7 @@ export const NotificacoesPage: React.FC<NotificacoesPageProps> = ({ onNavigate }
       </div>
 
       {/* Tabela de Notificações Canônica do GLA */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-xs overflow-hidden">
+      <TableContainer noScroll>
         {/* Barra superior com Título e Ferramentas */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 border-b border-slate-100 dark:border-slate-800 relative bg-white dark:bg-slate-900">
           <div>
@@ -586,9 +588,9 @@ export const NotificacoesPage: React.FC<NotificacoesPageProps> = ({ onNavigate }
                     {/* Categoria */}
                     <td className="py-3.5 px-4 text-xs">
                       {item.categoria ? (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-normal">
+                        <Badge color="gray" size="xs">
                           {item.categoria}
-                        </span>
+                        </Badge>
                       ) : null}
                     </td>
 
@@ -600,10 +602,14 @@ export const NotificacoesPage: React.FC<NotificacoesPageProps> = ({ onNavigate }
                     {/* Status */}
                     <td className="py-3.5 px-4 text-xs">
                       {item.isRead ? (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-normal">
+                        <Badge color="gray" size="xs">
                           Lida
-                        </span>
-                      ) : null}
+                        </Badge>
+                      ) : (
+                        <Badge color="warning" size="xs" dot>
+                          Não lida
+                        </Badge>
+                      )}
                     </td>
 
                     {/* Ações */}
@@ -722,7 +728,7 @@ export const NotificacoesPage: React.FC<NotificacoesPageProps> = ({ onNavigate }
             </div>
           </div>
         </div>
-      </div>
+      </TableContainer>
 
       {/* Modal / Dialog de Detalhes da Notificação */}
       <Dialog open={!!selectedNotification} onOpenChange={(open) => !open && setSelectedNotification(null)}>
@@ -730,18 +736,18 @@ export const NotificacoesPage: React.FC<NotificacoesPageProps> = ({ onNavigate }
           <DialogHeader className="pr-8">
             <div className="flex flex-wrap items-center gap-2 mb-1.5">
               {selectedNotification?.categoria && (
-                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                <Badge color="gray" size="xs">
                   {selectedNotification.categoria}
-                </span>
+                </Badge>
               )}
               {selectedNotification?.isRead ? (
-                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                <Badge color="gray" size="xs">
                   Lida
-                </span>
+                </Badge>
               ) : (
-                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 font-medium">
+                <Badge color="warning" size="xs" dot>
                   Nova Notificação
-                </span>
+                </Badge>
               )}
               <span className="text-xs text-slate-400 dark:text-slate-500 font-mono">
                 • {selectedNotification?.recebidaEm}
