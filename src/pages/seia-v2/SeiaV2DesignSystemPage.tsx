@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   AlertCircle,
   AlertTriangle,
@@ -231,6 +231,10 @@ const Specimen: React.FC<{
 );
 
 export const SeiaV2DesignSystemPage: React.FC = () => {
+  const [activeSection, setActiveSection] = useState<string>('overview');
+  const isClickScrollingRef = useRef(false);
+  const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [navFilter, setNavFilter] = useState('');
@@ -265,14 +269,62 @@ export const SeiaV2DesignSystemPage: React.FC = () => {
   };
 
   const jumpTo = (id: string) => {
+    setActiveSection(id);
+    isClickScrollingRef.current = true;
+    if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
+    clickTimeoutRef.current = setTimeout(() => {
+      isClickScrollingRef.current = false;
+    }, 1000);
+
     const target = document.getElementById(id);
     const container = document.getElementById('design-system-content');
     if (target && container) {
-      const top = target.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop - 24;
-      container.scrollTo({ top, behavior: 'smooth' });
+      const containerRect = container.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+      const offsetTop = targetRect.top - containerRect.top + container.scrollTop - 20;
+      container.scrollTo({ top: offsetTop, behavior: 'smooth' });
     }
     setIsMobileSidebarOpen(false);
   };
+
+  useEffect(() => {
+    const container = document.getElementById('design-system-content');
+    if (!container) return;
+
+    const handleScroll = () => {
+      if (isClickScrollingRef.current) return;
+
+      // Se estiver muito próximo ao fim do scroll, ativar a última seção
+      if (container.scrollHeight - container.scrollTop <= container.clientHeight + 80) {
+        setActiveSection(catalogSections[catalogSections.length - 1].id);
+        return;
+      }
+
+      const containerRect = container.getBoundingClientRect();
+      const triggerPoint = containerRect.top + 80;
+
+      let currentActive = catalogSections[0].id;
+      for (const section of catalogSections) {
+        const el = document.getElementById(section.id);
+        if (el) {
+          const elRect = el.getBoundingClientRect();
+          if (elRect.top <= triggerPoint) {
+            currentActive = section.id;
+          }
+        }
+      }
+
+      setActiveSection(currentActive);
+    };
+
+    container.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      container.removeEventListener('scroll', handleScroll);
+      if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
+    };
+  }, []);
 
   const toggleSidebar = () => {
     if (window.innerWidth < 1024) {
@@ -351,6 +403,7 @@ export const SeiaV2DesignSystemPage: React.FC = () => {
               <div className="hidden space-y-1 lg:block">
                 {Object.entries(groupedSections).map(([group, sections]) => {
                   const GroupIcon = catalogGroupIcons[group] || Boxes;
+                  const isGroupActive = sections.some((s) => s.id === activeSection);
                   return (
                     <button
                       key={group}
@@ -358,7 +411,12 @@ export const SeiaV2DesignSystemPage: React.FC = () => {
                       title={group}
                       aria-label={group}
                       onClick={() => jumpTo(sections[0].id)}
-                      className="flex h-10 w-full items-center justify-center rounded-lg text-[var(--nav-item-text)] transition-colors hover:bg-[var(--nav-item-hover-bg)] hover:text-[var(--nav-item-selected-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-green-alpha-32)]"
+                      className={cn(
+                        'flex h-10 w-full items-center justify-center rounded-lg transition-colors cursor-pointer',
+                        isGroupActive
+                          ? 'bg-[var(--nav-item-selected-bg)] text-[var(--nav-item-selected-text)] shadow-2xs dark:bg-emerald-950/60 dark:text-emerald-300'
+                          : 'text-[var(--nav-item-text)] hover:bg-[var(--nav-item-hover-bg)] hover:text-[var(--nav-item-selected-text)]'
+                      )}
                     >
                       <GroupIcon className="h-4 w-4" />
                     </button>
@@ -371,15 +429,27 @@ export const SeiaV2DesignSystemPage: React.FC = () => {
                   <div key={group}>
                     <p className="mb-1.5 px-2 text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--color-text-tertiary)]">{group}</p>
                     <div className="space-y-0.5">
-                      {sections.map((section) => (
-                        <button
-                          key={section.id}
-                          onClick={() => jumpTo(section.id)}
-                          className="w-full rounded-lg px-2 py-1.5 text-left text-xs font-medium text-[var(--nav-item-text)] transition-colors hover:bg-[var(--nav-item-hover-bg)] hover:text-[var(--nav-item-selected-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-green-alpha-32)]"
-                        >
-                          {section.label}
-                        </button>
-                      ))}
+                      {sections.map((section) => {
+                        const isActive = activeSection === section.id;
+                        return (
+                          <button
+                            key={section.id}
+                            type="button"
+                            onClick={() => jumpTo(section.id)}
+                            className={cn(
+                              'group flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-left text-xs transition-all duration-150 cursor-pointer',
+                              isActive
+                                ? 'bg-[var(--nav-item-selected-bg)] font-semibold text-[var(--nav-item-selected-text)] shadow-2xs dark:bg-emerald-950/60 dark:text-emerald-300 dark:border dark:border-emerald-800/60'
+                                : 'font-medium text-[var(--nav-item-text)] hover:bg-[var(--nav-item-hover-bg)] hover:text-[var(--nav-item-selected-text)]'
+                            )}
+                          >
+                            <span className="truncate">{section.label}</span>
+                            {isActive && (
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#0F4C3A] dark:bg-emerald-400 shrink-0" />
+                            )}
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                 ))}
