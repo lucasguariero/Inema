@@ -379,41 +379,37 @@ export const SeiaV2DesignSystemPage: React.FC = () => {
             isSidebarCollapsed ? 'lg:w-16' : 'lg:w-72'
           )}
         >
-          <div className={cn('border-b border-[var(--color-border-subtle)] px-4 py-3.5', isSidebarCollapsed && 'lg:px-2')}>
-            {isSidebarCollapsed ? (
-              <div className="hidden h-9 items-center justify-center rounded-lg bg-[var(--nav-item-selected-bg)] text-xs font-black text-[var(--nav-item-selected-text)] lg:flex">DS</div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-[#0F4C3A] dark:bg-emerald-400" />
-                <p className="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200">Catálogo de Padrões</p>
-              </div>
-            )}
-          </div>
-
           <nav aria-label="Seções do design system" className={cn('flex-1 overflow-y-auto p-3 custom-scrollbar', isSidebarCollapsed && 'lg:px-2')}>
             {isSidebarCollapsed ? (
-              <div className="hidden space-y-1 lg:block">
-                {Object.entries(groupedSections).map(([group, sections]) => {
-                  const GroupIcon = catalogGroupIcons[group] || Boxes;
-                  const isGroupActive = sections.some((s) => s.id === activeSection);
-                  return (
-                    <button
-                      key={group}
-                      type="button"
-                      title={group}
-                      aria-label={group}
-                      onClick={() => jumpTo(sections[0].id)}
-                      className={cn(
-                        'flex h-10 w-full items-center justify-center rounded-lg transition-colors cursor-pointer',
-                        isGroupActive
-                          ? 'bg-[var(--nav-item-selected-bg)] text-[var(--nav-item-selected-text)] shadow-2xs dark:bg-emerald-950/60 dark:text-emerald-300'
-                          : 'text-[var(--nav-item-text)] hover:bg-[var(--nav-item-hover-bg)] hover:text-[var(--nav-item-selected-text)]'
-                      )}
-                    >
-                      <GroupIcon className="h-4 w-4" />
-                    </button>
-                  );
-                })}
+              <div className="hidden space-y-3 lg:block">
+                {Object.entries(groupedSections).map(([group, sections], groupIndex) => (
+                  <div key={group} className="space-y-1">
+                    {groupIndex > 0 && (
+                      <div className="my-2 border-t border-[var(--color-border-subtle)]/70 mx-1.5" />
+                    )}
+                    {sections.map((section) => {
+                      const SectionIcon = section.icon || Boxes;
+                      const isActive = activeSection === section.id;
+                      return (
+                        <button
+                          key={section.id}
+                          type="button"
+                          title={section.label}
+                          aria-label={section.label}
+                          onClick={() => jumpTo(section.id)}
+                          className={cn(
+                            'flex h-9 w-9 mx-auto items-center justify-center rounded-lg transition-colors cursor-pointer',
+                            isActive
+                              ? 'bg-[var(--nav-item-selected-bg)] text-[var(--nav-item-selected-text)] shadow-2xs dark:bg-emerald-950/60 dark:text-emerald-300'
+                              : 'text-[var(--nav-item-text)] hover:bg-[var(--nav-item-hover-bg)] hover:text-[var(--nav-item-selected-text)]'
+                          )}
+                        >
+                          <SectionIcon className="h-4 w-4" />
+                        </button>
+                      );
+                    })}
+                  </div>
+                ))}
               </div>
             ) : (
               <div className="space-y-4">
