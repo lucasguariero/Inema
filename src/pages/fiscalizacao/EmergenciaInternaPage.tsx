@@ -259,10 +259,12 @@ export const EmergenciaInternaPage: React.FC<{ onNavigate?: (route: string) => v
             <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
               Cadastro de Emergência Química Interna (DOR003)
             </h1>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-900 text-rose-700 dark:text-rose-300 text-xs font-mono font-bold shadow-2xs">
-              <Flame className="w-3.5 h-3.5 text-rose-600" />
-              <span>Nº do Registro: {protocoloREGerado || numeroREProvisorio}</span>
-            </div>
+            {registroFinalizado && (
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-900 text-emerald-700 dark:text-emerald-300 text-xs font-mono font-bold shadow-2xs">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Nº do Registro: {protocoloREGerado}</span>
+              </div>
+            )}
           </div>
           <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 mt-1">
             Atendimento emergencial a acidentes com produtos perigosos — Gestão DIFIS/INEMA.

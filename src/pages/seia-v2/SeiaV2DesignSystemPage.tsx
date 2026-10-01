@@ -58,6 +58,14 @@ import {
   UserRound,
   Users,
   X,
+  Palette,
+  Type,
+  Tag,
+  FolderKanban,
+  Compass,
+  Table as TableIcon,
+  GitFork,
+  Layout,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -109,26 +117,27 @@ type CatalogSection = {
   id: string;
   label: string;
   group: string;
+  icon: React.ElementType;
 };
 
 const catalogSections: CatalogSection[] = [
-  { id: 'overview', label: 'Visão geral', group: 'Começar' },
-  { id: 'brand', label: 'Marca e assets', group: 'Fundações' },
-  { id: 'colors', label: 'Cores e tokens', group: 'Fundações' },
-  { id: 'typography', label: 'Tipografia', group: 'Fundações' },
-  { id: 'spacing', label: 'Espaçamento e forma', group: 'Fundações' },
-  { id: 'icons', label: 'Ícones', group: 'Fundações' },
-  { id: 'buttons', label: 'Botões', group: 'Componentes' },
-  { id: 'fields', label: 'Campos e seleção', group: 'Componentes' },
-  { id: 'badges', label: 'Badges e estados', group: 'Componentes' },
-  { id: 'cards', label: 'Cards e métricas', group: 'Componentes' },
-  { id: 'navigation', label: 'Navegação', group: 'Componentes' },
-  { id: 'table', label: 'Tabelas', group: 'Componentes' },
-  { id: 'wizard', label: 'Wizard', group: 'Componentes' },
-  { id: 'feedback', label: 'Feedback e overlays', group: 'Componentes' },
-  { id: 'patterns', label: 'Padrões de página', group: 'Composições' },
-  { id: 'templates', label: 'Templates de telas', group: 'Composições' },
-  { id: 'accessibility', label: 'Acessibilidade', group: 'Diretrizes' },
+  { id: 'overview', label: 'Visão geral', group: 'Começar', icon: LayoutDashboard },
+  { id: 'brand', label: 'Marca e assets', group: 'Fundações', icon: Sparkles },
+  { id: 'colors', label: 'Cores e tokens', group: 'Fundações', icon: Palette },
+  { id: 'typography', label: 'Tipografia', group: 'Fundações', icon: Type },
+  { id: 'spacing', label: 'Espaçamento e forma', group: 'Fundações', icon: SlidersHorizontal },
+  { id: 'icons', label: 'Ícones', group: 'Fundações', icon: Award },
+  { id: 'buttons', label: 'Botões', group: 'Componentes', icon: Plus },
+  { id: 'fields', label: 'Campos e seleção', group: 'Componentes', icon: Edit3 },
+  { id: 'badges', label: 'Badges e estados', group: 'Componentes', icon: Tag },
+  { id: 'cards', label: 'Cards e métricas', group: 'Componentes', icon: FolderKanban },
+  { id: 'navigation', label: 'Navegação', group: 'Componentes', icon: Compass },
+  { id: 'table', label: 'Tabelas', group: 'Componentes', icon: TableIcon },
+  { id: 'wizard', label: 'Wizard', group: 'Componentes', icon: GitFork },
+  { id: 'feedback', label: 'Feedback e overlays', group: 'Componentes', icon: AlertCircle },
+  { id: 'patterns', label: 'Padrões de página', group: 'Composições', icon: Layout },
+  { id: 'templates', label: 'Templates de telas', group: 'Composições', icon: Layers },
+  { id: 'accessibility', label: 'Acessibilidade', group: 'Diretrizes', icon: CheckCircle2 },
 ];
 
 const catalogGroupIcons: Record<string, React.ElementType> = {
@@ -370,31 +379,14 @@ export const SeiaV2DesignSystemPage: React.FC = () => {
             isSidebarCollapsed ? 'lg:w-16' : 'lg:w-72'
           )}
         >
-          <div className={cn('border-b border-[var(--color-border-subtle)] p-3', isSidebarCollapsed && 'lg:px-2')}>
+          <div className={cn('border-b border-[var(--color-border-subtle)] px-4 py-3.5', isSidebarCollapsed && 'lg:px-2')}>
             {isSidebarCollapsed ? (
               <div className="hidden h-9 items-center justify-center rounded-lg bg-[var(--nav-item-selected-bg)] text-xs font-black text-[var(--nav-item-selected-text)] lg:flex">DS</div>
             ) : (
-              <>
-                <div className="mb-3 px-1">
-                  <p className="text-sm font-bold text-[var(--color-text-primary)]">Design System</p>
-                  <p className="text-[10px] font-medium text-[var(--color-text-tertiary)]">SEIA Plataforma · v1.0</p>
-                </div>
-                <div className="relative">
-                  <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[var(--color-text-tertiary)]" />
-                  <input
-                    value={navFilter}
-                    onChange={(event) => setNavFilter(event.target.value)}
-                    placeholder="Filtrar catálogo"
-                    className={cn(fieldClass, 'h-8 pl-8 pr-8 text-xs')}
-                    aria-label="Filtrar seções do design system"
-                  />
-                  {navFilter && (
-                    <button onClick={() => setNavFilter('')} className={cn('absolute right-2.5 top-1/2 -translate-y-1/2 rounded text-[var(--color-text-tertiary)]', focusRing)} aria-label="Limpar filtro">
-                      <X className="h-3.5 w-3.5" />
-                    </button>
-                  )}
-                </div>
-              </>
+              <div className="flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-[#0F4C3A] dark:bg-emerald-400" />
+                <p className="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200">Catálogo de Padrões</p>
+              </div>
             )}
           </div>
 
@@ -431,6 +423,7 @@ export const SeiaV2DesignSystemPage: React.FC = () => {
                     <div className="space-y-0.5">
                       {sections.map((section) => {
                         const isActive = activeSection === section.id;
+                        const SectionIcon = section.icon || Boxes;
                         return (
                           <button
                             key={section.id}
@@ -443,7 +436,10 @@ export const SeiaV2DesignSystemPage: React.FC = () => {
                                 : 'font-medium text-[var(--nav-item-text)] hover:bg-[var(--nav-item-hover-bg)] hover:text-[var(--nav-item-selected-text)]'
                             )}
                           >
-                            <span className="truncate">{section.label}</span>
+                            <span className="flex items-center gap-2 truncate">
+                              <SectionIcon className={cn('h-3.5 w-3.5 shrink-0 transition-colors', isActive ? 'text-[#0F4C3A] dark:text-emerald-400' : 'text-slate-400 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300')} />
+                              <span className="truncate">{section.label}</span>
+                            </span>
                             {isActive && (
                               <span className="w-1.5 h-1.5 rounded-full bg-[#0F4C3A] dark:bg-emerald-400 shrink-0" />
                             )}

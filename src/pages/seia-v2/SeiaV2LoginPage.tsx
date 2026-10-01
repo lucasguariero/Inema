@@ -158,72 +158,54 @@ export const SeiaV2LoginPage: React.FC<SeiaV2LoginPageProps> = ({ onLoginSuccess
           {/* Gradiente Institucional Degradê Suave */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#041A14] via-[#0A3327]/90 to-[#07251C]/95 backdrop-blur-[2px]" />
 
-          {/* Container Central com Animação Fluida */}
+          {/* Container Central com Animação Fluida & Minimalista */}
           <div className="relative z-10 flex flex-col items-center justify-center max-w-[430px] w-full px-6 animate-in fade-in zoom-in-95 duration-400 ease-out text-center">
-            {/* Logo Central com Brilho Suave */}
-            <div className="relative mb-6">
-              <div className="absolute -inset-4 rounded-full bg-emerald-500/15 blur-2xl pointer-events-none" />
+            {/* Logo Central (10% menor) */}
+            <div className="relative mb-8">
               <img
                 src={logoHorizontalWhite}
                 alt="INEMA - Governo da Bahia"
-                className="relative h-22 sm:h-26 md:h-30 w-auto drop-shadow-[0_10px_25px_rgba(0,0,0,0.5)]"
+                className="relative h-14 sm:h-18 md:h-20 w-auto drop-shadow-[0_8px_20px_rgba(0,0,0,0.4)]"
               />
             </div>
 
-            {/* Subtítulo Institucional Minimalista */}
-            <p className="text-[11px] font-mono tracking-widest uppercase text-emerald-200/75 font-semibold mb-6">
-              Sistema Estadual de Informações Ambientais
-            </p>
-
-            {/* Card de Progresso Moderno e Translúcido */}
-            <div className="w-full bg-white/[0.08] backdrop-blur-md rounded-2xl p-5 border border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.4)]">
-              {/* Status e Porcentagem */}
-              <div className="w-full flex items-center justify-between text-xs mb-3">
-                <div className="flex items-center gap-2 text-emerald-100 font-medium">
-                  {transitionProgress === 100 ? (
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 animate-in zoom-in duration-200" />
-                  ) : (
-                    <Loader2 className="w-4 h-4 text-emerald-300 animate-spin" />
-                  )}
-                  <span className="truncate max-w-[320px] text-left text-xs">
-                    {transitionStatus}
-                  </span>
-                </div>
-                <span className="font-mono text-xs font-bold text-emerald-300 tabular-nums">
-                  {transitionProgress}%
-                </span>
-              </div>
-
-              {/* Barra de Progresso com Shimmer e Glow */}
-              <div className="w-full h-2.5 bg-black/40 rounded-full overflow-hidden p-0.5 border border-white/10 relative shadow-inner">
-                <div
-                  className="h-full rounded-full bg-gradient-to-r from-[#0F4C3A] via-emerald-500 to-emerald-300 transition-all duration-400 ease-out relative shadow-[0_0_14px_rgba(52,211,153,0.65)] overflow-hidden"
-                  style={{ width: `${Math.max(6, transitionProgress)}%` }}
-                >
-                  {/* Linha de reflexo / brilho móvel */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-seia-shimmer" />
-                </div>
-              </div>
-
-              {/* Etapas de Validação (Micro-Badges Institucionais) */}
-              <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-emerald-200/60 font-mono">
-                <span className={transitionProgress >= 15 ? 'text-emerald-300 font-semibold' : ''}>
-                  • Credenciais
-                </span>
-                <span className={transitionProgress >= 42 ? 'text-emerald-300 font-semibold' : ''}>
-                  • Perfil
-                </span>
-                <span className={transitionProgress >= 75 ? 'text-emerald-300 font-semibold' : ''}>
-                  • Módulos
-                </span>
-                <span className={transitionProgress === 100 ? 'text-emerald-400 font-semibold' : ''}>
-                  • Acesso
-                </span>
-              </div>
+            {/* Spinner Elegante em Branco (Inspirado no loader orbital suave) */}
+            <div className="relative flex items-center justify-center w-14 h-14 mb-5">
+              {/* Pulso orbital suave */}
+              <div className="absolute inset-0 rounded-full border-2 border-white/20 animate-ping opacity-25" />
+              {/* Spinner circular fino em branco puro */}
+              <svg className="w-12 h-12 animate-spin text-white" viewBox="0 0 50 50">
+                <circle
+                  className="opacity-20"
+                  cx="25"
+                  cy="25"
+                  r="20"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  fill="none"
+                />
+                <circle
+                  className="opacity-95"
+                  cx="25"
+                  cy="25"
+                  r="20"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  strokeDasharray="75"
+                  strokeDashoffset="55"
+                  strokeLinecap="round"
+                  fill="none"
+                />
+              </svg>
             </div>
 
+            {/* Texto de Status Sóbrio Institucional */}
+            <p className="text-xs font-mono tracking-wider uppercase text-emerald-100/85 font-medium">
+              {transitionStatus || 'Iniciando ambiente seguro...'}
+            </p>
+
             {/* Rodapé Institucional */}
-            <p className="mt-6 text-[10px] tracking-wider uppercase text-emerald-200/40 font-medium">
+            <p className="mt-8 text-[10px] tracking-wider uppercase text-emerald-200/40 font-medium">
               Governo do Estado da Bahia • INEMA
             </p>
           </div>

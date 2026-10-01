@@ -14,7 +14,9 @@ import {
   Clock,
   Download,
   AlertCircle,
-  FileCheck
+  FileCheck,
+  Eye,
+  SearchCheck
 } from 'lucide-react';
 import { SeiaV2Breadcrumb } from '@/components/seia-v2/SeiaV2Breadcrumb';
 import { Button } from '@/components/ui/button';
@@ -261,19 +263,28 @@ export const AcessoPublicoPage: React.FC<AcessoPublicoPageProps> = ({ onNavigate
       <div className="flex flex-wrap items-center gap-3">
         <Button
           variant="primary"
-          onClick={() => onNavigate?.('cidadao')}
-          className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs sm:text-sm h-10 px-4 font-medium shadow-2xs gap-2 cursor-pointer"
+          onClick={() => (onNavigate ? onNavigate('consulta-externa') : (window.location.href = '/?rota=seia-v2&tela=consulta-externa'))}
+          className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs sm:text-sm h-10 px-4 font-semibold shadow-2xs gap-2 cursor-pointer"
         >
-          <Megaphone className="w-4 h-4" />
+          <SearchCheck className="w-4 h-4" />
+          <span>Acompanhar Registros</span>
+        </Button>
+
+        <Button
+          variant="outline"
+          onClick={() => onNavigate?.('cidadao')}
+          className="border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-xs sm:text-sm h-10 px-4 font-medium hover:bg-slate-50 dark:hover:bg-slate-800 shadow-2xs gap-2 cursor-pointer"
+        >
+          <Megaphone className="w-4 h-4 text-emerald-700 dark:text-emerald-400" />
           <span>Registrar Denúncia Ambiental</span>
         </Button>
 
         <Button
-          variant="primary"
+          variant="outline"
           onClick={() => onNavigate?.('emergencia-externa')}
-          className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs sm:text-sm h-10 px-4 font-medium shadow-2xs gap-2 cursor-pointer"
+          className="border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-xs sm:text-sm h-10 px-4 font-medium hover:bg-slate-50 dark:hover:bg-slate-800 shadow-2xs gap-2 cursor-pointer"
         >
-          <FlaskConical className="w-4 h-4" />
+          <FlaskConical className="w-4 h-4 text-rose-600 dark:text-rose-400" />
           <span>Registrar Emergência Química</span>
         </Button>
 
@@ -425,13 +436,20 @@ export const AcessoPublicoPage: React.FC<AcessoPublicoPageProps> = ({ onNavigate
                   >
                     {/* Categoria */}
                     <td className="py-3.5 px-4 whitespace-nowrap">
-                      <span
-                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getBadgeClass(
-                          item.categoriaVariant
-                        )}`}
+                      <Badge
+                        color={
+                          item.categoriaVariant === 'emerald'
+                            ? 'success'
+                            : item.categoriaVariant === 'amber'
+                            ? 'warning'
+                            : item.categoriaVariant === 'rose'
+                            ? 'danger'
+                            : 'info'
+                        }
+                        size="xs"
                       >
                         {item.categoriaLabel}
-                      </span>
+                      </Badge>
                     </td>
 
                     {/* Portaria */}
@@ -475,14 +493,15 @@ export const AcessoPublicoPage: React.FC<AcessoPublicoPageProps> = ({ onNavigate
 
                     {/* Ações */}
                     <td className="py-3.5 px-4 text-right whitespace-nowrap">
-                      <button
-                        type="button"
+                      <Button
+                        variant="outline"
+                        size="xs"
                         onClick={() => setSelectedConsulta(item)}
-                        className="text-xs font-semibold text-slate-700 hover:text-[#0F4C3A] dark:text-slate-300 dark:hover:text-emerald-400 inline-flex items-center gap-1 cursor-pointer transition-colors"
+                        className="h-7 text-xs font-medium text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:text-[#0F4C3A] dark:hover:text-emerald-400 cursor-pointer"
                       >
-                        <span>Ver detalhes</span>
-                        <span>→</span>
-                      </button>
+                        <Eye className="w-3.5 h-3.5 mr-1 text-slate-500" />
+                        <span>Visualizar</span>
+                      </Button>
                     </td>
                   </tr>
                 ))

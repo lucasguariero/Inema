@@ -162,3 +162,13 @@ Toda entrega de protótipo deve fornecer no relatório:
 
 - **Timeouts Rígidos e Auto-Encerramento**: É terminantemente proibido deixar scripts rodando soltos ou aguardar sem controle. Qualquer script (Playwright, crawler, build, preview) deve conter timeout máximo explícito (1 a 3 minutos), matar seus servidores filhos e chamar `process.exit(0)`.
 - **Estimativa e Conferência Ativa**: Ao disparar qualquer tarefa assíncrona, estipular a estimativa de tempo e checar imediatamente o término, validando o output sem deixar processos pendentes de uma sessão para outra.
+
+---
+
+## 10. Checklist de Lembrete Mandatório do Usuário (Pendências Pós-Execução)
+
+O usuário determinou explicitamente que, após a criação e execução dos planos de instrução, as seguintes revisões devem ser lembradas e executadas com prioridade máxima:
+- [ ] **[REVISAR TODAS AS PÁGINAS]**: Inspeção profunda e confronto visual/conteúdo com o GLA legado em 100% das telas do sistema, aplicando a componentização oficial.
+- [ ] **REVISAR BREADCRUMBS E ROTAS**: Garantir que toda página tenha trilha de breadcrumb contextual íntegra (`SeiaV2Breadcrumb`) e mapeamento canônico de rota URL.
+- [ ] **REVISAR ITENS DO SIDEBAR**: Conferir categorizações, títulos, ícones, visibilidade por escopo e garantia de que nenhum item interno/desenvolvimento (Roteiro, Design System, Card Sorting) esteja exposto.
+

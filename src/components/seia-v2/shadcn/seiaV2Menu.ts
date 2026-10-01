@@ -171,7 +171,6 @@ export const SEIA_V2_MENU_GROUPS: MenuGroup[] = [
     items: [
       { id: 'rel-gerenciais-bi', label: 'Relatórios Gerenciais & Indicadores', href: seiaHref('relatorios'), route: 'relatorios' },
       { id: 'rel-metricas-analista', label: 'Métricas do Analista', href: seiaHref('seia-painel'), route: 'seia-painel' },
-      { id: 'rel-roteiro-apresentacao', label: 'Roteiro de Apresentação (Call Thays)', href: seiaHref('apresentacao'), route: 'apresentacao', badge: 'Guia', badgeVariant: 'sage' },
     ],
   },
   {
@@ -235,17 +234,5 @@ export const SEIA_V2_MENU_GROUPS: MenuGroup[] = [
       { id: 'admin-pf', label: 'Pessoas Físicas', href: seiaHref('admin-pf'), route: 'admin-pf' },
       { id: 'admin-atos-ambientais', label: 'Atos Ambientais & Portarias', href: seiaHref('atos-ambientais'), route: 'atos-ambientais' },
     ],
-  },
-  {
-    id: 'design-system',
-    label: 'Design System',
-    section: 'Configuração do Sistema',
-    icon: 'Layers',
-    route: 'design-system',
-    href: seiaHref('design-system'),
-    isDirectItem: true,
-    badge: 'V2',
-    badgeVariant: 'sage',
-    items: [],
   },
 ];

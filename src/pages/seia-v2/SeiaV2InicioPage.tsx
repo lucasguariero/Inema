@@ -280,7 +280,9 @@ export const SeiaV2InicioPage: React.FC<SeiaV2InicioPageProps> = ({ onNavigate }
           {/* Card Header no padrão do Design System */}
           <div className="flex items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800/80 px-6 py-4 bg-slate-50/50 dark:bg-slate-800/30">
             <div className="flex items-center gap-2.5 flex-wrap">
-              <Badge color="primary" size="sm">COMUNICADO OFICIAL</Badge>
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-[11px] font-bold tracking-wide uppercase bg-[#0F4C3A] text-white dark:bg-emerald-700 dark:text-white shadow-2xs">
+                COMUNICADO OFICIAL
+              </span>
               <span className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300">
                 Portaria Conjunta INEMA nº 25.753/2022
               </span>

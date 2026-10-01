@@ -618,92 +618,96 @@ export const RoteiroApresentacaoPage: React.FC<{ onNavigate?: (route: string) =>
                             : 'hover:bg-slate-50/50 dark:hover:bg-slate-800/20'
                         )}
                       >
-                        <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
-                          {/* CHECKBOX & TÍTULO */}
-                          <div className="flex items-start gap-3 flex-1 min-w-0">
-                            <button
-                              type="button"
-                              onClick={() => toggleCheck(item.id)}
-                              className="mt-1 shrink-0 cursor-pointer focus:outline-none"
-                              aria-label={`Marcar ${item.titulo} como concluído`}
-                            >
-                              {isChecked ? (
-                                <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                              ) : (
-                                <Circle className="w-5 h-5 text-slate-300 dark:text-slate-600 hover:text-slate-500 transition-colors" />
-                              )}
-                            </button>
-
-                            <div className="space-y-3 flex-1 min-w-0">
-                              <div className="flex flex-wrap items-center gap-2">
-                                <h3
+                        {/* GRID DE DUAS COLUNAS LADO A LADO */}
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
+                          {/* COLUNA 1 (ESQUERDA): CHECKBOX, TÍTULO, ABRIR TELA & O QUE MOSTRAR */}
+                          <div className="space-y-4">
+                            <div className="flex items-start justify-between gap-3">
+                              <div className="flex items-start gap-3 min-w-0">
+                                <button
+                                  type="button"
                                   onClick={() => toggleCheck(item.id)}
-                                  className={cn(
-                                    'text-sm sm:text-base font-bold cursor-pointer transition-colors',
-                                    isChecked
-                                      ? 'line-through text-slate-400 dark:text-slate-500'
-                                      : 'text-slate-900 dark:text-slate-100 hover:text-[#0F4C3A]'
-                                  )}
+                                  className="mt-0.5 shrink-0 cursor-pointer focus:outline-none"
+                                  aria-label={`Marcar ${item.titulo} como concluído`}
                                 >
-                                  {item.titulo}
-                                </h3>
-                                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-semibold">
-                                  {item.tempoSugerido}
-                                </span>
-                                <Badge color="gray" dot size="xs">
-                                  {item.tagMapeada}
-                                </Badge>
-                              </div>
-
-                              {/* O QUE FALAR (SCRIPT FALADO NA VOZ DO LUCAS) */}
-                              <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 space-y-1.5">
-                                <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-[#0F4C3A] dark:text-emerald-400">
-                                  <MessageSquareQuote className="w-3.5 h-3.5" />
-                                  <span>Como você vai falar (Direto ao ponto):</span>
-                                </div>
-                                <p className="text-xs sm:text-sm text-slate-800 dark:text-slate-200 leading-relaxed italic font-normal">
-                                  {item.oQueFalar}
-                                </p>
-                              </div>
-
-                              {/* O QUE MOSTRAR & CLICAR */}
-                              <div className="space-y-1.5">
-                                <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                                  <MousePointerClick className="w-3.5 h-3.5" />
-                                  <span>O que mostrar / clicar no compartilhamento:</span>
-                                </div>
-                                <ul className="space-y-1 text-xs text-slate-600 dark:text-slate-300">
-                                  {item.oQueMostrar.map((guia, i) => (
-                                    <li key={i} className="flex items-start gap-2">
-                                      <span className="text-[#0F4C3A] dark:text-emerald-400 font-bold mt-0.5">•</span>
-                                      <span>{guia}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-
-                              {/* ARGUMENTO DE OURO / ENCHANTMENT */}
-                              <div className="flex items-start gap-2 p-2.5 rounded-lg bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-200/60 dark:border-emerald-800/40 text-xs text-emerald-900 dark:text-emerald-200">
-                                <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                                  {isChecked ? (
+                                    <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                                  ) : (
+                                    <Circle className="w-5 h-5 text-slate-300 dark:text-slate-600 hover:text-slate-500 transition-colors" />
+                                  )}
+                                </button>
                                 <div>
-                                  <strong className="font-semibold text-emerald-950 dark:text-emerald-100">Argumento-Chave: </strong>
-                                  <span>{item.argumentoDeOuro}</span>
+                                  <div className="flex flex-wrap items-center gap-2">
+                                    <h3
+                                      onClick={() => toggleCheck(item.id)}
+                                      className={cn(
+                                        'text-sm sm:text-base font-bold cursor-pointer transition-colors',
+                                        isChecked
+                                          ? 'line-through text-slate-400 dark:text-slate-500'
+                                          : 'text-slate-900 dark:text-slate-100 hover:text-[#0F4C3A]'
+                                      )}
+                                    >
+                                      {item.titulo}
+                                    </h3>
+                                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-semibold">
+                                      {item.tempoSugerido}
+                                    </span>
+                                    <Badge color="gray" dot size="xs">
+                                      {item.tagMapeada}
+                                    </Badge>
+                                  </div>
                                 </div>
                               </div>
+
+                              <a
+                                href={item.rotaUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-white dark:bg-slate-800 hover:bg-[#0F4C3A] hover:text-white dark:hover:bg-[#0F4C3A] dark:hover:text-white text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 shadow-2xs transition-colors shrink-0"
+                              >
+                                <ExternalLink className="w-3.5 h-3.5" />
+                                <span>Abrir Tela</span>
+                              </a>
+                            </div>
+
+                            {/* O QUE MOSTRAR & CLICAR */}
+                            <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/70 dark:border-slate-700/60 space-y-2">
+                              <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">
+                                <MousePointerClick className="w-3.5 h-3.5 text-[#0F4C3A] dark:text-emerald-400" />
+                                <span>O que mostrar / clicar no compartilhamento:</span>
+                              </div>
+                              <ul className="space-y-1.5 text-xs text-slate-700 dark:text-slate-300">
+                                {item.oQueMostrar.map((guia, i) => (
+                                  <li key={i} className="flex items-start gap-2">
+                                    <span className="text-[#0F4C3A] dark:text-emerald-400 font-bold mt-0.5">•</span>
+                                    <span>{guia}</span>
+                                  </li>
+                                ))}
+                              </ul>
                             </div>
                           </div>
 
-                          {/* BOTÃO DE ABRIR TELA EM 1 CLIQUE */}
-                          <div className="lg:pl-4 shrink-0 flex items-center">
-                            <a
-                              href={item.rotaUrl}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-white dark:bg-slate-800 hover:bg-[#0F4C3A] hover:text-white dark:hover:bg-[#0F4C3A] dark:hover:text-white text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 shadow-2xs transition-colors"
-                            >
-                              <ExternalLink className="w-3.5 h-3.5" />
-                              <span>Abrir Tela</span>
-                            </a>
+                          {/* COLUNA 2 (DIREITA): COMO VOCÊ VAI FALAR & ARGUMENTO-CHAVE */}
+                          <div className="space-y-3.5">
+                            {/* O QUE FALAR (SCRIPT FALADO NA VOZ DO LUCAS) */}
+                            <div className="p-4 rounded-xl bg-emerald-50/40 dark:bg-emerald-950/20 border border-emerald-200/70 dark:border-emerald-800/50 space-y-2">
+                              <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-[#0F4C3A] dark:text-emerald-400">
+                                <MessageSquareQuote className="w-3.5 h-3.5" />
+                                <span>Como você vai falar (Direto ao ponto):</span>
+                              </div>
+                              <p className="text-xs sm:text-sm text-slate-800 dark:text-slate-200 leading-relaxed italic font-normal">
+                                {item.oQueFalar}
+                              </p>
+                            </div>
+
+                            {/* ARGUMENTO DE OURO / ENCHANTMENT */}
+                            <div className="flex items-start gap-2.5 p-3 rounded-xl bg-white dark:bg-slate-800/80 border border-emerald-200 dark:border-emerald-800/60 text-xs text-emerald-950 dark:text-emerald-200 shadow-2xs">
+                              <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                              <div>
+                                <strong className="font-semibold text-emerald-950 dark:text-emerald-100">Argumento-Chave: </strong>
+                                <span>{item.argumentoDeOuro}</span>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>

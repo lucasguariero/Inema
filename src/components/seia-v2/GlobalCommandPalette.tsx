@@ -234,23 +234,6 @@ export const GlobalCommandPalette: React.FC<GlobalCommandPaletteProps> = ({
       route: 'parcelamento-debito',
       icon: Landmark,
     },
-    {
-      id: 'cmd-design-system',
-      category: 'Navegação',
-      label: 'Catálogo do Design System SEIA V2',
-      description: 'Tokens, componentes e padrões de interface',
-      route: 'design-system',
-      icon: Layers,
-      badge: 'V2',
-    },
-    {
-      id: 'cmd-roteiro',
-      category: 'Navegação',
-      label: 'Roteiro de Apresentação & Mapeamento',
-      description: 'Demonstração executiva dos fluxos SEIA V2',
-      route: 'roteiro',
-      icon: Layers,
-    },
 
     // Processos Recentes
     {

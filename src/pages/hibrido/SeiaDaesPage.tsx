@@ -436,20 +436,20 @@ export const SeiaDaesPage: React.FC<SeiaDaesPageProps> = ({ onNavigate }) => {
                     {/* Situação */}
                     <GlaTd align="center">
                       {isPago && (
-                        <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-                          <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                        <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800">
+                          <CheckCircle2 className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                           <span>Pago</span>
                         </span>
                       )}
                       {isEmitido && (
-                        <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
-                          <Clock className="w-3 h-3 text-amber-600" />
+                        <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800">
+                          <Clock className="w-3 h-3 text-amber-600 dark:text-amber-400" />
                           <span>Emitido</span>
                         </span>
                       )}
                       {isVencido && (
-                        <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200">
-                          <AlertTriangle className="w-3 h-3 text-rose-600" />
+                        <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-800">
+                          <AlertTriangle className="w-3 h-3 text-rose-600 dark:text-rose-400" />
                           <span>Vencido</span>
                         </span>
                       )}
@@ -511,24 +511,24 @@ export const SeiaDaesPage: React.FC<SeiaDaesPageProps> = ({ onNavigate }) => {
             </div>
 
             {/* Corpo do DAE */}
-            <div className="p-6 space-y-5 text-xs text-slate-800 max-h-[75vh] overflow-y-auto">
+            <div className="p-6 space-y-5 text-xs text-slate-800 dark:text-slate-200 max-h-[75vh] overflow-y-auto">
               {/* Status Banner */}
-              <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200">
+              <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
                 <div>
-                  <span className="text-[10px] text-slate-500 font-bold uppercase">Situação da Guia:</span>
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase">Situação da Guia:</span>
                   <div className="font-bold text-sm mt-0.5">
                     {daeVisualizando.situacao === 'Pago' ? (
-                      <span className="text-emerald-700">PAGO — Autenticação Bancária Registrada</span>
+                      <span className="text-emerald-700 dark:text-emerald-400">PAGO — Autenticação Bancária Registrada</span>
                     ) : daeVisualizando.situacao === 'Emitido' ? (
-                      <span className="text-amber-700">EMITIDO — Aguardando Compensação Bancária</span>
+                      <span className="text-amber-700 dark:text-amber-400">EMITIDO — Aguardando Compensação Bancária</span>
                     ) : (
-                      <span className="text-rose-700">VENCIDO — Necessário emissão de 2ª via atualizada</span>
+                      <span className="text-rose-700 dark:text-rose-400">VENCIDO — Necessário emissão de 2ª via atualizada</span>
                     )}
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="text-[10px] text-slate-500 font-bold uppercase">Data de Emissão:</span>
-                  <div className="font-mono font-bold mt-0.5">{daeVisualizando.emissao}</div>
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase">Data de Emissão:</span>
+                  <div className="font-mono font-bold mt-0.5 text-slate-800 dark:text-slate-200">{daeVisualizando.emissao}</div>
                 </div>
               </div>
 

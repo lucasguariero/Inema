@@ -12,7 +12,8 @@ import {
   Info,
   FileText,
   UserCheck,
-  AlertCircle
+  AlertCircle,
+  Eye
 } from 'lucide-react';
 import { SeiaV2Breadcrumb } from '@/components/seia-v2/SeiaV2Breadcrumb';
 import { Button } from '@/components/ui/button';
@@ -398,31 +399,46 @@ export const NotificacoesPage: React.FC<NotificacoesPageProps> = ({ onNavigate }
 
       {/* Tabela de Notificações Canônica do GLA */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-xs overflow-hidden">
-        {/* Barra superior de ferramentas (alinhada à direita conforme padrão GLA) */}
-        <div className="flex items-center justify-end gap-2 p-3.5 border-b border-slate-100 dark:border-slate-800 relative bg-white dark:bg-slate-900">
-          {/* Campo Pesquisar */}
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
-            <input
-              type="text"
-              placeholder="Pesquisar"
-              value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-                setCurrentPage(1);
-              }}
-              className="h-9 pl-9 pr-7 text-xs sm:text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#0F4C3A] w-52 sm:w-64 transition-all"
-            />
-            {searchTerm && (
-              <button
-                type="button"
-                onClick={() => setSearchTerm('')}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            )}
+        {/* Barra superior com Título e Ferramentas */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 border-b border-slate-100 dark:border-slate-800 relative bg-white dark:bg-slate-900">
+          <div>
+            <div className="flex items-center gap-2">
+              <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">
+                Painel de Notificações
+              </h2>
+              <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                {filteredNotificacoes.length} registros
+              </span>
+            </div>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              Comunicações formais, atos de trâmite e avisos do sistema
+            </p>
           </div>
+
+          <div className="flex items-center gap-2 shrink-0">
+            {/* Campo Pesquisar */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+              <input
+                type="text"
+                placeholder="Pesquisar"
+                value={searchTerm}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setCurrentPage(1);
+                }}
+                className="h-9 pl-9 pr-7 text-xs sm:text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#0F4C3A] w-52 sm:w-64 transition-all"
+              />
+              {searchTerm && (
+                <button
+                  type="button"
+                  onClick={() => setSearchTerm('')}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
 
           {/* Botão de Filtro com Contador (Padrão GLA) */}
           <div className="relative">
@@ -520,8 +536,9 @@ export const NotificacoesPage: React.FC<NotificacoesPageProps> = ({ onNavigate }
             )}
           </div>
         </div>
+      </div>
 
-        {/* Tabela de Dados */}
+      {/* Tabela de Dados */}
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -538,8 +555,8 @@ export const NotificacoesPage: React.FC<NotificacoesPageProps> = ({ onNavigate }
                 <th className="py-3 px-4 text-xs font-semibold text-slate-700 dark:text-slate-300 w-[10%]">
                   Status
                 </th>
-                <th className="py-3 px-4 text-xs font-semibold text-slate-700 dark:text-slate-300 text-right w-[14%]">
-                  <span className="sr-only">Ações</span>
+                <th className="py-3 px-4 text-xs font-semibold text-slate-700 dark:text-slate-300 text-right w-[16%]">
+                  Ações
                 </th>
               </tr>
             </thead>
@@ -591,27 +608,39 @@ export const NotificacoesPage: React.FC<NotificacoesPageProps> = ({ onNavigate }
 
                     {/* Ações */}
                     <td className="py-3.5 px-4 text-right whitespace-nowrap">
-                      <div className="inline-flex items-center justify-end gap-3.5">
+                      <div className="inline-flex items-center justify-end gap-2">
                         {item.hasAbrir && (
-                          <button
-                            type="button"
+                          <Button
+                            variant="outline"
+                            size="xs"
                             onClick={() => setSelectedNotification(item)}
-                            className="inline-flex items-center gap-1 text-xs font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white transition-colors cursor-pointer"
+                            className="h-7 text-xs font-medium text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:text-[#0F4C3A] dark:hover:text-emerald-400"
                           >
-                            <ExternalLink className="w-3.5 h-3.5 text-slate-500" />
+                            <ExternalLink className="w-3.5 h-3.5 mr-1 text-slate-500" />
                             <span>Abrir</span>
-                          </button>
+                          </Button>
                         )}
 
-                        {!item.isRead && (
-                          <button
-                            type="button"
+                        {!item.isRead ? (
+                          <Button
+                            variant="ghost"
+                            size="xs"
                             onClick={(e) => handleMarkAsRead(item.id, e)}
-                            className="inline-flex items-center gap-1 text-xs font-medium text-[#0F4C3A] hover:text-[#0c3d2e] dark:text-emerald-400 dark:hover:text-emerald-300 transition-colors cursor-pointer"
+                            className="h-7 text-xs font-medium text-[#0F4C3A] hover:bg-[#0F4C3A]/10 dark:text-emerald-400 dark:hover:bg-emerald-950/40"
                           >
-                            <Check className="w-3.5 h-3.5 text-[#0F4C3A] dark:text-emerald-400" />
-                            <span>Marcar como lida</span>
-                          </button>
+                            <Check className="w-3.5 h-3.5 mr-1" />
+                            <span>Marcar lida</span>
+                          </Button>
+                        ) : (
+                          <Button
+                            variant="ghost"
+                            size="xs"
+                            onClick={() => setSelectedNotification(item)}
+                            className="h-7 text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
+                          >
+                            <Eye className="w-3.5 h-3.5 mr-1" />
+                            <span>Visualizar</span>
+                          </Button>
                         )}
                       </div>
                     </td>
