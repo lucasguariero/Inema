@@ -20,9 +20,8 @@ import {
   X,
   ExternalLink
 } from 'lucide-react';
-import { CustomSelect, SelectOption } from './CustomSelect';
 import { SeiaV2Breadcrumb } from './SeiaV2Breadcrumb';
-import { TableContainer, TableToolbar } from '@/components/filament/Table';
+import { TableContainer, TableToolbar, FilamentSelect, SelectOption } from '@/components/filament';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
@@ -280,7 +279,7 @@ export const SeiaV2TabelaOperacionalPage: React.FC<SeiaV2TabelaOperacionalPagePr
             filters={
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 items-center">
                 <div className="lg:col-span-5">
-                  <CustomSelect
+                  <FilamentSelect
                     value={statusFilter}
                     onChange={setStatusFilter}
                     options={statusOptions}
@@ -288,7 +287,7 @@ export const SeiaV2TabelaOperacionalPage: React.FC<SeiaV2TabelaOperacionalPagePr
                   />
                 </div>
                 <div className="lg:col-span-5">
-                  <CustomSelect
+                  <FilamentSelect
                     value={diretoriaFilter}
                     onChange={setDiretoriaFilter}
                     options={diretoriaOptions}
@@ -334,8 +333,8 @@ export const SeiaV2TabelaOperacionalPage: React.FC<SeiaV2TabelaOperacionalPagePr
               <span className="text-slate-300 dark:text-slate-700">•</span>
               <div className="flex items-center gap-1.5">
                 <span>Por página:</span>
-                <div className="w-18">
-                  <CustomSelect
+                <div className="w-20">
+                  <FilamentSelect
                     value={String(itemsPerPage)}
                     onChange={(v) => setItemsPerPage(Number(v))}
                     options={perPageOptions}

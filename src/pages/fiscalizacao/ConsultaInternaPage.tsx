@@ -81,37 +81,50 @@ const TIPOS_EMERGENCIA = [
   'Outros'
 ];
 
-export const ConsultaInternaPage: React.FC<{ onNavigate?: (route: string) => void }> = ({ onNavigate }) => {
+export interface ConsultaInternaPageProps {
+  onNavigate?: (route: string) => void;
+  modoContexto?: 'denuncias' | 'emergencias' | 'analises' | 'associar-tecnico';
+}
+
+export const ConsultaInternaPage: React.FC<ConsultaInternaPageProps> = ({ onNavigate, modoContexto = 'denuncias' }) => {
   const { isDarkMode } = useTheme();
 
   const [registros, setRegistros] = useState<RegistroFiscalizacao[]>(REGISTROS_MOCK_INICIAIS);
 
   // Filtros Oficiais (DOR005 - RN003, TL001)
-  const [filtroStatus, setFiltroStatus] = useState('TODOS');
+  const isModoEmergencia = modoContexto === 'emergencias';
+  const isModoAnalises = modoContexto === 'analises';
+  const isModoAssociar = modoContexto === 'associar-tecnico';
+
+  const defaultTipo = isModoEmergencia ? 'RE' : 'TODOS';
+  const defaultStatus = isModoAnalises ? 'Em Análise' : isModoAssociar ? 'Registrado' : 'TODOS';
+  const defaultTecnico = isModoAnalises ? FISCAIS_DIFIS[0] : 'TODOS';
+
+  const [filtroStatus, setFiltroStatus] = useState(defaultStatus);
   const [filtroNumeroRegistro, setFiltroNumeroRegistro] = useState('');
   const [filtroMunicipio, setFiltroMunicipio] = useState('TODOS');
-  const [filtroTipo, setFiltroTipo] = useState<'TODOS' | 'RD' | 'RE'>('TODOS');
+  const [filtroTipo, setFiltroTipo] = useState<'TODOS' | 'RD' | 'RE'>(defaultTipo);
   const [filtroTipoEmergencia, setFiltroTipoEmergencia] = useState('Todos os Tipos de Emergência');
   const [filtroDataInicial, setFiltroDataInicial] = useState('');
   const [filtroDataFinal, setFiltroDataFinal] = useState('');
   const [filtroPalavraChave, setFiltroPalavraChave] = useState('');
   const [filtroEixoTematico, setFiltroEixoTematico] = useState('Todos os Eixos');
-  const [filtroTecnico, setFiltroTecnico] = useState('TODOS');
+  const [filtroTecnico, setFiltroTecnico] = useState(defaultTecnico);
   const [filtroComunicante, setFiltroComunicante] = useState('');
   const [filtroUnidade, setFiltroUnidade] = useState('TODOS');
 
   // Filtros aplicados em execução (acionados pelo botão Consultar - BOT001)
   const [appliedFilters, setAppliedFilters] = useState({
-    status: 'TODOS',
+    status: defaultStatus,
     numero: '',
     municipio: 'TODOS',
-    tipo: 'TODOS',
+    tipo: defaultTipo,
     tipoEmergencia: 'Todos os Tipos de Emergência',
     dataInicial: '',
     dataFinal: '',
     palavraChave: '',
     eixo: 'Todos os Eixos',
-    tecnico: 'TODOS',
+    tecnico: defaultTecnico,
     comunicante: '',
     unidade: 'TODOS',
   });
@@ -335,17 +348,37 @@ export const ConsultaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
             items={[
               { label: 'Início', route: 'inicio', href: '/?rota=seia-v2&tela=inicio' },
               { label: 'Fiscalização' },
-              { label: 'Consultar Registros' },
+              {
+                label: isModoEmergencia
+                  ? 'Minhas Emergências'
+                  : isModoAnalises
+                  ? 'Minhas Análises'
+                  : isModoAssociar
+                  ? 'Associar Técnico'
+                  : 'Consultar Registros',
+              },
             ]}
             onNavigate={onNavigate}
           />
           <div className="flex items-center gap-3 flex-wrap">
             <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
-              Consultar Registros
+              {isModoEmergencia
+                ? 'Minhas Emergências Ambientais'
+                : isModoAnalises
+                ? 'Minhas Análises de Fiscalização'
+                : isModoAssociar
+                ? 'Distribuição & Associação de Fiscais'
+                : 'Consultar Registros de Fiscalização'}
             </h1>
           </div>
           <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 mt-1">
-            Consulta unificada de Denúncias Ambientais (RD) e Registros de Emergência Química (RE) — DIFIS/INEMA.
+            {isModoEmergencia
+              ? 'Gestão de ocorrências e acidentes com produtos perigosos autuados no Estado da Bahia.'
+              : isModoAnalises
+              ? 'Pauta técnica individual de apuração, laudos de vistoria e autos de fiscalização.'
+              : isModoAssociar
+              ? 'Pauta de processos aguardando designação e associação de técnicos da DIFIS.'
+              : 'Consulta unificada de Denúncias Ambientais (RD) e Registros de Emergência Química (RE) — DIFIS/INEMA.'}
           </p>
         </div>
 

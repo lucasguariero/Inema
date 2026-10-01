@@ -24,13 +24,20 @@ import { SeiaV2Breadcrumb } from '@/components/seia-v2/SeiaV2Breadcrumb';
 
 interface AnslaPageProps {
   onNavigate?: (route: string) => void;
+  initialMode?: 'pauta' | 'novo-enquadramento';
 }
 
-export const AnslaPage: React.FC<AnslaPageProps> = ({ onNavigate }) => {
-  const [viewMode, setViewMode] = useState<'pauta' | 'novo-enquadramento'>('pauta');
+export const AnslaPage: React.FC<AnslaPageProps> = ({ onNavigate, initialMode = 'pauta' }) => {
+  const [viewMode, setViewMode] = useState<'pauta' | 'novo-enquadramento'>(initialMode);
   const [activeTab, setActiveTab] = useState('declaracoes');
   const [searchTerm, setSearchTerm] = useState('');
   const [wizardStep, setWizardStep] = useState(1);
+
+  React.useEffect(() => {
+    if (initialMode) {
+      setViewMode(initialMode);
+    }
+  }, [initialMode]);
 
   const tabs: FilamentTabItem[] = [
     { id: 'declaracoes', label: 'Declarações Emitidas', badge: '3.890', badgeVariant: 'primary' },

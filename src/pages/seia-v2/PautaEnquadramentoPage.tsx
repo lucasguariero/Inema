@@ -34,15 +34,22 @@ import { PdfPreviewDrawer, PdfDocumentData } from '@/components/seia-v2/PdfPrevi
 
 interface PautaEnquadramentoPageProps {
   onNavigate?: (route: string) => void;
+  initialTab?: string;
 }
 
-export const PautaEnquadramentoPage: React.FC<PautaEnquadramentoPageProps> = ({ onNavigate }) => {
-  const [activeTab, setActiveTab] = useState('todos');
+export const PautaEnquadramentoPage: React.FC<PautaEnquadramentoPageProps> = ({ onNavigate, initialTab = 'todos' }) => {
+  const [activeTab, setActiveTab] = useState(initialTab);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProcesso, setSelectedProcesso] = useState<any>(null);
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [pdfPreviewData, setPdfPreviewData] = useState<PdfDocumentData | null>(null);
   const [isPdfDrawerOpen, setIsPdfDrawerOpen] = useState(false);
+
+  React.useEffect(() => {
+    if (initialTab) {
+      setActiveTab(initialTab);
+    }
+  }, [initialTab]);
 
   const handleOpenParecerPdf = (proc: any) => {
     setPdfPreviewData({

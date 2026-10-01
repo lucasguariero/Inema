@@ -36,13 +36,20 @@ import { SeiaV2Breadcrumb } from '@/components/seia-v2/SeiaV2Breadcrumb';
 
 interface CadastrosBasicosPageProps {
   onNavigate?: (route: string) => void;
+  initialTab?: string;
 }
 
-export const CadastrosBasicosPage: React.FC<CadastrosBasicosPageProps> = ({ onNavigate }) => {
-  const [activeTab, setActiveTab] = useState('rt');
+export const CadastrosBasicosPage: React.FC<CadastrosBasicosPageProps> = ({ onNavigate, initialTab = 'rt' }) => {
+  const [activeTab, setActiveTab] = useState(initialTab);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [selectedItem, setSelectedItem] = useState<any>(null);
+
+  React.useEffect(() => {
+    if (initialTab) {
+      setActiveTab(initialTab);
+    }
+  }, [initialTab]);
 
   const tabs: TabItem[] = [
     { id: 'rt', label: 'Responsáveis Técnicos', badge: '14', badgeColor: 'primary' },

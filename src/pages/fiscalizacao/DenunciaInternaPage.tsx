@@ -297,24 +297,14 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
       <form onSubmit={handleFinalizar} className="space-y-6">
         {/* CARD 1: Detalhes do Registro (DOR001) */}
         <Card className="border-slate-200/90 dark:border-slate-800">
-          <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">
-            <div className="flex items-center justify-between flex-wrap gap-2">
-              <div className="flex items-center gap-2.5">
-                <span className="w-7 h-7 rounded-lg bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/60 text-xs font-bold flex items-center justify-center shadow-2xs">
-                  1
-                </span>
-                <div>
-                  <CardTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
-                    Detalhes do Registro
-                  </CardTitle>
-                  <CardDescription className="text-xs">
-                    Canais formais de entrada e dados do comunicado recebido pelo INEMA (DOR001).
-                  </CardDescription>
-                </div>
-              </div>
-              <Badge color="primary" dot>
-                Nº Previsto: 2026.XXXXXX/INEMA/RD
-              </Badge>
+          <CardHeader className="pb-3.5 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-800/30">
+            <div>
+              <CardTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
+                Detalhes do Registro
+              </CardTitle>
+              <CardDescription className="text-xs">
+                Canais formais de entrada e dados do comunicado recebido pelo INEMA (DOR001).
+              </CardDescription>
             </div>
           </CardHeader>
 
@@ -408,19 +398,14 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
 
         {/* CARD 2: Ocorrência Ambiental */}
         <Card className="border-slate-200/90 dark:border-slate-800">
-          <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">
-            <div className="flex items-center gap-2.5">
-              <span className="w-7 h-7 rounded-lg bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/60 text-xs font-bold flex items-center justify-center shadow-2xs">
-                2
-              </span>
-              <div>
-                <CardTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
-                  Ocorrência Ambiental
-                </CardTitle>
-                <CardDescription className="text-xs">
-                  Tipologia do dano, período dos fatos, narrativa circunstanciada e anexos.
-                </CardDescription>
-              </div>
+          <CardHeader className="pb-3.5 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-800/30">
+            <div>
+              <CardTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
+                Ocorrência Ambiental
+              </CardTitle>
+              <CardDescription className="text-xs">
+                Tipologia do dano, período dos fatos, narrativa circunstanciada e anexos.
+              </CardDescription>
             </div>
           </CardHeader>
 
@@ -537,19 +522,14 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
 
         {/* CARD 3: Localização Geográfica e Complementos (DOR001) */}
         <Card className="border-slate-200/90 dark:border-slate-800">
-          <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">
-            <div className="flex items-center gap-2.5">
-              <span className="w-7 h-7 rounded-lg bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/60 text-xs font-bold flex items-center justify-center shadow-2xs">
-                3
-              </span>
-              <div>
-                <CardTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
-                  Localização Geográfica
-                </CardTitle>
-                <CardDescription className="text-xs">
-                  Município, logradouro, coordenadas geográficas e complementos territoriais.
-                </CardDescription>
-              </div>
+          <CardHeader className="pb-3.5 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-800/30">
+            <div>
+              <CardTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
+                Localização Geográfica
+              </CardTitle>
+              <CardDescription className="text-xs">
+                Município, logradouro, coordenadas geográficas e complementos territoriais.
+              </CardDescription>
             </div>
           </CardHeader>
 
@@ -770,20 +750,15 @@ export const DenunciaInternaPage: React.FC<{ onNavigate?: (route: string) => voi
 
         {/* CARD 4: Identificação do Denunciante (DOR001) */}
         <Card className="border-slate-200/90 dark:border-slate-800">
-          <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <CardHeader className="pb-3.5 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-800/30">
             <div className="flex items-center justify-between flex-wrap gap-2">
-              <div className="flex items-center gap-2.5">
-                <span className="w-7 h-7 rounded-lg bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/60 text-xs font-bold flex items-center justify-center shadow-2xs">
-                  4
-                </span>
-                <div>
-                  <CardTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
-                    Identificação do Denunciante
-                  </CardTitle>
-                  <CardDescription className="text-xs">
-                    Opção de identificação formal ou sigilo total garantido por lei (DOR001 / RN010).
-                  </CardDescription>
-                </div>
+              <div>
+                <CardTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
+                  Identificação do Denunciante
+                </CardTitle>
+                <CardDescription className="text-xs">
+                  Opção de identificação formal ou sigilo total garantido por lei (DOR001 / RN010).
+                </CardDescription>
               </div>
 
               {/* Toggle Identificado */}

@@ -116,10 +116,13 @@ export const SeiaV2RootPage: React.FC = () => {
       case 'consulta-externa':
         return <ConsultaExternaPage onNavigate={handleNavigate} />;
       case 'consulta-interna':
+        return <ConsultaInternaPage onNavigate={handleNavigate} modoContexto="denuncias" />;
       case 'minhas-emergencias':
+        return <ConsultaInternaPage onNavigate={handleNavigate} modoContexto="emergencias" />;
       case 'minhas-analises':
+        return <ConsultaInternaPage onNavigate={handleNavigate} modoContexto="analises" />;
       case 'associar-tecnico':
-        return <ConsultaInternaPage onNavigate={handleNavigate} />;
+        return <ConsultaInternaPage onNavigate={handleNavigate} modoContexto="associar-tecnico" />;
       case 'seia-daes':
         return <SeiaDaesPage onNavigate={handleNavigate} />;
       case 'cerh':
@@ -134,9 +137,10 @@ export const SeiaV2RootPage: React.FC = () => {
       case 'cnd':
         return <CertidaoDebitoPage onNavigate={handleNavigate} />;
       case 'ansla':
+        return <AnslaPage onNavigate={handleNavigate} initialMode="pauta" />;
       case 'dispensa':
       case 'ansla-dispensa':
-        return <AnslaPage onNavigate={handleNavigate} />;
+        return <AnslaPage onNavigate={handleNavigate} initialMode="novo-enquadramento" />;
       case 'parcelamento':
       case 'req-parcelamento':
         return <ParcelamentoDebitoPage onNavigate={handleNavigate} />;
@@ -159,23 +163,34 @@ export const SeiaV2RootPage: React.FC = () => {
       case 'sispass-calendario-anual':
       case 'sispass-convites':
         return <SispassPerfisPage onNavigate={handleNavigate} />;
+      case 'cad-responsavel':
+      case 'responsaveis-tecnicos':
+        return <CadastrosBasicosPage onNavigate={handleNavigate} initialTab="rt" />;
+      case 'cad-representante':
+        return <CadastrosBasicosPage onNavigate={handleNavigate} initialTab="representantes" />;
+      case 'cad-empreendimentos':
+        return <CadastrosBasicosPage onNavigate={handleNavigate} initialTab="empreendimentos" />;
+      case 'cad-cefir':
+        return <CadastrosBasicosPage onNavigate={handleNavigate} initialTab="propriedades" />;
+      case 'cad-procurador':
+        return <CadastrosBasicosPage onNavigate={handleNavigate} initialTab="procuradores" />;
+      case 'cad-representacoes':
+        return <CadastrosBasicosPage onNavigate={handleNavigate} initialTab="consultorias" />;
       case 'cadastros-basicos':
       case 'cadastros':
-      case 'responsaveis-tecnicos':
-      case 'cad-representante':
-      case 'cad-responsavel':
-      case 'cad-empreendimentos':
       case 'cad-pj':
-      case 'cad-procurador':
-      case 'cad-representacoes':
-        return <CadastrosBasicosPage onNavigate={handleNavigate} />;
+        return <CadastrosBasicosPage onNavigate={handleNavigate} initialTab="rt" />;
+      case 'pauta-area':
+      case 'analise-pauta-area':
+        return <PautaEnquadramentoPage onNavigate={handleNavigate} initialTab="todos" />;
+      case 'enquadramento-tecnica':
+      case 'analise-tec-geral':
+      case 'analise-tec-pauta':
+        return <PautaEnquadramentoPage onNavigate={handleNavigate} initialTab="em-analise" />;
       case 'enquadramento':
       case 'pauta-enquadramento':
-      case 'pauta-area':
-      case 'enquadramento-tecnica':
-      case 'analise-pauta-area':
       case 'analise-tec-coordenador':
-        return <PautaEnquadramentoPage onNavigate={handleNavigate} />;
+        return <PautaEnquadramentoPage onNavigate={handleNavigate} initialTab="todos" />;
       case 'parametrizacao':
       case 'parametrizacoes':
       case 'parametrizacoes-master':
@@ -206,9 +221,10 @@ export const SeiaV2RootPage: React.FC = () => {
         return <RoteiroApresentacaoPage onNavigate={handleNavigate} />;
       case 'design-system':
         return <SeiaV2DesignSystemPage />;
+      case 'financeiro-relatorios':
+        return <SeiaDaesPage onNavigate={handleNavigate} />;
       case 'relatorios':
       case 'dashboard':
-      case 'financeiro-relatorios':
         return <DashboardPage onNavigate={handleNavigate} />;
       case 'inicio':
       default:

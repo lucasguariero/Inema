@@ -14,7 +14,7 @@ import {
   Save,
   X
 } from 'lucide-react';
-import { CustomSelect, SelectOption } from './CustomSelect';
+import { FilamentSelect, SelectOption } from '@/components/filament';
 import { SeiaV2Breadcrumb } from './SeiaV2Breadcrumb';
 import { FilamentWizard } from '@/components/filament/Wizard';
 
@@ -286,7 +286,7 @@ export const SeiaV2FormularioComplexoPage: React.FC<SeiaV2FormularioComplexoPage
               <div className="grid grid-cols-12 gap-4">
                 <div className="col-span-12 md:col-span-8 space-y-1">
                   <label className="text-xs font-semibold text-slate-700">Tipologia Principal da Atividade *</label>
-                  <CustomSelect
+                  <FilamentSelect
                     options={tipologiaOptions}
                     value={formData.tipologia}
                     onChange={(v) => setFormData({ ...formData, tipologia: v })}
@@ -295,7 +295,7 @@ export const SeiaV2FormularioComplexoPage: React.FC<SeiaV2FormularioComplexoPage
 
                 <div className="col-span-12 md:col-span-4 space-y-1">
                   <label className="text-xs font-semibold text-slate-700">Tipo de Ato Requerido *</label>
-                  <CustomSelect
+                  <FilamentSelect
                     options={tipoLicencaOptions}
                     value={formData.tipoLicenca}
                     onChange={(v) => setFormData({ ...formData, tipoLicenca: v })}
@@ -348,7 +348,7 @@ export const SeiaV2FormularioComplexoPage: React.FC<SeiaV2FormularioComplexoPage
                 <div className="grid grid-cols-12 gap-4">
                   <div className="col-span-12 md:col-span-6 space-y-1">
                     <label className="text-xs font-semibold text-slate-700">Tipo de Ponto de Captação *</label>
-                    <CustomSelect
+                    <FilamentSelect
                       options={tipoCaptacaoOptions}
                       value={formData.tipoCaptacao}
                       onChange={(v) => setFormData({ ...formData, tipoCaptacao: v })}

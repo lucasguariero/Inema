@@ -335,11 +335,11 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
       </div>
 
       {/* 5. Tabela Oficial: Processos Vencidos (Top 5) */}
-      <Card className="w-full overflow-hidden shadow-2xs border border-slate-200 dark:border-slate-800 dark:bg-slate-900 transition-all">
-        <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between flex-wrap gap-2">
+      <Card className="w-full rounded-xl overflow-hidden shadow-xs border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 transition-all">
+        <div className="px-5 py-3.5 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-800/30 flex items-center justify-between flex-wrap gap-2">
           <div>
             <div className="flex items-center gap-2">
-              <CardTitle className="text-sm font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+              <CardTitle className="text-sm font-semibold text-slate-950 dark:text-white tracking-tight">
                 Processos Vencidos (Top 5)
               </CardTitle>
               <span className="text-xs font-medium text-slate-400 dark:text-slate-500">

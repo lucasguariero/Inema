@@ -324,21 +324,16 @@ export const EmergenciaInternaPage: React.FC<{ onNavigate?: (route: string) => v
       {/* Formulário Principal */}
       <form onSubmit={handleFinalizar} className="space-y-6">
         {/* CARD 1: Detalhes do Comunicado e Origem (DOR003 - RN004) */}
-        <Card className="border-slate-200/90 dark:border-slate-800">
-          <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">
+        <Card className="border-slate-200/80 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 shadow-xs overflow-hidden">
+          <CardHeader className="px-5 py-3.5 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-800/30">
             <div className="flex items-center justify-between flex-wrap gap-2">
-              <div className="flex items-center gap-2.5">
-                <span className="w-7 h-7 rounded-lg bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/60 text-xs font-bold flex items-center justify-center shadow-2xs">
-                  1
-                </span>
-                <div>
-                  <CardTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
-                    Detalhes do Comunicado e Origem
-                  </CardTitle>
-                  <CardDescription className="text-xs">
-                    Origem do acionamento e canal de comunicação oficial (RN004).
-                  </CardDescription>
-                </div>
+              <div>
+                <CardTitle className="text-sm sm:text-base font-semibold text-slate-950 dark:text-white">
+                  Detalhes do Comunicado e Origem
+                </CardTitle>
+                <CardDescription className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  Origem do acionamento e canal de comunicação oficial (RN004).
+                </CardDescription>
               </div>
 
               {/* Severidade Pills */}
@@ -443,20 +438,15 @@ export const EmergenciaInternaPage: React.FC<{ onNavigate?: (route: string) => v
         </Card>
 
         {/* CARD 2: Identificação do Comunicante & Vínculo (DOR003 - RN025, RN026) */}
-        <Card className="border-slate-200/90 dark:border-slate-800">
-          <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">
-            <div className="flex items-center gap-2.5">
-              <span className="w-7 h-7 rounded-lg bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/60 text-xs font-bold flex items-center justify-center shadow-2xs">
-                2
-              </span>
-              <div>
-                <CardTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
-                  Dados do Comunicante e Vínculo com a Empresa
-                </CardTitle>
-                <CardDescription className="text-xs">
-                  Informações de contato e declaração de vínculo institucional (DOR003).
-                </CardDescription>
-              </div>
+        <Card className="border-slate-200/80 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 shadow-xs overflow-hidden">
+          <CardHeader className="px-5 py-3.5 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-800/30">
+            <div>
+              <CardTitle className="text-sm sm:text-base font-semibold text-slate-950 dark:text-white">
+                Dados do Comunicante e Vínculo com a Empresa
+              </CardTitle>
+              <CardDescription className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Informações de contato e declaração de vínculo institucional (DOR003).
+              </CardDescription>
             </div>
           </CardHeader>
 
@@ -472,7 +462,7 @@ export const EmergenciaInternaPage: React.FC<{ onNavigate?: (route: string) => v
                 onChange={(e) => setComunicanteNome(e.target.value)}
                 required
                 placeholder="Nome de quem prestou a informação"
-                className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
+                className="w-full text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-slate-800 dark:text-slate-100 outline-none focus:border-[#0F4C3A] focus:ring-1 focus:ring-[#0F4C3A]"
               />
             </div>
 
@@ -487,7 +477,7 @@ export const EmergenciaInternaPage: React.FC<{ onNavigate?: (route: string) => v
                 onChange={(e) => setComunicanteTelefone(e.target.value)}
                 required
                 placeholder="(71) 90000-0000 ou (71) 3000-0000"
-                className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
+                className="w-full text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-slate-800 dark:text-slate-100 outline-none focus:border-[#0F4C3A] focus:ring-1 focus:ring-[#0F4C3A]"
               />
             </div>
 
@@ -517,7 +507,7 @@ export const EmergenciaInternaPage: React.FC<{ onNavigate?: (route: string) => v
                   disabled={registroFinalizado}
                   onChange={(e) => setCargoEmpresa(e.target.value)}
                   placeholder="Ex: Supervisor de Segurança / Motorista"
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
+                  className="w-full text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-slate-800 dark:text-slate-100 outline-none focus:border-[#0F4C3A] focus:ring-1 focus:ring-[#0F4C3A]"
                 />
               </div>
             )}
@@ -539,20 +529,15 @@ export const EmergenciaInternaPage: React.FC<{ onNavigate?: (route: string) => v
         </Card>
 
         {/* CARD 3: Caracterização Química & Empresa */}
-        <Card className="border-slate-200/90 dark:border-slate-800">
-          <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">
-            <div className="flex items-center gap-2.5">
-              <span className="w-7 h-7 rounded-lg bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/60 text-xs font-bold flex items-center justify-center shadow-2xs">
-                3
-              </span>
-              <div>
-                <CardTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
-                  Substância Envolvida e Empresa Responsável
-                </CardTitle>
-                <CardDescription className="text-xs">
-                  Dados de ONU, risco químico e volume derramado.
-                </CardDescription>
-              </div>
+        <Card className="border-slate-200/80 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 shadow-xs overflow-hidden">
+          <CardHeader className="px-5 py-3.5 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-800/30">
+            <div>
+              <CardTitle className="text-sm sm:text-base font-semibold text-slate-950 dark:text-white">
+                Substância Envolvida e Empresa Responsável
+              </CardTitle>
+              <CardDescription className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Dados de ONU, risco químico e volume derramado.
+              </CardDescription>
             </div>
           </CardHeader>
 
@@ -643,20 +628,15 @@ export const EmergenciaInternaPage: React.FC<{ onNavigate?: (route: string) => v
         </Card>
 
         {/* CARD 4: Localização e Áreas Atingidas (RN010, RN029) */}
-        <Card className="border-slate-200/90 dark:border-slate-800">
-          <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">
-            <div className="flex items-center gap-2.5">
-              <span className="w-7 h-7 rounded-lg bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/60 text-xs font-bold flex items-center justify-center shadow-2xs">
-                4
-              </span>
-              <div>
-                <CardTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
-                  Localização e Áreas Atingidas
-                </CardTitle>
-                <CardDescription className="text-xs">
-                  Município, logradouro, coordenadas e restrição de até 3 áreas afetadas (RN010).
-                </CardDescription>
-              </div>
+        <Card className="border-slate-200/80 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 shadow-xs overflow-hidden">
+          <CardHeader className="px-5 py-3.5 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-800/30">
+            <div>
+              <CardTitle className="text-sm sm:text-base font-semibold text-slate-950 dark:text-white">
+                Localização e Áreas Atingidas
+              </CardTitle>
+              <CardDescription className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Município, logradouro, coordenadas e restrição de até 3 áreas afetadas (RN010).
+              </CardDescription>
             </div>
           </CardHeader>
 
@@ -685,7 +665,7 @@ export const EmergenciaInternaPage: React.FC<{ onNavigate?: (route: string) => v
                   disabled={registroFinalizado}
                   onChange={(e) => setCep(e.target.value)}
                   placeholder="40020-000"
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
+                  className="w-full text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-slate-800 dark:text-slate-100 outline-none focus:border-[#0F4C3A] focus:ring-1 focus:ring-[#0F4C3A]"
                 />
               </div>
 
@@ -700,7 +680,7 @@ export const EmergenciaInternaPage: React.FC<{ onNavigate?: (route: string) => v
                   onChange={(e) => setLocalidade(e.target.value)}
                   required
                   placeholder="Ex: BR-324, KM 585"
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 text-slate-800 dark:text-slate-100 outline-none"
+                  className="w-full text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-slate-800 dark:text-slate-100 outline-none focus:border-[#0F4C3A] focus:ring-1 focus:ring-[#0F4C3A]"
                 />
               </div>
             </div>
@@ -738,10 +718,10 @@ export const EmergenciaInternaPage: React.FC<{ onNavigate?: (route: string) => v
                       onClick={() => handleToggleArea(area.id)}
                       title={area.tooltip}
                       className={cn(
-                        "p-2.5 rounded-xl text-left border transition-all flex items-center justify-between cursor-pointer",
+                        "p-2.5 rounded-lg text-left border transition-all flex items-center justify-between cursor-pointer",
                         isChecked
-                          ? "bg-blue-50 dark:bg-blue-950/50 border-blue-500 text-blue-900 dark:text-blue-200 shadow-2xs font-semibold"
-                          : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-blue-300"
+                          ? "bg-emerald-50 dark:bg-emerald-950/50 border-[#0F4C3A] text-[#0F4C3A] dark:text-emerald-200 shadow-2xs font-semibold"
+                          : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-slate-400"
                       )}
                     >
                       <span className="text-xs">{area.label}</span>
@@ -766,7 +746,7 @@ export const EmergenciaInternaPage: React.FC<{ onNavigate?: (route: string) => v
                   disabled={registroFinalizado}
                   onChange={(e) => setLatitude(e.target.value)}
                   placeholder="-12.6719"
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 font-mono text-slate-800 dark:text-slate-100 outline-none"
+                  className="w-full text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 font-mono text-slate-800 dark:text-slate-100 outline-none focus:border-[#0F4C3A] focus:ring-1 focus:ring-[#0F4C3A]"
                 />
               </div>
 
@@ -780,14 +760,14 @@ export const EmergenciaInternaPage: React.FC<{ onNavigate?: (route: string) => v
                   disabled={registroFinalizado}
                   onChange={(e) => setLongitude(e.target.value)}
                   placeholder="-38.5442"
-                  className="w-full text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2.5 font-mono text-slate-800 dark:text-slate-100 outline-none"
+                  className="w-full text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 font-mono text-slate-800 dark:text-slate-100 outline-none focus:border-[#0F4C3A] focus:ring-1 focus:ring-[#0F4C3A]"
                 />
               </div>
             </div>
           </CardContent>
 
           {!registroFinalizado && (
-            <CardFooter className="pt-4 pb-5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between flex-wrap gap-3">
+            <CardFooter className="px-5 py-3.5 border-t border-slate-100 dark:border-slate-800/80 bg-slate-50/30 dark:bg-slate-850/30 flex items-center justify-between flex-wrap gap-3">
               <div className="text-xs text-slate-500 dark:text-slate-400">
                 A finalização atribui automaticamente o status de <strong>Emergência Registrada</strong>.
               </div>
@@ -803,7 +783,7 @@ export const EmergenciaInternaPage: React.FC<{ onNavigate?: (route: string) => v
                 <Button
                   type="submit"
                   variant="primary"
-                  className="font-bold text-xs shadow-sm px-6 bg-rose-600 hover:bg-rose-700"
+                  className="font-bold text-xs shadow-sm px-6"
                 >
                   Finalizar Registro de Emergência (MSG003)
                 </Button>
@@ -815,16 +795,16 @@ export const EmergenciaInternaPage: React.FC<{ onNavigate?: (route: string) => v
 
       {/* BLOCO 9: Informações Adicionais Pós-Finalização (DOR003 - Bloco 9 / RN016) */}
       {registroFinalizado && (
-        <Card className="border-slate-200/90 dark:border-slate-800 animate-in fade-in">
-          <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">
+        <Card className="border-slate-200/80 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 shadow-xs overflow-hidden animate-in fade-in">
+          <CardHeader className="px-5 py-3.5 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-800/30">
             <div className="flex items-center justify-between flex-wrap gap-2">
               <div className="flex items-center gap-2.5">
-                <Clock className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                <Clock className="w-4 h-4 text-slate-500 dark:text-slate-400" />
                 <div>
-                  <CardTitle className="text-base font-bold text-slate-900 dark:text-slate-100">
+                  <CardTitle className="text-sm sm:text-base font-semibold text-slate-950 dark:text-white">
                     Informações Adicionais do Plantão (Bloco 9 / RN016)
                   </CardTitle>
-                  <CardDescription className="text-xs">
+                  <CardDescription className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                     Adicione notas operacionais e andamento das providências sem alterar a descrição original.
                   </CardDescription>
                 </div>
