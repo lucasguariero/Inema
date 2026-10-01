@@ -86,26 +86,7 @@ export const SeiaV2LoginPage: React.FC<SeiaV2LoginPageProps> = ({ onLoginSuccess
       return;
     }
 
-    // Etapa 1: Início imediato e perceptível
-    setTransitionProgress(15);
-    setTransitionStatus('Validando credenciais de acesso...');
-
-    const t1 = setTimeout(() => {
-      setTransitionProgress(42);
-      setTransitionStatus('Autenticando perfil institucional e permissões...');
-    }, 350);
-
-    const t2 = setTimeout(() => {
-      setTransitionProgress(75);
-      setTransitionStatus('Carregando ecossistema de módulos SEIA V2...');
-    }, 800);
-
-    const t3 = setTimeout(() => {
-      setTransitionProgress(100);
-      setTransitionStatus('Acesso autorizado! Redirecionando...');
-    }, 1350);
-
-    const t4 = setTimeout(() => {
+    const timer = setTimeout(() => {
       if (onLoginSuccess) {
         onLoginSuccess(selectedRole);
       } else if (onNavigate) {
@@ -113,13 +94,10 @@ export const SeiaV2LoginPage: React.FC<SeiaV2LoginPageProps> = ({ onLoginSuccess
       } else {
         window.location.href = '/?rota=seia-v2&tela=inicio';
       }
-    }, 1750);
+    }, 1050);
 
     return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-      clearTimeout(t3);
-      clearTimeout(t4);
+      clearTimeout(timer);
     };
   }, [isTransitioning, onLoginSuccess, onNavigate, selectedRole]);
 
@@ -198,16 +176,6 @@ export const SeiaV2LoginPage: React.FC<SeiaV2LoginPageProps> = ({ onLoginSuccess
                 />
               </svg>
             </div>
-
-            {/* Texto de Status Sóbrio Institucional */}
-            <p className="text-xs font-mono tracking-wider uppercase text-emerald-100/85 font-medium">
-              {transitionStatus || 'Iniciando ambiente seguro...'}
-            </p>
-
-            {/* Rodapé Institucional */}
-            <p className="mt-8 text-[10px] tracking-wider uppercase text-emerald-200/40 font-medium">
-              Governo do Estado da Bahia • INEMA
-            </p>
           </div>
         </div>
       )}
