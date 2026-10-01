@@ -85,6 +85,14 @@ export const SeiaV2RootPage: React.FC = () => {
       case 'auth':
         return <SeiaV2LoginPage onNavigate={handleNavigate} onLoginSuccess={() => handleNavigate('inicio')} />;
       case 'tabela':
+      case 'processos':
+      case 'meus-processos':
+      case 'notificacoes':
+      case 'analise-pauta-tecnico':
+      case 'analise-tec-geral':
+      case 'analise-tec-pauta':
+      case 'processos-consultar':
+      case 'processos-finalizados':
         return <SeiaV2TabelaOperacionalPage onNavigate={handleNavigate} />;
       case 'formulario':
         return <SeiaV2FormularioComplexoPage onNavigate={handleNavigate} />;
@@ -101,6 +109,9 @@ export const SeiaV2RootPage: React.FC = () => {
       case 'consulta-externa':
         return <ConsultaExternaPage onNavigate={handleNavigate} />;
       case 'consulta-interna':
+      case 'minhas-emergencias':
+      case 'minhas-analises':
+      case 'associar-tecnico':
         return <ConsultaInternaPage onNavigate={handleNavigate} />;
       case 'seia-daes':
         return <SeiaDaesPage onNavigate={handleNavigate} />;
@@ -117,37 +128,70 @@ export const SeiaV2RootPage: React.FC = () => {
         return <CertidaoDebitoPage onNavigate={handleNavigate} />;
       case 'ansla':
       case 'dispensa':
+      case 'ansla-dispensa':
         return <AnslaPage onNavigate={handleNavigate} />;
       case 'parcelamento':
+      case 'req-parcelamento':
         return <ParcelamentoDebitoPage onNavigate={handleNavigate} />;
       case 'cras':
       case 'cras-fauna':
       case 'fauna':
+      case 'fauna-admissao':
+      case 'fauna-manejo':
+      case 'dir-especies':
+      case 'dir-destinacoes':
+      case 'dir-recintos':
         return <CrasFaunaPage onNavigate={handleNavigate} />;
       case 'cefir':
       case 'cefir-imoveis':
         return <CefirImoveisPage onNavigate={handleNavigate} />;
       case 'sispass':
       case 'sispass-perfis':
+      case 'sispass-pauta':
+      case 'sispass-calendarios':
+      case 'sispass-calendario-anual':
+      case 'sispass-convites':
         return <SispassPerfisPage onNavigate={handleNavigate} />;
       case 'cadastros-basicos':
       case 'cadastros':
       case 'responsaveis-tecnicos':
+      case 'cad-representante':
+      case 'cad-responsavel':
+      case 'cad-empreendimentos':
+      case 'cad-pj':
+      case 'cad-procurador':
+      case 'cad-representacoes':
         return <CadastrosBasicosPage onNavigate={handleNavigate} />;
       case 'enquadramento':
       case 'pauta-enquadramento':
       case 'pauta-area':
+      case 'enquadramento-tecnica':
+      case 'analise-pauta-area':
+      case 'analise-tec-coordenador':
         return <PautaEnquadramentoPage onNavigate={handleNavigate} />;
       case 'parametrizacao':
       case 'parametrizacoes':
       case 'parametrizacoes-master':
       case 'tipologias':
+      case 'admin-residuos':
+      case 'admin-porte':
+      case 'admin-solicitacao':
+      case 'admin-plantonistas':
+      case 'admin-setores':
+      case 'admin-legislacoes':
+      case 'config-parametros':
+      case 'config-informativos':
+      case 'config-juros':
         return <ParametrizacoesMasterPage onNavigate={handleNavigate} />;
       case 'usuarios-roles':
       case 'usuarios':
       case 'roles':
       case 'administracao':
       case 'auditoria':
+      case 'admin-grupos':
+      case 'admin-pf':
+      case 'admin-auditoria':
+      case 'auditoria-registros':
         return <UsuariosRolesPage onNavigate={handleNavigate} />;
       case 'apresentacao':
       case 'pitch':
@@ -157,6 +201,7 @@ export const SeiaV2RootPage: React.FC = () => {
         return <SeiaV2DesignSystemPage />;
       case 'relatorios':
       case 'dashboard':
+      case 'financeiro-relatorios':
         return <DashboardPage onNavigate={handleNavigate} />;
       case 'inicio':
       default:
