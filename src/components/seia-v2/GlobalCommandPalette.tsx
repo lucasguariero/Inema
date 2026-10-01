@@ -357,9 +357,6 @@ export const GlobalCommandPalette: React.FC<GlobalCommandPaletteProps> = ({
             autoFocus
             className="w-full text-sm bg-transparent border-none text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-hidden"
           />
-          <kbd className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-mono font-medium text-slate-500 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded">
-            ESC
-          </kbd>
         </div>
 
         {/* Lista de Resultados */}
@@ -417,28 +414,6 @@ export const GlobalCommandPalette: React.FC<GlobalCommandPaletteProps> = ({
               );
             })
           )}
-        </div>
-
-        {/* Rodapé Informativo */}
-        <div className="px-4 py-2.5 bg-slate-50 dark:bg-slate-950/60 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
-          <div className="flex items-center gap-3">
-            <span>
-              <kbd className="px-1 py-0.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded text-[10px] font-mono">
-                ↑
-              </kbd>{' '}
-              <kbd className="px-1 py-0.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded text-[10px] font-mono">
-                ↓
-              </kbd>{' '}
-              Navegar
-            </span>
-            <span>
-              <kbd className="px-1.5 py-0.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded text-[10px] font-mono">
-                ↵
-              </kbd>{' '}
-              Selecionar
-            </span>
-          </div>
-          <span className="font-mono text-[10px]">SEIA V2 Omnisearch</span>
         </div>
       </DialogContent>
     </Dialog>

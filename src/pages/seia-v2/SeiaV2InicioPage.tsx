@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  FilePlus2,
+  Plus,
   FolderKanban,
   AlertTriangle,
   ArrowRight,
@@ -71,8 +71,8 @@ export const SeiaV2InicioPage: React.FC<SeiaV2InicioPageProps> = ({ onNavigate }
               onClick={() => onNavigate && onNavigate('formulario')}
               className="h-11 text-xs font-semibold bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white shadow-sm flex items-center justify-center gap-2 rounded-xl transition-all duration-150 cursor-pointer"
             >
-              <FilePlus2 className="w-4 h-4 shrink-0" />
-              <span>+ Novo Requerimento Único</span>
+              <Plus className="w-4 h-4 shrink-0" />
+              <span>Novo Requerimento Único</span>
             </Button>
 
             <Button
