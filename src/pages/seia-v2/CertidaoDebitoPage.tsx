@@ -101,14 +101,16 @@ export const CertidaoDebitoPage: React.FC<CertidaoDebitoPageProps> = ({ onNaviga
             <form onSubmit={handleConsultar} className="p-5">
               <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
                 <div className="sm:col-span-8">
-                  <input
-                    type="text"
-                    placeholder="Digite o CPF ou CNPJ (ex: 00.000.000/0001-00)"
-                    value={documentoConsulta}
-                    onChange={(e) => setDocumentoConsulta(e.target.value)}
-                    className="w-full px-4 py-2 text-xs font-mono rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A]"
-                    required
-                  />
+                  <InputWrapper>
+                    <input
+                      type="text"
+                      placeholder="Digite o CPF ou CNPJ (ex: 00.000.000/0001-00)"
+                      value={documentoConsulta}
+                      onChange={(e) => setDocumentoConsulta(e.target.value)}
+                      className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
+                      required
+                    />
+                  </InputWrapper>
                 </div>
                 <div className="sm:col-span-4">
                   <Button
@@ -342,7 +344,7 @@ export const CertidaoDebitoPage: React.FC<CertidaoDebitoPageProps> = ({ onNaviga
               <input
                 type="text"
                 placeholder="Ex: A4F9-8812-BC90-1124-E99A"
-                className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100"
+                className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm font-mono uppercase text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
               />
             </InputWrapper>
             <Button className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs h-9 font-semibold">

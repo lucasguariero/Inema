@@ -416,7 +416,7 @@ export const SeiaV2LoginPage: React.FC<SeiaV2LoginPageProps> = ({ onLoginSuccess
 
           <div className="space-y-3 py-2 text-xs">
             <InputWrapper label="Tipo de Cadastro">
-              <select className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100">
+              <select className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 focus:outline-none dark:text-slate-100 cursor-pointer">
                 <option value="cidadao">Pessoa Física / Requerente Cidadão</option>
                 <option value="rt">Responsável Técnico (CREA / CRBio / CRQ)</option>
                 <option value="pj">Representante Legal de Empresa (PJ)</option>
@@ -428,7 +428,7 @@ export const SeiaV2LoginPage: React.FC<SeiaV2LoginPageProps> = ({ onLoginSuccess
               <input
                 type="text"
                 placeholder="Seu nome completo"
-                className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100"
+                className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
               />
             </InputWrapper>
 
@@ -437,14 +437,14 @@ export const SeiaV2LoginPage: React.FC<SeiaV2LoginPageProps> = ({ onLoginSuccess
                 <input
                   type="text"
                   placeholder="000.000.000-00"
-                  className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 font-mono"
+                  className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
                 />
               </InputWrapper>
               <InputWrapper label="Telefone / WhatsApp">
                 <input
                   type="text"
                   placeholder="(71) 99999-0000"
-                  className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 font-mono"
+                  className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
                 />
               </InputWrapper>
             </div>
@@ -453,7 +453,7 @@ export const SeiaV2LoginPage: React.FC<SeiaV2LoginPageProps> = ({ onLoginSuccess
               <input
                 type="email"
                 placeholder="seu.email@exemplo.com.br"
-                className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100"
+                className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
               />
             </InputWrapper>
 
@@ -500,7 +500,7 @@ export const SeiaV2LoginPage: React.FC<SeiaV2LoginPageProps> = ({ onLoginSuccess
                 type="text"
                 defaultValue={cpf}
                 placeholder="000.000.000-00"
-                className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 font-mono"
+                className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
               />
             </InputWrapper>
           </div>

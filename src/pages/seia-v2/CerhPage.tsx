@@ -413,28 +413,28 @@ export const CerhPage: React.FC<CerhPageProps> = ({ onNavigate }) => {
                     <input
                       type="text"
                       defaultValue="Agropecuária Vale Verde S.A."
-                      className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800"
+                      className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
                     />
                   </InputWrapper>
                   <InputWrapper label="CPF ou CNPJ" required>
                     <input
                       type="text"
                       defaultValue="04.892.112/0001-90"
-                      className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800"
+                      className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
                     />
                   </InputWrapper>
                   <InputWrapper label="Nome do Empreendimento / Fazenda" required>
                     <input
                       type="text"
                       placeholder="Ex: Fazenda Boa Esperança - Gleba A"
-                      className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800"
+                      className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
                     />
                   </InputWrapper>
                   <InputWrapper label="Número do CEFIR / CAR Estadual">
                     <input
                       type="text"
                       placeholder="BA-2903201-98AF234190"
-                      className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800"
+                      className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
                     />
                   </InputWrapper>
                 </div>
@@ -446,7 +446,7 @@ export const CerhPage: React.FC<CerhPageProps> = ({ onNavigate }) => {
               >
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <InputWrapper label="Bacia Hidrográfica (RPGA)" required>
-                    <select className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+                    <select className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 focus:outline-none dark:text-slate-100 cursor-pointer">
                       <option>Bacia do Rio São Francisco</option>
                       <option>Bacia do Rio Paraguaçu</option>
                       <option>Bacia do Rio de Contas</option>
@@ -456,14 +456,14 @@ export const CerhPage: React.FC<CerhPageProps> = ({ onNavigate }) => {
                     <input
                       type="text"
                       defaultValue="Barreiras"
-                      className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800"
+                      className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
                     />
                   </InputWrapper>
                   <InputWrapper label="Coordenadas Geográficas (SIRGAS 2000)" required>
                     <input
                       type="text"
                       placeholder="-12.148500, -45.002100"
-                      className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800"
+                      className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
                     />
                   </InputWrapper>
                 </div>
@@ -480,7 +480,7 @@ export const CerhPage: React.FC<CerhPageProps> = ({ onNavigate }) => {
               >
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <InputWrapper label="Modalidade de Interferência *" required>
-                    <select className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+                    <select className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 focus:outline-none dark:text-slate-100 cursor-pointer">
                       <option>Captação Subterrânea (Poço Tubular)</option>
                       <option>Captação Superficial Direta (Rio / Riacho)</option>
                       <option>Barramento com Regularização de Vazão</option>
@@ -491,21 +491,21 @@ export const CerhPage: React.FC<CerhPageProps> = ({ onNavigate }) => {
                     <input
                       type="text"
                       defaultValue="Aquífero Urucuia / Rio de Ondas"
-                      className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800"
+                      className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
                     />
                   </InputWrapper>
                   <InputWrapper label="Profundidade do Poço (metros)">
                     <input
                       type="number"
                       defaultValue="180"
-                      className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800"
+                      className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
                     />
                   </InputWrapper>
                   <InputWrapper label="Nível Estático / Dinâmico (m)">
                     <input
                       type="text"
                       defaultValue="NE: 32m / ND: 68m"
-                      className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800"
+                      className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
                     />
                   </InputWrapper>
                 </div>
@@ -522,7 +522,7 @@ export const CerhPage: React.FC<CerhPageProps> = ({ onNavigate }) => {
               >
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <InputWrapper label="Finalidade Principal *" required>
-                    <select className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+                    <select className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 focus:outline-none dark:text-slate-100 cursor-pointer">
                       <option>Irrigação Agrícola (Pivô / Gotejamento)</option>
                       <option>Consumo Humano / Abastecimento Público</option>
                       <option>Industrial e Transformação</option>
@@ -533,14 +533,14 @@ export const CerhPage: React.FC<CerhPageProps> = ({ onNavigate }) => {
                     <input
                       type="text"
                       defaultValue="45.00"
-                      className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800"
+                      className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
                     />
                   </InputWrapper>
                   <InputWrapper label="Horas de Operação por Dia (h/dia) *" required>
                     <input
                       type="number"
                       defaultValue="16"
-                      className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800"
+                      className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
                     />
                   </InputWrapper>
                 </div>
@@ -560,14 +560,14 @@ export const CerhPage: React.FC<CerhPageProps> = ({ onNavigate }) => {
                     <input
                       type="text"
                       defaultValue="Eng. Carlos Eduardo Pinheiro (CREA-BA 19.824-D)"
-                      className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800"
+                      className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
                     />
                   </InputWrapper>
                   <InputWrapper label="Número da ART / RRT *" required>
                     <input
                       type="text"
                       defaultValue="ART-BA-2026-9912048"
-                      className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800"
+                      className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
                     />
                   </InputWrapper>
                 </div>

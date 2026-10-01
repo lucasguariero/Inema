@@ -1038,7 +1038,7 @@ export const ParametrizacoesMasterPage: React.FC<ParametrizacoesMasterPageProps>
                   <input
                     type="text"
                     defaultValue="1,00%"
-                    className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 font-mono"
+                    className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
                   />
                 </InputWrapper>
               </div>
@@ -1048,14 +1048,14 @@ export const ParametrizacoesMasterPage: React.FC<ParametrizacoesMasterPageProps>
                   <input
                     type="text"
                     defaultValue="2,00%"
-                    className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 font-mono"
+                    className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
                   />
                 </InputWrapper>
                 <InputWrapper label="Dias de Tolerância para Compensação">
                   <input
                     type="number"
                     defaultValue="3"
-                    className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 font-mono"
+                    className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
                   />
                 </InputWrapper>
               </div>
@@ -1064,7 +1064,7 @@ export const ParametrizacoesMasterPage: React.FC<ParametrizacoesMasterPageProps>
                 <textarea
                   rows={2}
                   defaultValue="Lei Estadual nº 11.631/2009 e Decreto Estadual nº 14.024/2012 — Regulamento da Taxa de Fiscalização Ambiental e Licenciamento."
-                  className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100"
+                  className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100 resize-y"
                 />
               </InputWrapper>
 
@@ -1105,7 +1105,7 @@ export const ParametrizacoesMasterPage: React.FC<ParametrizacoesMasterPageProps>
                 <input
                   type="text"
                   defaultValue="Diretor Geral do Instituto do Meio Ambiente e Recursos Hídricos (INEMA)"
-                  className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 font-medium"
+                  className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100 font-medium"
                 />
               </InputWrapper>
 
@@ -1114,14 +1114,14 @@ export const ParametrizacoesMasterPage: React.FC<ParametrizacoesMasterPageProps>
                   <input
                     type="text"
                     defaultValue="Diretor Geral"
-                    className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100"
+                    className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
                   />
                 </InputWrapper>
                 <InputWrapper label="Matrícula Funcional">
                   <input
                     type="text"
                     defaultValue="98.112.440-1"
-                    className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 font-mono"
+                    className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
                   />
                 </InputWrapper>
               </div>
@@ -1130,7 +1130,7 @@ export const ParametrizacoesMasterPage: React.FC<ParametrizacoesMasterPageProps>
                 <textarea
                   rows={4}
                   defaultValue="O inadimplemento de 03 (três) parcelas consecutivas ou alternadas ensejará a rescisão de pleno direito do presente parcelamento, com o vencimento antecipado do saldo devedor remanescente e imediato encaminhamento à Procuradoria Geral do Estado (PGE) para inscrição em Dívida Ativa."
-                  className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100"
+                  className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100 resize-y"
                 />
               </InputWrapper>
 
@@ -1187,7 +1187,7 @@ export const ParametrizacoesMasterPage: React.FC<ParametrizacoesMasterPageProps>
               <input
                 type="text"
                 placeholder="Ex: IND.02.99 / ONU 3082"
-                className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 font-mono"
+                className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
               />
             </InputWrapper>
 
@@ -1195,7 +1195,7 @@ export const ParametrizacoesMasterPage: React.FC<ParametrizacoesMasterPageProps>
               <input
                 type="text"
                 placeholder="Nome completo do registro parametrizado"
-                className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100"
+                className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
               />
             </InputWrapper>
 
@@ -1203,7 +1203,7 @@ export const ParametrizacoesMasterPage: React.FC<ParametrizacoesMasterPageProps>
               <input
                 type="text"
                 placeholder="Ex: Portaria INEMA nº 25.753/2022"
-                className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100"
+                className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
               />
             </InputWrapper>
           </div>

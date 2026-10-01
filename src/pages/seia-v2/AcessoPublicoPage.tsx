@@ -21,7 +21,7 @@ import {
 import { SeiaV2Breadcrumb } from '@/components/seia-v2/SeiaV2Breadcrumb';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { TableContainer, TableToolbar } from '@/components/filament';
+import { TableContainer, TableToolbar, InputWrapper } from '@/components/filament';
 import {
   Dialog,
   DialogContent,
@@ -605,10 +605,7 @@ export const AcessoPublicoPage: React.FC<AcessoPublicoPageProps> = ({ onNavigate
           </DialogHeader>
 
           <form onSubmit={handleVerificarAutenticidade} className="space-y-4 py-2">
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                Código Verificador / Hash do Documento
-              </label>
+            <InputWrapper label="Código Verificador / Hash do Documento" required>
               <input
                 type="text"
                 placeholder="Ex: 2026.029-A8F4-91BC ou LP-2026-002"
@@ -617,9 +614,9 @@ export const AcessoPublicoPage: React.FC<AcessoPublicoPageProps> = ({ onNavigate
                   setAuthCode(e.target.value);
                   setAuthResult({ status: 'idle' });
                 }}
-                className="w-full h-10 px-3 text-xs sm:text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 uppercase font-mono focus:outline-none focus:ring-1 focus:ring-[#0F4C3A]"
+                className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm uppercase font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
               />
-            </div>
+            </InputWrapper>
 
             {authResult.status === 'valid' && (
               <div className="p-3 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 text-xs flex items-start gap-2">

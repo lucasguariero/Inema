@@ -385,7 +385,7 @@ export const PautaEnquadramentoPage: React.FC<PautaEnquadramentoPageProps> = ({ 
 
             <div className="space-y-4 text-xs">
               <InputWrapper label="Selecione o Analista Técnico Responsável" required>
-                <select className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+                <select className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 focus:outline-none dark:text-slate-100 cursor-pointer">
                   <option>Eng. Caick Vinicius — 4 processos em andamento (Carga: Baixa)</option>
                   <option>Bióloga Fernanda Souza — 8 processos em andamento (Carga: Média)</option>
                   <option>Eng. Florestal Bruno Carvalho — 6 processos em andamento (Carga: Média)</option>
@@ -393,7 +393,7 @@ export const PautaEnquadramentoPage: React.FC<PautaEnquadramentoPageProps> = ({ 
               </InputWrapper>
 
               <InputWrapper label="Prazo Interno de Enquadramento" required>
-                <select className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+                <select className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 focus:outline-none dark:text-slate-100 cursor-pointer">
                   <option>SLA Padrão — 5 dias úteis</option>
                   <option>Prioritário / Decisão Judicial — 48 horas</option>
                   <option>Projeto Estruturante do Estado — 72 horas</option>
@@ -401,7 +401,7 @@ export const PautaEnquadramentoPage: React.FC<PautaEnquadramentoPageProps> = ({ 
               </InputWrapper>
 
               <InputWrapper label="Despacho / Instruções Técnicas">
-                <textarea rows={3} placeholder="Instruções específicas para o analista sobre tipologias ou estudos..." className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800" />
+                <textarea rows={3} placeholder="Instruções específicas para o analista sobre tipologias ou estudos..." className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100 resize-y" />
               </InputWrapper>
             </div>
 
@@ -453,7 +453,7 @@ export const PautaEnquadramentoPage: React.FC<PautaEnquadramentoPageProps> = ({ 
               </Section>
 
               <InputWrapper label="Conclusão e Justificativa do Parecer" required>
-                <textarea defaultValue="Empreendimento devidamente enquadrado com base nas diretrizes da Portaria INEMA nº 25.753/2022. Estudos ambientais (RCA/PCA) deverão ser protocolados no prazo legal." rows={3} className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800" />
+                <textarea defaultValue="Empreendimento devidamente enquadrado com base nas diretrizes da Portaria INEMA nº 25.753/2022. Estudos ambientais (RCA/PCA) deverão ser protocolados no prazo legal." rows={3} className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100 resize-y" />
               </InputWrapper>
             </div>
 

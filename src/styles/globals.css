@@ -652,16 +652,26 @@ input[type="range"] {
 }
 
 /* Inputs, Textareas e Selects elegantes com focus ring suave */
-input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="reset"]),
-textarea {
+input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not(.fi-input),
+textarea:not(.fi-input) {
   transition: all 0.2s ease-in-out;
 }
 
-input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="reset"]):focus,
-textarea:focus {
+input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not(.fi-input):focus,
+textarea:not(.fi-input):focus {
   outline: none !important;
   border-color: var(--input-border-focus) !important;
   box-shadow: 0 0 0 2px var(--color-green-alpha-20) !important;
+}
+
+/* Reset obrigatório para componentes InputWrapper do Design System */
+.fi-input:focus,
+.fi-input-wrp input:focus,
+.fi-input-wrp textarea:focus,
+.fi-input-wrp select:focus {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 /* Transições universais suaves em botões, links e células interativas */

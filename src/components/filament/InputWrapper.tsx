@@ -37,8 +37,8 @@ export const InputWrapper = React.forwardRef<HTMLDivElement, InputWrapperProps>(
         className={cn(
           'fi-input-wrp flex items-center rounded-lg shadow-2xs border transition-colors duration-75 overflow-hidden',
           valid
-            ? 'border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800/80 focus-within:border-[#0F4C3A] dark:focus-within:border-emerald-500 focus-within:ring-1 focus-within:ring-[#0F4C3A]/20 dark:focus-within:ring-emerald-500/20'
-            : 'border-rose-400 dark:border-rose-600 focus-within:border-rose-600 focus-within:ring-1 focus-within:ring-rose-600/30 bg-rose-50/20 dark:bg-rose-950/20',
+            ? 'border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800/80 focus-within:border-[#0F4C3A] dark:focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-[#0F4C3A]/20 dark:focus-within:ring-emerald-500/30'
+            : 'border-rose-400 dark:border-rose-600 focus-within:border-rose-600 focus-within:ring-2 focus-within:ring-rose-600/30 bg-rose-50/20 dark:bg-rose-950/20',
           disabled && 'bg-slate-100/70 dark:bg-slate-800/50 cursor-not-allowed opacity-75',
           className
         )}

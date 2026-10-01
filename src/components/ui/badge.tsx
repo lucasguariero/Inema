@@ -65,17 +65,17 @@ function Badge({ className, color, size = 'sm', variant = 'default', dot = false
   // Filament badge colors
   const colorStyles: Record<FilamentBadgeColor, string> = {
     primary:
-      'bg-[var(--color-brand-primary-subtle)] text-[var(--color-brand-primary)] ring-[var(--color-green-alpha-20)]',
+      'bg-emerald-50 text-[#0F4C3A] ring-emerald-600/20 dark:bg-emerald-950/40 dark:text-emerald-300 dark:ring-emerald-500/30',
     gray:
-      'bg-[var(--badge-info-bg)] text-[var(--badge-info-text)] ring-[var(--badge-info-border)]',
+      'bg-slate-100 text-slate-700 ring-slate-300/60 dark:bg-slate-800 dark:text-slate-300 dark:ring-slate-700',
     danger:
-      'bg-[var(--badge-critical-bg)] text-[var(--badge-critical-text)] ring-[var(--badge-critical-border)]',
+      'bg-rose-50 text-rose-700 ring-rose-600/20 dark:bg-rose-950/40 dark:text-rose-300 dark:ring-rose-500/30',
     warning:
-      'bg-[var(--badge-warning-bg)] text-[var(--badge-warning-text)] ring-[var(--badge-warning-border)]',
+      'bg-amber-50 text-amber-850 ring-amber-600/20 dark:bg-amber-950/40 dark:text-amber-300 dark:ring-amber-500/30',
     success:
-      'bg-[var(--badge-success-bg)] text-[var(--badge-success-text)] ring-[var(--badge-success-border)]',
+      'bg-emerald-50 text-emerald-800 ring-emerald-600/20 dark:bg-emerald-950/40 dark:text-emerald-300 dark:ring-emerald-500/30',
     info:
-      'bg-[var(--badge-info-bg)] text-[var(--badge-info-text)] ring-[var(--badge-info-border)]',
+      'bg-sky-50 text-sky-800 ring-sky-600/20 dark:bg-sky-950/40 dark:text-sky-300 dark:ring-sky-500/30',
   };
 
   const sizeStyles: Record<FilamentBadgeSize, string> = {
@@ -85,12 +85,12 @@ function Badge({ className, color, size = 'sm', variant = 'default', dot = false
   };
 
   const dotColors: Record<FilamentBadgeColor, string> = {
-    primary: 'bg-[var(--color-brand-primary)]',
-    gray: 'bg-[var(--color-status-info)]',
-    danger: 'bg-[var(--color-status-critical)]',
-    warning: 'bg-[var(--color-status-warning)]',
-    success: 'bg-[var(--color-status-success)]',
-    info: 'bg-[var(--color-status-info)]',
+    primary: 'bg-[#0F4C3A] dark:bg-emerald-400',
+    gray: 'bg-slate-500 dark:bg-slate-400',
+    danger: 'bg-rose-600 dark:bg-rose-400',
+    warning: 'bg-amber-600 dark:bg-amber-400',
+    success: 'bg-emerald-600 dark:bg-emerald-400',
+    info: 'bg-sky-600 dark:bg-sky-400',
   };
 
   return (

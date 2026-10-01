@@ -308,7 +308,7 @@ export const ParcelamentoDebitoPage: React.FC<ParcelamentoDebitoPageProps> = ({ 
                   <select
                     value={numeroParcelas}
                     onChange={(e) => setNumeroParcelas(Number(e.target.value))}
-                    className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800"
+                    className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 focus:outline-none dark:text-slate-100 cursor-pointer"
                   >
                     <option value={6}>6 parcelas</option>
                     <option value={12}>12 parcelas</option>
@@ -319,7 +319,7 @@ export const ParcelamentoDebitoPage: React.FC<ParcelamentoDebitoPageProps> = ({ 
                   </select>
                 </InputWrapper>
                 <InputWrapper label="Dia de Vencimento Mensal *" required>
-                  <select className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+                  <select className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 focus:outline-none dark:text-slate-100 cursor-pointer">
                     <option>Dia 10 de cada mês</option>
                     <option>Dia 20 de cada mês</option>
                     <option>Dia 30 de cada mês</option>

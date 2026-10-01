@@ -616,7 +616,7 @@ export const UsuariosRolesPage: React.FC<UsuariosRolesPageProps> = ({ onNavigate
               <input
                 type="text"
                 placeholder="Nome do servidor ou analista"
-                className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100"
+                className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
               />
             </InputWrapper>
 
@@ -625,14 +625,14 @@ export const UsuariosRolesPage: React.FC<UsuariosRolesPageProps> = ({ onNavigate
                 <input
                   type="text"
                   placeholder="000.000.000-00"
-                  className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 font-mono"
+                  className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
                 />
               </InputWrapper>
               <InputWrapper label="Matrícula SEI (opcional)">
                 <input
                   type="text"
                   placeholder="98.110.000-1"
-                  className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 font-mono"
+                  className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
                 />
               </InputWrapper>
             </div>
@@ -641,7 +641,7 @@ export const UsuariosRolesPage: React.FC<UsuariosRolesPageProps> = ({ onNavigate
               <input
                 type="email"
                 placeholder="nome.sobrenome@inema.ba.gov.br"
-                className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100"
+                className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100"
               />
             </InputWrapper>
 

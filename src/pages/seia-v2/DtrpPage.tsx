@@ -332,16 +332,16 @@ export const DtrpPage: React.FC<DtrpPageProps> = ({ onNavigate }) => {
             <Section title="1. Dados do Gerador e Destinador Final" icon={<Building2 className="w-4 h-4 text-[#0F4C3A]" />}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <InputWrapper label="Razão Social do Gerador" required>
-                  <input type="text" defaultValue="Petroquímica Camaçari S.A." className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800" />
+                  <input type="text" defaultValue="Petroquímica Camaçari S.A." className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100" />
                 </InputWrapper>
                 <InputWrapper label="Licença de Operação do Gerador (LO)" required>
-                  <input type="text" defaultValue="Portaria INEMA nº 2024/0912-LO" className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800" />
+                  <input type="text" defaultValue="Portaria INEMA nº 2024/0912-LO" className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100" />
                 </InputWrapper>
                 <InputWrapper label="Empresa Destinadora Autorizada" required>
-                  <input type="text" defaultValue="Cetrel S.A. Tratamento de Efluentes e Resíduos" className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800" />
+                  <input type="text" defaultValue="Cetrel S.A. Tratamento de Efluentes e Resíduos" className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100" />
                 </InputWrapper>
                 <InputWrapper label="Método de Destinação Final" required>
-                  <select className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+                  <select className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 focus:outline-none dark:text-slate-100 cursor-pointer">
                     <option>Incineração Térmica Controlada</option>
                     <option>Co-processamento em Fornos de Clínquer</option>
                     <option>Aterro Industrial de Resíduos Perigosos (Classe I)</option>
@@ -356,17 +356,17 @@ export const DtrpPage: React.FC<DtrpPageProps> = ({ onNavigate }) => {
             <Section title="2. Classificação Técnica do Resíduo" icon={<AlertTriangle className="w-4 h-4 text-[#0F4C3A]" />}>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <InputWrapper label="Código ONU" required>
-                  <input type="text" defaultValue="ONU 1993" className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800" />
+                  <input type="text" defaultValue="ONU 1993" className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100" />
                 </InputWrapper>
                 <InputWrapper label="Classe de Risco" required>
-                  <select className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+                  <select className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 focus:outline-none dark:text-slate-100 cursor-pointer">
                     <option>Classe 3 — Líquidos Inflamáveis</option>
                     <option>Classe 8 — Substâncias Corrosivas</option>
                     <option>Classe 9 — Substâncias Perigosas Diversas</option>
                   </select>
                 </InputWrapper>
                 <InputWrapper label="Volume / Peso Total" required>
-                  <input type="text" defaultValue="14.500 kg" className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800" />
+                  <input type="text" defaultValue="14.500 kg" className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100" />
                 </InputWrapper>
               </div>
             </Section>
@@ -376,13 +376,13 @@ export const DtrpPage: React.FC<DtrpPageProps> = ({ onNavigate }) => {
             <Section title="3. Veículo Transportador e Motorista" icon={<Truck className="w-4 h-4 text-[#0F4C3A]" />}>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <InputWrapper label="Placa do Cavalo / Veículo" required>
-                  <input type="text" defaultValue="BRA-2E19" className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800" />
+                  <input type="text" defaultValue="BRA-2E19" className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100" />
                 </InputWrapper>
                 <InputWrapper label="Certificado CIPP do Tanque" required>
-                  <input type="text" defaultValue="CIPP-BA-991823" className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800" />
+                  <input type="text" defaultValue="CIPP-BA-991823" className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100" />
                 </InputWrapper>
                 <InputWrapper label="Condutor Habilitado com MOPP" required>
-                  <input type="text" defaultValue="Marcos Vinicius Ribeiro (CNH 0491823910)" className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800" />
+                  <input type="text" defaultValue="Marcos Vinicius Ribeiro (CNH 0491823910)" className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100" />
                 </InputWrapper>
               </div>
             </Section>
@@ -392,10 +392,10 @@ export const DtrpPage: React.FC<DtrpPageProps> = ({ onNavigate }) => {
             <Section title="4. Rota Rodoviária e Apólice de Seguro" icon={<ShieldCheck className="w-4 h-4 text-[#0F4C3A]" />}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <InputWrapper label="Trajeto Rodoviário Principal" required>
-                  <input type="text" defaultValue="BA-093 km 12 ➔ BR-324 ➔ BA-522" className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800" />
+                  <input type="text" defaultValue="BA-093 km 12 ➔ BR-324 ➔ BA-522" className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100" />
                 </InputWrapper>
                 <InputWrapper label="Apólice de Seguro Ambiental (RCTR-C)" required>
-                  <input type="text" defaultValue="Porto Seguro Ambiental Nº 991.241.902" className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800" />
+                  <input type="text" defaultValue="Porto Seguro Ambiental Nº 991.241.902" className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100" />
                 </InputWrapper>
               </div>
             </Section>

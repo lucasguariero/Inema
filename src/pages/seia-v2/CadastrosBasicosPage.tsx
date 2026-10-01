@@ -751,12 +751,12 @@ export const CadastrosBasicosPage: React.FC<CadastrosBasicosPageProps> = ({ onNa
 
             <div className="space-y-4 text-xs">
               <InputWrapper label="CPF do Profissional" required hint="O profissional receberá convite digital para aceite no SEIA">
-                <input type="text" placeholder="000.000.000-00" className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800" />
+                <input type="text" placeholder="000.000.000-00" className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100" />
               </InputWrapper>
 
               <div className="grid grid-cols-2 gap-3">
                 <InputWrapper label="Conselho de Classe" required>
-                  <select className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+                  <select className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 focus:outline-none dark:text-slate-100 cursor-pointer">
                     <option>CREA-BA (Engenharia / Agronomia)</option>
                     <option>CRBio-08 (Biologia)</option>
                     <option>CRQ-VII (Química)</option>
@@ -764,16 +764,16 @@ export const CadastrosBasicosPage: React.FC<CadastrosBasicosPageProps> = ({ onNa
                   </select>
                 </InputWrapper>
                 <InputWrapper label="Número de Registro no Conselho" required>
-                  <input type="text" placeholder="Ex: 051982/D" className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800" />
+                  <input type="text" placeholder="Ex: 051982/D" className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100" />
                 </InputWrapper>
               </div>
 
               <InputWrapper label="Número da ART / TRT / RRT Vinculada" required>
-                <input type="text" placeholder="Ex: ART-BA-2026-0912441" className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800" />
+                <input type="text" placeholder="Ex: ART-BA-2026-0912441" className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100" />
               </InputWrapper>
 
               <InputWrapper label="Escopo de Atribuições" required>
-                <select className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+                <select className="fi-input block w-full border-none bg-transparent py-1.5 px-3 text-xs sm:text-sm text-slate-900 focus:outline-none dark:text-slate-100 cursor-pointer">
                   <option>Poderes Totais (Elaborar, protocolar, responder notificações e assinar laudos)</option>
                   <option>Apenas Elaboração e Acompanhamento Técnico</option>
                   <option>Específico para Manejo de Fauna (CRAS / ASAS)</option>
