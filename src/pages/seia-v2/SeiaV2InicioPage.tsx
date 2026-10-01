@@ -39,26 +39,9 @@ export const SeiaV2InicioPage: React.FC<SeiaV2InicioPageProps> = ({ onNavigate }
     <div className="w-full space-y-6 lg:space-y-7 pb-16 animate-in fade-in duration-200">
       {/* 1. HERO HEADER INSTITUCIONAL */}
       <div className="relative overflow-hidden rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs">
-        {/* Faixa decorativa sutil no topo do card com o verde institucional */}
-        <div className="h-1.5 w-full bg-gradient-to-r from-[#0F4C3A] via-[#1a6e55] to-[#0F4C3A]" />
-
         <div className="p-6 sm:p-7 lg:p-8 flex flex-col xl:flex-row xl:items-center justify-between gap-6">
           {/* Lado Esquerdo: Saudação & Contexto do Usuário */}
           <div className="space-y-2.5 max-w-3xl">
-            <div className="flex items-center gap-2.5 flex-wrap">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-[#0F4C3A] dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
-                </span>
-                Sessão Ativa • SEIA V2
-              </span>
-              <span className="text-xs text-slate-400 dark:text-slate-500">•</span>
-              <span className="text-xs font-mono font-medium text-slate-500 dark:text-slate-400">
-                DIRRE / COASP • Homologação
-              </span>
-            </div>
-
             <div>
               <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
                 Bem-vindo, Admin INEMA
@@ -293,90 +276,88 @@ export const SeiaV2InicioPage: React.FC<SeiaV2InicioPageProps> = ({ onNavigate }
       {/* 3. SEÇÃO CENTRAL: AVISO IMPORTANTE (2/3) + PAINEL DE PROCESSOS RECENTES (1/3) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 w-full">
         {/* LADO ESQUERDO (8 Colunas): CARD AVISO IMPORTANTE */}
-        <div className="lg:col-span-8 rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-7 shadow-xs border-l-4 border-l-[#0F4C3A] flex flex-col justify-between">
-          <div>
-            <div className="flex items-center justify-between gap-3 flex-wrap">
-              <div className="flex items-center gap-2.5">
-                <span className="px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wider bg-[#0F4C3A]/10 text-[#0F4C3A] dark:bg-emerald-950/60 dark:text-emerald-300 border border-[#0F4C3A]/20">
-                  COMUNICADO OFICIAL
-                </span>
-                <span className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300">
-                  Portaria Conjunta INEMA nº 25.753/2022
-                </span>
-              </div>
-              <span className="text-xs font-mono font-medium text-slate-500 dark:text-slate-400">
-                Vigência Atual
+        <div className="lg:col-span-8 rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs flex flex-col justify-between overflow-hidden">
+          {/* Card Header no padrão do Design System */}
+          <div className="flex items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800/80 px-6 py-4 bg-slate-50/50 dark:bg-slate-800/30">
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <Badge color="primary" size="sm">COMUNICADO OFICIAL</Badge>
+              <span className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300">
+                Portaria Conjunta INEMA nº 25.753/2022
               </span>
             </div>
-
-            <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-3.5 leading-snug">
-              Está disponível a nova versão do Requerimento Único
-            </h3>
-
-            <p className="text-sm sm:text-base font-medium text-slate-700 dark:text-slate-200 mt-2.5 leading-relaxed">
-              Todos os atos administrativos necessários à regularização ambiental de atividades ou empreendimentos devem ser solicitados no mesmo requerimento unificado.
-            </p>
-
-            {/* Grid dos 6 atos administrativos integrados */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-5">
-              <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-100 shadow-2xs">
-                <CheckCircle2 className="w-4.5 h-4.5 text-[#0F4C3A] dark:text-emerald-400 shrink-0 mt-0.5" />
-                <span>Renovação ou alteração de licença ambiental (LP, LI, LO);</span>
-              </div>
-
-              <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-100 shadow-2xs">
-                <CheckCircle2 className="w-4.5 h-4.5 text-[#0F4C3A] dark:text-emerald-400 shrink-0 mt-0.5" />
-                <span>Renovação, alteração ou outorga de uso de água (CERH);</span>
-              </div>
-
-              <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-100 shadow-2xs">
-                <CheckCircle2 className="w-4.5 h-4.5 text-[#0F4C3A] dark:text-emerald-400 shrink-0 mt-0.5" />
-                <span>Prorrogação de prazo de validade de atos do INEMA;</span>
-              </div>
-
-              <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-100 shadow-2xs">
-                <CheckCircle2 className="w-4.5 h-4.5 text-[#0F4C3A] dark:text-emerald-400 shrink-0 mt-0.5" />
-                <span>Revisão e cumprimento de condicionantes ambientais;</span>
-              </div>
-
-              <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-100 shadow-2xs">
-                <CheckCircle2 className="w-4.5 h-4.5 text-[#0F4C3A] dark:text-emerald-400 shrink-0 mt-0.5" />
-                <span>Novas licenças, outorgas e atos florestais (ASV/CRF);</span>
-              </div>
-
-              <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-100 shadow-2xs">
-                <CheckCircle2 className="w-4.5 h-4.5 text-[#0F4C3A] dark:text-emerald-400 shrink-0 mt-0.5" />
-                <span>Alteração de Razão Social e Transferência de Titularidade.</span>
-              </div>
-            </div>
-
-            <p className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400 mt-4 leading-relaxed">
-              * Os atos declaratórios de regularização ambiental (ANSLA) também devem ser iniciados utilizando o fluxo unificado.
-            </p>
           </div>
 
-          <div className="pt-6 mt-6 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <span className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300">
-              Precisa de ajuda com o novo formulário?
-            </span>
-            <div className="flex items-center gap-2.5 w-full sm:w-auto">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => onNavigate && onNavigate('formulario')}
-                className="text-xs sm:text-sm font-semibold h-9 rounded-lg cursor-pointer"
-              >
-                Guia do Requerente
-              </Button>
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={() => onNavigate && onNavigate('formulario')}
-                className="text-xs sm:text-sm font-semibold bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white h-9 rounded-lg shadow-2xs flex items-center gap-1.5 cursor-pointer"
-              >
-                <span>Preencher Agora</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Button>
+          <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between">
+            <div>
+              <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-snug">
+                Está disponível a nova versão do Requerimento Único
+              </h3>
+
+              <p className="text-sm sm:text-base font-medium text-slate-700 dark:text-slate-200 mt-2.5 leading-relaxed">
+                Todos os atos administrativos necessários à regularização ambiental de atividades ou empreendimentos devem ser solicitados no mesmo requerimento unificado.
+              </p>
+
+              {/* Grid dos 6 atos administrativos integrados */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-5">
+                <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-100 shadow-2xs">
+                  <CheckCircle2 className="w-4.5 h-4.5 text-[#0F4C3A] dark:text-emerald-400 shrink-0 mt-0.5" />
+                  <span>Renovação ou alteração de licença ambiental (LP, LI, LO);</span>
+                </div>
+
+                <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-100 shadow-2xs">
+                  <CheckCircle2 className="w-4.5 h-4.5 text-[#0F4C3A] dark:text-emerald-400 shrink-0 mt-0.5" />
+                  <span>Renovação, alteração ou outorga de uso de água (CERH);</span>
+                </div>
+
+                <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-100 shadow-2xs">
+                  <CheckCircle2 className="w-4.5 h-4.5 text-[#0F4C3A] dark:text-emerald-400 shrink-0 mt-0.5" />
+                  <span>Prorrogação de prazo de validade de atos do INEMA;</span>
+                </div>
+
+                <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-100 shadow-2xs">
+                  <CheckCircle2 className="w-4.5 h-4.5 text-[#0F4C3A] dark:text-emerald-400 shrink-0 mt-0.5" />
+                  <span>Revisão e cumprimento de condicionantes ambientais;</span>
+                </div>
+
+                <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-100 shadow-2xs">
+                  <CheckCircle2 className="w-4.5 h-4.5 text-[#0F4C3A] dark:text-emerald-400 shrink-0 mt-0.5" />
+                  <span>Novas licenças, outorgas e atos florestais (ASV/CRF);</span>
+                </div>
+
+                <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-100 shadow-2xs">
+                  <CheckCircle2 className="w-4.5 h-4.5 text-[#0F4C3A] dark:text-emerald-400 shrink-0 mt-0.5" />
+                  <span>Alteração de Razão Social e Transferência de Titularidade.</span>
+                </div>
+              </div>
+
+              <p className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400 mt-4 leading-relaxed">
+                * Os atos declaratórios de regularização ambiental (ANSLA) também devem ser iniciados utilizando o fluxo unificado.
+              </p>
+            </div>
+
+            <div className="pt-6 mt-6 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <span className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300">
+                Precisa de ajuda com o novo formulário?
+              </span>
+              <div className="flex items-center gap-2.5 w-full sm:w-auto">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => onNavigate && onNavigate('formulario')}
+                  className="text-xs sm:text-sm font-semibold h-9 rounded-lg cursor-pointer"
+                >
+                  Guia do Requerente
+                </Button>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={() => onNavigate && onNavigate('formulario')}
+                  className="text-xs sm:text-sm font-semibold bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white h-9 rounded-lg shadow-2xs flex items-center gap-1.5 cursor-pointer"
+                >
+                  <span>Preencher Agora</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Button>
+              </div>
             </div>
           </div>
         </div>
