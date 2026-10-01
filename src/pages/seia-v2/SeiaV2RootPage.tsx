@@ -30,6 +30,7 @@ import { UsuariosRolesPage } from '@/pages/seia-v2/UsuariosRolesPage';
 import { SeiaV2LoginPage } from '@/pages/seia-v2/SeiaV2LoginPage';
 import { SeiaV2InicioPage } from '@/pages/seia-v2/SeiaV2InicioPage';
 import { NotificacoesPage } from '@/pages/seia-v2/NotificacoesPage';
+import { AcessoPublicoPage } from '@/pages/seia-v2/AcessoPublicoPage';
 
 export const SeiaV2RootPage: React.FC = () => {
   const [activeSubRoute, setActiveSubRoute] = useState<string>('inicio');
@@ -45,6 +46,7 @@ export const SeiaV2RootPage: React.FC = () => {
       if (tela === 'formulario' || tela === 'form' || tela === 'novo') return 'formulario';
       if (tela === 'tabela' || tela === 'pauta' || tela === 'processos') return 'tabela';
       if (tela === 'notificacoes' || tela === 'notificacao' || tela === 'notifs') return 'notificacoes';
+      if (tela === 'acesso-publico' || tela === 'publico') return 'acesso-publico';
       if (tela === 'seia-painel' || tela === 'painel') return 'seia-painel';
       if (tela === 'atendente' || tela === 'denuncia-interna') return 'atendente';
       if (tela === 'cidadao' || tela === 'denuncia-externa') return 'cidadao';
@@ -105,6 +107,8 @@ export const SeiaV2RootPage: React.FC = () => {
         return <DenunciaInternaPage onNavigate={handleNavigate} />;
       case 'cidadao':
         return <DenunciaExternaPage onNavigate={handleNavigate} />;
+      case 'acesso-publico':
+        return <AcessoPublicoPage onNavigate={handleNavigate} />;
       case 'emergencia-interna':
         return <EmergenciaInternaPage onNavigate={handleNavigate} />;
       case 'emergencia-externa':

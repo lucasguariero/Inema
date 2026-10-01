@@ -47,7 +47,7 @@ export const TOP_DIRECT_ITEMS: TopDirectItem[] = [
   { id: 'iniciar-requerimento', label: 'Iniciar Requerimento', href: seiaHref('formulario'), route: 'formulario', icon: 'FilePlus2' },
   { id: 'meus-processos', label: 'Meus Processos', href: seiaHref('tabela'), route: 'tabela', icon: 'FolderKanban' },
   { id: 'notificacoes', label: 'Notificações', href: seiaHref('notificacoes'), route: 'notificacoes', icon: 'Bell', badge: '13', badgeVariant: 'rose' },
-  { id: 'acesso-publico', label: 'Acesso Público', href: seiaHref('consulta-externa'), route: 'consulta-externa', icon: 'Globe' },
+  { id: 'acesso-publico', label: 'Acesso Público', href: seiaHref('acesso-publico'), route: 'acesso-publico', icon: 'Globe' },
 ];
 
 export const SEIA_V2_MENU_GROUPS: MenuGroup[] = [
