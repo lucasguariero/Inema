@@ -170,7 +170,7 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
     return 'text-[#c6e1e8] hover:bg-[#135467] hover:text-white font-medium';
   };
 
-  // Um único módulo aberto por vez mantém a navegação curta e previsível.
+  // Um único módulo aberto por vez mantém a navegação curta e previsível (acordeão exclusivo).
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() => {
     const activeGroup = getGroupForRoute(activeRoute);
     return activeGroup ? { [activeGroup]: true } : {};
@@ -184,11 +184,11 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
   useEffect(() => {
     const activeGroup = getGroupForRoute(activeRoute);
     if (activeGroup) {
-      setOpenGroups((prev) => ({ ...prev, [activeGroup]: true }));
+      setOpenGroups({ [activeGroup]: true });
     }
     const activeSec = getSectionForRoute(activeRoute);
     if (activeSec) {
-      setOpenSections((prev) => ({ ...prev, [activeSec]: true }));
+      setOpenSections({ [activeSec]: true });
     }
   }, [activeRoute]);
 
@@ -196,11 +196,18 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
   const [searchFilter, setSearchFilter] = useState('');
 
   const toggleGroup = (groupId: string) => {
+    const targetGroup = SEIA_V2_MENU_GROUPS.find((g) => g.id === groupId);
+    const targetSection = targetGroup?.section;
+
     setOpenGroups((prev) => (prev[groupId] ? {} : { [groupId]: true }));
+
+    if (targetSection) {
+      setOpenSections({ [targetSection]: true });
+    }
   };
 
   const toggleSection = (section: string) => {
-    setOpenSections((prev) => ({ ...prev, [section]: !prev[section] }));
+    setOpenSections((prev) => (prev[section] ? {} : { [section]: true }));
   };
 
   const handleNav = (item: MenuItem | TopDirectItem, e?: React.MouseEvent) => {

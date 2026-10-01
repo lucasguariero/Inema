@@ -35,14 +35,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const scope = getCurrentScope();
 
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
-    'seia-hibrido': true,
     regulacao: true,
-    fiscalizacao: true,
-    'unidades-conservacao': true,
   });
 
   const toggleGroup = (groupId: string) => {
-    setOpenGroups((prev) => ({ ...prev, [groupId]: !prev[groupId] }));
+    setOpenGroups((prev) => (prev[groupId] ? {} : { [groupId]: true }));
   };
 
   const handleItemClick = (item: MenuItem, e: React.MouseEvent) => {
