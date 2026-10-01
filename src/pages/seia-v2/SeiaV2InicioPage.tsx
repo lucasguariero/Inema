@@ -273,10 +273,10 @@ export const SeiaV2InicioPage: React.FC<SeiaV2InicioPageProps> = ({ onNavigate }
         </div>
       </div>
 
-      {/* 3. SEÇÃO CENTRAL: AVISO IMPORTANTE (2/3) + PAINEL DE PROCESSOS RECENTES (1/3) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 w-full">
-        {/* LADO ESQUERDO (8 Colunas): CARD AVISO IMPORTANTE */}
-        <div className="lg:col-span-8 rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs flex flex-col justify-between overflow-hidden">
+      {/* 3. SEÇÃO CENTRAL: AVISO IMPORTANTE */}
+      <div className="w-full">
+        {/* CARD AVISO IMPORTANTE */}
+        <div className="w-full rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs flex flex-col justify-between overflow-hidden">
           {/* Card Header no padrão do Design System */}
           <div className="flex items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800/80 px-6 py-4 bg-slate-50/50 dark:bg-slate-800/30">
             <div className="flex items-center gap-2.5 flex-wrap">
@@ -363,99 +363,6 @@ export const SeiaV2InicioPage: React.FC<SeiaV2InicioPageProps> = ({ onNavigate }
             </div>
           </div>
         </div>
-
-        {/* LADO DIREITO (4 Colunas): FEED OPERACIONAL / PROCESSOS RECENTES */}
-        <div className="lg:col-span-4 rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xs flex flex-col justify-between">
-          <div>
-            <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 dark:border-slate-800">
-              <div className="flex items-center gap-2">
-                <FolderKanban className="w-4 h-4 text-[#0F4C3A] dark:text-emerald-400" />
-                <h4 className="font-bold text-sm text-slate-900 dark:text-white">
-                  Movimentações Recentes
-                </h4>
-              </div>
-              <Badge color="info" size="xs">
-                Em Tramitação
-              </Badge>
-            </div>
-
-            <div className="divide-y divide-slate-100 dark:divide-slate-800/80 mt-1">
-              {/* Processo 1 */}
-              <div
-                onClick={() => onNavigate && onNavigate('tabela')}
-                className="py-3.5 hover:bg-slate-50 dark:hover:bg-slate-800/40 px-2 rounded-lg transition-colors cursor-pointer group"
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-xs font-mono font-bold text-slate-900 dark:text-slate-100 group-hover:text-[#0F4C3A] dark:group-hover:text-emerald-400 transition-colors">
-                    2026-00412/TEC
-                  </span>
-                  <span className="text-[10px] text-slate-400">Há 2h</span>
-                </div>
-                <p className="text-xs font-medium text-slate-700 dark:text-slate-300 mt-1 line-clamp-1">
-                  Polo Petroquímico Camaçari • Renovação LO
-                </p>
-                <div className="flex items-center gap-2 mt-1.5">
-                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 font-medium">
-                    Parecer Emitido
-                  </span>
-                  <span className="text-[10px] text-slate-400">DIRRE/COASP</span>
-                </div>
-              </div>
-
-              {/* Processo 2 */}
-              <div
-                onClick={() => onNavigate && onNavigate('tabela')}
-                className="py-3.5 hover:bg-slate-50 dark:hover:bg-slate-800/40 px-2 rounded-lg transition-colors cursor-pointer group"
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-xs font-mono font-bold text-slate-900 dark:text-slate-100 group-hover:text-[#0F4C3A] dark:group-hover:text-emerald-400 transition-colors">
-                    2026-00398/OUT
-                  </span>
-                  <span className="text-[10px] text-slate-400">Há 5h</span>
-                </div>
-                <p className="text-xs font-medium text-slate-700 dark:text-slate-300 mt-1 line-clamp-1">
-                  Acelen Refinaria • Outorga de Captação
-                </p>
-                <div className="flex items-center gap-2 mt-1.5">
-                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-800 font-medium">
-                    Complementação
-                  </span>
-                  <span className="text-[10px] text-slate-400">CERH Ativo</span>
-                </div>
-              </div>
-
-              {/* Processo 3 */}
-              <div
-                onClick={() => onNavigate && onNavigate('tabela')}
-                className="py-3.5 hover:bg-slate-50 dark:hover:bg-slate-800/40 px-2 rounded-lg transition-colors cursor-pointer group"
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-xs font-mono font-bold text-slate-900 dark:text-slate-100 group-hover:text-[#0F4C3A] dark:group-hover:text-emerald-400 transition-colors">
-                    2026-00129/ASV
-                  </span>
-                  <span className="text-[10px] text-slate-400">Ontem</span>
-                </div>
-                <p className="text-xs font-medium text-slate-700 dark:text-slate-300 mt-1 line-clamp-1">
-                  Complexo Eólico São Francisco • Supressão
-                </p>
-                <div className="flex items-center gap-2 mt-1.5">
-                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-sky-50 text-sky-700 dark:bg-sky-950/60 dark:text-sky-300 border border-sky-200 dark:border-sky-800 font-medium">
-                    Em Análise
-                  </span>
-                  <span className="text-[10px] text-slate-400">CRF Vinculado</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <button
-            onClick={() => onNavigate && onNavigate('tabela')}
-            className="w-full text-xs font-semibold text-[#0F4C3A] dark:text-emerald-400 hover:underline pt-3 mt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-center gap-1.5 cursor-pointer"
-          >
-            <span>Ver todos os processos em tramitação</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
       </div>
 
       {/* 4. SEÇÃO ACESSO RÁPIDO (GRID DE 6 ITENS ALINHADO E EXPANSIVO) */}
@@ -469,9 +376,6 @@ export const SeiaV2InicioPage: React.FC<SeiaV2InicioPageProps> = ({ onNavigate }
               Atalhos operacionais diretos para os cadastros e módulos regulatórios vinculados ao seu perfil.
             </p>
           </div>
-          <span className="text-xs text-slate-400 dark:text-slate-500 font-mono">
-            6 Módulos Frequentes
-          </span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 w-full">
