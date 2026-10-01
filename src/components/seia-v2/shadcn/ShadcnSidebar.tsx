@@ -86,10 +86,23 @@ const ICON_MAP: Record<string, React.ElementType> = {
   FileSpreadsheet,
 };
 
+export const SIDEBAR_SECTIONS = [
+  { label: 'Operação Ambiental', icon: 'FileCheck' },
+  { label: 'Serviços e Receita', icon: 'Globe' },
+  { label: 'Gestão e Controle', icon: 'BarChart3' },
+  { label: 'Configuração do Sistema', icon: 'Settings' },
+];
+
 const getGroupForRoute = (route?: string) =>
   SEIA_V2_MENU_GROUPS.find((group) =>
     group.items.some((item) => item.route === route)
   )?.id;
+
+const getSectionForRoute = (route?: string) =>
+  SEIA_V2_MENU_GROUPS.find(
+    (group) =>
+      group.route === route || group.items.some((item) => item.route === route)
+  )?.section || null;
 
 export const ShadcnSidebar: React.FC<SidebarProps> = ({
   activeRoute = 'relatorios',
@@ -163,9 +176,20 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
     return activeGroup ? { [activeGroup]: true } : {};
   });
 
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>(() => {
+    const activeSec = getSectionForRoute(activeRoute);
+    return activeSec ? { [activeSec]: true } : { 'Operação Ambiental': true };
+  });
+
   useEffect(() => {
     const activeGroup = getGroupForRoute(activeRoute);
-    setOpenGroups(activeGroup ? { [activeGroup]: true } : {});
+    if (activeGroup) {
+      setOpenGroups((prev) => ({ ...prev, [activeGroup]: true }));
+    }
+    const activeSec = getSectionForRoute(activeRoute);
+    if (activeSec) {
+      setOpenSections((prev) => ({ ...prev, [activeSec]: true }));
+    }
   }, [activeRoute]);
 
   // Filtro de busca instantâneo
@@ -173,6 +197,10 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
 
   const toggleGroup = (groupId: string) => {
     setOpenGroups((prev) => (prev[groupId] ? {} : { [groupId]: true }));
+  };
+
+  const toggleSection = (section: string) => {
+    setOpenSections((prev) => ({ ...prev, [section]: !prev[section] }));
   };
 
   const handleNav = (item: MenuItem | TopDirectItem, e?: React.MouseEvent) => {
@@ -240,6 +268,11 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
   const isGroupExpanded = (groupId: string) => {
     if (searchFilter.trim()) return true;
     return !!openGroups[groupId];
+  };
+
+  const isSectionExpanded = (section: string) => {
+    if (searchFilter.trim()) return true;
+    return !!openSections[section];
   };
 
   const renderBadge = (badge?: string, variant?: string) => {
@@ -426,26 +459,30 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                 );
               })}
 
-              {/* Grupos e Módulos na Sidebar Colapsada */}
-              {SEIA_V2_MENU_GROUPS.map((group) => {
-                const GroupIcon = ICON_MAP[group.icon] || Sliders;
-                const isActive =
-                  activeRoute === group.route ||
-                  group.items.some((item) => item.route === activeRoute);
+              {/* Divisor sutil */}
+              <div className={cn("w-6 h-px my-1", isDarkMode ? "bg-slate-800" : isVizoraGreen ? "bg-[#206954]" : isInemaLight ? "bg-slate-200" : "bg-[#145366]")} />
+
+              {/* Seções Canônicas na Sidebar Colapsada */}
+              {SIDEBAR_SECTIONS.map((section) => {
+                const SectionIcon = ICON_MAP[section.icon] || Layers;
+                const sectionGroups = SEIA_V2_MENU_GROUPS.filter(
+                  (group) => group.section === section.label
+                );
+                const isActive = sectionGroups.some(
+                  (group) =>
+                    activeRoute === group.route ||
+                    group.items.some((item) => item.route === activeRoute)
+                );
 
                 return (
-                  <Tooltip key={group.id} delayDuration={0}>
+                  <Tooltip key={section.label} delayDuration={0}>
                     <TooltipTrigger asChild>
                       <button
                         type="button"
-                        data-testid={`nav-group-${group.id}`}
+                        data-testid={`nav-section-${section.label}`}
                         onClick={() => {
-                          if (group.isDirectItem && group.route && onNavigate) {
-                            onNavigate(group.route);
-                          } else {
-                            toggleGroup(group.id);
-                            onToggleCollapse?.();
-                          }
+                          setOpenSections((prev) => ({ ...prev, [section.label]: true }));
+                          onToggleCollapse?.();
                         }}
                         className={cn(
                           'h-10 w-10 flex items-center justify-center rounded-md transition-all duration-150 cursor-pointer',
@@ -465,13 +502,13 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                             ? 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                             : 'text-[#9ec3cc] hover:bg-[#135467] hover:text-white'
                         )}
-                        aria-label={group.label}
+                        aria-label={section.label}
                       >
-                        <GroupIcon className="w-4 h-4" />
+                        <SectionIcon className="w-4 h-4" />
                       </button>
                     </TooltipTrigger>
                     <TooltipContent side="right" sideOffset={12}>
-                      {group.label}
+                      {section.label}
                     </TooltipContent>
                   </Tooltip>
                 );
@@ -551,77 +588,121 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                 </div>
               )}
 
-              {/* Grupos de Acordeão Oficiais do GLA (Fluxo Contínuo Sem Seções Artificiais) */}
-              {filteredGroups.map((group) => {
+              {/* Grupos Organizados por Seções Canônicas com Cabeçalho e Acordeão */}
+              {filteredGroups.map((group, index) => {
                 const GroupIcon = ICON_MAP[group.icon] || Sliders;
+                const startsSection = index === 0 || group.section !== filteredGroups[index - 1].section;
+                const sectionExpanded = isSectionExpanded(group.section);
+                const sectionHeading = startsSection ? (
+                  <button
+                    type="button"
+                    onClick={() => toggleSection(group.section)}
+                    aria-expanded={sectionExpanded}
+                    className={cn(
+                      'w-full flex items-center justify-between px-2.5 py-2 text-[10px] font-bold uppercase tracking-[0.12em] text-left cursor-pointer transition-colors select-none',
+                      index > 0 ? 'mt-3 pt-3 border-t' : 'mt-1 pt-1',
+                      isDarkMode
+                        ? 'text-slate-500 border-slate-800 hover:text-slate-300'
+                        : isVizoraGreen
+                        ? 'text-[#97c7b6] border-[#206954] hover:text-white'
+                        : isInemaLight
+                        ? 'text-[var(--color-text-tertiary)] border-[var(--color-border-subtle)] hover:text-[var(--nav-item-selected-text)]'
+                        : 'text-[#7ea8b3] border-[#145366] hover:text-white'
+                    )}
+                  >
+                    <span>{group.section}</span>
+                    <ChevronDown
+                      className={cn(
+                        'h-3.5 w-3.5 shrink-0 transition-transform duration-200',
+                        sectionExpanded ? 'rotate-0' : '-rotate-90'
+                      )}
+                    />
+                  </button>
+                ) : null;
 
                 // Item Direto (ex.: Design System)
                 if (group.isDirectItem) {
                   const isDirectActive = activeRoute === group.route;
 
                   return (
-                    <div key={group.id} className="pt-0.5">
-                      <a
-                        id={group.htmlId || group.id}
-                        data-testid={`nav-${group.label}`}
-                        href={group.href || '#'}
-                        onClick={(e) => {
-                          if (group.route && onNavigate) {
-                            e.preventDefault();
-                            onNavigate(group.route);
-                            if (onCloseMobile) onCloseMobile();
-                          }
-                        }}
+                    <React.Fragment key={group.id}>
+                      {sectionHeading}
+                      <div
+                        aria-hidden={!sectionExpanded}
+                        inert={!sectionExpanded ? true : undefined}
                         className={cn(
-                          'group flex items-center justify-between px-2.5 py-2 rounded-xl text-xs md:text-sm transition-all duration-150 cursor-pointer',
-                          getDirectItemClass(isDirectActive)
+                          'grid transition-[grid-template-rows,opacity] duration-200 ease-out motion-reduce:transition-none',
+                          sectionExpanded
+                            ? 'grid-rows-[1fr] opacity-100'
+                            : 'grid-rows-[0fr] opacity-0 pointer-events-none'
                         )}
                       >
-                        <div className="flex items-center gap-2.5 min-w-0">
-                          <div
-                            className={cn(
-                              'w-6 h-6 rounded-lg flex items-center justify-center shrink-0 transition-colors',
-                              isDirectActive
-                                ? isDarkMode
-                                  ? 'bg-slate-700 text-white shadow-xs'
-                                  : isVizoraGreen
-                                  ? 'bg-[#298369] text-white shadow-xs'
-                                  : isInemaLight
-                                  ? 'bg-[#0F4C3A] text-white'
-                                  : 'bg-[#1d6b82] text-white shadow-xs'
-                                : isDarkMode
-                                ? 'bg-slate-900 text-slate-400 group-hover:bg-slate-800 group-hover:text-white'
-                                : isVizoraGreen
-                                ? 'bg-[#103d30] text-[#bce0d3] group-hover:bg-[#1f6853] group-hover:text-white'
-                                : isInemaLight
-                                ? 'bg-slate-100 text-slate-500 group-hover:bg-slate-200 group-hover:text-slate-800'
-                                : 'bg-[#083340] text-[#9ec3cc] group-hover:bg-[#135467] group-hover:text-white'
-                            )}
-                          >
-                            <GroupIcon className="w-3.5 h-3.5" />
-                          </div>
-                          <span className="truncate">{group.label}</span>
-                        </div>
-
-                        <div className="flex items-center gap-1.5 shrink-0">
-                          {renderBadge(group.badge, group.badgeVariant)}
-                          {isDirectActive && (
-                            <span
+                        <div className="min-h-0 overflow-hidden">
+                          <div className="pt-0.5">
+                            <a
+                              id={group.htmlId || group.id}
+                              data-testid={`nav-${group.label}`}
+                              href={group.href || '#'}
+                              onClick={(e) => {
+                                if (group.route && onNavigate) {
+                                  e.preventDefault();
+                                  onNavigate(group.route);
+                                  if (onCloseMobile) onCloseMobile();
+                                }
+                              }}
                               className={cn(
-                                'w-1.5 h-1.5 rounded-full',
-                                isDarkMode
-                                  ? 'bg-emerald-400'
-                                  : isVizoraGreen
-                                  ? 'bg-[#34D399]'
-                                  : isInemaLight
-                                  ? 'bg-[#0F4C3A]'
-                                  : 'bg-[#34D399]'
+                                'group flex items-center justify-between px-2.5 py-2 rounded-xl text-xs md:text-sm transition-all duration-150 cursor-pointer',
+                                getDirectItemClass(isDirectActive)
                               )}
-                            />
-                          )}
+                            >
+                              <div className="flex items-center gap-2.5 min-w-0">
+                                <div
+                                  className={cn(
+                                    'w-6 h-6 rounded-lg flex items-center justify-center shrink-0 transition-colors',
+                                    isDirectActive
+                                      ? isDarkMode
+                                        ? 'bg-slate-700 text-white shadow-xs'
+                                        : isVizoraGreen
+                                        ? 'bg-[#298369] text-white shadow-xs'
+                                        : isInemaLight
+                                        ? 'bg-[#0F4C3A] text-white'
+                                        : 'bg-[#1d6b82] text-white shadow-xs'
+                                      : isDarkMode
+                                      ? 'bg-slate-900 text-slate-400 group-hover:bg-slate-800 group-hover:text-white'
+                                      : isVizoraGreen
+                                      ? 'bg-[#103d30] text-[#bce0d3] group-hover:bg-[#1f6853] group-hover:text-white'
+                                      : isInemaLight
+                                      ? 'bg-slate-100 text-slate-500 group-hover:bg-slate-200 group-hover:text-slate-800'
+                                      : 'bg-[#083340] text-[#9ec3cc] group-hover:bg-[#135467] group-hover:text-white'
+                                  )}
+                                >
+                                  <GroupIcon className="w-3.5 h-3.5" />
+                                </div>
+                                <span className="truncate">{group.label}</span>
+                              </div>
+
+                              <div className="flex items-center gap-1.5 shrink-0">
+                                {renderBadge(group.badge, group.badgeVariant)}
+                                {isDirectActive && (
+                                  <span
+                                    className={cn(
+                                      'w-1.5 h-1.5 rounded-full',
+                                      isDarkMode
+                                        ? 'bg-emerald-400'
+                                        : isVizoraGreen
+                                        ? 'bg-[#34D399]'
+                                        : isInemaLight
+                                        ? 'bg-[#0F4C3A]'
+                                        : 'bg-[#34D399]'
+                                    )}
+                                  />
+                                )}
+                              </div>
+                            </a>
+                          </div>
                         </div>
-                      </a>
-                    </div>
+                      </div>
+                    </React.Fragment>
                   );
                 }
 
@@ -631,135 +712,151 @@ export const ShadcnSidebar: React.FC<SidebarProps> = ({
                 );
 
                 return (
-                  <div key={group.id} className="pt-0.5">
-                    {/* Cabeçalho do Grupo (Botão de Acordeão com chevron no estilo GLA) */}
-                    <button
-                      id={`btn-${group.id}`}
-                      data-testid={`nav-${group.label}`}
-                      onClick={() => toggleGroup(group.id)}
-                      disabled={group.disabled}
-                      aria-expanded={expanded}
-                      aria-controls={`group-${group.id}`}
+                  <React.Fragment key={group.id}>
+                    {sectionHeading}
+                    <div
+                      aria-hidden={!sectionExpanded}
+                      inert={!sectionExpanded ? true : undefined}
                       className={cn(
-                        'w-full flex items-center justify-between px-2.5 py-2 rounded-xl transition-all duration-150 cursor-pointer text-left',
-                        getGroupBtnClass(hasActiveChild),
-                        group.disabled && 'opacity-55 cursor-not-allowed'
+                        'grid transition-[grid-template-rows,opacity] duration-200 ease-out motion-reduce:transition-none',
+                        sectionExpanded
+                          ? 'grid-rows-[1fr] opacity-100'
+                          : 'grid-rows-[0fr] opacity-0 pointer-events-none'
                       )}
                     >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div
-                          className={cn(
-                            'w-6 h-6 rounded-lg flex items-center justify-center shrink-0 border transition-colors',
-                            hasActiveChild
-                              ? isDarkMode
-                                ? 'bg-slate-800 text-white border-slate-700'
-                                : isVizoraGreen
-                                ? 'bg-[#298369] text-white border-[#298369]'
-                                : isInemaLight
-                                ? 'bg-slate-200 border-slate-300 text-[#0F4C3A]'
-                                : 'bg-[#1d6b82] text-white border-[#1d6b82]'
-                              : isDarkMode
-                              ? 'bg-slate-900 border-slate-800 text-slate-400'
-                              : isVizoraGreen
-                              ? 'bg-[#103d30] border-[#185846] text-[#bce0d3]'
-                              : isInemaLight
-                              ? 'bg-slate-100 border-slate-200 text-slate-500'
-                              : 'bg-[#083340] border-[#0c4353] text-[#9ec3cc]'
-                          )}
-                        >
-                          <GroupIcon className="w-3.5 h-3.5" />
-                        </div>
-                        <span className="min-w-0 text-xs md:text-sm font-semibold leading-4 truncate">
-                          {group.label}
-                        </span>
-                      </div>
-
-                      <div className="flex items-center gap-1.5 shrink-0">
-                        {renderBadge(group.badge, group.badgeVariant)}
-                        {!group.disabled && (
-                          <ChevronRight
+                      <div className="min-h-0 overflow-hidden">
+                        <div className="pt-0.5">
+                          {/* Cabeçalho do Grupo (Botão de Acordeão com chevron no estilo GLA) */}
+                          <button
+                            id={`btn-${group.id}`}
+                            data-testid={`nav-${group.label}`}
+                            onClick={() => toggleGroup(group.id)}
+                            disabled={group.disabled}
+                            aria-expanded={expanded}
+                            aria-controls={`group-${group.id}`}
                             className={cn(
-                              'w-3.5 h-3.5 transition-transform duration-200 text-slate-400',
-                              expanded ? 'rotate-90 text-slate-600 dark:text-slate-200' : ''
+                              'w-full flex items-center justify-between px-2.5 py-2 rounded-xl transition-all duration-150 cursor-pointer text-left',
+                              getGroupBtnClass(hasActiveChild),
+                              group.disabled && 'opacity-55 cursor-not-allowed'
                             )}
-                          />
-                        )}
-                      </div>
-                    </button>
-
-                    {/* Subitens Expansíveis */}
-                    {!group.disabled && (
-                      <div
-                        aria-hidden={!expanded}
-                        inert={!expanded ? true : undefined}
-                        className={cn(
-                          'grid transition-[grid-template-rows,opacity] duration-200 ease-out motion-reduce:transition-none',
-                          expanded
-                            ? 'grid-rows-[1fr] opacity-100'
-                            : 'grid-rows-[0fr] opacity-0 pointer-events-none'
-                        )}
-                      >
-                        <div
-                          id={`group-${group.id}`}
-                          className={cn(
-                            'min-h-0 overflow-hidden mt-1 ml-3.5 pl-3 border-l space-y-0.5',
-                            isDarkMode
-                              ? 'border-slate-800'
-                              : isVizoraGreen
-                              ? 'border-[#206954]'
-                              : isInemaLight
-                              ? 'border-slate-200'
-                              : 'border-[#145366]'
-                          )}
-                        >
-                          {group.items.map((subItem) => {
-                            const isSubActive = activeRoute === subItem.route;
-
-                            return (
-                              <a
-                                key={subItem.id}
-                                id={subItem.htmlId || subItem.id}
-                                data-testid={`subnav-${subItem.label}`}
-                                href={subItem.href || '#'}
-                                onClick={(e) => {
-                                  if (subItem.disabled) {
-                                    e.preventDefault();
-                                  } else if (subItem.route && onNavigate) {
-                                    e.preventDefault();
-                                    onNavigate(subItem.route);
-                                    if (onCloseMobile) onCloseMobile();
-                                  }
-                                }}
+                          >
+                            <div className="flex items-center gap-2.5 min-w-0">
+                              <div
                                 className={cn(
-                                  'group flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-all duration-150',
-                                  getSubItemClass(isSubActive, subItem.disabled)
+                                  'w-6 h-6 rounded-lg flex items-center justify-center shrink-0 border transition-colors',
+                                  hasActiveChild
+                                    ? isDarkMode
+                                      ? 'bg-slate-800 text-white border-slate-700'
+                                      : isVizoraGreen
+                                      ? 'bg-[#298369] text-white border-[#298369]'
+                                      : isInemaLight
+                                      ? 'bg-slate-200 border-slate-300 text-[#0F4C3A]'
+                                      : 'bg-[#1d6b82] text-white border-[#1d6b82]'
+                                    : isDarkMode
+                                    ? 'bg-slate-900 border-slate-800 text-slate-400'
+                                    : isVizoraGreen
+                                    ? 'bg-[#103d30] border-[#185846] text-[#bce0d3]'
+                                    : isInemaLight
+                                    ? 'bg-slate-100 border-slate-200 text-slate-500'
+                                    : 'bg-[#083340] border-[#0c4353] text-[#9ec3cc]'
                                 )}
-                                aria-disabled={subItem.disabled || undefined}
-                                tabIndex={subItem.disabled ? -1 : undefined}
                               >
-                                <span className="truncate pr-1">{subItem.label}</span>
+                                <GroupIcon className="w-3.5 h-3.5" />
+                              </div>
+                              <span className="min-w-0 text-xs md:text-sm font-semibold leading-4 truncate">
+                                {group.label}
+                              </span>
+                            </div>
 
-                                <div className="flex items-center gap-1 shrink-0">
-                                  {subItem.badge && (
-                                    <span
-                                      id={
-                                        subItem.id === 'fisc-painel-interno-difis'
-                                          ? 'sidebarBadgeEmergencias'
-                                          : undefined
-                                      }
-                                      className="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-[var(--color-status-critical)] text-white shadow-2xs"
-                                    >
-                                      {subItem.badge}
-                                    </span>
+                            <div className="flex items-center gap-1.5 shrink-0">
+                              {renderBadge(group.badge, group.badgeVariant)}
+                              {!group.disabled && (
+                                <ChevronRight
+                                  className={cn(
+                                    'w-3.5 h-3.5 transition-transform duration-200 text-slate-400',
+                                    expanded ? 'rotate-90 text-slate-600 dark:text-slate-200' : ''
                                   )}
-                                </div>
-                              </a>
-                            );
-                          })}
+                                />
+                              )}
+                            </div>
+                          </button>
+
+                          {/* Subitens Expansíveis */}
+                          {!group.disabled && (
+                            <div
+                              aria-hidden={!expanded}
+                              inert={!expanded ? true : undefined}
+                              className={cn(
+                                'grid transition-[grid-template-rows,opacity] duration-200 ease-out motion-reduce:transition-none',
+                                expanded
+                                  ? 'grid-rows-[1fr] opacity-100'
+                                  : 'grid-rows-[0fr] opacity-0 pointer-events-none'
+                              )}
+                            >
+                              <div
+                                id={`group-${group.id}`}
+                                className={cn(
+                                  'min-h-0 overflow-hidden mt-1 ml-3.5 pl-3 border-l space-y-0.5',
+                                  isDarkMode
+                                    ? 'border-slate-800'
+                                    : isVizoraGreen
+                                    ? 'border-[#206954]'
+                                    : isInemaLight
+                                    ? 'border-slate-200'
+                                    : 'border-[#145366]'
+                                )}
+                              >
+                                {group.items.map((subItem) => {
+                                  const isSubActive = activeRoute === subItem.route;
+
+                                  return (
+                                    <a
+                                      key={subItem.id}
+                                      id={subItem.htmlId || subItem.id}
+                                      data-testid={`subnav-${subItem.label}`}
+                                      href={subItem.href || '#'}
+                                      onClick={(e) => {
+                                        if (subItem.disabled) {
+                                          e.preventDefault();
+                                        } else if (subItem.route && onNavigate) {
+                                          e.preventDefault();
+                                          onNavigate(subItem.route);
+                                          if (onCloseMobile) onCloseMobile();
+                                        }
+                                      }}
+                                      className={cn(
+                                        'group flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-all duration-150',
+                                        getSubItemClass(isSubActive, subItem.disabled)
+                                      )}
+                                      aria-disabled={subItem.disabled || undefined}
+                                      tabIndex={subItem.disabled ? -1 : undefined}
+                                    >
+                                      <span className="truncate pr-1">{subItem.label}</span>
+
+                                      <div className="flex items-center gap-1 shrink-0">
+                                        {subItem.badge && (
+                                          <span
+                                            id={
+                                              subItem.id === 'fisc-painel-interno-difis'
+                                                ? 'sidebarBadgeEmergencias'
+                                                : undefined
+                                            }
+                                            className="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-[var(--color-status-critical)] text-white shadow-2xs"
+                                          >
+                                            {subItem.badge}
+                                          </span>
+                                        )}
+                                      </div>
+                                    </a>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  </React.Fragment>
                 );
               })}
 

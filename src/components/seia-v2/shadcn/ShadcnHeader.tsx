@@ -93,6 +93,8 @@ export const ShadcnHeader: React.FC<HeaderProps> = ({
         </button>
         <button
           type="button"
+          id="btn-toggle-sidebar"
+          data-testid="btn-toggle-sidebar"
           onClick={onToggleSidebar}
           className="hidden h-9 w-9 shrink-0 items-center justify-center rounded-lg text-white/85 transition-colors hover:bg-white/12 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 cursor-pointer lg:inline-flex"
           aria-label={isSidebarCollapsed ? "Expandir menu lateral" : "Recolher menu lateral"}
