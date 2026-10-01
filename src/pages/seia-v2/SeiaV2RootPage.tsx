@@ -29,6 +29,7 @@ import { ParametrizacoesMasterPage } from '@/pages/seia-v2/ParametrizacoesMaster
 import { UsuariosRolesPage } from '@/pages/seia-v2/UsuariosRolesPage';
 import { SeiaV2LoginPage } from '@/pages/seia-v2/SeiaV2LoginPage';
 import { SeiaV2InicioPage } from '@/pages/seia-v2/SeiaV2InicioPage';
+import { NotificacoesPage } from '@/pages/seia-v2/NotificacoesPage';
 
 export const SeiaV2RootPage: React.FC = () => {
   const [activeSubRoute, setActiveSubRoute] = useState<string>('inicio');
@@ -43,6 +44,7 @@ export const SeiaV2RootPage: React.FC = () => {
       if (tela === 'relatorios' || tela === 'dashboard' || tela === 'gerencial') return 'relatorios';
       if (tela === 'formulario' || tela === 'form' || tela === 'novo') return 'formulario';
       if (tela === 'tabela' || tela === 'pauta' || tela === 'processos') return 'tabela';
+      if (tela === 'notificacoes' || tela === 'notificacao' || tela === 'notifs') return 'notificacoes';
       if (tela === 'seia-painel' || tela === 'painel') return 'seia-painel';
       if (tela === 'atendente' || tela === 'denuncia-interna') return 'atendente';
       if (tela === 'cidadao' || tela === 'denuncia-externa') return 'cidadao';
@@ -87,13 +89,14 @@ export const SeiaV2RootPage: React.FC = () => {
       case 'tabela':
       case 'processos':
       case 'meus-processos':
-      case 'notificacoes':
       case 'analise-pauta-tecnico':
       case 'analise-tec-geral':
       case 'analise-tec-pauta':
       case 'processos-consultar':
       case 'processos-finalizados':
         return <SeiaV2TabelaOperacionalPage onNavigate={handleNavigate} />;
+      case 'notificacoes':
+        return <NotificacoesPage onNavigate={handleNavigate} />;
       case 'formulario':
         return <SeiaV2FormularioComplexoPage onNavigate={handleNavigate} />;
       case 'seia-painel':
