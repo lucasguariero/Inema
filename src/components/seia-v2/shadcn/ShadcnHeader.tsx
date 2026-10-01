@@ -32,6 +32,7 @@ interface HeaderProps {
   isMobileSidebarOpen?: boolean;
   onToggleSidebar?: () => void;
   onOpenCommandPalette?: () => void;
+  searchPlaceholder?: string;
 }
 
 export const ShadcnHeader: React.FC<HeaderProps> = ({
@@ -39,6 +40,7 @@ export const ShadcnHeader: React.FC<HeaderProps> = ({
   isMobileSidebarOpen,
   onToggleSidebar,
   onOpenCommandPalette,
+  searchPlaceholder,
 }) => {
   const { isDarkMode, toggleDarkMode } = useTheme();
   const [internalCommandPaletteOpen, setInternalCommandPaletteOpen] = useState(false);
@@ -123,7 +125,7 @@ export const ShadcnHeader: React.FC<HeaderProps> = ({
           onClick={handleOpenSearch}
           className="pointer-events-auto w-full flex items-center justify-between rounded-lg border border-white/18 bg-white/10 py-2 pl-8 pr-3 text-xs text-white/75 transition-all hover:bg-white/14 hover:border-white/35 focus:border-white/45 focus:bg-white/16 focus:outline-none cursor-pointer text-left"
         >
-          <span className="truncate">Buscar processos, requerimentos SEIA ou atos...</span>
+          <span className="truncate">{searchPlaceholder || "Buscar processos, requerimentos SEIA ou atos..."}</span>
           <Search className="h-3.5 w-3.5 text-white/50 shrink-0 ml-2" />
         </button>
       </div>

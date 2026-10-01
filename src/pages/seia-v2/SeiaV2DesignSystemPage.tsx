@@ -260,12 +260,52 @@ export const SeiaV2DesignSystemPage: React.FC = () => {
   const [checkboxState, setCheckboxState] = useState(true);
   const [interactiveButtonLoading, setInteractiveButtonLoading] = useState(false);
   const [activeTemplateTab, setActiveTemplateTab] = useState<'dashboard' | 'tabela' | 'formulario' | 'detalhes' | 'cidadao'>('dashboard');
+  const [dsSearchOpen, setDsSearchOpen] = useState(false);
+  const [dsSearchTerm, setDsSearchTerm] = useState('');
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setDsSearchOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const filteredSections = useMemo(() => {
     const term = navFilter.trim().toLowerCase();
     if (!term) return catalogSections;
     return catalogSections.filter((section) => `${section.group} ${section.label}`.toLowerCase().includes(term));
   }, [navFilter]);
+
+  const dsSearchResults = useMemo(() => {
+    const query = dsSearchTerm.trim().toLowerCase();
+    if (!query) {
+      return {
+        sections: catalogSections,
+        tokens: semanticTokens.slice(0, 6),
+      };
+    }
+
+    const matchedSections = catalogSections.filter(
+      (sec) =>
+        sec.label.toLowerCase().includes(query) ||
+        sec.group.toLowerCase().includes(query) ||
+        sec.id.toLowerCase().includes(query)
+    );
+
+    const matchedTokens = semanticTokens.filter(
+      ([name, varName]) =>
+        name.toLowerCase().includes(query) || varName.toLowerCase().includes(query)
+    );
+
+    return {
+      sections: matchedSections,
+      tokens: matchedTokens,
+    };
+  }, [dsSearchTerm]);
 
   const visibleRows = tableRows.filter((row) =>
     `${row.process} ${row.applicant} ${row.type} ${row.status} ${row.unit}`.toLowerCase().includes(tableSearch.toLowerCase())
@@ -359,6 +399,8 @@ export const SeiaV2DesignSystemPage: React.FC = () => {
         isSidebarCollapsed={isSidebarCollapsed}
         isMobileSidebarOpen={isMobileSidebarOpen}
         onToggleSidebar={toggleSidebar}
+        searchPlaceholder="Buscar componentes, tokens, regras e seções do Design System..."
+        onOpenCommandPalette={() => setDsSearchOpen(true)}
       />
 
       <div className="flex min-h-0 flex-1 overflow-hidden">
@@ -1324,7 +1366,7 @@ export const SeiaV2DesignSystemPage: React.FC = () => {
                 />
 
                 {/* Seletor de Arquétipos */}
-                <div className="flex flex-wrap items-center gap-2 border-b border-[var(--color-border-subtle)] pb-4 mb-6">
+                <div className="flex flex-wrap items-center gap-2 border-b border-[var(--color-border-subtle)] pb-4 mb-8">
                   {[
                     { id: 'dashboard', label: '1. Dashboard Gerencial', icon: LayoutDashboard },
                     { id: 'tabela', label: '2. Pauta / Data Grid', icon: FileSpreadsheet },
@@ -1788,6 +1830,116 @@ export const SeiaV2DesignSystemPage: React.FC = () => {
             <Button color="gray" onClick={() => setIsModalOpen(false)}>Cancelar</Button>
             <Button onClick={() => setIsModalOpen(false)}>Confirmar Encaminhamento</Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Modal de Busca Isolada do Design System */}
+      <Dialog open={dsSearchOpen} onOpenChange={setDsSearchOpen}>
+        <DialogContent className="max-w-2xl p-0 overflow-hidden gap-0">
+          <div className="flex items-center gap-3 border-b border-[var(--color-border-default)] px-4 py-3.5 bg-[var(--color-surface-default)]">
+            <Search className="h-5 w-5 text-slate-400 shrink-0" />
+            <input
+              type="text"
+              value={dsSearchTerm}
+              onChange={(e) => setDsSearchTerm(e.target.value)}
+              placeholder="Buscar seções, componentes, tokens e regras..."
+              className="flex-1 bg-transparent text-sm text-[var(--color-text-primary)] placeholder:text-slate-400 outline-none"
+              autoFocus
+            />
+            {dsSearchTerm && (
+              <button
+                type="button"
+                onClick={() => setDsSearchTerm('')}
+                className="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+              >
+                Limpar
+              </button>
+            )}
+            <kbd className="hidden sm:inline-flex items-center gap-1 rounded bg-slate-100 dark:bg-slate-800 px-2 py-0.5 text-[10px] font-mono text-slate-500 border border-slate-200 dark:border-slate-700">
+              ESC
+            </kbd>
+          </div>
+
+          <div className="max-h-[60vh] overflow-y-auto p-4 space-y-4">
+            {/* Seções e Componentes do Design System */}
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-2 px-1">
+                Seções do Design System ({dsSearchResults.sections.length})
+              </p>
+              {dsSearchResults.sections.length === 0 ? (
+                <p className="text-xs text-slate-400 px-1 py-2">Nenhuma seção encontrada com esse termo.</p>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                  {dsSearchResults.sections.map((sec) => {
+                    const SecIcon = sec.icon;
+                    return (
+                      <button
+                        key={sec.id}
+                        type="button"
+                        onClick={() => {
+                          setDsSearchOpen(false);
+                          jumpTo(sec.id);
+                        }}
+                        className="flex items-center justify-between p-2.5 rounded-lg text-left text-xs hover:bg-[var(--color-surface-subtle)] border border-transparent hover:border-[var(--color-border-subtle)] transition-colors group cursor-pointer"
+                      >
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <div className="p-1.5 rounded-md bg-emerald-50 dark:bg-emerald-950/40 text-[#0F4C3A] dark:text-emerald-400">
+                            <SecIcon className="h-4 w-4 shrink-0" />
+                          </div>
+                          <span className="font-medium text-[var(--color-text-primary)] truncate">
+                            {sec.label}
+                          </span>
+                        </div>
+                        <Badge color="gray" size="xs" className="shrink-0">{sec.group}</Badge>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Tokens Semânticos */}
+            {dsSearchResults.tokens.length > 0 && (
+              <div className="border-t border-[var(--color-border-subtle)] pt-3">
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-2 px-1">
+                  Tokens Semânticos ({dsSearchResults.tokens.length})
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                  {dsSearchResults.tokens.map(([name, varName]) => (
+                    <button
+                      key={varName}
+                      type="button"
+                      onClick={() => {
+                        setDsSearchOpen(false);
+                        jumpTo('colors');
+                      }}
+                      className="flex items-center justify-between p-2 rounded-lg text-left text-xs hover:bg-[var(--color-surface-subtle)] border border-transparent hover:border-[var(--color-border-subtle)] transition-colors group cursor-pointer"
+                    >
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span
+                          className="h-3.5 w-3.5 rounded border border-slate-300 dark:border-slate-600 shrink-0"
+                          style={{ backgroundColor: `var(${varName})` }}
+                        />
+                        <span className="font-mono text-[11px] text-[var(--color-text-primary)] truncate">
+                          {varName}
+                        </span>
+                      </div>
+                      <span className="text-[10px] text-slate-400">{name}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="flex items-center justify-between border-t border-[var(--color-border-subtle)] px-4 py-2.5 bg-[var(--color-surface-subtle)] text-[11px] text-slate-400">
+            <span>Busca isolada do SEIA V2 Design System</span>
+            <div className="flex items-center gap-2 font-mono text-[10px]">
+              <span>Clique para navegar</span>
+              <span>·</span>
+              <span>Atalho: Ctrl+K</span>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
