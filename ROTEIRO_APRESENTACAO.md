@@ -1,64 +1,143 @@
-# 📋 Roteiro de Apresentação — Alinhamento Inema & GLA
+# 🎯 Roteiro de Apresentação — SEIA V2 para Tales (UX Inema)
 
-> **Ambiente de Demonstração:** [https://gla-inema-dev.acto.com.br/](https://gla-inema-dev.acto.com.br/)  
-> **Credenciais de Acesso:** CPF: `000.000.000-00` | Senha: `admin123`  
-> **Dica Pré-Apresentação:** Já deixe a aba aberta e logada antes de iniciar o compartilhamento de tela.
+> **Público-Alvo:** Tales (UX Designer do Inema)  
+> **Contexto do Tales:** Está conduzindo a inspeção heurística e mapeamento de fluxos/telas no sistema legado do Inema.  
+> **Objetivo da Reunião:** Apresentar a arquitetura de UX, o Design System e os arquétipos do SEIA V2 como a **plataforma modular pronta** para receber e implementar as telas que ele revisar no legado.  
+> **Diretriz de Ouro:** **ZERO "tela a tela"**. O foco é arquitetura, consistência, resolução das dores do legado e parceria de produto.  
+> **Ambiente Oficial de Demonstração:** [https://inema.acto.com.br/?rota=seia-v2](https://inema.acto.com.br/?rota=seia-v2)  
+> **Duração Estimada:** 10 a 12 minutos (+ espaço para debate e alinhamento).
 
 ---
 
-## 1. Abertura & Validação do Figma (Logo após a fala da Thays)
-*(Sem compartilhar a tela ainda — cerca de 30 a 45 segundos)*
+## 📌 Visão Geral da Apresentação (Os 4 Blocos)
 
-> *"Perfeito, Thays. Pessoal, antes de puxar a tela aqui do ambiente de desenvolvimento, nós demos uma olhada no protótipo Figma que vocês mandaram e identificamos vários pontos funcionais bem interessantes ali.*
+| Bloco | Tema | Foco de UX | Tempo Sugerido |
+| :---: | :--- | :--- | :---: |
+| **01** | **Abertura & Conexão Estratégica** | Valorização da inspeção do legado e proposta de parceria de produto | ~1:30 min |
+| **02** | **Design System Vivo & Fundações** | Tokens semânticos, densidade compacta (36px), grid de 8pt, WCAG e Dark Mode | ~3:30 min |
+| **03** | **Os 3 Arquétipos de Interação** | Pautas/Tabelas com Drawers, Formulários em Stepper SVG e Dashboards Sóbrios | ~4:30 min |
+| **04** | **Handover & Próximos Passos** | Fluxo contínuo: do wireframe/revisão do Tales para a implementação direta no SEIA V2 | ~2:00 min |
+
+---
+
+## 🎙️ Bloco 1: Abertura & Conexão com a Inspeção do Legado
+*(Sem compartilhar tela nos primeiros 30 segundos — aprox. 1:30 min)*
+
+### 🗣️ O que falar:
+> *"Fala Tales! Tudo bem?*
 > 
-> *Chamou bastante a atenção a preocupação em deixar tudo mais direto: a parte de alertas e prazos bem visível logo de entrada, os serviços principais centralizados para o usuário não se perder, e atalhos rápidos para as ações mais frequentes do dia a dia.*
+> *Cara, eu sei que você está bem focado aí na inspeção das telas e dos fluxos do Inema legado — que é um trabalho fundamental pra gente mapear as fricções cognitivas, os campos reais e a lógica de trabalho dos analistas.*
 > 
-> *Essa linha de raciocínio de vocês de encurtar caminho e dar clareza bate 100% com o que a gente está construindo aqui. Vou compartilhar a tela agora com o nosso ambiente de desenvolvimento para vocês verem como essa base já está funcionando."*
-
----
-
-## 2. Tour ao Vivo: `gla-inema-dev.acto.com.br`
-*(Inicie o compartilhamento de tela já no painel logado — cerca de 2 a 3 minutos)*
-
-> *"Puxando aqui pro nosso ambiente de desenvolvimento: o GLA já é construído em Filament, mas o que nós fizemos aqui foi dar uma boa modernizada no design, no layout e nos componentes, deixando a navegação bem mais limpa e prática no dia a dia:"*
-
-### 🔹 1. Menu Lateral (Identidade & Filtro Dinâmico)
-> *"No menu lateral, repaginamos a identidade visual e adicionamos esse campo de filtro dinâmico no topo. Basta começar a digitar o nome do módulo e o menu filtra na hora, agilizando bastante a rotina de quem usa o sistema com frequência."*  
-* **Ação na tela:** Digite algo rápido no campo *"Filtrar menu..."* (ex: "Processos" ou "Pesquisa") para demonstrar a filtragem em tempo real.
-
----
-
-### 🔹 2. Barra Superior (Breadcrumb, Alinhamento & Busca Global)
-> *"Na barra superior, clareamos o layout trazendo ela pro branco, afinamos todos os alinhamentos e incluímos o breadcrumb para o usuário sempre saber exatamente onde está navegando. Além disso, adicionamos a busca global rápida com atalho de teclado (`Ctrl + K`)."*  
-* **Ação na tela:** Aponte o breadcrumb e pressione `Ctrl + K` (ou clique na busca) para abrir o modal de pesquisa global.
-
----
-
-### 🔹 3. Painel Inicial (Cards de Acesso Rápido)
-> *"Na tela inicial, refinamos a estrutura dos cards de acesso rápido, padronizando os blocos e ícones para deixar a navegação de entrada ainda mais intuitiva e agradável de bater o olho."*  
-* **Ação na tela:** Passe o cursor pelos cards centrais (Dados Pessoais, Empreendimentos, CERH, Reposição Florestal, etc.).
-
----
-
-### 🔹 4. Tabelas & Listagens (Legibilidade & Badges)
-> *"E nas tabelas e listagens, trabalhamos o espaçamento e a clareza dos dados, com badges de status bem visíveis e uma leitura muito mais confortável no dia a dia."*  
-* **Ação na tela:** Abra uma listagem/módulo para demonstrar o visual limpo da tabela e das tags de status.
-
----
-
-## 3. O Gancho Final (Proposta Colaborativa de Evolução)
-*(Fechamento da sua fala abrindo para a validação do cliente — cerca de 45 segundos)*
-
-> *"A gente notou que o desenho de vocês no Figma focou bastante na lógica e no fluxo de trabalho prático, sem necessariamente se prender à estrutura de componentes ou à tecnologia do Filament — o que é natural.
+> *Pra nossa conversa de hoje, eu não vou te cansar passando tela a tela de um sistema inteiro. Como você é de UX, eu quero te mostrar **a infraestrutura e a arquitetura de interface** que nós construímos aqui no SEIA V2:*
 > 
-> Por isso, a nossa ideia é justamente **unir o melhor das duas coisas**: pegar essa visão funcional que vocês desenharam e reconstruir dentro do Filament, refinando a usabilidade e aproveitando esses novos componentes e padrões visuais que mostramos aqui.
+> *Montamos um Design System vivo, definimos os padrões fundamentais de interação e deixamos essa base 100% pronta para plugar com velocidade exatamente as telas e jornadas que você for refinando na sua inspeção.*
 > 
-> **O que vocês acham dessa proposta? Se fizer sentido para vocês**, a gente já puxa esse trabalho e traz na próxima reunião um protótipo navegável unindo essas duas frentes para validarmos juntos."*
+> *Vou compartilhar minha tela pra você ver como estruturamos essa fundação."*
+
+### 🖥️ Ação na tela:
+- Iniciar compartilhamento já na URL oficial: `https://inema.acto.com.br/?rota=seia-v2` (na tela inicial ou direto no menu).
+
+### 💡 Argumento de Ouro:
+> *"Nós não criamos telas isoladas: criamos um sistema de design escalável que absorve qualquer fluxo que você desenhar sem retrabalho de componentes."*
 
 ---
 
-## 📌 Checklist Rápido de Palco
-- [ ] Monitor em resolução padrão (zoom 100%).
-- [ ] Aba do `gla-inema-dev` já aberta e logada.
-- [ ] Notificações do Windows/Slack/WhatsApp pausadas.
-- [ ] Roteiro aberto na tela secundária ou celular.
+## 🎨 Bloco 2: O Design System Vivo & Fundações de UI
+*(Acessar `/?rota=seia-v2&tela=design-system` — aprox. 3:30 min)*
+
+### 🗣️ O que falar:
+> *"Tales, começando pela nossa fonte de verdade: construímos um ambiente autônomo do **Design System oficial do INEMA**, documentando desde as fundações atômicas até componentes complexos.*
+> 
+> *Quero destacar 4 decisões de UX que tomamos aqui:*
+> 
+> 1. **Identidade Institucional sem Ruído:** Fixamos a paleta no verde institucional oficial (`#0F4C3A`), eliminando totalmente qualquer roxo, gradientes artificiais ou teals genéricos que costumam poluir sistemas de governo.
+> 2. **Densidade de Informação (Dense UI):** O legado sofre muito com desperdício de espaço vertical. Aqui adotamos alturas de controle de 36px e 32px (padrão Filament/Dense), com tipografia modular (Inter) e dados em fonte monoespacial tabular (`font-mono tabular-nums`). Isso aumenta a área útil da tela sem cansar a vista.
+> 3. **Grid de 8pt & Consistência Geométrica:** Todos os contêineres e cards seguem estritamente `rounded-xl` (12px), enquanto inputs e botões seguem `rounded-lg` (8px), com anéis de foco suaves de acessibilidade.
+> 4. **Acessibilidade & Dark Mode Nativo:** Contraste validado em WCAG AA e dark mode neutro em carvão/ardósia, essencial para os analistas que trabalham 8 horas diárias analisando processos extensos."*
+
+### 🖥️ O que mostrar:
+1. Abrir a rota `/?rota=seia-v2&tela=design-system`.
+2. Rolar brevemente pelas seções de **Tokens de Cores** e **Componentes Base** (`Button`, `Badge` com e sem dot, `InputWrapper`, `FilamentSelect`).
+3. Alternar rapidamente para o **Dark Mode** (ícone de lua na topbar) e voltar para o Light Mode para demonstrar a consistência de contraste.
+4. Apontar o comportamento dos componentes com estados de foco suave e transições de 150ms.
+
+### 💡 Argumento de Ouro:
+> *"Como já temos os tokens e componentes refinados, quando você terminar de desenhar uma tela no Figma, a nossa conversa técnica de implementação será em cima de blocos prontos, sem discussão de botões descartáveis ou inconsistências visuais."*
+
+---
+
+## 🧩 Bloco 3: Os 3 Arquétipos de Interação (Como Resolvemos o Legado)
+*(Demonstração prática dos 3 padrões fundamentais — aprox. 4:30 min)*
+
+> *"Tales, em vez de repassar 20 telas parecidas, vou te mostrar os **3 arquétipos fundamentais** que resolvem 95% de tudo o que existe no Inema legado:"*
+
+---
+
+### 🔹 Padrão 1: Pautas Operacionais & Data Grids (Tabelas com Contexto)
+* **Rota para abrir:** `/?rota=seia-v2&tela=pauta-area` ou `/?rota=seia-v2&tela=tabela`
+* **O que falar:**
+  > *"O analista técnico passa 90% do dia em pautas de processos. No legado, o problema crônico são tabelas pesadas, sem filtros inteligentes e com popups que quebram o fluxo de raciocínio.*
+  > 
+  > *Aqui nós resolvemos isso com a **Tabela Canônica**:*
+  > - *Toolbar com busca em tempo real (`debounced`) e filtros dinâmicos que exibem contagem ativa em badges.*
+  > - *Badges semânticos de SLA com status dots (`danger` para atrasado, `warning` para atenção e `success` para deferido).*
+  > - *Ações contextuais que abrem gavetas laterais (Drawers) ou modais refinados, permitindo analisar o processo sem que o técnico perca o contexto ou a posição na lista."*
+* **O que mostrar:**
+  - Digitar no filtro de busca da tabela.
+  - Mostrar a contagem de itens e paginação limpa.
+  - Clicar na ação da linha para abrir detalhes contextuais.
+
+---
+
+### 🔹 Padrão 2: Formulários Modulares & Wizard com Stepper SVG
+* **Rota para abrir:** `/?rota=seia-v2&tela=formulario` ou `/?rota=seia-v2&tela=ansla-dispensa`
+* **O que falar:**
+  > *"O segundo arquétipo são os formulários ambientais. No legado, o usuário enfrenta páginas intermináveis com 70 a 80 campos monolíticos jogados na mesma tela, o que gera abandono e erros frequentes de preenchimento.*
+  > 
+  > *Nossa solução de UX foi o **FilamentWizard** com divisórias em chevron institucional SVG:*
+  > - *Fatiamos a complexidade em etapas lógicas e digestíveis (Identificação, Tipologia, Recursos Hídricos, Documentos).*
+  > - *O usuário sempre sabe onde está, o que concluiu e o que falta, com validação de campos e salvamento de rascunhos.*
+  > - *Seções recolhíveis (`Section`) para dados complementares, mantendo a tela limpa."*
+* **O que mostrar:**
+  - Avançar entre etapas no Wizard (Etapa 1 ➔ Etapa 2).
+  - Destacar os chevrons institucionais com indicador de etapa ativa e concluída.
+  - Apontar o botão de retorno claro no topo: `← Voltar à Pauta`.
+
+---
+
+### 🔹 Padrão 3: Dashboards & Métricas de Produtividade Sóbrias
+* **Rota para abrir:** `/?rota=seia-v2&tela=inicio`
+* **O que falar:**
+  > *"O terceiro arquétipo é a visão executiva e a gestão diária. No legado há uma grande escassez de visibilidade sobre pendências e prazos.*
+  > 
+  > *Aqui nós implementamos o padrão de **KpiCards Sóbrios**:*
+  > - *Títulos em caixa alta discreta (`text-[11px] uppercase`), valores em `font-mono tabular-nums` e micro-sparklines de tendência.*
+  > - *Zero ilustrações genéricas ou caixas coloridas berrantes: é uma interface densa, informativa e profissional, feita para tomada rápida de decisão pelo gestor e pelo técnico."*
+* **O que mostrar:**
+  - Passar o cursor sobre as métricas principais da Home (Mensagens, Notificações, Prazos, Requerimentos, Vencimentos).
+  - Apontar a hierarquia limpa entre o Hero e os cards de Acesso Rápido.
+
+---
+
+## 🤝 Bloco 4: Handover & Fluxo de Implementação Contínua
+*(Finalização abrindo a parceria — aprox. 2:00 min)*
+
+### 🗣️ O que falar:
+> *"Tales, essa é a arquitetura que está operando hoje no SEIA V2, já compilada, testada e publicada no link oficial `inema.acto.com.br`.*
+> 
+> *A grande vantagem prática para o seu trabalho de UX é que **você tem total liberdade de desenhar os fluxos na sua inspeção do legado sabendo que a base técnica já está resolvida**.*
+> 
+> *Conforme você for concluindo a inspeção de cada lote de telas (seja Regulação, Fiscalização, Recursos Hídricos ou Cadastros), a gente pega as telas que você revisar e pluga diretamente dentro dessa estrutura de componentes.*
+> 
+> *Como você prefere que a gente organize esse fluxo de repasse? Quer que a gente defina lotes de telas por sprint ou você prefere validar as jornadas principais primeiro no Figma?"*
+
+---
+
+## 📋 Checklist Rápido de Pré-Apresentação para o Tales
+
+- [ ] **Aba 1:** `https://inema.acto.com.br/?rota=seia-v2&tela=design-system` (já aberta para mostrar o Design System).
+- [ ] **Aba 2:** `https://inema.acto.com.br/?rota=seia-v2&tela=pauta-area` (pronta para demonstrar o Arquétipo 1 de Tabela).
+- [ ] **Aba 3:** `https://inema.acto.com.br/?rota=seia-v2&tela=formulario` (pronta para demonstrar o Arquétipo 2 de Wizard).
+- [ ] **Aba 4:** `https://inema.acto.com.br/?rota=seia-v2&tela=inicio` (pronta para demonstrar o Arquétipo 3 de Dashboards).
+- [ ] **Tela de Apoio / Celular:** O teleprompter em `/?rota=seia-v2&tela=apresentacao` com o cronômetro ativo.
+- [ ] Notificações e alertas silenciados.

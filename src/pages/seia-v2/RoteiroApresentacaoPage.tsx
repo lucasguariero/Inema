@@ -53,310 +53,153 @@ interface RoteiroBloco {
 
 const ROTEIRO_DATA: RoteiroBloco[] = [
   {
-    id: 'bloco-1-visao-geral',
+    id: 'bloco-1-abertura-parceria',
     numero: '01',
-    titulo: 'Visão Executiva & Propósito do SEIA V2',
-    subtitulo: 'Introdução, contextualização da modernização e o novo Shell institucional.',
-    tempoTotal: '4 min',
+    titulo: 'Abertura & Conexão com a Inspeção do Legado',
+    subtitulo: 'Posicionamento estratégico: de UX para UX, sem passar tela a tela.',
+    tempoTotal: '1:30 min',
     cor: '#0F4C3A',
     itens: [
       {
-        id: 'abertura-contexto',
-        titulo: 'Abertura & Posicionamento do Projeto',
+        id: 'abertura-ux-tales',
+        titulo: 'Alinhamento de Propósito: O Motor de Design para o seu Trabalho',
         tempoSugerido: '1:30 min',
         rotaUrl: '/?rota=seia-v2&tela=inicio',
-        tagMapeada: 'Início / Dashboard',
+        tagMapeada: 'Início & Posicionamento',
         oQueFalar:
-          '“Fala Thays! Tudo bem? Preparei nossa call pra gente repassar em detalhes tudo o que estruturamos pro SEIA V2. Nosso foco principal aqui foi transformar a experiência do sistema: sair de uma interface sobrecarregada e pesada do legado pra uma plataforma fluida, limpa e padronizada. Cada detalhe que você vai ver foi pensado pra dar autonomia pro analista do Inema e previsibilidade pro cidadão, mantendo 100% da segurança jurídica e normativa do órgão.”',
+          '“Fala Tales! Tudo bem? Cara, eu sei que você está bem focado aí na inspeção das telas e dos fluxos do Inema legado — que é um trabalho essencial pra gente mapear as fricções cognitivas, redundâncias de campos e a lógica de trabalho dos analistas.\n\nPra nossa conversa de hoje, eu não vou te cansar passando tela a tela de um sistema inteiro. Como você é de UX, eu quero te mostrar a infraestrutura e a arquitetura de interface que nós construímos aqui no SEIA V2: montamos um Design System vivo, definimos os padrões fundamentais de interação e deixamos essa base 100% pronta para plugar com velocidade exatamente as telas e jornadas que você for refinando na sua inspeção.\n\nVou compartilhar minha tela pra você ver como estruturamos essa fundação.”',
         oQueMostrar: [
-          'Mostrar a topbar verde institucional (100% de largura) com a busca rápida centralizada.',
-          'Demonstrar a logo oficial do SEIA e a transição limpa para o ícone quando a sidebar é recolhida.',
-          'Explicar que o dark mode neutro foi implementado nativamente para analistas que trabalham muitas horas seguidas.',
+          'Compartilhar a tela já no ambiente oficial do SEIA V2: inema.acto.com.br/?rota=seia-v2.',
+          'Destacar a sobriedade institucional da topbar (100% de largura) e a fluidez do novo Shell de navegação.',
+          'Explicar que a meta da call é alinhar a esteira de implementação para as telas que ele for inspecionando.',
         ],
         argumentoDeOuro:
-          'O SEIA V2 não é só um "redesenho visual": é uma reformulação na arquitetura de uso, reduzindo o tempo de clique e a curva de aprendizado dos técnicos.',
-      },
-      {
-        id: 'novo-shell-navegacao',
-        titulo: 'O Novo Shell de Navegação (Zero Ruído)',
-        tempoSugerido: '2:30 min',
-        rotaUrl: '/?rota=seia-v2&tela=inicio',
-        tagMapeada: 'Sidebar & Shell',
-        oQueFalar:
-          '“Thays, dá uma olhada na navegação lateral. Um dos maiores problemas do sistema antigo era aquela sidebar infinita com dezenas de itens soltos que poluíam a tela. No SEIA V2, estruturamos um comportamento inteligente: as seções principais ficam agrupadas, apenas um módulo abre por vez com transição suave, e o analista tem um campo de busca instantânea do menu no topo da sidebar. Se recolher, ela vira uma barra de acesso rápido super compacta.”',
-        oQueMostrar: [
-          'Abrir e fechar agrupamentos na sidebar (mostrando que apenas 1 fica aberto por vez).',
-          'Digitar no campo "Filtrar menu..." (ex: digitar "CERH" ou "Fauna") para demonstrar o filtro em tempo real.',
-          'Clicar no botão de recolher a sidebar (ícone compacto) e passar o mouse nos itens para ver os tooltips.',
-        ],
-        argumentoDeOuro:
-          'Apenas 1 agrupamento aberto por vez elimina a rolagem vertical desnecessária e mantém o foco mental do usuário no fluxo de trabalho.',
+          'Nós não criamos telas isoladas: criamos um sistema de design escalável que absorve qualquer fluxo que o Tales desenhar sem retrabalho de componentes.',
       },
     ],
   },
   {
-    id: 'bloco-2-card-sorting',
+    id: 'bloco-2-design-system',
     numero: '02',
-    titulo: 'Card Sorting & Arquitetura de Informação',
-    subtitulo: 'A categorização lógica baseada nos 20 módulos reais mapeados.',
-    tempoTotal: '3 min',
+    titulo: 'Design System Oficial INEMA & Fundações de UI',
+    subtitulo: 'Tokens semânticos, densidade compacta (36px/32px), grid de 8pt, WCAG e Dark Mode nativo.',
+    tempoTotal: '3:30 min',
     cor: '#1b5e20',
     itens: [
       {
-        id: 'card-sorting-modulos',
-        titulo: 'Organização dos 20 Módulos Reais do Sistema',
-        tempoSugerido: '3 min',
-        rotaUrl: '/?rota=seia-v2&tela=inicio',
-        tagMapeada: 'Estrutura do Menu',
+        id: 'ds-fundacoes-tokens',
+        titulo: 'Fundações Atômicas, Paleta Institucional e Acessibilidade',
+        tempoSugerido: '1:45 min',
+        rotaUrl: '/?rota=seia-v2&tela=design-system',
+        tagMapeada: 'Design System / Fundações',
         oQueFalar:
-          '“Pra definir essa arquitetura, nós fizemos um estudo profundo de Card Sorting confrontando o edital com a rotina real de uso do GLA e do SEIA. Mapeamos os 20 módulos ativos e organizamos em 4 pilares estratégicos muito claros: 1. Operação Ambiental (o coração do trabalho técnico: regulação, fiscalização, fauna e UCs); 2. Serviços e Receita (tudo o que é voltado ao cidadão e arrecadação/DAEs); 3. Gestão e Controle (relatórios, métricas de produtividade e auditoria); e 4. Configuração do Sistema. Nada ficou solto ou perdido.”',
+          '“Tales, começando pela nossa fonte de verdade: construímos um ambiente autônomo do Design System oficial do INEMA, documentando desde as fundações atômicas até componentes complexos.\n\nQuero destacar 4 decisões de UX que tomamos aqui:\n1. Identidade Institucional sem Ruído: Fixamos a paleta no verde oficial (#0F4C3A), eliminando qualquer roxo, gradientes chamativos ou teals genéricos que costumam poluir sistemas de governo.\n2. Tipografia Modular: Usamos a Inter com escala tipográfica modular rígida, e todos os processos, protocolos SEI e valores em fonte monoespacial tabular (font-mono tabular-nums).\n3. Consistência Geométrica: Grid de 8pt, rounded-xl (12px) rigoroso para contêineres e rounded-lg (8px) para controles interativos.\n4. Acessibilidade & Dark Mode: Contraste validado em WCAG AA e dark mode nativo neutro em carvão/ardósia, pensado para analistas com longas jornadas de trabalho diário.”',
         oQueMostrar: [
-          'Apontar os 4 pilares na sidebar: Operação Ambiental, Serviços e Receita, Gestão e Controle, Configuração do Sistema.',
-          'Mostrar como os módulos estão distribuídos dentro de cada pilar de forma coesa (ex: Regulação, Fiscalização, Gestão de Fauna, Biodiversidade).',
+          'Abrir a rota do Design System (/tela=design-system).',
+          'Rolar brevemente pelas seções de Cores e Tokens, destacando as variáveis CSS semânticas.',
+          'Alternar para o Dark Mode (ícone de lua na topbar) e voltar para o Light Mode demonstrando a harmonia de contraste.',
         ],
         argumentoDeOuro:
-          'Nenhum módulo é genérico: todos os 20 cartões correspondem a telas reais que nós já prototipamos e conectamos na árvore de navegação.',
+          'O Design System é a nossa linguagem comum: elimina subjetividade visual e garante conformidade de acessibilidade (WCAG AA) em todo o sistema.',
+      },
+      {
+        id: 'ds-densidade-componentes',
+        titulo: 'Densidade de Informação (Dense UI) & Componentes Reutilizáveis',
+        tempoSugerido: '1:45 min',
+        rotaUrl: '/?rota=seia-v2&tela=design-system',
+        tagMapeada: 'Componentes & Densidade',
+        oQueFalar:
+          '“Um ponto que eu sei que você repara muito na inspeção do legado é o desperdício de espaço vertical e horizontal. O analista precisa rolar a página inteira pra ver 3 campos.\n\nNo SEIA V2, nós adotamos uma densidade compacta inspirada no Filament: alturas de controle de 36px e 32px nos botões e inputs (InputWrapper e FilamentSelect), badges semânticos com status dots, seções recolhíveis (Section) e cards de KPI com micro-sparklines.\n\nIsso aumenta drasticamente a área útil da tela sem gerar cansaço visual, permitindo ao usuário processar dados com muito mais rapidez.”',
+        oQueMostrar: [
+          'Mostrar a seção de Botões e Inputs com prefixos/sufixos, anéis de foco suaves e alturas compactas (h-9 e h-8).',
+          'Mostrar os Badges semânticos com dots coloridos (sucesso, aviso, perigo, info).',
+          'Destacar a biblioteca de componentes limpos: zero HTML descartável, tudo modularizado.',
+        ],
+        argumentoDeOuro:
+          'Como já temos os componentes refinados, quando o Tales terminar de desenhar uma tela no Figma, a conversa técnica será em cima de blocos prontos.',
       },
     ],
   },
   {
-    id: 'bloco-3-design-system',
+    id: 'bloco-3-arquetipos-interacao',
     numero: '03',
-    titulo: 'Design System Oficial INEMA (16 Seções Vivas)',
-    subtitulo: 'Catálogo de componentes, tokens semânticos, acessibilidade e o Wizard institucional.',
-    tempoTotal: '5 min',
+    titulo: 'Os 3 Arquétipos de Interação (Como Resolvemos o Legado)',
+    subtitulo: 'Data Grids com Drawers, Stepper em Chevron SVG e Dashboards Sóbrios.',
+    tempoTotal: '4:30 min',
     cor: '#004d40',
     itens: [
       {
-        id: 'ds-catalogo-geral',
-        titulo: 'Ambiente Autônomo de Documentação & Tokens',
-        tempoSugerido: '2:30 min',
-        rotaUrl: '/?rota=seia-v2&tela=design-system',
-        tagMapeada: 'Design System Catálogo',
+        id: 'arquetipo-pautas-tabelas',
+        titulo: 'Arquétipo 1: Pautas Operacionais & Data Grids (Tabelas com Contexto)',
+        tempoSugerido: '1:30 min',
+        rotaUrl: '/?rota=seia-v2&tela=pauta-area',
+        tagMapeada: 'Pauta da Área / Tabela',
         oQueFalar:
-          '“Agora quero te mostrar a base de tudo isso: o nosso Design System oficial do INEMA. Nós não criamos componentes soltos nem código descartável. Construímos um ambiente completo com 16 seções documentando desde as fundações (paleta institucional #0F4C3A, tipografia modular, contraste WCAG AA, espaçamentos em grid de 8pt) até componentes avançados como tabelas, cards com micro-gráficos e modais. Isso garante que qualquer novo módulo desenvolvido no futuro vai nascer idêntico ao padrão oficial.”',
+          '“Tales, em vez de repassar 20 telas parecidas, vou te mostrar os 3 arquétipos fundamentais que cobrem 95% das necessidades do legado:\n\nO primeiro arquétipo são as Pautas e Data Grids (aqui na Pauta da Área). No legado, o técnico sofre com tabelas pesadas, sem filtros dinâmicos e com popups que quebram o fluxo de raciocínio.\n\nAqui nós resolvemos isso com a Tabela Canônica:\n- Toolbar com busca em tempo real debounced e filtros dinâmicos que exibem contagem ativa em badges.\n- Badges semânticos de SLA com dots coloridos pra identificar na hora processos críticos ou no prazo.\n- Ações contextuais que abrem gavetas laterais (Drawers) ou modais refinados, permitindo analisar detalhes sem que o técnico perca a posição ou o contexto na listagem.”',
         oQueMostrar: [
-          'Acessar a rota do Design System (destacar que ele possui shell próprio, sem poluir com o menu operacional).',
-          'Rolar pelas seções: Cores e tokens, Botões (variantes, tamanhos, loading), Badges semânticos e Cards de KPIs.',
-          'Demonstrar a densidade compacta inspirada no Filament (36px/32px), que aproveita ao máximo a área útil da tela.',
+          'Abrir a rota /tela=pauta-area (mostrar abas de Pauta da Área vs Em Análise Técnica ativadas instantaneamente).',
+          'Digitar no campo de busca da tabela e mostrar a toolbar com contagem de filtros.',
+          'Destacar a tipografia monoespacial nos números SEI e a leitura confortável das linhas.',
         ],
         argumentoDeOuro:
-          'Eliminamos qualquer risco de inconsistência visual. O Design System é a garantia de que o projeto escala com qualidade enterprise.',
+          'Reduz a fricção operacional diária: o analista encontra, tria e despacha processos sem recarregar páginas e sem perder a sua fila de trabalho.',
       },
       {
-        id: 'ds-wizard-stepper',
-        titulo: 'O Stepper / Wizard Oficial com Chevron SVG',
-        tempoSugerido: '2:30 min',
-        rotaUrl: '/?rota=seia-v2&tela=design-system',
-        tagMapeada: 'Wizard & Formulários',
-        oQueFalar:
-          '“Um destaque muito importante que quero te mostrar aqui no Design System é o nosso Wizard. Formulários ambientais são longos e cheios de etapas. Criamos o FilamentWizard com divisórias em chevron SVG institucional: o analista ou o requerente sempre sabe exatamente onde está, o que já concluiu e o que falta preencher, com validação de campos obrigatórios e salvamento de rascunho. Esse mesmo componente é a espinha dorsal de todos os requerimentos do sistema.”',
-        oQueMostrar: [
-          'Ir até a seção "Wizard" no Design System e interagir com as etapas.',
-          'Destacar os estados do stepper: etapa concluída (check), etapa ativa (verde institucional) e etapas futuras.',
-          'Mostrar a responsividade do stepper e a limpeza visual.',
-        ],
-        argumentoDeOuro:
-          'Zero improviso: o Wizard do SEIA V2 guia o usuário passo a passo com feedback visual instantâneo e conformidade total com as normas do INEMA.',
-      },
-    ],
-  },
-  {
-    id: 'bloco-4-telas-core',
-    numero: '04',
-    titulo: 'Repasse das Telas Principais do Core',
-    subtitulo: 'Dashboard Gerencial, Pauta de Processos, Requerimento Unificado e Fiscalização.',
-    tempoTotal: '8 min',
-    cor: '#0f4c3a',
-    itens: [
-      {
-        id: 'core-dashboard',
-        titulo: 'Dashboard Gerencial de Regulação',
-        tempoSugerido: '2 min',
-        rotaUrl: '/?rota=seia-v2&tela=inicio',
-        tagMapeada: 'Dashboard Gerencial',
-        oQueFalar:
-          '“Vamos pras telas de produto! Começando pela Dashboard Gerencial. Aqui o gestor e os técnicos têm a visão consolidada em tempo real: total de processos tramitando, taxa de deferimento, alertas de SLA e gráficos de distribuição por tipologia e bacia hidrográfica. Tudo construído com cards interativos de KPI e micro-sparklines de tendência.”',
-        oQueMostrar: [
-          'Passar o mouse sobre os cards de KPI (Processos em Análise, SLA Médio, Deferimentos).',
-          'Mostrar a hierarquia visual clara, sem poluição de cores e com contraste impecável.',
-        ],
-        argumentoDeOuro:
-          'Permite ao diretor e ao coordenador tomar decisões rápidas sem precisar gerar relatórios manuais em planilhas.',
-      },
-      {
-        id: 'core-pauta-tabela',
-        titulo: 'Pauta Operacional de Processos (Tabela Canônica)',
-        tempoSugerido: '2 min',
-        rotaUrl: '/?rota=seia-v2&tela=tabela',
-        tagMapeada: 'Pauta de Processos',
-        oQueFalar:
-          '“Essa é a tela onde o analista passa 90% do dia: a Pauta de Processos. Implementamos a tabela canônica com busca rápida debounced, filtros dinâmicos por status, município e técnico responsável, badges semânticos de SLA (em dia, atenção e crítico) e gaveta lateral de ações rápidas. O analista consegue visualizar o histórico sem perder o contexto da listagem.”',
-        oQueMostrar: [
-          'Filtrar por status ou digitar no campo de busca.',
-          'Destacar a formatação dos números SEI e protocolos em fonte monoespacial limpa.',
-          'Mostrar a paginação fluida e as ações por linha.',
-        ],
-        argumentoDeOuro:
-          'Organização cirúrgica dos dados: as informações cruciais (requerente, tipologia, SLA e status) estão visíveis de imediato.',
-      },
-      {
-        id: 'core-requerimento-unificado',
-        titulo: 'Requerimento Ambiental Unificado (Wizard Completo)',
-        tempoSugerido: '2 min',
+        id: 'arquetipo-formularios-wizard',
+        titulo: 'Arquétipo 2: Formulários Modulares & Wizard com Stepper SVG',
+        tempoSugerido: '1:30 min',
         rotaUrl: '/?rota=seia-v2&tela=formulario',
-        tagMapeada: 'Requerimento Unificado',
+        tagMapeada: 'Requerimento / Wizard',
         oQueFalar:
-          '“Agora o Requerimento Unificado. Em vez daquele formulário monolítico confuso, dividimos o fluxo em 4 etapas lógicas: Identificação do Empreendimento, Tipologia e Atividades, Documentação & ARTs e Resumo Conclusivo com cálculo de taxa. Note a barra oficial do formulário no topo com o botão de voltar à pauta e salvar rascunho.”',
+          '“O segundo arquétipo são os Formulários Complexos. No legado, o usuário enfrenta páginas com 70 a 80 campos jogados na mesma tela, gerando abandono e erros frequentes.\n\nNossa solução de UX foi o componente FilamentWizard com divisórias em chevron institucional SVG:\n- Fatiamos a complexidade em etapas lógicas e digestíveis (Identificação, Tipologia, Recursos Hídricos, Documentos).\n- O usuário sempre sabe exatamente em que etapa está, o que concluiu e o que falta preencher, com validação instantânea e salvamento de rascunhos.\n- Seções modulares recolhíveis (Section) para informações complementares, com botão limpo de retorno à pauta no topo.”',
         oQueMostrar: [
-          'Avançar pelas etapas do Wizard usando o botão "Avançar Etapa".',
-          'Mostrar os campos agrupados em `Section` com ícones institucionais e validação suave nos inputs.',
-          'Demonstrar o resumo final antes do protocolo.',
+          'Abrir a rota /tela=formulario (Requerimento Unificado) ou /tela=ansla-dispensa.',
+          'Avançar pelas etapas do Stepper oficial com chevron institucional.',
+          'Apontar os cards agrupados em Section com ícones discretos e campos bem alinhados.',
         ],
         argumentoDeOuro:
-          'Reduz drasticamente o índice de erros e pendências no momento da entrada do requerimento.',
+          'Transforma fluxos burocráticos pesados em jornadas guiadas passo a passo, reduzindo a taxa de erros e retrabalho de análise técnica.',
       },
       {
-        id: 'core-fiscalizacao-daes',
-        titulo: 'Fiscalização (Denúncias/Emergências) & Financeiro DAE',
-        tempoSugerido: '2 min',
-        rotaUrl: '/?rota=seia-v2&tela=seia-daes',
-        tagMapeada: 'Fiscalização & DAE',
+        id: 'arquetipo-dashboards-kpis',
+        titulo: 'Arquétipo 3: Dashboards & Métricas de Produtividade Sóbrias',
+        tempoSugerido: '1:30 min',
+        rotaUrl: '/?rota=seia-v2&tela=inicio',
+        tagMapeada: 'Dashboard / Visão Executiva',
         oQueFalar:
-          '“Cobrimos também toda a esteira de Fiscalização — tanto os fluxos internos de atendimento técnico quanto o formulário público do cidadão pra registrar denúncias e emergências ambientais com upload de fotos e geolocalização. E no módulo Financeiro, unificamos a emissão e baixa de DAEs com status de compensação bancária em tempo real.”',
+          '“O terceiro arquétipo é a Visão Executiva e a Gestão Diária. No legado há uma grande escassez de visibilidade sobre pendências e prazos.\n\nAqui nós implementamos o padrão de KpiCards Sóbrios:\n- Títulos em caixa alta discreta (text-[11px] uppercase), valores em font-mono tabular-nums de alto contraste e micro-sparklines de tendência.\n- Zero ilustrações genéricas ou caixas coloridas berrantes: é uma interface densa, informativa e profissional, feita para tomada rápida de decisão pelo gestor e pelo técnico.”',
         oQueMostrar: [
-          'Mostrar a pauta financeira de DAEs e os status de pagamento.',
-          'Mencionar a integração dos canais cidadão vs técnico interno na fiscalização.',
+          'Voltar à rota /tela=inicio.',
+          'Passar o cursor sobre as 6 métricas de entrada (Mensagens, Notificações, Prazos, Requerimentos, Vencimentos, Rascunhos).',
+          'Mostrar o Comunicado Oficial padronizado com referência normativa e o grid de Acesso Rápido limpo.',
         ],
         argumentoDeOuro:
-          'Rastreabilidade total desde a denúncia na ponta até a autuação e a arrecadação das taxas e multas.',
+          'Visibilidade gerencial imediata: métricas operacionais reais que dão clareza de prioridades no primeiro segundo de acesso ao sistema.',
       },
     ],
   },
   {
-    id: 'bloco-5-telas-prioritarias',
-    numero: '05',
-    titulo: 'Novos Módulos Prioritários do Legado GLA',
-    subtitulo: 'As 9 telas-chave do GLA adaptadas com excelência para o padrão SEIA V2.',
-    tempoTotal: '10 min',
-    cor: '#00695c',
-    itens: [
-      {
-        id: 'prio-cerh',
-        titulo: 'CERH — Recursos Hídricos & Outorga de Água',
-        tempoSugerido: '2 min',
-        rotaUrl: '/?rota=seia-v2&tela=cerh',
-        tagMapeada: 'Recursos Hídricos / CERH',
-        oQueFalar:
-          '“Thays, fizemos um trabalho cirúrgico inspecionando o GLA legado e trouxemos os 9 módulos mais estratégicos pro padrão SEIA V2. O primeiro é o CERH: controle de captações subterrâneas em poços tubulares, captações superficiais em rios, lançamentos de efluentes e pedidos de outorga. Tem o formulário oficial F-DIPRE-CERH-01 estruturado com enquadramento hidrográfico por RPGA (São Francisco, Paraguaçu, etc.) e vazões calculadas em m³/h.”',
-        oQueMostrar: [
-          'Mostrar a pauta com os 4 KPIs de volume outorgado e poços.',
-          'Clicar em "+ Nova Declaração / Outorga" pra exibir o formulário F-DIPRE-CERH-01 no padrão Wizard.',
-          'Destacar a precisão técnica dos campos de bacia hidrográfica e coordenadas SIRGAS 2000.',
-        ],
-        argumentoDeOuro:
-          'O CERH é um dos módulos mais cobrados pelo setor produtivo (agro e indústria). O formulário agora é 100% intuitivo.',
-      },
-      {
-        id: 'prio-dtrp',
-        titulo: 'DTRP — Transporte de Resíduos Perigosos',
-        tempoSugerido: '1:30 min',
-        rotaUrl: '/?rota=seia-v2&tela=dtrp',
-        tagMapeada: 'Transporte DTRP',
-        oQueFalar:
-          '“O DTRP é essencial pra fiscalização da DIFIS: controle de manifestos de transporte de cargas perigosas (produtos químicos, solventes, óleos lubrificantes usados). Incluímos a validação de código ONU, certificado CIPP do tanque, condutor com habilitação MOPP e emissão do manifesto com QR Code pra leitura rápida em blitz na rodovia.”',
-        oQueMostrar: [
-          'Mostrar a listagem de manifestos ativos e cargas em trânsito.',
-          'Clicar em "+ Novo Manifesto DTRP" pra mostrar o formulário F-DIFIS-DTRP-045.',
-          'Apontar os detalhes de rota rodoviária e apólice de seguro ambiental.',
-        ],
-        argumentoDeOuro:
-          'Segurança para a fiscalização em campo: a polícia ambiental e os fiscais validam o manifesto em segundos pelo QR Code.',
-      },
-      {
-        id: 'prio-crf',
-        titulo: 'Reposição Florestal Obrigatória & Créditos (CRF)',
-        tempoSugerido: '1:30 min',
-        rotaUrl: '/?rota=seia-v2&tela=reposicao-florestal',
-        tagMapeada: 'Reposição Florestal CRF',
-        oQueFalar:
-          '“Pra área de biodiversidade e florestas, implementamos a Reposição Florestal Obrigatória ligada às Autorizações de Supressão Vegetal (ASV). O sistema faz a gestão da conta corrente de créditos florestais em metros estéreos (m³ st), acompanhando o débito do empreendedor e as opções de compensação por plantio próprio ou compra de créditos de fomento.”',
-        oQueMostrar: [
-          'Mostrar o painel de saldo de créditos florestais (45.200 m³ st) e taxa de adimplência.',
-          'Destacar o extrato de débitos vs créditos compensados por processo.',
-        ],
-        argumentoDeOuro:
-          'Fecha o ciclo de compensação ambiental do Estado com total transparência e extrato auditável.',
-      },
-      {
-        id: 'prio-cnd',
-        titulo: 'Certidão Negativa de Débito Ambiental (CND)',
-        tempoSugerido: '1:30 min',
-        rotaUrl: '/?rota=seia-v2&tela=certidao-debito',
-        tagMapeada: 'Certidão de Débito CND',
-        oQueFalar:
-          '“A CND é uma das maiores demandas de balcão do Inema. Criamos uma tela pública e interna onde qualquer cidadão ou empresa digita o CNPJ e, se estiver regular, o sistema gera a certidão na hora em PDF assinado com código de autenticidade e chave criptográfica sha256. Zero fila física, emissão instantânea.”',
-        oQueMostrar: [
-          'Digitar um CNPJ de teste ou clicar em "Emitir Certidão".',
-          'Mostrar a prévia do documento oficial emitido com validade de 90 dias, hash de autenticidade e carimbo oficial.',
-        ],
-        argumentoDeOuro:
-          'Desafoga imediatamente o atendimento do Inema: desburocratização real para empresas em licitações e financiamentos.',
-      },
-      {
-        id: 'prio-fauna-cras',
-        titulo: 'CRAS — Gestão de Fauna Silvestre & Prontuários',
-        tempoSugerido: '1:30 min',
-        rotaUrl: '/?rota=seia-v2&tela=cras',
-        tagMapeada: 'CRAS Fauna',
-        oQueFalar:
-          '“Na gestão de fauna, trouxemos o Centro de Triagem de Animais Silvestres (CRAS). A tela monitora animais em quarentena, taxas de reabilitação e ocupação de recintos. Ao clicar no animal, abre a ficha clínica veterinária completa com identificação por microchip/anilha, procedência de resgate e aptidão pra soltura suave ou reintrodução.”',
-        oQueMostrar: [
-          'Mostrar os KPIs de fauna (animais em cuidados, solturas realizadas).',
-          'Clicar no botão "Prontuário" na linha da Arara-azul-de-lear para abrir o modal de prontuário clínico detalhado.',
-        ],
-        argumentoDeOuro:
-          'Atende a uma área muito sensível e nobre do Inema, com prontuário clínico individualizado e gestão de solturas.',
-      },
-      {
-        id: 'prio-demais-telas',
-        titulo: 'ANSLA, Parcelamento de Débitos, CEFIR & SISPASS',
-        tempoSugerido: '2 min',
-        rotaUrl: '/?rota=seia-v2&tela=parcelamento',
-        tagMapeada: 'ANSLA, Parcelamento, CEFIR, SISPASS',
-        oQueFalar:
-          '“E pra fechar o pacote completo de atendimento ao legado, temos mais 4 telas totalmente funcionais: 1. ANSLA (Declaração de Não-Sujeição ao licenciamento com questionário automatizado); 2. Parcelamento de Débitos (com simulador financeiro de parcelas e geração de DAE de entrada); 3. CEFIR/CAR (cadastro de imóveis rurais e reserva legal); e 4. SISPASS (gestão de criadores amadoristas de passeriformes com anilhas cadastradas).”',
-        oQueMostrar: [
-          'Abrir a tela de Parcelamento e mostrar o simulador com cálculo de parcelas e desconto de juros.',
-          'Mencionar a cobertura completa de ponta a ponta dos módulos regulatórios do órgão.',
-        ],
-        argumentoDeOuro:
-          'Mostra que a plataforma não tem "gaps": todo o ecossistema do Inema foi mapeado e contemplado no mesmo padrão de excelência.',
-      },
-    ],
-  },
-  {
-    id: 'bloco-6-fechamento',
-    numero: '06',
-    titulo: 'Fechamento & Próximos Passos',
-    subtitulo: 'Homologação, validação com os analistas e próximos marcos.',
-    tempoTotal: '3 min',
+    id: 'bloco-4-handover-parceria',
+    numero: '04',
+    titulo: 'Handover & Fluxo de Implementação Contínua',
+    subtitulo: 'Como transformar as telas revisadas pelo Tales em telas reais prontas no SEIA V2.',
+    tempoTotal: '2:00 min',
     cor: '#0F4C3A',
     itens: [
       {
-        id: 'fechamento-alinhamento',
-        titulo: 'Conclusão & Abertura pra Feedbacks da Thays',
-        tempoSugerido: '3 min',
+        id: 'parceria-fluxo-continuo',
+        titulo: 'Alinhamento da Esteira: Da Inspeção/Figma do Tales para o SEIA V2',
+        tempoSugerido: '2:00 min',
         rotaUrl: '/?rota=seia-v2&tela=inicio',
-        tagMapeada: 'Conclusão & Handover',
+        tagMapeada: 'Handover & Parceria',
         oQueFalar:
-          '“Thays, esse é o ecossistema consolidado do SEIA V2 até aqui. Temos 21 telas de produto navegáveis, todas construídas sobre o mesmo Design System inviolável, com build validado e deploy contínuo ativo no link oficial inema.acto.com.br. Queria ouvir tuas impressões e alinhar com você os próximos passos: quais analistas você quer que validem cada fluxo primeiro e onde a gente prioriza os próximos ajustes!”',
+          '“Tales, essa é a arquitetura que está operando hoje no SEIA V2, já compilada, testada e publicada no link oficial inema.acto.com.br.\n\nA grande vantagem prática para o seu trabalho de UX é que você tem total liberdade de desenhar os fluxos na sua inspeção do legado sabendo que a base técnica já está resolvida.\n\nConforme você for concluindo a inspeção de cada lote de telas (seja Regulação, Fiscalização, Recursos Hídricos ou Cadastros), a gente pega as telas que você revisar e pluga diretamente dentro dessa estrutura de componentes.\n\nComo você prefere que a gente organize esse fluxo de repasse? Quer que a gente defina lotes de telas por sprint ou você prefere validar as jornadas principais primeiro no Figma?”',
         oQueMostrar: [
-          'Voltar para a tela inicial do SEIA V2.',
-          'Deixar a tela aberta na Dashboard Gerencial ou no Design System para responder a perguntas.',
+          'Deixar a tela na página inicial ou no Design System para responder a eventuais dúvidas técnicas ou de UI.',
+          'Abrir o microfone para ouvir as impressões do Tales e co-definir o formato da parceria.',
         ],
         argumentoDeOuro:
-          'Entrega completa, consistente e pronta pra homologação. A liderança tem em mãos um produto pronto pra encantar a diretoria do Inema.',
+          'Alinhamento perfeito de papéis: o Tales foca em UX research, fluxos e regras do legado, e nós garantimos a implementação fiel e rápida no SEIA V2.',
       },
     ],
   },
@@ -448,14 +291,14 @@ export const RoteiroApresentacaoPage: React.FC<{ onNavigate?: (route: string) =>
                 <span>Modo Apresentador Ativo</span>
               </span>
               <span className="text-xs text-slate-500 dark:text-slate-400">
-                Apresentação Líder de Projeto • <strong>Thays</strong>
+                Apresentação de UX & Design System • <strong>Tales (UX Inema)</strong>
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100 tracking-tight mt-2">
-              Roteiro de Apresentação — SEIA V2
+              Roteiro de Apresentação — SEIA V2 (Foco em UX & Design System)
             </h1>
             <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-3xl leading-relaxed">
-              Guia interativo passo a passo para você apresentar na sua voz, marcar os checks em tempo real e abrir as telas em 1 clique durante o compartilhamento de tela.
+              Guia interativo para demonstrar ao Tales o Design System vivo, os 3 arquétipos fundamentais e como a esteira técnica está pronta para plugar as telas que ele revisar no legado. Sem repassar tela a tela.
             </p>
           </div>
 
