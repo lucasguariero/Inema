@@ -16,8 +16,6 @@ import { AtividadesDidaticasPage } from '@/pages/uc/AtividadesDidaticasPage';
 import { PesquisaCientificaPage } from '@/pages/uc/PesquisaCientificaPage';
 import { RelatoriosRegulacaoPage } from '@/pages/regulacao/RelatoriosRegulacaoPage';
 import { CeucConsultaPage } from '@/pages/uc/CeucConsultaPage';
-import { SeiaHomePage } from '@/pages/hibrido/SeiaHomePage';
-import { SeiaDaesPage } from '@/pages/hibrido/SeiaDaesPage';
 import { SeiaV2RootPage } from '@/pages/seia-v2/SeiaV2RootPage';
 import { getCurrentScope } from '@/lib/scope';
 
@@ -34,7 +32,8 @@ export function App() {
     }
     const scope = getCurrentScope();
     if (scope === 'ceuc') return 'ceuc';
-    return scope === 'regulacao' ? 'relatorios' : 'seia-home';
+    if (scope === 'fiscalizacao') return 'consulta-interna';
+    return 'relatorios';
   });
 
   useEffect(() => {
@@ -57,9 +56,7 @@ export function App() {
       return;
     }
 
-    if (vParam === 'hibrido' || rotaParam === 'hibrido' || rotaParam === 'seia') {
-      setActiveRoute('seia-home');
-    } else if (rotaParam === 'ceuc' || rotaParam === 'ceuc-consulta') {
+    if (rotaParam === 'ceuc' || rotaParam === 'ceuc-consulta') {
       setActiveRoute('ceuc');
     } else if (rotaParam) {
       setActiveRoute(rotaParam);
@@ -91,11 +88,6 @@ export function App() {
 
   const renderContent = () => {
     switch (activeRoute) {
-      case 'seia-home':
-      case 'hibrido':
-        return <SeiaHomePage onNavigate={handleNavigate} />;
-      case 'seia-daes':
-        return <SeiaDaesPage onNavigate={handleNavigate} />;
       case 'atendente':
         return <DenunciaInternaPage onNavigate={handleNavigate} />;
       case 'cidadao':
@@ -129,7 +121,7 @@ export function App() {
       case 'dashboard':
         return <DashboardPage />;
       default:
-        return <SeiaHomePage onNavigate={handleNavigate} />;
+        return <RelatoriosRegulacaoPage />;
     }
   };
 

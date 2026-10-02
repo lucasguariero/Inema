@@ -172,3 +172,25 @@ O usuário determinou explicitamente que, após a criação e execução dos pla
 - [ ] **REVISAR BREADCRUMBS E ROTAS**: Garantir que toda página tenha trilha de breadcrumb contextual íntegra (`SeiaV2Breadcrumb`) e mapeamento canônico de rota URL.
 - [ ] **REVISAR ITENS DO SIDEBAR**: Conferir categorizações, títulos, ícones, visibilidade por escopo e garantia de que nenhum item interno/desenvolvimento (Roteiro, Design System, Card Sorting) esteja exposto.
 
+---
+
+## 11. Arquitetura dos Novos Protótipos (Shell Legado + Design System Refinado no Miolo)
+
+Diretriz mandatória definida pelo usuário para todas as novas telas e protótipos a partir de agora:
+1. **Casca Externa (Shell)**:
+   - **Topbar e Sidebar**: Devem ser estritamente o layout do sistema **legado GLA** (`AppShell.tsx`, `Sidebar.tsx`, topo `#0F4C3A` verde institucional e sidebar lateral com acordeão cinza/branco).
+   - **Remoção do SEIA Híbrido**: Todas as rotas e referências a "SEIA Híbrido" (`seia-home`, `seia-daes`, grupo híbrido) foram expurgadas do portal consolidado `https://inema.acto.com.br/`.
+   - **Rota Inicial Padrão**: Abre diretamente em `relatorios` (Regulação), nunca em telas híbridas vazias.
+2. **Miolo / Conteúdo das Telas (Design System Inviolável)**:
+   - Todo e qualquer novo protótipo solicitado deve ser construído dentro da área de conteúdo do shell legado, **utilizando 100% dos componentes e padrões do novo Design System**:
+     - Botões: `Button` de `@/components/ui/button`
+     - Status/Tags: `Badge` de `@/components/ui/badge`
+     - Formulários: `InputWrapper` de `@/components/filament/InputWrapper` e `FilamentSelect` de `@/components/filament/Select`
+     - Seções e Blocos: `Section` de `@/components/filament/Section` (`rounded-xl`, bordas sutis)
+     - Tabelas e Pautas: `TableContainer` e `TableToolbar` de `@/components/filament/Table`
+     - Multi-etapas: `FilamentWizard` de `@/components/filament/Wizard`
+     - Métricas: `KpiCard` e `StatsOverviewWidget`
+     - Zero invenções de pills decorativas em títulos, sem caixas coloridas arbitrárias e sem gradientes ou cores fora da paleta oficial.
+3. **SEIA V2 (`?rota=seia-v2`) Congelado**:
+   - O ambiente de SEIA V2 fica preservado e congelado para implementações futuras da equipe. Não mexer nele por enquanto. Novas telas solicitadas entram nas rotas e menu do layout legado.
+
