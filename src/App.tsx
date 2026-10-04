@@ -16,6 +16,13 @@ import { AtividadesDidaticasPage } from '@/pages/uc/AtividadesDidaticasPage';
 import { PesquisaCientificaPage } from '@/pages/uc/PesquisaCientificaPage';
 import { RelatoriosRegulacaoPage } from '@/pages/regulacao/RelatoriosRegulacaoPage';
 import { CeucConsultaPage } from '@/pages/uc/CeucConsultaPage';
+import { EspeciesTaxonomiaPage } from '@/pages/fauna/EspeciesTaxonomiaPage';
+import { UnidadesDestinosPage } from '@/pages/fauna/UnidadesDestinosPage';
+import { DocumentosTermosPage } from '@/pages/fauna/DocumentosTermosPage';
+import { ProcedenciaAnimalPage } from '@/pages/fauna/ProcedenciaAnimalPage';
+import { RecintosAreasPage } from '@/pages/fauna/RecintosAreasPage';
+import { TiposManejoPage } from '@/pages/fauna/TiposManejoPage';
+import { AnimaisPage } from '@/pages/fauna/AnimaisPage';
 import { SeiaV2RootPage } from '@/pages/seia-v2/SeiaV2RootPage';
 import { getCurrentScope } from '@/lib/scope';
 
@@ -115,6 +122,20 @@ export function App() {
         return <AtividadesDidaticasPage onNavigate={handleNavigate} />;
       case 'uc-pesquisa-cientifica':
         return <PesquisaCientificaPage onNavigate={handleNavigate} />;
+      case 'fauna-especies':
+        return <EspeciesTaxonomiaPage onNavigate={handleNavigate} />;
+      case 'fauna-unidades':
+        return <UnidadesDestinosPage onNavigate={handleNavigate} />;
+      case 'fauna-documentos':
+        return <DocumentosTermosPage onNavigate={handleNavigate} />;
+      case 'fauna-procedencia':
+        return <ProcedenciaAnimalPage onNavigate={handleNavigate} />;
+      case 'fauna-recintos':
+        return <RecintosAreasPage onNavigate={handleNavigate} />;
+      case 'fauna-manejos':
+        return <TiposManejoPage onNavigate={handleNavigate} />;
+      case 'fauna-animais':
+        return <AnimaisPage onNavigate={handleNavigate} />;
       case 'relatorios':
       case 'regulacao':
         return <RelatoriosRegulacaoPage />;

@@ -5,6 +5,7 @@ import {
   Layers,
   ChevronDown,
   Sparkles,
+  PawPrint,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GLA_MENU_GROUPS, MenuItem } from '@/data/glaMenu';
@@ -21,6 +22,8 @@ const ICON_MAP: Record<string, React.ElementType> = {
   ShieldAlert: FileCheck,
   Trees: Trees,
   Layers: Layers,
+  PawPrint: PawPrint,
+  pets: PawPrint,
   fact_check: FileCheck,
   forest: Trees,
   dashboard_customize: Layers,

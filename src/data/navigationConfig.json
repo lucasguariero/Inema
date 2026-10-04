@@ -111,6 +111,72 @@
           "htmlId": "menu-uc-pesquisa-cientifica"
         }
       ]
+    },
+    {
+      "id": "fauna",
+      "label": "Gestão de Fauna",
+      "icon": "PawPrint",
+      "materialIcon": "pets",
+      "defaultOpen": true,
+      "htmlId": "subFauna",
+      "items": [
+        {
+          "id": "fauna-especies",
+          "label": "Espécies e Taxonomia",
+          "href": "/?rota=fauna-especies",
+          "route": "fauna-especies",
+          "badge": "DR002",
+          "htmlId": "menu-fauna-especies"
+        },
+        {
+          "id": "fauna-unidades",
+          "label": "Unidades e Destinos",
+          "href": "/?rota=fauna-unidades",
+          "route": "fauna-unidades",
+          "badge": "DR004",
+          "htmlId": "menu-fauna-unidades"
+        },
+        {
+          "id": "fauna-documentos",
+          "label": "Documentos e Termos",
+          "href": "/?rota=fauna-documentos",
+          "route": "fauna-documentos",
+          "badge": "DR007",
+          "htmlId": "menu-fauna-documentos"
+        },
+        {
+          "id": "fauna-procedencia",
+          "label": "Procedência Animal",
+          "href": "/?rota=fauna-procedencia",
+          "route": "fauna-procedencia",
+          "badge": "DR003",
+          "htmlId": "menu-fauna-procedencia"
+        },
+        {
+          "id": "fauna-recintos",
+          "label": "Recintos e Áreas",
+          "href": "/?rota=fauna-recintos",
+          "route": "fauna-recintos",
+          "badge": "DR005",
+          "htmlId": "menu-fauna-recintos"
+        },
+        {
+          "id": "fauna-manejos",
+          "label": "Tipos de Manejo",
+          "href": "/?rota=fauna-manejos",
+          "route": "fauna-manejos",
+          "badge": "DR006",
+          "htmlId": "menu-fauna-manejos"
+        },
+        {
+          "id": "fauna-animais",
+          "label": "Animais",
+          "href": "/?rota=fauna-animais",
+          "route": "fauna-animais",
+          "badge": "DR001",
+          "htmlId": "menu-fauna-animais"
+        }
+      ]
     }
   ]
 }

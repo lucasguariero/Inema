@@ -27,6 +27,13 @@ const ROUTE_INFO: Record<string, { module: string; page: string }> = {
  'uc-autorizacao-visitacao': { module: 'Unidades de Conservação', page: 'Autorização de Eventos - AAV' },
  'uc-atividades-didaticas': { module: 'Unidades de Conservação', page: 'Atividades Didáticas - AAD' },
  'uc-pesquisa-cientifica': { module: 'Unidades de Conservação', page: 'Pesquisa Científica - Pesc' },
+ 'fauna-especies': { module: 'Gestão de Fauna', page: 'Espécies e Taxonomia' },
+ 'fauna-unidades': { module: 'Gestão de Fauna', page: 'Unidades e Destinos' },
+ 'fauna-documentos': { module: 'Gestão de Fauna', page: 'Documentos e Termos' },
+ 'fauna-procedencia': { module: 'Gestão de Fauna', page: 'Procedência Animal' },
+ 'fauna-recintos': { module: 'Gestão de Fauna', page: 'Recintos e Áreas' },
+ 'fauna-manejos': { module: 'Gestão de Fauna', page: 'Tipos de Manejo' },
+ 'fauna-animais': { module: 'Gestão de Fauna', page: 'Animais' },
 };
 
 export const AppShell: React.FC<AppShellProps> = ({
