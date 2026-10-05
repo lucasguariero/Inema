@@ -14,7 +14,6 @@
           "label": "Relatórios de Regulação",
           "href": "/?rota=relatorios",
           "route": "relatorios",
-          "badge": "NOVO",
           "htmlId": "menu-relatorios"
         },
         {
@@ -22,7 +21,6 @@
           "label": "Dashboard Gerencial",
           "href": "/?rota=dashboard",
           "route": "dashboard",
-          "badge": "NOVO",
           "htmlId": "menu-dashboard"
         }
       ]
@@ -78,8 +76,6 @@
           "label": "Cadastro de UC (CEUC)",
           "href": "/?rota=ceuc",
           "route": "ceuc",
-          "badge": "NOVO",
-          "badgeVariant": "sage",
           "htmlId": "menu-ceuc-consulta"
         },
         {
@@ -125,6 +121,7 @@
           "label": "Espécies e Taxonomia",
           "href": "/?rota=fauna-especies",
           "route": "fauna-especies",
+          "badge": "DR002",
           "htmlId": "menu-fauna-especies"
         },
         {
@@ -132,6 +129,7 @@
           "label": "Unidades e Destinos",
           "href": "/?rota=fauna-unidades",
           "route": "fauna-unidades",
+          "badge": "DR004",
           "htmlId": "menu-fauna-unidades"
         },
         {
@@ -139,6 +137,7 @@
           "label": "Documentos e Termos",
           "href": "/?rota=fauna-documentos",
           "route": "fauna-documentos",
+          "badge": "DR007",
           "htmlId": "menu-fauna-documentos"
         },
         {
@@ -146,6 +145,7 @@
           "label": "Procedência Animal",
           "href": "/?rota=fauna-procedencia",
           "route": "fauna-procedencia",
+          "badge": "DR003",
           "htmlId": "menu-fauna-procedencia"
         },
         {
@@ -153,6 +153,7 @@
           "label": "Recintos e Áreas",
           "href": "/?rota=fauna-recintos",
           "route": "fauna-recintos",
+          "badge": "DR005",
           "htmlId": "menu-fauna-recintos"
         },
         {
@@ -160,6 +161,7 @@
           "label": "Tipos de Manejo",
           "href": "/?rota=fauna-manejos",
           "route": "fauna-manejos",
+          "badge": "DR006",
           "htmlId": "menu-fauna-manejos"
         },
         {
@@ -167,6 +169,7 @@
           "label": "Animais",
           "href": "/?rota=fauna-animais",
           "route": "fauna-animais",
+          "badge": "DR001",
           "htmlId": "menu-fauna-animais"
         }
       ]
