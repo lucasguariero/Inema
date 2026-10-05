@@ -88,6 +88,8 @@ export const ProcedenciaAnimalPage: React.FC<ProcedenciaAnimalPageProps> = ({ on
   // - "Unidade de origem" habilitada SOMENTE para Transferência
   // - Regra de Admissão: "Anexar documento? Sim / Não" -> Se Não, Pendência obrigatória
   // -------------------------------------------------------------
+  // ESTADOS DO FORMULÁRIO (TL002)
+  // -------------------------------------------------------------
   const [isEditing, setIsEditing] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
@@ -95,23 +97,20 @@ export const ProcedenciaAnimalPage: React.FC<ProcedenciaAnimalPageProps> = ({ on
   const [formTipo, setFormTipo] = useState<TipoProcedencia>('Entrega voluntária');
   const [formSubtipo, setFormSubtipo] = useState('');
   const [formDescricaoUso, setFormDescricaoUso] = useState('');
+  const [formObservacoes, setFormObservacoes] = useState('');
   const [formSubtipoPadrao, setFormSubtipoPadrao] = useState(false);
 
   // Informações Exigidas na Admissão
   const [formExigeOrgao, setFormExigeOrgao] = useState(false);
   const [formExigeResponsavel, setFormExigeResponsavel] = useState(true);
   const [formExigeUnidadeOrigem, setFormExigeUnidadeOrigem] = useState(false);
-  const [formExigeObservacao, setFormExigeObservacao] = useState(true); // Exclusivo Observação, Ocorrência eliminada
+  const [formExigeObservacao, setFormExigeObservacao] = useState(true);
 
   // Órgãos Permitidos
   const [formOrgaosPermitidos, setFormOrgaosPermitidos] = useState<string[]>([]);
 
   // Documentos Exigidos
   const [formDocumentosExigidos, setFormDocumentosExigidos] = useState<string[]>([]);
-
-  // Simulação da Regra de Admissão de Documentos (Sim/Não com Pendência)
-  const [simularAnexoAdmissao, setSimularAnexoAdmissao] = useState<'sim' | 'nao'>('sim');
-  const [simularJustificativaPendencia, setSimularJustificativaPendencia] = useState('');
 
   // Código SISCETAS
   const [formCodigoSiscetas, setFormCodigoSiscetas] = useState('');
@@ -131,6 +130,7 @@ export const ProcedenciaAnimalPage: React.FC<ProcedenciaAnimalPageProps> = ({ on
     setFormTipo('Entrega voluntária');
     setFormSubtipo('');
     setFormDescricaoUso('');
+    setFormObservacoes('');
     setFormSubtipoPadrao(false);
     setFormExigeOrgao(false);
     setFormExigeResponsavel(true);
@@ -151,6 +151,7 @@ export const ProcedenciaAnimalPage: React.FC<ProcedenciaAnimalPageProps> = ({ on
     setFormTipo(p.tipo);
     setFormSubtipo(p.subtipo);
     setFormDescricaoUso(p.descricaoUso || '');
+    setFormObservacoes(p.observacoes || '');
     setFormSubtipoPadrao(p.subtipoPadrao);
     setFormExigeOrgao(p.exigeOrgaoInstituicao);
     setFormExigeResponsavel(p.exigeResponsavel);
@@ -233,6 +234,7 @@ export const ProcedenciaAnimalPage: React.FC<ProcedenciaAnimalPageProps> = ({ on
               tipo: formTipo,
               subtipo: formSubtipo.trim(),
               descricaoUso: formDescricaoUso.trim() || undefined,
+              observacoes: formObservacoes.trim() || undefined,
               subtipoPadrao: formSubtipoPadrao,
               exigeOrgaoInstituicao: formExigeOrgao,
               exigeResponsavel: formExigeResponsavel,
@@ -254,6 +256,7 @@ export const ProcedenciaAnimalPage: React.FC<ProcedenciaAnimalPageProps> = ({ on
         tipo: formTipo,
         subtipo: formSubtipo.trim(),
         descricaoUso: formDescricaoUso.trim() || undefined,
+        observacoes: formObservacoes.trim() || undefined,
         subtipoPadrao: formSubtipoPadrao,
         exigeOrgaoInstituicao: formExigeOrgao,
         exigeResponsavel: formExigeResponsavel,
@@ -323,19 +326,11 @@ export const ProcedenciaAnimalPage: React.FC<ProcedenciaAnimalPageProps> = ({ on
           {/* Cabeçalho */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200/80">
             <div>
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 border border-slate-200">
-                  DR003
-                </span>
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold">
-                  CADASTRO TRANSVERSAL
-                </span>
-              </div>
-              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight mt-1">
+              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
                 Procedência Animal
               </h1>
               <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-                Cadastro transversal dos tipos e subtipos de origem da fauna admitida nos centros de triagem e resgate do INEMA.
+                Cadastro dos tipos e subtipos de origem da fauna admitida nos centros de triagem e resgate do INEMA.
               </p>
             </div>
 
@@ -348,34 +343,6 @@ export const ProcedenciaAnimalPage: React.FC<ProcedenciaAnimalPageProps> = ({ on
                 <Plus className="w-4 h-4 mr-1.5" />
                 Nova Procedência
               </Button>
-            </div>
-          </div>
-
-          {/* KPI Cards Sóbrios */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-              <span className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">Tipos Principais</span>
-              <p className="text-xl font-bold font-mono text-slate-900 mt-1">4</p>
-              <span className="text-[11px] text-slate-400 mt-0.5 block">Entrega, Apreensão, Resgate, Transferência</span>
-            </div>
-            <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-              <span className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">Subtipos Cadastrados</span>
-              <p className="text-xl font-bold font-mono text-[#0F4C3A] mt-1">{procedencias.length}</p>
-              <span className="text-[11px] text-slate-400 mt-0.5 block">Modalidades específicas</span>
-            </div>
-            <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-              <span className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">Subtipos Padrão</span>
-              <p className="text-xl font-bold font-mono text-emerald-700 mt-1">
-                {procedencias.filter((p) => p.subtipoPadrao).length}
-              </p>
-              <span className="text-[11px] text-slate-400 mt-0.5 block">Seleção inicial na admissão</span>
-            </div>
-            <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-              <span className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">Procedências Ativas</span>
-              <p className="text-xl font-bold font-mono text-blue-700 mt-1">
-                {procedencias.filter((p) => p.situacao === 'Ativo').length}
-              </p>
-              <span className="text-[11px] text-slate-400 mt-0.5 block">Disponíveis para uso</span>
             </div>
           </div>
 
@@ -455,7 +422,6 @@ export const ProcedenciaAnimalPage: React.FC<ProcedenciaAnimalPageProps> = ({ on
                   <th className="py-2.5 px-4">Subtipo Cadastrado</th>
                   <th className="py-2.5 px-3">Subtipo Padrão?</th>
                   <th className="py-2.5 px-4">Informações Exigidas na Admissão</th>
-                  <th className="py-2.5 px-3">Cód. SISCETAS</th>
                   <th className="py-2.5 px-3">Situação</th>
                   <th className="py-2.5 px-4 text-right">Ações</th>
                 </tr>
@@ -463,7 +429,7 @@ export const ProcedenciaAnimalPage: React.FC<ProcedenciaAnimalPageProps> = ({ on
               <tbody className="divide-y divide-slate-100">
                 {procedenciasFiltradas.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="py-12 text-center text-slate-500">
+                    <td colSpan={6} className="py-12 text-center text-slate-500">
                       <div className="max-w-sm mx-auto space-y-2">
                         <Info className="w-8 h-8 text-slate-400 mx-auto" />
                         <p className="font-semibold text-slate-700">Nenhuma procedência encontrada</p>
@@ -546,17 +512,6 @@ export const ProcedenciaAnimalPage: React.FC<ProcedenciaAnimalPageProps> = ({ on
                         </div>
                       </td>
 
-                      {/* SISCETAS */}
-                      <td className="py-2.5 px-3">
-                        {proc.codigoSiscetas ? (
-                          <span className="font-mono text-xs font-semibold text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">
-                            {proc.codigoSiscetas}
-                          </span>
-                        ) : (
-                          <span className="text-slate-300">—</span>
-                        )}
-                      </td>
-
                       {/* Situação */}
                       <td className="py-2.5 px-3">
                         <Badge color={proc.situacao === 'Ativo' ? 'success' : 'gray'} size="sm" dot>
@@ -623,10 +578,6 @@ export const ProcedenciaAnimalPage: React.FC<ProcedenciaAnimalPageProps> = ({ on
                 <ArrowLeft className="w-3.5 h-3.5 mr-1" />
                 Voltar à Listagem
               </Button>
-              <div className="h-4 w-px bg-slate-300" />
-              <span className="text-[11px] font-mono uppercase tracking-wider text-slate-500">
-                DR003 — Formulário de Procedência Animal
-              </span>
             </div>
 
             <div className="flex items-center gap-2">
@@ -681,9 +632,6 @@ export const ProcedenciaAnimalPage: React.FC<ProcedenciaAnimalPageProps> = ({ on
                       </option>
                     ))}
                   </select>
-                  <span className="text-[11px] text-slate-400 mt-0.5 block">
-                    Regra de Ouro: tipos consolidados na base única da DISUC.
-                  </span>
                 </div>
 
                 {/* Subtipo */}
@@ -722,6 +670,21 @@ export const ProcedenciaAnimalPage: React.FC<ProcedenciaAnimalPageProps> = ({ on
                   />
                 </div>
 
+                {/* Observações */}
+                <div className="md:col-span-2">
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Observações
+                  </label>
+                  <textarea
+                    rows={2}
+                    maxLength={1000}
+                    value={formObservacoes}
+                    onChange={(e) => setFormObservacoes(e.target.value)}
+                    placeholder="Observações complementares sobre a parametrização..."
+                    className="w-full text-xs bg-white border border-slate-300 rounded-lg p-2.5 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A]"
+                  />
+                </div>
+
                 {/* Subtipo Padrão & SISCETAS */}
                 <div className="flex items-center gap-2 p-3 bg-slate-50 rounded-lg border border-slate-200">
                   <input
@@ -732,7 +695,7 @@ export const ProcedenciaAnimalPage: React.FC<ProcedenciaAnimalPageProps> = ({ on
                     className="rounded text-[#0F4C3A] focus:ring-[#0F4C3A]"
                   />
                   <label htmlFor="subtipoPadraoCheck" className="text-xs text-slate-700 cursor-pointer">
-                    <strong>Definir como Subtipo Padrão</strong> (pré-selecionado na Admissão - RN-005)
+                    <strong>Definir como Subtipo Padrão</strong> (pré-selecionado na Admissão)
                   </label>
                 </div>
 
@@ -744,7 +707,7 @@ export const ProcedenciaAnimalPage: React.FC<ProcedenciaAnimalPageProps> = ({ on
                     type="text"
                     value={formCodigoSiscetas}
                     onChange={(e) => setFormCodigoSiscetas(e.target.value)}
-                    placeholder="ex: EV-CID-01 ou APR-POL-02 (opcional - RN-013)"
+                    placeholder="ex: EV-CID-01 ou APR-POL-02"
                     className="w-full h-9 text-xs font-mono bg-white border border-slate-300 rounded-lg px-2.5 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A]"
                   />
                 </div>
@@ -755,7 +718,7 @@ export const ProcedenciaAnimalPage: React.FC<ProcedenciaAnimalPageProps> = ({ on
           {/* SEÇÃO 2: Informações Exigidas na Admissão */}
           <Section
             title="2. Informações e Controles Exigidos na Admissão"
-            description="Campos habilitados na tela de entrada do animal. Ocorrência foi substituída por Observação."
+            description="Campos habilitados na tela de entrada do animal."
           >
             <div className="space-y-4 pt-2">
               <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 space-y-3">
@@ -786,14 +749,14 @@ export const ProcedenciaAnimalPage: React.FC<ProcedenciaAnimalPageProps> = ({ on
                       className="rounded text-[#0F4C3A] focus:ring-[#0F4C3A] mt-0.5"
                     />
                     <div>
-                      <strong className="block text-slate-800">Responsável pela Entrega / Cidadão</strong>
+                      <strong className="block text-slate-800">Responsável</strong>
                       <span className="text-[11px] text-slate-500">
                         Exige dados de identificação da pessoa física entregadora.
                       </span>
                     </div>
                   </label>
 
-                  {/* Unidade de Origem (Condicional SOMENTE para Transferência - RN-007) */}
+                  {/* Unidade de Origem (Condicional SOMENTE para Transferência) */}
                   <label
                     className={cn(
                       'flex items-start gap-2 text-xs cursor-pointer',
@@ -808,14 +771,14 @@ export const ProcedenciaAnimalPage: React.FC<ProcedenciaAnimalPageProps> = ({ on
                       className="rounded text-[#0F4C3A] focus:ring-[#0F4C3A] mt-0.5"
                     />
                     <div>
-                      <strong className="block text-slate-800">Unidade de Origem (Exclusivo Transferência)</strong>
+                      <strong className="block text-slate-800">Unidade de Origem</strong>
                       <span className="text-[11px] text-slate-500">
-                        Habilitado SOMENTE para subtipos de Transferência (RN-007).
+                        Habilitado apenas quando o tipo de procedência for Transferência.
                       </span>
                     </div>
                   </label>
 
-                  {/* Observação (Substitui Ocorrência - Regra de Ouro) */}
+                  {/* Observação */}
                   <label className="flex items-start gap-2 text-xs text-slate-700 cursor-pointer">
                     <input
                       type="checkbox"
@@ -824,9 +787,9 @@ export const ProcedenciaAnimalPage: React.FC<ProcedenciaAnimalPageProps> = ({ on
                       className="rounded text-[#0F4C3A] focus:ring-[#0F4C3A] mt-0.5"
                     />
                     <div>
-                      <strong className="block text-slate-800">Observação Técnica</strong>
+                      <strong className="block text-slate-800">Observação</strong>
                       <span className="text-[11px] text-slate-500">
-                        Regra de Ouro: O campo &quot;Ocorrência&quot; foi removido; campo padronizado como Observação.
+                        Habilita campo de anotações técnicas complementares na admissão.
                       </span>
                     </div>
                   </label>
@@ -866,15 +829,15 @@ export const ProcedenciaAnimalPage: React.FC<ProcedenciaAnimalPageProps> = ({ on
             </div>
           </Section>
 
-          {/* SEÇÃO 3: Documentos Exigidos & Salvaguarda de Anexo */}
+          {/* SEÇÃO 3: Documentos Obrigatórios */}
           <Section
-            title="3. Documentos Obrigatórios & Regra de Anexo na Admissão"
-            description="Vinculação aos tipos do DR007 e regra mandatória de pendência documental se não houver anexo."
+            title="3. Documentos Obrigatórios na Admissão"
+            description="Vinculação aos modelos de documentos exigidos no ato de entrada do animal."
           >
             <div className="space-y-4 pt-2">
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                  Documentos Exigidos para este Subtipo (DR007)
+                  Documentos Exigidos para este Subtipo
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 p-3 bg-slate-50 rounded-lg border border-slate-200">
                   {MOCK_DOCUMENTOS_TERMOS.map((doc) => (
@@ -894,61 +857,6 @@ export const ProcedenciaAnimalPage: React.FC<ProcedenciaAnimalPageProps> = ({ on
                       </div>
                     </label>
                   ))}
-                </div>
-              </div>
-
-              {/* Box Demonstrativo da Regra de Ouro da Admissão */}
-              <div className="p-3.5 bg-amber-50/70 rounded-lg border border-amber-200 space-y-3">
-                <div className="flex items-center gap-2 text-xs font-bold text-amber-900">
-                  <ShieldAlert className="w-4 h-4 text-amber-700 shrink-0" />
-                  <span>Regra de Ouro no Fluxo de Admissão de Fauna:</span>
-                </div>
-                <p className="text-[11px] text-amber-800 leading-relaxed">
-                  Na Admissão, a anexação documental segue a regra: <strong>&quot;Anexar documento? Sim / Não&quot;</strong>.
-                  Caso o técnico responda <strong>&quot;Não&quot;</strong>, o campo <strong>&quot;Pendência Documental&quot;</strong> torna-se
-                  automaticamente <strong>OBRIGATÓRIO</strong> com justificativa registrada em ata.
-                </p>
-
-                {/* Simulador Interativo da Regra */}
-                <div className="p-3 bg-white rounded-md border border-amber-200/80 space-y-2">
-                  <div className="flex items-center gap-4 text-xs font-medium text-slate-800">
-                    <span>Simulação: Anexar documento na admissão agora?</span>
-                    <label className="flex items-center gap-1 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="simularAnexo"
-                        checked={simularAnexoAdmissao === 'sim'}
-                        onChange={() => setSimularAnexoAdmissao('sim')}
-                        className="text-[#0F4C3A] focus:ring-[#0F4C3A]"
-                      />
-                      <span>Sim (Upload do arquivo)</span>
-                    </label>
-                    <label className="flex items-center gap-1 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="simularAnexo"
-                        checked={simularAnexoAdmissao === 'nao'}
-                        onChange={() => setSimularAnexoAdmissao('nao')}
-                        className="text-rose-600 focus:ring-rose-500"
-                      />
-                      <span className="text-rose-700 font-semibold">Não (Gerar Pendência)</span>
-                    </label>
-                  </div>
-
-                  {simularAnexoAdmissao === 'nao' && (
-                    <div className="pt-2 border-t border-slate-100">
-                      <label className="block text-[11px] font-semibold text-rose-700 mb-1">
-                        Motivo da Pendência Documental <span className="text-rose-500">* (Obrigatório)</span>
-                      </label>
-                      <input
-                        type="text"
-                        value={simularJustificativaPendencia}
-                        onChange={(e) => setSimularJustificativaPendencia(e.target.value)}
-                        placeholder="Informe a justificativa (ex: Cidadão não portava termo no momento do resgate)..."
-                        className="w-full h-8 text-xs bg-rose-50/50 border border-rose-300 rounded-md px-2 text-slate-800 focus:ring-1 focus:ring-rose-500"
-                      />
-                    </div>
-                  )}
                 </div>
               </div>
             </div>
@@ -1051,6 +959,18 @@ export const ProcedenciaAnimalPage: React.FC<ProcedenciaAnimalPageProps> = ({ on
               </div>
             )}
 
+            {/* Observações */}
+            {drawerProc.observacoes && (
+              <div>
+                <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+                  Observações
+                </h4>
+                <p className="bg-slate-50 p-2.5 rounded-lg border border-slate-100 text-slate-700 leading-relaxed">
+                  {drawerProc.observacoes}
+                </p>
+              </div>
+            )}
+
             {/* Exigências de Admissão */}
             <div>
               <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">
@@ -1062,7 +982,7 @@ export const ProcedenciaAnimalPage: React.FC<ProcedenciaAnimalPageProps> = ({ on
                   <strong>{drawerProc.exigeOrgaoInstituicao ? 'Sim' : 'Não'}</strong>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span>Responsável pela Entrega / Cidadão:</span>
+                  <span>Responsável:</span>
                   <strong>{drawerProc.exigeResponsavel ? 'Sim' : 'Não'}</strong>
                 </div>
                 <div className="flex items-center justify-between">
@@ -1070,7 +990,7 @@ export const ProcedenciaAnimalPage: React.FC<ProcedenciaAnimalPageProps> = ({ on
                   <strong>{drawerProc.exigeUnidadeOrigem ? 'Sim (Transferência)' : 'Não'}</strong>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span>Observação Técnica:</span>
+                  <span>Observação:</span>
                   <strong>{drawerProc.exigeObservacao ? 'Sim' : 'Não'}</strong>
                 </div>
               </div>

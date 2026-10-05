@@ -118,7 +118,7 @@ export const MOCK_ESPECIES: EspecieItem[] = [
     ameacada: true,
     exoticaInvasora: false,
     restricoesSoltura: 'Soltura restrita com monitoramento via colar GPS satelital. Proibida soltura sem aprovação formal expressa do Plano de Ação Nacional (PAN) e comissão técnica do INEMA.',
-    observacoes: 'Animal topo de cadeia. Exemplares resgatados exigem recinto de alta contenção conforme DR005.',
+    observacoes: 'Animal topo de cadeia. Exemplares resgatados exigem recinto de alta contenção.',
     statusRegistro: 'definitivo',
     situacao: 'Ativo',
     dataCadastro: '18/01/2024',
@@ -523,6 +523,13 @@ export const MOCK_UNIDADES: UnidadeItem[] = [
 
 export type NaturezaDocTermo = 'Documento anexado' | 'Termo emitido';
 
+export interface VersaoAnteriorItem {
+  versao: string;
+  dataCriacao: string;
+  modeloTermo?: string;
+  motivoAtualizacao?: string;
+}
+
 export interface DocumentoTermoItem {
   id: string;
   nome: string;
@@ -540,7 +547,8 @@ export interface DocumentoTermoItem {
   signatarios?: string[];
   situacao: 'Ativo' | 'Inativo';
   dataCadastro: string;
-  travadoEdicao: boolean; // RN-001 trava natureza após uso
+  travadoEdicao: boolean;
+  historicoVersoes?: VersaoAnteriorItem[];
 }
 
 export const MOCK_DOCUMENTOS_TERMOS: DocumentoTermoItem[] = [
@@ -561,6 +569,20 @@ export const MOCK_DOCUMENTOS_TERMOS: DocumentoTermoItem[] = [
     situacao: 'Ativo',
     dataCadastro: '02/01/2024',
     travadoEdicao: true,
+    historicoVersoes: [
+      {
+        versao: 'v1.1',
+        dataCriacao: '15/10/2023',
+        modeloTermo: 'Pelo presente termo, o(a) entregador(a) faz entrega do animal silvestre ao INEMA na data de [DATA_ATUAL].',
+        motivoAtualizacao: 'Inclusão de fundamentação jurídica do Art. 24 do Decreto Federal nº 6.514/2008.',
+      },
+      {
+        versao: 'v1.0',
+        dataCriacao: '01/06/2023',
+        modeloTermo: 'Termo simplificado de entrega de espécime ao CETAS.',
+        motivoAtualizacao: 'Versão inicial homologada.',
+      },
+    ],
   },
   {
     id: 'doc-02',
@@ -579,6 +601,14 @@ export const MOCK_DOCUMENTOS_TERMOS: DocumentoTermoItem[] = [
     situacao: 'Ativo',
     dataCadastro: '15/02/2024',
     travadoEdicao: true,
+    historicoVersoes: [
+      {
+        versao: 'v1.0',
+        dataCriacao: '10/01/2023',
+        modeloTermo: 'Auto de apreensão e entrega provisória de espécimes sob fiscalização.',
+        motivoAtualizacao: 'Atualização do texto base para integração com o módulo DIFIS.',
+      },
+    ],
   },
   {
     id: 'doc-03',
@@ -623,6 +653,14 @@ export const MOCK_DOCUMENTOS_TERMOS: DocumentoTermoItem[] = [
     situacao: 'Ativo',
     dataCadastro: '10/03/2024',
     travadoEdicao: true,
+    historicoVersoes: [
+      {
+        versao: 'v1.0',
+        dataCriacao: '05/01/2024',
+        modeloTermo: 'Termo de autorização de soltura em área cadastrada.',
+        motivoAtualizacao: 'Versão piloto de soltura.',
+      },
+    ],
   },
 ];
 
@@ -637,6 +675,7 @@ export interface ProcedenciaItem {
   tipo: TipoProcedencia;
   subtipo: string;
   descricaoUso?: string;
+  observacoes?: string;
   subtipoPadrao: boolean;
   exigeOrgaoInstituicao: boolean;
   exigeResponsavel: boolean;
@@ -655,6 +694,7 @@ export const MOCK_PROCEDENCIAS: ProcedenciaItem[] = [
     tipo: 'Entrega voluntária',
     subtipo: 'Entrega Espontânea por Cidadão',
     descricaoUso: 'Quando o cidadão comparece espontaneamente ao CETAS para entregar espécime mantido em cativeiro doméstico.',
+    observacoes: 'Isenção de multa conforme termo próprio.',
     subtipoPadrao: true,
     exigeOrgaoInstituicao: false,
     exigeResponsavel: true,

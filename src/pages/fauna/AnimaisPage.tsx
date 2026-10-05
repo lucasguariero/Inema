@@ -29,9 +29,16 @@ import {
   ListOrdered,
   PlusCircle,
   HelpCircle,
+  MoreVertical,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { InputWrapper } from '@/components/filament/InputWrapper';
 import { FilamentSelect } from '@/components/filament/Select';
 import { Section } from '@/components/filament/Section';
@@ -155,10 +162,6 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
   // Atualização dinâmica do código gerado ao trocar a regional
   const handleTrocaRegional = (novaSigla: string) => {
     setFormRegional(novaSigla);
-    if (!isEditing) {
-      const sufixoRandom = Math.floor(100000 + Math.random() * 900000);
-      setFormCodigo(`${novaSigla}-${sufixoRandom}`);
-    }
   };
 
   // Abrir Formulário de Novo Animal
@@ -166,11 +169,8 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
     setIsEditing(false);
     setEditingId(null);
 
-    const regionalInicial = 'UR-MET';
-    const sufixoRandom = Math.floor(100000 + Math.random() * 900000);
-
-    setFormRegional(regionalInicial);
-    setFormCodigo(`${regionalInicial}-${sufixoRandom}`);
+    setFormRegional('UR-MET');
+    setFormCodigo('');
     setFormIdentificacaoComplementar('');
 
     setFormEspecieId('');
@@ -264,7 +264,7 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
     const erros: Record<string, string> = {};
 
     if (!formEspecieId) {
-      erros.especie = 'A espécie é obrigatória conforme RN-004.';
+      erros.especie = 'A seleção da espécie é obrigatória.';
     }
 
     if (!formOrigemUf.trim()) {
@@ -276,7 +276,7 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
     }
 
     if (formSigilo && !formJustificativaSigilo.trim()) {
-      erros.justificativaSigilo = 'A justificativa do sigilo é obrigatória pelo Gestor (RN-013).';
+      erros.justificativaSigilo = 'A justificativa do sigilo é obrigatória pelo Gestor.';
     }
 
     // Validar marcações físicas (se houver linhas, o número é obrigatório)
@@ -297,6 +297,8 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
     const procedencia = MOCK_PROCEDENCIAS.find((p) => p.id === formProcedenciaId)!;
     const regionalObj = REGIONAIS_BAHIA.find((r) => r.sigla === formRegional);
 
+    const nomePopularPrincipal = (especie.nomesPopulares.find((n) => n.principal) || especie.nomesPopulares[0])?.nome || especie.nomeCientifico;
+
     if (isEditing && editingId) {
       setAnimais((prev) =>
         prev.map((a) => {
@@ -306,7 +308,7 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
               identificacaoComplementar: formIdentificacaoComplementar.trim() || undefined,
               especieId: formEspecieId,
               especieNomeCientifico: especie.nomeCientifico,
-              especieNomePopular: especie.nomePopular,
+              especieNomePopular: nomePopularPrincipal,
               grupoAnimal: especie.grupoAnimal,
               identificacaoAConfirmar: formIdentificacaoAConfirmar,
               sexo: formSexo,
@@ -325,14 +327,15 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
       );
       showToast(`Prontuário do animal "${formCodigo}" atualizado com sucesso!`);
     } else {
+      const codigoFinal = formCodigo || `${formRegional}-${Math.floor(100000 + Math.random() * 900000)}`;
       const novo: AnimalItem = {
         id: `ani-${Date.now().toString().slice(-4)}`,
-        codigo: formCodigo,
+        codigo: codigoFinal,
         unidadeRegional: regionalObj?.nome || formRegional,
         identificacaoComplementar: formIdentificacaoComplementar.trim() || undefined,
         especieId: formEspecieId,
         especieNomeCientifico: especie.nomeCientifico,
-        especieNomePopular: especie.nomePopular,
+        especieNomePopular: nomePopularPrincipal,
         grupoAnimal: especie.grupoAnimal,
         identificacaoAConfirmar: formIdentificacaoAConfirmar,
         sexo: formSexo,
@@ -353,7 +356,7 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
         situacao: 'Ativo',
       };
       setAnimais((prev) => [novo, ...prev]);
-      showToast(`Animal "${formCodigo}" cadastrado com sucesso na Base Única!`);
+      showToast(`Animal "${codigoFinal}" cadastrado com sucesso!`);
     }
 
     setViewMode('listagem');
@@ -486,15 +489,7 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
           {/* Cabeçalho */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200/80">
             <div>
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 border border-slate-200">
-                  DR001
-                </span>
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold">
-                  BASE ÚNICA DE FAUNA
-                </span>
-              </div>
-              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight mt-1">
+              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
                 Animais
               </h1>
               <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
@@ -511,43 +506,6 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
                 <Plus className="w-4 h-4 mr-1.5" />
                 Novo Animal
               </Button>
-            </div>
-          </div>
-
-          {/* KPI Cards Sóbrios */}
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-            <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-              <span className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">Total no Sistema</span>
-              <p className="text-xl font-bold font-mono text-slate-900 mt-1">{animais.length}</p>
-              <span className="text-[11px] text-slate-400 mt-0.5 block">Prontuários registrados</span>
-            </div>
-            <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-              <span className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">Em Tratamento</span>
-              <p className="text-xl font-bold font-mono text-amber-700 mt-1">
-                {animais.filter((a) => a.status === 'Em Tratamento').length}
-              </p>
-              <span className="text-[11px] text-slate-400 mt-0.5 block">Acompanhamento clínico</span>
-            </div>
-            <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-              <span className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">Aptos para Soltura</span>
-              <p className="text-xl font-bold font-mono text-emerald-700 mt-1">
-                {animais.filter((a) => a.status === 'Apto para Soltura').length}
-              </p>
-              <span className="text-[11px] text-slate-400 mt-0.5 block">Reabilitação finalizada</span>
-            </div>
-            <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-              <span className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">Com Sigilo Ativo</span>
-              <p className="text-xl font-bold font-mono text-slate-700 mt-1">
-                {animais.filter((a) => a.sigilo).length}
-              </p>
-              <span className="text-[11px] text-slate-400 mt-0.5 block">Acesso restrito gestor</span>
-            </div>
-            <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-              <span className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">Candidatos Guarda</span>
-              <p className="text-xl font-bold font-mono text-blue-700 mt-1">
-                {animais.filter((a) => a.candidatoGuarda).length}
-              </p>
-              <span className="text-[11px] text-slate-400 mt-0.5 block">Perfil não soltável</span>
             </div>
           </div>
 
@@ -658,9 +616,6 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
               <span className="text-xs font-semibold text-slate-700">
                 Prontuários Cadastrados ({animaisFiltrados.length})
               </span>
-              <span className="text-[11px] text-slate-400">
-                Padrão Oficial: Código UR gerado pelo sistema · Marcações físicas em tabela separada
-              </span>
             </div>
 
             <div className="overflow-x-auto">
@@ -691,9 +646,6 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
                           <span className="font-mono font-semibold text-slate-900 block">
                             {animal.codigo}
                           </span>
-                          <span className="text-[10px] text-slate-400 block">
-                            {animal.unidadeRegional}
-                          </span>
                         </td>
                         <td className="px-4 py-3">
                           <span className="font-medium text-slate-900 block">
@@ -702,11 +654,6 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
                           <span className="text-[11px] italic text-slate-500 block">
                             {animal.especieNomeCientifico}
                           </span>
-                          {animal.identificacaoComplementar && (
-                            <span className="text-[10px] text-slate-500 block">
-                              Ref: "{animal.identificacaoComplementar}"
-                            </span>
-                          )}
                         </td>
                         <td className="px-4 py-3">
                           <span className="text-slate-800 font-medium">
@@ -716,16 +663,10 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
                           <span className="text-slate-600">
                             {animal.faixaEtaria}
                           </span>
-                          <span className="text-[10px] text-slate-400 block">
-                            {animal.origemMunicipio}/{animal.origemUf}
-                          </span>
                         </td>
                         <td className="px-4 py-3">
                           <span className="text-slate-800 font-medium block">
                             {animal.unidadeAtualNome}
-                          </span>
-                          <span className="text-[10px] text-slate-400">
-                            Admitido em: {animal.dataAdmissao}
                           </span>
                         </td>
                         <td className="px-4 py-3">
@@ -760,29 +701,40 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
                           </div>
                         </td>
                         <td className="px-4 py-3 text-right">
-                          <div className="flex items-center justify-end gap-1">
-                            <button
-                              onClick={() => setDrawerAnimal(animal)}
-                              title="Visualizar Prontuário Completo"
-                              className="p-1 text-slate-500 hover:text-slate-800 rounded hover:bg-slate-100 cursor-pointer"
-                            >
-                              <Eye className="w-4 h-4" />
-                            </button>
-                            <button
-                              onClick={() => setModalHistoricoAnimal(animal)}
-                              title="Histórico de Movimentações e Manejos"
-                              className="p-1 text-slate-500 hover:text-blue-700 rounded hover:bg-slate-100 cursor-pointer"
-                            >
-                              <History className="w-4 h-4" />
-                            </button>
-                            <button
-                              onClick={() => handleEditarAnimal(animal)}
-                              title="Editar Prontuário (Gestor)"
-                              className="p-1 text-slate-500 hover:text-[#0F4C3A] rounded hover:bg-slate-100 cursor-pointer"
-                            >
-                              <Edit className="w-4 h-4" />
-                            </button>
-                          </div>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <button
+                                type="button"
+                                title="Ações do animal"
+                                className="p-1 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-md transition-colors cursor-pointer"
+                              >
+                                <MoreVertical className="w-4 h-4" />
+                              </button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-44 text-xs">
+                              <DropdownMenuItem
+                                onClick={() => setDrawerAnimal(animal)}
+                                className="cursor-pointer flex items-center gap-2"
+                              >
+                                <Eye className="w-3.5 h-3.5 text-slate-500" />
+                                <span>Visualizar Prontuário</span>
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => handleEditarAnimal(animal)}
+                                className="cursor-pointer flex items-center gap-2"
+                              >
+                                <Edit className="w-3.5 h-3.5 text-slate-500" />
+                                <span>Editar Prontuário</span>
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => setModalHistoricoAnimal(animal)}
+                                className="cursor-pointer flex items-center gap-2"
+                              >
+                                <History className="w-3.5 h-3.5 text-slate-500" />
+                                <span>Histórico e Manejos</span>
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
                         </td>
                       </tr>
                     ))
@@ -812,10 +764,6 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
                 <ArrowLeft className="w-3.5 h-3.5 mr-1" />
                 Voltar à Listagem
               </Button>
-              <div className="h-4 w-px bg-slate-300" />
-              <span className="text-xs font-mono text-slate-500">
-                DR001 — {isEditing ? 'EDITAR PRONTUÁRIO DE ANIMAL' : 'NOVO ANIMAL NA BASE ÚNICA'}
-              </span>
             </div>
 
             <div className="flex items-center gap-2">
@@ -841,17 +789,17 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
 
           <div>
             <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
-              {isEditing ? `Editar Animal: ${formCodigo}` : 'Novo Animal (Base Única de Fauna)'}
+              {isEditing ? `Editar Animal: ${formCodigo}` : 'Novo Animal'}
             </h1>
             <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
               Cadastro e atualização de prontuário físico e biológico de espécime silvestre sob custódia do INEMA.
             </p>
           </div>
 
-          {/* SEÇÃO 1: Identificação Oficial do Animal (Regra de Ouro DR001) */}
+          {/* SEÇÃO 1: Identificação Oficial do Animal */}
           <Section
-            title="1. Identificação Oficial do Animal (Regra de Ouro DR001)"
-            description="O código UR-XXX-000001 é gerado automaticamente pelo sistema a partir da regional e é estritamente de somente leitura."
+            title="1. Identificação Oficial do Animal"
+            description="O código UR-XXX-000001 é gerado automaticamente pelo sistema a partir da regional selecionada."
           >
             <div className="space-y-4 pt-2">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -875,7 +823,7 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
                     ))}
                   </select>
                   <span className="text-[11px] text-slate-400 mt-1 block">
-                    Define o prefixo do código oficial (RN-022).
+                    Define o prefixo do código de identificação oficial.
                   </span>
                 </div>
 
@@ -886,11 +834,16 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
                   <input
                     type="text"
                     disabled
-                    value={formCodigo}
-                    className="w-full h-9 text-xs font-mono font-bold bg-slate-100 border border-slate-300 rounded-lg px-2.5 text-slate-900 cursor-not-allowed"
+                    value={formCodigo || 'Gerado ao salvar'}
+                    className={cn(
+                      "w-full h-9 text-xs font-mono rounded-lg px-2.5 cursor-not-allowed border",
+                      formCodigo
+                        ? "font-bold bg-slate-100 border-slate-300 text-slate-900"
+                        : "italic bg-slate-50 border-dashed border-slate-300 text-slate-500 font-medium"
+                    )}
                   />
                   <span className="text-[11px] text-slate-500 mt-1 block">
-                    Regra de Ouro: Gerado pelo sistema (RN-002), independe de microchip.
+                    Identificador unificado gerado automaticamente pelo sistema.
                   </span>
                 </div>
 
@@ -914,16 +867,16 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
             </div>
           </Section>
 
-          {/* SEÇÃO 2: Taxonomia (Integrada ao DR002) */}
+          {/* SEÇÃO 2: Classificação Taxonômica */}
           <Section
-            title="2. Classificação Taxonômica (Integrada ao DR002)"
-            description="Vínculo à espécie oficial homologada no catálogo do INEMA com derivação automática de grupo e ameaça."
+            title="2. Classificação Taxonômica"
+            description="Vínculo à espécie oficial cadastrada com derivação automática de grupo biológico."
           >
             <div className="space-y-4 pt-2">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="sm:col-span-2">
                   <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    Espécie / Táxon Homologado (DR002) <span className="text-rose-500">*</span>
+                    Espécie / Táxon Homologado <span className="text-rose-500">*</span>
                   </label>
                   <select
                     value={formEspecieId}
@@ -934,11 +887,14 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
                     )}
                   >
                     <option value="">Selecione a espécie oficial...</option>
-                    {MOCK_ESPECIES.map((esp) => (
-                      <option key={esp.id} value={esp.id}>
-                        {esp.nomePopular} ({esp.nomeCientifico}) · {esp.grupoAnimal}
-                      </option>
-                    ))}
+                    {MOCK_ESPECIES.map((esp) => {
+                      const popular = (esp.nomesPopulares.find((n) => n.principal) || esp.nomesPopulares[0])?.nome || esp.nomeCientifico;
+                      return (
+                        <option key={esp.id} value={esp.id}>
+                          {popular} ({esp.nomeCientifico}) · {esp.grupoAnimal}
+                        </option>
+                      );
+                    })}
                   </select>
                   {formErrors.especie && (
                     <span className="text-[11px] text-rose-600 mt-1 block">{formErrors.especie}</span>
@@ -956,7 +912,7 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
                     className="w-full h-9 text-xs bg-slate-100 border border-slate-300 rounded-lg px-2.5 text-slate-700 font-medium cursor-not-allowed"
                   />
                   <span className="text-[11px] text-slate-500 mt-1 block">
-                    Derivado automaticamente da espécie (RN-005).
+                    Derivado automaticamente da espécie selecionada.
                   </span>
                 </div>
               </div>
@@ -980,7 +936,7 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
           {/* SEÇÃO 3: Características Biológicas e Origem Geográfica */}
           <Section
             title="3. Características Biológicas e Origem Geográfica"
-            description="Dados morfológicos do animal e coordenadas/município de resgate em campo (não confundir com procedência)."
+            description="Dados morfológicos do animal e município de resgate em campo."
           >
             <div className="space-y-4 pt-2">
               <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
@@ -1051,20 +1007,13 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
                   )}
                 </div>
               </div>
-
-              <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 text-xs text-slate-600 flex items-start gap-2">
-                <Info className="w-4 h-4 text-[#0F4C3A] shrink-0 mt-0.5" />
-                <span>
-                  <strong>Atenção à RN-012:</strong> A Origem Geográfica refere-se ao local físico de captura, avistamento ou habitat original na Bahia. Ela é independente da Procedência de Admissão (ex: se o animal foi apreendido em Feira de Santana, mas sua procedência é de entrega voluntária).
-                </span>
-              </div>
             </div>
           </Section>
 
-          {/* SEÇÃO 4: Regra de Ouro DR001 — Marcações Físicas em Tabela Separada */}
+          {/* SEÇÃO 4: Marcações Físicas */}
           <Section
-            title="4. Marcações Físicas (Regra de Ouro DR001)"
-            description="Tabela editável independente do código oficial. Registre microchips, anilhas, brincos ou tatuagens aplicados no exemplar."
+            title="4. Marcações Físicas"
+            description="Dispositivos de marcação física (microchips, anilhas, brincos, tatuagens) aplicados no exemplar."
           >
             <div className="space-y-4 pt-2">
               <div className="flex justify-between items-center">
@@ -1094,7 +1043,7 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
                   <Tag className="w-8 h-8 text-slate-400 mx-auto" />
                   <p className="text-xs font-semibold text-slate-700">Nenhuma marcação física cadastrada</p>
                   <p className="text-[11px] text-slate-500 max-w-md mx-auto">
-                    Conforme a Regra de Ouro, animais recém-admitidos podem receber microchips ou anilhas posteriormente durante o manejo clínico.
+                    Dispositivos de marcação física podem ser vinculados no cadastro inicial ou inseridos durante os procedimentos de manejo.
                   </p>
                 </div>
               ) : (
@@ -1178,42 +1127,67 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
           {/* SEÇÃO 5: Alocação, Procedência e Status Operacional */}
           <Section
             title="5. Alocação e Procedência Institucional"
-            description="Campos de controle operacional integrados aos módulos DR003 (Procedência) e DR004 (Unidades)."
+            description="Controle operacional de custódia e procedência do animal."
           >
             <div className="space-y-4 pt-2">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    Unidade de Custódia Atual <span className="text-rose-500">*</span>
+                    Unidade de Custódia Atual {isEditing ? <span className="text-slate-400 font-normal">(Somente Leitura)</span> : <span className="text-rose-500">*</span>}
                   </label>
-                  <select
-                    value={formUnidadeAtualId}
-                    onChange={(e) => setFormUnidadeAtualId(e.target.value)}
-                    className="w-full h-9 text-xs bg-white border border-slate-300 rounded-lg px-2.5 text-slate-800"
-                  >
-                    {MOCK_UNIDADES.filter((u) => u.natureza === 'Unidade do INEMA').map((u) => (
-                      <option key={u.id} value={u.id}>
-                        {u.nome} ({u.municipio})
-                      </option>
-                    ))}
-                  </select>
+                  {isEditing ? (
+                    <div className="h-9 flex items-center px-3 bg-slate-100 border border-slate-300 rounded-lg text-xs font-medium text-slate-700">
+                      {MOCK_UNIDADES.find((u) => u.id === formUnidadeAtualId)?.nome || formUnidadeAtualId}
+                    </div>
+                  ) : (
+                    <select
+                      value={formUnidadeAtualId}
+                      onChange={(e) => setFormUnidadeAtualId(e.target.value)}
+                      className="w-full h-9 text-xs bg-white border border-slate-300 rounded-lg px-2.5 text-slate-800"
+                    >
+                      {MOCK_UNIDADES.filter((u) => u.natureza === 'Unidade do INEMA').map((u) => (
+                        <option key={u.id} value={u.id}>
+                          {u.nome} ({u.municipio})
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                  {isEditing && (
+                    <span className="text-[11px] text-slate-500 mt-1 block">
+                      Alterações de unidade ocorrem exclusivamente via termo de transferência.
+                    </span>
+                  )}
                 </div>
 
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    Procedência de Admissão (DR003) <span className="text-rose-500">*</span>
+                    Procedência de Admissão {isEditing ? <span className="text-slate-400 font-normal">(Somente Leitura)</span> : <span className="text-rose-500">*</span>}
                   </label>
-                  <select
-                    value={formProcedenciaId}
-                    onChange={(e) => setFormProcedenciaId(e.target.value)}
-                    className="w-full h-9 text-xs bg-white border border-slate-300 rounded-lg px-2.5 text-slate-800"
-                  >
-                    {MOCK_PROCEDENCIAS.map((p) => (
-                      <option key={p.id} value={p.id}>
-                        {p.tipo} · {p.subtipo}
-                      </option>
-                    ))}
-                  </select>
+                  {isEditing ? (
+                    <div className="h-9 flex items-center px-3 bg-slate-100 border border-slate-300 rounded-lg text-xs font-medium text-slate-700">
+                      {(() => {
+                        const p = MOCK_PROCEDENCIAS.find((item) => item.id === formProcedenciaId);
+                        return p ? `${p.tipo} · ${p.subtipo}` : formProcedenciaId;
+                      })()}
+                    </div>
+                  ) : (
+                    <select
+                      value={formProcedenciaId}
+                      onChange={(e) => setFormProcedenciaId(e.target.value)}
+                      className="w-full h-9 text-xs bg-white border border-slate-300 rounded-lg px-2.5 text-slate-800"
+                    >
+                      {MOCK_PROCEDENCIAS.map((p) => (
+                        <option key={p.id} value={p.id}>
+                          {p.tipo} · {p.subtipo}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                  {isEditing && (
+                    <span className="text-[11px] text-slate-500 mt-1 block">
+                      Registrada no momento da entrada oficial do animal.
+                    </span>
+                  )}
                 </div>
 
                 <div>
@@ -1224,17 +1198,17 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
                     {formStatus}
                   </div>
                   <span className="text-[11px] text-slate-500 mt-1 block">
-                    Atualizado via eventos de manejo e triagem (RN-009).
+                    Atualizado via eventos de manejo e triagem clínica.
                   </span>
                 </div>
               </div>
             </div>
           </Section>
 
-          {/* SEÇÃO 6: Salvaguardas e Gestão Restrita (Regra de Ouro DR001) */}
+          {/* SEÇÃO 6: Salvaguardas e Gestão Restrita */}
           <Section
-            title="6. Salvaguardas e Gestão Restrita (Regra de Ouro DR001)"
-            description="Controles restritos ao perfil de Gestor de Fauna do INEMA com toggles desligados por padrão."
+            title="6. Salvaguardas e Gestão Restrita"
+            description="Controles de sigilo e destinação especial sob gestão técnica do INEMA."
           >
             <div className="space-y-4 pt-2">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1242,14 +1216,9 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
                 <div className="p-4 rounded-xl border border-slate-200 bg-white space-y-3">
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-xs font-bold text-slate-900">Sigilo de Prontuário</span>
-                        <span className="text-[10px] font-mono px-1 py-0.2 rounded bg-amber-50 text-amber-800 border border-amber-200">
-                          RN-013
-                        </span>
-                      </div>
+                      <span className="text-xs font-bold text-slate-900 block">Sigilo de Prontuário</span>
                       <span className="text-[11px] text-slate-500 block mt-0.5">
-                        Regra de Ouro: Padrão DESLIGADO. Restringe o prontuário contra vazamentos e operações especiais.
+                        Restringe o acesso ao prontuário para operações especiais e espécimes sob custódia judicial.
                       </span>
                     </div>
                     <button
@@ -1274,7 +1243,7 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
                         rows={2}
                         value={formJustificativaSigilo}
                         onChange={(e) => setFormJustificativaSigilo(e.target.value)}
-                        placeholder="Informe a motivação jurídica/técnica (ex: espécime alvo de tráfico internacional, operação policial sigilosa)..."
+                        placeholder="Informe a motivação jurídica/técnica (ex: espécime alvo de apreensão policial sigilosa)..."
                         className={cn(
                           'w-full text-xs bg-white border rounded-lg p-2.5 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A]',
                           formErrors.justificativaSigilo ? 'border-rose-400' : 'border-slate-300'
@@ -1291,14 +1260,9 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
                 <div className="p-4 rounded-xl border border-slate-200 bg-white space-y-3">
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-xs font-bold text-slate-900">Candidato à Guarda</span>
-                        <span className="text-[10px] font-mono px-1 py-0.2 rounded bg-sky-50 text-sky-800 border border-sky-200">
-                          RN-014
-                        </span>
-                      </div>
+                      <span className="text-xs font-bold text-slate-900 block">Candidato à Guarda</span>
                       <span className="text-[11px] text-slate-500 block mt-0.5">
-                        Regra de Ouro: Padrão DESLIGADO. Marca espécime com baixa aptidão de soltura para guarda doméstica/fiel depositário.
+                        Sinaliza espécime sem aptidão de soltura para guarda doméstica autorizada ou fiel depositário.
                       </span>
                     </div>
                     <button
@@ -1377,7 +1341,7 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
             'Prontuário do Animal'
           )
         }
-        size="md"
+        width="md"
         footer={
           drawerAnimal && (
             <div className="flex items-center justify-between w-full">

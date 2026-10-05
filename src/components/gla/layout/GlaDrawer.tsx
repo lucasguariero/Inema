@@ -7,8 +7,8 @@ export type GlaDrawerWidth = 'sm' | 'md' | 'lg' | 'xl';
 export interface GlaDrawerProps {
   isOpen: boolean;
   onClose: () => void;
-  title?: string;
-  subtitle?: string;
+  title?: React.ReactNode;
+  subtitle?: React.ReactNode;
   width?: GlaDrawerWidth;
   children: React.ReactNode;
   footer?: React.ReactNode;

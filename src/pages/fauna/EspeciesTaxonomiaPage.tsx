@@ -217,9 +217,17 @@ export const EspeciesTaxonomiaPage: React.FC<EspeciesTaxonomiaPageProps> = ({ on
 
   // Salvar formulário (Rascunho ou Definitivo)
   const handleSalvar = (statusDestino: 'rascunho' | 'definitivo') => {
-    // Validações
     if (!formNomeCientifico.trim()) {
       showToast('Preencha o Nome Científico da espécie.');
+      return;
+    }
+    const duplicada = especies.some(
+      (e) =>
+        e.id !== editingId &&
+        e.nomeCientifico.trim().toLowerCase() === formNomeCientifico.trim().toLowerCase()
+    );
+    if (duplicada) {
+      showToast('Já existe uma espécie cadastrada com este Nome Científico.');
       return;
     }
     if (!formClasse.trim() || !formOrdem.trim() || !formFamilia.trim() || !formGenero.trim()) {
@@ -402,19 +410,11 @@ export const EspeciesTaxonomiaPage: React.FC<EspeciesTaxonomiaPageProps> = ({ on
           {/* Cabeçalho da Página */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-200">
             <div>
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200">
-                  DR002
-                </span>
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-50 text-[#0F4C3A] border border-emerald-200 font-semibold">
-                  CADASTRO TRANSVERSAL
-                </span>
-              </div>
-              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 mt-1">
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
                 Espécies e Taxonomia
               </h1>
               <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-                Cadastro transversal de espécies, taxonomia e categorias de ameaça para a gestão de fauna silvestre do INEMA.
+                Cadastro de espécies, taxonomia e categorias de ameaça para a gestão de fauna silvestre do INEMA.
               </p>
             </div>
 
@@ -427,36 +427,6 @@ export const EspeciesTaxonomiaPage: React.FC<EspeciesTaxonomiaPageProps> = ({ on
                 <Plus className="w-4 h-4 mr-1.5" />
                 Nova Espécie
               </Button>
-            </div>
-          </div>
-
-          {/* Cards de Métricas Sóbrias (KpiCards Dense) */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-              <span className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">Total de Espécies</span>
-              <p className="text-xl font-bold font-mono text-slate-900 mt-1">{especies.length}</p>
-              <span className="text-[11px] text-slate-400 mt-0.5 block">Na base oficial</span>
-            </div>
-            <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-              <span className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">Ameaçadas</span>
-              <p className="text-xl font-bold font-mono text-amber-700 mt-1">
-                {especies.filter((e) => e.ameacada).length}
-              </p>
-              <span className="text-[11px] text-amber-600/80 mt-0.5 block">Categorias CR, EN, VU</span>
-            </div>
-            <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-              <span className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">Exóticas / Invasoras</span>
-              <p className="text-xl font-bold font-mono text-rose-700 mt-1">
-                {especies.filter((e) => e.exoticaInvasora).length}
-              </p>
-              <span className="text-[11px] text-rose-600/80 mt-0.5 block">Soltura restrita/proibida</span>
-            </div>
-            <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-              <span className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">Em Rascunho</span>
-              <p className="text-xl font-bold font-mono text-slate-600 mt-1">
-                {especies.filter((e) => e.statusRegistro === 'rascunho').length}
-              </p>
-              <span className="text-[11px] text-slate-400 mt-0.5 block">Pendente validação DISUC</span>
             </div>
           </div>
 
@@ -563,7 +533,7 @@ export const EspeciesTaxonomiaPage: React.FC<EspeciesTaxonomiaPageProps> = ({ on
                 <tr className="border-b border-slate-200 bg-slate-50/75 text-slate-600 font-semibold select-none">
                   <th className="py-2.5 px-4">Nome Científico</th>
                   <th className="py-2.5 px-4">Nome Popular</th>
-                  <th className="py-2.5 px-4 hidden md:table-cell">Taxonomia (Família / Ordem)</th>
+                  <th className="py-2.5 px-4 hidden md:table-cell">Família</th>
                   <th className="py-2.5 px-3">Grupo</th>
                   <th className="py-2.5 px-4">Grau de Ameaça</th>
                   <th className="py-2.5 px-3 hidden lg:table-cell">Exótica?</th>
@@ -598,51 +568,31 @@ export const EspeciesTaxonomiaPage: React.FC<EspeciesTaxonomiaPageProps> = ({ on
                       <tr key={esp.id} className="hover:bg-slate-50/70 transition-colors duration-100">
                         {/* Nome Científico */}
                         <td className="py-2.5 px-4">
-                          <div className="flex flex-col">
-                            <div className="flex items-center gap-1.5">
-                              <span className="font-bold italic text-slate-900 text-xs sm:text-sm">
-                                {esp.nomeCientifico}
-                              </span>
-                              {esp.taxonSuperior && (
-                                <span className="text-[10px] font-mono px-1 py-0.2 rounded bg-amber-50 text-amber-700 border border-amber-200">
-                                  Táxon Sup.
-                                </span>
-                              )}
-                              {esp.statusRegistro === 'rascunho' && (
-                                <span className="text-[10px] font-mono px-1 py-0.2 rounded bg-slate-100 text-slate-500 border border-slate-200">
-                                  Rascunho
-                                </span>
-                              )}
-                            </div>
-                            <span className="text-[11px] text-slate-400 font-mono mt-0.5">
-                              {esp.codigo} {esp.autorAno && `· ${esp.autorAno}`}
+                          <div className="flex items-center gap-1.5">
+                            <span className="font-bold italic text-slate-900 text-xs sm:text-sm">
+                              {esp.nomeCientifico}
                             </span>
-                          </div>
-                        </td>
-
-                        {/* Nome Popular */}
-                        <td className="py-2.5 px-4 font-medium text-slate-800">
-                          <div className="flex items-center gap-1.5 flex-wrap">
-                            <span className="font-semibold text-slate-900">{nomePrincipal}</span>
-                            {outrosNomesCount > 0 && (
-                              <span
-                                className="text-[10px] px-1.5 py-0.2 rounded bg-slate-100 text-slate-600 border border-slate-200"
-                                title={esp.nomesPopulares.map((n) => n.nome).join(', ')}
-                              >
-                                +{outrosNomesCount}
+                            {esp.taxonSuperior && (
+                              <span className="text-[10px] font-mono px-1 py-0.2 rounded bg-amber-50 text-amber-700 border border-amber-200">
+                                Táxon Sup.
+                              </span>
+                            )}
+                            {esp.statusRegistro === 'rascunho' && (
+                              <span className="text-[10px] font-mono px-1 py-0.2 rounded bg-slate-100 text-slate-500 border border-slate-200">
+                                Rascunho
                               </span>
                             )}
                           </div>
                         </td>
 
-                        {/* Taxonomia */}
-                        <td className="py-2.5 px-4 hidden md:table-cell text-slate-600 text-xs">
-                          <div className="flex flex-col">
-                            <span className="font-medium text-slate-800">{esp.familia}</span>
-                            <span className="text-[11px] text-slate-400">
-                              {esp.ordem} · {esp.classe}
-                            </span>
-                          </div>
+                        {/* Nome Popular */}
+                        <td className="py-2.5 px-4 font-semibold text-slate-900">
+                          {nomePrincipal}
+                        </td>
+
+                        {/* Família */}
+                        <td className="py-2.5 px-4 hidden md:table-cell text-slate-700 text-xs font-medium">
+                          {esp.familia}
                         </td>
 
                         {/* Grupo */}
@@ -652,34 +602,47 @@ export const EspeciesTaxonomiaPage: React.FC<EspeciesTaxonomiaPageProps> = ({ on
                           </Badge>
                         </td>
 
-                        {/* Grau de Ameaça */}
+                        {/* Grau de Ameaça (Mais Restritivo) */}
                         <td className="py-2.5 px-4">
-                          {esp.classificacoesAmeaca.length === 0 ? (
-                            <span className="text-slate-400 text-[11px]">Não avaliada</span>
-                          ) : (
-                            <div className="flex flex-wrap gap-1 max-w-xs">
-                              {esp.classificacoesAmeaca.map((ca) => {
-                                const isCritico = ca.categoria.includes('CR') || ca.categoria.includes('Apêndice I');
-                                const isAmeacado = ca.categoria.includes('EN') || ca.categoria.includes('VU');
-                                return (
-                                  <span
-                                    key={ca.id}
-                                    className={cn(
-                                      'text-[10px] px-1.5 py-0.5 rounded border font-mono tracking-tight whitespace-nowrap',
-                                      isCritico
-                                        ? 'bg-rose-50 text-rose-700 border-rose-200 font-bold'
-                                        : isAmeacado
-                                        ? 'bg-amber-50 text-amber-700 border-amber-200 font-semibold'
-                                        : 'bg-slate-100 text-slate-600 border-slate-200'
-                                    )}
-                                    title={`${ca.listaOficial}: ${ca.categoria} (${ca.atoNormativoAno})`}
-                                  >
-                                    {ca.listaOficial.split(' ')[0]}: {ca.categoria.split(' ')[0]}
-                                  </span>
-                                );
-                              })}
-                            </div>
-                          )}
+                          {(() => {
+                            if (!esp.classificacoesAmeaca || esp.classificacoesAmeaca.length === 0) {
+                              return <span className="text-slate-400 text-[11px]">Não avaliada</span>;
+                            }
+                            // Ordem de gravidade: CR (1) > EN (2) > VU (3) > NT (4) > LC (5) > Apêndice I (6) > Outros (7)
+                            const rankCategory = (cat: string) => {
+                              const c = cat.toUpperCase();
+                              if (c.includes('CR')) return 1;
+                              if (c.includes('EN')) return 2;
+                              if (c.includes('VU')) return 3;
+                              if (c.includes('NT')) return 4;
+                              if (c.includes('LC')) return 5;
+                              if (c.includes('APÊNDICE I') || c.includes('APENDICE I')) return 6;
+                              return 7;
+                            };
+
+                            const sorted = [...esp.classificacoesAmeaca].sort(
+                              (a, b) => rankCategory(a.categoria) - rankCategory(b.categoria)
+                            );
+                            const mostRestrictive = sorted[0];
+                            const isCritico = mostRestrictive.categoria.includes('CR') || mostRestrictive.categoria.includes('Apêndice I');
+                            const isAmeacado = mostRestrictive.categoria.includes('EN') || mostRestrictive.categoria.includes('VU');
+
+                            return (
+                              <span
+                                className={cn(
+                                  'text-[10px] px-2 py-0.5 rounded border font-mono tracking-tight font-semibold inline-block whitespace-nowrap',
+                                  isCritico
+                                    ? 'bg-rose-50 text-rose-700 border-rose-200 font-bold'
+                                    : isAmeacado
+                                    ? 'bg-amber-50 text-amber-700 border-amber-200'
+                                    : 'bg-slate-100 text-slate-600 border-slate-200'
+                                )}
+                                title={`${mostRestrictive.listaOficial}: ${mostRestrictive.categoria} (${mostRestrictive.atoNormativoAno})`}
+                              >
+                                {mostRestrictive.categoria}
+                              </span>
+                            );
+                          })()}
                         </td>
 
                         {/* Exótica / Invasora */}
@@ -756,7 +719,7 @@ export const EspeciesTaxonomiaPage: React.FC<EspeciesTaxonomiaPageProps> = ({ on
       {/* ========================================================= */}
       {viewMode === 'formulario' && (
         <div className="space-y-6 max-w-5xl">
-          {/* Barra Superior de Retorno & Metadados do Requisito */}
+          {/* Barra Superior de Retorno & Ações */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-slate-200">
             <div className="flex items-center gap-3">
               <button
@@ -767,12 +730,6 @@ export const EspeciesTaxonomiaPage: React.FC<EspeciesTaxonomiaPageProps> = ({ on
                 <ArrowLeft className="w-4 h-4" />
                 <span>Voltar à Listagem</span>
               </button>
-
-              <div className="h-4 w-px bg-slate-200 hidden sm:block" />
-
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200">
-                DR002 — FORMULÁRIO DE ESPÉCIE
-              </span>
             </div>
 
             <div className="flex items-center gap-2">
@@ -817,8 +774,6 @@ export const EspeciesTaxonomiaPage: React.FC<EspeciesTaxonomiaPageProps> = ({ on
           <Section
             title="1. Classificação Taxonômica Oficial"
             description="Informações científicas, família, gênero e enquadramento zoológico."
-            icon={BookOpen}
-            iconColor="primary"
           >
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-4">
               {/* C001 - Nome Científico */}
@@ -836,7 +791,7 @@ export const EspeciesTaxonomiaPage: React.FC<EspeciesTaxonomiaPageProps> = ({ on
                   />
                 </InputWrapper>
                 <span className="text-[11px] text-slate-500 mt-1 block">
-                  Padrão binominal (Gênero + epíteto específico em itálico - RN-001/002).
+                  Padrão binominal (Gênero + epíteto específico em itálico).
                 </span>
               </div>
 
@@ -867,7 +822,7 @@ export const EspeciesTaxonomiaPage: React.FC<EspeciesTaxonomiaPageProps> = ({ on
                   <span>Registro em Táxon Superior</span>
                 </label>
                 <span className="text-[11px] text-slate-500 ml-6">
-                  Para gênero ou família sem identificação da espécie (RN-004).
+                  Para gênero ou família sem identificação específica da espécie.
                 </span>
               </div>
 
@@ -953,9 +908,7 @@ export const EspeciesTaxonomiaPage: React.FC<EspeciesTaxonomiaPageProps> = ({ on
           {/* Seção 2: Nomes Populares (C006) */}
           <Section
             title="2. Nomes Populares da Espécie"
-            description="Cadastre as denominações regionais da espécie na Bahia e no Brasil. Exatamente um deve ser marcado como Principal (RN-005)."
-            icon={Info}
-            iconColor="primary"
+            description="Cadastre as denominações regionais da espécie na Bahia e no Brasil. Exatamente um deve ser marcado como Principal."
             headerActions={
               <Button
                 variant="outline"
@@ -1024,12 +977,9 @@ export const EspeciesTaxonomiaPage: React.FC<EspeciesTaxonomiaPageProps> = ({ on
           </Section>
 
           {/* Seção 3: Classificações de Ameaça em Listas Oficiais (C007) */}
-          {/* REGRA DE OURO DR002: Campo Categoria de Ameaça NÃO DUPLICADO - Tabela Editável Única */}
           <Section
             title="3. Classificações de Ameaça (Listas Oficiais)"
-            description="Vincule as classificações de conservação vigentes. Conforme a Regra de Ouro, cada lista possui uma única categoria na tabela abaixo."
-            icon={ShieldAlert}
-            iconColor="warning"
+            description="Vincule as classificações de conservação vigentes."
             headerActions={
               <Button
                 variant="outline"
@@ -1146,11 +1096,9 @@ export const EspeciesTaxonomiaPage: React.FC<EspeciesTaxonomiaPageProps> = ({ on
           <Section
             title="4. Regras Ecológicas & Restrições de Soltura"
             description="Critérios operacionais para quarentena, destinação e reintegração da espécie na natureza."
-            icon={AlertTriangle}
-            iconColor="danger"
           >
             <div className="p-4 space-y-4">
-              {/* C008 - Exótica / Invasora (Chave / Toggle com padrão DESLIGADO) */}
+              {/* C008 - Exótica / Invasora */}
               <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-lg flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div className="space-y-0.5">
                   <div className="flex items-center gap-2">
@@ -1162,7 +1110,7 @@ export const EspeciesTaxonomiaPage: React.FC<EspeciesTaxonomiaPageProps> = ({ on
                     )}
                   </div>
                   <p className="text-[11px] text-slate-500">
-                    Indica espécie não nativa com restrição estrita de soltura e exigência de autorização especial (padrão desligado - RN-009).
+                    Indica espécie não nativa com restrição estrita de soltura e exigência de autorização especial.
                   </p>
                 </div>
 
@@ -1177,7 +1125,7 @@ export const EspeciesTaxonomiaPage: React.FC<EspeciesTaxonomiaPageProps> = ({ on
                 </label>
               </div>
 
-              {/* C009 - Restrições de Soltura (Texto Livre OBRIGATÓRIO com *) */}
+              {/* C009 - Restrições de Soltura */}
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <label className="block text-xs font-semibold text-slate-800">
@@ -1195,7 +1143,7 @@ export const EspeciesTaxonomiaPage: React.FC<EspeciesTaxonomiaPageProps> = ({ on
                   className="w-full text-xs sm:text-sm p-3 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A] text-slate-900 placeholder:text-slate-400 leading-relaxed"
                 />
                 <span className="text-[11px] text-slate-500 mt-1 block">
-                  Campo aberto para digitação obrigatório (RN-010). Orienta diretamente os técnicos de ASAS e os laudos de destinação.
+                  Campo obrigatório para orientar os laudos de destinação e soltura.
                 </span>
               </div>
             </div>
@@ -1205,8 +1153,6 @@ export const EspeciesTaxonomiaPage: React.FC<EspeciesTaxonomiaPageProps> = ({ on
           <Section
             title="5. Observações & Auditoria"
             description="Informações complementares e justificativa formal de alteração."
-            icon={FileText}
-            iconColor="gray"
           >
             <div className="p-4 space-y-4">
               {/* C010 - Observações */}
@@ -1229,11 +1175,11 @@ export const EspeciesTaxonomiaPage: React.FC<EspeciesTaxonomiaPageProps> = ({ on
                   <div className="flex items-center gap-2">
                     <AlertTriangle className="w-4 h-4 text-amber-700 shrink-0" />
                     <span className="text-xs font-bold text-amber-900">
-                      Justificativa de Edição Excepcional (RN-016) <span className="text-rose-500">*</span>
+                      Justificativa de Alteração <span className="text-rose-500">*</span>
                     </span>
                   </div>
                   <p className="text-[11px] text-amber-800">
-                    Este registro já foi salvo como Definitivo. Qualquer alteração em dados taxonômicos ou regras de soltura exige justificativa expressa para auditoria da DISUC/COTIC.
+                    Este registro já foi salvo como Definitivo. Qualquer alteração em dados taxonômicos ou regras de soltura exige justificativa expressa.
                   </p>
                   <textarea
                     rows={2}

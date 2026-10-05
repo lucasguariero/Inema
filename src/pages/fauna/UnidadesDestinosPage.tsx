@@ -356,19 +356,11 @@ export const UnidadesDestinosPage: React.FC<UnidadesDestinosPageProps> = ({ onNa
           {/* Cabeçalho */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200/80">
             <div>
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 border border-slate-200">
-                  DR004
-                </span>
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold">
-                  CADASTRO TRANSVERSAL
-                </span>
-              </div>
-              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight mt-1">
+              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
                 Unidades e Destinos
               </h1>
               <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-                Cadastro transversal de unidades internas do INEMA, zoológicos, ASAS e criadouros de destinação da fauna silvestre.
+                Cadastro de unidades internas do INEMA, zoológicos, ASAS e criadouros de destinação da fauna silvestre.
               </p>
             </div>
 
@@ -390,36 +382,6 @@ export const UnidadesDestinosPage: React.FC<UnidadesDestinosPageProps> = ({ onNa
                 <Plus className="w-4 h-4 mr-1.5" />
                 Nova Unidade/Destino
               </Button>
-            </div>
-          </div>
-
-          {/* KPI Cards Sóbrios */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-              <span className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">Total de Unidades</span>
-              <p className="text-xl font-bold font-mono text-slate-900 mt-1">{unidades.length}</p>
-              <span className="text-[11px] text-slate-400 mt-0.5 block">Cadastradas no sistema</span>
-            </div>
-            <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-              <span className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">Unidades do INEMA</span>
-              <p className="text-xl font-bold font-mono text-[#0F4C3A] mt-1">
-                {unidades.filter((u) => u.natureza === 'Unidade do INEMA').length}
-              </p>
-              <span className="text-[11px] text-slate-400 mt-0.5 block">CETAS e Regionais</span>
-            </div>
-            <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-              <span className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">Destinos Externos</span>
-              <p className="text-xl font-bold font-mono text-blue-700 mt-1">
-                {unidades.filter((u) => u.natureza === 'Destino externo').length}
-              </p>
-              <span className="text-[11px] text-slate-400 mt-0.5 block">Zoos, ASAS e Criadouros</span>
-            </div>
-            <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-              <span className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">Unidades Ativas</span>
-              <p className="text-xl font-bold font-mono text-emerald-700 mt-1">
-                {unidades.filter((u) => u.situacao === 'Ativo').length}
-              </p>
-              <span className="text-[11px] text-slate-400 mt-0.5 block">Habilitadas para operação</span>
             </div>
           </div>
 
@@ -495,11 +457,9 @@ export const UnidadesDestinosPage: React.FC<UnidadesDestinosPageProps> = ({ onNa
             <table className="w-full text-left text-xs border-collapse">
               <thead>
                 <tr className="border-b border-slate-200 bg-slate-50/75 text-slate-600 font-semibold select-none">
-                  <th className="py-2.5 px-4">Tipo de Unidade</th>
                   <th className="py-2.5 px-4">Nome da Unidade / Destino</th>
-                  <th className="py-2.5 px-3">Natureza</th>
+                  <th className="py-2.5 px-4">Tipo de Unidade</th>
                   <th className="py-2.5 px-3">Município / UF</th>
-                  <th className="py-2.5 px-4">Responsável & Contato</th>
                   <th className="py-2.5 px-3">Situação</th>
                   <th className="py-2.5 px-4 text-right">Ações</th>
                 </tr>
@@ -507,7 +467,7 @@ export const UnidadesDestinosPage: React.FC<UnidadesDestinosPageProps> = ({ onNa
               <tbody className="divide-y divide-slate-100">
                 {unidadesFiltradas.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="py-12 text-center text-slate-500">
+                    <td colSpan={5} className="py-12 text-center text-slate-500">
                       <div className="max-w-sm mx-auto space-y-2">
                         <Info className="w-8 h-8 text-slate-400 mx-auto" />
                         <p className="font-semibold text-slate-700">Nenhuma unidade encontrada</p>
@@ -525,27 +485,14 @@ export const UnidadesDestinosPage: React.FC<UnidadesDestinosPageProps> = ({ onNa
                 ) : (
                   unidadesFiltradas.map((und) => (
                     <tr key={und.id} className="hover:bg-slate-50/70 transition-colors duration-100">
-                      {/* Tipo de Unidade */}
-                      <td className="py-2.5 px-4">
-                        <span className="font-medium text-slate-800 block">{und.tipoUnidadeNome}</span>
-                      </td>
-
                       {/* Nome */}
                       <td className="py-2.5 px-4">
                         <span className="font-semibold text-slate-900 block">{und.nome}</span>
-                        {und.endereco && (
-                          <span className="text-[11px] text-slate-400 truncate block max-w-xs">{und.endereco}</span>
-                        )}
                       </td>
 
-                      {/* Natureza */}
-                      <td className="py-2.5 px-3">
-                        <Badge
-                          color={und.natureza === 'Unidade do INEMA' ? 'primary' : 'gray'}
-                          size="sm"
-                        >
-                          {und.natureza}
-                        </Badge>
+                      {/* Tipo de Unidade */}
+                      <td className="py-2.5 px-4">
+                        <span className="font-medium text-slate-800 block">{und.tipoUnidadeNome}</span>
                       </td>
 
                       {/* Município / UF */}
@@ -553,18 +500,6 @@ export const UnidadesDestinosPage: React.FC<UnidadesDestinosPageProps> = ({ onNa
                         <span className="text-slate-700 font-medium">
                           {und.municipio} / {und.uf}
                         </span>
-                      </td>
-
-                      {/* Responsável & Contato */}
-                      <td className="py-2.5 px-4">
-                        <div className="space-y-0.5">
-                          <span className="text-slate-800 font-medium block">{und.responsavel}</span>
-                          <div className="flex items-center gap-2 text-[11px] text-slate-500">
-                            <span>{und.telefone}</span>
-                            <span>•</span>
-                            <span className="truncate max-w-[140px]">{und.email}</span>
-                          </div>
-                        </div>
                       </td>
 
                       {/* Situação */}
@@ -633,10 +568,6 @@ export const UnidadesDestinosPage: React.FC<UnidadesDestinosPageProps> = ({ onNa
                 <ArrowLeft className="w-3.5 h-3.5 mr-1" />
                 Voltar à Listagem
               </Button>
-              <div className="h-4 w-px bg-slate-300" />
-              <span className="text-[11px] font-mono uppercase tracking-wider text-slate-500">
-                DR004 — Formulário de Unidade / Destino
-              </span>
             </div>
 
             <div className="flex items-center gap-2">
@@ -664,14 +595,14 @@ export const UnidadesDestinosPage: React.FC<UnidadesDestinosPageProps> = ({ onNa
               {isEditing ? `Editar: ${formNome}` : 'Nova Unidade ou Destino de Fauna'}
             </h2>
             <p className="text-xs text-slate-500 mt-0.5">
-              Preencha os dados institucionais, localização e contatos conforme diretrizes normativas da DISUC/INEMA.
+              Preencha os dados institucionais, localização e contatos da unidade.
             </p>
           </div>
 
-          {/* SEÇÃO 1: Identificação e Localização (Ordem EXATA da Regra de Ouro) */}
+          {/* SEÇÃO 1: Identificação e Localização */}
           <Section
-            title="1. Identificação, Localização e Contatos Oficiais"
-            description="Ordem obrigatória: Tipo de Unidade, Nome, Município, Responsável, Telefone e E-mail."
+            title="Identificação, Localização e Contatos"
+            description="Informações cadastrais e dados para contato institucional."
           >
             <div className="space-y-4 pt-2">
               {/* Alerta de Natureza Derivada */}
@@ -771,15 +702,12 @@ export const UnidadesDestinosPage: React.FC<UnidadesDestinosPageProps> = ({ onNa
                     maxLength={120}
                     value={formResponsavel}
                     onChange={(e) => setFormResponsavel(e.target.value)}
-                    placeholder="Nome completo e cargo/registro profissional (ex: Dr. Carlos - CRMV/BA 1234)"
+                    placeholder="Nome completo do responsável"
                     className={cn(
                       'w-full h-9 text-xs bg-white border rounded-lg px-2.5 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A]',
                       formErrors.formResponsavel ? 'border-rose-400' : 'border-slate-300'
                     )}
                   />
-                  <span className="text-[11px] text-slate-400 mt-0.5 block">
-                    Texto livre obrigatório conforme Regra de Ouro DR004 (sem exigência de pré-cadastro de pessoa).
-                  </span>
                   {formErrors.formResponsavel && (
                     <span className="text-[11px] text-rose-600 mt-0.5 block">{formErrors.formResponsavel}</span>
                   )}
@@ -828,10 +756,10 @@ export const UnidadesDestinosPage: React.FC<UnidadesDestinosPageProps> = ({ onNa
             </div>
           </Section>
 
-          {/* SEÇÃO 2: Dados Complementares para Destino Externo (Condicional) */}
+          {/* SEÇÃO: Dados Complementares para Destino Externo (Condicional) */}
           {isDestinoExterno && (
             <Section
-              title="2. Dados Complementares do Destino Externo"
+              title="Dados Complementares do Destino Externo"
               description="Exigidos para zoológicos, criadouros particulares e áreas de soltura (ASAS)."
             >
               <div className="space-y-4 pt-2">
@@ -945,9 +873,9 @@ export const UnidadesDestinosPage: React.FC<UnidadesDestinosPageProps> = ({ onNa
             </Section>
           )}
 
-          {/* SEÇÃO 3: Situação Operacional */}
+          {/* SEÇÃO: Situação Cadastral */}
           <Section
-            title="3. Situação Cadastral"
+            title="Situação Cadastral"
             description="Controle de ativação da unidade no sistema integrado do INEMA."
           >
             <div className="pt-2 flex items-center justify-between p-3 rounded-lg bg-slate-50 border border-slate-200">
@@ -1123,14 +1051,9 @@ export const UnidadesDestinosPage: React.FC<UnidadesDestinosPageProps> = ({ onNa
       <Dialog open={isModalTiposOpen} onOpenChange={setIsModalTiposOpen}>
         <DialogContent className="max-w-3xl bg-white p-6 rounded-xl">
           <DialogHeader>
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 border border-slate-200">
-                TL003
-              </span>
-              <DialogTitle className="text-base font-bold text-slate-900">
-                Parametrização de Tipos de Unidade
-              </DialogTitle>
-            </div>
+            <DialogTitle className="text-base font-bold text-slate-900">
+              Parametrização de Tipos de Unidade
+            </DialogTitle>
             <p className="text-xs text-slate-500 mt-1">
               Defina as permissões operacionais para admissão, destinação e gestão de recintos de cada categoria de unidade.
             </p>

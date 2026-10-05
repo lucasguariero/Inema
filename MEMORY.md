@@ -194,3 +194,38 @@ Diretriz mandatória definida pelo usuário para todas as novas telas e protóti
 3. **SEIA V2 (`?rota=seia-v2`) Congelado**:
    - O ambiente de SEIA V2 fica preservado e congelado para implementações futuras da equipe. Não mexer nele por enquanto. Novas telas solicitadas entram nas rotas e menu do layout legado.
 
+---
+
+## 12. Gestão de Fauna (DR001 a DR007) — Diretrizes de Refino 10.0 / 10.0 (Fonte Persistente de Verdade)
+
+As seguintes instruções e fontes de verdade governam a rodada de correção das telas DR001 a DR007:
+
+### 1. Hierarquia de Fontes de Verdade
+1. Documentos oficiais DR001 ao DR007 (se houver conflito, os DRs vencem).
+2. Diretrizes mandatórias do projeto.
+3. Regras de Ouro fornecidas.
+4. Design System oficial / referência visual do GLA.
+5. Esta lista de correções.
+*Em caso de dúvida sobre comportamento não comprovado nos documentos: PARAR E PERGUNTAR. NÃO INVENTAR.*
+
+### 2. Princípios Não Negociáveis (Zero AI Slop)
+- **Zero Invenção**: Sem campos extras, sem caixas de métricas/KPIs no topo das listagens (Total de Espécies, Ameaçadas, Total de Unidades, etc.), sem textos decorativos.
+- **Zero Exposição de Metadados Internos**: Banidos da interface visual códigos como `DR001`, `DR002`, `RN-001`, `RN-xxx`, `Regra de Ouro`, `CADASTRO TRANSVERSAL`, `BASE ÚNICA DE FAUNA`. As regras devem existir no comportamento da aplicação, nunca recitadas para o usuário.
+- **Zero Simulação**: Banido qualquer bloco de simulação de fluxo (ex: rádio buttons de teste de documento na tela de parametrização de procedência).
+- **Identidade Visual Sóbria**: Topbar verde institucional `#0F4C3A`, sidebar legada, Dense UI (`h-9`), zero azul primário, zero roxo/violeta, zero gradientes, zero ícones decorativos antes de títulos de seção/card.
+
+### 3. Sequência Rígida de Execução (Etapas 1 a 10)
+1. **Etapa 1 — Limpeza Global de AI Slop / Excesso**: Remover KPIs inventados de todas as listagens (DR001–DR007); remover badges de documentação (`DRxxx`, `RN-xxx`, `Regra de Ouro`, `Cadastro Transversal`, `Base Única`); reduzir helper texts excessivos; priorizar toolbar + filtros + tabela.
+2. **Etapa 2 — DR001 Animais / Base Única**: Na edição de animal, `Unidade Atual` e `Procedência de Admissão` são estritamente SOMENTE LEITURA (mudanças só via eventos/admissão/transferência); código `UR-XXX-000001` gerado pelo sistema (somente leitura, sem preview falso de persistência); marcações físicas em tabela separada; status somente leitura; Sigilo e Candidato à Guarda OFF por padrão (ativar Sigilo exige justificativa).
+3. **Etapa 3 — DR003 Procedência**: Remover o simulador de admissão da parametrização; restaurar campo `Observações` (textarea opcional, separado de `Descrição de Uso`); campo `Ocorrência` permanece banido; `Unidade de Origem` habilitada SOMENTE quando `Tipo === Transferência`.
+4. **Etapa 4 — DR005 Recintos e Áreas**: Em TL002, exibir `Ocupação` e `Situação Operacional` como calculados e somente leitura; `Área Física` não obrigatória se não for OBG no DR; `Capacidade` e `Espécies Permitidas` obrigatórias SOMENTE para Zoológico (opcionais para CETAS); banir qualquer menção a "Manutenção" (usar apenas `Observação`).
+5. **Etapa 5 — DR007 Documentos / Termos**: `Natureza` editável antes do primeiro uso e travada (`disabled`) após; `Versão` gerada pelo sistema (somente leitura); `Validade` sempre em DIAS; implementar seção de `Versões Anteriores` (tabela/lista somente leitura das versões prévias); remover badges de RN/DR.
+6. **Etapa 6 — DR002 Espécies / Taxonomia**: Na listagem TL001, a coluna `Categoria de Ameaça` exibe SOMENTE a categoria mais restritiva entre as listas vigentes (sem poluir com todas as listas ao mesmo tempo); colunas de taxonomia estritamente conforme o DR (sem adicionar Ordem indevida); remover ícones decorativos dos títulos de seções em TL002.
+7. **Etapa 7 — DR004 Unidades e Destinos**: Preservar ordem exata dos campos: Tipo ➔ Nome ➔ Município ➔ Responsável ➔ Telefone ➔ E-mail; `Responsável` texto livre obrigatório (*); banir Capacidade/Autorização/Validade da tela da unidade; corrigir numeração de seções (numeração dinâmica ou sem número em seções condicionais); validar fluxo de Destino Externo.
+8. **Etapa 8 — DR006 Tipos de Manejo**: Preservar defaults OFF para as 3 chaves (`Permite múltiplos animais`, `Exige anexo`, `Exige termo`); manter tabela editável de Campos Customizados com travas para campos já utilizados; remover coluna não especificada "Campos Dinâmicos" na listagem TL001.
+9. **Etapa 9 — UX / Design System / Dense UI**: Refinamento visual global mantendo a casca legada, verde `#0F4C3A`, densidade compacta, alinhamentos, paddings, gaps, consistência de drawers, buttons, badges e estados (hover, focus, disabled, empty states).
+10. **Etapa 10 — QA Funcional Obrigatório**: Bateria completa de testes funcionais para cada um dos DRs e para todos os estados de UI, garantindo aprovação 10.0 / 10.0.
+
+### 4. Gate de Execução
+Nenhuma alteração de código ou tela deve ser executada sem a autorização explícita: `EXECUTAR REFINO FAUNA 10/10`.
+

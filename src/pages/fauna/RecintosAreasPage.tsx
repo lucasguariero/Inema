@@ -210,16 +210,25 @@ export const RecintosAreasPage: React.FC<RecintosAreasPageProps> = ({ onNavigate
 
     if (!formNomeLocal.trim()) errors.formNomeLocal = 'Informe o nome local do recinto na unidade.';
     if (!formUnidadeId) errors.formUnidadeId = 'Selecione a unidade do recinto.';
-    if (!formAreaM2 || formAreaM2 <= 0) errors.formAreaM2 = 'Informe a área física em m² maior que zero.';
 
-    // Regra de Ouro: se Zoológico, Capacidade e Espécies são OBRIGATÓRIAS
+    // Área Física é opcional; se preenchida, deve ser positiva
+    if (formAreaM2 !== undefined && formAreaM2 !== null && formAreaM2 < 0) {
+      errors.formAreaM2 = 'A área física em m² não pode ser negativa.';
+    }
+
+    // Se Zoológico, Capacidade e Espécies são OBRIGATÓRIAS
     if (isZoologico) {
       if (!formCapacidade || formCapacidade <= 0) {
-        errors.formCapacidade = 'Para Zoológicos, a capacidade máxima é obrigatória (*).';
+        errors.formCapacidade = 'Para Zoológicos, a capacidade máxima é obrigatória.';
       }
       if (formEspeciesPermitidas.length === 0) {
-        errors.formEspecies = 'Para Zoológicos, a definição de espécies permitidas é obrigatória (*).';
+        errors.formEspecies = 'Para Zoológicos, a definição de espécies permitidas é obrigatória.';
       }
+    }
+
+    // Bloqueio de redução de capacidade abaixo da ocupação atual (se houver ocupação)
+    if (isEditing && formCapacidade > 0 && formCapacidade < formOcupacaoAtual) {
+      errors.formCapacidade = `A capacidade (${formCapacidade}) não pode ser inferior à ocupação atual (${formOcupacaoAtual} animais).`;
     }
 
     setFormErrors(errors);
@@ -336,19 +345,11 @@ export const RecintosAreasPage: React.FC<RecintosAreasPageProps> = ({ onNavigate
           {/* Cabeçalho */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200/80">
             <div>
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 border border-slate-200">
-                  DR005
-                </span>
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold">
-                  CADASTRO TRANSVERSAL
-                </span>
-              </div>
-              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight mt-1">
+              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
                 Recintos e Áreas
               </h1>
               <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-                Cadastro transversal de recintos, gaiolões, viveiros e áreas de quarentena das unidades do INEMA e zoológicos.
+                Cadastro de recintos, gaiolões, viveiros e áreas de quarentena das unidades do INEMA e zoológicos.
               </p>
             </div>
 
@@ -361,36 +362,6 @@ export const RecintosAreasPage: React.FC<RecintosAreasPageProps> = ({ onNavigate
                 <Plus className="w-4 h-4 mr-1.5" />
                 Novo Recinto/Área
               </Button>
-            </div>
-          </div>
-
-          {/* KPI Cards Sóbrios */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-              <span className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">Total de Recintos</span>
-              <p className="text-xl font-bold font-mono text-slate-900 mt-1">{recintos.length}</p>
-              <span className="text-[11px] text-slate-400 mt-0.5 block">Mapeados nas unidades</span>
-            </div>
-            <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-              <span className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">Recintos Disponíveis</span>
-              <p className="text-xl font-bold font-mono text-emerald-700 mt-1">
-                {recintos.filter((r) => r.situacaoOperacional === 'Disponível').length}
-              </p>
-              <span className="text-[11px] text-slate-400 mt-0.5 block">Com vagas para animais</span>
-            </div>
-            <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-              <span className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">Lotados ou Quase</span>
-              <p className="text-xl font-bold font-mono text-amber-700 mt-1">
-                {recintos.filter((r) => r.situacaoOperacional === 'Lotado' || r.situacaoOperacional === 'Quase Lotado').length}
-              </p>
-              <span className="text-[11px] text-slate-400 mt-0.5 block">Taxa superior a 80%</span>
-            </div>
-            <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-              <span className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">Isolamento / Desinfecção</span>
-              <p className="text-xl font-bold font-mono text-rose-700 mt-1">
-                {recintos.filter((r) => r.estadoSanitario !== 'Adequado').length}
-              </p>
-              <span className="text-[11px] text-slate-400 mt-0.5 block">Controle sanitário ativo</span>
             </div>
           </div>
 
@@ -488,12 +459,11 @@ export const RecintosAreasPage: React.FC<RecintosAreasPageProps> = ({ onNavigate
               <thead>
                 <tr className="border-b border-slate-200 bg-slate-50/75 text-slate-600 font-semibold select-none">
                   <th className="py-2.5 px-4">Código</th>
-                  <th className="py-2.5 px-4">Nome Local & Unidade</th>
+                  <th className="py-2.5 px-4">Nome Local</th>
+                  <th className="py-2.5 px-4">Unidade</th>
                   <th className="py-2.5 px-3">Tipo de Recinto</th>
-                  <th className="py-2.5 px-3">Área (m²)</th>
                   <th className="py-2.5 px-3 text-center">Ocupação / Cap.</th>
                   <th className="py-2.5 px-3">Situação Operacional</th>
-                  <th className="py-2.5 px-3">Estado Sanitário</th>
                   <th className="py-2.5 px-3">Situação</th>
                   <th className="py-2.5 px-4 text-right">Ações</th>
                 </tr>
@@ -501,7 +471,7 @@ export const RecintosAreasPage: React.FC<RecintosAreasPageProps> = ({ onNavigate
               <tbody className="divide-y divide-slate-100">
                 {recintosFiltrados.length === 0 ? (
                   <tr>
-                    <td colSpan={9} className="py-12 text-center text-slate-500">
+                    <td colSpan={8} className="py-12 text-center text-slate-500">
                       <div className="max-w-sm mx-auto space-y-2">
                         <Info className="w-8 h-8 text-slate-400 mx-auto" />
                         <p className="font-semibold text-slate-700">Nenhum recinto encontrado</p>
@@ -524,20 +494,19 @@ export const RecintosAreasPage: React.FC<RecintosAreasPageProps> = ({ onNavigate
                         {rec.codigo}
                       </td>
 
-                      {/* Nome Local & Unidade */}
-                      <td className="py-2.5 px-4">
-                        <span className="font-semibold text-slate-900 block">{rec.nomeLocal}</span>
-                        <span className="text-[11px] text-slate-500 block">{rec.unidadeNome}</span>
+                      {/* Nome Local */}
+                      <td className="py-2.5 px-4 font-semibold text-slate-900">
+                        {rec.nomeLocal}
+                      </td>
+
+                      {/* Unidade */}
+                      <td className="py-2.5 px-4 text-slate-600">
+                        {rec.unidadeNome}
                       </td>
 
                       {/* Tipo */}
                       <td className="py-2.5 px-3">
                         <span className="font-medium text-slate-700">{rec.tipoRecinto}</span>
-                      </td>
-
-                      {/* Área */}
-                      <td className="py-2.5 px-3">
-                        <span className="font-mono text-slate-600">{rec.areaM2} m²</span>
                       </td>
 
                       {/* Ocupação / Capacidade */}
@@ -562,25 +531,6 @@ export const RecintosAreasPage: React.FC<RecintosAreasPageProps> = ({ onNavigate
                           size="xs"
                         >
                           {rec.situacaoOperacional}
-                        </Badge>
-                      </td>
-
-                      {/* Estado Sanitário */}
-                      <td className="py-2.5 px-3">
-                        <Badge
-                          color={
-                            rec.estadoSanitario === 'Adequado'
-                              ? 'success'
-                              : rec.estadoSanitario === 'Em Desinfecção'
-                              ? 'info'
-                              : rec.estadoSanitario === 'Quarentena Sanitária'
-                              ? 'warning'
-                              : 'danger'
-                          }
-                          size="xs"
-                          dot
-                        >
-                          {rec.estadoSanitario}
                         </Badge>
                       </td>
 
@@ -650,10 +600,6 @@ export const RecintosAreasPage: React.FC<RecintosAreasPageProps> = ({ onNavigate
                 <ArrowLeft className="w-3.5 h-3.5 mr-1" />
                 Voltar à Listagem
               </Button>
-              <div className="h-4 w-px bg-slate-300" />
-              <span className="text-[11px] font-mono uppercase tracking-wider text-slate-500">
-                DR005 — Formulário de Recinto / Área
-              </span>
             </div>
 
             <div className="flex items-center gap-2">
@@ -703,7 +649,7 @@ export const RecintosAreasPage: React.FC<RecintosAreasPageProps> = ({ onNavigate
                     value={formCodigo}
                     className="w-full h-9 text-xs font-mono font-bold bg-slate-100 border border-slate-200 rounded-lg px-2.5 text-slate-700 cursor-not-allowed"
                   />
-                  <span className="text-[11px] text-slate-400 mt-0.5 block">Gerado pelo sistema (RN-002).</span>
+                  <span className="text-[11px] text-slate-400 mt-0.5 block">Gerado automaticamente pelo sistema.</span>
                 </div>
 
                 {/* Nome Local */}
@@ -768,33 +714,21 @@ export const RecintosAreasPage: React.FC<RecintosAreasPageProps> = ({ onNavigate
 
           {/* SEÇÃO 2: Dimensões, Capacidade e Espécies Permitidas */}
           <Section
-            title="2. Dimensões Físicas e Regra Zoológica de Capacidade"
-            description="Regra de Ouro: Capacidade e Espécies são OBRIGATÓRIAS para Zoológicos e opcionais para CETAS."
+            title="2. Dimensões Físicas e Capacidade"
+            description="Dimensões estruturais e parâmetros de lotação do recinto."
           >
             <div className="space-y-4 pt-2">
-              {/* Alerta de Unidade Zoo */}
-              {isZoologico && (
-                <div className="p-3 bg-amber-50 rounded-lg border border-amber-200 text-xs flex items-center gap-2.5 text-amber-800">
-                  <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
-                  <span>
-                    <strong>Regra de Ouro DR005:</strong> A unidade selecionada é um <strong>Zoológico</strong>.
-                    Portanto, os campos <strong>Capacidade Máxima</strong> e <strong>Espécies Permitidas</strong> tornam-se
-                    estritamente <strong>OBRIGATÓRIOS (*)</strong>.
-                  </span>
-                </div>
-              )}
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                 {/* Área m² */}
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    Área Física (m²) <span className="text-rose-500">*</span>
+                    Área Física (m²)
                   </label>
                   <div className="relative">
                     <input
                       type="number"
                       step="0.1"
-                      min={1}
+                      min={0}
                       value={formAreaM2}
                       onChange={(e) => setFormAreaM2(parseFloat(e.target.value) || 0)}
                       className={cn(
@@ -814,14 +748,14 @@ export const RecintosAreasPage: React.FC<RecintosAreasPageProps> = ({ onNavigate
                 {/* Capacidade */}
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    Capacidade Máxima de Animais {isZoologico && <span className="text-rose-500">*</span>}
+                    Capacidade Máxima {isZoologico && <span className="text-rose-500">*</span>}
                   </label>
                   <input
                     type="number"
                     min={1}
                     value={formCapacidade}
                     onChange={(e) => setFormCapacidade(parseInt(e.target.value) || 0)}
-                    placeholder={isZoologico ? 'Obrigatório para Zoo' : 'Opcional para CETAS'}
+                    placeholder={isZoologico ? 'Obrigatório para Zoológico' : 'Opcional'}
                     className={cn(
                       'w-full h-9 text-xs bg-white border rounded-lg px-2.5 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A]',
                       formErrors.formCapacidade ? 'border-rose-400' : 'border-slate-300'
@@ -832,10 +766,30 @@ export const RecintosAreasPage: React.FC<RecintosAreasPageProps> = ({ onNavigate
                   )}
                 </div>
 
+                {/* Ocupação Atual (Calculada e Readonly) */}
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Ocupação Atual <span className="text-slate-400 font-normal">(Somente Leitura)</span>
+                  </label>
+                  <div className="h-9 px-3 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-between">
+                    <span className="text-xs font-mono font-semibold text-slate-800">
+                      {formOcupacaoAtual} animais
+                    </span>
+                    {formCapacidade > 0 && (
+                      <span className="text-[11px] text-slate-500 font-medium">
+                        {Math.round((formOcupacaoAtual / formCapacidade) * 100)}%
+                      </span>
+                    )}
+                  </div>
+                  <span className="text-[10px] text-slate-400 mt-0.5 block">
+                    Calculada pelos animais alocados no recinto.
+                  </span>
+                </div>
+
                 {/* Situação Operacional (Calculada e Readonly) */}
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    Situação Operacional (Calculada)
+                    Situação Operacional <span className="text-slate-400 font-normal">(Somente Leitura)</span>
                   </label>
                   <div className="h-9 px-3 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-between">
                     <span className="text-xs font-semibold text-slate-800">{situacaoOperacionalCalculada}</span>
@@ -864,7 +818,7 @@ export const RecintosAreasPage: React.FC<RecintosAreasPageProps> = ({ onNavigate
               <div className="pt-2 border-t border-slate-100">
                 <div className="flex items-center justify-between mb-1.5">
                   <label className="text-xs font-semibold text-slate-700">
-                    Espécies Permitidas {isZoologico && <span className="text-rose-500">* (Obrigatório para Zoo)</span>}
+                    Espécies Permitidas {isZoologico && <span className="text-rose-500">* (Obrigatório para Zoológico)</span>}
                   </label>
                   <span className="text-[11px] text-slate-400">
                     Selecione as espécies que podem habitar este recinto
@@ -898,10 +852,10 @@ export const RecintosAreasPage: React.FC<RecintosAreasPageProps> = ({ onNavigate
             </div>
           </Section>
 
-          {/* SEÇÃO 3: Estado Sanitário e Observações de Obras */}
+          {/* SEÇÃO 3: Estado Sanitário e Observação */}
           <Section
-            title="3. Estado Sanitário e Observações Operacionais"
-            description="Campo 'Manutenção' foi removido; reformas e obras devem ser descritas em Observação."
+            title="3. Estado Sanitário e Observação"
+            description="Condição sanitária e anotações técnicas do recinto."
           >
             <div className="space-y-4 pt-2">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -926,7 +880,7 @@ export const RecintosAreasPage: React.FC<RecintosAreasPageProps> = ({ onNavigate
                 {/* Possui Restrição? */}
                 <div className="flex items-center justify-between p-3 rounded-lg bg-slate-50 border border-slate-200">
                   <div>
-                    <span className="text-xs font-semibold text-slate-800 block">Possui Restrições Físicas/Manejamento?</span>
+                    <span className="text-xs font-semibold text-slate-800 block">Possui restrição?</span>
                     <span className="text-[11px] text-slate-500">
                       Indica barreiras especiais ou necessidade de contenção reforçada.
                     </span>
@@ -944,22 +898,19 @@ export const RecintosAreasPage: React.FC<RecintosAreasPageProps> = ({ onNavigate
                   </button>
                 </div>
 
-                {/* Observação (Obras, Reformas, Manutenção) */}
+                {/* Observação */}
                 <div className="sm:col-span-2">
                   <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    Observações Operacionais, Reformas e Obras
+                    Observação
                   </label>
                   <textarea
                     rows={3}
                     maxLength={1000}
                     value={formObservacao}
                     onChange={(e) => setFormObservacao(e.target.value)}
-                    placeholder="Regra de Ouro: Registre aqui qualquer detalhe sobre reformas, pinturas, consertos de telas ou contaminação sanitária (campo 'Manutenção' foi unificado aqui)..."
+                    placeholder="Anotações técnicas, histórico estrutural ou detalhes sanitários do recinto..."
                     className="w-full text-xs bg-white border border-slate-300 rounded-lg p-2.5 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A]"
                   />
-                  <span className="text-[11px] text-slate-400 mt-0.5 block">
-                    Conforme Regra de Ouro DR005, o campo &quot;Manutenção&quot; foi removido; informações de manutenção/obras ficam neste campo.
-                  </span>
                 </div>
               </div>
             </div>
@@ -1120,11 +1071,11 @@ export const RecintosAreasPage: React.FC<RecintosAreasPageProps> = ({ onNavigate
               </div>
             )}
 
-            {/* Observações / Manutenção */}
+            {/* Observações */}
             {drawerRecinto.observacao && (
               <div>
                 <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
-                  Observações & Manutenção / Obras
+                  Observações
                 </h4>
                 <p className="bg-slate-50 p-2.5 rounded-lg border border-slate-100 text-slate-700 leading-relaxed">
                   {drawerRecinto.observacao}

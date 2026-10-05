@@ -115,6 +115,7 @@ export const DocumentosTermosPage: React.FC<DocumentosTermosPageProps> = ({ onNa
 
   // Situação
   const [formSituacao, setFormSituacao] = useState<'Ativo' | 'Inativo'>('Ativo');
+  const [formHistoricoVersoes, setFormHistoricoVersoes] = useState<any[]>([]);
 
   // Erros
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
@@ -140,6 +141,7 @@ export const DocumentosTermosPage: React.FC<DocumentosTermosPageProps> = ({ onNa
     setFormFormaAssinatura('Digital Gov.br');
     setFormSignatarios([SIGNATARIOS_OPCOES[0]]);
     setFormSituacao('Ativo');
+    setFormHistoricoVersoes([]);
     setFormErrors({});
     setViewMode('formulario');
   };
@@ -168,6 +170,7 @@ export const DocumentosTermosPage: React.FC<DocumentosTermosPageProps> = ({ onNa
     setFormFormaAssinatura(doc.formaAssinatura || 'Digital Gov.br');
     setFormSignatarios(doc.signatarios || [SIGNATARIOS_OPCOES[0]]);
     setFormSituacao(doc.situacao);
+    setFormHistoricoVersoes(doc.historicoVersoes || []);
     setFormErrors({});
     if (drawerDoc) setDrawerDoc(null);
     setViewMode('formulario');
@@ -217,7 +220,7 @@ export const DocumentosTermosPage: React.FC<DocumentosTermosPageProps> = ({ onNa
 
     if (isTermoEmitido) {
       if (!formModeloTermo.trim()) {
-        errors.formModeloTermo = 'O modelo do termo é obrigatório para termos emitidos (RN-003).';
+        errors.formModeloTermo = 'O modelo do termo é obrigatório para termos emitidos.';
       }
       if (!formInicioVigencia.trim()) {
         errors.formInicioVigencia = 'A data de início de vigência é obrigatória.';
@@ -249,9 +252,19 @@ export const DocumentosTermosPage: React.FC<DocumentosTermosPageProps> = ({ onNa
           if (d.id === editingId) {
             // Incrementar versão minor se termo emitido foi editado
             let novaVersao = d.versaoVigente;
+            let novoHistorico = d.historicoVersoes ? [...d.historicoVersoes] : [];
             if (d.natureza === 'Termo emitido') {
               const num = parseFloat(d.versaoVigente.replace('v', '')) || 1.0;
               novaVersao = `v${(num + 0.1).toFixed(1)}`;
+              novoHistorico = [
+                {
+                  versao: d.versaoVigente,
+                  dataCriacao: new Date().toLocaleDateString('pt-BR'),
+                  modeloTermo: d.modeloTermo,
+                  motivoAtualizacao: 'Atualização de modelo de minuta pelo usuário.',
+                },
+                ...novoHistorico,
+              ];
             }
 
             return {
@@ -269,6 +282,7 @@ export const DocumentosTermosPage: React.FC<DocumentosTermosPageProps> = ({ onNa
               signatarios: isTermoEmitido && formExigeAssinatura ? formSignatarios : undefined,
               situacao: formSituacao,
               travadoEdicao: true, // Trava após salvar
+              historicoVersoes: novoHistorico,
             };
           }
           return d;
@@ -356,19 +370,11 @@ export const DocumentosTermosPage: React.FC<DocumentosTermosPageProps> = ({ onNa
           {/* Cabeçalho */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200/80">
             <div>
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 border border-slate-200">
-                  DR007
-                </span>
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold">
-                  CADASTRO TRANSVERSAL
-                </span>
-              </div>
-              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight mt-1">
+              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
                 Documentos e Termos
               </h1>
               <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-                Cadastro transversal de tipos de documentos anexados e termos emitidos para a gestão de fauna silvestre.
+                Gerenciamento de tipos de documentos anexados e termos emitidos para a gestão de fauna silvestre.
               </p>
             </div>
 
@@ -381,36 +387,6 @@ export const DocumentosTermosPage: React.FC<DocumentosTermosPageProps> = ({ onNa
                 <Plus className="w-4 h-4 mr-1.5" />
                 Novo Documento/Termo
               </Button>
-            </div>
-          </div>
-
-          {/* KPI Cards Sóbrios */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-              <span className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">Total Cadastrado</span>
-              <p className="text-xl font-bold font-mono text-slate-900 mt-1">{documentos.length}</p>
-              <span className="text-[11px] text-slate-400 mt-0.5 block">Documentos e termos</span>
-            </div>
-            <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-              <span className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">Termos Emitidos</span>
-              <p className="text-xl font-bold font-mono text-[#0F4C3A] mt-1">
-                {documentos.filter((d) => d.natureza === 'Termo emitido').length}
-              </p>
-              <span className="text-[11px] text-slate-400 mt-0.5 block">Gerados pelo sistema</span>
-            </div>
-            <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-              <span className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">Documentos Anexados</span>
-              <p className="text-xl font-bold font-mono text-slate-700 mt-1">
-                {documentos.filter((d) => d.natureza === 'Documento anexado').length}
-              </p>
-              <span className="text-[11px] text-slate-400 mt-0.5 block">Laudos e guias de upload</span>
-            </div>
-            <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-              <span className="text-[11px] font-semibold tracking-wider text-slate-500 uppercase">Exigem Assinatura</span>
-              <p className="text-xl font-bold font-mono text-blue-700 mt-1">
-                {documentos.filter((d) => d.exigeAssinatura).length}
-              </p>
-              <span className="text-[11px] text-slate-400 mt-0.5 block">Com fluxo de signatários</span>
             </div>
           </div>
 
@@ -576,18 +552,11 @@ export const DocumentosTermosPage: React.FC<DocumentosTermosPageProps> = ({ onNa
                       {/* Assinatura */}
                       <td className="py-2.5 px-4">
                         {doc.exigeAssinatura ? (
-                          <div className="space-y-0.5">
-                            <Badge color="info" size="xs">
-                              {doc.formaAssinatura || 'Exige Assinatura'}
-                            </Badge>
-                            {doc.validadeDias && (
-                              <span className="text-[11px] text-slate-500 block">
-                                Validade: <strong>{doc.validadeDias} dias</strong>
-                              </span>
-                            )}
-                          </div>
+                          <Badge color="info" size="xs">
+                            Sim
+                          </Badge>
                         ) : (
-                          <span className="text-slate-400">Não exige</span>
+                          <span className="text-slate-400">Não</span>
                         )}
                       </td>
 
@@ -657,10 +626,6 @@ export const DocumentosTermosPage: React.FC<DocumentosTermosPageProps> = ({ onNa
                 <ArrowLeft className="w-3.5 h-3.5 mr-1" />
                 Voltar à Listagem
               </Button>
-              <div className="h-4 w-px bg-slate-300" />
-              <span className="text-[11px] font-mono uppercase tracking-wider text-slate-500">
-                DR007 — Formulário de Documento ou Termo
-              </span>
             </div>
 
             <div className="flex items-center gap-2">
@@ -694,17 +659,15 @@ export const DocumentosTermosPage: React.FC<DocumentosTermosPageProps> = ({ onNa
 
           {/* SEÇÃO 1: Identificação e Natureza Documental */}
           <Section
-            title="1. Natureza e Identificação do Modelo"
+            title="Natureza e Identificação do Modelo"
             description="Defina se o tipo documental é anexado pelo usuário ou emitido pelo sistema com minuta."
           >
             <div className="space-y-4 pt-2">
-              {/* Aviso da Regra de Ouro se Natureza estiver Travada */}
               {isEditing && naturezaTravada && (
-                <div className="p-3 bg-amber-50 rounded-lg border border-amber-200 text-xs flex items-center gap-2.5 text-amber-800">
-                  <Lock className="w-4 h-4 text-amber-600 shrink-0" />
+                <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 text-xs flex items-center gap-2.5 text-slate-700">
+                  <Lock className="w-4 h-4 text-slate-500 shrink-0" />
                   <span>
-                    <strong>Natureza Travada (RN-001):</strong> Este modelo documental já foi salvo e possui
-                    aplicabilidade no sistema. A natureza não pode ser alterada para preservar o histórico jurídico.
+                    A natureza deste modelo documental está fixada após o primeiro registro para preservar o histórico jurídico.
                   </span>
                 </div>
               )}
@@ -769,7 +732,7 @@ export const DocumentosTermosPage: React.FC<DocumentosTermosPageProps> = ({ onNa
               {/* Unidades Aplicáveis */}
               <div className="pt-2 border-t border-slate-100">
                 <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                  Unidades Aplicáveis (RN-007)
+                  Unidades Aplicáveis
                 </label>
                 <div className="flex items-center gap-4 mb-2">
                   <label className="flex items-center gap-1.5 text-xs text-slate-700 cursor-pointer">
@@ -845,7 +808,7 @@ export const DocumentosTermosPage: React.FC<DocumentosTermosPageProps> = ({ onNa
           {/* SEÇÃO 2: Configurações Exclusivas de Termo Emitido (Condicional) */}
           {isTermoEmitido && (
             <Section
-              title="2. Minuta do Termo, Vigência e Assinatura Digital"
+              title="Minuta do Termo, Vigência e Assinatura Digital"
               description="Configurações aplicáveis exclusivamente a termos gerados pelo sistema com preenchimento automático."
             >
               <div className="space-y-4 pt-2">
@@ -900,7 +863,7 @@ export const DocumentosTermosPage: React.FC<DocumentosTermosPageProps> = ({ onNa
                       value={formVersaoVigente}
                       className="w-full h-8 text-xs font-mono font-bold bg-slate-100 border border-slate-200 rounded-md px-2 text-slate-700 cursor-not-allowed"
                     />
-                    <span className="text-[10px] text-slate-400 mt-0.5 block">Gerada automaticamente (RN-004).</span>
+                    <span className="text-[10px] text-slate-400 mt-0.5 block">Gerada automaticamente pelo sistema.</span>
                   </div>
 
                   <div>
@@ -918,7 +881,7 @@ export const DocumentosTermosPage: React.FC<DocumentosTermosPageProps> = ({ onNa
 
                   <div>
                     <label className="block text-[11px] font-semibold text-slate-600 mb-1">
-                      Validade do Termo (em DIAS) <span className="text-rose-500">*</span>
+                      Validade do Termo (em dias) <span className="text-rose-500">*</span>
                     </label>
                     <div className="relative">
                       <input
@@ -933,7 +896,6 @@ export const DocumentosTermosPage: React.FC<DocumentosTermosPageProps> = ({ onNa
                         dias
                       </span>
                     </div>
-                    <span className="text-[10px] text-slate-400 mt-0.5 block">Regra de Ouro: expressa em DIAS.</span>
                   </div>
                 </div>
 
@@ -1004,9 +966,54 @@ export const DocumentosTermosPage: React.FC<DocumentosTermosPageProps> = ({ onNa
             </Section>
           )}
 
-          {/* SEÇÃO 3: Situação Cadastral */}
+          {/* SEÇÃO: Versões Anteriores (Somente Leitura) */}
+          {isEditing && isTermoEmitido && (
+            <Section
+              title="Versões Anteriores"
+              description="Histórico de versões precedentes deste modelo documental (somente leitura)."
+            >
+              <div className="pt-2">
+                {formHistoricoVersoes.length === 0 ? (
+                  <div className="p-4 bg-slate-50 rounded-lg border border-slate-200 text-xs text-slate-500 text-center">
+                    Este documento está em sua primeira versão ({formVersaoVigente}). Nenhuma versão anterior registrada.
+                  </div>
+                ) : (
+                  <div className="border border-slate-200 rounded-lg overflow-hidden">
+                    <table className="w-full text-xs">
+                      <thead className="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
+                        <tr>
+                          <th className="px-3 py-2 text-left w-24">Versão</th>
+                          <th className="px-3 py-2 text-left w-28">Data</th>
+                          <th className="px-3 py-2 text-left">Motivo / Alteração</th>
+                          <th className="px-3 py-2 text-left">Minuta Histórica</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100">
+                        {formHistoricoVersoes.map((v: any, idx: number) => (
+                          <tr key={idx} className="hover:bg-slate-50/50">
+                            <td className="px-3 py-2.5 font-mono font-bold text-slate-700">
+                              <Badge color="gray" size="xs">
+                                {v.versao}
+                              </Badge>
+                            </td>
+                            <td className="px-3 py-2.5 text-slate-500">{v.dataCriacao}</td>
+                            <td className="px-3 py-2.5 text-slate-700">{v.motivoAtualizacao || '—'}</td>
+                            <td className="px-3 py-2.5 text-slate-600 font-mono text-[11px] max-w-xs truncate" title={v.modeloTermo}>
+                              {v.modeloTermo || '—'}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            </Section>
+          )}
+
+          {/* SEÇÃO: Situação Cadastral */}
           <Section
-            title="3. Situação Cadastral"
+            title="Situação Cadastral"
             description="Controle de ativação do documento ou termo no ecossistema do INEMA."
           >
             <div className="pt-2 flex items-center justify-between p-3 rounded-lg bg-slate-50 border border-slate-200">
@@ -1146,6 +1153,33 @@ export const DocumentosTermosPage: React.FC<DocumentosTermosPageProps> = ({ onNa
                           </div>
                         </div>
                       )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Versões Anteriores no Drawer */}
+                {drawerDoc.historicoVersoes && drawerDoc.historicoVersoes.length > 0 && (
+                  <div>
+                    <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+                      Histórico de Versões Anteriores
+                    </h4>
+                    <div className="space-y-1.5 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+                      {drawerDoc.historicoVersoes.map((hv, idx) => (
+                        <div key={idx} className="p-2 bg-white rounded border border-slate-200 text-[11px] space-y-1">
+                          <div className="flex items-center justify-between">
+                            <span className="font-mono font-bold text-[#0F4C3A]">{hv.versao}</span>
+                            <span className="text-slate-400 text-[10px]">{hv.dataCriacao}</span>
+                          </div>
+                          {hv.motivoAtualizacao && (
+                            <p className="text-slate-600 text-[11px]">{hv.motivoAtualizacao}</p>
+                          )}
+                          {hv.modeloTermo && (
+                            <p className="text-slate-500 font-mono text-[10px] bg-slate-50 p-1 rounded truncate" title={hv.modeloTermo}>
+                              {hv.modeloTermo}
+                            </p>
+                          )}
+                        </div>
+                      ))}
                     </div>
                   </div>
                 )}
