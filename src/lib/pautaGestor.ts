@@ -286,3 +286,31 @@ export function referenciaEspacial(r: RegistroPauta): { municipio: string; coord
   if (anexo) return { municipio: r.municipio, coordenada: anexo.coordenada, fonte: `Anexo: ${anexo.fonte}` };
   return r.municipio ? { municipio: r.municipio, fonte: 'Município' } : null;
 }
+// DOR011, lista de legendas (p. 12–13). LEG002 não é exibida: conflito com RN009.
+export const LEG: Record<number, string> = {
+  1: 'Selecione a origem registrada.',
+  2: 'Disponível quando a origem selecionada for Ofício.',
+  3: 'Disponível conforme a origem selecionada.',
+  4: 'Selecione um município do Estado da Bahia.',
+  5: 'Informe a data inicial e a data final do registro.',
+  6: 'Informe o identificador completo do registro.',
+  7: 'Informe uma ou mais palavras completas. A pesquisa desconsidera acentuação e não aceita termos parciais.',
+  8: 'Pesquise por nome ou CPF/CNPJ conforme o tipo de registro.',
+  9: 'Informe uma coordenada em Grau Decimal, Grau/Minuto/Segundo ou UTM.',
+  10: 'Selecione uma situação aplicável à guia ativa.',
+  11: 'Selecione primeiro o eixo e depois o subitem.',
+  12: 'Selecione a classificação da área quando aplicável.',
+  13: 'Selecione uma faixa de dias em aberto.',
+  14: 'Disponível somente para Registro de Emergência.',
+  15: 'Selecione uma Unidade de Conservação quando aplicável.',
+  16: 'Quantidade de registros ou processos com dados de localização correspondentes.',
+  17: 'Selecione o motivo que fundamenta o arquivamento.',
+  18: 'Obrigatória quando o motivo selecionado for Outros.',
+  19: 'Informe a justificativa da ação.',
+  20: 'Registre uma observação sem alterar a situação do registro.',
+  21: 'Selecione as colunas que deseja visualizar.',
+  22: 'Expanda o grupo para visualizar os filtros e recolha-o quando não precisar utilizá-los.',
+  23: 'Adicione arquivos que complementem ou documentem o registro.',
+  24: 'Acesse o GeoBahia para analisar a localização do registro e dos documentos relacionados.',
+};
+

@@ -8,7 +8,7 @@ import { GlaTable, GlaTableHead, GlaTh, GlaTableBody, GlaTableRow, GlaTd } from 
 import { GlaRadioGroup } from '@/components/gla/primitives/GlaRadioGroup';
 import { Button } from '@/components/ui/button';
 import { diasEmAberto, type RegistroPauta, type DocumentoRelacionadoPauta } from '@/data/pautaGestorMock';
-import { ACOES, MSG, duplicidades, podeExecutar, referenciaEspacial, referenciasEspaciais, itemAutorizado, BLOQUEIOS_ACOES, destinosAutorizados, type ProcessoPauta, EIXOS, MOTIVOS_ARQUIVAMENTO, EXTENSOES_ARQUIVOS, arquivoPermitido, type AcaoPauta, type ComandoPauta, type SessaoPauta } from '@/lib/pautaGestor';
+import { ACOES, MSG, LEG, duplicidades, podeExecutar, referenciaEspacial, referenciasEspaciais, itemAutorizado, BLOQUEIOS_ACOES, destinosAutorizados, type ProcessoPauta, EIXOS, MOTIVOS_ARQUIVAMENTO, EXTENSOES_ARQUIVOS, arquivoPermitido, type AcaoPauta, type ComandoPauta, type SessaoPauta } from '@/lib/pautaGestor';
 
 interface Props { registro: RegistroPauta; registros: RegistroPauta[]; inicial: string; sessao: SessaoPauta; onClose: () => void; onRestoreFocus: () => void; onExecutar: (c: ComandoPauta) => void; }
 export function PautaRegistroDialog({ registro: r, registros, inicial, sessao, onClose, onRestoreFocus, onExecutar }: Props) {
@@ -41,8 +41,10 @@ export function PautaRegistroDialog({ registro: r, registros, inicial, sessao, o
   const titulo = relacionado ? 'Registro relacionado' : documento ? 'Documento relacionado' : confirmacao ? 'Confirmar operação' : visao === 'acoes' ? 'Ações do Registro' : visao === 'duplicados' ? 'Possíveis Duplicidades' : visao === 'visualizar' ? 'Detalhes do Registro' : ACOES[visao as AcaoPauta];
   const textoConfirmacao = confirmacao?.acao === 'anexar' ? MSG[16] : confirmacao?.acao === 'arquivar' ? MSG[11] : confirmacao?.acao === 'encaminhar' ? `Encaminhar para ${confirmacao.destino}` : MSG[19];
   const leitura = (label: string, value: React.ReactNode) => <div key={label}><dt className="text-xs text-slate-500 mb-1">{label}</dt><dd className="text-xs text-slate-800 break-words">{value === '' || value === undefined || value === null ? '—' : value}</dd></div>;
-  const selecao = (label: string, value: string, onChange: (value: string) => void, options: string[]) => <InputWrapper label={label} required className="border-0 shadow-none overflow-visible"><FilamentSelect ariaLabel={label} value={value} onChange={onChange} options={options} className="pauta-select" placeholder="Selecione..." /></InputWrapper>;
-  const texto = (label: string, value: string, onChange: (value: string) => void, obrigatorio = true) => <InputWrapper label={label} required={obrigatorio}><textarea aria-label={label} value={value} onChange={e => onChange(e.target.value)} className="fi-input w-full min-h-24 p-3 text-xs outline-none bg-transparent" /></InputWrapper>;
+  const legendas: Record<string, number> = { 'Eixo Temático': 11, 'Motivo do arquivamento': 17, 'Descrição do motivo': 18, 'Justificativa': 19, 'Comentário': 20 };
+  const hint = (label: string) => legendas[label] && <span id={`leg-acao-${legendas[label]}`} data-leg={legendas[label]} className="pauta-helper">{LEG[legendas[label]]}</span>;
+  const selecao = (label: string, value: string, onChange: (value: string) => void, options: string[]) => <InputWrapper label={label} hint={hint(label)} required className="border-0 shadow-none overflow-visible"><FilamentSelect ariaLabel={label} value={value} onChange={onChange} options={options} className="pauta-select" placeholder="Selecione..." /></InputWrapper>;
+  const texto = (label: string, value: string, onChange: (value: string) => void, obrigatorio = true) => <InputWrapper label={label} hint={hint(label)} required={obrigatorio}><textarea aria-label={label} aria-describedby={legendas[label] ? `leg-acao-${legendas[label]}` : undefined} value={value} onChange={e => onChange(e.target.value)} className="fi-input w-full min-h-24 p-3 text-xs outline-none bg-transparent" /></InputWrapper>;
   const acessoRestrito = !['acoes', 'visualizar', 'geo', 'duplicados'].includes(visao) && !podeExecutar(sessao, r, visao as AcaoPauta);
   if (!itemAutorizado(sessao, r) || acessoRestrito || relacionado && !itemAutorizado(sessao, relacionado)) return <Dialog open onOpenChange={onClose}><DialogContent className="pauta-dialog"><DialogTitle>Acesso negado</DialogTitle><DialogDescription>{MSG[3]}</DialogDescription><Button size="sm" color="gray" onClick={onClose}>Fechar</Button></DialogContent></Dialog>;
   return <Dialog open onOpenChange={open => { if (!open) onClose(); }}><DialogContent className="pauta-dialog max-w-3xl" onCloseAutoFocus={e => { e.preventDefault(); onRestoreFocus(); }}><DialogHeader><DialogTitle>{titulo}</DialogTitle><DialogDescription className="font-mono">{relacionado?.numero || r.numero}</DialogDescription></DialogHeader>
@@ -57,17 +59,18 @@ export function PautaRegistroDialog({ registro: r, registros, inicial, sessao, o
         <Section compact heading="Histórico"><ol className="space-y-3">{r.historico.map((h, i) => <li key={i} className="text-xs border-b border-slate-100 pb-3 last:border-0"><p className="font-semibold">{h.acao}</p><p className="text-slate-500 mt-1">{new Date(h.data).toLocaleString('pt-BR')} · {h.usuario} · {h.perfil}</p>{h.anterior && <p className="mt-1">Anterior: {h.anterior}</p>}{h.novo && <p className="mt-1">{h.novo}</p>}{h.justificativa && <p className="mt-1">Justificativa: {h.justificativa}</p>}<p className="mt-1 text-slate-500">{h.resultado}</p></li>)}</ol></Section>
       </div>}
       {visao === 'duplicados' && <>
+        <p data-leg="16" className="pauta-helper">{LEG[16]}</p>
         <div className="space-y-3">{candidatos.map(c => <div key={c.id} className="flex items-center justify-between gap-3"><GlaRadioGroup name="duplicidade" label="" value={alvo} onChange={setAlvo} options={[{ value: c.id, label: c.numero, description: `${'tipo' in c ? c.status : 'Processo'} · ${c.data.split('-').reverse().join('/')} · ${c.municipio}` }]} /><Button size="sm" color="gray" aria-label={`Visualizar ${c.numero}`} onClick={() => { if (itemAutorizado(sessao, c)) setRelacionado(c); else setErro(MSG[3]); }}>Visualizar</Button></div>)}</div>
         {!candidatos.length && <p className="text-xs text-slate-500">Nenhum registro relacionado disponível.</p>}
         <p className="text-xs text-slate-500">Entre registros, o mais antigo será a Referência Principal. Ao anexar a um processo, o processo será a referência.</p>
       </>}
-      {visao === 'desanexar' && <><p className="text-xs">Referência Principal: <span className="font-mono">{pai?.numero || r.processo || r.pai}</span></p><InputWrapper label="Justificativa" required><textarea aria-label="Justificativa" className="fi-input w-full min-h-24 p-3 text-xs outline-none bg-transparent" value={justificativa} onChange={e => setJustificativa(e.target.value)} /></InputWrapper></>}
+      {visao === 'desanexar' && <><p className="text-xs">Referência Principal: <span className="font-mono">{pai?.numero || r.processo || r.pai}</span></p>{texto('Justificativa', justificativa, setJustificativa)}</>}
       {visao === 'arquivar' && <div className="space-y-4">{selecao('Motivo do arquivamento', motivo, setMotivo, MOTIVOS_ARQUIVAMENTO)}{motivo === 'Outros' && texto('Descrição do motivo', descricaoMotivo, setDescricaoMotivo)}{texto('Justificativa', justificativa, setJustificativa)}</div>}
       {visao === 'encaminhar' && selecao('Destino', destino, setDestino, destinosAutorizados(sessao))}
       {visao === 'eixo' && <div className="grid sm:grid-cols-2 gap-4">{selecao('Eixo Temático', eixo, v => { setEixo(v); setSubitem(''); }, Object.keys(EIXOS))}{selecao('Subitem', subitem, setSubitem, EIXOS[eixo] || [])}</div>}
       {visao === 'comentario' && texto('Comentário', comentario, setComentario, false)}
       {visao === 'arquivos' && <div className="space-y-4">
-        <InputWrapper label="Arquivos" className="border-0 shadow-none"><input ref={fileInput} type="file" aria-label="Selecionar arquivos" multiple accept={EXTENSOES_ARQUIVOS.map(e => `.${e}`).join(',')} className="sr-only" onChange={e => {
+        <InputWrapper label="Arquivos" hint={<span id="leg-anexos" data-leg="23" className="pauta-helper">{LEG[23]}</span>} className="border-0 shadow-none"><input ref={fileInput} type="file" aria-label="Selecionar arquivos" aria-describedby="leg-anexos" multiple accept={EXTENSOES_ARQUIVOS.map(e => `.${e}`).join(',')} className="sr-only" onChange={e => {
           const files = Array.from(e.target.files || []);
           if (files.some(f => !arquivoPermitido(f.name))) { setErro(MSG[32]); setArquivos([]); }
           else { setArquivos(files); setErro(''); }
@@ -90,7 +93,7 @@ export function PautaRegistroDialog({ registro: r, registros, inicial, sessao, o
               {f.url ? <Button asChild size="sm" color="gray" className="shrink-0"><a href={f.url} target="_blank" rel="noopener noreferrer">Visualizar</a></Button> : f.documento ? <Button size="sm" color="gray" className="shrink-0" onClick={() => setDocumento(f.documento!)}>Visualizar metadados</Button> : <Button size="sm" color="gray" disabled className="shrink-0" title="Arquivo não disponível nesta sessão.">Visualizar</Button>}
             </li>)}
           </ul> : <p className="text-xs text-slate-500">Nenhum documento relacionado disponível.</p>}
-        </Section><p className="text-xs text-slate-500">GeoBahia: integração pendente.</p>
+        </Section><p data-leg="24" className="pauta-helper">{LEG[24]}</p><p className="text-xs text-slate-500">GeoBahia: integração pendente.</p>
       </div> : <p role="alert" className="text-xs text-rose-700">{MSG[33]}</p>)}
     </>}
     <DialogFooter>{relacionado || documento ? <Button color="gray" size="sm" onClick={() => { setRelacionado(null); setDocumento(null); }}>Voltar</Button> : confirmacao ? <><Button color="gray" size="sm" onClick={() => setConfirmacao(null)}>Cancelar</Button><Button size="sm" onClick={() => executar(confirmacao)}>Confirmar</Button></> : <>
@@ -111,7 +114,7 @@ export function PautaRegistroDialog({ registro: r, registros, inicial, sessao, o
         executar({ ...comando('arquivos'), arquivos: selecionados });
         if (!enviado.current) selecionados.forEach(f => URL.revokeObjectURL(f.url));
       }}>Adicionar arquivo</Button>}
-      {visao === 'geo' && espacial && <Button size="sm" disabled title={BLOQUEIOS_ACOES.geo}>Abrir GeoBahia</Button>}
+      {visao === 'geo' && espacial && <Button size="sm" color="gray" className="pauta-geobahia-disabled" disabled title={BLOQUEIOS_ACOES.geo}>Abrir GeoBahia</Button>}
     </>}</DialogFooter>
   </DialogContent></Dialog>;
 }

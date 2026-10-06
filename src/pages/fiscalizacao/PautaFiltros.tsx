@@ -4,7 +4,7 @@ import { FilamentSelect } from '@/components/filament/Select';
 import { Button } from '@/components/ui/button';
 import municipiosBahia from '@/data/municipiosBahia.json';
 import type { GuiaPauta, RegistroPauta } from '@/data/pautaGestorMock';
-import { aplicaEm, itemAutorizado, AREAS, EIXOS, EMERGENCIAS, ORIGENS, ORIGENS_COM_SETOR, STATUS, MSG, type FiltrosPauta, type GrupoFiltro, type SessaoPauta } from '@/lib/pautaGestor';
+import { aplicaEm, itemAutorizado, AREAS, EIXOS, EMERGENCIAS, ORIGENS, ORIGENS_COM_SETOR, STATUS, MSG, LEG, type FiltrosPauta, type GrupoFiltro, type SessaoPauta } from '@/lib/pautaGestor';
 
 interface Props {
   guia: GuiaPauta; filtros: FiltrosPauta; registros: RegistroPauta[]; erro: string; sessao: SessaoPauta;
@@ -26,16 +26,19 @@ export function PautaFiltros({ guia, filtros: f, registros: dados, sessao, erro,
     if (campo === 'eixo') next.subitem = '';
     onChange(next);
   };
-  const select = (campo: keyof FiltrosPauta, label: string, options: string[]) => <InputWrapper key={campo} label={label} className="border-0 shadow-none overflow-visible">
+  const legendas: Partial<Record<keyof FiltrosPauta, number>> = { origem: 1, setor: 3, municipio: 4, inicial: 5, numero: 6, palavra: 7, demandante: 8, coordenada: 9, status: 10, eixo: 11, area: 12, dias: 13, emergencia: 14, uc: 15 };
+  const hint = (campo: keyof FiltrosPauta) => legendas[campo] && <span id={`leg-filtro-${legendas[campo]}`} data-leg={legendas[campo]} className="pauta-helper">{LEG[legendas[campo]!]}</span>;
+  const select = (campo: keyof FiltrosPauta, label: string, options: string[]) => <InputWrapper key={campo} label={label} hint={hint(campo)} className="border-0 shadow-none overflow-visible">
     <FilamentSelect id={`filtro-${campo}`} ariaLabel={label} value={f[campo]} onChange={v => alterar(campo, v)} options={[...(campo === 'formato' ? [] : [{ value: '', label: 'Todos' }]), ...options.map(value => ({ value, label: value }))]} className="pauta-select" />
   </InputWrapper>;
-  const input = (campo: keyof FiltrosPauta, label: string, tipo = 'text', placeholder?: string) => <InputWrapper key={campo} label={label} valid={!(erro === MSG[5] && ['inicial', 'final'].includes(campo)) && !(erro === MSG[6] && campo === 'coordenada') && !(erro.includes('CPF ou CNPJ') && campo === 'demandante')}>
-    <input aria-label={label} type={tipo} className="fi-input block w-full h-9 px-3 text-xs bg-transparent outline-none" value={f[campo]} onChange={e => alterar(campo, e.target.value)} placeholder={placeholder} />
+  const input = (campo: keyof FiltrosPauta, label: string, tipo = 'text', placeholder?: string) => <InputWrapper key={campo} label={label} hint={hint(campo)} valid={!(erro === MSG[5] && ['inicial', 'final'].includes(campo)) && !(erro === MSG[6] && campo === 'coordenada') && !(erro.includes('CPF ou CNPJ') && campo === 'demandante')}>
+    <input aria-label={label} aria-describedby={legendas[campo] ? `leg-filtro-${legendas[campo]}` : campo === 'final' ? 'leg-filtro-5' : undefined} type={tipo} className="fi-input block w-full h-9 px-3 text-xs bg-transparent outline-none" value={f[campo]} onChange={e => alterar(campo, e.target.value)} placeholder={placeholder} />
   </InputWrapper>;
   const grupo = (id: GrupoFiltro, titulo: string, campos: React.ReactNode) => <Section compact collapsible defaultCollapsed onCollapsedChange={c => onGrupo(id, !c)} heading={titulo} className="overflow-visible" key={id}>
     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">{campos}</div>
   </Section>;
   return <div className="space-y-2">
+    <p data-leg="22" className="pauta-helper">{LEG[22]}</p>
     {grupo('dados', 'Dados do registro', <>
       {aplicaEm(guia, ['RD', 'RE', 'RC']) && <>{select('origem', 'Origem', ORIGENS)}{select('orgao', 'Órgão', orgaos)}</>}
       {aplicaEm(guia, ['RD']) && ORIGENS_COM_SETOR.includes(f.origem) && select('setor', 'Setor de origem', setores)}

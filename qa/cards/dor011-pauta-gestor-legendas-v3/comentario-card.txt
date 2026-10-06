@@ -1,0 +1,9 @@
+Reteste da Pauta do Gestor - Registros — legendas e compliance DOR011 v3.
+
+Resolvido no protótipo: 23 legendas oficiais literais, text-xs/token neutro, somente nos campos/contextos aplicáveis. Prints 02/03 mostram filtros; 04 mostra arquivamento com Outros; 17/19/20 mostram duplicidades/colunas/arquivos. TL011 preservado, LEG024 com indicação de integração pendente e botão Abrir GeoBahia realmente disabled (Print 05). AppShell, menus, tabelas e Select compartilhado não foram alterados.
+
+Testes: 48/48, 43/43, 24/24; novas LEG 39/39 + 5/5 complemento, 40 casos únicos. TypeScript/build exit0. Matriz 268: 126 A/111 P/12 NA/19 B/0 NV. C93: 49 A/37 P/3 NA/4 B/0 NV.
+
+Não resolvido por dependência/contrato: LEG002 contraditória, PE003, Ofício, Conversão, RN047, F003/RT, PDF real, GeoBahia/CAR e backend/persistência reais. C034/C051/C076 e quatro C bloqueados preservados. Lint NÃO VERIFICADO (sem script); HIGH source-map-js 1.2.1 preexistente, tratamento separado.
+
+Evidências e URL da publicação constam no pacote v3; entrega para reauditoria independente, sem nota/homologação/conclusão integral do DOR011. Checklist é interno e não deve ser anexado ao card.
