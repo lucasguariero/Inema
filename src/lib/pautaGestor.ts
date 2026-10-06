@@ -313,4 +313,3 @@ export const LEG: Record<number, string> = {
   23: 'Adicione arquivos que complementem ou documentem o registro.',
   24: 'Acesse o GeoBahia para analisar a localização do registro e dos documentos relacionados.',
 };
-
