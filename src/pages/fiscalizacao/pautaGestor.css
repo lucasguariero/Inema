@@ -11,4 +11,6 @@
 .pauta-gestor .fi-select-trigger:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 2px; }
 .pauta-gestor .fi-ta tbody td { padding-block: 6px; }
 .pauta-helper { font-size: 12px; line-height: 16px; color: var(--color-text-secondary); }
+.pauta-gestor > .fi-tabs { margin-bottom: 8px; }
+.pauta-gestor [data-leg="22"] { margin-bottom: 12px; }
 .pauta-geobahia-disabled:disabled { cursor: not-allowed; pointer-events: auto; box-shadow: none; }

@@ -52,6 +52,7 @@
           "label": "Pauta do Gestor - Registros",
           "href": "/?rota=fisc-pauta-gestor-registros",
           "route": "fisc-pauta-gestor-registros",
+          "badge": "DOR011",
           "htmlId": "menu-fisc-pauta-gestor-registros"
         },
         {

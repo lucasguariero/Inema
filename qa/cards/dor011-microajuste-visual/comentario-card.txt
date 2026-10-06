@@ -1,0 +1,5 @@
+Microajuste visual DOR011 concluído: orientação dos filtros com 8px após as tabs e 12px antes do primeiro grupo, sem alterar o texto oficial, o tamanho/cor do helper ou o espaço título–tabs.
+
+Tag DOR011 acrescentada à direita do item “Pauta do Gestor - Registros” usando o renderer existente da sidebar, sem variante nova. shrink-0 e nowrap mantidos; altura do item e estados active/hover preservados.
+
+Nenhuma regra funcional, fluxo, filtro, tabela ou comportamento alterado. Build e TypeScript sem erros; validação visual em Full HD e mobile.
