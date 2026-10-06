@@ -6,7 +6,7 @@ const dir = path.join(__dirname, 'logs');
 fs.mkdirSync(dir, { recursive: true });
 const started = new Date().toISOString();
 const windowsCommand = process.platform === 'win32' && ['npm', 'npx'].includes(command);
-const child = spawn(windowsCommand ? 'cmd.exe' : command, windowsCommand ? ['/d', '/s', '/c', [command, ...args.map(arg => /\s/.test(arg) ? JSON.stringify(arg) : arg)].join(' ')] : args, { cwd: path.resolve(__dirname, '../../..'), env: process.env, windowsHide: true });
+const child = spawn(windowsCommand ? 'cmd.exe' : command, windowsCommand ? ['/d', '/s', '/c', [command, ...args.map(arg => /[\s&|<>^()%!\"]/.test(arg) ? JSON.stringify(arg) : arg)].join(' ')] : args, { cwd: path.resolve(__dirname, '../../..'), env: process.env, windowsHide: true });
 let stdout = '', stderr = '';
 child.stdout.on('data', data => { stdout += data; process.stdout.write(data); });
 child.stderr.on('data', data => { stderr += data; process.stderr.write(data); });
