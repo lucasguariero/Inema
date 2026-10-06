@@ -2,16 +2,19 @@ import { Section } from '@/components/filament/Section';
 import { InputWrapper } from '@/components/filament/InputWrapper';
 import { FilamentSelect } from '@/components/filament/Select';
 import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
+import { Filter } from 'lucide-react';
 import municipiosBahia from '@/data/municipiosBahia.json';
 import type { GuiaPauta, RegistroPauta } from '@/data/pautaGestorMock';
-import { aplicaEm, itemAutorizado, AREAS, EIXOS, EMERGENCIAS, ORIGENS, ORIGENS_COM_SETOR, STATUS, MSG, LEG, type FiltrosPauta, type GrupoFiltro, type SessaoPauta } from '@/lib/pautaGestor';
+import { aplicaEm, filtrosDaConsulta, itemAutorizado, AREAS, EIXOS, EMERGENCIAS, ORIGENS, ORIGENS_COM_SETOR, STATUS, MSG, LEG, type FiltrosPauta, type GrupoFiltro, type SessaoPauta } from '@/lib/pautaGestor';
 
 interface Props {
   guia: GuiaPauta; filtros: FiltrosPauta; registros: RegistroPauta[]; erro: string; sessao: SessaoPauta;
   onChange: (f: FiltrosPauta) => void; onGrupo: (g: GrupoFiltro, aberto: boolean) => void;
   onConsultar: () => void; onLimpar: () => void;
+  grupos: Record<GrupoFiltro, boolean>;
 }
-export function PautaFiltros({ guia, filtros: f, registros: dados, sessao, erro, onChange, onGrupo, onConsultar, onLimpar }: Props) {
+export function PautaFiltros({ guia, filtros: f, registros: dados, sessao, erro, grupos, onChange, onGrupo, onConsultar, onLimpar }: Props) {
   const registros = dados.filter(r => itemAutorizado(sessao, r) && (guia === 'Todos' || r.tipo === guia));
   const orgaos = [...new Set(registros.filter(r => !f.origem || r.origem === f.origem).map(r => r.orgao))];
   const setores = [...new Set(registros.filter(r => r.origem === f.origem && (!f.orgao || r.orgao === f.orgao)).map(r => r.setor))];
@@ -34,11 +37,18 @@ export function PautaFiltros({ guia, filtros: f, registros: dados, sessao, erro,
   const input = (campo: keyof FiltrosPauta, label: string, tipo = 'text', placeholder?: string) => <InputWrapper key={campo} label={label} hint={hint(campo)} valid={!(erro === MSG[5] && ['inicial', 'final'].includes(campo)) && !(erro === MSG[6] && campo === 'coordenada') && !(erro.includes('CPF ou CNPJ') && campo === 'demandante')}>
     <input aria-label={label} aria-describedby={legendas[campo] ? `leg-filtro-${legendas[campo]}` : campo === 'final' ? 'leg-filtro-5' : undefined} type={tipo} className="fi-input block w-full h-9 px-3 text-xs bg-transparent outline-none" value={f[campo]} onChange={e => alterar(campo, e.target.value)} placeholder={placeholder} />
   </InputWrapper>;
-  const grupo = (id: GrupoFiltro, titulo: string, campos: React.ReactNode) => <Section compact collapsible defaultCollapsed onCollapsedChange={c => onGrupo(id, !c)} heading={titulo} className="overflow-visible" key={id}>
+  const quantidade = Object.entries(filtrosDaConsulta(f, grupos)).filter(([campo, valor]) => campo !== 'formato' && valor.trim()).length;
+  const grupo = (id: GrupoFiltro, titulo: string, campos: React.ReactNode) => <Section compact collapsible defaultCollapsed onCollapsedChange={c => onGrupo(id, !c)} heading={titulo} className="rounded-none ring-0 shadow-none overflow-visible bg-transparent" key={id}>
     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">{campos}</div>
   </Section>;
-  return <div className="space-y-2">
+  return <div>
     <p data-leg="22" className="pauta-helper">{LEG[22]}</p>
+    <Card className="overflow-visible">
+    <CardHeader className="flex-row flex-wrap items-center justify-between gap-2 space-y-0 px-4 py-3">
+      <CardTitle className="flex items-center gap-2 text-sm"><Filter className="h-4 w-4 text-[var(--color-text-secondary)]" aria-hidden="true" />Filtros de consulta</CardTitle>
+      <CardDescription>Combine critérios para refinar os resultados</CardDescription>
+    </CardHeader>
+    <CardContent className="pauta-filter-groups p-0 divide-y divide-[var(--color-border-subtle)]">
     {grupo('dados', 'Dados do registro', <>
       {aplicaEm(guia, ['RD', 'RE', 'RC']) && <>{select('origem', 'Origem', ORIGENS)}{select('orgao', 'Órgão', orgaos)}</>}
       {aplicaEm(guia, ['RD']) && ORIGENS_COM_SETOR.includes(f.origem) && select('setor', 'Setor de origem', setores)}
@@ -61,7 +71,12 @@ export function PautaFiltros({ guia, filtros: f, registros: dados, sessao, erro,
       {aplicaEm(guia, ['RD', 'RT', 'RC', 'RA']) && <>{select('eixo', 'Eixo Temático', Object.keys(EIXOS))}{select('subitem', 'Subitem', EIXOS[f.eixo] || [])}</>}
       {aplicaEm(guia, ['RE']) && select('emergencia', 'Tipo de Emergência', EMERGENCIAS)}
     </>)}
-    {erro && <p role="alert" className="text-xs text-rose-700 pt-2">{erro}</p>}
-    <div className="flex justify-end gap-2 pt-2"><Button size="md" color="gray" onClick={onLimpar}>Limpar filtros</Button><Button size="md" onClick={onConsultar}>Consultar</Button></div>
+    </CardContent>
+    {erro && <p role="alert" className="text-xs text-[var(--color-status-critical)] px-4 py-3">{erro}</p>}
+    <CardFooter className="flex-wrap justify-between gap-3 px-4 rounded-b-xl">
+      <span className="pauta-helper" aria-live="polite">{quantidade ? `${quantidade} ${quantidade === 1 ? 'critério de consulta' : 'critérios de consulta'}` : 'Nenhum critério selecionado'}</span>
+      <div className="flex flex-wrap gap-2"><Button size="md" color="gray" onClick={onLimpar}>Limpar filtros</Button><Button size="md" onClick={onConsultar}>Consultar</Button></div>
+    </CardFooter>
+    </Card>
   </div>;
 }

@@ -22,3 +22,6 @@ donut-test.png
 test_*.png
 *.m4a
 gdrive*
+
+.vercel
+.env*

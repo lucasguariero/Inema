@@ -1,3 +1,14 @@
+# DOR011 — Refino final UI/UX: gates explícitos da rodada atual
+
+Instruções persistentes recebidas em 06/10/2026: ler integralmente `docs/DOR011_REFINO_FINAL_INSTRUCOES.md` antes de qualquer trabalho nesta rodada do DOR011. O briefing completo e a lista A–T governam as próximas fases.
+
+- Estado atualizado em 06/10/2026: FASE 2 concluída e aprovada externamente; FASE 3 explicitamente autorizada e implementada localmente. Aguardando autorização para a FASE 4. Não iniciar revisão adversarial, pacote final/FASE 5 ou deploy antecipadamente.
+- FASE 2 é somente exploração/inventário/plano e deve parar. FASE 3 exige outra autorização explícita.
+- FASE 4 exige revisão adversarial PASS antes da FASE 5 (evidências/ZIP). Não publicar automaticamente como pronto.
+- Protótipo frontend com mocks: preservar shell legado e regras aprovadas; reutilizar o Design System real no miolo. PDF governa requisitos, DS governa visual, Figma é referência secundária sem copiar o laranja.
+- Não implementar backend, banco, autenticação/autorização real, storage, serviços ou integrações reais GeoBahia/CAR.
+- Estes gates específicos substituem a execução/publicação automática genérica abaixo SOMENTE nesta rodada DOR011. Não ampliar o escopo para outras telas.
+
 # Autonomous Execution & Zero-Interruption Rules
 
 - **Total Autonomy & Auto-Approval**: Execute all tasks end-to-end without pausing for trivial questions, micro-approvals, permission dialogs, or intermediate confirmations. Whenever a task is requested, assume "Sim, sempre" for any command, file edit, or verification required to achieve the goal.

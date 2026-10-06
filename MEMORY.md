@@ -229,3 +229,46 @@ As seguintes instruções e fontes de verdade governam a rodada de correção da
 ### 4. Gate de Execução
 Nenhuma alteração de código ou tela deve ser executada sem a autorização explícita: `EXECUTAR REFINO FAUNA 10/10`.
 
+---
+
+## 13. MEMÓRIA DOR011 — REFINO FINAL (06/10/2026)
+
+Fonte persistente integral: `docs/DOR011_REFINO_FINAL_INSTRUCOES.md`. Ler o arquivo completo antes das próximas fases desta rodada. Todas as decisões A–T, detalhes e condições do briefing original estão preservados nele.
+
+**Estado:** FASE 1 registrada. FASE 2 não iniciada e depende de autorização explícita do usuário. A FASE 2 termina no inventário/plano; FASE 3 exige nova autorização. FASE 4 é revisão adversarial e a FASE 5 só ocorre com PASS. Nesta rodada, os gates específicos prevalecem sobre instruções genéricas de autonomia e deploy automático.
+
+### Objetivo e fontes
+
+- Refino do DOR011 usando o Design System real, sem reproduções manuais de componentes semelhantes.
+- PDF original: campos, regras, fluxos, nomenclatura e arquétipos; protótipos de média fidelidade não são cópia pixel-perfect.
+- DS oficial: principal autoridade visual; localizar componentes e arquivos reais antes de editar. Reutilizar primeiro, compor primitives depois; criar apenas sem equivalente e com justificativa documentada na FASE 2.
+- Figma Filament: referência secundária de anatomia/densidade/estados, sem copiar identidade laranja.
+- Frontend navegável com mocks locais; representar fielmente experiências. Não incluir backend, banco, persistência/storage, autenticação/autorização real, serviços REST, transações distribuídas ou integrações reais GeoBahia/CAR.
+- Preservar shell legado, regras aprovadas e escopo da funcionalidade.
+
+### Decisões A–T
+
+- A–C: tabs canônicas em container arredondado, nome legível + sigla (Todos sem sigla), ativo suave e scroll horizontal; helper oficial com 8px/10–12px; tag DOR011 no renderer existente.
+- D–F: um único card “Filtros de consulta”, quatro grupos internos recolhíveis e footer integrado; Data Grid canônico com somente features do DOR; olho abre TL003 e três pontos sem texto abre TL004.
+- G–I: detalhes TL003 e ações TL004 com header/body/footer oficiais, contexto do registro, ações com ícones semânticos; histórico por botão, não permanentemente aberto; inventariar e revisar todos os dialogs, sem casca própria do DOR011.
+- J–M: TL005 duplicidades preserva candidatos/rádio/referência principal; TL006 justificativa/consequências; TL007 Arquivar destructive oficial; TL008 Encaminhar primary institucional. Preservar fluxos e permissões simuladas.
+- N–P: reutilizar File Upload oficial; preferir Column Picker em popover ancorado se existir e não contrariar o DOR; confirmações oficiais, warning/destructive sem modal desnecessário.
+- Q–T: TL011 com mocks distinguindo referências espaciais, documentos, anexos e metadados sem coordenada falsa; GeoBahia não integrado; cards somente onde o arquétipo pede; tokens INEMA sem verde novo; Dense UI, alturas/ícones/heading oficiais.
+
+### Fases futuras e entregáveis
+
+- FASE 2, após autorização: navegar DS, localizar sources reais, reler TL001–TL015 do PDF, inspecionar DOR011, inventariar todos os dialogs e criar `DOR011_COMPONENT_MAPPING.md` + `DOR011_REFINO_PLAN.md` (reutilizar/compor/criar/não alterar). PARAR.
+- FASE 3, após nova autorização: implementar plano, primeiro primitives/composição e depois telas; regressão se tocar componentes compartilhados; sem redesign do shell ou invenção de campos/regras.
+- FASE 4: comparar implementação × DS × DOR; QA Full HD, 4K, 390px, teclado/foco/overflow e todas as interações/modalidades. Corrigir problemas encontrados antes do PASS.
+- FASE 5: prints não redundantes, relatórios visual/funcional/regressão/build, logs, patch/commit e PDF original em `PACOTE-AUDITORIA-DOR011-UI-FINAL.zip`; `RESUMO-ENTREGA-UI-FINAL.md` explicita reuso/composição/criação/testes/limitações do protótipo.
+- Não declarar 10/10, homologação integral, produção pronta ou backend concluído; entregar provas para auditoria independente.
+
+### Atualização — FASE 3 do DOR011 (06/10/2026)
+
+- Autorização específica: anexo `a89c25ed-cc88-47d1-91a3-89fcec54db33/Texto colado.txt`. Plano da FASE 2 aprovado externamente; executada somente a FASE 3.
+- Implementados: Tabs contained opt-in (default underline intacto), Card único de filtros, header Registros, Eye/dots, anatomia oficial de Dialog, histórico sob demanda, ações com ícones, duplicidades/radio, desanexar/encaminhar com Continuar, Arquivar neutro na navegação e danger no CTA/confirmação, upload local browse/drop e picker DropdownMenu com draft/Aplicar/Cancelar.
+- Domínio, mocks, colunas, Dialog global, AppShell, rotas e navegação preservados. Nenhum componente autônomo novo, integração ou dependência nova.
+- Desenvolvimento: TypeScript e build com exit 0; aviso de chunk grande já existente. SSR compara default Tabs com HEAD exatamente; testes locais de teclado/cancelamento/select/picker/upload, duplicidades e 390px registrados em `DOR011_FASE3_DESENVOLVIMENTO.md`.
+- Evidências preliminares e script local em `qa/cards/dor011-fase3-desenvolvimento/`; não são pacote/ZIP final nem revisão adversarial.
+- Próximo gate: aguardar autorização explícita da FASE 4. Não publicar, não gerar ZIP da FASE 5 e não presumir aprovação final. Drag-and-drop real, matriz completa de cenários e comparação 4K ainda precisam da auditoria.
+

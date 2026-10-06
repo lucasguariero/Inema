@@ -4,10 +4,8 @@
 .pauta-dialog a:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 3px; }
 .pauta-gestor .fi-section-header-heading { font-size: 13px; }
 .pauta-gestor .fi-ta-header-actions { flex-wrap: wrap; }
-.pauta-dialog { width: min(720px, calc(100vw - 32px)); max-height: calc(100dvh - 40px); overflow-y: auto; border-radius: 12px; }
 .pauta-dialog .pauta-select .fi-select-trigger { height: 36px; padding-block: 0; border-radius: 8px; }
 .pauta-sla-orange { background: var(--color-orange-50); color: var(--color-orange-800); --tw-ring-color: var(--color-orange-200); }
-.pauta-dialog input[type="checkbox"]:checked + div svg { opacity: 1; }
 .pauta-gestor .fi-select-trigger:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 2px; }
 .pauta-gestor .fi-ta tbody td { padding-block: 6px; }
 .pauta-helper { font-size: 12px; line-height: 16px; color: var(--color-text-secondary); }
