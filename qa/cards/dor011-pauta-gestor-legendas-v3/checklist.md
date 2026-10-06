@@ -9,5 +9,5 @@
 - [x] Light 1920/3840/390 inspecionado, sem redesign.
 - [x] Matriz268: somente23 LEG alteradas; C93 preservados.
 - [x] Delta oficial vinculado, limitações/lint/HIGH explícitos.
-- [ ] Publicação exclusiva v3 e main validados; links v1/v2 intactos.
-- [ ] ZIP v3: fonte/patch/PDF/evidências/logs/checksums e seis prints cirúrgicos.
+- [x] Publicação exclusiva v3 e main validados; links v1/v2 intactos.
+- [x] Empacotador v3: fonte/patch/PDF/evidências/logs/checksums e seis prints cirúrgicos; validação de execução registrada em VALIDACAO-PACOTE.json.

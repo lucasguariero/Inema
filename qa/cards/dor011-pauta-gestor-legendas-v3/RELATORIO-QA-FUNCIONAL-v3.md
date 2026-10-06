@@ -16,4 +16,4 @@ Os quatro consumidores Select foram reexecutados em M10: Fiscalização, Fauna, 
 
 Primeira tentativa de LEG: servidor local estava desligado; ensaio interrompido e reiniciado após subir Vite. Primeira execução dos 24 microtestes: faltava a cópia da fixture mensagens-pdf.json no novo card; 23 PASS/1 falha de infraestrutura. Fixture copiada sem mudar asserções; suíte completa reexecutada com 24 PASS. Logs iniciais preservados quando disponíveis. Uma chamada complementar com grep contendo espaços não encontrou testes; chamada com grep de uma palavra executou 5 PASS. Nenhuma dessas falhas exigiu mudar os fluxos de produto.
 
-Produção: smoke e testes direcionados com logs próprios; ver PUBLICACAO-E-VALIDACAO-v3.md. Testes não são homologação de backend, serviço documental, autorização corporativa, CAR ou GeoBahia.
+Produção: 12/12 smoke, 3/3 direcionados e 26/26 LEG, todos PASS, logs próprios; ver PUBLICACAO-E-VALIDACAO-v3.md. Testes não são homologação de backend, serviço documental, autorização corporativa, CAR ou GeoBahia.

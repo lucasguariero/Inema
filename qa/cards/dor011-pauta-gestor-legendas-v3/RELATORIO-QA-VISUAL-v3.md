@@ -18,6 +18,6 @@ As imagens são capturas de viewport, não imagem longa redimensionada. No mobil
 
 Os nomes completos (que distinguem os dois Print 12) constam no manifesto do ZIP. Screenshots adicionais dos gates anteriores são preservados na pasta de trabalho; o pacote principal contém seleção representativa, não dezenas de telas repetidas.
 
-Helpers usam 12px/16px e token neutro do DS. Verificados wrapping/overflow dos helpers, documento sem overflow horizontal, rolagem dos modais, foco de Justificativa, disabled real, disponibilidade dos botões de rodapé. Não foi introduzido azul de estado, gradiente, card adicional ou ícone decorativo. O detector executado não retornou saída estruturada; não é usado como prova automática de conformidade. A conclusão visual se apoia nos renders e testes DOM/computed.
+Helpers usam 12px/16px e token neutro do DS. Contraste mínimo medido nos quatro grupos e LEG024: 7.24:1 (helpers-computed.json). Verificados wrapping/overflow dos helpers, documento sem overflow horizontal, rolagem dos modais, foco de Justificativa, disabled real, disponibilidade dos botões de rodapé. Não foi introduzido azul de estado, gradiente, card adicional ou ícone decorativo. O detector executado não retornou saída estruturada; não é usado como prova automática de conformidade. A conclusão visual se apoia nos renders e testes DOM/computed.
 
 Não se declara auditoria WCAG completa, todos os navegadores, todos os leitores de tela nem Dark Mode integral nesta rodada. Os tokens são os existentes; a mudança não altera a paleta global.
