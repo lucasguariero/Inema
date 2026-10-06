@@ -15,4 +15,6 @@
 - [ ] Integrações/catálogos/perfis/transações reais: pendentes/bloqueados.
 - [x] Prints Full HD/4K/estreita inspecionados.
 - [x] Matriz independente e relatório com limitações.
-- [ ] Fechar commit/deploy/validação de produção/pacote (evidência separada).
+- [x] Commit/push e deploy READY; 12 fluxos UI de produção, zero pageerror.
+- [x] ZIP gerado e verificado: PDF original idêntico, manifesto/hash/CRC, 29 capturas e 268 itens indexados.
+- [x] Link congelado protegido: leitura CLI autenticada confirmou bundle; não declarar QA UI anônimo nesse link.

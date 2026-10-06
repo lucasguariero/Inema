@@ -32,4 +32,4 @@ A primeira leitura CLI do URL exclusivo com & foi separada pelo cmd no logger; e
 04_evidencias/producao contém 10 PNGs capturados no domínio publicado: 8 Full HD, 1 4K e 1 estreito. Os Prints 14–21 repetem cenários, mas são execuções distintas, não evidências antigas reaproveitadas.
 Print 22 demonstra pauta inicial Full HD; Print 23, pauta com Localização aberta em 4K. Ambos foram inspecionados visualmente.
 
-O checklist registrado antes desta publicação deve ser lido junto deste documento e dos logs. Este relatório complementa os sete relatórios obrigatórios, sem promover pendências corporativas a ATENDIDO.
+O checklist foi fechado após publicação e geração verificada do pacote. Deve ser lido junto deste documento e dos logs. Este relatório complementa os sete relatórios obrigatórios, sem promover pendências corporativas a ATENDIDO.
