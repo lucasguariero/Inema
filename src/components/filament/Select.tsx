@@ -21,6 +21,7 @@ export interface FilamentSelectProps {
   id?: string;
   name?: string;
   required?: boolean;
+  ariaLabel?: string;
 }
 
 export const FilamentSelect: React.FC<FilamentSelectProps> = ({
@@ -35,6 +36,7 @@ export const FilamentSelect: React.FC<FilamentSelectProps> = ({
   id,
   name,
   required = false,
+  ariaLabel,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -103,6 +105,9 @@ export const FilamentSelect: React.FC<FilamentSelectProps> = ({
       <button
         type="button"
         id={id}
+        aria-label={ariaLabel}
+        aria-expanded={isOpen}
+        aria-haspopup="listbox"
         disabled={disabled}
         onClick={() => !disabled && setIsOpen(!isOpen)}
         className={cn(
@@ -149,7 +154,7 @@ export const FilamentSelect: React.FC<FilamentSelectProps> = ({
           )}
 
           {/* Lista de Opções */}
-          <div className="overflow-y-auto max-h-48 py-1 space-y-0.5 custom-scrollbar">
+          <div role="listbox" aria-label={ariaLabel || placeholder} className="overflow-y-auto max-h-48 py-1 space-y-0.5 custom-scrollbar">
             {filteredOptions.length === 0 ? (
               <div className="px-3 py-2 text-center text-xs text-slate-400">
                 Nenhum resultado encontrado.
@@ -161,6 +166,8 @@ export const FilamentSelect: React.FC<FilamentSelectProps> = ({
                   <button
                     key={opt.value}
                     type="button"
+                    role="option"
+                    aria-selected={isSelected}
                     onClick={() => handleSelect(opt.value)}
                     className={cn(
                       'fi-select-option w-full text-left px-2.5 py-1.5 rounded-lg text-xs flex items-center justify-between gap-2 transition-colors cursor-pointer',

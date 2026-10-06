@@ -48,6 +48,13 @@
           "htmlId": "menu-consulta-interna"
         },
         {
+          "id": "fisc-pauta-gestor-registros",
+          "label": "Pauta do Gestor - Registros",
+          "href": "/?rota=fisc-pauta-gestor-registros",
+          "route": "fisc-pauta-gestor-registros",
+          "htmlId": "menu-fisc-pauta-gestor-registros"
+        },
+        {
           "id": "fisc-plantonista",
           "label": "Cadastro de Plantonista",
           "href": "/?rota=fisc-plantonista",

@@ -21,6 +21,7 @@ const ROUTE_INFO: Record<string, { module: string; page: string }> = {
  'consulta-interna': { module: 'Fiscalização', page: 'Painel DIFIS' },
  'fisc-plantonista': { module: 'Fiscalização', page: 'Cadastro de Plantonista' },
  'fisc-escala': { module: 'Fiscalização', page: 'Escala de Plantonistas' },
+ 'fisc-pauta-gestor-registros': { module: 'Fiscalização', page: 'Pauta do Gestor - Registros' },
  'ceuc-consulta': { module: 'Gestão de UC', page: 'Cadastro Estadual de UC (CEUC)' },
  ceuc: { module: 'Gestão de UC', page: 'Cadastro Estadual de UC (CEUC)' },
  'uc-agendamento': { module: 'Unidades de Conservação', page: 'Agendamento de Visitação' },

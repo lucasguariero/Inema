@@ -1,4 +1,4 @@
-export type AnalystScope = 'naiane' | 'herickles' | 'thays' | 'maria' | 'regulacao' | 'fiscalizacao' | 'ceuc' | 'todas';
+export type AnalystScope = 'naiane' | 'herickles' | 'thays' | 'maria' | 'regulacao' | 'fiscalizacao' | 'pauta-gestor' | 'ceuc' | 'todas';
 
 /**
  * Detects whether the current session is scoped to a specific analyst delivery.
@@ -13,6 +13,7 @@ export function getCurrentScope(): AnalystScope {
   const path = window.location.pathname.toLowerCase();
   const params = new URLSearchParams(window.location.search);
   const paramScope = (params.get('escopo') || params.get('modulo') || params.get('rota') || params.get('route') || '').toLowerCase();
+  if (paramScope === 'pauta-gestor') return 'pauta-gestor';
 
   if (
     paramScope === 'ceuc' ||
@@ -49,6 +50,7 @@ export function getCurrentScope(): AnalystScope {
  */
 export function isGroupVisibleInScope(groupId: string, scope: AnalystScope): boolean {
   if (scope === 'todas') return true;
+  if (scope === 'pauta-gestor') return groupId === 'fiscalizacao';
   if (scope === 'ceuc') {
     return groupId === 'unidades-conservacao';
   }
@@ -66,6 +68,8 @@ export function isGroupVisibleInScope(groupId: string, scope: AnalystScope): boo
  */
 export function isItemVisibleInScope(itemId: string, scope: AnalystScope): boolean {
   if (scope === 'todas') return true;
+  if (scope === 'pauta-gestor') return itemId === 'fisc-pauta-gestor-registros';
+  if (scope === 'fiscalizacao' && itemId === 'fisc-pauta-gestor-registros') return false;
   if (scope === 'ceuc') {
     return itemId === 'ceuc-consulta';
   }

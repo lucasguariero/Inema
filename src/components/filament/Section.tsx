@@ -10,6 +10,7 @@ export interface SectionProps extends Omit<React.HTMLAttributes<HTMLDivElement>,
   iconColor?: 'primary' | 'gray' | 'danger' | 'warning' | 'success' | 'info';
   collapsible?: boolean;
   defaultCollapsed?: boolean;
+  onCollapsedChange?: (collapsed: boolean) => void;
   compact?: boolean;
   headerActions?: React.ReactNode;
   footer?: React.ReactNode;
@@ -23,6 +24,7 @@ export const Section: React.FC<SectionProps> = ({
   iconColor = 'gray',
   collapsible = false,
   defaultCollapsed = false,
+  onCollapsedChange,
   compact = false,
   headerActions,
   footer,
@@ -32,6 +34,10 @@ export const Section: React.FC<SectionProps> = ({
 }) => {
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed);
   const sectionHeading = heading || title;
+  const toggleCollapsed = () => {
+    setIsCollapsed(!isCollapsed);
+    onCollapsedChange?.(!isCollapsed);
+  };
 
   const iconColorStyles = {
     primary: 'text-[var(--color-text-link)]',
@@ -77,7 +83,7 @@ export const Section: React.FC<SectionProps> = ({
             compact ? 'px-4 py-2.5' : 'px-5 py-3.5',
             collapsible ? 'cursor-pointer select-none hover:bg-slate-50/50 dark:hover:bg-slate-800/30' : ''
           )}
-          onClick={collapsible ? () => setIsCollapsed(!isCollapsed) : undefined}
+          onClick={collapsible ? toggleCollapsed : undefined}
         >
           <div className="flex items-center gap-2.5 min-w-0 flex-1">
             {renderIcon()}
@@ -101,7 +107,8 @@ export const Section: React.FC<SectionProps> = ({
               <button
                 type="button"
                 className="p-1 rounded-md text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-transform duration-150"
-                aria-label={isCollapsed ? 'Expand section' : 'Collapse section'}
+                aria-label={`${isCollapsed ? 'Expandir' : 'Recolher'} ${typeof sectionHeading === 'string' ? sectionHeading : 'seção'}`}
+                aria-expanded={!isCollapsed}
               >
                 <ChevronDown
                   className={cn('w-4 h-4 transition-transform duration-200', isCollapsed && '-rotate-90')}

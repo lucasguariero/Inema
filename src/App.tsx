@@ -10,6 +10,7 @@ import { ConsultaExternaPage } from '@/pages/fiscalizacao/ConsultaExternaPage';
 import { ConsultaInternaPage } from '@/pages/fiscalizacao/ConsultaInternaPage';
 import { CadastroPlantonistaPage } from '@/pages/fiscalizacao/CadastroPlantonistaPage';
 import { CadastroEscalaPage } from '@/pages/fiscalizacao/CadastroEscalaPage';
+import { PautaGestorRegistrosPage } from '@/pages/fiscalizacao/PautaGestorRegistrosPage';
 import { AgendamentoVisitacaoPage } from '@/pages/uc/AgendamentoVisitacaoPage';
 import { AutorizacaoVisitacaoPage } from '@/pages/uc/AutorizacaoVisitacaoPage';
 import { AtividadesDidaticasPage } from '@/pages/uc/AtividadesDidaticasPage';
@@ -38,6 +39,7 @@ export function App() {
       }
     }
     const scope = getCurrentScope();
+    if (scope === 'pauta-gestor') return 'fisc-pauta-gestor-registros';
     if (scope === 'ceuc') return 'ceuc';
     if (scope === 'fiscalizacao') return 'consulta-interna';
     return 'relatorios';
@@ -111,6 +113,8 @@ export function App() {
         return <CadastroPlantonistaPage onNavigate={handleNavigate} />;
       case 'fisc-escala':
         return <CadastroEscalaPage onNavigate={handleNavigate} />;
+      case 'fisc-pauta-gestor-registros':
+        return <PautaGestorRegistrosPage />;
       case 'ceuc':
       case 'ceuc-consulta':
         return <CeucConsultaPage />;
