@@ -1,0 +1,6 @@
+Reteste do protótipo Pauta do Gestor - Registros (DOR011), microrefino v2.
+Resolvido no protótipo: TL011 lista anexos comuns e fontes dos documentos estruturados simulados sem inventar coordenadas. Rótulos oficiais e paginação condicional corrigidos. Select em modal não fecha o Dialog no primeiro Escape. Seleção, contexto, colunas e casos negativos retestados.
+Resultado: TypeScript/build sem erros; 48 verificações anteriores, 43 regressões e 24 microtestes aprovados; 12 fluxos e 3 casos adicionais no ambiente publicado.
+Não resolvido/integral: backend, ACL corporativa, armazenamento, GeoBahia/CAR/PDF, PE003/Ofício/conversão, contradições de requisitos e matriz RN047 definitiva. Lint não configurado e vulnerabilidade alta preexistente registrados.
+Parecer: microcorreções verificadas como protótipo; não significa homologação integral do DOR011. Pacote completo para auditoria externa; nenhuma nova nota autoatribuída.
+
