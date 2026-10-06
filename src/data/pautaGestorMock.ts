@@ -7,6 +7,10 @@ export interface HistoricoPauta {
   anterior?: string; novo?: string; justificativa?: string; resultado: string;
 }
 export interface ArquivoPauta { nome: string; tamanho: number; url?: string; }
+export interface DocumentoRelacionadoPauta {
+  id: string; tipo: string; identificador: string; nome: string; registroOrigem: string;
+  coordenada?: { lat: number; lng: number }; conteudo: string;
+}
 export interface RegistroPauta {
   id: string; tipo: TipoRegistro; numero: string; data: string; status: StatusRegistro;
   municipio: string; origem: string; orgao: string; setor: string; demandante: string;
@@ -14,6 +18,7 @@ export interface RegistroPauta {
   descricao: string; endereco: string; bairro: string; cep: string;
   coordenada?: { lat: number; lng: number }; coordenadaDocumento?: { lat: number; lng: number; documento: string };
   arquivos: ArquivoPauta[]; historico: HistoricoPauta[]; responsavel: string;
+  documentos?: DocumentoRelacionadoPauta[];
   pai?: string; processo?: string; versao: number; escopo: string;
 }
 export function diasEmAberto(registro: Pick<RegistroPauta, 'data'>, hoje = new Date()): number {
@@ -29,7 +34,7 @@ export function criarRegistrosPauta(hoje = new Date()): RegistroPauta[] {
   const tipos: TipoRegistro[] = ['RD', 'RE', 'RT', 'RD', 'RC', 'RE', 'RD', 'RT', 'RE', 'RC', 'OF', 'RD', 'RT'];
   const cidades = ['Salvador', 'Camaçari', 'Ilhéus', 'Salvador', 'Feira de Santana', 'Candeias', 'Barreiras', 'Juazeiro', 'Camaçari', 'Ilhéus', 'Porto Seguro', 'Salvador', 'Juazeiro'];
   const descricoes = ['Descarte de resíduos sólidos em área urbana.', 'Vazamento de produto químico em rodovia.', 'Vistoria técnica de recurso hídrico.', 'Descarte de resíduos sólidos na mesma localidade.', 'Comunicação de lançamento de efluentes.', 'Ocorrência de pluma de contaminação.', 'Desmatamento de vegetação nativa.', 'Relatório técnico de poluição do ar.', 'Mortandade de peixes em corpo hídrico.', 'Comunicação de esgoto doméstico.', 'Ofício de acompanhamento de fiscalização.', 'Descarte de resíduos sólidos em área urbana.', 'Vistoria técnica de atividade industrial.'];
-  return idades.map((idade, i) => {
+  const registros: RegistroPauta[] = idades.map((idade, i) => {
     const data = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate() - idade);
     const iso = `${data.getFullYear()}-${String(data.getMonth() + 1).padStart(2, '0')}-${String(data.getDate()).padStart(2, '0')}`;
     const tipo = tipos[i];
@@ -48,8 +53,15 @@ export function criarRegistrosPauta(hoje = new Date()): RegistroPauta[] {
       bairro: i === 0 || i === 3 || i === 11 ? 'São Cristóvão' : '', cep: '',
       coordenada: i === 0 || i === 3 || i === 11 ? { lat: -12.91, lng: -38.35 } : i % 2 ? { lat: -12.7 - i / 100, lng: -38.4 - i / 100 } : undefined,
       coordenadaDocumento: i === 2 ? { lat: -14.62, lng: -39.05, documento: 'Nota Técnica' } : undefined,
+      documentos: (i === 0 ? ['RAE', 'RFA'] : i === 2 ? ['Nota Técnica', 'PTAD'] : i === 7 ? ['ATN', 'Desdobramento'] : []).map((documento, j) => ({
+        id: `documento-${i + 1}-${j}`, tipo: documento, identificador: `SIM-${i + 1}-${j + 1}`, nome: `${documento} (simulado)`, registroOrigem: `registro-${i + 1}`,
+        coordenada: i === 2 ? { lat: -14.62, lng: -39.05 } : i === 0 ? { lat: -12.91, lng: -38.35 } : undefined,
+        conteudo: `Documento simulado vinculado ao registro ${i + 1}, para demonstrar a origem da referência geoespacial. Não é documento oficial.`,
+      })),
       arquivos: [], historico: [{ data: `${iso}T12:00:00`, acao: 'Registro', usuario: 'Atendimento DIFIS (simulado)', perfil: 'Interno', novo: 'Registrado', resultado: 'Sucesso' }],
       responsavel: 'DIFIS', versao: 1, escopo: 'DIFIS',
     };
   });
+  // Contraste de escopo: nunca aparece para a sessão DIFIS. Não é cadastro real.
+  return [...registros, ...registros.slice(0, 3).map((r, i) => ({ ...structuredClone(r), id: `outro-${i + 1}`, numero: `${r.data.slice(0, 4)}.${String(i + 201).padStart(6, '0')}/INEMA/${r.tipo}`, escopo: 'OUTRO', orgao: 'Órgão de outro escopo (simulado)', setor: 'Setor de outro escopo (simulado)', responsavel: 'OUTRO', documentos: [] }))];
 }

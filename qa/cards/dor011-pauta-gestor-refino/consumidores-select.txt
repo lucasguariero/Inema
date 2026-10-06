@@ -1,0 +1,35 @@
+Inventário textual de FilamentSelect nesta rodada (rg -l FilamentSelect src).
+Não significa que todas estas telas foram testadas. Ver REGRESSOES-COMPONENTES-COMPARTILHADOS.md.
+
+src\components\dashboard\FilterDrawer.tsx
+src\components\filament\Select.tsx
+src\components\ModalAnexoRelatorio.tsx
+src\components\seia-v2\SeiaV2FormularioComplexoPage.tsx
+src\components\seia-v2\SeiaV2TabelaOperacionalPage.tsx
+src\pages\fauna\UnidadesDestinosPage.tsx
+src\pages\uc\PesquisaCientificaPage.tsx
+src\pages\fauna\RecintosAreasPage.tsx
+src\pages\fauna\EspeciesTaxonomiaPage.tsx
+src\pages\fauna\TiposManejoPage.tsx
+src\pages\fauna\ProcedenciaAnimalPage.tsx
+src\pages\fiscalizacao\CadastroPlantonistaPage.tsx
+src\pages\fiscalizacao\ConsultaExternaPage.tsx
+src\pages\fiscalizacao\ConsultaInternaPage.tsx
+src\pages\fiscalizacao\CadastroEscalaPage.tsx
+src\pages\uc\AtividadesDidaticasPage.tsx
+src\pages\uc\AgendamentoVisitacaoPage.tsx
+src\pages\seia-v2\CerhPage.tsx
+src\pages\uc\AutorizacaoVisitacaoPage.tsx
+src\pages\fiscalizacao\EmergenciaExternaPage.tsx
+src\pages\fiscalizacao\DenunciaInternaPage.tsx
+src\pages\fiscalizacao\DenunciaExternaPage.tsx
+src\pages\fauna\AnimaisPage.tsx
+src\pages\fiscalizacao\EmergenciaInternaPage.tsx
+src\pages\seia-v2\CrasFaunaPage.tsx
+src\pages\fauna\DocumentosTermosPage.tsx
+src\pages\fiscalizacao\PautaFiltros.tsx
+src\pages\fiscalizacao\PautaGestorRegistrosPage.tsx
+src\pages\seia-v2\ParametrizacoesMasterPage.tsx
+src\pages\fiscalizacao\PautaRegistroDialog.tsx
+src\pages\seia-v2\SeiaV2DesignSystemPage.tsx
+src\pages\seia-v2\UsuariosRolesPage.tsx

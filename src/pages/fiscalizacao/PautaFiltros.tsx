@@ -2,18 +2,19 @@ import { Section } from '@/components/filament/Section';
 import { InputWrapper } from '@/components/filament/InputWrapper';
 import { FilamentSelect } from '@/components/filament/Select';
 import { Button } from '@/components/ui/button';
-import { MUNICIPIOS_BAHIA } from '@/data/fiscalizacaoMock';
+import municipiosBahia from '@/data/municipiosBahia.json';
 import type { GuiaPauta, RegistroPauta } from '@/data/pautaGestorMock';
-import { aplicaEm, AREAS, EIXOS, EMERGENCIAS, ORIGENS, ORIGENS_COM_SETOR, STATUS, MSG, type FiltrosPauta, type GrupoFiltro } from '@/lib/pautaGestor';
+import { aplicaEm, itemAutorizado, AREAS, EIXOS, EMERGENCIAS, ORIGENS, ORIGENS_COM_SETOR, STATUS, MSG, type FiltrosPauta, type GrupoFiltro, type SessaoPauta } from '@/lib/pautaGestor';
 
 interface Props {
-  guia: GuiaPauta; filtros: FiltrosPauta; registros: RegistroPauta[]; erro: string;
+  guia: GuiaPauta; filtros: FiltrosPauta; registros: RegistroPauta[]; erro: string; sessao: SessaoPauta;
   onChange: (f: FiltrosPauta) => void; onGrupo: (g: GrupoFiltro, aberto: boolean) => void;
   onConsultar: () => void; onLimpar: () => void;
 }
-export function PautaFiltros({ guia, filtros: f, registros, erro, onChange, onGrupo, onConsultar, onLimpar }: Props) {
-  const orgaos = [...new Set(registros.filter(r => r.escopo === 'DIFIS' && (!f.origem || r.origem === f.origem)).map(r => r.orgao))];
-  const setores = [...new Set(registros.filter(r => r.escopo === 'DIFIS' && r.origem === f.origem && (!f.orgao || r.orgao === f.orgao)).map(r => r.setor))];
+export function PautaFiltros({ guia, filtros: f, registros: dados, sessao, erro, onChange, onGrupo, onConsultar, onLimpar }: Props) {
+  const registros = dados.filter(r => itemAutorizado(sessao, r) && (guia === 'Todos' || r.tipo === guia));
+  const orgaos = [...new Set(registros.filter(r => !f.origem || r.origem === f.origem).map(r => r.orgao))];
+  const setores = [...new Set(registros.filter(r => r.origem === f.origem && (!f.orgao || r.orgao === f.orgao)).map(r => r.setor))];
   const alterar = (campo: keyof FiltrosPauta, valor: string) => {
     const next = { ...f, [campo]: valor };
     if (campo === 'origem') {
@@ -39,10 +40,10 @@ export function PautaFiltros({ guia, filtros: f, registros, erro, onChange, onGr
       {aplicaEm(guia, ['RD', 'RE', 'RC']) && <>{select('origem', 'Origem', ORIGENS)}{select('orgao', 'Órgão', orgaos)}</>}
       {aplicaEm(guia, ['RD']) && ORIGENS_COM_SETOR.includes(f.origem) && select('setor', 'Setor de origem', setores)}
       {input('numero', 'Número do Registro')}{input('palavra', 'Palavra-chave')}
-      {aplicaEm(guia, ['RD', 'RE', 'RC', 'RT']) && input('demandante', guia === 'RD' ? 'Denunciante' : guia === 'RE' || guia === 'RC' ? 'Comunicante' : guia === 'RT' ? 'Técnico' : 'Demandante', 'text', 'Nome ou CPF/CNPJ')}
+      {sessao.verDemandante && aplicaEm(guia, ['RD', 'RE', 'RC', 'RT']) && input('demandante', guia === 'RD' ? 'Denunciante' : guia === 'RE' || guia === 'RC' ? 'Comunicante' : guia === 'RT' ? 'Técnico' : 'Demandante', 'text', 'Nome ou CPF/CNPJ')}
     </>)}
     {grupo('localizacao', 'Localização', <>
-      {select('municipio', 'Município', MUNICIPIOS_BAHIA)}
+      {select('municipio', 'Município', municipiosBahia.municipios.map(m => m.nome))}
       {select('formato', 'Formato da coordenada', ['Grau Decimal', 'Grau/Minuto/Segundo', 'UTM'])}
       {input('coordenada', 'Coordenada', 'text', f.formato === 'UTM' ? '24S 570000 8570000' : f.formato === 'Grau/Minuto/Segundo' ? '12°54\'36"S 38°21\'00"W' : '-12.910000, -38.350000')}
       {aplicaEm(guia, ['RD', 'RE', 'RA', 'RT']) && select('area', 'Área Atingida', AREAS)}

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useId } from 'react';
 import { ChevronDown, Check, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -42,6 +42,11 @@ export const FilamentSelect: React.FC<FilamentSelectProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
   const containerRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+  const listId = useId();
+  const [activeIndex, setActiveIndex] = useState(0);
+  const fold = (text: string) => text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase();
 
   // Normaliza opções
   const normalizedOptions: SelectOption[] = options.map((opt) =>
@@ -54,7 +59,7 @@ export const FilamentSelect: React.FC<FilamentSelectProps> = ({
   const shouldEnableSearch = searchable || normalizedOptions.length > 8;
 
   const filteredOptions = normalizedOptions.filter((opt) =>
-    opt.label.toLowerCase().includes(searchTerm.toLowerCase())
+    fold(opt.label).includes(fold(searchTerm))
   );
 
   // Fechar ao clicar fora
@@ -69,7 +74,9 @@ export const FilamentSelect: React.FC<FilamentSelectProps> = ({
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
       if (shouldEnableSearch && searchInputRef.current) {
-        setTimeout(() => searchInputRef.current?.focus(), 50);
+        searchInputRef.current.focus();
+      } else {
+        listRef.current?.focus();
       }
     }
 
@@ -78,22 +85,35 @@ export const FilamentSelect: React.FC<FilamentSelectProps> = ({
     };
   }, [isOpen, shouldEnableSearch]);
 
-  // Teclado (Esc para fechar)
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (isOpen && e.key === 'Escape') {
-        setIsOpen(false);
-        setSearchTerm('');
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen]);
+    if (isOpen) listRef.current?.querySelectorAll('[role="option"]')[activeIndex]?.scrollIntoView({ block: 'nearest' });
+  }, [isOpen, activeIndex]);
+  const close = (restore = true) => {
+    setIsOpen(false); setSearchTerm('');
+    if (restore) triggerRef.current?.focus();
+  };
+  const open = (last = false) => {
+    setSearchTerm('');
+    const selected = normalizedOptions.findIndex(opt => opt.value === value);
+    setActiveIndex(last ? normalizedOptions.length - 1 : Math.max(0, selected));
+    setIsOpen(true);
+  };
+  const keyboard = (e: React.KeyboardEvent, searching = false) => {
+    if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); close(); }
+    else if (e.key === 'Tab') close(); // Leave the trigger by native Tab / Shift+Tab order.
+    else if (['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(e.key)) {
+      e.preventDefault();
+      const last = Math.max(0, filteredOptions.length - 1);
+      setActiveIndex(i => e.key === 'Home' ? 0 : e.key === 'End' ? last : Math.max(0, Math.min(last, i + (e.key === 'ArrowDown' ? 1 : -1))));
+    } else if (e.key === 'Enter' || (e.key === ' ' && !searching)) {
+      e.preventDefault();
+      if (filteredOptions[activeIndex]) handleSelect(filteredOptions[activeIndex].value);
+    }
+  };
 
   const handleSelect = (val: string) => {
     onChange(val);
-    setIsOpen(false);
-    setSearchTerm('');
+    close();
   };
 
   return (
@@ -105,13 +125,16 @@ export const FilamentSelect: React.FC<FilamentSelectProps> = ({
       <button
         type="button"
         id={id}
+        ref={triggerRef}
+        aria-controls={isOpen ? listId : undefined}
         aria-label={ariaLabel}
         aria-expanded={isOpen}
         aria-haspopup="listbox"
         disabled={disabled}
-        onClick={() => !disabled && setIsOpen(!isOpen)}
+        onClick={() => !disabled && (isOpen ? close() : open())}
+        onKeyDown={e => { if (!disabled && ['ArrowDown', 'ArrowUp'].includes(e.key)) { e.preventDefault(); open(e.key === 'ArrowUp'); } }}
         className={cn(
-          'fi-select-trigger fi-input-wrp w-full text-left text-xs rounded-xl border flex items-center justify-between gap-2 px-3 py-2 transition-all cursor-pointer shadow-2xs outline-none',
+          'fi-select-trigger fi-input-wrp w-full text-left text-xs rounded-xl border flex items-center justify-between gap-2 px-3 py-2 transition-all cursor-pointer shadow-2xs outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-green-alpha-20)] focus-visible:border-[var(--input-border-focus)]',
           disabled
             ? 'bg-slate-100 dark:bg-slate-800/60 border-slate-200 dark:border-slate-800 text-slate-400 cursor-not-allowed opacity-60'
             : isOpen
@@ -144,8 +167,14 @@ export const FilamentSelect: React.FC<FilamentSelectProps> = ({
                 <input
                   ref={searchInputRef}
                   type="text"
+                  role="combobox"
+                  aria-label="Pesquisar opções"
+                  aria-expanded="true"
+                  aria-controls={listId}
+                  aria-activedescendant={filteredOptions[activeIndex] ? `${listId}-${activeIndex}` : undefined}
+                  onKeyDown={e => keyboard(e, true)}
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={(e) => { setSearchTerm(e.target.value); setActiveIndex(0); }}
                   placeholder="Pesquisar..."
                   className="w-full text-xs bg-transparent border-none outline-none text-slate-800 dark:text-slate-100 placeholder:text-slate-400"
                 />
@@ -154,23 +183,27 @@ export const FilamentSelect: React.FC<FilamentSelectProps> = ({
           )}
 
           {/* Lista de Opções */}
-          <div role="listbox" aria-label={ariaLabel || placeholder} className="overflow-y-auto max-h-48 py-1 space-y-0.5 custom-scrollbar">
+          <div ref={listRef} id={listId} tabIndex={shouldEnableSearch ? -1 : 0} aria-activedescendant={!shouldEnableSearch && filteredOptions[activeIndex] ? `${listId}-${activeIndex}` : undefined} onKeyDown={e => keyboard(e)} role="listbox" aria-label={ariaLabel || placeholder} className="overflow-y-auto max-h-48 py-1 space-y-0.5 custom-scrollbar outline-none">
             {filteredOptions.length === 0 ? (
               <div className="px-3 py-2 text-center text-xs text-slate-400">
                 Nenhum resultado encontrado.
               </div>
             ) : (
-              filteredOptions.map((opt) => {
+              filteredOptions.map((opt, index) => {
                 const isSelected = opt.value === value;
                 return (
                   <button
                     key={opt.value}
                     type="button"
                     role="option"
+                    id={`${listId}-${index}`}
+                    tabIndex={-1}
+                    onMouseMove={() => setActiveIndex(index)}
                     aria-selected={isSelected}
                     onClick={() => handleSelect(opt.value)}
                     className={cn(
                       'fi-select-option w-full text-left px-2.5 py-1.5 rounded-lg text-xs flex items-center justify-between gap-2 transition-colors cursor-pointer',
+                      activeIndex === index && 'ring-1 ring-inset ring-[var(--input-border-focus)] bg-[var(--color-brand-primary-subtle)]',
                       isSelected
                         ? 'bg-[var(--color-brand-primary-subtle)] text-[var(--color-text-link)] font-semibold'
                         : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-slate-100'

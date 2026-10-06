@@ -1,0 +1,41 @@
+const { chromium, expect } = require('@playwright/test');
+const fs = require('node:fs');
+const path = require('node:path');
+const assert = require('node:assert/strict');
+const url = process.env.PAUTA_URL;
+if (!url) throw new Error('PAUTA_URL obrigatória; sem fallback para ambiente errado.');
+const destino = path.join(__dirname, 'prints-producao');
+fs.mkdirSync(destino, { recursive: true });
+(async () => {
+  const browser = await chromium.launch({ channel: 'chrome', headless: true });
+  try {
+    const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } });
+    const errors = [];
+    page.on('pageerror', e => errors.push(e.message));
+    const response = await page.goto(url);
+    assert.equal(response.status(), 200);
+    await expect(page.getByRole('heading', { name: 'Pauta do Gestor - Registros', exact: true })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Ordenar', exact: true })).toBeVisible();
+    await expect(page.locator('.pauta-gestor tbody tr')).toHaveCount(10);
+    await page.screenshot({ path: path.join(destino, 'Print 22 - Producao FullHD refino.png'), animations: 'disabled' });
+    await page.getByRole('button', { name: 'Expandir Localização', exact: true }).click();
+    await page.getByRole('button', { name: 'Município', exact: true }).click();
+    await expect(page.getByRole('option')).toHaveCount(418);
+    await expect(page.getByRole('option', { name: 'Abaíra', exact: true })).toBeVisible();
+    await expect(page.getByRole('option', { name: 'Xique-Xique', exact: true })).toHaveCount(1);
+    await page.keyboard.press('Escape');
+    await page.getByRole('button', { name: 'Ações de', exact: false }).first().click();
+    await expect(page.getByRole('button', { name: 'Gerar PDF', exact: true })).toBeDisabled();
+    await expect(page.getByRole('button', { name: 'GeoBahia', exact: true })).toBeDisabled();
+    await page.getByRole('button', { name: 'Visualizar', exact: true }).click();
+    await expect(page.getByRole('dialog')).toContainText('RAE');
+    await expect(page.getByRole('dialog')).toContainText('RFA');
+    await page.getByRole('button', { name: 'Fechar', exact: true }).first().click();
+    await page.setViewportSize({ width: 3840, height: 2160 });
+    await page.screenshot({ path: path.join(destino, 'Print 23 - Producao 4K refino.png'), animations: 'disabled' });
+    assert.deepEqual(errors, []);
+    const result = { url, data: new Date().toISOString(), http: response.status(), verificacoes: ['heading', 'ordenação explícita', 'grid 10 linhas', '417 municípios + Todos', 'extremos do catálogo', 'PDF/Geo bloqueados', 'RAE/RFA com referência', 'zero pageerror'], errors, scripts: await page.locator('script[src]').evaluateAll(es => es.map(e => e.src)) };
+    fs.writeFileSync(path.join(__dirname, 'logs', 'validacao-producao-detalhada.json'), JSON.stringify(result, null, 2));
+    console.log(JSON.stringify(result, null, 2));
+  } finally { await browser.close(); }
+})().catch(e => { console.error(e); process.exitCode = 1; });

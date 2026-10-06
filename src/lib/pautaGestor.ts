@@ -125,25 +125,26 @@ export function lerCoordenada(texto: string, formato: string): { lat: number; ln
   if (![lat, lng].every(Number.isFinite)) return null;
   return Math.abs(lat) <= 90 && Math.abs(lng) <= 180 ? { lat, lng } : null;
 }
-export function consultarPauta(registros: RegistroPauta[], guia: GuiaPauta, f: FiltrosPauta): RegistroPauta[] {
+export function consultarPauta(registros: RegistroPauta[], guia: GuiaPauta, f: FiltrosPauta, sessao: SessaoPauta): RegistroPauta[] {
   const palavras = normalizar(f.palavra).match(/[\p{L}\p{N}]+/gu) || [];
   return registros.filter(r => {
-    if (r.escopo !== 'DIFIS' || (guia !== 'Todos' && r.tipo !== guia)) return false;
+    if (!itemAutorizado(sessao, r) || (guia !== 'Todos' && r.tipo !== guia)) return false;
+    if (f.demandante && !sessao.verDemandante) return false;
     for (const campo of ['origem', 'orgao', 'setor', 'municipio', 'status', 'area', 'uc', 'eixo', 'subitem', 'emergencia'] as const) if (f[campo] && f[campo] !== r[campo]) return false;
     if (f.numero && normalizar(f.numero.trim()) !== normalizar(r.numero)) return false;
     if (f.inicial && (r.data < f.inicial || r.data > f.final)) return false;
     if (f.demandante && !normalizar(r.demandante).includes(normalizar(f.demandante.trim()))) return false;
-    const texto = new Set(normalizar(`${r.descricao} ${r.endereco} ${r.bairro} ${r.demandante}`).match(/[\p{L}\p{N}]+/gu));
+    const texto = new Set(normalizar(`${r.descricao} ${r.endereco} ${r.bairro} ${sessao.verDemandante ? r.demandante : ''}`).match(/[\p{L}\p{N}]+/gu));
     if (!palavras.every(p => texto.has(p))) return false;
     if (f.dias) {
       const dias = diasEmAberto(r);
       if (f.dias === '0-89' ? dias >= 90 : f.dias === '90-149' ? dias < 90 || dias >= 150 : f.dias === '150-180' ? dias < 150 || dias > 180 : dias < 181) return false;
     }
     if (f.coordenada) {
-      const p = lerCoordenada(f.coordenada, f.formato), c = r.coordenada || r.coordenadaDocumento;
-      if (!p || !c) return false;
+      const p = lerCoordenada(f.coordenada, f.formato);
+      if (!p) return false;
       const car = CARS_SIMULADOS.find(item => dentroPoligono(p, item.poligono));
-      if (car ? !dentroPoligono(c, car.poligono) : Math.abs(p.lat - c.lat) > 0.00001 || Math.abs(p.lng - c.lng) > 0.00001) return false;
+      if (!referenciasEspaciais(r).some(({ coordenada: c }) => car ? dentroPoligono(c, car.poligono) : Math.abs(p.lat - c.lat) <= 0.00001 && Math.abs(p.lng - c.lng) <= 0.00001)) return false;
     }
     return true;
   });
@@ -151,9 +152,10 @@ export function consultarPauta(registros: RegistroPauta[], guia: GuiaPauta, f: F
 
 export interface ProcessoPauta { id: string; numero: string; data: string; municipio: string; coordenada?: { lat: number; lng: number }; escopo: string; }
 export const PROCESSOS_SIMULADOS: ProcessoPauta[] = [{ id: 'processo-simulado-1', numero: '2025.000041/INEMA/PROCESSO', data: '2025-11-10', municipio: 'Salvador', coordenada: { lat: -12.91, lng: -38.35 }, escopo: 'DIFIS' }];
-export function duplicidades(registro: RegistroPauta, todos: RegistroPauta[], processos: ProcessoPauta[] = PROCESSOS_SIMULADOS): (RegistroPauta | ProcessoPauta)[] {
+export function duplicidades(registro: RegistroPauta, todos: RegistroPauta[], processos: ProcessoPauta[] = PROCESSOS_SIMULADOS, sessao?: SessaoPauta): (RegistroPauta | ProcessoPauta)[] {
+  if (!sessao || !itemAutorizado(sessao, registro)) return [];
   const coincidem = (outro: RegistroPauta | ProcessoPauta) => {
-    if (outro.id === registro.id || outro.id === registro.pai || outro.escopo !== registro.escopo) return false;
+    if (outro.id === registro.id || outro.id === registro.pai || outro.escopo !== registro.escopo || (sessao && !itemAutorizado(sessao, outro))) return false;
     if ('pai' in outro && registro.pai && outro.pai === registro.pai) return false;
     const coordenada = !!registro.coordenada && !!outro.coordenada && registro.coordenada.lat === outro.coordenada.lat && registro.coordenada.lng === outro.coordenada.lng;
     const municipio = !!registro.municipio && normalizar(outro.municipio) === normalizar(registro.municipio);
@@ -165,19 +167,30 @@ export function duplicidades(registro: RegistroPauta, todos: RegistroPauta[], pr
 
 export type AcaoPauta = 'visualizar' | 'pdf' | 'geo' | 'arquivos' | 'encaminhar' | 'oficio' | 'eixo' | 'arquivar' | 'processo' | 'converter' | 'comentario' | 'desanexar' | 'anexar';
 export const ACOES: Record<AcaoPauta, string> = { visualizar: 'Visualizar', pdf: 'Gerar PDF', geo: 'GeoBahia', arquivos: 'Arquivos', encaminhar: 'Encaminhar', oficio: 'Gerar Ofício', eixo: 'Alterar Eixo', arquivar: 'Arquivar', processo: 'Formar Processo', converter: 'Converter', comentario: 'Adicionar comentário', desanexar: 'Desanexar', anexar: 'Anexar' };
-export interface SessaoPauta { interno: boolean; autenticado: boolean; escopo: string; usuario: string; perfil: string; gestor: boolean; permissoes: AcaoPauta[]; }
-export const SESSAO_SIMULADA: SessaoPauta = { interno: true, autenticado: true, escopo: 'DIFIS', usuario: 'Lucas Manager (simulado)', perfil: 'Gestor DIFIS', gestor: true, permissoes: Object.keys(ACOES) as AcaoPauta[] };
-export function acessoPauta(s: SessaoPauta) { return s.autenticado && s.interno && s.permissoes.includes('visualizar'); }
+export interface RegraAcaoPauta { tipos: RegistroPauta['tipo'][]; status: StatusRegistro[]; relacionamento: 'qualquer' | 'sem-relacao' | 'com-relacao'; }
+export interface SessaoPauta { interno: boolean; autenticado: boolean; escopo: string; usuario: string; perfil: string; gestor: boolean; permissoes: AcaoPauta[]; itensAutorizados?: string[]; verDemandante?: boolean; destinos?: string[]; regrasAcoes?: Partial<Record<AcaoPauta, RegraAcaoPauta>>; }
+// Política explícita exclusivamente demonstrativa. Não representa a matriz corporativa RN047/PE001.
+const regraMock = (tipos: RegistroPauta['tipo'][]): RegraAcaoPauta => ({ tipos, status: ['Registrado', 'Em Análise Técnica', 'Encaminhado', 'Relacionado', 'Anexado'], relacionamento: 'qualquer' });
+export const SESSAO_SIMULADA: SessaoPauta = { interno: true, autenticado: true, escopo: 'DIFIS', usuario: 'Lucas Manager (simulado)', perfil: 'Gestor DIFIS', gestor: true, permissoes: Object.keys(ACOES) as AcaoPauta[], verDemandante: true, destinos: ['DIFIS', 'Coordenação de Fiscalização', 'UR Metropolitana'], regrasAcoes: {
+  anexar: regraMock(['RD', 'RE', 'RT', 'RC']), desanexar: regraMock(['RD', 'RE', 'RT', 'RC']),
+  arquivos: regraMock(['RD', 'RE', 'RT', 'RC']), arquivar: regraMock(['RD', 'RE', 'RT', 'RC']), encaminhar: regraMock(['RD', 'RE', 'RT', 'RC']), eixo: regraMock(['RD', 'RT', 'RC']),
+} };
+export function acessoPauta(s: SessaoPauta) { return !!(s.autenticado && s.interno && s.gestor && s.perfil.trim() && s.escopo.trim() && s.permissoes.includes('visualizar')); }
+export function itemAutorizado(s: SessaoPauta, r: { id: string; escopo: string }) { return acessoPauta(s) && s.escopo === r.escopo && (!s.itensAutorizados || s.itensAutorizados.includes(r.id)); }
+export function destinosAutorizados(s: SessaoPauta) { return acessoPauta(s) && s.permissoes.includes('encaminhar') ? [...new Set(s.destinos || [])] : []; }
+export const BLOQUEIOS_ACOES: Partial<Record<AcaoPauta, string>> = { pdf: 'Integração documental não implementada (RN043).', geo: 'Integração GeoBahia não implementada (RN055).', processo: 'Bloqueado por definição externa: PE003.', oficio: 'Bloqueado por definição externa: RN041.', converter: 'Validação do tipo de destino não implementada (RN044).' };
 export function podeExecutar(s: SessaoPauta, r: RegistroPauta, acao: AcaoPauta): boolean {
-  if (!acessoPauta(s) || s.escopo !== r.escopo || !s.permissoes.includes(acao)) return false;
-  if (['visualizar', 'pdf', 'geo', 'comentario'].includes(acao)) return true;
-  if (r.status === 'Arquivado') return false;
+  if (!itemAutorizado(s, r)) return false;
+  if (acao === 'visualizar' || acao === 'comentario') return true; // RN042/RN045: qualquer registro visível.
+  if (!s.permissoes.includes(acao) || BLOQUEIOS_ACOES[acao]) return false;
+  const regra = s.regrasAcoes?.[acao];
+  if (!regra || !regra.tipos.includes(r.tipo) || !regra.status.includes(r.status)) return false;
+  const relacionado = !!(r.pai || r.processo);
+  if (regra.relacionamento === 'sem-relacao' && relacionado || regra.relacionamento === 'com-relacao' && !relacionado) return false;
   if (acao === 'desanexar') return s.gestor && !!r.pai;
-  if (acao === 'converter') return ['RD', 'RE', 'RT'].includes(r.tipo) && !r.pai && !r.processo;
-  if (acao === 'processo') return !r.processo;
-  if (acao === 'eixo') return ['RD', 'RT', 'RC', 'RA'].includes(r.tipo);
-  if (acao === 'oficio') return r.status !== 'Ofício Gerado';
-  return true;
+  if (acao === 'eixo') return ['RD', 'RT', 'RC', 'RA'].includes(r.tipo) && !!r.eixo;
+  if (acao === 'encaminhar') return destinosAutorizados(s).length > 0;
+  return ['anexar', 'arquivos', 'arquivar'].includes(acao);
 }
 export interface ComandoPauta {
   acao: AcaoPauta; id: string; versao: number; versoes: Record<string, number>;
@@ -194,7 +207,7 @@ export function executarComando(registros: RegistroPauta[], comando: ComandoPaut
   let envolvidos = [atual];
   let mensagem: string = MSG[31];
   if (comando.acao === 'anexar') {
-    const alvo = duplicidades(registro, registros, processos).find(r => r.id === comando.destino);
+    const alvo = duplicidades(registro, registros, processos, sessao).find(r => r.id === comando.destino);
     if (!alvo) throw new Error(MSG[18]);
     const grupo = (r: RegistroPauta) => next.filter(item => item.id === r.id || (!!r.pai && (item.pai === r.pai || item.id === r.pai)));
     envolvidos = [...new Map([...grupo(atual), ...('tipo' in alvo ? grupo(next.find(r => r.id === alvo.id)!) : [])].map(r => [r.id, r])).values()];
@@ -215,7 +228,7 @@ export function executarComando(registros: RegistroPauta[], comando: ComandoPaut
     if (comando.motivo === 'Outros' && !comando.descricaoMotivo?.trim()) throw new Error(MSG[10]);
     atual.status = 'Arquivado'; mensagem = MSG[12];
   } else if (comando.acao === 'encaminhar') {
-    if (!DESTINOS_SIMULADOS.includes(comando.destino || '')) throw new Error(MSG[15]);
+    if (!destinosAutorizados(sessao).includes(comando.destino || '')) throw new Error(MSG[15]);
     atual.responsavel = comando.destino!; atual.status = 'Encaminhado'; mensagem = MSG[14];
   } else if (comando.acao === 'eixo') {
     if (!comando.eixo || !EIXOS[comando.eixo]?.includes(comando.subitem || '')) throw new Error(MSG[31]);
@@ -232,7 +245,7 @@ export function executarComando(registros: RegistroPauta[], comando: ComandoPaut
   }
   for (const r of envolvidos) {
     const antes = registros.find(item => item.id === r.id)!;
-    if (r.escopo !== sessao.escopo) throw new Error(MSG[3]);
+    if (!itemAutorizado(sessao, r)) throw new Error(MSG[3]);
     if (comando.versoes[r.id] !== antes.versao) throw new Error(MSG[30]);
     const resumo = (item: RegistroPauta) => `${item.status}; responsável: ${item.responsavel}; referência: ${item.pai || 'sem relação'}; eixo: ${item.eixo || '—'}/${item.subitem || '—'}; arquivos: ${item.arquivos.length}`;
     r.historico.push({ data: new Date().toISOString(), acao: ACOES[comando.acao], usuario: sessao.usuario, perfil: sessao.perfil, anterior: resumo(antes), novo: comando.comentario?.trim() || resumo(r), justificativa: [comando.motivo, comando.descricaoMotivo, comando.justificativa].filter(Boolean).join(' — ') || undefined, resultado: 'Sucesso' });
@@ -241,8 +254,6 @@ export function executarComando(registros: RegistroPauta[], comando: ComandoPaut
   return { registros: next, mensagem };
 }
 export const MOTIVOS_ARQUIVAMENTO = ['Não é demanda ambiental', 'Informações insuficientes', 'Encaminhamento externo', 'Outros'];
-// Destinos já usados nos protótipos DIFIS; somente demonstração autorizada, não cadastro oficial.
-export const DESTINOS_SIMULADOS = ['DIFIS', 'Coordenação de Fiscalização', 'UR Metropolitana'];
 export const EXTENSOES_ARQUIVOS = ['pdf', 'doc', 'docx', 'txt', 'jpeg', 'jpg', 'png', 'bmp', 'xls', 'xlsx', 'mp3', 'mp4', 'shp', 'shx', 'dbf', 'prj', 'kml', 'kmz', 'zip'];
 export function arquivoPermitido(nome: string) { return EXTENSOES_ARQUIVOS.includes(nome.split('.').pop()?.toLowerCase() || ''); }
 
@@ -257,8 +268,13 @@ export function dentroPoligono(p: { lat: number; lng: number }, poligono: number
   }
   return dentro;
 }
+export function referenciasEspaciais(r: RegistroPauta) {
+  return [...(r.coordenada ? [{ fonte: `Registro ${r.numero}`, coordenada: r.coordenada }] : []), ...(r.documentos || []).filter(d => d.coordenada).map(d => ({ fonte: `${d.tipo} ${d.identificador}`, coordenada: d.coordenada! })), ...(!r.documentos?.some(d => d.coordenada) && r.coordenadaDocumento ? [{ fonte: r.coordenadaDocumento.documento, coordenada: r.coordenadaDocumento }] : [])];
+}
 export function referenciaEspacial(r: RegistroPauta): { municipio: string; coordenada?: { lat: number; lng: number }; fonte: string } | null {
   if (r.coordenada) return { municipio: r.municipio, coordenada: r.coordenada, fonte: 'Registro' };
+  const documento = r.documentos?.find(d => d.coordenada);
+  if (documento) return { municipio: r.municipio, coordenada: documento.coordenada, fonte: `${documento.tipo} ${documento.identificador}` };
   if (r.coordenadaDocumento) return { municipio: r.municipio, coordenada: r.coordenadaDocumento, fonte: r.coordenadaDocumento.documento };
   return r.municipio ? { municipio: r.municipio, fonte: 'Município' } : null;
 }
