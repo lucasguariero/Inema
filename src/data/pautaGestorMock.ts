@@ -6,7 +6,11 @@ export interface HistoricoPauta {
   data: string; acao: string; usuario: string; perfil: string;
   anterior?: string; novo?: string; justificativa?: string; resultado: string;
 }
-export interface ArquivoPauta { nome: string; tamanho: number; url?: string; }
+export interface ArquivoPauta {
+  nome: string; tamanho: number; url?: string;
+  // Metadado estruturado opcional. O upload comum não extrai coordenadas do arquivo.
+  documento?: DocumentoRelacionadoPauta;
+}
 export interface DocumentoRelacionadoPauta {
   id: string; tipo: string; identificador: string; nome: string; registroOrigem: string;
   coordenada?: { lat: number; lng: number }; conteudo: string;
@@ -58,10 +62,17 @@ export function criarRegistrosPauta(hoje = new Date()): RegistroPauta[] {
         coordenada: i === 2 ? { lat: -14.62, lng: -39.05 } : i === 0 ? { lat: -12.91, lng: -38.35 } : undefined,
         conteudo: `Documento simulado vinculado ao registro ${i + 1}, para demonstrar a origem da referência geoespacial. Não é documento oficial.`,
       })),
-      arquivos: [], historico: [{ data: `${iso}T12:00:00`, acao: 'Registro', usuario: 'Atendimento DIFIS (simulado)', perfil: 'Interno', novo: 'Registrado', resultado: 'Sucesso' }],
+      arquivos: i === 0 ? [
+        { nome: 'comprovante-recebimento.pdf', tamanho: 2048 },
+        { nome: 'nota-tecnica-localizacao.pdf', tamanho: 4096, documento: {
+          id: 'anexo-1', tipo: 'Nota Técnica', identificador: 'SIM-ANEXO-001', nome: 'Nota técnica de localização (simulada)', registroOrigem: 'registro-1',
+          coordenada: { lat: -12.9102, lng: -38.3502 },
+          conteudo: 'Metadado estruturado simulado do anexo. Não houve leitura ou extração de coordenadas do PDF; o arquivo oficial não está disponível.',
+        } },
+      ] : [], historico: [{ data: `${iso}T12:00:00`, acao: 'Registro', usuario: 'Atendimento DIFIS (simulado)', perfil: 'Interno', novo: 'Registrado', resultado: 'Sucesso' }],
       responsavel: 'DIFIS', versao: 1, escopo: 'DIFIS',
     };
   });
   // Contraste de escopo: nunca aparece para a sessão DIFIS. Não é cadastro real.
-  return [...registros, ...registros.slice(0, 3).map((r, i) => ({ ...structuredClone(r), id: `outro-${i + 1}`, numero: `${r.data.slice(0, 4)}.${String(i + 201).padStart(6, '0')}/INEMA/${r.tipo}`, escopo: 'OUTRO', orgao: 'Órgão de outro escopo (simulado)', setor: 'Setor de outro escopo (simulado)', responsavel: 'OUTRO', documentos: [] }))];
+  return [...registros, ...registros.slice(0, 3).map((r, i) => ({ ...structuredClone(r), id: `outro-${i + 1}`, numero: `${r.data.slice(0, 4)}.${String(i + 201).padStart(6, '0')}/INEMA/${r.tipo}`, escopo: 'OUTRO', orgao: 'Órgão de outro escopo (simulado)', setor: 'Setor de outro escopo (simulado)', responsavel: 'OUTRO', documentos: [], arquivos: [] }))];
 }

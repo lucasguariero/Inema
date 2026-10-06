@@ -69,7 +69,7 @@ export function PautaGestorRegistrosPage({ sessao = SESSAO_SIMULADA, registrosIn
       case 'acoes': return <Button color="gray" size="sm" aria-label={`Ações de ${r.numero}`} onClick={() => abrir(r, 'acoes')}><MoreHorizontal className="h-4 w-4" />Ações</Button>;
       case 'duplicados': {
         const n = duplicidades(r, registros, undefined, sessao).length;
-        return n ? <Button color="gray" size="sm" className="bg-transparent ring-0 shadow-none px-0 hover:bg-transparent" aria-label={`${n} possíveis duplicados de ${r.numero}`} onClick={() => abrir(r, 'duplicados')}><Badge variant="primary">{n}</Badge></Button> : <span className="text-slate-500">0</span>;
+        return n ? <Button color="gray" size="sm" className="bg-transparent ring-0 shadow-none px-0 hover:bg-transparent" aria-label={`Ver duplicados: ${n} possíveis duplicados de ${r.numero}`} onClick={() => abrir(r, 'duplicados')}><Badge variant="primary">{n}</Badge></Button> : <span className="text-slate-500">0</span>;
       }
       default: return r[coluna] || '—';
     }

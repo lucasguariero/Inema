@@ -70,9 +70,18 @@ export const FilamentSelect: React.FC<FilamentSelectProps> = ({
         setSearchTerm('');
       }
     };
+    // Radix escuta Escape no document (capture). Consumir antes dele mantém o modal aberto.
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && containerRef.current?.contains(event.target as Node)) {
+        event.preventDefault(); event.stopPropagation();
+        setIsOpen(false); setSearchTerm(''); triggerRef.current?.focus();
+      }
+    };
+    const ownerWindow = containerRef.current?.ownerDocument.defaultView;
 
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
+      ownerWindow?.addEventListener('keydown', handleEscape, true);
       if (shouldEnableSearch && searchInputRef.current) {
         searchInputRef.current.focus();
       } else {
@@ -82,6 +91,7 @@ export const FilamentSelect: React.FC<FilamentSelectProps> = ({
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      ownerWindow?.removeEventListener('keydown', handleEscape, true);
     };
   }, [isOpen, shouldEnableSearch]);
 

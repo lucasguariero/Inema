@@ -166,7 +166,7 @@ export function duplicidades(registro: RegistroPauta, todos: RegistroPauta[], pr
 }
 
 export type AcaoPauta = 'visualizar' | 'pdf' | 'geo' | 'arquivos' | 'encaminhar' | 'oficio' | 'eixo' | 'arquivar' | 'processo' | 'converter' | 'comentario' | 'desanexar' | 'anexar';
-export const ACOES: Record<AcaoPauta, string> = { visualizar: 'Visualizar', pdf: 'Gerar PDF', geo: 'GeoBahia', arquivos: 'Arquivos', encaminhar: 'Encaminhar', oficio: 'Gerar Ofício', eixo: 'Alterar Eixo', arquivar: 'Arquivar', processo: 'Formar Processo', converter: 'Converter', comentario: 'Adicionar comentário', desanexar: 'Desanexar', anexar: 'Anexar' };
+export const ACOES: Record<AcaoPauta, string> = { visualizar: 'Visualizar', pdf: 'Gerar PDF', geo: 'Visualizar informações geoespaciais', arquivos: 'Adicionar arquivo', encaminhar: 'Encaminhar', oficio: 'Gerar Ofício', eixo: 'Alterar eixo temático', arquivar: 'Arquivar', processo: 'Formar Processo', converter: 'Converter Registro', comentario: 'Adicionar comentário', desanexar: 'Desanexar', anexar: 'Anexar' };
 export interface RegraAcaoPauta { tipos: RegistroPauta['tipo'][]; status: StatusRegistro[]; relacionamento: 'qualquer' | 'sem-relacao' | 'com-relacao'; }
 export interface SessaoPauta { interno: boolean; autenticado: boolean; escopo: string; usuario: string; perfil: string; gestor: boolean; permissoes: AcaoPauta[]; itensAutorizados?: string[]; verDemandante?: boolean; destinos?: string[]; regrasAcoes?: Partial<Record<AcaoPauta, RegraAcaoPauta>>; }
 // Política explícita exclusivamente demonstrativa. Não representa a matriz corporativa RN047/PE001.
@@ -269,12 +269,20 @@ export function dentroPoligono(p: { lat: number; lng: number }, poligono: number
   return dentro;
 }
 export function referenciasEspaciais(r: RegistroPauta) {
-  return [...(r.coordenada ? [{ fonte: `Registro ${r.numero}`, coordenada: r.coordenada }] : []), ...(r.documentos || []).filter(d => d.coordenada).map(d => ({ fonte: `${d.tipo} ${d.identificador}`, coordenada: d.coordenada! })), ...(!r.documentos?.some(d => d.coordenada) && r.coordenadaDocumento ? [{ fonte: r.coordenadaDocumento.documento, coordenada: r.coordenadaDocumento }] : [])];
+  const referencias = [
+    ...(r.coordenada ? [{ origem: 'Registro', fonte: `Registro ${r.numero}`, coordenada: r.coordenada }] : []),
+    ...(r.documentos || []).filter(d => d.coordenada).map(d => ({ origem: 'Documento relacionado', fonte: `${d.tipo} ${d.identificador}`, coordenada: d.coordenada! })),
+    ...(!r.documentos?.some(d => d.coordenada) && r.coordenadaDocumento ? [{ origem: 'Documento relacionado', fonte: r.coordenadaDocumento.documento, coordenada: r.coordenadaDocumento }] : []),
+    ...r.arquivos.filter(f => f.documento?.coordenada).map(f => ({ origem: 'Anexo', fonte: `${f.nome} · ${f.documento!.tipo} ${f.documento!.identificador}`, coordenada: f.documento!.coordenada! })),
+  ];
+  return referencias.filter(({ coordenada: c }) => Number.isFinite(c.lat) && Number.isFinite(c.lng) && Math.abs(c.lat) <= 90 && Math.abs(c.lng) <= 180);
 }
 export function referenciaEspacial(r: RegistroPauta): { municipio: string; coordenada?: { lat: number; lng: number }; fonte: string } | null {
   if (r.coordenada) return { municipio: r.municipio, coordenada: r.coordenada, fonte: 'Registro' };
   const documento = r.documentos?.find(d => d.coordenada);
   if (documento) return { municipio: r.municipio, coordenada: documento.coordenada, fonte: `${documento.tipo} ${documento.identificador}` };
   if (r.coordenadaDocumento) return { municipio: r.municipio, coordenada: r.coordenadaDocumento, fonte: r.coordenadaDocumento.documento };
+  const anexo = referenciasEspaciais(r).find(ref => ref.origem === 'Anexo');
+  if (anexo) return { municipio: r.municipio, coordenada: anexo.coordenada, fonte: `Anexo: ${anexo.fonte}` };
   return r.municipio ? { municipio: r.municipio, fonte: 'Município' } : null;
 }
