@@ -10,6 +10,43 @@
       "htmlId": "subRegulacao",
       "items": [
         {
+          "id": "coine-bess",
+          "label": "FCE BESS (Licença Prévia)",
+          "href": "/?rota=coine-bess&escopo=coine-fces",
+          "route": "coine-bess"
+        },
+        {
+          "id": "coine-eolica",
+          "label": "FCE de Energia Eólica",
+          "href": "/?rota=coine-eolica&escopo=coine-fces",
+          "route": "coine-eolica"
+        },
+        {
+          "id": "coine-solar",
+          "label": "FCE de Energia Solar",
+          "href": "/?rota=coine-solar&escopo=coine-fces",
+          "route": "coine-solar"
+        },
+        {
+          "id": "coine-datacenter",
+          "label": "FCE de Data Center",
+          "href": "/?rota=coine-datacenter&escopo=coine-fces",
+          "route": "coine-datacenter"
+        },
+        {
+          "id": "coine-turismo",
+          "label": "FCE de Turismo e Lazer",
+          "href": "/?rota=coine-turismo&escopo=coine-fces",
+          "route": "coine-turismo"
+        },
+        {
+          "id": "reg-pauta-area",
+          "label": "Pauta da Área",
+          "href": "/?rota=reg-pauta-area&escopo=padronizacao-pauta",
+          "route": "reg-pauta-area",
+          "htmlId": "menu-reg-pauta-area"
+        },
+        {
           "id": "relatorios",
           "label": "Relatórios de Regulação",
           "href": "/?rota=relatorios",
@@ -22,6 +59,45 @@
           "href": "/?rota=dashboard",
           "route": "dashboard",
           "htmlId": "menu-dashboard"
+        },
+        {
+          "id": "cerh-empreendimentos",
+          "label": "Empreendimentos (CERH)",
+          "href": "/?rota=cad-empreendimentos",
+          "route": "cad-empreendimentos",
+          "htmlId": "menu-cerh-empreendimentos"
+        },
+        {
+          "id": "cerh-consulta",
+          "label": "Consulta CERH",
+          "href": "/cerh/consulta",
+          "route": "cerh",
+          "badge": "DR001",
+          "htmlId": "menu-cerh-consulta"
+        }
+      ]
+    },
+    {
+      "id": "assinatura-eletronica",
+      "label": "Assinatura Eletrônica",
+      "icon": "FileCheck",
+      "materialIcon": "draw",
+      "defaultOpen": true,
+      "htmlId": "subAssinaturaEletronica",
+      "items": [
+        {
+          "id": "a-assinar",
+          "label": "A Assinar",
+          "href": "/?rota=a-assinar&escopo=assinatura-eletronica",
+          "route": "a-assinar",
+          "htmlId": "menu-a-assinar"
+        },
+        {
+          "id": "assinatura-eletronica",
+          "label": "Documentos & Atos",
+          "href": "/?rota=assinatura-eletronica&escopo=assinatura-eletronica",
+          "route": "assinatura-eletronica",
+          "htmlId": "menu-assinatura-eletronica"
         }
       ]
     },
@@ -56,6 +132,41 @@
           "htmlId": "menu-fisc-pauta-gestor-registros"
         },
         {
+          "id": "fisc-aiad",
+          "label": "Auto de Infração - Advertência",
+          "href": "/?rota=fisc-aiad",
+          "route": "fisc-aiad",
+          "badge": "DOR013",
+          "htmlId": "menu-fisc-aiad"
+        },
+        {
+          "id": "fisc-aiap",
+          "label": "AIAP — Apreensão",
+          "title": "Auto de Infração – Apreensão",
+          "href": "/?rota=fisc-aiap&escopo=fiscalizacao",
+          "route": "fisc-aiap",
+          "badge": "DOR014",
+          "htmlId": "menu-fisc-aiap"
+        },
+        {
+          "id": "fisc-rfa",
+          "label": "RFA",
+          "title": "Relatório de Fiscalização Ambiental",
+          "href": "/?rota=fisc-rfa&escopo=fiscalizacao",
+          "route": "fisc-rfa",
+          "badge": "DOR008",
+          "htmlId": "menu-fisc-rfa"
+        },
+        {
+          "id": "fisc-rae",
+          "label": "RAE",
+          "title": "Relatório de Atendimento de Emergência",
+          "href": "/?rota=fisc-rae&escopo=fiscalizacao",
+          "route": "fisc-rae",
+          "badge": "DOR009",
+          "htmlId": "menu-fisc-rae"
+        },
+        {
           "id": "fisc-plantonista",
           "label": "Cadastro de Plantonista",
           "href": "/?rota=fisc-plantonista",
@@ -87,10 +198,17 @@
           "htmlId": "menu-ceuc-consulta"
         },
         {
+          "id": "uc-conselhos",
+          "label": "Conselhos Gestores",
+          "href": "/?rota=uc-conselhos&escopo=conselho-gestor",
+          "route": "uc-conselhos",
+          "htmlId": "menu-uc-conselhos"
+        },
+        {
           "id": "uc-agendamento",
-          "label": "Agendamento de Visitação",
-          "href": "/?rota=uc-agendamento",
-          "route": "uc-agendamento",
+          "label": "Entrada Única para Realização de Atividade em Unidade de Conservação",
+          "href": "/?rota=uc-entrada-unica",
+          "route": "uc-entrada-unica",
           "htmlId": "menu-uc-agendamento"
         },
         {
@@ -173,12 +291,44 @@
           "htmlId": "menu-fauna-manejos"
         },
         {
+          "id": "fauna-admissao",
+          "label": "Admissão e Termo de Recebimento",
+          "href": "/?rota=fauna-admissao",
+          "route": "fauna-admissao",
+          "badge": "DR008",
+          "htmlId": "menu-fauna-admissao"
+        },
+        {
           "id": "fauna-animais",
           "label": "Animais",
           "href": "/?rota=fauna-animais",
           "route": "fauna-animais",
           "badge": "DR001",
           "htmlId": "menu-fauna-animais"
+        },
+        {
+          "id": "fauna-asas",
+          "label": "Áreas de Soltura (ASAS)",
+          "href": "/?rota=fauna-asas",
+          "route": "fauna-asas",
+          "badge": "DR009",
+          "htmlId": "menu-fauna-asas"
+        },
+        {
+          "id": "fauna-mapa-asas",
+          "label": "Mapa de ASAS e Destinações",
+          "href": "/?rota=fauna-mapa-asas",
+          "route": "fauna-mapa-asas",
+          "badge": "DR010",
+          "htmlId": "menu-fauna-mapa-asas"
+        },
+        {
+          "id": "fauna-guardiao",
+          "label": "Guardiões e TGAS",
+          "href": "/?rota=fauna-guardiao",
+          "route": "fauna-guardiao",
+          "badge": "DR012",
+          "htmlId": "menu-fauna-guardiao"
         }
       ]
     }

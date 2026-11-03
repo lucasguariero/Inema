@@ -73,7 +73,20 @@ const TIPOS_MARCACAO_OPCOES = ['Microchip', 'Anilha', 'Tatuagem', 'Brinco', 'Col
 const SITUACOES_MARCACAO_OPCOES = ['Ativa', 'Perdida', 'Danificada'] as const;
 const SEXOS_OPCOES: SexoAnimal[] = ['Macho', 'Fêmea', 'Indeterminado'];
 const FAIXAS_ETARIAS_OPCOES: FaixaEtariaAnimal[] = ['Filhote', 'Jovem', 'Adulto', 'Senil', 'Indeterminada'];
-const STATUS_ANIMAL_OPCOES: StatusAnimal[] = ['Em Quarentena', 'Em Tratamento', 'Apto para Soltura', 'Destinado', 'Óbito'];
+const STATUS_ANIMAL_OPCOES: StatusAnimal[] = [
+  'Aguardando triagem',
+  'Em quarentena',
+  'Em isolamento',
+  'Internado',
+  'Alta Médica',
+  'Soltura',
+  'Destinação',
+  'Óbito',
+  'Em Quarentena',
+  'Em Tratamento',
+  'Apto para Soltura',
+  'Destinado',
+];
 
 interface AnimaisPageProps {
   onNavigate?: (route: string) => void;
@@ -368,6 +381,9 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
       const matchBusca =
         busca.trim() === '' ||
         a.codigo.toLowerCase().includes(busca.toLowerCase()) ||
+        (a.numeroTr && a.numeroTr.toLowerCase().includes(busca.toLowerCase())) ||
+        (a.numeroDigital && a.numeroDigital.toLowerCase().includes(busca.toLowerCase())) ||
+        (a.numeroCadaver && a.numeroCadaver.toLowerCase().includes(busca.toLowerCase())) ||
         a.especieNomePopular.toLowerCase().includes(busca.toLowerCase()) ||
         a.especieNomeCientifico.toLowerCase().includes(busca.toLowerCase()) ||
         (a.identificacaoComplementar &&
@@ -500,11 +516,19 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
             <div className="flex items-center gap-2 shrink-0">
               <Button
                 variant="primary"
-                onClick={handleNovoAnimal}
+                onClick={() => onNavigate?.('fauna-admissao')}
                 className="bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white shadow-xs text-xs sm:text-sm h-9 px-4 font-semibold"
               >
                 <Plus className="w-4 h-4 mr-1.5" />
-                Novo Animal
+                Nova Entrada (TR / Admissão)
+              </Button>
+              <Button
+                variant="outline"
+                onClick={handleNovoAnimal}
+                className="text-slate-700 border-slate-300 text-xs sm:text-sm h-9 px-3"
+                title="Inclusão manual avulsa restrita a casos de exceção do Gestor de Fauna (Zoológico/Migração)"
+              >
+                Cadastro Avulso (Gestor)
               </Button>
             </div>
           </div>
@@ -643,9 +667,24 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
                     animaisFiltrados.map((animal) => (
                       <tr key={animal.id} className="hover:bg-slate-50/80 transition-colors">
                         <td className="px-4 py-3">
-                          <span className="font-mono font-semibold text-slate-900 block">
-                            {animal.codigo}
-                          </span>
+                          <button
+                            type="button"
+                            onClick={() => setDrawerAnimal(animal)}
+                            className="font-mono font-semibold text-slate-900 hover:text-[#0F4C3A] hover:underline text-left block cursor-pointer"
+                            title="Visualizar Prontuário Completo"
+                          >
+                            {animal.numeroDigital || animal.codigo}
+                          </button>
+                          {animal.numeroTr && (
+                            <span className="text-[10px] text-slate-500 font-mono block">
+                              TR: {animal.numeroTr}
+                            </span>
+                          )}
+                          {animal.numeroCadaver && (
+                            <span className="text-[10px] text-rose-600 font-mono font-semibold block">
+                              Cadáver: {animal.numeroCadaver}
+                            </span>
+                          )}
                         </td>
                         <td className="px-4 py-3">
                           <span className="font-medium text-slate-900 block">
@@ -1386,6 +1425,72 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
               )}
             </div>
 
+            {/* Identificações Oficiais (Tríade DR008 RN-018) */}
+            <div className="space-y-3">
+              <span className="text-[11px] font-bold tracking-wider text-slate-500 uppercase block">
+                Identificações Oficiais (Tríade DR008)
+              </span>
+              <div className="grid grid-cols-2 gap-2 bg-slate-50 p-3 rounded-lg border border-slate-200">
+                <div>
+                  <span className="text-slate-500 block text-[11px]">Número Digital:</span>
+                  <span className="font-mono font-bold text-slate-900">
+                    {drawerAnimal.numeroDigital ||
+                      (drawerAnimal.unidadeAtualNome?.includes('Regional') || drawerAnimal.numeroTr?.startsWith('UR')
+                        ? 'Identificado via TR (Sem Triagem na UR — RN-036)'
+                        : 'Pendente de Triagem')}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-slate-500 block text-[11px]">Termo de Recebimento (TR):</span>
+                  <span className="font-mono font-bold text-slate-800">
+                    {drawerAnimal.numeroTr || 'Inclusão Avulsa'}
+                  </span>
+                </div>
+                {drawerAnimal.numeroCadaver && (
+                  <div className="col-span-2">
+                    <span className="text-rose-600 block text-[11px] font-semibold">Identificação do Cadáver (Óbito):</span>
+                    <span className="font-mono font-bold text-rose-700">
+                      {drawerAnimal.numeroCadaver}
+                    </span>
+                  </div>
+                )}
+                <div>
+                  <span className="text-slate-500 block text-[11px]">Código Interno Base:</span>
+                  <span className="font-mono text-slate-600">{drawerAnimal.codigo}</span>
+                </div>
+                <div>
+                  <span className="text-slate-500 block text-[11px]">Sufixo Clínico (-CL):</span>
+                  <span className="text-slate-700">{drawerAnimal.sufixoCl ? 'Sim (Internamento Clínico)' : 'Não'}</span>
+                </div>
+
+                {/* Ações Rápidas de Integração DR001 x DR008 */}
+                <div className="col-span-2 pt-2 border-t border-slate-200 flex items-center gap-2 flex-wrap">
+                  {drawerAnimal.numeroTr && onNavigate && (
+                    <Button
+                      size="xs"
+                      variant="outline"
+                      onClick={() => onNavigate('fauna-admissao')}
+                      className="text-xs text-[#0F4C3A] border-[#0F4C3A]/30 hover:bg-[#0F4C3A]/5 font-semibold"
+                    >
+                      <FileText className="w-3.5 h-3.5 mr-1" />
+                      Visualizar TR ({drawerAnimal.numeroTr})
+                    </Button>
+                  )}
+                  {(drawerAnimal.status === 'Internado' || drawerAnimal.sufixoCl) && onNavigate && (
+                    <Button
+                      size="xs"
+                      variant="outline"
+                      onClick={() => onNavigate('fauna-admissao')}
+                      className="text-xs text-rose-700 border-rose-300 hover:bg-rose-50 font-semibold"
+                    >
+                      <HeartPulse className="w-3.5 h-3.5 mr-1" />
+                      Prontuário Hospitalar (-CL)
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+
             {/* Informações Básicas */}
             <div className="space-y-3">
               <span className="text-[11px] font-bold tracking-wider text-slate-500 uppercase block">
@@ -1547,6 +1652,20 @@ export const AnimaisPage: React.FC<AnimaisPageProps> = ({ onNavigate }) => {
                       Animal transferido do Quarentenário para o Viveiro de Reabilitação para treino muscular pré-soltura.
                     </p>
                   </div>
+                  {modalHistoricoAnimal.movimentacoes && modalHistoricoAnimal.movimentacoes.length > 0 && (
+                    modalHistoricoAnimal.movimentacoes.map((mov, idx) => (
+                      <div key={idx} className="relative">
+                        <span className="absolute -left-6 top-1 w-2.5 h-2.5 rounded-full bg-amber-600" />
+                        <span className="text-[11px] text-slate-400 block font-mono">{mov.dataHora}</span>
+                        <span className="font-semibold text-slate-800">Transferência Interna INEMA (RN-037)</span>
+                        <p className="text-[11px] text-slate-600 mt-0.5">
+                          Movimentado de <strong>{mov.unidadeOrigemNome}</strong> para <strong>{mov.unidadeDestinoNome}</strong>.
+                          <br />
+                          Responsável: {mov.responsavel} | Motivo: {mov.motivo}
+                        </p>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
             </div>

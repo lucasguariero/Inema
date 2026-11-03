@@ -367,6 +367,8 @@ export interface UnidadeItem {
   telefone: string;
   email: string;
   natureza: NaturezaUnidade;
+  sigla?: string; // Sigla contratual DR008 RN-002 (CTS, CTR, CTO, URCH, etc.)
+  tipoUnidadeCategoria?: 'CETAS' | 'UR' | 'Outro';
   // Campos exclusivos para Destino Externo
   cpfCnpj?: string;
   razaoSocial?: string;
@@ -431,6 +433,8 @@ export const MOCK_UNIDADES: UnidadeItem[] = [
     id: 'und-01',
     tipoUnidadeId: 'tu-01',
     tipoUnidadeNome: 'CETAS - Centro de Triagem de Animais Silvestres',
+    sigla: 'CTS',
+    tipoUnidadeCategoria: 'CETAS',
     nome: 'CETAS Salvador (Cabula)',
     municipio: 'Salvador',
     uf: 'BA',
@@ -445,29 +449,193 @@ export const MOCK_UNIDADES: UnidadeItem[] = [
     id: 'und-02',
     tipoUnidadeId: 'tu-01',
     tipoUnidadeNome: 'CETAS - Centro de Triagem de Animais Silvestres',
-    nome: 'CETAS Porto Seguro (Costa do Descobrimento)',
-    municipio: 'Porto Seguro',
+    sigla: 'CTR',
+    tipoUnidadeCategoria: 'CETAS',
+    nome: 'CETAS Recôncavo (Cruz das Almas)',
+    municipio: 'Cruz das Almas',
     uf: 'BA',
-    responsavel: 'Dr. Rodrigo Mendes - Biólogo CRBio 18942',
-    telefone: '(73) 3288-5678',
-    email: 'cetas.portoseguro@inema.ba.gov.br',
+    responsavel: 'Dr. Thiago Moreira - CRMV/BA 5512',
+    telefone: '(75) 3621-4455',
+    email: 'cetas.reconcavo@inema.ba.gov.br',
     natureza: 'Unidade do INEMA',
     situacao: 'Ativo',
     dataCadastro: '20/02/2024',
   },
   {
     id: 'und-03',
+    tipoUnidadeId: 'tu-01',
+    tipoUnidadeNome: 'CETAS - Centro de Triagem de Animais Silvestres',
+    sigla: 'CTO',
+    tipoUnidadeCategoria: 'CETAS',
+    nome: 'CETAS Oeste (Barreiras)',
+    municipio: 'Barreiras',
+    uf: 'BA',
+    responsavel: 'Dra. Larissa Neves - CRMV/BA 6210',
+    telefone: '(77) 3612-8899',
+    email: 'cetas.oeste@inema.ba.gov.br',
+    natureza: 'Unidade do INEMA',
+    situacao: 'Ativo',
+    dataCadastro: '01/03/2024',
+  },
+  {
+    id: 'und-04',
+    tipoUnidadeId: 'tu-05',
+    tipoUnidadeNome: 'Base Operacional Regional INEMA',
+    sigla: 'URCH',
+    tipoUnidadeCategoria: 'UR',
+    nome: 'Unidade Regional Chapada (Lençóis / Seabra)',
+    municipio: 'Seabra',
+    uf: 'BA',
+    responsavel: 'Carlos Eduardo Oliveira - Gestor Regional',
+    telefone: '(75) 3331-1020',
+    email: 'ur.chapada@inema.ba.gov.br',
+    natureza: 'Unidade do INEMA',
+    situacao: 'Ativo',
+    dataCadastro: '10/01/2024',
+  },
+  {
+    id: 'und-05',
+    tipoUnidadeId: 'tu-05',
+    tipoUnidadeNome: 'Base Operacional Regional INEMA',
+    sigla: 'URES',
+    tipoUnidadeCategoria: 'UR',
+    nome: 'Unidade Regional Extremo Sul (Eunápolis / Porto Seguro)',
+    municipio: 'Eunápolis',
+    uf: 'BA',
+    responsavel: 'Mariana Duarte - Fiscal Ambiental',
+    telefone: '(73) 3281-3344',
+    email: 'ur.extremosul@inema.ba.gov.br',
+    natureza: 'Unidade do INEMA',
+    situacao: 'Ativo',
+    dataCadastro: '12/01/2024',
+  },
+  {
+    id: 'und-06',
+    tipoUnidadeId: 'tu-05',
+    tipoUnidadeNome: 'Base Operacional Regional INEMA',
+    sigla: 'UROE',
+    tipoUnidadeCategoria: 'UR',
+    nome: 'Unidade Regional Oeste (Barreiras / Luís Eduardo)',
+    municipio: 'Barreiras',
+    uf: 'BA',
+    responsavel: 'Marcos Vinícius Costa - Analista Técnico',
+    telefone: '(77) 3611-7788',
+    email: 'ur.oeste@inema.ba.gov.br',
+    natureza: 'Unidade do INEMA',
+    situacao: 'Ativo',
+    dataCadastro: '15/01/2024',
+  },
+  {
+    id: 'und-07',
+    tipoUnidadeId: 'tu-05',
+    tipoUnidadeNome: 'Base Operacional Regional INEMA',
+    sigla: 'URPD',
+    tipoUnidadeCategoria: 'UR',
+    nome: 'Unidade Regional Piemonte da Diamantina (Senhor do Bonfim)',
+    municipio: 'Senhor do Bonfim',
+    uf: 'BA',
+    responsavel: 'Renato Guimarães - Técnico de Campo',
+    telefone: '(74) 3541-2211',
+    email: 'ur.piemonte@inema.ba.gov.br',
+    natureza: 'Unidade do INEMA',
+    situacao: 'Ativo',
+    dataCadastro: '18/01/2024',
+  },
+  {
+    id: 'und-08',
+    tipoUnidadeId: 'tu-05',
+    tipoUnidadeNome: 'Base Operacional Regional INEMA',
+    sigla: 'URPS',
+    tipoUnidadeCategoria: 'UR',
+    nome: 'Unidade Regional Portal do Sertão (Feira de Santana)',
+    municipio: 'Feira de Santana',
+    uf: 'BA',
+    responsavel: 'Camila Peixoto - Fiscalização Regional',
+    telefone: '(75) 3223-5566',
+    email: 'ur.portaldosertao@inema.ba.gov.br',
+    natureza: 'Unidade do INEMA',
+    situacao: 'Ativo',
+    dataCadastro: '20/01/2024',
+  },
+  {
+    id: 'und-09',
+    tipoUnidadeId: 'tu-05',
+    tipoUnidadeNome: 'Base Operacional Regional INEMA',
+    sigla: 'URRC',
+    tipoUnidadeCategoria: 'UR',
+    nome: 'Unidade Regional Rio Corrente (Santa Maria da Vitória)',
+    municipio: 'Santa Maria da Vitória',
+    uf: 'BA',
+    responsavel: 'Fernando Rocha - Agente Regional',
+    telefone: '(77) 3483-1122',
+    email: 'ur.riocorrente@inema.ba.gov.br',
+    natureza: 'Unidade do INEMA',
+    situacao: 'Ativo',
+    dataCadastro: '22/01/2024',
+  },
+  {
+    id: 'und-10',
+    tipoUnidadeId: 'tu-05',
+    tipoUnidadeNome: 'Base Operacional Regional INEMA',
+    sigla: 'URSF',
+    tipoUnidadeCategoria: 'UR',
+    nome: 'Unidade Regional Sertão São Francisco (Juazeiro)',
+    municipio: 'Juazeiro',
+    uf: 'BA',
+    responsavel: 'Dra. Patrícia Alencar - Médica Veterinária',
+    telefone: '(74) 3611-9900',
+    email: 'ur.saofrancisco@inema.ba.gov.br',
+    natureza: 'Unidade do INEMA',
+    situacao: 'Ativo',
+    dataCadastro: '25/01/2024',
+  },
+  {
+    id: 'und-11',
+    tipoUnidadeId: 'tu-05',
+    tipoUnidadeNome: 'Base Operacional Regional INEMA',
+    sigla: 'URSO',
+    tipoUnidadeCategoria: 'UR',
+    nome: 'Unidade Regional Sudoeste (Vitória da Conquista)',
+    municipio: 'Vitória da Conquista',
+    uf: 'BA',
+    responsavel: 'Gustavo Silveira - Coordenador Regional',
+    telefone: '(77) 3422-4433',
+    email: 'ur.sudoeste@inema.ba.gov.br',
+    natureza: 'Unidade do INEMA',
+    situacao: 'Ativo',
+    dataCadastro: '28/01/2024',
+  },
+  {
+    id: 'und-12',
+    tipoUnidadeId: 'tu-05',
+    tipoUnidadeNome: 'Base Operacional Regional INEMA',
+    sigla: 'URSU',
+    tipoUnidadeCategoria: 'UR',
+    nome: 'Unidade Regional Sul (Ilhéus / Itabuna)',
+    municipio: 'Ilhéus',
+    uf: 'BA',
+    responsavel: 'Juliana Fagundes - Analista Ambiental',
+    telefone: '(73) 3634-1200',
+    email: 'ur.sul@inema.ba.gov.br',
+    natureza: 'Unidade do INEMA',
+    situacao: 'Ativo',
+    dataCadastro: '30/01/2024',
+  },
+  {
+    id: 'und-zoo',
     tipoUnidadeId: 'tu-02',
     tipoUnidadeNome: 'Zoológico Municipal ou Estadual',
+    sigla: 'ZOO',
+    tipoUnidadeCategoria: 'Outro',
     nome: 'Parque Zoobotânico Getúlio Vargas (Zoo de Salvador)',
     municipio: 'Salvador',
     uf: 'BA',
     responsavel: 'Dr. Vinícius Dantas - CRMV/BA 3110',
     telefone: '(71) 3116-7954',
     email: 'zoologico.salvador@inema.ba.gov.br',
-    natureza: 'Destino externo',
+    natureza: 'Unidade do INEMA',
     cpfCnpj: '13.937.071/0001-90',
-    razaoSocial: 'Estado da Bahia - Secretaria do Meio Ambiente',
+    razaoSocial: 'Estado da Bahia - Secretaria do Meio Ambiente / INEMA',
     endereco: 'Rua Alto de Ondina, s/n, Ondina, Salvador - BA, CEP 40170-110',
     latitude: '-13.0078',
     longitude: '-38.5086',
@@ -476,9 +644,10 @@ export const MOCK_UNIDADES: UnidadeItem[] = [
     dataCadastro: '10/03/2024',
   },
   {
-    id: 'und-04',
+    id: 'und-ext-01',
     tipoUnidadeId: 'tu-03',
     tipoUnidadeNome: 'ASAS - Área de Soltura de Animais Silvestres',
+    tipoUnidadeCategoria: 'Outro',
     nome: 'ASAS Fazenda Boa Esperança (Bacia do Paraguaçu)',
     municipio: 'Andaraí',
     uf: 'BA',
@@ -496,9 +665,10 @@ export const MOCK_UNIDADES: UnidadeItem[] = [
     dataCadastro: '05/04/2024',
   },
   {
-    id: 'und-05',
+    id: 'und-ext-02',
     tipoUnidadeId: 'tu-04',
     tipoUnidadeNome: 'Criatório Conservacionista',
+    tipoUnidadeCategoria: 'Outro',
     nome: 'Criadouro Conservacionista Canto da Mata',
     municipio: 'Feira de Santana',
     uf: 'BA',
@@ -668,7 +838,12 @@ export const MOCK_DOCUMENTOS_TERMOS: DocumentoTermoItem[] = [
 // DR003 — PROCEDÊNCIA ANIMAL
 // ============================================================================
 
-export type TipoProcedencia = 'Entrega voluntária' | 'Apreensão' | 'Resgate' | 'Transferência';
+export type TipoProcedencia =
+  | 'Entrega voluntária'
+  | 'Apreensão'
+  | 'Resgate'
+  | 'Transferência'
+  | 'Transferência interestadual';
 
 export interface ProcedenciaItem {
   id: string;
@@ -988,9 +1163,32 @@ export const MOCK_TIPOS_MANEJO: TipoManejoItem[] = [
 // DR001 — ANIMAIS (BASE ÚNICA DE FAUNA)
 // ============================================================================
 
-export type StatusAnimal = 'Em Quarentena' | 'Em Tratamento' | 'Apto para Soltura' | 'Destinado' | 'Óbito';
+export type StatusAnimal =
+  | 'Aguardando triagem'
+  | 'Em quarentena'
+  | 'Em isolamento'
+  | 'Internado'
+  | 'Alta Médica'
+  | 'Soltura'
+  | 'Destinação'
+  | 'Óbito'
+  // Estados legados da R1 para compatibilidade
+  | 'Em Quarentena'
+  | 'Em Tratamento'
+  | 'Apto para Soltura'
+  | 'Destinado';
 export type SexoAnimal = 'Macho' | 'Fêmea' | 'Indeterminado';
-export type FaixaEtariaAnimal = 'Filhote' | 'Jovem' | 'Adulto' | 'Senil' | 'Indeterminada';
+export type FaixaEtariaAnimal = 'Filhote' | 'Jovem' | 'Adulto' | 'Senil' | 'Indeterminada' | 'Neonato' | 'Idoso';
+
+export interface MovimentacaoAnimalItem {
+  unidadeOrigemId: string;
+  unidadeOrigemNome: string;
+  unidadeDestinoId: string;
+  unidadeDestinoNome: string;
+  dataHora: string;
+  responsavel: string;
+  motivo: string;
+}
 
 export interface MarcacaoFisicaItem {
   id: string;
@@ -1003,6 +1201,10 @@ export interface MarcacaoFisicaItem {
 export interface AnimalItem {
   id: string;
   codigo: string; // UR-XXX-000001 (Somente leitura gerado)
+  numeroTr?: string; // Formato [SIGLA]-000.000 (DR008 RN-003)
+  numeroDigital?: string; // Formato 000.000/AAAA[-CL] (DR008 RN-015/016)
+  sufixoCl?: boolean; // Sufixo -CL se internado na clínica
+  numeroCadaver?: string; // Formato [Nº TR]-OB01 se óbito
   unidadeRegional: string;
   identificacaoComplementar?: string;
   especieId: string;
@@ -1023,6 +1225,13 @@ export interface AnimalItem {
   sigilo: boolean; // Padrão DESLIGADO, restrito Gestor
   justificativaSigilo?: string;
   candidatoGuarda: boolean; // Padrão DESLIGADO, restrito Gestor
+  laudoVeterinarioAssinado?: boolean; // Laudo do CETAS assinado para guarda (RN-013)
+  condicaoEntrada?: string;
+  atitude?: string;
+  temperamento?: string;
+  estadoNutricional?: string;
+  trHistorico?: string[]; // Suporte a múltiplos TRs para readmissão
+  movimentacoes?: MovimentacaoAnimalItem[]; // Histórico de movimentações entre unidades (RN-037)
   observacoes?: string;
   dataAdmissao: string;
   situacao: 'Ativo' | 'Inativo';
@@ -1032,8 +1241,11 @@ export const MOCK_ANIMAIS: AnimalItem[] = [
   {
     id: 'ani-001',
     codigo: 'UR-MET-000001',
+    numeroTr: 'CTS-000.032',
+    numeroDigital: '000.124/2026',
+    sufixoCl: false,
     unidadeRegional: 'UR Metropolitana (Salvador)',
-    identificacaoComplementar: 'Canindé Dócil Resgatada',
+    identificacaoComplementar: 'Canindé adulta em reabilitação',
     especieId: 'esp-001',
     especieNomeCientifico: 'Ara ararauna',
     especieNomePopular: 'Arara-canindé',
@@ -1044,14 +1256,14 @@ export const MOCK_ANIMAIS: AnimalItem[] = [
     origemUf: 'BA',
     origemMunicipio: 'Camaçari',
     marcacoesFisicas: [
-      { id: 'mf-1', tipo: 'Anilha', numero: 'INEMA-BA-2024-8841', dataAplicacao: '15/02/2024', situacao: 'Ativa' },
-      { id: 'mf-2', tipo: 'Microchip', numero: '981098102345678', dataAplicacao: '15/02/2024', situacao: 'Ativa' },
+      { id: 'mf-1', tipo: 'Anilha', numero: 'AN-XPNH00089', dataAplicacao: '15/02/2024', situacao: 'Ativa' },
+      { id: 'mf-2', tipo: 'Microchip', numero: 'MC-981098102345678', dataAplicacao: '15/02/2024', situacao: 'Ativa' },
     ],
     unidadeAtualId: 'und-01',
     unidadeAtualNome: 'CETAS Salvador (Cabula)',
     procedenciaId: 'proc-01',
     procedenciaNome: 'Entrega voluntária · Entrega Espontânea por Cidadão',
-    status: 'Apto para Soltura',
+    status: 'Soltura',
     sigilo: false,
     candidatoGuarda: false,
     observacoes: 'Animal com excelente empenamento e vôo vigoroso no viveiro de reabilitação. Triagem sorológica negativa para clamidiose.',
@@ -1061,8 +1273,11 @@ export const MOCK_ANIMAIS: AnimalItem[] = [
   {
     id: 'ani-002',
     codigo: 'UR-SUL-000002',
+    numeroTr: 'CTS-000.032',
+    numeroDigital: '000.125/2026-CL',
+    sufixoCl: true,
     unidadeRegional: 'UR Sul (Ilhéus / Porto Seguro)',
-    identificacaoComplementar: 'Jaguatirica Macho Atropelada',
+    identificacaoComplementar: 'Jaguatirica atropelada resgate BR-101',
     especieId: 'esp-003',
     especieNomeCientifico: 'Leopardus pardalis',
     especieNomePopular: 'Jaguatirica',
@@ -1073,13 +1288,13 @@ export const MOCK_ANIMAIS: AnimalItem[] = [
     origemUf: 'BA',
     origemMunicipio: 'Eunápolis',
     marcacoesFisicas: [
-      { id: 'mf-3', tipo: 'Microchip', numero: '981098109876543', dataAplicacao: '22/03/2024', situacao: 'Ativa' },
+      { id: 'mf-3', tipo: 'Microchip', numero: 'MC-981098109876543', dataAplicacao: '22/03/2024', situacao: 'Ativa' },
     ],
-    unidadeAtualId: 'und-02',
-    unidadeAtualNome: 'CETAS Porto Seguro (Costa do Descobrimento)',
+    unidadeAtualId: 'und-01',
+    unidadeAtualNome: 'CETAS Salvador (Cabula)',
     procedenciaId: 'proc-03',
     procedenciaNome: 'Resgate · Resgate em Área Urbana ou Rodovia (Acidentado/Ferido)',
-    status: 'Em Tratamento',
+    status: 'Internado',
     sigilo: false,
     candidatoGuarda: false,
     observacoes: 'Recuperando de fratura consolidada de fêmur esquerdo. Fisioterapia veterinária em andamento.',
@@ -1089,8 +1304,9 @@ export const MOCK_ANIMAIS: AnimalItem[] = [
   {
     id: 'ani-003',
     codigo: 'UR-OES-000003',
-    unidadeRegional: 'UR Oeste (Barreiras)',
-    identificacaoComplementar: 'Ararinha Cativeiro Apreensão COPPA',
+    numeroTr: 'URCH-000.015',
+    unidadeRegional: 'UR Chapada (Lençóis / Seabra)',
+    identificacaoComplementar: 'Ararinha apreensão policial ambiental',
     especieId: 'esp-004',
     especieNomeCientifico: 'Cyanopsitta spixii',
     especieNomePopular: 'Ararinha-azul',
@@ -1100,54 +1316,58 @@ export const MOCK_ANIMAIS: AnimalItem[] = [
     faixaEtaria: 'Jovem',
     origemUf: 'BA',
     origemMunicipio: 'Curaçá',
-    marcacoesFisicas: [
-      { id: 'mf-4', tipo: 'Anilha', numero: 'C-SPIXII-BA-001', dataAplicacao: '05/04/2024', situacao: 'Ativa' },
-    ],
-    unidadeAtualId: 'und-01',
-    unidadeAtualNome: 'CETAS Salvador (Cabula)',
+    marcacoesFisicas: [], // RN-036: Unidades Regionais realizam apenas recebimento (TR); sem marcação física nem número digital na UR
+    unidadeAtualId: 'und-04',
+    unidadeAtualNome: 'Unidade Regional Chapada (Lençóis / Seabra)',
     procedenciaId: 'proc-02',
     procedenciaNome: 'Apreensão · Operação Policial / Fiscalização Ambiental',
-    status: 'Em Quarentena',
+    status: 'Aguardando triagem',
     sigilo: true,
     justificativaSigilo: 'Espécie criticamente ameaçada (CR) com programa federal sigiloso de reprodução em cativeiro com o ICMBio.',
     candidatoGuarda: false,
-    observacoes: 'Isolamento microbiológico total na quarentena de alta segurança do CETAS.',
+    observacoes: 'Animal recebido na Regional Chapada aguardando encaminhamento para o CETAS.',
     dataAdmissao: '04/04/2024',
     situacao: 'Ativo',
   },
   {
     id: 'ani-004',
     codigo: 'UR-MET-000004',
+    numeroTr: 'CTR-000.018',
+    numeroDigital: '000.098/2026',
+    sufixoCl: false,
     unidadeRegional: 'UR Metropolitana (Salvador)',
-    identificacaoComplementar: 'Tartaruga Encalhada com Linha de Pesca',
+    identificacaoComplementar: 'Tartaruga resgate praia Lauro de Freitas',
     especieId: 'esp-005',
     especieNomeCientifico: 'Chelonia mydas',
     especieNomePopular: 'Tartaruga-verde',
     grupoAnimal: 'Répteis',
     identificacaoAConfirmar: false,
     sexo: 'Fêmea',
-    faixaEtaria: 'Subadulto' as any,
+    faixaEtaria: 'Jovem',
     origemUf: 'BA',
     origemMunicipio: 'Lauro de Freitas',
     marcacoesFisicas: [
-      { id: 'mf-5', tipo: 'Anilha', numero: 'TAMAR-BA-9921', dataAplicacao: '10/05/2024', situacao: 'Ativa' },
+      { id: 'mf-5', tipo: 'Anilha', numero: 'AN-TAMAR-BA-9921', dataAplicacao: '10/05/2024', situacao: 'Ativa' },
     ],
-    unidadeAtualId: 'und-01',
-    unidadeAtualNome: 'CETAS Salvador (Cabula)',
+    unidadeAtualId: 'und-02',
+    unidadeAtualNome: 'CETAS Recôncavo (Cruz das Almas)',
     procedenciaId: 'proc-03',
     procedenciaNome: 'Resgate · Resgate em Área Urbana ou Rodovia (Acidentado/Ferido)',
-    status: 'Em Tratamento',
+    status: 'Alta Médica',
     sigilo: false,
     candidatoGuarda: false,
-    observacoes: 'Acompanhamento conjunto com o Projeto TAMAR em tanque de reabilitação.',
+    observacoes: 'Acompanhamento conjunto com o Projeto TAMAR em tanque de reabilitação. Alta médica concedida, aguardando destinação para soltura em mar aberto.',
     dataAdmissao: '09/05/2024',
     situacao: 'Ativo',
   },
   {
     id: 'ani-005',
     codigo: 'UR-MET-000005',
+    numeroTr: 'CTS-000.010',
+    numeroDigital: '000.045/2026',
+    sufixoCl: false,
     unidadeRegional: 'UR Metropolitana (Salvador)',
-    identificacaoComplementar: 'Papagaio Doméstico Falador',
+    identificacaoComplementar: 'Papagaio entrega voluntária idoso',
     especieId: 'esp-007',
     especieNomeCientifico: 'Amazona aestiva',
     especieNomePopular: 'Papagaio-verdadeiro',
@@ -1158,17 +1378,48 @@ export const MOCK_ANIMAIS: AnimalItem[] = [
     origemUf: 'BA',
     origemMunicipio: 'Salvador',
     marcacoesFisicas: [
-      { id: 'mf-6', tipo: 'Anilha', numero: 'INEMA-BA-2024-3310', dataAplicacao: '18/06/2024', situacao: 'Ativa' },
+      { id: 'mf-6', tipo: 'Anilha', numero: 'AN-INEMA-BA-3310', dataAplicacao: '18/06/2024', situacao: 'Ativa' },
     ],
     unidadeAtualId: 'und-01',
     unidadeAtualNome: 'CETAS Salvador (Cabula)',
     procedenciaId: 'proc-01',
     procedenciaNome: 'Entrega voluntária · Entrega Espontânea por Cidadão',
-    status: 'Destinado',
+    status: 'Destinação',
     sigilo: false,
     candidatoGuarda: true, // Candidato à guarda pelo perfil senil e humanizado
+    laudoVeterinarioAssinado: true, // Laudo do CETAS atestando inaptidão para soltura (RN-013)
     observacoes: 'Animal humanizado que não apresenta aptidão para reabilitação e soltura em natureza. Encaminhado para guarda sob Termo de Depósito.',
     dataAdmissao: '15/06/2024',
+    situacao: 'Ativo',
+  },
+  {
+    id: 'ani-006',
+    codigo: 'UR-MET-000006',
+    numeroTr: 'CTS-000.032',
+    numeroDigital: '000.126/2026',
+    sufixoCl: false,
+    numeroCadaver: 'CTS-000.032-OB01',
+    unidadeRegional: 'UR Metropolitana (Salvador)',
+    identificacaoComplementar: 'Canário-da-terra óbito pós-apreensão',
+    especieId: 'esp-006',
+    especieNomeCientifico: 'Sicalis flaveola',
+    especieNomePopular: 'Canário-da-terra',
+    grupoAnimal: 'Aves',
+    identificacaoAConfirmar: false,
+    sexo: 'Macho',
+    faixaEtaria: 'Adulto',
+    origemUf: 'BA',
+    origemMunicipio: 'Feira de Santana',
+    marcacoesFisicas: [],
+    unidadeAtualId: 'und-01',
+    unidadeAtualNome: 'CETAS Salvador (Cabula)',
+    procedenciaId: 'proc-02',
+    procedenciaNome: 'Apreensão · Operação Policial / Fiscalização Ambiental',
+    status: 'Óbito',
+    sigilo: false,
+    candidatoGuarda: false,
+    observacoes: 'Animal chegou em choque hipovolêmico grave e foi a óbito durante a recepção. Carcaça destinada para pesquisa no Museu de Zoologia da UFBA.',
+    dataAdmissao: '12/10/2026',
     situacao: 'Ativo',
   },
 ];

@@ -1,18 +1,41 @@
-import React, { useState } from 'react';
+import { CerhShellContext } from '@/pages/seia-v2/cerh/CerhShellContext';
+import React, { useEffect, useState } from 'react';
 import { Menu, Search, Bell } from 'lucide-react';
 import { Sidebar } from './Sidebar';
 import { cn } from '@/lib/utils';
+import { getCurrentScope } from '@/lib/scope';
 
 interface AppShellProps {
  children: React.ReactNode;
  activeRoute?: string;
  onNavigate?: (route: string) => void;
+ variant?: 'default' | 'document-explorer';
 }
 
 const ROUTE_INFO: Record<string, { module: string; page: string }> = {
+  'a-assinar': { module: 'Assinatura Eletrônica', page: 'A Assinar' },
+  'assinatura-eletronica': { module: 'Assinatura Eletrônica', page: 'Documentos & Atos' },
+ 'coine-bess': { module: 'COINE', page: 'FCE BESS (Licença Prévia)' },
+ 'coine-eolica': { module: 'COINE', page: 'FCE de Energia Eólica' },
+ 'coine-solar': { module: 'COINE', page: 'FCE de Energia Solar' },
+ 'coine-datacenter': { module: 'COINE', page: 'FCE de Data Center' },
+ 'coine-turismo': { module: 'COINE', page: 'FCE de Turismo e Lazer' },
+ 'uc-conselhos': { module: 'Gestão de UC', page: 'Conselhos Gestores' },
+ 'uc-conselho-criacao': { module: 'Gestão de UC', page: 'Criação e Renovação de Conselho Gestor' },
+ 'uc-conselho-implementacao': { module: 'Gestão de UC', page: 'Implementação de Conselho Gestor' },
+ 'cerh-contrato': { module: 'Regulação', page: 'Requerimentos — contrato CERH' },
+ 'cerh-finalidades': { module: 'Administração › Processo', page: 'Finalidade' },
+ 'cerh-tipos-uso': { module: 'Administração › Processo', page: 'Tipo de Uso' },
+ 'cerh-usuarios': { module: 'Administração › Segurança', page: 'Usuários' },
+ 'cerh-grupos': { module: 'Administração › Segurança', page: 'Grupos' },
+ 'reg-pauta-area': { module: 'Regulação', page: 'Pauta da Área' },
  relatorios: { module: 'Regulação', page: 'Relatórios de Regulação' },
  regulacao: { module: 'Regulação', page: 'Relatórios de Regulação' },
  dashboard: { module: 'Regulação', page: 'Dashboard Gerencial' },
+ 'cad-empreendimentos': { module: 'Regulação', page: 'Empreendimentos (CERH)' },
+ empreendimentos: { module: 'Regulação', page: 'Empreendimentos (CERH)' },
+ cerh: { module: 'Regulação', page: 'Consulta CERH' },
+ outorga: { module: 'Regulação', page: 'Consulta CERH' },
  atendente: { module: 'Fiscalização', page: 'Denúncia Interna' },
  cidadao: { module: 'Fiscalização', page: 'Formulário Cidadão' },
  'emergencia-interna': { module: 'Fiscalização', page: 'Emergência Química' },
@@ -22,9 +45,14 @@ const ROUTE_INFO: Record<string, { module: string; page: string }> = {
  'fisc-plantonista': { module: 'Fiscalização', page: 'Cadastro de Plantonista' },
  'fisc-escala': { module: 'Fiscalização', page: 'Escala de Plantonistas' },
  'fisc-pauta-gestor-registros': { module: 'Fiscalização', page: 'Pauta do Gestor - Registros' },
+ 'fisc-aiad': { module: 'Fiscalização', page: 'Auto de Infração - Advertência' },
+ 'fisc-aiap': { module: 'Fiscalização', page: 'Auto de Infração – Apreensão' },
+ 'fisc-rfa': { module: 'Fiscalização', page: 'Relatório de Fiscalização Ambiental' },
+ 'fisc-rae': { module: 'Fiscalização', page: 'Relatório de Atendimento de Emergência' },
  'ceuc-consulta': { module: 'Gestão de UC', page: 'Cadastro Estadual de UC (CEUC)' },
  ceuc: { module: 'Gestão de UC', page: 'Cadastro Estadual de UC (CEUC)' },
- 'uc-agendamento': { module: 'Unidades de Conservação', page: 'Agendamento de Visitação' },
+ 'uc-agendamento': { module: 'Unidades de Conservação', page: 'Entrada Única para Realização de Atividade em Unidade de Conservação' },
+ 'uc-entrada-unica': { module: 'Unidades de Conservação', page: 'Entrada Única para Realização de Atividade em Unidade de Conservação' },
  'uc-autorizacao-visitacao': { module: 'Unidades de Conservação', page: 'Autorização de Eventos - AAV' },
  'uc-atividades-didaticas': { module: 'Unidades de Conservação', page: 'Atividades Didáticas - AAD' },
  'uc-pesquisa-cientifica': { module: 'Unidades de Conservação', page: 'Pesquisa Científica - Pesc' },
@@ -35,20 +63,40 @@ const ROUTE_INFO: Record<string, { module: string; page: string }> = {
  'fauna-recintos': { module: 'Gestão de Fauna', page: 'Recintos e Áreas' },
  'fauna-manejos': { module: 'Gestão de Fauna', page: 'Tipos de Manejo' },
  'fauna-animais': { module: 'Gestão de Fauna', page: 'Animais' },
+    'fauna-asas': { module: 'Gestão de Fauna', page: 'Áreas de Soltura (ASAS)' },
+    'fauna-mapa-asas': { module: 'Gestão de Fauna', page: 'Mapa de ASAS e Destinações' },
+    'fauna-guardiao': { module: 'Gestão de Fauna', page: 'Guardiões e TGAS' },
 };
 
 export const AppShell: React.FC<AppShellProps> = ({
  children,
  activeRoute = 'relatorios',
  onNavigate,
+ variant = 'default',
 }) => {
  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
- const currentRoute = ROUTE_INFO[activeRoute] || { module: 'Sistema', page: activeRoute };
+ const cerhContext = ['cad-empreendimentos','empreendimentos','cerh','outorga','cerh-finalidades','cerh-tipos-uso','cerh-usuarios','cerh-grupos','cerh-contrato'].includes(activeRoute);
+ const immersive = variant === 'document-explorer';
+ useEffect(() => { if (immersive) setIsMobileSidebarOpen(false); }, [immersive]);
+ const currentRoute = (() => {
+    const base = ROUTE_INFO[activeRoute] || { module: 'Sistema', page: activeRoute };
+    if (activeRoute === 'assinatura-eletronica' && typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('aba') === 'parametrizacao') {
+        return { module: 'Assinatura Eletrônica', page: 'Parametrização por Etapa' };
+      }
+    }
+    return base;
+  })();
+ const scope = getCurrentScope();
+ const homeHref = scope === 'assinatura-eletronica'
+   ? '/?rota=a-assinar&escopo=assinatura-eletronica'
+   : '/?rota=relatorios';
 
  return (
- <div className="min-h-screen bg-[#F8FAFC] text-slate-800 antialiased flex flex-col">
+ <div data-layout={variant} className={cn('bg-[#F8FAFC] text-slate-800 antialiased flex flex-col', immersive ? 'h-dvh overflow-hidden' : 'min-h-screen', ['uc-agendamento','uc-entrada-unica'].includes(activeRoute) && 'entrada-unica-shell')}>
  {/* 1. HEADER INSTITUCIONAL INEMA / SEIA (Layout Antigo: Verde #0F4C3A) */}
- <header className="h-[60px] bg-[#0F4C3A] text-white fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 lg:px-6 shadow-xs select-none">
+ {!immersive && <header className="h-[60px] bg-[#0F4C3A] text-white fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 lg:px-6 shadow-xs select-none">
  <div className="flex items-center gap-3">
  <button
  onClick={() => setIsMobileSidebarOpen((prev) => !prev)}
@@ -57,7 +105,7 @@ export const AppShell: React.FC<AppShellProps> = ({
  >
  <Menu className="w-5 h-5" />
  </button>
- <a href="/?rota=relatorios" className="flex items-center">
+ <a href={homeHref} className="flex items-center">
  <img src="/logo.svg" alt="INEMA" className="h-9 w-auto object-contain" />
  </a>
  </div>
@@ -73,6 +121,7 @@ export const AppShell: React.FC<AppShellProps> = ({
  <Search className="w-4 h-4 absolute left-2.5 top-1/2 -translate-y-1/2 text-white/60 pointer-events-none" />
  </div>
 
+ {cerhContext ? <CerhShellContext /> : <>
  {/* Notificações */}
  <button
  className="w-9 h-9 rounded-lg hover:bg-white/10 flex items-center justify-center text-white relative transition-colors cursor-pointer"
@@ -89,13 +138,14 @@ export const AppShell: React.FC<AppShellProps> = ({
  </div>
  <span className="text-xs font-medium hidden md:inline text-white/90">Lucas Manager</span>
  </div>
+ </>}
  </div>
- </header>
+ </header>}
 
  {/* 2. CORPO PRINCIPAL COM SIDEBAR LATERAL + MIOLO */}
- <div className="flex flex-1 pt-[60px]">
+ <div className={cn('flex flex-1', immersive ? 'min-h-0' : 'pt-[60px]')}>
  {/* Overlay Mobile */}
- {isMobileSidebarOpen && (
+ {!immersive && isMobileSidebarOpen && (
  <div
  onClick={() => setIsMobileSidebarOpen(false)}
  className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-30 lg:hidden"
@@ -104,23 +154,23 @@ export const AppShell: React.FC<AppShellProps> = ({
  )}
 
  {/* Sidebar Lateral Padronizada */}
- <Sidebar
+ {!immersive && <Sidebar
  activeRoute={activeRoute}
  isOpenMobile={isMobileSidebarOpen}
  onCloseMobile={() => setIsMobileSidebarOpen(false)}
  onNavigate={onNavigate}
- />
+ />}
 
  {/* Conteúdo da Tela */}
- <main className="flex-1 lg:ml-[280px] p-4 sm:p-6 lg:p-8 space-y-6 overflow-y-auto min-h-[calc(100vh-60px)] bg-[#F8FAFC]">
+ <main className={immersive ? 'flex-1 min-w-0 min-h-0 overflow-hidden' : 'flex-1 lg:ml-[280px] p-4 sm:p-6 lg:p-8 space-y-6 overflow-y-auto min-h-[calc(100vh-60px)] bg-[#F8FAFC]'}>
  {/* Breadcrumbs Oficiais */}
- <nav className="flex items-center gap-2 text-xs text-slate-500 font-medium" aria-label="Breadcrumb">
- <a href="/?rota=relatorios" className="hover:text-slate-700">Início</a>
+ {!immersive && <nav className={cn("flex items-center gap-2 text-xs text-slate-500 font-medium", ['uc-agendamento','uc-entrada-unica'].includes(activeRoute) && 'flex-wrap')} aria-label="Breadcrumb">
+ <a href={homeHref} className="hover:text-slate-700">Início</a>
  <span>›</span>
  <span className="hover:text-slate-700">{currentRoute.module}</span>
  <span>›</span>
  <span className="text-[#0F4C3A] font-bold">{currentRoute.page}</span>
- </nav>
+ </nav>}
 
  {children}
  </main>
