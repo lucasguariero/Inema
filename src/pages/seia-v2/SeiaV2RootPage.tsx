@@ -31,6 +31,11 @@ import { SeiaV2LoginPage } from '@/pages/seia-v2/SeiaV2LoginPage';
 import { SeiaV2InicioPage } from '@/pages/seia-v2/SeiaV2InicioPage';
 import { NotificacoesPage } from '@/pages/seia-v2/NotificacoesPage';
 import { AcessoPublicoPage } from '@/pages/seia-v2/AcessoPublicoPage';
+import { CoineBessLpPage } from '@/pages/coine/CoineBessLpPage';
+import { CoineFcePage } from '@/pages/coine/CoineFcePage';
+import { fceDefinitions } from '@/pages/coine/coineFces';
+import { CoindFcePage } from '@/pages/coind/CoindFcePage';
+import { coindDefinitions } from '@/pages/coind/coindFces';
 
 export const SeiaV2RootPage: React.FC = () => {
   const [activeSubRoute, setActiveSubRoute] = useState<string>('inicio');
@@ -226,6 +231,24 @@ export const SeiaV2RootPage: React.FC = () => {
       case 'relatorios':
       case 'dashboard':
         return <DashboardPage onNavigate={handleNavigate} />;
+      case 'coine-bess':
+      case 'bess-lp':
+      case 'bess':
+        return <CoineBessLpPage onNavigate={handleNavigate} />;
+      case 'coine-eolica':
+        return <CoineFcePage key="eolica" definition={fceDefinitions.eolica} onNavigate={handleNavigate} nested />;
+      case 'coine-solar':
+        return <CoineFcePage key="solar" definition={fceDefinitions.solar} onNavigate={handleNavigate} nested />;
+      case 'coine-datacenter':
+        return <CoineFcePage key="datacenter" definition={fceDefinitions.datacenter} onNavigate={handleNavigate} nested />;
+      case 'coine-turismo':
+        return <CoineFcePage key="turismo" definition={fceDefinitions.turismo} onNavigate={handleNavigate} nested />;
+      case 'coind-industria':
+        return <CoindFcePage key="industria" definition={coindDefinitions.industria} onNavigate={handleNavigate} nested />;
+      case 'coind-desmantelamento':
+        return <CoindFcePage key="desmantelamento" definition={coindDefinitions.desmantelamento} onNavigate={handleNavigate} nested />;
+      case 'coind-dutovia':
+        return <CoindFcePage key="dutovia" definition={coindDefinitions.dutovia} onNavigate={handleNavigate} nested />;
       case 'inicio':
       default:
         return <SeiaV2InicioPage onNavigate={handleNavigate} />;

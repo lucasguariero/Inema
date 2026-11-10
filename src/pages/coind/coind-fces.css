@@ -1,0 +1,68 @@
+.coind-fce{width:100%;min-width:0;color:var(--color-text-primary);padding-bottom:calc(var(--spacing)*8)}
+.coind-heading{display:flex;align-items:flex-start;gap:var(--spacing);margin-bottom:calc(var(--spacing)*4)}
+.coind-heading>div{min-width:0;padding-top:calc(var(--spacing)*1.5)}
+.coind-heading h1{font-size:1.5rem;line-height:1.3;font-weight:700;letter-spacing:-.02em}
+.coind-heading p,.coind-context,.coind-stage,.coind-hint{font-size:.8125rem;line-height:1.6;color:var(--color-text-secondary)}
+.coind-heading p{margin-top:var(--spacing)}
+.coind-fce .coind-back{width:44px;height:44px;flex:0 0 44px;padding:0;border:0;background:transparent;box-shadow:none;--tw-ring-shadow:0 0 #0000;color:var(--color-text-secondary)}
+.coind-fce .coind-back:hover{background:transparent;color:var(--color-text-primary)}
+.coind-context{padding-block:calc(var(--spacing)*3);border-block:1px solid var(--color-border-default)}
+
+.coind-phase-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:calc(var(--spacing)*3);padding-block:calc(var(--spacing)*3);border-bottom:1px solid var(--color-border-default)}
+.coind-phase-selector{display:inline-flex;align-items:center;gap:calc(var(--spacing)*1.5);padding:calc(var(--spacing)*1) calc(var(--spacing)*2);background:var(--color-surface-muted, #f8fafc);border:1px solid var(--color-border-default);border-radius:var(--radius-lg)}
+.coind-phase-selector label{font-size:.75rem;font-weight:600;color:var(--color-text-secondary)}
+.coind-phase-selector select{border:0;background:transparent;font-size:.8125rem;font-weight:600;color:var(--color-brand-primary);padding:calc(var(--spacing)*1) calc(var(--spacing)*2);border-radius:var(--radius-md);cursor:pointer}
+.coind-phase-badge{display:inline-flex;align-items:center;padding:calc(var(--spacing)*0.75) calc(var(--spacing)*2);border-radius:var(--radius-md);font-size:.75rem;font-weight:700;background:var(--color-brand-primary-subtle);color:var(--color-brand-primary)}
+
+.coind-draft-actions{display:flex;justify-content:space-between;align-items:center;gap:calc(var(--spacing)*3);padding-block:calc(var(--spacing)*4);font-size:.8125rem;color:var(--color-text-secondary)}
+.coind-wizard{min-width:0;overflow:hidden;border-radius:var(--radius-xl);outline:1px solid var(--color-border-default)}
+.coind-fce .fi-sc-wizard-header-step{min-width:calc(var(--spacing)*56);height:auto;min-height:5rem}
+.coind-fce .fi-sc-wizard-header{touch-action:pan-x pan-y}
+.coind-fce .fi-sc-wizard-header-step-label,.coind-fce .fi-section-header-heading{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.5}
+.coind-stage{margin-block:calc(var(--spacing)*5)}
+.coind-sections{display:grid;gap:calc(var(--spacing)*6)}
+.coind-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:calc(var(--spacing)*5)}
+.coind-field{min-width:0;display:grid;align-content:start;gap:calc(var(--spacing)*1.5)}
+.coind-field-wide{grid-column:1/-1}
+.coind-label{font-size:.75rem;line-height:1.5;font-weight:600;color:var(--color-text-secondary)}
+.coind-label>span{color:var(--badge-critical-text)}
+.coind-fce textarea{min-height:7rem;resize:vertical}
+.coind-fce select{appearance:none}
+.coind-options{display:flex;flex-wrap:wrap;gap:calc(var(--spacing)*2)}
+.coind-option{display:flex;align-items:center;gap:calc(var(--spacing)*2);padding:calc(var(--spacing)*2.5) calc(var(--spacing)*3);border:1px solid var(--color-border-default);border-radius:var(--radius-lg);font-size:.8125rem;line-height:1.5;cursor:pointer}
+.coind-option:has(:checked){border-color:var(--color-border-focus);background:var(--color-brand-primary-subtle)}
+.coind-option input{width:16px;height:16px;flex:0 0 16px;accent-color:var(--color-brand-primary)}
+.coind-hint{font-size:.75rem}
+.coind-output,.coind-pending{font-size:.875rem;line-height:1.6;min-height:36px;display:flex;align-items:center}
+.coind-pending{color:var(--color-text-secondary)}
+.coind-error{display:block;font-size:.8125rem;line-height:1.5;color:var(--badge-critical-text)}
+.coind-documents{margin-top:calc(var(--spacing)*5);padding-top:calc(var(--spacing)*4);border-top:1px solid var(--color-border-default);font-size:.8125rem;line-height:1.6}
+.coind-documents h4,.coind-review-section h4{font-size:.875rem;font-weight:600;margin-bottom:calc(var(--spacing)*2)}
+.coind-documents ul{list-style:disc;padding-left:calc(var(--spacing)*5)}
+.coind-documents p{color:var(--color-text-secondary);font-size:.75rem;margin-top:calc(var(--spacing)*2)}
+.coind-notice{padding:calc(var(--spacing)*3) calc(var(--spacing)*4);border:1px solid var(--color-border-default);border-radius:var(--radius-lg);background:var(--color-surface-muted,var(--color-brand-primary-subtle));font-size:.8125rem;line-height:1.6;margin-bottom:calc(var(--spacing)*5)}
+.coind-footer{display:flex;align-items:center;justify-content:space-between;gap:calc(var(--spacing)*3);margin-top:calc(var(--spacing)*6);padding-top:calc(var(--spacing)*5);border-top:1px solid var(--color-border-default)}
+.coind-footer>div{display:flex;gap:calc(var(--spacing)*3);flex-wrap:wrap;justify-content:flex-end}
+.coind-review-count{font-size:.8125rem;line-height:1.6}
+.coind-review-section{padding-block:calc(var(--spacing)*4);border-bottom:1px solid var(--color-border-default)}
+.coind-review-section:first-child{padding-top:0}.coind-review-section:last-child{border:0;padding-bottom:0}
+.coind-review-section dl{display:grid;grid-template-columns:minmax(10rem,1fr) minmax(0,2fr);gap:calc(var(--spacing)*2) calc(var(--spacing)*5);font-size:.8125rem;line-height:1.6;margin-bottom:calc(var(--spacing)*3)}
+.coind-review-section dt{color:var(--color-text-secondary)}
+.coind-review-section dd{overflow-wrap:anywhere;white-space:pre-wrap}
+.coind-review-section dd ul{padding-block:calc(var(--spacing)*2)}
+.coind-table-field,.coind-table-field .fi-ta-ctn{width:100%;min-width:0}
+.coind-table-scroll{width:100%;min-width:0;max-width:100%;overflow-x:auto}.coind-table-scroll table{min-width:42rem}.coind-table-scroll td{vertical-align:top}
+.coind-dialog{max-height:calc(100dvh - var(--spacing)*8);overflow-y:auto}
+.coind-fce :is(button,input,select,textarea,[tabindex]):focus-visible,.coind-dialog :is(button,input):focus-visible{outline:2px solid var(--color-border-focus)!important;outline-offset:2px}
+.coind-fce .coind-back:focus-visible,.coind-fce .fi-sc-wizard-header-step-btn:focus-visible{outline-offset:-4px}
+@media(max-width:1023px){.coind-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:639px){
+ .coind-heading h1{font-size:1.25rem}.coind-grid{grid-template-columns:minmax(0,1fr)}
+ .coind-fce .fi-sc-wizard-header-step{min-width:16rem}
+ .coind-fce :is(button,select,input:not([type=radio]):not([type=checkbox])){min-height:44px}
+ .coind-draft-actions{align-items:flex-start;flex-direction:column}
+ .coind-footer{align-items:stretch;flex-direction:column}.coind-footer>div{justify-content:flex-start}.coind-footer button{height:auto;white-space:normal}
+ .coind-review-section dl{grid-template-columns:minmax(0,1fr);gap:var(--spacing)}
+ .coind-review-section dd{margin-bottom:calc(var(--spacing)*3)}
+ .coind-dialog{max-height:calc(100dvh - var(--spacing)*4)}
+}

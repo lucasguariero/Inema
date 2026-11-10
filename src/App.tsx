@@ -43,6 +43,8 @@ import { SeiaV2RootPage } from '@/pages/seia-v2/SeiaV2RootPage';
 import { CoineBessLpPage } from '@/pages/coine/CoineBessLpPage';
 import { CoineFcePage } from '@/pages/coine/CoineFcePage';
 import { eolica, solar, datacenter, turismo } from '@/pages/coine/coineFces';
+import { CoindFcePage } from '@/pages/coind/CoindFcePage';
+import { industria, desmantelamento, dutovia } from '@/pages/coind/coindFces';
 import { SignatureWorkspacePage } from '@/pages/signature/SignatureWorkspacePage';
 import { SignaturePublicValidationPage } from '@/pages/signature/SignaturePublicValidationPage';
 import { getCurrentScope } from '@/lib/scope';
@@ -317,6 +319,12 @@ export function App() {
         return <CoineFcePage key="datacenter" definition={datacenter} onNavigate={handleNavigate} />;
       case 'coine-turismo':
         return <CoineFcePage key="turismo" definition={turismo} onNavigate={handleNavigate} />;
+      case 'coind-industria':
+        return <CoindFcePage key="industria" definition={industria} onNavigate={handleNavigate} />;
+      case 'coind-desmantelamento':
+        return <CoindFcePage key="desmantelamento" definition={desmantelamento} onNavigate={handleNavigate} />;
+      case 'coind-dutovia':
+        return <CoindFcePage key="dutovia" definition={dutovia} onNavigate={handleNavigate} />;
       case 'dashboard':
         return <DashboardPage />;
       case 'assinatura-eletronica':
