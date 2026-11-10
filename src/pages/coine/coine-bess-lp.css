@@ -1,0 +1,42 @@
+.bess-lp-page{width:100%;min-width:0;padding-bottom:calc(var(--spacing)*8);color:var(--color-text-primary)}
+.bess-page-header{display:grid;gap:calc(var(--spacing)*5)}
+.bess-heading,.bess-content,.bess-wizard{width:100%;min-width:0}
+.bess-wizard-frame{min-width:0;border-radius:var(--radius-xl);overflow:hidden;box-shadow:0 1px 2px rgb(0 0 0 / .05);outline:1px solid var(--color-border-default)}
+.bess-content{padding-top:calc(var(--spacing)*6)}
+/* Adaptação de composição: o cabeçalho institucional mantém o piloto aprovado. */
+.bess-institutional-heading{padding-bottom:0;border:0}
+.bess-institutional-heading>div{padding-top:0}
+.bess-lp-page h1:focus{outline:none}
+.bess-lp-page .fi-section-header-heading{white-space:normal;text-overflow:clip;overflow:visible}
+.bess-lp-page .fi-sc-wizard-header-step-label{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.5}
+.bess-lp-page .fi-sc-wizard-header-step{min-height:5rem;height:auto}
+.bess-lp-page .fi-sc-wizard-header-step-btn:focus-visible{outline:2px solid var(--color-border-focus);outline-offset:-3px}
+.bess-stage-label{font-size:.8125rem;color:var(--color-text-secondary);margin-bottom:calc(var(--spacing)*5)}
+.bess-field{display:grid;gap:calc(var(--spacing)*1.5);min-width:0;align-content:start}
+.bess-field>label{font-size:.75rem;line-height:1.5;font-weight:600;color:var(--color-text-secondary)}
+.bess-field-hint{font-size:.8125rem;color:var(--color-text-secondary);line-height:1.5}
+.bess-field-error{font-size:.8125rem;color:var(--badge-critical-text);line-height:1.5}
+.bess-field input:focus-visible,.bess-field textarea:focus-visible,.bess-field select:focus-visible{outline:2px solid var(--color-border-focus);outline-offset:-2px}
+.bess-field select:disabled{cursor:not-allowed;color:var(--color-text-secondary)}
+.bess-field select{appearance:none}
+.bess-field textarea{resize:vertical;min-height:7rem}
+.bess-document-row{padding-block:calc(var(--spacing)*3);border-bottom:1px solid var(--color-border-default)}
+.bess-document-row:last-child{border-bottom:0;padding-bottom:0}
+.bess-document-row:first-child{padding-top:0}
+.bess-document-row h4{font-size:.875rem;font-weight:600;line-height:1.5}
+.bess-document-row p{font-size:.8125rem;line-height:1.5;color:var(--color-text-secondary);margin-top:var(--spacing)}
+.bess-sound-scroll{max-width:100%;overflow-x:auto}
+.bess-sound-scroll table{min-width:34rem}
+.bess-sound-scroll:focus-visible{outline:2px solid var(--color-border-focus);outline-offset:-2px}
+.bess-empty{padding:calc(var(--spacing)*6);text-align:center;color:var(--color-text-secondary)}
+.bess-dialog{max-height:calc(100dvh - var(--spacing)*8);overflow-y:auto}
+@media(max-width:767px){
+ .bess-lp-page .fi-sc-wizard-header-step{min-width:17rem}
+ .bess-lp-page .fi-sc-wizard-header{touch-action:pan-x pan-y}
+ .bess-lp-page button,.bess-dialog button,.bess-field input,.bess-field select{min-height:calc(var(--spacing)*11)}
+ .bess-lp-page [data-step] input[type=radio],.bess-lp-page [data-step] input[type=checkbox]{min-height:0}
+ .bess-lp-page input[type=radio]:focus-visible,.bess-lp-page input[type=checkbox]:focus-visible{outline:2px solid var(--color-border-focus);outline-offset:3px}
+ .bess-lp-page main>div:last-child>div{flex-wrap:wrap}
+ .bess-draft-notice{left:calc(var(--spacing)*4);right:calc(var(--spacing)*4);max-width:none}
+ .bess-dialog{max-height:calc(100dvh - var(--spacing)*4)}
+}
