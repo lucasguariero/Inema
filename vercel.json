@@ -42,6 +42,86 @@
           "value": "same-origin"
         }
       ]
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "query",
+          "key": "rota",
+          "value": "reg-pauta-area"
+        }
+      ],
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https: blob:; font-src 'self' data: https:; connect-src 'self' https: wss:; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests; frame-src 'self' blob:;"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "query",
+          "key": "escopo",
+          "value": "padronizacao-pauta"
+        }
+      ],
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https: blob:; font-src 'self' data: https:; connect-src 'self' https: wss:; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests; frame-src 'self' blob:;"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "query",
+          "key": "rota",
+          "value": "fisc-rfa"
+        }
+      ],
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https: blob:; font-src 'self' data: https:; connect-src 'self' https: wss: blob:; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests; frame-src 'self' blob:;"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "query",
+          "key": "rota",
+          "value": "fisc-rae"
+        }
+      ],
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https: blob:; font-src 'self' data: https:; connect-src 'self' https: wss: blob:; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests; frame-src 'self' blob:;"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "query",
+          "key": "rota",
+          "value": "uc-conselho(s|-criacao|-implementacao|-portal|-publico)"
+        }
+      ],
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https: blob:; font-src 'self' data: https:; connect-src 'self' https: wss: blob:; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests; frame-src 'self' blob:;"
+        }
+      ]
     }
   ],
   "rewrites": [
@@ -57,11 +137,93 @@
     },
     {
       "source": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "escopo"
+        }
+      ],
+      "destination": "/index.html"
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "modulo"
+        }
+      ],
+      "destination": "/index.html"
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "analista"
+        }
+      ],
+      "destination": "/index.html"
+    },
+    {
+      "source": "/ceuc",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/ceuc/:path*",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/relatorios",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/relatorios/:path*",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/regulacao",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/seia-v2",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/seia-v2/:path*",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/tales",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/tales/:path*",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/cotic",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/cotic/:path*",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/",
       "destination": "/relatorios-antigo.html"
     },
     {
       "source": "/layout-antigo",
       "destination": "/relatorios-antigo.html"
+    },
+    {
+      "source": "/cerh/:path*",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/cerh",
+      "destination": "/index.html"
     },
     {
       "source": "/conceito-01",

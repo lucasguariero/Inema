@@ -17,6 +17,12 @@ if (fs.existsSync(distIndex)) {
     'sidebar-verde-azul',
     'sidebar-verde',
     'sidebar-branca',
+    'seia-v2',
+    'tales',
+    'cotic',
+    'ceuc',
+    'relatorios',
+    'regulacao',
   ];
   for (const c of concepts) {
     // 1. Arquivo plano dist/conceito-01.html (para cleanUrls)
@@ -27,6 +33,29 @@ if (fs.existsSync(distIndex)) {
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
     fs.copyFileSync(distIndex, path.resolve(`dist/${c}/index.html`));
     console.log(`Created dist/${c}.html and dist/${c}/index.html`);
+  }
+
+  const cerhRoutes = [
+    'cerh',
+    'cerh/consulta',
+    'cerh/demo/resumo',
+    'cerh/demo/uso-da-agua',
+    'cerh/demo/barragem',
+    'cerh/demo/intervencao',
+    'cerh/demo/captacao-superficial',
+    'cerh/demo/captacao-subterranea',
+    'cerh/demo/lancamento-efluentes',
+  ];
+  for (const r of cerhRoutes) {
+    const filePath = path.resolve(`dist/${r}.html`);
+    const fileDir = path.dirname(filePath);
+    if (!fs.existsSync(fileDir)) fs.mkdirSync(fileDir, { recursive: true });
+    fs.copyFileSync(distIndex, filePath);
+
+    const dir = path.resolve(`dist/${r}`);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.copyFileSync(distIndex, path.resolve(`dist/${r}/index.html`));
+    console.log(`Created dist/${r}.html and dist/${r}/index.html`);
   }
 }
 
