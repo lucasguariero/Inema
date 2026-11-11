@@ -48,13 +48,11 @@ export const BahiaFaunaMap: React.FC<BahiaFaunaMapProps> = ({
     return true;
   });
 
-  // RN-004 e CA002: Contagens por situação com quantidades dinâmicas na legenda
-  const qtdAtivas = asasList.filter((a) => a.situacao === 'Ativa').length;
-  const qtdVencidas = asasList.filter(
-    (a) => a.situacao === 'Certificado vencido' || a.situacao === 'Certificado Vencido'
-  ).length;
-  const qtdSuspensas = asasList.filter((a) => a.situacao === 'Suspensa').length;
-  const qtdEmAnalise = asasList.filter((a) =>
+  // RN-004 e CA002: Contagens por situação calculadas sobre as áreas plotadas/visíveis
+  const qtdAtivas = visibleAsas.filter((a) => a.situacao === 'Ativa').length;
+  const qtdVencidas = visibleAsas.filter((a) => a.situacao === 'Certificado vencido').length;
+  const qtdSuspensas = visibleAsas.filter((a) => a.situacao === 'Suspensa').length;
+  const qtdEmAnalise = visibleAsas.filter((a) =>
     ['Em análise', 'Em complementação', 'Aguardando termo', 'Em cadastro'].includes(a.situacao)
   ).length;
 
@@ -492,59 +490,48 @@ export const BahiaFaunaMap: React.FC<BahiaFaunaMapProps> = ({
         </svg>
       </div>
 
-      {/* Legenda Oficial Acessível e Textual com Quantidades por Situação (RN-004 e CA002) */}
+      {/* Legenda Oficial Acessível Compacta e Reconciliada (RN-004 e CA002) */}
       <div
         data-testid="legenda-mapa-asas"
-        className="absolute bottom-3 left-3 z-20 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xs rounded-xl shadow-md border border-slate-200 dark:border-slate-800 p-2.5 text-xs max-w-sm"
+        className="absolute bottom-3 left-3 z-20 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xs rounded-xl shadow-md border border-slate-200 dark:border-slate-800 p-2 text-xs max-w-xs"
       >
-        <div className="flex items-center justify-between mb-1.5">
+        <div className="flex items-center justify-between mb-1.5 gap-2">
           <span className="font-bold text-slate-800 dark:text-slate-200 text-[11px] uppercase tracking-wide">
-            Legenda das Áreas de Soltura (RN-004)
+            Áreas de Soltura
           </span>
-          <Badge variant="outline" className="text-[9px] bg-slate-100 text-slate-700 border-slate-300">
-            6 Áreas Elegíveis Mapeadas
+          <Badge variant="outline" className="text-[10px] bg-slate-50 text-slate-600 border-slate-200">
+            {visibleAsas.length} exibida{visibleAsas.length !== 1 ? 's' : ''} de {asasList.length}
           </Badge>
         </div>
-        <div className="grid grid-cols-2 gap-x-3 gap-y-1.5 text-[11px]">
-          <div className="flex items-center justify-between gap-1.5 bg-slate-50/80 dark:bg-slate-800/50 px-2 py-1 rounded-lg">
+        <div className="grid grid-cols-2 gap-1.5 text-[11px]">
+          <div className="flex items-center justify-between gap-1.5 bg-slate-50/80 dark:bg-slate-800/50 px-2 py-0.5 rounded">
             <div className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full bg-[#10b981] border border-[#047857]" />
               <span className="text-slate-700 dark:text-slate-300">Ativa:</span>
             </div>
             <strong className="font-mono text-emerald-700 dark:text-emerald-400 font-bold" data-testid="legenda-qtd-ativa">{qtdAtivas}</strong>
           </div>
-          <div className="flex items-center justify-between gap-1.5 bg-slate-50/80 dark:bg-slate-800/50 px-2 py-1 rounded-lg">
+          <div className="flex items-center justify-between gap-1.5 bg-slate-50/80 dark:bg-slate-800/50 px-2 py-0.5 rounded">
             <div className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full bg-[#ef4444] border border-[#b91c1c]" />
               <span className="text-slate-700 dark:text-slate-300">Vencida:</span>
             </div>
             <strong className="font-mono text-rose-700 dark:text-rose-400 font-bold" data-testid="legenda-qtd-vencida">{qtdVencidas}</strong>
           </div>
-          <div className="flex items-center justify-between gap-1.5 bg-slate-50/80 dark:bg-slate-800/50 px-2 py-1 rounded-lg">
+          <div className="flex items-center justify-between gap-1.5 bg-slate-50/80 dark:bg-slate-800/50 px-2 py-0.5 rounded">
             <div className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full bg-[#f59e0b] border border-[#b45309]" />
               <span className="text-slate-700 dark:text-slate-300">Suspensa:</span>
             </div>
             <strong className="font-mono text-amber-700 dark:text-amber-400 font-bold" data-testid="legenda-qtd-suspensa">{qtdSuspensas}</strong>
           </div>
-          <div className="flex items-center justify-between gap-1.5 bg-slate-50/80 dark:bg-slate-800/50 px-2 py-1 rounded-lg">
+          <div className="flex items-center justify-between gap-1.5 bg-slate-50/80 dark:bg-slate-800/50 px-2 py-0.5 rounded">
             <div className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full bg-[#64748b] border border-[#334155]" />
               <span className="text-slate-700 dark:text-slate-300">Em Análise:</span>
             </div>
             <strong className="font-mono text-slate-700 dark:text-slate-300 font-bold" data-testid="legenda-qtd-analise">{qtdEmAnalise}</strong>
           </div>
-        </div>
-        <div className="text-[10px] text-slate-500 mt-1.5 border-t border-slate-100 dark:border-slate-800 pt-1 space-y-0.5">
-          <p>
-            * Conforme a <strong>RN-003</strong>, as situações <em>'Em complementação'</em> e <em>'Aguardando termo'</em> são representadas e contabilizadas sob a categoria visual <strong>'Em análise'</strong> (cinza) no mapa e na lista lateral.
-          </p>
-          <p>
-            * <strong>Diferenciação cadastral:</strong> Áreas elegíveis possuem polígono vetorial e são plotadas no mapa; cadastros sem delimitação exigem arquivo KML (RN-006).
-          </p>
-          <p className="text-slate-600 dark:text-slate-300">
-            * <strong>Agrupamento macroestadual:</strong> Em escala ampla, áreas com proximidade agrupam-se em marcadores regionais com contagem consolidada, desagrupando-se ao aproximar o zoom (RN-005).
-          </p>
         </div>
       </div>
 

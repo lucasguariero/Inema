@@ -7,5 +7,7 @@ export { Button } from '@/components/ui/button';
 export { Badge } from '@/components/ui/badge';
 export * from './Wizard';
 export * from './Tabs';
+export * from './ProcessTree';
+export * from './DocumentExplorer';
 export { Switch } from '@/components/ui/switch';
 export * from '@/components/common/GlaTable';

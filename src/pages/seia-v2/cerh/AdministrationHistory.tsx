@@ -1,0 +1,6 @@
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import type { AuditEntry } from './administration';
+export function AdministrationHistory({ title, events, onClose }: { title: string; events: AuditEntry[]; onClose: () => void }) {
+  return <Dialog open onOpenChange={v => { if (!v) onClose(); }}><DialogContent className="cerh-dialog max-w-3xl"><DialogHeader><DialogTitle>Visualizar histórico — {title}</DialogTitle><DialogDescription>Eventos locais do protótipo demonstrativo.</DialogDescription></DialogHeader><div className="cerh-dialog-body"><ol className="cerh-history">{[...events].reverse().map(e => <li key={e.id}><h3 className="text-sm font-semibold">{e.action}</h3><p className="cerh-helper">{e.actor} · {new Date(e.date).toLocaleString('pt-BR')}</p>{e.before && <p className="text-xs break-words mt-2">Valor anterior: {e.before}</p>}{e.after && <p className="text-xs break-words mt-2">Valor novo: {e.after}</p>}</li>)}</ol>{!events.length && <p className="cerh-empty">Nenhum evento registrado.</p>}</div><DialogFooter><Button color="gray" size="sm" onClick={onClose}>Fechar</Button></DialogFooter></DialogContent></Dialog>;
+}

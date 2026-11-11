@@ -16,6 +16,9 @@ import {
   Calendar
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { InputWrapper } from '@/components/filament/InputWrapper';
+import { SeiaV2PageHeader } from '@/components/seia-v2/SeiaV2PageHeader';
+import { ChevronDown } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import {
   GuardiaoItem,
@@ -158,7 +161,7 @@ export const GuardiaoAcompanhamentoPage: React.FC<GuardiaoAcompanhamentoPageProp
       dataEnvio: new Date().toLocaleDateString('pt-BR'),
       periodoSemestral: periodoRelatorio,
       veterinarioNome: vetRelatorio,
-      crmv: 'CRMV/BA 7891',
+      veterinarioCrmv: 'CRMV/BA 7891',
       status: 'Regular',
       animaisInspecionados: (guardiao.tgasVigente?.animaisSobGuarda || []).map((a) => ({
         animalId: a.animalId,
@@ -181,79 +184,70 @@ export const GuardiaoAcompanhamentoPage: React.FC<GuardiaoAcompanhamentoPageProp
   };
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto pb-12" data-testid="pagina-guardiao-acompanhamento">
-      {/* Topbar com Retorno */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-4">
-        <div className="flex items-center gap-3">
-          <button
-            onClick={onVoltar}
-            data-testid="btn-voltar-acompanhamento"
-            className="w-9 h-9 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 flex items-center justify-center text-slate-600 cursor-pointer"
-            title="Voltar"
-            aria-label="Voltar"
-          >
-            <ArrowLeft className="w-4 h-4" />
-          </button>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-mono font-bold text-sm text-[#0F4C3A]">
-                {guardiao.tgasVigente?.numero || 'TGAS VIGENTE'}
-              </span>
-              <Badge variant="outline" className="text-[10px]">
-                {guardiao.recinto.municipio} / BA
-              </Badge>
-              <Badge variant={guardiao.tgasVigente?.situacao === 'Vigente' ? 'success' : 'warning'} dot>
-                {guardiao.tgasVigente?.situacao || 'Sem termo'}
-              </Badge>
-            </div>
-            <h1 className="text-xl font-bold text-slate-900 dark:text-white">
-              Acompanhamento e Registro de Ocorrências
-            </h1>
-            <p className="text-xs text-slate-500">
-              Guardião: <strong>{guardiao.requerente.nomeOuRazaoSocial}</strong> · CPF:{' '}
-              {guardiao.requerente.cpfCnpj}
-            </p>
+    <div className="space-y-6 w-full pb-12" data-testid="pagina-guardiao-acompanhamento">
+      {/* Header Canônico SEIA V2 */}
+      <SeiaV2PageHeader
+        title="Acompanhamento e Registro de Ocorrências"
+        subtitle={`Guardião: ${guardiao.requerente.nomeOuRazaoSocial} · CPF: ${guardiao.requerente.cpfCnpj} · Recinto: ${guardiao.recinto.municipio} / BA`}
+        badge={
+          <div className="flex items-center gap-2">
+            <span className="font-mono font-bold text-xs text-[#0F4C3A] dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
+              {guardiao.tgasVigente?.numero || 'TGAS VIGENTE'}
+            </span>
+            <Badge variant="outline" className="text-xs">
+              {guardiao.recinto.municipio} / BA
+            </Badge>
+            <Badge variant={guardiao.tgasVigente?.situacao === 'Vigente' ? 'success' : 'warning'} dot>
+              {guardiao.tgasVigente?.situacao || 'Sem termo'}
+            </Badge>
           </div>
-        </div>
+        }
+        backButton={{
+          onClick: onVoltar,
+          label: 'Voltar',
+          title: 'Voltar',
+          dataTestId: 'btn-voltar-acompanhamento'
+        }}
+        actions={
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setTipoDocModal('DR012-DOC003');
+                setModalDocAberto(true);
+              }}
+              data-testid="btn-ver-notificacao-a4"
+              className="text-xs gap-1.5 h-9"
+            >
+              <FileText className="w-3.5 h-3.5" /> Notificação Adequação (DOC003)
+            </Button>
 
-        <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              setTipoDocModal('DR012-DOC003');
-              setModalDocAberto(true);
-            }}
-            data-testid="btn-ver-notificacao-a4"
-            className="text-xs gap-1.5 h-9"
-          >
-            <FileText className="w-3.5 h-3.5" /> Notificação Adequação (DOC003)
-          </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setModalNovaOcorrenciaAberto(true)}
+              data-testid="btn-abrir-modal-ocorrencia"
+              className="text-xs gap-1.5 h-9 border-amber-400 text-amber-900 hover:bg-amber-50"
+            >
+              <AlertTriangle className="w-3.5 h-3.5 text-amber-600" /> Comunicar Ocorrência (48h)
+            </Button>
 
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setModalNovaOcorrenciaAberto(true)}
-            data-testid="btn-abrir-modal-ocorrencia"
-            className="text-xs gap-1.5 h-9 border-amber-400 text-amber-900 hover:bg-amber-50"
-          >
-            <AlertTriangle className="w-3.5 h-3.5 text-amber-600" /> Comunicar Ocorrência (48h)
-          </Button>
-
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={() => setModalNovoRelatorioAberto(true)}
-            data-testid="btn-abrir-modal-relatorio"
-            className="text-xs gap-1.5 h-9 bg-[#0F4C3A] text-white"
-          >
-            <Plus className="w-3.5 h-3.5" /> Enviar Relatório Semestral
-          </Button>
-        </div>
-      </div>
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={() => setModalNovoRelatorioAberto(true)}
+              data-testid="btn-abrir-modal-relatorio"
+              className="text-xs gap-1.5 h-9 bg-[#0F4C3A] text-white"
+            >
+              <Plus className="w-3.5 h-3.5" /> Enviar Relatório Semestral
+            </Button>
+          </div>
+        }
+      />
 
       {/* 1. RELATÓRIOS SEMESTRAIS E PRORROGAÇÃO ANUAL (RN-015 / RN-016) */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs space-y-4 text-xs">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs space-y-4 text-xs">
         <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
           <div>
             <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">
@@ -319,7 +313,7 @@ export const GuardiaoAcompanhamentoPage: React.FC<GuardiaoAcompanhamentoPageProp
       </div>
 
       {/* 2. REGISTRO DE OCORRÊNCIAS (RN-017 A RN-024) */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs space-y-4 text-xs">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs space-y-4 text-xs">
         <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
           <div>
             <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">
@@ -385,7 +379,7 @@ export const GuardiaoAcompanhamentoPage: React.FC<GuardiaoAcompanhamentoPageProp
 
       {/* 3. HISTÓRICO DE TERMOS SUBSTITUÍDOS */}
       {guardiao.historicoTgas.length > 0 && (
-        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs space-y-4 text-xs">
+        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs space-y-4 text-xs">
           <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider pb-2 border-b border-slate-100 dark:border-slate-800">
             3. Histórico de Versões do TGAS Substituídas (RN-025)
           </h3>

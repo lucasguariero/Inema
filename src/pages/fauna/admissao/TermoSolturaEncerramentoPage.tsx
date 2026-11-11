@@ -40,7 +40,7 @@ import {
   getGuardioesList,
   saveGuardiaoItem,
 } from '@/data/faunaR3R4Mock';
-import { AsasItem, GuardiaoItem } from '@/types/faunaR3R4';
+import { AsasItem, GuardiaoItem, AnimalIndicadoGuardiao } from '@/types/faunaR3R4';
 
 interface TermoSolturaEncerramentoPageProps {
   animalIdPreselecionado?: string;
@@ -287,7 +287,7 @@ export const TermoSolturaEncerramentoPage: React.FC<TermoSolturaEncerramentoPage
 
     // Atualiza status do animal no acervo do DR008 para desfecho terminal (RN-030)
     animalAtual.status = destinacaoFinal === 'Soltura' ? 'Soltura' : 'Destinação';
-    animalAtual.destinacaoFinal = destinacaoFinal;
+    (animalAtual as unknown as Record<string, unknown>).destinacaoFinal = destinacaoFinal;
 
     // Se o desfecho for Guardião, atualiza o vínculo do animal no TGAS do guardião e decrementa vaga
     if (destinacaoFinal === 'Guardião') {
@@ -297,16 +297,18 @@ export const TermoSolturaEncerramentoPage: React.FC<TermoSolturaEncerramentoPage
           (a) => a.animalId === animalAtual.id || a.numeroDigital === animalAtual.numeroDigital
         );
         if (!jaVinculado) {
-          const novoVinculo = {
+          const novoVinculo: AnimalIndicadoGuardiao = {
             animalId: animalAtual.id,
-            especie: animalAtual.especieNomePopular,
-            nomeCientifico: animalAtual.especieNomeCientifico || '',
             numeroDigital: animalAtual.numeroDigital || animalAtual.codigo,
-            marcacao: marcacaoFormatada,
-            dataVinculo: dataSaida,
+            nomeComum: animalAtual.especieNomePopular,
+            nomeCientifico: animalAtual.especieNomeCientifico || '',
+            grupo: 'Aves',
+            sexo: animalAtual.sexo || 'Indeterminado',
+            tipoMarcacao: (animalAtual as unknown as { tipoMarcacao?: string }).tipoMarcacao || 'Anilha Fechada',
+            codigoMarcacao: marcacaoFormatada,
+            situacaoAnimal: 'Sob guarda',
             laudoTecnicoId: 'laudo-doc002-cetas-01',
-            tsdNumero: numeroTermo,
-            status: 'Sob guarda' as const
+            tsdNumero: numeroTermo
           };
           const guardiaoAtualizado: GuardiaoItem = {
             ...g,

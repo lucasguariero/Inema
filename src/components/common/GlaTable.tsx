@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { TablePresentationContext, TableToolbar, TableToolbarProps, useTenRowMinimum } from '@/components/filament/Table';
 
 export interface GlaTableContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   heading?: React.ReactNode;
@@ -24,7 +25,13 @@ export const GlaTableContainer: React.FC<GlaTableContainerProps> = ({
   className,
   ...props
 }) => {
-  const hasHeader = heading || description || badge || actions;
+  const unified = React.useContext(TablePresentationContext);
+  const bodyRef = useTenRowMinimum(unified, children);
+  const combined = unified && React.isValidElement<TableToolbarProps>(toolbar) && toolbar.type === TableToolbar;
+  const mergedToolbar = combined ? React.cloneElement(toolbar as React.ReactElement<TableToolbarProps>, {
+    heading, description, actions: <>{badge && <span className="text-xs text-[var(--color-text-secondary)]">{badge}</span>}{actions}</>,
+  }) : toolbar;
+  const hasHeader = !combined && (heading || description || badge || actions);
 
   return (
     <div
@@ -62,10 +69,10 @@ export const GlaTableContainer: React.FC<GlaTableContainerProps> = ({
       )}
 
       {/* 2. Toolbar opcional (busca / filtros inline) */}
-      {toolbar}
+      {mergedToolbar}
 
       {/* 3. Tabela com scroll horizontal suave */}
-      <div className={noScroll ? 'w-full' : 'overflow-x-auto'}>{children}</div>
+      <div ref={bodyRef} className={cn(noScroll ? 'w-full' : 'overflow-x-auto', unified && 'min-h-[648px]')}>{children}</div>
 
       {/* 4. Paginação Oficial */}
       {pagination && (
@@ -185,24 +192,29 @@ export const GlaTableAction: React.FC<GlaTableActionProps> = ({
 export interface GlaPaginationProps {
   currentCount: number;
   totalCount: number;
+  /** Primeiro registro visível; opt-in para consultas com paginação real. */
+  startIndex?: number;
   page?: number;
   totalPages?: number;
   onPageChange?: (newPage: number) => void;
   entityName?: string;
+  rangeSeparator?: string;
 }
 
 export const GlaPagination: React.FC<GlaPaginationProps> = ({
   currentCount,
   totalCount,
+  startIndex = 1,
   page = 1,
   totalPages = 1,
   onPageChange,
-  entityName = 'processos'
+  entityName = 'processos',
+  rangeSeparator = '-'
 }) => {
   return (
     <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600 dark:text-slate-400">
       <div>
-        Exibindo <span className="font-bold text-slate-900 dark:text-white">1</span>-
+        Exibindo <span className="font-bold text-slate-900 dark:text-white">{startIndex}</span>{rangeSeparator}
         <span className="font-bold text-slate-900 dark:text-white">{currentCount}</span> de{' '}
         <span className="font-bold text-slate-900 dark:text-white">{totalCount.toLocaleString('pt-BR')}</span> {entityName}
       </div>

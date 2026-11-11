@@ -1,0 +1,49 @@
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Plus, Pencil, Trash2 } from 'lucide-react';
+import { useEditor, ReportSection, Field, Confirm } from './controls';
+import { ProcessFields, IdentityFields, ParticipantList, LocationFields, CoordinateList, GeoContext, HistoricalLookup, DescriptionFields, ConclusionFields, AttachmentList, NotificationsEditor, Responsibility } from './sharedSections';
+import { InfractionsEditor } from './InfractionEditor';
+import { validAttendance, overlapping, overlapFingerprint, uid, message, legend } from './domain';
+import { AttendanceFields } from './AttendanceFields';
+import { attendanceDisplay } from './attendanceTime';
+import type { Attendance, Company, Participant } from './types';
+
+export const RAE_SECTIONS = ['Atendimento', 'Identificação', 'Local da emergência', 'Área atingida', 'Histórico', 'Descrição da emergência', 'Conclusão e desdobramentos', 'Infrações', 'Notificações', 'Recomendações', 'Anexos', 'Responsabilidade técnica'];
+function AttendanceList() {
+ const { report, set, editable, notice } = useEditor(), [entry, setEntry] = useState<Attendance>({ id: uid(), start: '', end: '' }), [confirm, setConfirm] = useState(false), [remove, setRemove] = useState<string | null>(null), [entryError, setEntryError] = useState('');
+ if (report.kind !== 'DOR009') return null;
+ const list = report.content.attendances;
+ const commit = (consent: boolean) => {
+  const next = [...list.filter(x => x.id !== entry.id), { ...entry }];
+  if (consent) for (const p of next) if (p.id === entry.id || overlapping(entry, next).some(x => x.id === p.id)) p.overlapConfirmed = overlapFingerprint(p, next);
+  set('attendances', next); setEntry({ id: uid(), start: '', end: '' }); setConfirm(false); notice('Período incorporado à edição. Salve o relatório para persistir.');
+ };
+ const save = () => { if (!validAttendance(entry)) { setEntryError(message('DOR009', 7)); notice(message('DOR009', 7) + ' Datas e horas futuras não são permitidas.'); return; } setEntryError(''); if (overlapping(entry, list).length) setConfirm(true); else commit(false); };
+ return <>{list.map((p, i) => <div className="fr-item" key={p.id}><div className="fr-heading"><h3>Atendimento {i + 1}</h3><div className="fr-actions"><Button color="gray" size="sm" disabled={!editable('attendances')} onClick={() => setEntry({ ...p })} aria-label={`Editar atendimento ${i + 1}`}><Pencil className="w-4 h-4" />Editar</Button><Button color="gray" size="sm" disabled={!editable('attendances')} onClick={() => setRemove(p.id)} aria-label={`Remover atendimento ${i + 1}`}><Trash2 className="w-4 h-4" />Remover</Button></div></div><p>{attendanceDisplay(p.start)} até {attendanceDisplay(p.end)} — Bahia</p>{overlapping(p, list).length > 0 && <p className="fr-hint">{p.overlapConfirmed === overlapFingerprint(p, list) ? 'Sobreposição confirmada explicitamente.' : 'Sobreposição alterada: revise e confirme antes de finalizar.'}</p>}</div>)}<h3>{list.some(p => p.id === entry.id) ? 'Editar período de atendimento' : 'Adicionar período de atendimento'}</h3><div className="fr-grid fr-attendance-grid"><AttendanceFields key={report.id+entry.id+'start'} label="Início do período" value={entry.start} onChange={start => { setEntryError(''); setEntry({ ...entry, start }); }} disabled={!editable('attendances')} error={entryError}/><AttendanceFields key={report.id+entry.id+'end'} label="Término do período" value={entry.end} onChange={end => { setEntryError(''); setEntry({ ...entry, end }); }} disabled={!editable('attendances')} error={entryError}/></div><p className="fr-hint">{legend('DOR009', 3)} Horários da Bahia; instantes preservados em UTC. A confirmação de sobreposição só vale para os intervalos apresentados.</p><div className="fr-actions"><Button color="gray" disabled={!editable('attendances')} onClick={save}><Plus className="w-4 h-4" />{list.some(p => p.id === entry.id) ? 'Salvar atendimento' : 'Adicionar atendimento'}</Button>{list.some(p => p.id === entry.id) && <Button color="gray" onClick={() => setEntry({ id: uid(), start: '', end: '' })}>Cancelar edição do atendimento</Button>}</div>{confirm && <Confirm title="Confirmar sobreposição de períodos" text={message('DOR009', 21)} onCancel={() => { setConfirm(false); notice('Sobreposição não gravada. Os dados do período permanecem disponíveis para correção.'); }} onConfirm={() => commit(true)} />}{remove && <Confirm title="Remover atendimento" text="Deseja remover este período de atendimento?" onCancel={() => setRemove(null)} onConfirm={() => { set('attendances', list.filter(p => p.id !== remove)); setRemove(null); }} />}</>;
+}
+function CompaniesEditor() {
+ const { report, set, editable, errors } = useEditor(), [remove, setRemove] = useState<{ company: string; representative?: string } | null>(null);
+ if (report.kind !== 'DOR009') return null;
+ const companies = report.content.companies, update = (id: string, patch: Partial<Company>) => set('companies', companies.map(c => c.id === id ? { ...c, ...patch } : c));
+ const representative = (): Participant => ({ id: uid(), userId: '', name: '', job: '', phone: '', email: '', responsible: false });
+ return <><p className="fr-hint">{legend('DOR009', 5)} {legend('DOR009', 6)} Cada representante permanece vinculado à sua empresa.</p>{companies.map((c, i) => <div className="fr-item" key={c.id}><div className="fr-heading"><h3>Empresa envolvida {i + 1}</h3><Button color="gray" disabled={!editable('companies')} onClick={() => setRemove({ company: c.id })}>Remover empresa</Button></div><div className="fr-grid"><Field label={`Nome/Razão social da empresa ${i + 1}`} name={`companies.${i}.name`} error={errors[`companies.${i}.name`]} value={c.name} onChange={v => update(c.id, { name: v })} required disabled={!editable('companies')} /><Field label={`CPF/CNPJ da empresa ${i + 1}`} name={`companies.${i}.document`} error={errors[`companies.${i}.document`]} value={c.document} onChange={v => update(c.id, { document: v.replace(/\D/g, '') })} required disabled={!editable('companies')} /></div>{c.representatives.map((p, j) => <div className="fr-item" key={p.id}><h4>Representante {j + 1} da empresa {i + 1}</h4><div className="fr-grid">{([['name', 'Nome'], ['job', 'Função'], ['phone', 'Telefone'], ['email', 'E-mail']] as const).map(([key, label]) => <Field key={key} type={key === 'email' ? 'email' : key === 'phone' ? 'tel' : 'text'} label={`${label} do representante ${j + 1} da empresa ${i + 1}`} name={`companies.${i}.representatives.${j}.${key}`} error={errors[`companies.${i}.representatives.${j}.${key}`]} value={p[key]} onChange={v => update(c.id, { representatives: c.representatives.map(x => x.id === p.id ? { ...x, [key]: v } : x) })} disabled={!editable('companies')} required={key === 'name' || key === 'job'} />)}</div><Button color="gray" size="sm" disabled={!editable('companies')} onClick={() => setRemove({ company: c.id, representative: p.id })}>Remover representante</Button></div>)}<Button color="gray" disabled={!editable('companies')} onClick={() => update(c.id, { representatives: [...c.representatives, representative()] })}><Plus className="w-4 h-4" />Adicionar representante</Button></div>)}<Button color="gray" disabled={!editable('companies')} onClick={() => set('companies', [...companies, { id: uid(), name: '', document: '', representatives: [] }])}><Plus className="w-4 h-4" />Adicionar empresa</Button>{remove && <Confirm title={remove.representative ? 'Remover representante' : 'Remover empresa e representantes'} text="Confirma remover os dados deste item da edição atual?" onCancel={() => setRemove(null)} onConfirm={() => { set('companies', remove.representative ? companies.map(c => c.id === remove.company ? { ...c, representatives: c.representatives.filter(p => p.id !== remove.representative) } : c) : companies.filter(c => c.id !== remove.company)); setRemove(null); }} />}</>;
+}
+export function RaeForm() {
+ const { report, set, editable, errors } = useEditor(); if (report.kind !== 'DOR009') throw Error('O formulário RAE exige DOR009.');
+ return <>
+  <ReportSection id="processo" title="Processo originador e processos relacionados" field="originator"><ProcessFields related /></ReportSection>
+  <ReportSection id="sec-1" title="1. Atendimento" field="attendances"><AttendanceList /></ReportSection>
+  <ReportSection id="sec-2" title="2. Identificação" field="person"><IdentityFields /><h3>Empresas e representantes</h3><CompaniesEditor /><h3>Participantes do atendimento</h3><ParticipantList /></ReportSection>
+  <ReportSection id="sec-3" title="3. Local da emergência" field="location"><LocationFields /><CoordinateList /></ReportSection>
+  <ReportSection id="sec-4" title="4. Área atingida" field="geo"><GeoContext /></ReportSection>
+  <ReportSection id="sec-5" title="5. Histórico" field="history"><HistoricalLookup /></ReportSection>
+  <ReportSection id="sec-6" title="6. Descrição da emergência" field="description"><DescriptionFields /></ReportSection>
+  <ReportSection id="sec-7" title="7. Conclusão e desdobramentos" field="conclusion"><ConclusionFields /></ReportSection>
+  <ReportSection id="sec-8" title="8. Infrações" field="infractions"><InfractionsEditor /></ReportSection>
+  <ReportSection id="sec-9" title="9. Notificações" field="notifications"><NotificationsEditor /></ReportSection>
+  <ReportSection id="sec-10" title="10. Recomendações" field="recommendations"><Field label="Recomendações técnicas" name="recommendations" value={report.content.recommendations} onChange={v => set('recommendations', v)} multiline maxLength={7000} disabled={!editable('recommendations')} error={errors.recommendations} hint={legend('DOR009', 16) + ' Opcional.'} /></ReportSection>
+  <ReportSection id="sec-11" title="11. Anexos" field="attachments"><AttachmentList /></ReportSection>
+  <ReportSection id="sec-12" title="12. Responsabilidade técnica"><Responsibility /></ReportSection>
+ </>;
+}

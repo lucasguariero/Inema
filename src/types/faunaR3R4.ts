@@ -292,6 +292,9 @@ export interface AnimalIndicadoGuardiao {
   avaliacaoComportamental?: string;
   justificativaImpossibilidadeSoltura?: string;
   fotoUrl?: string;
+  laudoTecnicoId?: string;
+  tsdNumero?: string;
+  dataVinculo?: string;
 }
 
 export interface LaudoTecnicoCetasLote {

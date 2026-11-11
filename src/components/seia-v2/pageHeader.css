@@ -1,0 +1,16 @@
+.seia-v2-page-heading { display: flex; flex: 1 1 28rem; align-items: flex-start; gap: var(--spacing); }
+.seia-v2-page-heading-copy { padding-top: calc(var(--spacing) * 1.5); }
+.seia-v2-page-header .seia-v2-page-back {
+  flex: 0 0 44px; width: 44px; height: 44px; min-height: 44px; padding: 0;
+  background: transparent; border: 0; box-shadow: none; color: var(--color-text-secondary);
+}
+.seia-v2-page-header .seia-v2-page-back:hover { color: var(--color-text-primary); }
+/* O reset global de outline usa !important; o foco desta ação deve continuar visível. */
+.seia-v2-page-header .seia-v2-page-back:focus-visible {
+  outline: 2px solid var(--color-border-focus) !important; outline-offset: -4px; box-shadow: none;
+}
+.seia-v2-page-header h1:focus { outline: none; }
+.seia-v2-page-actions { min-width: 0; }
+.seia-v2-page-actions .fi-btn { white-space: nowrap; }
+/* Mantém ações existentes acessíveis em cabeçalhos COTIC estreitos. */
+.seia-v2-page-actions > div { flex-wrap: wrap; }

@@ -1,0 +1,156 @@
+.cerh-surface { color: var(--color-text-primary); min-width: 0; }
+.cerh-surface > * + * { margin-top: 16px; }
+.cerh-surface .fi-section { overflow: visible; }
+.cerh-surface .fi-section-header { border-radius: 12px 12px 0 0; }
+.cerh-surface .fi-section-header-heading { white-space: normal; }
+.cerh-surface .fi-section-content > * + * { margin-top: 16px; }
+.cerh-field-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: start; }
+.cerh-field { min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.cerh-label { font-size: 12px; font-weight: 600; color: var(--color-text-secondary); }
+.cerh-required, .cerh-error { color: var(--badge-critical-text); }
+.cerh-error { font-size: 12px; }
+.cerh-helper { font-size: 12px; line-height: 1.5; color: var(--color-text-secondary); }
+.cerh-input { display: block; width: 100%; height: 36px; padding: 6px 12px; font-size: 12px; background: transparent; color: var(--color-text-primary); outline: none; border: 0; caret-color: var(--color-text-link); }
+.cerh-input::placeholder { color: var(--color-text-secondary); }
+.cerh-input[readonly] { background: var(--color-surface-subtle); }
+.cerh-textarea { height: auto; min-height: 96px; resize: vertical; }
+.cerh-select .fi-select-trigger { height: 36px; border-radius: 8px; }
+.cerh-select .fi-select-popover { z-index: 40; }
+.cerh-message { padding: 8px 0; font-size: 12px; line-height: 1.6; color: var(--color-text-secondary); }
+.cerh-message.cerh-error { color: var(--badge-critical-text); }
+.cerh-values { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; margin: 0; }
+.cerh-values dt { color: var(--color-text-secondary); font-size: 12px; margin-bottom: 4px; }
+.cerh-values dd { margin: 0; font-size: 12px; overflow-wrap: anywhere; }
+.cerh-multi { width: min(420px, calc(100vw - 32px)); max-height: var(--radix-popover-content-available-height); overflow: auto; background: var(--color-surface-default); border: 1px solid var(--color-border-default); border-radius: 8px; padding: 12px; box-shadow: 0 8px 24px #0002; color: var(--color-text-primary); }
+.cerh-multi-options { max-height: 240px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; margin-top: 12px; padding: 4px; }
+.cerh-dialog { width: calc(100% - 32px); max-height: calc(100dvh - 32px); display: flex; flex-direction: column; padding: 20px; border-radius: 12px; overflow: hidden; }
+.cerh-dialog-body { overflow-y: auto; min-height: 0; padding: 4px; }
+.cerh-dialog-body > * + * { margin-top: 16px; }
+.cerh-dialog .fi-section { overflow: visible; }
+.cerh-dialog fieldset { border: none; margin: 0; padding: 0; }
+.cerh-dialog legend { margin-bottom: 8px; }
+.cerh-surface fieldset { border: none; padding: 0; }
+.cerh-surface .fi-ta-pagination { flex-wrap: wrap; gap: 12px; }
+.cerh-upload { border: 1px dashed var(--color-border-default); border-radius: 8px; padding: 12px; }
+.cerh-upload-drag { border-color: var(--input-border-focus); background: var(--color-brand-primary-subtle); }
+.cerh-surface button:focus-visible, .cerh-dialog button:focus-visible { outline: 2px solid var(--input-border-focus); outline-offset: 2px; }
+.cerh-record-row { cursor: pointer; }
+.cerh-surface .cerh-record-row:focus-visible { outline: 2px solid var(--input-border-focus) !important; outline-offset: -2px; }
+.cerh-surface ::selection, .cerh-dialog ::selection { background: var(--color-green-alpha-20); }
+.cerh-surface .cerh-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.cerh-form { max-width: 1440px; margin-inline: auto; }
+.cerh-form-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; position: sticky; bottom: 0; padding: 12px; background: var(--color-surface-default); border-top: 1px solid var(--color-border-default); z-index: 20; }
+.cerh-empty { padding: 32px 16px; text-align: center; font-size: 12px; color: var(--color-text-secondary); }
+.cerh-empty h3 { color: var(--color-text-primary); font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+.cerh-history { list-style: none; padding: 0; margin: 0; }
+.cerh-history > li { padding-block: 12px; border-bottom: 1px solid var(--color-border-default); }
+.cerh-history > li:first-child { padding-top: 0; }
+.cerh-history pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 11px; margin: 8px 0; }
+.cerh-map { width: 100%; height: 180px; background: var(--color-surface-subtle); border: 1px solid var(--color-border-default); border-radius: 8px; }
+.cerh-certificate { padding: 24px; font-size: 12px; }
+.cerh-certificate h2 { font-size: 20px; margin-bottom: 16px; }
+.cerh-purpose { padding-top: 12px; }
+.cerh-purpose + .cerh-purpose { border-top: 1px solid var(--color-border-default); margin-top: 16px; }
+.cerh-purpose > * + * { margin-top: 12px; }
+.cerh-compare { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+.cerh-surface input:checked + div svg, .cerh-dialog input:checked + div svg, .cerh-multi input:checked + div svg { opacity: 1; }
+.cerh-surface .fi-select-trigger span, .cerh-dialog .fi-select-trigger span { color: var(--color-text-secondary); }
+.cerh-surface [hidden] { display: none !important; }
+.cerh-venture-wizard { overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; touch-action: pan-x pan-y; }
+.cerh-venture-wizard::-webkit-scrollbar { display: none; width: 0; height: 0; }
+.cerh-venture-wizard > li { flex: 1 0 280px; min-width: 280px; }
+.cerh-venture-wizard .fi-sc-wizard-header-step-label { white-space: normal; overflow: visible; text-overflow: clip; }
+.cerh-wizard-navigation { min-width: 0; width: 100%; }
+.cerh-venture-wizard, .cerh-venture-wizard * { cursor: default; }
+.cerh-venture-wizard .fi-sc-wizard-header-step-btn:hover { background-color: transparent; }
+.cerh-venture-wizard[data-dragging="true"], .cerh-venture-wizard[data-dragging="true"] * { user-select: none; }
+@media (max-width: 639px) { .cerh-venture-wizard > li { flex-basis: 260px; min-width: 260px; } }
+.cerh-water-groups { display: grid; gap: 16px; }
+.cerh-water-group + .cerh-water-group { border-top: 1px solid var(--color-border-default); padding-top: 16px; }
+.cerh-water-types { display: flex; flex-wrap: wrap; gap: 16px 24px; margin-top: 12px; }
+@media (max-width: 1023px) { .cerh-field-grid, .cerh-values { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media (max-width: 639px) { .cerh-field-grid, .cerh-values { grid-template-columns: minmax(0,1fr); } .cerh-dialog { padding: 16px; } .cerh-form-footer { position: static; } .cerh-certificate { padding: 12px; } }
+@media (prefers-reduced-motion: reduce) {
+  .cerh-surface *, .cerh-dialog *, .cerh-multi * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+@media print {
+  body:has(.cerh-certificate) #root,
+  body:has(.cerh-certificate) > [data-state]:not([role=dialog]),
+  body:has(.cerh-certificate) [role=dialog]:not(:has(.cerh-certificate)) { display: none !important; }
+  body:has(.cerh-certificate) * { visibility: hidden; }
+  body:has(.cerh-certificate) .cerh-certificate, body:has(.cerh-certificate) .cerh-certificate * { visibility: visible; }
+  body:has(.cerh-certificate) [role=dialog]:has(.cerh-certificate) { --tw-translate-x: 0px !important; --tw-translate-y: 0px !important; transform: none !important; translate: none !important; animation: none !important; transition: none !important; position: static; display: block; width: 100%; max-width: none; max-height: none; overflow: visible; padding: 0; border: 0; box-shadow: none; background: white; color: black; }
+  body:has(.cerh-certificate) [role=dialog]:has(.cerh-certificate) > :not(.cerh-dialog-body) { display: none !important; }
+  body:has(.cerh-certificate) .cerh-dialog-body { overflow: visible; }
+  .cerh-certificate { position: static; background: white; color: black; }
+  .cerh-certificate .fi-section { break-inside: avoid; box-shadow: none; }
+  .cerh-certificate .fi-section-header-heading, .cerh-certificate dt, .cerh-certificate dd { color: black; }
+}
+
+.cerh-sort { display:inline-flex; align-items:center; gap:8px; cursor:pointer; }
+.cerh-report-page { background:var(--color-surface-default); color:var(--color-text-primary); padding:28px; margin:0 auto 20px; border:1px solid var(--color-border-default); max-width:900px; }
+.cerh-report-page header { display:flex; align-items:center; gap:24px; border-bottom:2px solid var(--color-brand-primary); padding-bottom:16px; margin-bottom:20px; }
+.cerh-report-page header img { width:100px; height:auto; }
+.cerh-report-page header h2 { font-size:18px; font-weight:600; }
+.cerh-report-page p { font-size:12px; margin:10px 0; }
+.cerh-report-page footer { display:flex; gap:20px; justify-content:space-between; margin-top:24px; padding-top:12px; border-top:1px solid var(--color-border-default); font-size:10px; }
+.cerh-report-page table { table-layout:auto; }
+.cerh-report-page td, .cerh-report-page th { overflow-wrap:break-word; white-space:normal; }
+@media(max-width:639px) { .cerh-report-page { padding:12px; } .cerh-report-page header { flex-wrap:wrap; gap:12px; } .cerh-report-page footer { flex-wrap:wrap; } }
+@media print { body:has(.cerh-print-document) #root { display:none!important; } body:has(.cerh-print-document) [role=dialog] { display:none!important; } body:has(.cerh-print-document) [role=dialog]:has(.cerh-print-document) { display:block!important; position:static!important; transform:none!important; max-height:none!important; max-width:none!important; width:100%!important; overflow:visible!important; box-shadow:none!important; border:0!important; } body:has(.cerh-print-document) [role=dialog] > :not(.cerh-dialog-body) { display:none!important; } body:has(.cerh-print-document) .cerh-dialog-body { overflow:visible!important; } .cerh-report-page { break-after:page; border:0; margin:0; max-width:none; padding:15mm; } .cerh-report-page:last-child { break-after:auto; } }
+
+.cerh-demo-context { font-size:12px; color:var(--color-text-secondary); border-bottom:1px solid var(--color-border-default); padding:8px 0 12px; }
+.cerh-demo-context summary { cursor:pointer; }
+.cerh-permission-card { padding:16px!important; border:1px solid var(--color-border-default)!important; border-radius:8px; }
+.cerh-instrument-picker { display:grid; grid-template-columns:1fr 1.5fr auto; gap:16px; align-items:end; }
+.cerh-instrument-card { padding:16px; border:1px solid var(--color-border-default); border-radius:8px; }
+.cerh-instrument-card > * + * { margin-top:16px; }
+.cerh-instrument-card .cerh-values { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.cerh-instrument-ended { background:var(--color-surface-subtle); }
+.cerh-instrument-warning { padding:12px; border-radius:8px; background:var(--badge-warning-bg); color:var(--badge-warning-text); font-size:12px; }
+@media(max-width:767px) { .cerh-instrument-picker { grid-template-columns:1fr; } }
+
+.cerh-certificate-document { background:var(--color-surface-subtle); padding:16px; }
+.cerh-certificate-page { background:white; color:#17212b; width:100%; max-width:794px; min-height:1040px; padding:48px; margin:0 auto 24px; border:1px solid var(--color-border-default); display:flex; flex-direction:column; gap:20px; }
+.cerh-certificate-page header { display:flex; gap:24px; border-bottom:2px solid var(--color-brand-primary); padding-bottom:16px; }
+.cerh-certificate-page header img { width:90px; object-fit:contain; align-self:flex-start; }
+.cerh-certificate-page h2 { font-size:15px; line-height:1.5; margin-bottom:8px; }
+.cerh-certificate-page header p { font-size:10px; line-height:1.6; }
+.cerh-certificate-page h3 { font-size:13px; font-weight:600; border-bottom:1px solid #cbd5e1; padding-bottom:6px; margin-bottom:12px; }
+.cerh-certificate-page .cerh-values { grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px 24px; }
+.cerh-certificate-page .cerh-values dt { color:#475569; font-size:10px; }
+.cerh-certificate-page .cerh-values dd { color:#17212b; font-size:11px; line-height:1.6; }
+.cerh-certificate-page footer { margin-top:auto; border-top:1px solid #cbd5e1; padding-top:12px; display:flex; justify-content:space-between; gap:12px; font-size:9px; }
+.cerh-sort-button { display:inline-flex; align-items:center; gap:8px; cursor:pointer; }
+@media(max-width:639px) { .cerh-certificate-document { padding:0; } .cerh-certificate-page { min-height:0; padding:16px; } .cerh-certificate-page header { flex-direction:column; gap:12px; } .cerh-certificate-page .cerh-values { grid-template-columns:1fr; } .cerh-certificate-page footer { flex-wrap:wrap; } }
+@page cerh-certificate { size:A4; margin:0; }
+@media print { .cerh-certificate-document { padding:0; background:white; } .cerh-certificate-page { page:cerh-certificate; width:210mm; max-width:none; min-height:297mm; box-sizing:border-box; margin:0; padding:18mm; border:0; break-after:page; } .cerh-certificate-page:last-child { break-after:auto; } .cerh-certificate-page .cerh-values { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+
+.cerh-instrument-editor .cerh-field-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+@media(max-width:639px) { .cerh-instrument-editor .cerh-field-grid { grid-template-columns:1fr; } }
+
+.cerh-surface .fi-section-header button, .cerh-dialog .fi-section-header button { color:var(--color-text-secondary); }
+
+@page cerh-report { size:A4 portrait; margin:0; }
+@page cerh-report-wide { size:A4 landscape; margin:0; }
+@media print { .cerh-report-page { page:cerh-report; } .cerh-report-wide { page:cerh-report-wide; } .cerh-report-table, .cerh-report-table > div { overflow:visible!important; border:0; box-shadow:none; } .cerh-report-page table { min-width:0!important; width:100%; table-layout:fixed; } }
+@media print {
+  body:has(.cerh-report-page) > [data-state]:not([role=dialog]) { display:none!important; }
+  body:has(.cerh-report-page) [role=dialog]:has(.cerh-report-page) { left:auto!important; top:auto!important; translate:none!important; animation:none!important; transition:none!important; height:auto!important; min-height:0!important; margin:0!important; padding:0!important; background:white!important; }
+  body:has(.cerh-report-page) .cerh-dialog-body { height:auto!important; max-height:none!important; overflow:visible!important; padding:0!important; }
+  .cerh-report-page { padding:0!important; }
+  .cerh-report-table, .cerh-report-table > div { display:block!important; background:white!important; }
+  .cerh-report-page footer { display:none; }
+}
+@page cerh-report {
+  margin:15mm;
+  @top-left { content:"DEMONSTRAÇÃO — SEM VALIDADE LEGAL"; font:bold 8pt Arial,sans-serif; }
+  @bottom-left { content:"Sistema SEIA / INEMA - Documento gerado eletronicamente para fins de conferência e arquivo."; font:7pt Arial,sans-serif; }
+  @bottom-right { content:"Página " counter(page) " de " counter(pages); font:7pt Arial,sans-serif; }
+}
+@page cerh-report-wide {
+  margin:15mm;
+  @top-left { content:"DEMONSTRAÇÃO — SEM VALIDADE LEGAL"; font:bold 8pt Arial,sans-serif; }
+  @bottom-left { content:"Sistema SEIA / INEMA - Documento gerado eletronicamente para fins de conferência e arquivo."; font:7pt Arial,sans-serif; }
+  @bottom-right { content:"Página " counter(page) " de " counter(pages); font:7pt Arial,sans-serif; }
+}

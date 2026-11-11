@@ -20,13 +20,20 @@ import {
   ShieldAlert,
   ShieldCheck,
   ExternalLink,
-  MapPin
+  MapPin,
+  ChevronDown
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { InputWrapper } from '@/components/filament/InputWrapper';
-import { FilamentSelect } from '@/components/filament/Select';
-import { TableContainer, TableToolbar, TablePagination } from '@/components/filament/Table';
+import { SeiaV2PageHeader } from '@/components/seia-v2/SeiaV2PageHeader';
+import {
+  GlaTableContainer,
+  GlaTable,
+  GlaTableHead,
+  GlaTh,
+  GlaPagination
+} from '@/components/common/GlaTable';
 import { AsasItem, CategoriaAsas, SituacaoAsas } from '@/types/faunaR3R4';
 import {
   getAsasList,
@@ -178,7 +185,7 @@ export const AsasListPage: React.FC<AsasListPageProps> = ({
   };
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-12" data-testid="pagina-asas-listagem">
+    <div className="space-y-6 w-full pb-12" data-testid="pagina-asas-listagem">
       {/* Toast Notificação */}
       {toastMsg && (
         <div
@@ -201,407 +208,376 @@ export const AsasListPage: React.FC<AsasListPageProps> = ({
       )}
 
       {/* Header Institucional da Tela */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-4">
-        <div>
-          <div className="flex items-center gap-2 text-xs text-slate-500 mb-1">
-            <span>Início</span>
-            <span>›</span>
-            <span>Gestão de Fauna Silvestre</span>
-            <span>›</span>
-            <span className="font-semibold text-slate-800 dark:text-slate-200">
-              Áreas de Soltura de Animais Silvestres (ASAS)
-            </span>
-          </div>
-          <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
-            Cadastro e Análise de ASAS (DR009)
-          </h1>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Gestão de propriedades rurais cadastradas para soltura, aclimatação e readaptação de fauna silvestre
-          </p>
-        </div>
-
-        {/* Seletor de Perfil Demonstrativo & CTAs */}
-        <div className="flex flex-wrap items-center gap-2.5">
-          {/* Seletor de Perfil (Para validação de RBAC RN-001 / RN-037) */}
-          <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl border border-slate-200 dark:border-slate-700 text-xs">
-            <span className="text-[11px] font-medium text-slate-500 pl-1.5 flex items-center gap-1">
-              <UserCheck className="w-3.5 h-3.5 text-[#0F4C3A]" /> Perfil:
-            </span>
-            <select
-              value={perfilAtivo}
-              onChange={(e) => onTrocarPerfil(e.target.value as PerfilDemonstrativoFauna)}
-              data-testid="seletor-perfil-asas"
-              className="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 text-xs rounded-lg px-2 py-1 font-semibold border-none focus:ring-1 focus:ring-emerald-600 cursor-pointer"
-            >
-              <option value="cgfau">Coordenador CGFAU</option>
-              <option value="tecnico">Técnico de Fauna (INEMA)</option>
-              <option value="requerente">Requerente (Portal Externo)</option>
-            </select>
-          </div>
-
-          {/* Botão Cadastrar ASAS Existente (RN-037: Exclusivo CGFAU) */}
-          {perfilAtivo === 'cgfau' && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => onAbrirRequerimento(undefined, 'existente')}
-              data-testid="btn-cadastrar-asas-existente"
-              className="text-xs gap-1.5 h-9 border-emerald-700 text-[#0F4C3A] hover:bg-emerald-50 dark:hover:bg-emerald-950/40"
-            >
-              <Building className="w-3.5 h-3.5" />
-              <span>Cadastrar ASAS Existente</span>
-            </Button>
-          )}
-
-          {/* Botão Novo Requerimento */}
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={() => onAbrirRequerimento(undefined, 'novo')}
-            data-testid="btn-novo-requerimento-asas"
-            className="text-xs gap-1.5 h-9 bg-[#0F4C3A] hover:bg-[#0c3c2e] text-white shadow-xs"
-          >
-            <Plus className="w-4 h-4" />
-            <span>Novo Requerimento</span>
-          </Button>
-        </div>
-      </div>
-
-      {/* Toolbar Canônica de Busca e Filtros */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs p-4 space-y-3">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-          <div className="flex-1 relative">
-            <input
-              type="text"
-              placeholder="Buscar por número ASAS, nome do imóvel, proprietário ou município..."
-              value={busca}
-              onChange={(e) => {
-                setBusca(e.target.value);
-                setPagina(1);
-              }}
-              data-testid="input-busca-asas"
-              className="w-full h-9 pl-9 pr-4 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A] transition-all"
-            />
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setDrawerFiltrosAberto((prev) => !prev)}
-              data-testid="btn-abrir-drawer-filtros"
-              className={`text-xs gap-1.5 h-9 ${
-                filtroSituacao !== 'todas' || filtroCategoria !== 'todas' || filtroUr !== 'todas'
-                  ? 'border-emerald-600 text-[#0F4C3A] bg-emerald-50/50'
-                  : ''
-              }`}
-            >
-              <Filter className="w-3.5 h-3.5" />
-              <span>Filtros Avançados</span>
-              {(filtroSituacao !== 'todas' || filtroCategoria !== 'todas' || filtroUr !== 'todas') && (
-                <span className="w-2 h-2 rounded-full bg-emerald-600" />
-              )}
-            </Button>
-
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleExportarCsv}
-              data-testid="btn-exportar-planilha-asas"
-              className="text-xs gap-1.5 h-9"
-            >
-              <Download className="w-3.5 h-3.5" />
-              <span>Exportar</span>
-            </Button>
-
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                resetFaunaR3R4ToSeed();
-                showToast('info', 'Cenário demonstrativo reiniciado com dados originais.');
-              }}
-              title="Reiniciar dados do cenário demonstrativo"
-              className="text-xs h-9 text-slate-500 hover:text-slate-800"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-            </Button>
-          </div>
-        </div>
-
-        {/* Drawer / Painel Recolhível de Filtros Avançados */}
-        {drawerFiltrosAberto && (
-          <div
-            data-testid="drawer-filtros-avancados-asas"
-            className="pt-3 border-t border-slate-100 dark:border-slate-800 grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs"
-          >
-            <div>
-              <label className="block text-[11px] font-medium text-slate-600 mb-1">Situação</label>
+      <SeiaV2PageHeader
+        title="Áreas de Soltura de Animais Silvestres (ASAS)"
+        subtitle="Gestão de propriedades rurais cadastradas para soltura, aclimatação e readaptação de fauna silvestre"
+        actions={
+          <div className="flex flex-wrap items-center gap-2.5">
+            {/* Seletor de Perfil (Para validação de RBAC RN-001 / RN-037) */}
+            <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-800/80 px-2 py-1 rounded-lg border border-slate-200 dark:border-slate-700 text-xs">
+              <UserCheck className="w-3.5 h-3.5 text-[#0F4C3A]" />
+              <span className="text-[11px] font-medium text-slate-500">Perfil:</span>
               <select
-                value={filtroSituacao}
-                onChange={(e) => {
-                  setFiltroSituacao(e.target.value);
-                  setPagina(1);
-                }}
-                className="w-full h-8 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2"
+                value={perfilAtivo}
+                onChange={(e) => onTrocarPerfil(e.target.value as PerfilDemonstrativoFauna)}
+                data-testid="seletor-perfil-asas"
+                className="bg-transparent text-slate-800 dark:text-slate-100 text-xs font-semibold focus:outline-none cursor-pointer"
               >
-                <option value="todas">Todas as situações</option>
-                <option value="Ativa">Ativa</option>
-                <option value="Certificado vencido">Certificado vencido</option>
-                <option value="Suspensa">Suspensa</option>
-                <option value="Aguardando termo">Aguardando termo</option>
-                <option value="Em análise">Em análise</option>
-                <option value="Em complementação">Em complementação</option>
-                <option value="Indeferida">Indeferida</option>
-                <option value="Desativada">Desativada</option>
+                <option value="cgfau">Coordenador CGFAU</option>
+                <option value="tecnico">Técnico de Fauna (INEMA)</option>
+                <option value="requerente">Requerente (Portal Externo)</option>
               </select>
             </div>
 
-            <div>
-              <label className="block text-[11px] font-medium text-slate-600 mb-1">Categoria</label>
-              <select
-                value={filtroCategoria}
-                onChange={(e) => {
-                  setFiltroCategoria(e.target.value);
-                  setPagina(1);
-                }}
-                className="w-full h-8 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2"
-              >
-                <option value="todas">Todas as categorias</option>
-                <option value="Categoria I">Categoria I (Soltura imediata)</option>
-                <option value="Categoria II">Categoria II (Aclimatação)</option>
-                <option value="Categoria III">Categoria III (Readaptação)</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-[11px] font-medium text-slate-600 mb-1">Unidade Regional (UR)</label>
-              <select
-                value={filtroUr}
-                onChange={(e) => {
-                  setFiltroUr(e.target.value);
-                  setPagina(1);
-                }}
-                className="w-full h-8 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2"
-              >
-                <option value="todas">Todas as URs</option>
-                <option value="URCH">URCH (Chapada Diamantina)</option>
-                <option value="URES">URES (Litoral Leste)</option>
-                <option value="UROE">UROE (Oeste)</option>
-                <option value="URPD">URPD (Paraguaçu-Delta)</option>
-                <option value="URPS">URPS (Porto Seguro)</option>
-                <option value="URRC">URRC (Rio de Contas)</option>
-                <option value="URSF">URSF (São Francisco)</option>
-                <option value="URSO">URSO (Sudoeste)</option>
-                <option value="URSU">URSU (Sul)</option>
-              </select>
-            </div>
-
-            <div className="flex items-end gap-2">
+            {/* Botão Cadastrar ASAS Existente (RN-037: Exclusivo CGFAU) */}
+            {perfilAtivo === 'cgfau' && (
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => {
-                  setFiltroSituacao('todas');
-                  setFiltroCategoria('todas');
-                  setFiltroUr('todas');
-                  setBusca('');
-                  setPagina(1);
-                }}
-                className="w-full h-8 text-[11px]"
+                onClick={() => onAbrirRequerimento(undefined, 'existente')}
+                data-testid="btn-cadastrar-asas-existente"
+                className="text-xs gap-1.5 h-9 border-emerald-700 text-[#0F4C3A] hover:bg-emerald-50 dark:hover:bg-emerald-950/40"
               >
-                Limpar Filtros
+                <Building className="w-3.5 h-3.5" />
+                <span>Cadastrar ASAS Existente</span>
               </Button>
-            </div>
-          </div>
-        )}
-      </div>
+            )}
 
-      {/* Tabela de ASAS Canônica */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
-            <thead>
-              <tr className="bg-slate-50/75 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800 text-slate-500 font-semibold select-none">
-                <th className="py-3 px-4">Número ASAS</th>
-                <th className="py-3 px-4">Propriedade / Imóvel</th>
-                <th className="py-3 px-4">Requerente</th>
-                <th className="py-3 px-4">Categoria</th>
-                <th className="py-3 px-4">Município / UR</th>
-                <th className="py-3 px-4">Situação</th>
-                <th className="py-3 px-4">Validade Certificado</th>
-                <th className="py-3 px-4 text-right">Ações</th>
+            {/* Botão Novo Requerimento */}
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={() => onAbrirRequerimento(undefined, 'novo')}
+              data-testid="btn-novo-requerimento-asas"
+              className="text-xs gap-1.5 h-9 bg-[#0F4C3A] hover:bg-[#0c3c2e] text-white shadow-xs"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Novo Requerimento</span>
+            </Button>
+          </div>
+        }
+      />
+
+      {/* Tabela de ASAS Canônica com Toolbar e Paginação GLA */}
+      <GlaTableContainer
+        heading="Áreas de Soltura Cadastradas"
+        description="Relação de propriedades cadastradas, analisadas e homologadas para soltura de fauna"
+        toolbar={
+          <div className="p-4 border-b border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-3">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+              <div className="flex-1 relative">
+                <input
+                  type="text"
+                  placeholder="Buscar por número ASAS, nome do imóvel, proprietário ou município..."
+                  value={busca}
+                  onChange={(e) => {
+                    setBusca(e.target.value);
+                    setPagina(1);
+                  }}
+                  data-testid="input-busca-asas"
+                  className="w-full h-9 pl-9 pr-4 text-xs sm:text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0F4C3A]/20 focus:border-[#0F4C3A] transition-all"
+                />
+                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setDrawerFiltrosAberto((prev) => !prev)}
+                  data-testid="btn-abrir-drawer-filtros"
+                  className={`text-xs gap-1.5 h-9 ${
+                    filtroSituacao !== 'todas' || filtroCategoria !== 'todas' || filtroUr !== 'todas'
+                      ? 'border-emerald-600 text-[#0F4C3A] bg-emerald-50/50'
+                      : ''
+                  }`}
+                >
+                  <Filter className="w-3.5 h-3.5" />
+                  <span>Filtros Avançados</span>
+                  {(filtroSituacao !== 'todas' || filtroCategoria !== 'todas' || filtroUr !== 'todas') && (
+                    <span className="w-2 h-2 rounded-full bg-emerald-600" />
+                  )}
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportarCsv}
+                  data-testid="btn-exportar-planilha-asas"
+                  className="text-xs gap-1.5 h-9"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Exportar</span>
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    resetFaunaR3R4ToSeed();
+                    showToast('info', 'Cenário demonstrativo reiniciado com dados originais.');
+                  }}
+                  title="Reiniciar dados do cenário demonstrativo"
+                  className="text-xs h-9 text-slate-500 hover:text-slate-800"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                </Button>
+              </div>
+            </div>
+
+            {/* Drawer / Painel Recolhível de Filtros Avançados */}
+            {drawerFiltrosAberto && (
+              <div
+                data-testid="drawer-filtros-avancados-asas"
+                className="pt-3 border-t border-slate-100 dark:border-slate-800 grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs"
+              >
+                <div>
+                  <label className="block text-[11px] font-medium text-slate-600 dark:text-slate-300 mb-1">Situação</label>
+                  <InputWrapper suffixIcon={ChevronDown}>
+                    <select
+                      value={filtroSituacao}
+                      onChange={(e) => {
+                        setFiltroSituacao(e.target.value);
+                        setPagina(1);
+                      }}
+                      className="w-full h-8 text-xs bg-transparent border-none appearance-none px-2 pr-6 focus:outline-none cursor-pointer"
+                    >
+                      <option value="todas">Todas as situações</option>
+                      <option value="Ativa">Ativa</option>
+                      <option value="Certificado vencido">Certificado vencido</option>
+                      <option value="Suspensa">Suspensa</option>
+                      <option value="Aguardando termo">Aguardando termo</option>
+                      <option value="Em análise">Em análise</option>
+                      <option value="Em complementação">Em complementação</option>
+                      <option value="Indeferida">Indeferida</option>
+                      <option value="Desativada">Desativada</option>
+                    </select>
+                  </InputWrapper>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-medium text-slate-600 dark:text-slate-300 mb-1">Categoria</label>
+                  <InputWrapper suffixIcon={ChevronDown}>
+                    <select
+                      value={filtroCategoria}
+                      onChange={(e) => {
+                        setFiltroCategoria(e.target.value);
+                        setPagina(1);
+                      }}
+                      className="w-full h-8 text-xs bg-transparent border-none appearance-none px-2 pr-6 focus:outline-none cursor-pointer"
+                    >
+                      <option value="todas">Todas as categorias</option>
+                      <option value="Categoria I">Categoria I (Soltura imediata)</option>
+                      <option value="Categoria II">Categoria II (Aclimatação)</option>
+                      <option value="Categoria III">Categoria III (Readaptação)</option>
+                    </select>
+                  </InputWrapper>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-medium text-slate-600 dark:text-slate-300 mb-1">Unidade Regional (UR)</label>
+                  <InputWrapper suffixIcon={ChevronDown}>
+                    <select
+                      value={filtroUr}
+                      onChange={(e) => {
+                        setFiltroUr(e.target.value);
+                        setPagina(1);
+                      }}
+                      className="w-full h-8 text-xs bg-transparent border-none appearance-none px-2 pr-6 focus:outline-none cursor-pointer"
+                    >
+                      <option value="todas">Todas as URs</option>
+                      <option value="URCH">URCH (Chapada Diamantina)</option>
+                      <option value="URES">URES (Litoral Leste)</option>
+                      <option value="UROE">UROE (Oeste)</option>
+                      <option value="URPD">URPD (Paraguaçu-Delta)</option>
+                      <option value="URPS">URPS (Porto Seguro)</option>
+                      <option value="URRC">URRC (Rio de Contas)</option>
+                      <option value="URSF">URSF (São Francisco)</option>
+                      <option value="URSO">URSO (Sudoeste)</option>
+                      <option value="URSU">URSU (Sul)</option>
+                    </select>
+                  </InputWrapper>
+                </div>
+
+                <div className="flex items-end gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setFiltroSituacao('todas');
+                      setFiltroCategoria('todas');
+                      setFiltroUr('todas');
+                      setBusca('');
+                      setPagina(1);
+                    }}
+                    className="w-full h-8 text-[11px]"
+                  >
+                    Limpar Filtros
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+        }
+        pagination={
+          <GlaPagination
+            startIndex={(pagina - 1) * porPagina + 1}
+            currentCount={Math.min(pagina * porPagina, totalItens)}
+            totalCount={totalItens}
+            page={pagina}
+            totalPages={totalPaginas}
+            onPageChange={(p) => setPagina(p)}
+            entityName="áreas de soltura"
+          />
+        }
+      >
+        <GlaTable>
+          <GlaTableHead>
+            <tr>
+              <GlaTh>Número ASAS</GlaTh>
+              <GlaTh>Propriedade / Imóvel</GlaTh>
+              <GlaTh>Requerente</GlaTh>
+              <GlaTh>Categoria</GlaTh>
+              <GlaTh>Município / UR</GlaTh>
+              <GlaTh>Situação</GlaTh>
+              <GlaTh>Validade Certificado</GlaTh>
+              <GlaTh align="right">Ações</GlaTh>
+            </tr>
+          </GlaTableHead>
+          <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+            {itensPaginados.length === 0 ? (
+              <tr>
+                <td colSpan={8} className="py-12 text-center text-slate-400">
+                  <p className="text-sm font-medium">Nenhuma área de soltura encontrada.</p>
+                  <p className="text-xs mt-1">Tente ajustar os termos de busca ou filtros aplicados.</p>
+                </td>
               </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-              {itensPaginados.length === 0 ? (
-                <tr>
-                  <td colSpan={8} className="py-12 text-center text-slate-400">
-                    <p className="text-sm font-medium">Nenhuma área de soltura encontrada.</p>
-                    <p className="text-xs mt-1">Tente ajustar os termos de busca ou filtros aplicados.</p>
+            ) : (
+              itensPaginados.map((item) => (
+                <tr
+                  key={item.id}
+                  data-testid={`linha-asas-${item.id}`}
+                  className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors"
+                >
+                  <td className="py-3 px-3.5 font-mono font-bold text-slate-800 dark:text-slate-100 whitespace-nowrap">
+                    {item.numero}
+                    {item.processoSei && (
+                      <span className="block text-[10px] font-normal text-slate-400">
+                        SEI: {item.processoSei}
+                      </span>
+                    )}
+                  </td>
+                  <td className="py-3 px-3.5">
+                    <span className="font-semibold text-slate-800 dark:text-slate-200 block">
+                      {item.propriedade.nome}
+                    </span>
+                    <span className="text-[11px] text-slate-500">
+                      {item.delimitacao?.areaHa ? `${item.delimitacao.areaHa} ha` : 'Sem polígono'} ·{' '}
+                      {item.propriedade.bioma}
+                    </span>
+                  </td>
+                  <td className="py-3 px-3.5">
+                    <span className="text-slate-800 dark:text-slate-200 block">
+                      {item.requerente.nomeOuRazaoSocial}
+                    </span>
+                    <span className="font-mono text-[10px] text-slate-400">
+                      {item.requerente.cpfCnpj}
+                    </span>
+                  </td>
+                  <td className="py-3 px-3.5 whitespace-nowrap">
+                    <Badge variant="outline" className="text-[10px]">
+                      {item.categoria}
+                    </Badge>
+                  </td>
+                  <td className="py-3 px-3.5 whitespace-nowrap">
+                    <span className="text-slate-700 dark:text-slate-300 block">
+                      {item.propriedade.municipio}
+                    </span>
+                    <span className="text-[10px] text-slate-400 font-mono">{item.propriedade.ur}</span>
+                  </td>
+                  <td className="py-3 px-3.5 whitespace-nowrap">{getSituacaoBadge(item.situacao)}</td>
+                  <td className="py-3 px-3.5 font-mono text-slate-600 dark:text-slate-300 whitespace-nowrap">
+                    {item.dataValidadeCertificado ? (
+                      <span
+                        className={
+                          item.situacao === 'Certificado vencido' ? 'text-rose-600 font-bold' : ''
+                        }
+                      >
+                        {item.dataValidadeCertificado}
+                      </span>
+                    ) : (
+                      <span className="text-slate-400">-</span>
+                    )}
+                  </td>
+                  <td className="py-3 px-3.5 text-right whitespace-nowrap">
+                    <div className="flex items-center justify-end gap-1.5">
+                      {/* Ação Principal: Visualizar Requerimento */}
+                      <button
+                        onClick={() => onAbrirRequerimento(item.id, 'ver')}
+                        data-testid={`btn-ver-asas-${item.id}`}
+                        className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 shadow-2xs transition-colors cursor-pointer"
+                        title="Visualizar Detalhes do Requerimento"
+                      >
+                        <Eye className="w-3.5 h-3.5 text-[#0F4C3A]" />
+                        <span className="hidden sm:inline">Ver Ficha</span>
+                      </button>
+
+                      {/* Ações Secundárias Administrativas */}
+                      {perfilAtivo !== 'requerente' && (
+                        <button
+                          onClick={() => onAbrirRequerimento(item.id, 'editar')}
+                          data-testid={`btn-editar-asas-${item.id}`}
+                          className="p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 hover:text-emerald-700 transition-colors cursor-pointer"
+                          title="Editar Dados Cadastrais / Justificar Alteração"
+                        >
+                          <Edit className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+
+                      {perfilAtivo !== 'requerente' && (
+                        <button
+                          onClick={() => onAbrirVistoria(item.id)}
+                          data-testid={`btn-vistoria-asas-${item.id}`}
+                          className="p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 hover:text-sky-700 transition-colors cursor-pointer"
+                          title="Registro de Vistoria Oficial (F-TEC-133)"
+                        >
+                          <ClipboardCheck className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+
+                      {perfilAtivo === 'cgfau' && (
+                        <button
+                          onClick={() => onAbrirDecisao(item.id)}
+                          data-testid={`btn-decisao-asas-${item.id}`}
+                          className="p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 hover:text-amber-700 transition-colors cursor-pointer"
+                          title="Decisão, Emissão de Certificado e Situação"
+                        >
+                          <Award className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+
+                      {item.dataEmissaoCertificado && (
+                        <button
+                          onClick={() => {
+                            setAsasSelecionadaDoc(item);
+                            setTipoDocModal('DR009-DOC001');
+                            setModalDocAberto(true);
+                          }}
+                          data-testid={`btn-doc-a4-asas-${item.id}`}
+                          className="p-1 rounded-md hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-emerald-800 dark:text-emerald-400 transition-colors cursor-pointer"
+                          title="Visualizar Certificado A4 Oficial"
+                        >
+                          <FileText className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
-              ) : (
-                itensPaginados.map((item) => (
-                  <tr
-                    key={item.id}
-                    data-testid={`linha-asas-${item.id}`}
-                    className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors"
-                  >
-                    <td className="py-3.5 px-4 font-mono font-bold text-slate-800 dark:text-slate-100">
-                      {item.numero}
-                      {item.processoSei && (
-                        <span className="block text-[10px] font-normal text-slate-400">
-                          SEI: {item.processoSei}
-                        </span>
-                      )}
-                    </td>
-                    <td className="py-3.5 px-4">
-                      <span className="font-semibold text-slate-800 dark:text-slate-200 block">
-                        {item.propriedade.nome}
-                      </span>
-                      <span className="text-[11px] text-slate-500">
-                        {item.delimitacao?.areaHa ? `${item.delimitacao.areaHa} ha` : 'Sem polígono'} ·{' '}
-                        {item.propriedade.bioma}
-                      </span>
-                    </td>
-                    <td className="py-3.5 px-4">
-                      <span className="text-slate-800 dark:text-slate-200 block">
-                        {item.requerente.nomeOuRazaoSocial}
-                      </span>
-                      <span className="font-mono text-[10px] text-slate-400">
-                        {item.requerente.cpfCnpj}
-                      </span>
-                    </td>
-                    <td className="py-3.5 px-4">
-                      <Badge variant="outline" className="text-[10px]">
-                        {item.categoria}
-                      </Badge>
-                    </td>
-                    <td className="py-3.5 px-4">
-                      <span className="text-slate-700 dark:text-slate-300 block">
-                        {item.propriedade.municipio}
-                      </span>
-                      <span className="text-[10px] text-slate-400 font-mono">{item.propriedade.ur}</span>
-                    </td>
-                    <td className="py-3.5 px-4">{getSituacaoBadge(item.situacao)}</td>
-                    <td className="py-3.5 px-4 font-mono text-slate-600 dark:text-slate-300">
-                      {item.dataValidadeCertificado ? (
-                        <span
-                          className={
-                            item.situacao === 'Certificado vencido' ? 'text-rose-600 font-bold' : ''
-                          }
-                        >
-                          {item.dataValidadeCertificado}
-                        </span>
-                      ) : (
-                        <span className="text-slate-400">-</span>
-                      )}
-                    </td>
-                    <td className="py-3.5 px-4 text-right">
-                      <div className="flex items-center justify-end gap-1">
-                        {/* Ação: Visualizar Requerimento */}
-                        <button
-                          onClick={() => onAbrirRequerimento(item.id, 'ver')}
-                          data-testid={`btn-ver-asas-${item.id}`}
-                          className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-[#0F4C3A] cursor-pointer"
-                          title="Visualizar Detalhes do Requerimento"
-                        >
-                          <Eye className="w-4 h-4" />
-                        </button>
-
-                        {/* Ação: Editar (somente se permitido) */}
-                        {perfilAtivo !== 'requerente' && (
-                          <button
-                            onClick={() => onAbrirRequerimento(item.id, 'editar')}
-                            data-testid={`btn-editar-asas-${item.id}`}
-                            className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-emerald-700 cursor-pointer"
-                            title="Editar Dados Cadastrais / Justificar Alteração"
-                          >
-                            <Edit className="w-4 h-4" />
-                          </button>
-                        )}
-
-                        {/* Ação: Vistoria F-TEC-133 */}
-                        {perfilAtivo !== 'requerente' && (
-                          <button
-                            onClick={() => onAbrirVistoria(item.id)}
-                            data-testid={`btn-vistoria-asas-${item.id}`}
-                            className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-blue-600 cursor-pointer"
-                            title="Registro de Vistoria Oficial (F-TEC-133)"
-                          >
-                            <ClipboardCheck className="w-4 h-4" />
-                          </button>
-                        )}
-
-                        {/* Ação: Decisão / Certificado / Situação */}
-                        {perfilAtivo === 'cgfau' && (
-                          <button
-                            onClick={() => onAbrirDecisao(item.id)}
-                            data-testid={`btn-decisao-asas-${item.id}`}
-                            className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-amber-600 cursor-pointer"
-                            title="Decisão, Emissão de Certificado e Situação"
-                          >
-                            <Award className="w-4 h-4" />
-                          </button>
-                        )}
-
-                        {/* Ver Documento A4 se tiver Certificado */}
-                        {item.dataEmissaoCertificado && (
-                          <button
-                            onClick={() => {
-                              setAsasSelecionadaDoc(item);
-                              setTipoDocModal('DR009-DOC001');
-                              setModalDocAberto(true);
-                            }}
-                            data-testid={`btn-doc-a4-asas-${item.id}`}
-                            className="p-1.5 rounded-lg hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-emerald-800 dark:text-emerald-400 cursor-pointer"
-                            title="Visualizar Certificado A4 Oficial"
-                          >
-                            <FileText className="w-4 h-4" />
-                          </button>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Rodapé e Paginação Canônica */}
-        <div className="px-4 py-3 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs text-slate-500">
-          <div>
-            Exibindo <strong>{itensPaginados.length}</strong> de <strong>{totalItens}</strong> áreas de soltura
-            cadastradas
-          </div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={pagina <= 1}
-              onClick={() => setPagina((p) => Math.max(1, p - 1))}
-              className="text-xs h-8"
-            >
-              Anterior
-            </Button>
-            <span className="font-mono px-2">
-              Página {pagina} de {totalPaginas}
-            </span>
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={pagina >= totalPaginas}
-              onClick={() => setPagina((p) => Math.min(totalPaginas, p + 1))}
-              className="text-xs h-8"
-            >
-              Próxima
-            </Button>
-          </div>
-        </div>
-      </div>
+              ))
+            )}
+          </tbody>
+        </GlaTable>
+      </GlaTableContainer>
 
       {/* Modal Visualizador A4 de Documentos */}
       {modalDocAberto && asasSelecionadaDoc && (

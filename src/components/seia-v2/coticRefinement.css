@@ -1,0 +1,42 @@
+/* Ajustes delimitados às superfícies corrigidas da COTIC; não afeta V1 ou CERH. */
+.cotic-refinement { min-width: 0; }
+.cotic-refinement :is(label, input, textarea, select, th, td),
+.cotic-drawer :is(label, input, textarea, select) { font-size: 0.875rem; }
+.cotic-refinement .fi-select-option { font-size: 0.875rem; }
+.cotic-refinement .fi-badge,
+.cotic-drawer .fi-badge { font-size: 0.75rem; }
+.cotic-refinement :is(input, textarea)::placeholder,
+.cotic-drawer :is(input, textarea)::placeholder { color: var(--color-text-secondary); opacity: 1; }
+.cotic-refinement [role="alert"] { scroll-margin-top: 100px; }
+.cotic-refinement [aria-invalid="true"] { border-color: var(--badge-critical-text, #be123c); }
+.cotic-drawer :is(input, select, textarea) { min-width: 0; }
+/* Scoped to COTIC consumers: V1, CERH technical forms and legacy modules retain their contracts. */
+[data-cotic-surface] :is(label, input, textarea, select, th, td, .fi-btn) { font-size: .875rem; }
+[data-cotic-surface] :is(.text-xs, [class*="text-[9px]"], [class*="text-[10px]"], [class*="text-[11px]"]),
+.cotic-drawer :is(.text-xs, [class*="text-[9px]"], [class*="text-[10px]"], [class*="text-[11px]"]) { font-size: .75rem; }
+[data-cotic-surface] :is(input,textarea)::placeholder { color: var(--color-text-secondary); opacity: 1; }
+.cotic-refinement .fi-input-wrp :is(input.fi-input, textarea.fi-input),
+.cotic-drawer .fi-input-wrp :is(input.fi-input, textarea.fi-input) {
+  border: 0; border-radius: 0; box-shadow: none; background: transparent;
+}
+[data-cotic-surface] :is(label, th, td, input, textarea, select, .fi-btn),
+.cotic-drawer :is(label, input, textarea, select, .fi-btn) { font-size: .875rem; }
+:is([data-cotic-surface], .cotic-drawer) :is(input, textarea, select):not(.fi-input-wrp *):focus-visible {
+  outline: 2px solid var(--color-border-focus) !important; outline-offset: 2px;
+}
+@media (max-width: 639px) {
+  .cotic-refinement .sticky.bottom-0 { position: static; }
+  .cotic-refinement :is(h1, h2), .cotic-drawer :is(h2, h3, p) { overflow-wrap: anywhere; }
+}
+:is(.cotic-metrics .fi-wi-stats-overview-stat-label, .cotic-metrics .fi-wi-stats-overview-stat-description span) {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+.cotic-document-preview :is(.text-xs, [class*="text-[9px]"], [class*="text-[10px]"], [class*="text-[11px]"]) { font-size: .75rem; }
+.cotic-form .fi-sc-wizard-header-step-label { white-space: normal; overflow: visible; text-overflow: clip; }
+.cotic-form .fi-sc-wizard-header-step { height: auto; min-height: 4.5rem; }
+@media (max-width: 767px) {
+  .cotic-form .fi-sc-wizard-header-step { min-width: 15rem; }
+  .cotic-form-footer button { min-height: 44px; }
+}

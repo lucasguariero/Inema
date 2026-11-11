@@ -684,7 +684,7 @@ export const SEED_ASAS: AsasItem[] = [
       localizacaoDescritiva: 'Estrada do Rio de Pedras, Km 18',
       bioma: 'Cerrado',
       bacia: 'Rio Grande',
-      ur: 'UR Oeste'
+      ur: 'UROE'
     },
     delimitacao: {
       tipo: 'CEFIR',
@@ -716,7 +716,6 @@ export const SEED_ASAS: AsasItem[] = [
     solturas: [],
     recintos: [],
     relatoriosTrimestrais: [],
-    animaisReabilitacao: [],
     historico: [
       {
         id: 'tram-desat-01',
@@ -1086,6 +1085,7 @@ export const SEED_GUARDIOES: GuardiaoItem[] = [
     declaracoesAceitas: true,
     situacao: 'Habilitado',
     dataCadastro: '2026-01-05',
+    laudosCetas: [],
     tgasVigente: {
       id: 'tgas-004',
       numero: 'TGAS-2026/0004',
@@ -1094,6 +1094,16 @@ export const SEED_GUARDIOES: GuardiaoItem[] = [
       dataEmissao: '2026-01-20',
       dataValidade: '2027-01-20',
       situacao: 'Vigente',
+      assinaturaGuardiao: {
+        concluida: true,
+        data: '2026-01-20',
+        tipo: 'gov.br'
+      },
+      assinaturaDiretorGeral: {
+        concluida: true,
+        data: '2026-01-21',
+        processoSei: '015.8821.2026.0019234-55'
+      },
       animaisSobGuarda: [
         { animalId: 'anim-101', numeroDigital: 'FAU-2026-0101', nomeComum: 'Periquito-rico', nomeCientifico: 'Brotogeris tirica', grupo: 'Aves', sexo: 'Macho', tipoMarcacao: 'Anilha Fechada', codigoMarcacao: 'BA-2026-AN-1001', situacaoAnimal: 'Sob guarda' },
         { animalId: 'anim-102', numeroDigital: 'FAU-2026-0102', nomeComum: 'Canário-da-terra', nomeCientifico: 'Sicalis flaveola', grupo: 'Aves', sexo: 'Macho', tipoMarcacao: 'Anilha Fechada', codigoMarcacao: 'BA-2026-AN-1002', situacaoAnimal: 'Sob guarda' },

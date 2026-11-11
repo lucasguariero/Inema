@@ -1,0 +1,44 @@
+.aiad-page { color: var(--color-text-primary); min-width: 0; display: grid; gap: 16px; }
+.aiad-page h1 { font-size: 20px; line-height: 28px; font-weight: 700; }
+.aiad-page-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+.aiad-page-heading p { margin-top: 2px; }
+.aiad-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; }
+.aiad-grid > *, .aiad-simulator > * { min-width: 0; }
+.aiad-simulator { display: grid; grid-template-columns: 200px 1fr auto; gap: 12px; align-items: end; }
+.aiad-label { display: block; font-size: 12px; font-weight: 600; color: var(--color-text-secondary); margin-bottom: 4px; }
+.aiad-helper { font-size: 12px; line-height: 1.45; color: var(--color-text-secondary); }
+.aiad-page .space-y-1\.5 > p, .aiad-dialog .space-y-1\.5 > p { color: var(--color-text-secondary); }
+.aiad-consult { display: flex; flex-wrap: wrap; align-items: end; gap: 10px; }
+.aiad-consult > button { height: 36px; margin: 0; }
+.aiad-input { height: 36px; width: 100%; display: block; padding: 6px 12px; font-size: 12px; color: var(--color-text-primary); background: transparent; outline: none; border: none; }
+.aiad-input:disabled { opacity: 1; }
+.aiad-textarea { height: auto; min-height: 96px; resize: vertical; }
+.aiad-select { position: relative; }
+.aiad-select .fi-select-trigger { height: 36px; padding-block: 0; }
+.aiad-select .fi-select-popover {
+  position: absolute !important;
+  left: 0;
+  top: 100%;
+  width: 100%;
+  z-index: 50 !important;
+}
+.aiad-page .fi-section, .aiad-dialog .fi-section { overflow: visible; }
+.aiad-page .fi-section-header { border-radius: 12px 12px 0 0; }
+.aiad-page .fi-section-header-heading { white-space: normal; font-size: 14px; }
+.aiad-page .fi-section-body { padding: 14px 16px; }
+.aiad-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.aiad-error { font-size: 12px; line-height: 1.4; color: var(--badge-critical-text); margin-top: 4px; }
+.aiad-composed { font-size: 12px; line-height: 1.6; color: var(--color-text-secondary); }
+.aiad-signatures, .aiad-gms { grid-template-columns: repeat(2,minmax(0,1fr)); }
+.aiad-signature-data { font-size: 12px; line-height: 1.45; margin-top: 10px; }
+.aiad-signature-data dt { color: var(--color-text-secondary); margin-top: 6px; }
+.aiad-empty { padding: 20px; text-align: center; color: var(--color-text-secondary); }
+.aiad-footer { position: sticky; bottom: 0; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; background: var(--color-surface-default); padding: 10px 16px; border: 1px solid var(--color-border-default); border-radius: 12px; z-index: 20; }
+.aiad-dialog { width: calc(100% - 32px); max-height: calc(100dvh - 32px); display: flex; flex-direction: column; border-radius: 12px; }
+.aiad-dialog-wide { max-width: 1120px; }
+.aiad-dialog-body { min-height: 0; overflow: auto; padding: 4px; display: grid; gap: 14px; }
+.aiad-file { height: auto; min-height: 36px; }
+.aiad-page :is(button,a,input,textarea):focus-visible, .aiad-dialog :is(button,a,input,textarea):focus-visible { outline: 2px solid var(--input-border-focus); outline-offset: 2px; }
+.aiad-page ::selection, .aiad-dialog ::selection { background: var(--color-green-alpha-20); }
+@media(max-width:1023px) { .aiad-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } .aiad-simulator { grid-template-columns: 1fr; } }
+@media(max-width:639px) { .aiad-grid { grid-template-columns: minmax(0,1fr); } .aiad-footer { position: static; } .aiad-dialog { padding: 16px; } }
