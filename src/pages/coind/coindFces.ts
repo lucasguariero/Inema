@@ -595,18 +595,18 @@ export const industria: CoindDefinition = {
           note: 'Todos os documentos de gerenciamento de risco são solicitados em Documentos Obrigatórios (ATEND), exigindo assinatura digital do Coordenador da CTGA (CTGA-01).',
         },
         {
-          title: 'Contatos de Emergência (LO e renovações)',
+          title: 'Contatos de Emergência',
           source: '63:3501',
           comments: [228, 229],
-          whenPhase: ['LO', 'Renovacao'],
-          note: 'Adicione um ou mais contatos Próprios (CPF, nome, cargo/função, telefone, e-mail) ou Terceiros (CNPJ, razão social, RT, telefone, e-mail) (#228).',
+          whenPhase: ['LI', 'LU', 'LA', 'LO', 'Renovacao'],
+          note: 'Adicione um ou mais contatos Próprios (CPF, nome, cargo/função, telefone, e-mail) ou Terceiros (CNPJ, razão social, RT, telefone, e-mail) (#228). Exibido em LI, LU, LA, LO e renovações; oculto na LP (#229).',
           fields: [
             {
               key: 'contatosEmergencia',
               label: 'Contatos de emergência cadastrados',
               type: 'table',
               required: true,
-              comments: [228],
+              comments: [228, 229],
               columns: CONTATOS_EMERGENCIA_COLUNAS,
             },
           ],
