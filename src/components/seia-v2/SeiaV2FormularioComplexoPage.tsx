@@ -1,5 +1,5 @@
 import { DirreRequestTypeSelect } from './DirreRequestTypeSelect';
-import { getAtoDetails, dirreRequest, dirreRequestLabel } from '@/data/dirreRequestTypes';
+import { getAtoDetails, dirreRequestLabel } from '@/data/dirreRequestTypes';
 import React, { useRef, useState } from 'react';
 import {
   Building2,
@@ -33,17 +33,15 @@ const tipologiaOptions: SelectOption[] = [
 ];
 
 export interface AtoInfo {
-  sigla: string;
-  nome: string;
+  id: string;
+  label: string;
   categoria: string;
-  taxaBase: string;
-  descricao: string;
-  legislacao: string;
+  group: string;
 }
 
 export const ATOS_CATALOGO: Record<string, AtoInfo> = new Proxy({} as Record<string, AtoInfo>, {
   get: (_target, prop: string) => {
-    return getAtoDetails(prop) as AtoInfo | undefined;
+    return getAtoDetails(prop);
   },
 });
 
@@ -77,10 +75,10 @@ export const SeiaV2FormularioComplexoPage: React.FC<SeiaV2FormularioComplexoPage
 
     // Step 2
     tipologia: 'Agricultura Irrigada de Grãos e Fibras',
-    porte: 'Grande Porte',
-    potencialPoluidor: 'Médio Potencial',
+    porte: 'Grande Porte (demonstrativo)',
+    potencialPoluidor: 'Médio Potencial (demonstrativo)',
     tipoLicenca: 'licencas-03',
-    enquadramentoLegal: 'Classe 5 (Decreto Estadual nº 14.024/2012)',
+    enquadramentoLegal: 'Pendente de enquadramento institucional (INEMA)',
 
     // Step 3
     temOutorga: 'sim',
@@ -303,69 +301,56 @@ export const SeiaV2FormularioComplexoPage: React.FC<SeiaV2FormularioComplexoPage
 
                 </div>
 
-                {/* Card do Ato Selecionado - Descrição Completa para todos os 53 Atos */}
+                {/* Resumo factual do Ato Selecionado conforme Modelo_página_SEIA.docx */}
                 {(() => {
                   const ato = getAtoDetails(formData.tipoLicenca);
-                  if (!ato) return null;
                   return (
-                    <div data-testid="card-ato-detalhes" className="col-span-12 p-4 rounded-xl border border-slate-200 bg-slate-50/70 dark:bg-slate-800/50 dark:border-slate-700 shadow-2xs space-y-2.5">
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-200 dark:border-slate-700">
-                        <div className="flex items-center gap-2">
-                          <span data-testid="card-ato-sigla" className="px-2 py-0.5 rounded text-xs font-bold bg-[#0F4C3A] text-white font-mono">
-                            {ato.sigla}
-                          </span>
-                          <span className="text-xs font-bold text-slate-800 dark:text-slate-100">{ato.nome}</span>
-                          <span className="text-[11px] text-slate-500 dark:text-slate-400">({ato.categoria})</span>
-                        </div>
-                        <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                          Taxa DAE: <span className="text-[#0F4C3A] dark:text-emerald-400 font-semibold">{ato.taxaBase}</span>
-                        </span>
-                      </div>
-                      <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                        {ato.descricao}
-                      </p>
-                      <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
-                        <strong className="text-slate-700 dark:text-slate-200">Base Legal:</strong> {ato.legislacao}
-                      </div>
+                    <div data-testid="card-ato-detalhes" className="col-span-12 p-4 rounded-xl border border-slate-200 bg-slate-50/70 dark:bg-slate-800/50 dark:border-slate-700 shadow-2xs space-y-1.5">
+                      {ato ? (
+                        <>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                              {ato.categoria}
+                            </span>
+                            <span className="text-slate-300 dark:text-slate-600">•</span>
+                            <span className="text-xs font-bold text-slate-800 dark:text-slate-100">
+                              {ato.label}
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                            {formData.enquadramentoLegal}. Valores de DAE, enquadramento normativo e documentação específica não são pré-definidos nesta etapa.
+                          </p>
+                        </>
+                      ) : (
+                        <p className="text-xs text-slate-600 dark:text-slate-300">
+                          Selecione o tipo de ato requerido para vinculá-lo a esta solicitação demonstrativa.
+                        </p>
+                      )}
                     </div>
                   );
                 })()}
 
-                {getAtoDetails(formData.tipoLicenca) && (
-                  <>
-                    <div className="col-span-12 md:col-span-6 space-y-1">
-                      <label htmlFor="cotic-field-3" className="text-xs font-semibold text-slate-700">Porte do Empreendimento *</label>
-                      <input id="cotic-field-3"
-                        type="text"
-                        readOnly
-                        value={formData.porte}
-                        className="w-full h-9 px-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg font-semibold text-slate-700 cursor-not-allowed"
-                      />
-                      <p className="text-[10px] text-slate-500">Definido com base na área declarada e tipologia da atividade.</p>
-                    </div>
+                <div className="col-span-12 md:col-span-6 space-y-1">
+                  <label htmlFor="cotic-field-3" className="text-xs font-semibold text-slate-700">Porte do Empreendimento *</label>
+                  <input id="cotic-field-3"
+                    type="text"
+                    readOnly
+                    value={formData.porte}
+                    className="w-full h-9 px-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg font-semibold text-slate-700 cursor-not-allowed"
+                  />
+                  <p className="text-[10px] text-slate-500">Campo ilustrativo (simulação demonstrativa).</p>
+                </div>
 
-                    <div className="col-span-12 md:col-span-6 space-y-1">
-                      <label htmlFor="cotic-field-4" className="text-xs font-semibold text-slate-700">Potencial Poluidor / Degradador *</label>
-                      <input id="cotic-field-4"
-                        type="text"
-                        readOnly
-                        value={formData.potencialPoluidor}
-                        className="w-full h-9 px-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg font-semibold text-slate-700 cursor-not-allowed"
-                      />
-                      <p className="text-[10px] text-slate-500">Enquadramento conforme Resolução CEPRAM nº 4.579.</p>
-                    </div>
-
-                    <div className="col-span-12 p-4 rounded-xl bg-emerald-50 border border-emerald-200 shadow-2xs">
-                      <div className="flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-[#0F4C3A]" />
-                        <span className="text-xs font-bold text-[#0F4C3A]">Enquadramento da Atividade:</span>
-                      </div>
-                      <p className="text-xs text-slate-700 mt-1 font-semibold">
-                        {formData.enquadramentoLegal} • Requerimento Ambiental Unificado.
-                      </p>
-                    </div>
-                  </>
-                )}
+                <div className="col-span-12 md:col-span-6 space-y-1">
+                  <label htmlFor="cotic-field-4" className="text-xs font-semibold text-slate-700">Potencial Poluidor / Degradador *</label>
+                  <input id="cotic-field-4"
+                    type="text"
+                    readOnly
+                    value={formData.potencialPoluidor}
+                    className="w-full h-9 px-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg font-semibold text-slate-700 cursor-not-allowed"
+                  />
+                  <p className="text-[10px] text-slate-500">Campo ilustrativo sujeito à validação institucional.</p>
+                </div>
               </div>
             </div>
           )}
@@ -519,10 +504,10 @@ export const SeiaV2FormularioComplexoPage: React.FC<SeiaV2FormularioComplexoPage
                   </div>
 
                   <div className="space-y-0.5">
-                    <span className="text-[11px] text-slate-500 font-medium">Ato & Enquadramento:</span>
+                    <span className="text-[11px] text-slate-500 font-medium">Ato Selecionado & Tipologia:</span>
                     <div className="font-semibold text-[#0F4C3A]">{dirreRequestLabel(formData.tipoLicenca)}</div>
-                    <div className="text-[11px] text-slate-600">{formData.tipologia}</div>
-                    <div className="text-[11px] text-slate-500">{ATOS_CATALOGO[formData.tipoLicenca]?formData.porte+' • '+formData.potencialPoluidor:'Enquadramento específico pendente de validação'}</div>
+                    <div className="text-[11px] text-slate-600">{getAtoDetails(formData.tipoLicenca)?.categoria ? `${getAtoDetails(formData.tipoLicenca)?.categoria} • ` : ''}{formData.tipologia}</div>
+                    <div className="text-[11px] text-slate-500">{formData.enquadramentoLegal}</div>
                   </div>
 
                   <div className="space-y-0.5">
