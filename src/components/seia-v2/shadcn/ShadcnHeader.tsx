@@ -13,8 +13,7 @@ import {
   Sun,
   History,
 } from 'lucide-react';
-import seiaLogoWhite from '@/assets/seia-plataforma/svg/SEIA Plataforma - Logo EXP_HORIZONTAL_W.svg';
-import seiaIconWhite from '@/assets/seia-plataforma/svg/SEIA Plataforma - Logo EXP_ICON_W.svg';
+import { LogoPlaceholder } from '@/components/seia-v2/LogoPlaceholder';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -73,16 +72,9 @@ export const ShadcnHeader: React.FC<HeaderProps> = ({
         <a
           href="/?rota=seia-v2"
           className="flex min-w-0 items-center"
-          title="SEIA Plataforma"
+          title="Início SEIA V2"
         >
-          <img
-            src={seiaLogoWhite}
-            alt="SEIA Plataforma"
-            className={cn("h-8 w-auto max-w-[122px] object-contain", isSidebarCollapsed && "lg:hidden")}
-          />
-          {isSidebarCollapsed && (
-            <img src={seiaIconWhite} alt="SEIA Plataforma" className="hidden h-8 w-8 object-contain lg:block" />
-          )}
+          <LogoPlaceholder variant={isSidebarCollapsed ? "header-collapsed" : "header"} />
         </a>
         <button
           type="button"

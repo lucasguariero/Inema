@@ -25,10 +25,8 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 
-// Import official logos
-import logoHorizontalWhite from '@/assets/seia-plataforma/svg/SEIA Plataforma - Logo EXP_HORIZONTAL_W.svg';
-import logoHorizontalColor from '@/assets/seia-plataforma/svg/SEIA Plataforma - Logo EXP_HORIZONTAL_COR.svg';
-import logoIconWhite from '@/assets/seia-plataforma/svg/SEIA Plataforma - Logo EXP_ICON_W.svg';
+// Logos preservados em disco aguardando aprovação institucional; placeholder oficial ativo
+import { LogoPlaceholder } from '@/components/seia-v2/LogoPlaceholder';
 
 interface SeiaV2LoginPageProps {
   onLoginSuccess?: (role: string) => void;
@@ -138,13 +136,9 @@ export const SeiaV2LoginPage: React.FC<SeiaV2LoginPageProps> = ({ onLoginSuccess
 
           {/* Container Central com Animação Fluida & Minimalista */}
           <div className="relative z-10 flex flex-col items-center justify-center max-w-[430px] w-full px-6 animate-in fade-in zoom-in-95 duration-400 ease-out text-center">
-            {/* Logo Central (10% menor) */}
+            {/* Logo Central (Placeholder) */}
             <div className="relative mb-8">
-              <img
-                src={logoHorizontalWhite}
-                alt="INEMA - Governo da Bahia"
-                className="relative h-14 sm:h-18 md:h-20 w-auto drop-shadow-[0_8px_20px_rgba(0,0,0,0.4)]"
-              />
+              <LogoPlaceholder variant="login-transition" />
             </div>
 
             {/* Spinner Elegante em Branco (Inspirado no loader orbital suave) */}
@@ -193,13 +187,9 @@ export const SeiaV2LoginPage: React.FC<SeiaV2LoginPageProps> = ({ onLoginSuccess
         {/* Gradiente Institucional Degradê */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#06241B] via-[#0F4C3A]/85 to-[#0A3327]/90 backdrop-blur-[0.5px]" />
 
-        {/* Logo Institucional Centralizado e Proeminente */}
+        {/* Logo Institucional Centralizado e Proeminente (Placeholder) */}
         <div className="relative z-10 flex flex-col items-center justify-center max-w-md text-center">
-          <img
-            src={logoHorizontalWhite}
-            alt="INEMA - Governo da Bahia"
-            className="h-24 sm:h-28 md:h-32 w-auto drop-shadow-xl"
-          />
+          <LogoPlaceholder variant="login-hero" />
         </div>
       </div>
 
@@ -208,11 +198,7 @@ export const SeiaV2LoginPage: React.FC<SeiaV2LoginPageProps> = ({ onLoginSuccess
         {/* Topo Direito: Theme Toggle & Logo Mobile */}
         <div className="flex items-center justify-between w-full">
           <div className="lg:hidden flex items-center gap-2">
-            <img
-              src={isDarkMode ? logoHorizontalWhite : logoHorizontalColor}
-              alt="SEIA"
-              className="h-9 w-auto"
-            />
+            <LogoPlaceholder variant="login-mobile" />
           </div>
 
           <div className="flex items-center gap-2 ml-auto">

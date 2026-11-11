@@ -106,12 +106,7 @@ import {
 import { KpiCard } from '@/components/dashboard/KpiCard';
 import { ShadcnHeader } from '@/components/seia-v2/shadcn/ShadcnHeader';
 import { cn } from '@/lib/utils';
-import seiaLogoWhite from '@/assets/seia-plataforma/svg/SEIA Plataforma - Logo EXP_HORIZONTAL_W.svg';
-import seiaLogoColor from '@/assets/seia-plataforma/svg/SEIA Plataforma - Logo EXP_HORIZONTAL_COR.svg';
-import seiaLogoGW from '@/assets/seia-plataforma/svg/SEIA Plataforma - Logo EXP_HORIZONTAL_G&W.svg';
-import seiaIconWhite from '@/assets/seia-plataforma/svg/SEIA Plataforma - Logo EXP_ICON_W.svg';
-import seiaIconColor from '@/assets/seia-plataforma/svg/SEIA Plataforma - Logo EXP_ICON_COR.svg';
-import seiaIconGW from '@/assets/seia-plataforma/svg/SEIA Plataforma - Logo EXP_ICON_G&W.svg';
+import { LogoPlaceholder } from '@/components/seia-v2/LogoPlaceholder';
 
 type CatalogSection = {
   id: string;
@@ -521,7 +516,7 @@ export const SeiaV2DesignSystemPage: React.FC = () => {
                   Design System INEMA
                 </h1>
                 <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--color-text-secondary)]">
-                  Catálogo vivo e referência de engenharia de interface do SEIA Plataforma. Todas as amostras utilizam tokens semânticos, componentes reais e padrões consolidados na Dashboard Gerencial de Regulação.
+                  Catálogo vivo e referência de engenharia de interface do SEIA V2. Todas as amostras utilizam tokens semânticos, componentes reais e padrões consolidados na Dashboard Gerencial de Regulação.
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-2">
@@ -565,27 +560,27 @@ export const SeiaV2DesignSystemPage: React.FC = () => {
               <section id="brand" className="scroll-mt-8">
                 <SectionIntro
                   title="Marca e assets"
-                  description="Assinaturas oficiais exportadas do SEIA Plataforma. Em topbars verdes (#0F4C3A), use estritamente as versões brancas."
+                  description="Assinaturas da interface com placeholders padronizados para aplicação horizontal e símbolo compacto."
                 />
                 <div className="grid gap-4 lg:grid-cols-2">
                   <Specimen title="Logo Horizontal (Versão Branca)" description="Uso em topbar verde institucional e páginas de autenticação.">
                     <div className="flex min-h-36 items-center justify-center rounded-xl bg-[var(--topbar-bg)] p-8">
-                      <img src={seiaLogoWhite} alt="SEIA Plataforma Horizontal Branco" className="h-12 max-w-full" />
+                      <LogoPlaceholder variant="specimen-horizontal" theme="white" />
                     </div>
                   </Specimen>
                   <Specimen title="Símbolo Compacto (Versão Branca)" description="Uso em sidebar recolhida (32px), favicon e espaços reduzidos.">
                     <div className="flex min-h-36 items-center justify-center rounded-xl bg-[var(--topbar-bg)] p-8">
-                      <img src={seiaIconWhite} alt="Símbolo SEIA Plataforma Branco" className="h-14 w-14" />
+                      <LogoPlaceholder variant="specimen-icon" theme="white" />
                     </div>
                   </Specimen>
-                  <Specimen title="Logo Horizontal (Versão Colorida)" description="Uso em documentos impressos, relatórios gerenciais e fundos claros.">
+                  <Specimen title="Logo Horizontal (Versão Colorida / Neutra)" description="Uso em documentos impressos, relatórios gerenciais e fundos claros.">
                     <div className="flex min-h-36 items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-800/40 p-8 border border-dashed border-slate-200 dark:border-slate-700">
-                      <img src={seiaLogoColor} alt="SEIA Plataforma Horizontal Color" className="h-12 max-w-full" />
+                      <LogoPlaceholder variant="specimen-horizontal" theme="dark" />
                     </div>
                   </Specimen>
-                  <Specimen title="Símbolo Compacto (Versão Colorida)" description="Uso em avatares de sistema, cards e ícones de atalho sobre fundo claro.">
+                  <Specimen title="Símbolo Compacto (Versão Colorida / Neutra)" description="Uso em avatares de sistema, cards e ícones de atalho sobre fundo claro.">
                     <div className="flex min-h-36 items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-800/40 p-8 border border-dashed border-slate-200 dark:border-slate-700">
-                      <img src={seiaIconColor} alt="Símbolo SEIA Plataforma Color" className="h-14 w-14" />
+                      <LogoPlaceholder variant="specimen-icon" theme="dark" />
                     </div>
                   </Specimen>
                 </div>
@@ -992,7 +987,7 @@ export const SeiaV2DesignSystemPage: React.FC = () => {
                 <div className="space-y-4">
                   <Specimen title="Topbar SEIA V2 (Header Institucional)">
                     <div className="flex min-h-16 items-center gap-4 rounded-xl bg-[var(--topbar-bg)] px-4 text-white shadow-md">
-                      <img src={seiaLogoWhite} alt="SEIA Plataforma" className="h-8 w-auto" />
+                      <LogoPlaceholder variant="header" />
                       <button className={cn('rounded-lg p-2 hover:bg-white/10 focus-visible:ring-white cursor-pointer', focusRing)} aria-label="Toggle Sidebar">
                         <PanelLeftClose className="h-4 w-4" />
                       </button>
@@ -1786,7 +1781,7 @@ export const SeiaV2DesignSystemPage: React.FC = () => {
               <section id="accessibility" className="scroll-mt-8 pb-12">
                 <SectionIntro
                   title="Acessibilidade e conformidade (WCAG 2.1 AA)"
-                  description="Critérios mínimos obrigatórios aplicados em todos os componentes e fluxos do SEIA Plataforma."
+                  description="Critérios mínimos obrigatórios aplicados em todos os componentes e fluxos do SEIA V2."
                 />
                 <div className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
                   {[
