@@ -17,6 +17,7 @@ import {
 import { FilamentSelect, SelectOption } from '@/components/filament';
 import { SeiaV2Breadcrumb } from './SeiaV2Breadcrumb';
 import { FilamentWizard } from '@/components/filament/Wizard';
+import { SEIA_V2_ATO_BY_KEY, SEIA_V2_ATO_OPTIONS, SEIA_V2_ATOS } from '@/data/seiaV2Atos';
 
 const tipologiaOptions: SelectOption[] = [
   { value: 'Agricultura Irrigada de Grãos e Fibras', label: 'Agricultura Irrigada de Grãos e Fibras' },
@@ -24,14 +25,6 @@ const tipologiaOptions: SelectOption[] = [
   { value: 'Geração de Energia Eólica / Solar Fotovoltaica', label: 'Geração de Energia Eólica / Solar Fotovoltaica' },
   { value: 'Indústria de Alimentos e Bebidas', label: 'Indústria de Alimentos e Bebidas' },
   { value: 'Loteamento e Obras de Urbanização', label: 'Loteamento e Obras de Urbanização' },
-];
-
-const tipoLicencaOptions: SelectOption[] = [
-  { value: 'Licença Prévia (LP)', label: 'Licença Prévia (LP)' },
-  { value: 'Licença de Instalação (LI) com ampliação', label: 'Licença de Instalação (LI) com ampliação' },
-  { value: 'Licença de Operação (LO)', label: 'Licença de Operação (LO)' },
-  { value: 'Licença Unificada (LU)', label: 'Licença Unificada (LU)' },
-  { value: 'Autorização Ambiental (AA)', label: 'Autorização Ambiental (AA)' },
 ];
 
 const tipoCaptacaoOptions: SelectOption[] = [
@@ -64,10 +57,10 @@ export const SeiaV2FormularioComplexoPage: React.FC<SeiaV2FormularioComplexoPage
 
     // Step 2
     tipologia: 'Agricultura Irrigada de Grãos e Fibras',
-    porte: 'Grande Porte',
-    potencialPoluidor: 'Médio Potencial',
-    tipoLicenca: 'Licença de Instalação (LI) com ampliação',
-    enquadramentoLegal: 'Classe 5 (Decreto Estadual nº 14.024/2012)',
+    porte: 'Grande Porte (demonstrativo)',
+    potencialPoluidor: 'Médio Potencial (demonstrativo)',
+    tipoLicenca: SEIA_V2_ATOS[1].key,
+    enquadramentoLegal: 'Pendente de validação institucional (INEMA)',
 
     // Step 3
     temOutorga: 'sim',
@@ -124,7 +117,7 @@ export const SeiaV2FormularioComplexoPage: React.FC<SeiaV2FormularioComplexoPage
             Requerimento Ambiental Unificado (SEIA V2)
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            Formulário oficial para Licenciamento Ambiental, Outorga de Recursos Hídricos e Autorização de Supressão Vegetal (ASV).
+            Protótipo demonstrativo para validação de fluxos e tipos de solicitação do requerimento ambiental.
           </p>
         </div>
         {onNavigate && (
@@ -163,9 +156,7 @@ export const SeiaV2FormularioComplexoPage: React.FC<SeiaV2FormularioComplexoPage
               Preencha os campos obrigatórios identificados com asterisco (*).
             </p>
           </div>
-          <span className="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-emerald-100 text-[#0F4C3A]">
-            F-DIRRE-092
-          </span>
+
         </div>
 
         <div className="p-6">
@@ -284,7 +275,7 @@ export const SeiaV2FormularioComplexoPage: React.FC<SeiaV2FormularioComplexoPage
           {currentStep === 2 && (
             <div className="space-y-5">
               <div className="grid grid-cols-12 gap-4">
-                <div className="col-span-12 md:col-span-8 space-y-1">
+                <div className="col-span-12 md:col-span-6 space-y-1">
                   <label className="text-xs font-semibold text-slate-700">Tipologia Principal da Atividade *</label>
                   <FilamentSelect
                     options={tipologiaOptions}
@@ -293,12 +284,14 @@ export const SeiaV2FormularioComplexoPage: React.FC<SeiaV2FormularioComplexoPage
                   />
                 </div>
 
-                <div className="col-span-12 md:col-span-4 space-y-1">
+                <div className="col-span-12 md:col-span-6 space-y-1">
                   <label className="text-xs font-semibold text-slate-700">Tipo de Ato Requerido *</label>
                   <FilamentSelect
-                    options={tipoLicencaOptions}
+                    options={SEIA_V2_ATO_OPTIONS}
                     value={formData.tipoLicenca}
                     onChange={(v) => setFormData({ ...formData, tipoLicenca: v })}
+                    searchable
+                    placeholder="Selecione o tipo de ato requerido"
                   />
                 </div>
 
@@ -310,7 +303,6 @@ export const SeiaV2FormularioComplexoPage: React.FC<SeiaV2FormularioComplexoPage
                     value={formData.porte}
                     className="w-full h-9 px-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg font-semibold text-slate-700 cursor-not-allowed"
                   />
-                  <p className="text-[10px] text-slate-500">Calculado automaticamente com base na área declarada.</p>
                 </div>
 
                 <div className="col-span-12 md:col-span-6 space-y-1">
@@ -321,18 +313,24 @@ export const SeiaV2FormularioComplexoPage: React.FC<SeiaV2FormularioComplexoPage
                     value={formData.potencialPoluidor}
                     className="w-full h-9 px-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg font-semibold text-slate-700 cursor-not-allowed"
                   />
-                  <p className="text-[10px] text-slate-500">Enquadramento conforme Resolução CEPRAM nº 4.579.</p>
                 </div>
 
-                <div className="col-span-12 p-4 rounded-xl bg-emerald-50 border border-emerald-200 shadow-2xs">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#0F4C3A]" />
-                    <span className="text-xs font-bold text-[#0F4C3A]">Enquadramento Automático Homologado:</span>
-                  </div>
-                  <p className="text-xs text-slate-700 mt-1 font-semibold">
-                    {formData.enquadramentoLegal} • Modalidade Trifásica com Conselho Estadual.
-                  </p>
-                </div>
+                {(() => {
+                  const selectedAto = SEIA_V2_ATO_BY_KEY[formData.tipoLicenca];
+                  return (
+                    <div className="col-span-12 p-4 rounded-xl bg-emerald-50 border border-emerald-200 shadow-2xs">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-[#0F4C3A]" />
+                        <span className="text-xs font-bold text-[#0F4C3A]">Ato selecionado:</span>
+                      </div>
+                      <p className="text-xs text-slate-700 mt-1 font-semibold">
+                        {selectedAto
+                          ? `${selectedAto.category} — ${selectedAto.label}`
+                          : 'Nenhum ato selecionado.'}
+                      </p>
+                    </div>
+                  );
+                })()}
               </div>
             </div>
           )}
@@ -468,9 +466,9 @@ export const SeiaV2FormularioComplexoPage: React.FC<SeiaV2FormularioComplexoPage
               <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3 shadow-2xs">
                 <div className="flex items-center justify-between pb-2 border-b border-slate-200">
                   <span className="text-xs font-bold uppercase tracking-wider text-slate-600">
-                    Resumo de Taxas de Vistoria e Licenciamento (DAE)
+                    Resumo Simulado de Taxas (Demonstração)
                   </span>
-                  <span className="font-mono text-xs font-bold text-[#0F4C3A]">SEFAZ-BA</span>
+                  <span className="font-mono text-xs font-bold text-[#0F4C3A]">Simulação</span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
@@ -483,7 +481,7 @@ export const SeiaV2FormularioComplexoPage: React.FC<SeiaV2FormularioComplexoPage
                     <div className="font-mono font-bold text-slate-900 mt-0.5">R$ 3.420,00</div>
                   </div>
                   <div>
-                    <span className="text-slate-500">Total a Recolher via DAE:</span>
+                    <span className="text-slate-500">Total simulado (ilustrativo):</span>
                     <div className="font-mono font-bold text-emerald-800 text-sm mt-0.5">R$ 18.270,00</div>
                   </div>
                 </div>
@@ -555,11 +553,11 @@ export const SeiaV2FormularioComplexoPage: React.FC<SeiaV2FormularioComplexoPage
             ) : (
               <button
                 type="button"
-                onClick={() => alert('Requerimento protocolado com sucesso no SEIA V2 sob o número 020.14920.2026/0001!')}
+                onClick={() => alert('Simulação demonstrativa concluída. Nenhuma integração oficial (SEIA/SEFAZ) foi executada.')}
                 className="h-9 px-6 text-xs font-bold bg-[#0F4C3A] hover:bg-[#0b382b] text-white rounded-lg transition-all duration-200 ease-in-out shadow-md flex items-center gap-1.5 cursor-pointer"
               >
                 <CheckCircle2 className="w-4 h-4" />
-                <span>Protocolar e Gerar DAE</span>
+                <span>Concluir Simulação</span>
               </button>
             )}
           </div>

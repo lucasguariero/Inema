@@ -7,6 +7,7 @@ export type Condition = {
   key?: string;
   value?: string;
   notValue?: string;
+  notIn?: string[];
   phase?: FcePhase | FcePhase[];
   notPhase?: FcePhase | FcePhase[];
 };
@@ -23,6 +24,7 @@ export interface FceField {
   source?: string;
   comments?: number[];
   columns?: FceField[];
+  compute?: (data: FceData, phase?: FcePhase) => string;
 }
 
 export interface FceSection {
@@ -33,6 +35,7 @@ export interface FceSection {
   fields: FceField[];
   documents?: string[];
   whenPhase?: FcePhase | FcePhase[];
+  when?: Condition | Condition[];
 }
 
 export interface FceStep {
@@ -52,344 +55,561 @@ export interface CoindDefinition {
 
 export const yesNo = ['Sim', 'Não'];
 
-export const numberField = (key: string, label: string, unit = '', required = true): FceField => ({ key, label, type: 'number', unit, required });
-export const textField = (key: string, label: string, required = true): FceField => ({ key, label, required });
-export const countField = (key: string, label: string, required = true): FceField => ({ key, label, type: 'integer', required });
-export const choice = (key: string, label: string, options: string[], type: 'radio' | 'select' | 'checks' = 'radio'): FceField => ({ key, label, options, type, required: true });
-export const pending = (key: string, label: string, hint: string): FceField => ({ key, label, type: 'pending', hint });
+export const numberField = (key: string, label: string, unit = '', required = true): FceField => ({
+  key,
+  label,
+  type: 'number',
+  unit,
+  required,
+});
 
-// Catálogo de substâncias perigosas com mapeamento automático de código ONU / CAS (#223, #224, #226)
-export const SUBSTANCIAS_ONU_MAP: Record<string, string> = {
-  // Explosivas
-  'Nitroglicerina': 'ONU 0143 (Classe 1.1D)',
-  'Dinamite': 'ONU 0081 (Classe 1.1D)',
-  'Fulminato de mercúrio': 'ONU 0135 (Classe 1.1A)',
-  'Trinitrotolueno (TNT)': 'ONU 0209 (Classe 1.1D)',
-  'Pólvora negra': 'ONU 0027 (Classe 1.1D)',
-  // Tóxicas
-  'Cloro gasoso': 'ONU 1017 (Classe 2.3)',
-  'Amônia anidra': 'ONU 1005 (Classe 2.3)',
-  'Ácido cianídrico': 'ONU 1051 (Classe 6.1)',
-  'Cianeto de sódio': 'ONU 1689 (Classe 6.1)',
-  'Fosgênio': 'ONU 1076 (Classe 2.3)',
-  // Inflamáveis CEPRAM II.3
-  'Acetona': 'ONU 1090 (Classe 3)',
-  'Álcool etílico (Etanol)': 'ONU 1170 (Classe 3)',
-  'Gasolina automotiva': 'ONU 1203 (Classe 3)',
-  'Hexano': 'ONU 1208 (Classe 3)',
-  'GLP - Gás Liquefeito de Petróleo': 'ONU 1075 (Classe 2.1)',
-  'Óleo diesel': 'ONU 1202 (Classe 3)',
-  'Solvente de nafta': 'ONU 1268 (Classe 3)',
-  'Tolueno': 'ONU 1294 (Classe 3)',
-  'Xileno': 'ONU 1307 (Classe 3)',
-  'Metanol': 'ONU 1230 (Classe 3/6.1)',
-  'Outra / Inserir substância não listada': 'Personalizado',
-};
+export const textField = (key: string, label: string, required = true): FceField => ({
+  key,
+  label,
+  required,
+});
 
-export const LISTA_EXPLOSIVAS = [
-  'Nitroglicerina',
-  'Dinamite',
-  'Fulminato de mercúrio',
-  'Trinitrotolueno (TNT)',
-  'Pólvora negra',
-  'Outra / Inserir substância não listada',
+export const countField = (key: string, label: string, required = true): FceField => ({
+  key,
+  label,
+  type: 'integer',
+  required,
+});
+
+export const choice = (
+  key: string,
+  label: string,
+  options: string[],
+  type: 'radio' | 'select' | 'checks' = 'radio',
+  required = true
+): FceField => ({
+  key,
+  label,
+  options,
+  type,
+  required,
+});
+
+export const pending = (key: string, label: string, hint: string): FceField => ({
+  key,
+  label,
+  type: 'pending',
+  hint,
+});
+
+export const computedField = (
+  key: string,
+  label: string,
+  compute: (data: FceData, phase?: FcePhase) => string,
+  unit = '',
+  hint?: string
+): FceField => ({
+  key,
+  label,
+  type: 'computed',
+  unit,
+  compute,
+  hint,
+});
+
+/**
+ * Sem catálogo normativo CEPRAM II.3 / ONU verificável no repositório; mantido vazio
+ * para evitar dados químicos presumidos (#223, #224).
+ */
+export const SUBSTANCIAS_ONU_MAP: Record<string, string> = {};
+
+const UNIDADES_SELECAO = ['ton', 'kg', 'm³', 'L', 'un', 'Outra (digitar na unidade livre)'];
+
+const TRATAMENTO_EFLUENTES_OPCOES = [
+  'ETE própria (físico-química e biológica)',
+  'Fossa séptica',
+  'Caixa separadora',
+  'CETREL',
+  'Sem tratamento',
 ];
 
-export const LISTA_TOXICAS = [
-  'Cloro gasoso',
-  'Amônia anidra',
-  'Ácido cianídrico',
-  'Cianeto de sódio',
-  'Fosgênio',
-  'Outra / Inserir substância não listada',
+const CONTROLE_EMISSOES_OPCOES = [
+  'Queimador de baixo NOx',
+  'Filtro de mangas',
+  'Lista parametrizada SEIA (pendente)',
+  'Outros',
 ];
 
-export const LISTA_INFLAMAVEIS_CEPRAM = [
-  'Acetona',
-  'Álcool etílico (Etanol)',
-  'Gasolina automotiva',
-  'Hexano',
-  'GLP - Gás Liquefeito de Petróleo',
-  'Óleo diesel',
-  'Solvente de nafta',
-  'Tolueno',
-  'Xileno',
-  'Metanol',
-  'Outra / Inserir substância não listada',
+const CLASSES_ABNT_2024 = [
+  'Classe I (perigoso)',
+  'Classe II (não perigoso)',
+  'Classe II A (não inerte)',
+  'Classe II B (inerte)',
 ];
 
-// 1. FCE DE INDÚSTRIA (#261 - #276, #283)
+const CONTATOS_EMERGENCIA_COLUNAS: FceField[] = [
+  choice('tipoContato', 'Tipo de contato', ['Próprio', 'Terceiro'], 'select'),
+  textField('documento', 'CPF (Próprio) / CNPJ (Terceiro)'),
+  textField('nomeRazao', 'Nome (Próprio) / Razão Social (Terceiro)'),
+  textField('cargoFuncaoRt', 'Cargo ou função (Próprio) / Nome do RT (Terceiro)'),
+  textField('telefone', 'Telefone'),
+  textField('email', 'E-mail'),
+];
+
+const SUBSTANCIA_RISCO_COLUNAS: FceField[] = [
+  {
+    ...choice('substancia', 'Substância', ['Inserir substância não listada'], 'select'),
+    comments: [223],
+    hint: 'Catálogo CEPRAM II.3 pendente de integração; selecione entrada manual (#223).',
+  },
+  textField('nomeSubstanciaManual', 'Nome da substância'),
+  {
+    ...textField('codigoOnu', 'ONU / FISPQ'),
+    comments: [224],
+    hint: 'Informar código ONU/FISPQ manualmente enquanto a consulta oficial estiver pendente (#224).',
+  },
+  textField('estadoFisico', 'Estado', false),
+  numberField('mmla', 'MMLA', 't', false),
+  numberField('mr', 'MR', 't', false),
+  numberField('fp', 'FP', '', false),
+];
+
+const ENERGY_DEMAND_FIELDS: Array<{ source: string; key: string; label: string; unit: string }> = [
+  { source: 'Rede concessionária', key: 'demandaEnergiaRede', label: 'Demanda prevista — Rede concessionária', unit: 'kWh/mês' },
+  { source: 'Gás natural', key: 'demandaEnergiaGas', label: 'Demanda prevista — Gás natural', unit: 'm³/mês' },
+  { source: 'GLP', key: 'demandaEnergiaGlp', label: 'Demanda prevista — GLP', unit: 'kg/mês' },
+  { source: 'Biomassa ou lenha', key: 'demandaEnergiaBiomassa', label: 'Demanda prevista — Biomassa ou lenha', unit: 't/mês' },
+  { source: 'Solar', key: 'demandaEnergiaSolar', label: 'Demanda prevista — Solar', unit: 'kWh/mês' },
+  { source: 'Outra', key: 'demandaEnergiaOutra', label: 'Demanda prevista — Outra fonte', unit: 'unidade declarada' },
+];
+
+const formatBrNumber = (n: number, maxDigits = 4) =>
+  new Intl.NumberFormat('pt-BR', { maximumFractionDigits: maxDigits }).format(n);
+
+// 1. FCE DE INDÚSTRIA — COIND (Frames #27-#64, #223-#231, #283)
 export const industria: CoindDefinition = {
   kind: 'industria',
-  title: 'FCE de Indústria',
+  title: 'FCE de Indústria e Serviços',
   route: 'coind-industria',
-  defaultPhase: 'LO',
-  availablePhases: ['LP', 'LI', 'LU', 'LO', 'Renovacao'],
+  defaultPhase: 'LI',
+  availablePhases: ['LP', 'LI', 'LU', 'LA', 'LO', 'Renovacao'],
   steps: [
     {
-      title: 'Identificação e recursos hídricos',
+      title: 'Processo e insumos',
       sections: [
         {
-          title: 'Abastecimento de água industrial',
-          source: '157:982',
-          comments: [261],
+          title: 'Processo produtivo',
+          source: '47:1816',
+          comments: [27, 33, 34, 35],
+          note: 'LP (#35) e LU (#33) mantêm os mesmos campos da LI. Na RLO/LO (#27, #34), os dados da fase anterior são exibidos apenas para revisão conforme integração.',
           fields: [
             {
-              ...choice('fonteAgua', 'Fonte de abastecimento de água', ['Subterrâneo', 'Superficial', 'Caminhão-Pipa', 'Concessionária'], 'radio'),
-              comments: [261],
+              ...textField('descricaoEtapas', 'Descrição das etapas do processo'),
+              type: 'textarea',
+              comments: [27, 33, 34, 35],
             },
-            numberField('consumoMedio', 'Consumo médio de água', 'm³/dia'),
-            numberField('vazaoHoraria', 'Vazão de captação', 'm³/h'),
             {
-              ...textField('portariaOutorga', 'Número da portaria de outorga ou dispensa', false),
-              when: { key: 'fonteAgua', notValue: 'Concessionária' },
-              hint: 'Opcional para concessionária pública; obrigatório quando houver captação própria em corpo hídrico.',
+              ...textField('historicoExpansoes', 'Histórico de expansões do período'),
+              type: 'textarea',
+              when: { phase: 'Renovacao' },
+              comments: [27],
+              hint: 'Na RLO, o histórico pode chegar automaticamente do processo anterior em modo de visualização quando integrado (#27).',
             },
           ],
-          documents: ['Outorga de direito de uso de recursos hídricos ou dispensa — ATEND'],
+          documents: ['Fluxograma projetado / atualizado — ATEND (#33, #34, #35)'],
         },
         {
-          title: 'Efluentes industriais e sanitários',
-          source: '157:982',
-          comments: [262, 263, 264],
-          whenPhase: ['LI', 'LU', 'LO', 'Renovacao'],
-          note: 'Esta aba é exibida especificamente a partir da Licença de Instalação (LI). Não é exigida na LP (#262).',
+          title: 'Matérias-primas',
+          source: '47:1816',
+          comments: [28, 29, 30],
+          note: 'Divisão em tabela própria para matérias-primas (#29). MSG-23: caso a unidade do Decreto 14.024/12 não atenda, informe livremente em Unidade livre.',
           fields: [
             {
-              ...choice('descarteEfluente', 'Haverá descarte de efluentes tratados em corpo receptor?', yesNo),
-              comments: [263],
-            },
-            {
-              ...choice('corpoReceptor', 'Corpo receptor final', ['Rio / Riacho', 'Solo / Infiltração', 'Rede pública com ETE', 'Não se aplica'], 'select'),
-              comments: [263],
-              hint: 'Opção "Não se aplica" incluída conforme item #263 para casos de recirculação ou evaporação total.',
-            },
-            {
-              key: 'tabelaEfluentes',
-              label: 'Caracterização e lançamento de efluentes',
+              key: 'tabelaMateriasPrimas',
+              label: 'Matérias-primas',
               type: 'table',
-              required: (_d, phase) => phase === 'LU' || phase === 'LO',
-              comments: [264],
-              hint: 'Obrigatória na Licença de Unificação (LU) e Operação (LO) (#264).',
+              required: false,
+              comments: [28, 29, 30],
               columns: [
-                textField('tipoEfluente', 'Tipo de efluente (sanitário/industrial)'),
-                numberField('vazaoEfluente', 'Vazão média', 'm³/dia'),
-                textField('sistemaTratamento', 'Sistema de tratamento adotado'),
-                textField('corpoReceptorRow', 'Corpo receptor'),
+                textField('materiaPrima', 'Matéria-prima'),
+                numberField('consumoMensal', 'Consumo estimado/mês'),
+                choice('unidadeMedida', 'Unidade de medida', UNIDADES_SELECAO, 'select'),
+                textField('unidadeLivre', 'Unidade livre (MSG-23)', false),
+                textField('formaArmazenamento', 'Forma de armazenamento', false),
               ],
             },
           ],
-          documents: ['Projeto executivo do sistema de tratamento de efluentes líquidos (LI) — ATEND'],
+        },
+        {
+          title: 'Insumos',
+          source: '47:1816',
+          comments: [28, 29, 30],
+          note: 'Tabela segregada para insumos (#29). Forma de armazenamento é opcional (#30).',
+          fields: [
+            {
+              key: 'tabelaInsumos',
+              label: 'Insumos e reagentes',
+              type: 'table',
+              required: false,
+              comments: [28, 29, 30],
+              columns: [
+                textField('insumo', 'Insumo ou reagente'),
+                numberField('consumoMensal', 'Consumo estimado/mês'),
+                choice('unidadeMedida', 'Unidade de medida', UNIDADES_SELECAO, 'select'),
+                textField('unidadeLivre', 'Unidade livre (MSG-23)', false),
+                textField('formaArmazenamento', 'Forma de armazenamento', false),
+              ],
+            },
+          ],
+        },
+        {
+          title: 'Produtos finais e subprodutos',
+          source: '47:1816',
+          comments: [30, 31, 32],
+          fields: [
+            {
+              key: 'tabelaProdutos',
+              label: 'Produtos',
+              type: 'table',
+              required: false,
+              comments: [30, 31, 32],
+              columns: [
+                textField('produto', 'Produto'),
+                numberField('quantidade', 'Quantidade'),
+                choice('unidadeMedida', 'Unidade de medida', UNIDADES_SELECAO, 'select'),
+                textField('unidadeLivre', 'Unidade livre', false),
+                textField('armazenamentoFinal', 'Onde o produto ficará armazenado até a destinação final?', false),
+              ],
+            },
+            {
+              key: 'tabelaSubprodutos',
+              label: 'Subprodutos',
+              type: 'table',
+              required: false,
+              columns: [
+                textField('subproduto', 'Subproduto'),
+                numberField('quantidade', 'Quantidade'),
+                choice('unidadeMedida', 'Unidade de medida', UNIDADES_SELECAO, 'select'),
+                textField('armazenamentoTemporario', 'Armazenamento temporário', false),
+              ],
+            },
+            numberField('capacidadeNominal', 'Capacidade nominal projetada', 'ton/mês'),
+            {
+              ...numberField('producaoMediaPeriodo', 'Produção média do período', 'ton/mês'),
+              when: { phase: ['LO', 'Renovacao'] },
+            },
+            {
+              ...textField('subprodutosPrevistos', 'Subprodutos previstos / balanço de massa e destinação', false),
+              type: 'textarea',
+            },
+          ],
         },
       ],
     },
     {
-      title: 'Resíduos sólidos e produtos perigosos',
+      title: 'Água, energia e outorga',
       sections: [
         {
-          title: 'Resíduos sólidos industriais (ABNT NBR 10004:2024)',
-          source: '157:991',
-          comments: [265, 266],
+          title: 'Abastecimento de água',
+          source: '47:1844',
+          comments: [36, 42],
           fields: [
             {
-              key: 'tabelaResiduosAbnt',
-              label: 'Classificação de resíduos conforme ABNT NBR 10004:2024',
-              type: 'table',
-              required: (_d, phase) => phase !== 'LP' && phase !== 'LI',
-              comments: [265, 266],
-              hint: 'Classificação segundo ABNT NBR 10004:2024 (#265). O preenchimento detalhado não é obrigatório SOMENTE na LP e LI (#266); obrigatório na LO e LU.',
-              columns: [
-                textField('origemResiduo', 'Origem / Processo gerador'),
-                textField('classificacaoAbnt', 'Classe ABNT (Classe I - Perigoso / Classe II A - Não inerte / Classe II B - Inerte)'),
-                numberField('geracaoMensal', 'Geração estimada', 't/mês'),
-                textField('armazenamento', 'Forma de armazenamento temporário'),
-                textField('destinacaoFinal', 'Destinação final ambientalmente adequada'),
-              ],
+              ...choice(
+                'fonteAgua',
+                'Fonte de abastecimento',
+                ['Captação Subterrânea (Poço)', 'Captação superficial (rio)', 'Rede pública ou concessionária', 'Outro'],
+                'radio'
+              ),
+              comments: [36, 42],
             },
+            numberField('demandaAgua', 'Demanda prevista', 'm³/dia'),
           ],
-          documents: ['Plano de Gerenciamento de Resíduos Sólidos — PGRS — ATEND'],
         },
         {
-          title: 'Plano de Gerenciamento de Resíduos Sólidos (CEPRAM 4578/2017)',
-          source: '157:997',
-          comments: [267, 268, 269, 270, 271, 272],
+          title: 'Outorga de direito de uso',
+          source: '47:1844',
+          comments: [37, 38, 41],
+          when: { key: 'fonteAgua', notValue: 'Rede pública ou concessionária' },
+          note: 'Oculta quando a fonte for Rede pública ou concessionária (#38). Caso o número de portaria inserido não seja reconhecido automaticamente, anexar PDF da portaria.',
           fields: [
             {
-              ...textField('numeroPgrs', 'Número / Identificação do PGRS vigente'),
-              required: (_d, phase) => phase !== 'LP',
-              comments: [267],
-              hint: 'PGRS conforme Deliberação CEPRAM 4578/2017 (NT-01/2017). Não é obrigatório na LP (#267); obrigatório nas demais fases.',
-            },
-            {
-              ...textField('periodicidadeRevisaoPgrs', 'Periodicidade de revisão e atualização do PGRS', false),
-              hint: 'Prazo regulamentar de 5 anos (#268, #272).',
-              comments: [268, 272],
-            },
-            {
-              ...textField('metasMinimizacao', 'Metas de minimização de resíduos e reutilização', false),
-              type: 'textarea',
-              comments: [269],
-              hint: 'Campo opcional (#269).',
-            },
-            {
-              ...textField('logisticaReversa', 'Sistemas de logística reversa aplicáveis', false),
-              type: 'textarea',
-              comments: [270],
-              hint: 'Campo opcional (#270).',
-            },
-            {
-              ...textField('reaproveitamentoEnergetico', 'Reaproveitamento energético ou coprocessamento', false),
-              type: 'textarea',
-              comments: [271],
-              hint: 'Campo opcional (#271).',
-            },
-          ],
-          documents: ['Anotação de Responsabilidade Técnica (ART) do PGRS — ATEND'],
-        },
-        {
-          title: 'Substâncias perigosas e inflamáveis (CEPRAM II.3)',
-          source: '107:1901',
-          comments: [223, 224, 226, 227],
-          fields: [
-            {
-              key: 'tabelaExplosivas',
-              label: 'Substâncias explosivas',
-              type: 'table',
-              required: false,
-              comments: [226],
-              hint: 'Tabela segregada para substâncias com propriedades explosivas (#226).',
-              columns: [
-                { ...choice('substancia', 'Substância', LISTA_EXPLOSIVAS, 'select'), comments: [223] },
-                { ...textField('codigoOnu', 'Código ONU / Classe'), hint: 'Preenchido automaticamente ao selecionar a substância (#224).' },
-                numberField('capacidadeArmazenada', 'Capacidade armazenada', 'kg'),
-                textField('localArmazenamento', 'Local / Edificação de armazenamento'),
-              ],
-            },
-            {
-              key: 'tabelaToxicas',
-              label: 'Substâncias tóxicas',
-              type: 'table',
-              required: false,
-              comments: [226],
-              hint: 'Tabela segregada para substâncias com propriedades tóxicas (#226).',
-              columns: [
-                { ...choice('substancia', 'Substância', LISTA_TOXICAS, 'select'), comments: [223] },
-                { ...textField('codigoOnu', 'Código ONU / Classe'), hint: 'Preenchido automaticamente ao selecionar a substância (#224).' },
-                numberField('capacidadeArmazenada', 'Capacidade armazenada', 't'),
-                textField('localArmazenamento', 'Forma de contenção'),
-              ],
-            },
-            {
-              key: 'tabelaInflamaveis',
-              label: 'Substâncias inflamáveis (Listagem CEPRAM II.3)',
-              type: 'table',
-              required: false,
-              comments: [223, 224, 226],
-              hint: 'Tabela segregada para substâncias inflamáveis com base no Anexo II.3 do CEPRAM (#223, #226). Código ONU preenchido automaticamente (#224).',
-              columns: [
-                { ...choice('substancia', 'Substância', LISTA_INFLAMAVEIS_CEPRAM, 'select'), comments: [223] },
-                { ...textField('codigoOnu', 'Código ONU / Classe'), hint: 'Preenchido automaticamente ao selecionar a substância (#224).' },
-                numberField('capacidadeArmazenada', 'Capacidade máxima de armazenamento', 'm³'),
-                textField('tipoRecipiente', 'Tipo de tanque / recipiente'),
-              ],
+              ...textField('portariaOutorga', 'Nº do requerimento/processo ou PORTARIA da outorga'),
+              comments: [37, 38],
+              hint: 'Caso o sistema não reconheça automaticamente a portaria informada, anexar o PDF da portaria na aba Documentos Obrigatórios (#38).',
             },
           ],
           documents: [
-            'Plano de Ação de Emergência — PAE (obrigatório para produtos perigosos) — ATEND (#227)',
-            'Estudo de Análise de Risco (EAR) e PGR integrado — ATEND',
+            'PDF da portaria de outorga (quando não reconhecida automaticamente) — ATEND (#38)',
+            'Comprovante de cumprimento da outorga (aplicável na RLO) — ATEND (#41)',
+          ],
+        },
+        {
+          title: 'Consumo energético',
+          source: '47:1844',
+          comments: [39, 40],
+          fields: [
+            {
+              ...choice(
+                'fontesEnergia',
+                'Fontes energéticas',
+                ['Rede concessionária', 'Gás natural', 'GLP', 'Biomassa ou lenha', 'Solar', 'Outra'],
+                'checks'
+              ),
+              comments: [39, 40],
+            },
+            ...ENERGY_DEMAND_FIELDS.map(entry => ({
+              ...numberField(entry.key, entry.label, entry.unit),
+              when: { key: 'fontesEnergia', value: entry.source },
+              comments: [40],
+            })),
+            computedField(
+              'demandaEnergiaTotal',
+              'Demanda total prevista (automático)',
+              data => {
+                const selected = Array.isArray(data.fontesEnergia) ? (data.fontesEnergia as string[]) : [];
+                if (!selected.length) return 'Selecione uma ou mais fontes energéticas';
+                let total = 0;
+                let filledCount = 0;
+                for (const entry of ENERGY_DEMAND_FIELDS) {
+                  if (!selected.includes(entry.source)) continue;
+                  const n = parseNumber(String(data[entry.key] || ''));
+                  if (n !== undefined) {
+                    total += n;
+                    filledCount += 1;
+                  }
+                }
+                return filledCount ? `${formatBrNumber(total)} (soma das ${filledCount} fonte(s) informada(s))` : 'Aguardando preenchimento das demandas';
+              },
+              '',
+              'Calculado automaticamente a partir da demanda de cada fonte energética selecionada (#40).'
+            ),
           ],
         },
       ],
     },
     {
-      title: 'Comunidades, emergência e programas',
+      title: 'Efluentes e emissões',
       sections: [
         {
-          title: 'Povos e comunidades tradicionais',
-          source: '170:989',
-          comments: [274],
+          title: 'Efluentes líquidos',
+          source: '47:1862',
+          comments: [43, 44, 45, 49, 50],
+          note: 'O laudo de monitoramento de efluentes foi removido deste formulário e permanece na aba Documentos Obrigatórios (ATEND) (#45, #49).',
           fields: [
+            numberField('vazaoEfluentes', 'Vazão prevista', 'm³/dia'),
             {
-              ...choice('interferenciaTradicional', 'Há sobreposição ou proximidade com Povos e Comunidades Tradicionais?', yesNo),
-              comments: [274],
+              ...choice('sistemaTratamento', 'Projeto do sistema de tratamento', TRATAMENTO_EFLUENTES_OPCOES, 'select'),
+              comments: [43, 44],
+              hint: 'As opções parametrizáveis completas vêm do banco do SEIA (#43).',
             },
             {
-              ...choice('tipoComunidade', 'Tipo de comunidade identificada', ['Indígena', 'Quilombola', 'Fundo e Fecho de Pasto', 'Pescadores Artesanais', 'Outros'], 'checks'),
-              when: { key: 'interferenciaTradicional', value: 'Sim' },
-              comments: [274],
-            },
-            {
-              ...numberField('distanciaComunidade', 'Distância até a comunidade mais próxima', 'km'),
-              when: { key: 'interferenciaTradicional', value: 'Sim' },
-            },
-            {
-              ...textField('medidasMitigadorasTradicional', 'Medidas de mitigação ou anuência prévia', false),
-              type: 'textarea',
-              when: { key: 'interferenciaTradicional', value: 'Sim' },
+              ...pending(
+                'corpoHidrico',
+                'Corpo Hídrico',
+                'Cadastro GEOBahia / AID não conectado nesta demonstração. Campo oculto para Fossa séptica, Caixa separadora, Sem tratamento e CETREL (#44).'
+              ),
+              when: {
+                key: 'sistemaTratamento',
+                notIn: ['Fossa séptica', 'Caixa separadora', 'Sem tratamento', 'CETREL'],
+              },
+              comments: [44],
             },
           ],
-          documents: ['Estudo do Componente Indígena / Quilombola ou manifestação de órgãos intervenientes — ATEND'],
+          documents: ['Laudo de monitoramento de efluentes (múltiplos arquivos permitidos na RLO) — ATEND (#45, #49, #50)'],
         },
         {
-          title: 'Contatos de emergência (LO e renovações)',
+          title: 'Emissões atmosféricas',
+          source: '47:1865',
+          comments: [46, 47, 50],
+          note: 'Avaliação isocinética e opacidade removida conforme #46. MSG-21: vazão opcional na LP/LI/LU e obrigatória na LO e RLO.',
+          fields: [
+            {
+              key: 'tabelaEmissoes',
+              label: 'Chaminés e fontes de emissão',
+              type: 'table',
+              required: false,
+              comments: [47],
+              columns: [
+                textField('chamineFonte', 'Chaminé ou fonte'),
+                textField('poluentes', 'Poluentes'),
+                {
+                  ...numberField('vazaoGasosa', 'Vazão', 'Nm³/h', false),
+                  required: (_d, p) => p === 'LO' || p === 'Renovacao',
+                },
+                {
+                  ...choice('sistemaControle', 'Sistema de controle', CONTROLE_EMISSOES_OPCOES, 'select'),
+                  comments: [47],
+                },
+                textField('outroSistemaControle', 'Descrição (se Outros)', false),
+              ],
+            },
+          ],
+          documents: ['Histórico de documentos de emissões (múltiplos arquivos na RLO) — ATEND (#50)'],
+        },
+        {
+          title: 'Ruídos e vibrações',
+          source: '47:1865',
+          comments: [48, 50],
+          fields: [
+            {
+              ...textField('fontesRuidos', 'Fontes geradoras, atenuação projetada e controle', true),
+              type: 'textarea',
+              required: (_d, p) => p !== 'Renovacao',
+              comments: [48],
+            },
+          ],
+          documents: ['Histórico de laudos de ruído (NBR 10.151 — múltiplos arquivos permitidos na RLO) — ATEND (#50)'],
+        },
+      ],
+    },
+    {
+      title: 'Resíduos e contaminação',
+      sections: [
+        {
+          title: 'Resíduos sólidos (ABNT/NBR 10004:2024)',
+          source: '47:1880',
+          comments: [51, 52, 53],
+          note: 'PGRS movido para Documentos Obrigatórios (#51). Classificação ABNT/NBR 10004:2024 (#53). MSG-22: SINIR/MTR não obrigatórios na LI e LO.',
+          fields: [
+            {
+              key: 'tabelaResiduos',
+              label: 'Resíduos sólidos',
+              type: 'table',
+              required: false,
+              comments: [53],
+              columns: [
+                choice('classeAbnt', 'Classe ABNT/NBR 10004:2024', CLASSES_ABNT_2024, 'select'),
+                textField('tipoResiduo', 'Tipo de resíduo'),
+                numberField('quantidade', 'Quantidade', 'ton/mês'),
+                textField('acondicionamento', 'Acondicionamento'),
+                textField('destinacaoFinal', 'Destinação final'),
+              ],
+            },
+            {
+              key: 'tabelaResiduosConstrucaoCivil',
+              label: 'Resíduos da Construção Civil',
+              type: 'table',
+              required: false,
+              comments: [52],
+              columns: [
+                textField('tipoResiduoRcc', 'Tipo / Classificação do resíduo (RCC)'),
+                numberField('quantidade', 'Quantidade'),
+                choice('unidadeMedida', 'Unidade', ['ton', 'm³', 'kg'], 'select'),
+                textField('destinacaoFinal', 'Acondicionamento e destinação final'),
+              ],
+            },
+          ],
+          documents: ['Plano de Gerenciamento de Resíduos Sólidos (PGRS) — ATEND (#51)'],
+        },
+        {
+          title: 'Transporte de resíduos',
+          source: '47:1889',
+          comments: [54, 57, 62, 63, 64],
+          whenPhase: ['LO', 'Renovacao'],
+          note: 'Seção removida na LI (#54). Na LO (#57, #63), o preenchimento e anexo são opcionais, sendo obrigatório anexar caso haja licença anterior.',
+          fields: [
+            {
+              ...textField('transporteResiduos', 'Transportadores identificados / Manifestos do período', false),
+              type: 'textarea',
+              required: (_d, p) => p === 'Renovacao',
+              comments: [57, 62],
+            },
+          ],
+          documents: ['Licenças ambientais das transportadoras (somente PDF; obrigatório na RLO e quando houver licença anterior na LO) — ATEND (#57, #63, #64)'],
+        },
+        {
+          title: 'Informações sobre Áreas Contaminadas',
+          source: '47:1889',
+          comments: [55, 56, 58, 59, 60, 64],
+          whenPhase: ['LP', 'LI', 'LU', 'LA', 'LO'],
+          note: 'Na LI (#56), o campo de Medidas de Prevenção (#55) foi removido. Na LO (#58, #60), o preenchimento e o laudo são opcionais caso não exista licença anterior.',
+          fields: [
+            {
+              ...textField('medidasContencaoMitigacao', 'Medidas de contenção e mitigação', false),
+              type: 'textarea',
+              when: { notPhase: 'LI' },
+              comments: [55, 56, 59, 60],
+              hint: 'Deixado não obrigatório na LO; anexar laudo caso possua licença anterior (#58, #60).',
+            },
+          ],
+          documents: ['Laudo de integridade das estruturas e bacias de contenção (somente PDF; opcional na LO se sem licença anterior) — ATEND (#58, #64)'],
+        },
+        {
+          title: 'Manutenção e Integridade do Solo',
+          source: '47:1895',
+          comments: [61, 62, 64],
+          whenPhase: ['Renovacao'],
+          fields: [
+            {
+              ...textField('manutencaoContencoes', 'Manutenção das contenções e investigações do período'),
+              type: 'textarea',
+              comments: [61],
+            },
+          ],
+          documents: ['Laudo de integridade das estruturas e bacias de contenção (somente PDF) — ATEND (#64)'],
+        },
+      ],
+    },
+    {
+      title: 'Riscos e PGR',
+      whenPhase: ['LI', 'LU', 'LA', 'LO', 'Renovacao'],
+      sections: [
+        {
+          title: 'Triagem e Índice de Risco (CEPRAM II.3)',
+          source: '107:1901',
+          comments: [223, 224, 226, 229],
+          note: 'Esta aba não é exibida na LP (#229). Tabelas segregadas (#226) para entrada manual (#223/#224) enquanto o catálogo normativo oficial CEPRAM II.3 / ONU não é integrado.',
+          fields: [
+            {
+              key: 'tabelaSubstanciasExplosivas',
+              label: 'Substâncias explosivas',
+              type: 'table',
+              required: false,
+              comments: [223, 224, 226],
+              columns: SUBSTANCIA_RISCO_COLUNAS,
+            },
+            {
+              key: 'tabelaSubstanciasToxicas',
+              label: 'Substâncias tóxicas',
+              type: 'table',
+              required: false,
+              comments: [223, 224, 226],
+              columns: SUBSTANCIA_RISCO_COLUNAS,
+            },
+            {
+              key: 'tabelaSubstanciasInflamaveis',
+              label: 'Substâncias inflamáveis (CEPRAM II.3)',
+              type: 'table',
+              required: false,
+              comments: [223, 224, 226],
+              columns: SUBSTANCIA_RISCO_COLUNAS,
+            },
+          ],
+        },
+        {
+          title: 'Gerenciamento de risco (NT-01/2017)',
+          source: '47:1901',
+          comments: [225, 227, 230, 231],
+          fields: [],
+          documents: [
+            'LI: Análise preliminar de perigos e diretrizes do PGR — ATEND (#230)',
+            'LO: PGR implementado, Autoavaliação do PGR com plano de ação e PAE — ATEND (#225, #227)',
+            'RLO: PGR atualizado, Autoavaliação, Relatório e Cronograma de reanálise de risco — ATEND (#231)',
+          ],
+          note: 'Todos os documentos de gerenciamento de risco são solicitados em Documentos Obrigatórios (ATEND), exigindo assinatura digital do Coordenador da CTGA (CTGA-01).',
+        },
+        {
+          title: 'Contatos de Emergência (LO e renovações)',
           source: '63:3501',
-          comments: [228, 229, 273],
-          whenPhase: ['LI', 'LU', 'LA', 'LO', 'Renovacao'],
-          note: 'Não é exibido na fase LP (#229). Aplicável em LO, LI, LU e renovações (#228, #273). Permite adicionar múltiplos contatos próprios e terceiros.',
+          comments: [228, 229],
+          whenPhase: ['LO', 'Renovacao'],
+          note: 'Adicione um ou mais contatos Próprios (CPF, nome, cargo/função, telefone, e-mail) ou Terceiros (CNPJ, razão social, RT, telefone, e-mail) (#228).',
           fields: [
             {
               key: 'contatosEmergencia',
               label: 'Contatos de emergência cadastrados',
               type: 'table',
               required: true,
-              comments: [228, 273],
-              columns: [
-                choice('tipoContato', 'Tipo de contato', ['Próprio', 'Terceiro'], 'select'),
-                textField('documento', 'Documento (CPF ou CNPJ)'),
-                textField('nomeRazao', 'Nome / Razão Social'),
-                textField('cargoFuncaoRt', 'Cargo, Função ou Nome do RT'),
-                textField('telefone', 'Telefone 24h'),
-                textField('email', 'E-mail'),
-              ],
+              comments: [228],
+              columns: CONTATOS_EMERGENCIA_COLUNAS,
             },
           ],
-        },
-        {
-          title: 'Planos e programas ambientais',
-          source: '157:1006',
-          comments: [275, 276],
-          fields: [
-            {
-              ...textField('programasPrevistosLp', 'Programas ambientais propostos para implantação', true),
-              type: 'textarea',
-              when: { phase: 'LP' },
-              comments: [276],
-              hint: 'Exibido somente no cenário LP (#276). Nas demais fases, o acompanhamento é feito via tabela de planos executados.',
-            },
-            {
-              ...textField('justificativaProgramasLp', 'Justificativa e objetivos dos programas propostos', false),
-              type: 'textarea',
-              when: { phase: 'LP' },
-              comments: [276],
-              hint: 'Exibido somente no cenário LP (#276).',
-            },
-            {
-              key: 'tabelaPlanosExecutados',
-              label: 'Planos Elaborados / Executados Durante a Vigência da Licença',
-              type: 'table',
-              required: true,
-              when: { notPhase: 'LP' },
-              comments: [275, 276],
-              hint: 'Adicionado campo alfanumérico para o usuário inserir em tabela os Planos Elaborados/Executados Durante a Vigência da Licença (a tabela não deve ser exibida em caso de LP) (#275).',
-              columns: [
-                textField('nomePlano', 'Nome do Plano / Programa ambiental'),
-                textField('protocoloAtend', 'Órgão de controle / Protocolo ATEND'),
-                textField('faseExecucao', 'Fase de execução (elaboração / em monitoramento / concluído)'),
-                textField('statusRelatorio', 'Status da entrega do relatório de monitoramento'),
-              ],
-            },
-          ],
-          documents: ['Relatórios de cumprimento de condicionantes da licença anterior — ATEND'],
         },
       ],
     },
@@ -400,7 +620,7 @@ export const industria: CoindDefinition = {
   ],
 };
 
-// 2. FCE DE DESMANTELAMENTO / AUTORIZAÇÃO AMBIENTAL (AA) (#234 - #241, #283)
+// 2. FCE DE DESMANTELAMENTO / AUTORIZAÇÃO AMBIENTAL — COIND (#232-#239, #283)
 export const desmantelamento: CoindDefinition = {
   kind: 'desmantelamento',
   title: 'FCE de Desmantelamento / Autorização Ambiental (AA)',
@@ -409,131 +629,191 @@ export const desmantelamento: CoindDefinition = {
   availablePhases: ['AA'],
   steps: [
     {
-      title: 'Enquadramento e objeto da autorização',
+      title: 'Autorização Ambiental e processo',
       sections: [
         {
           title: 'Identificação da Autorização Ambiental (AA)',
           source: '111:1931',
-          comments: [234, 235],
+          comments: [234, 235, 238],
           fields: [
             {
-              ...choice('motivoAa', 'Motivo da Autorização Ambiental', [
-                'Teste Industrial',
-                'Teste para Incorporação',
-                'Teste para Queima',
-                'Desativação Parcial',
-                'Desativação Total',
-                'Intervenção de Área Contaminada',
-                'Remediação de Área Contaminada',
-              ], 'select'),
+              ...choice(
+                'motivoAa',
+                'Motivo da Autorização Ambiental',
+                [
+                  'Teste Industrial',
+                  'Teste para Incorporação',
+                  'Teste para Queima',
+                  'Desativação Parcial',
+                  'Desativação Total',
+                  'Intervenção de Área Contaminada',
+                  'Remediação de Área Contaminada',
+                ],
+                'select'
+              ),
               comments: [235],
-              hint: 'A lista é parametrizada conforme o enquadramento formal da ATEND (#235).',
+              hint: 'Na operação real, vem pré-preenchido conforme o enquadramento especificado pela ATEND; lista parametrizada (#235).',
             },
             {
-              ...textField('descricaoObjetoAa', 'Descreva detalhadamente o objeto da autorização ambiental', true),
+              ...textField('descricaoObjetoAa', 'Descreva detalhadamente o objeto da autorização ambiental'),
               type: 'textarea',
-              comments: [232, 235],
-              hint: 'Descrição obrigatória em todas as fases da solicitação (#232, #235).',
+              comments: [235],
+            },
+            {
+              ...textField('caracterizacaoSubstancias', 'Caracterização de substâncias, metodologias e destinação'),
+              type: 'textarea',
+              comments: [238],
             },
           ],
-          documents: ['Requerimento de Autorização Ambiental e Certidão de Uso do Solo — ATEND'],
         },
         {
-          title: 'Substâncias, metodologias e destinação',
-          source: '63:3501',
-          comments: [236, 237, 238],
+          title: 'Processo produtivo',
+          source: '111:1914',
+          comments: [232, 233, 236, 237],
           fields: [
             {
-              ...textField('caracterizacaoSubstancias', 'Caracterização de substâncias, metodologias e destinação', true),
+              ...textField('descricaoEtapas', 'Descrição resumida das etapas'),
               type: 'textarea',
-              comments: [236, 237, 238],
-              hint: 'Campo obrigatório para a Autorização Ambiental (#236, #237, #238): caracterização técnica das substâncias residuais, metodologia de neutralização/descontaminação e destinação ambientalmente segura.',
-            },
-            {
-              ...textField('cronogramaDesativacao', 'Cronograma previsto de desativação / intervenção', true),
-              type: 'textarea',
-              comments: [233],
-              hint: 'Obrigatório para todas as modalidades de desativação e remediação (#233).',
+              comments: [232, 237],
             },
           ],
-          documents: [
-            'Plano de Desativação e Encerramento de Atividades — ATEND',
-            'Plano de Intervenção ou Remediação de Área Contaminada aprovado — ATEND',
+          documents: ['Fluxograma produtivo (PDF) — obrigatório em todas as fases — ATEND (#233, #236)'],
+        },
+        {
+          title: 'Matérias-primas e reagentes',
+          source: '111:1914',
+          note: 'MSG-23: se a unidade do Decreto 14.024/12 não servir para o insumo, digite livremente em Unidade de medida.',
+          fields: [
+            {
+              key: 'tabelaMateriasPrimas',
+              label: 'Matérias-primas e reagentes',
+              type: 'table',
+              required: false,
+              columns: [
+                textField('materiaPrima', 'Matéria-prima'),
+                numberField('consumoMensal', 'Consumo/mês'),
+                textField('unidadeMedida', 'Unidade de medida'),
+                textField('formaArmazenamento', 'Forma de armazenamento', false),
+              ],
+            },
+          ],
+        },
+        {
+          title: 'Produtos e subprodutos',
+          source: '111:1914',
+          fields: [
+            {
+              key: 'tabelaProdutos',
+              label: 'Produtos e subprodutos',
+              type: 'table',
+              required: false,
+              columns: [
+                textField('produto', 'Produto ou subproduto'),
+                numberField('capacidadeInstalada', 'Capacidade instalada', 'ton/mês'),
+                choice('estadoFisico', 'Estado físico', ['Sólido', 'Líquido', 'Gasoso'], 'select'),
+                textField('embalagem', 'Embalagem', false),
+                textField('destinacao', 'Destinação'),
+              ],
+            },
           ],
         },
       ],
     },
     {
-      title: 'Estruturas, interferências e áreas',
+      title: 'Água e energia',
       sections: [
         {
-          title: 'Estruturas objeto de desmantelamento ou intervenção',
-          source: '113:1940',
-          comments: [240, 241],
-          note: 'Todos os campos de quantificação desta seção foram definidos como opcionais (#241).',
+          title: 'Consumo energético',
+          source: '63:3501',
+          comments: [40],
           fields: [
-            {
-              ...choice('estruturasIntervencao', 'Estruturas envolvidas na intervenção', ['Linha de Transmissão', 'Pistas', 'APP', 'Outros'], 'checks'),
-              comments: [240],
-              hint: 'Estruturas adicionadas: Linha de Transmissão, Pistas, APP e Outros (#240).',
-            },
-            {
-              ...numberField('extensaoLinha', 'Extensão de linha de transmissão a ser desmantelada', 'km', false),
-              when: { key: 'estruturasIntervencao', value: 'Linha de Transmissão' },
-              comments: [241],
-            },
-            {
-              ...numberField('areaPistas', 'Área de pistas ou acessos a recuperar', 'm²', false),
-              when: { key: 'estruturasIntervencao', value: 'Pistas' },
-              comments: [241],
-            },
-            {
-              ...numberField('areaApp', 'Área de intervenção em APP', 'ha', false),
-              when: { key: 'estruturasIntervencao', value: 'APP' },
-              comments: [241],
-            },
-            {
-              ...numberField('volumeSoloRemover', 'Volume estimado de solo/entulho a ser removido', 'm³', false),
-              comments: [241],
-            },
-          ],
-          documents: [
-            'Levantamento planialtimétrico da área de intervenção — ATEND',
-            'Plano de Recuperação de Áreas Degradadas (PRAD) — ATEND',
+            choice('fontesEnergia', 'Fontes de energia (renováveis e não renováveis)', ['Rede concessionária', 'Gás natural', 'Biomassa ou lenha', 'Solar', 'Outra'], 'checks'),
+            numberField('consumoEletricoMedio', 'Consumo elétrico médio', 'kWh/mês'),
+            numberField('potenciaInstalada', 'Potência instalada', 'kW'),
           ],
         },
         {
-          title: 'Resíduos gerados no desmantelamento',
-          source: '94:2035',
-          comments: [209, 210, 211],
+          title: 'Abastecimento de água e outorga',
+          source: '63:3501',
+          fields: [
+            choice('origemAgua', 'Origem da água', ['Poço tubular', 'Captação superficial', 'Rede pública ou concessionária'], 'radio'),
+            numberField('vazaoConsumida', 'Vazão consumida', 'm³/dia'),
+            choice('possuiOutorga', 'Possui outorga do INEMA?', yesNo, 'radio'),
+            {
+              ...textField('portariaOutorga', 'Nº da portaria de outorga'),
+              when: { key: 'possuiOutorga', value: 'Sim' },
+            },
+          ],
+        },
+      ],
+    },
+    {
+      title: 'Efluentes e emissões',
+      sections: [
+        {
+          title: 'Efluentes líquidos',
+          source: '63:3501',
+          fields: [
+            numberField('vazaoEfluenteIndustrial', 'Vazão de efluente industrial', 'm³/dia'),
+            numberField('vazaoEfluenteSanitario', 'Vazão de efluente sanitário', 'm³/dia'),
+            choice('tipoTratamento', 'Tipo de tratamento', TRATAMENTO_EFLUENTES_OPCOES, 'select'),
+            pending('corpoHidricoReceptor', 'Corpo hídrico receptor', 'Cadastro GEOBahia / AID não conectado nesta demonstração.'),
+          ],
+        },
+        {
+          title: 'Emissões atmosféricas e ruídos',
+          source: '63:3501',
           fields: [
             {
-              key: 'tabelaResiduosDesmantelamento',
-              label: 'Quantitativo diário e mensal de resíduos do desmantelamento',
+              key: 'tabelaEmissoes',
+              label: 'Emissões atmosféricas',
               type: 'table',
-              required: true,
-              comments: [209],
-              hint: 'Deve informar a quantidade diária recebida/gerada para CADA tipo de resíduo (#209).',
+              required: false,
               columns: [
-                textField('tipoResiduo', 'Tipo de resíduo gerado'),
-                numberField('qtdDiaria', 'Quantidade diária gerada', 't/dia'),
-                numberField('qtdMensal', 'Quantidade mensal estimada', 't/mês'),
-                textField('horarioTransporte', 'Horário preferencial de transporte'),
+                textField('fonteEmissao', 'Fonte de emissão'),
+                textField('poluentes', 'Poluentes (MP, SOx, NOx, CO, COV)'),
+                numberField('vazaoGasosa', 'Vazão do efluente gasoso', 'Nm³/h', false),
+                textField('sistemaControle', 'Sistema de controle ambiental'),
               ],
             },
             {
-              ...choice('tipoVeiculoTransporte', 'Tipos de veículos utilizados para remoção', [
-                'Caminhão Baú',
-                'Caminhão Tanque',
-                'Caminhão Caçamba Basculante',
-                'Carreta Graneleira',
-                'Veículo Utilitário / VUC',
-                'Outro',
-              ], 'checks'),
-              comments: [210, 211],
+              ...textField('ruidosControle', 'Ruídos: fontes geradoras e controle', false),
+              type: 'textarea',
             },
           ],
-          documents: ['Manifesto de Transporte de Resíduos (MTR) e Certificado de Destinação — ATEND'],
+        },
+      ],
+    },
+    {
+      title: 'Resíduos e documentação AA',
+      sections: [
+        {
+          title: 'Resíduos sólidos (ABNT NBR 10004:2024)',
+          source: '111:1929',
+          note: 'MSG-22: o cadastro no SINIR e o MTR não são obrigatórios para envio na LI e na LO.',
+          fields: [
+            {
+              key: 'tabelaResiduosDesmantelamento',
+              label: 'Resíduos sólidos',
+              type: 'table',
+              required: false,
+              columns: [
+                choice('classeAbnt', 'Classe ABNT', CLASSES_ABNT_2024, 'select'),
+                textField('tipoResiduo', 'Tipo de resíduo'),
+                numberField('quantidade', 'Quantidade', 'ton/mês'),
+                textField('acondicionamento', 'Acondicionamento'),
+                textField('destinacaoFinal', 'Destinação final'),
+              ],
+            },
+          ],
+        },
+        {
+          title: 'Documentos específicos da Autorização Ambiental',
+          source: '111:1929',
+          comments: [239],
+          fields: [],
+          note: 'A seção fixa "Desativação e demolição (IN INEMA 002/2021)" foi removida conforme #239: somente documentos específicos ao Motivo da AA selecionado são requeridos na aba Documentos Obrigatórios (ATEND).',
+          documents: ['Documentos específicos conforme Motivo da AA enquadrado pela ATEND (#239)'],
         },
       ],
     },
@@ -544,135 +824,379 @@ export const desmantelamento: CoindDefinition = {
   ],
 };
 
-// 3. FCE DE DUTOVIA (#251 - #260, #283)
+// 3. FCE DE DUTOVIA — COIND (#240, #241, #249-#256, #259-#276, #283)
 export const dutovia: CoindDefinition = {
   kind: 'dutovia',
   title: 'FCE de Dutovia',
   route: 'coind-dutovia',
   defaultPhase: 'LP',
-  availablePhases: ['LP', 'LI', 'LA', 'LO'],
+  availablePhases: ['LP', 'LI', 'LU', 'LA', 'LO', 'Renovacao'],
   steps: [
     {
-      title: 'Traçado, faixa de servidão e extensão',
+      title: 'Engenharia e traçado',
       sections: [
         {
-          title: 'Geometria do traçado e extensão',
-          source: '113:1937',
-          comments: [251, 256],
+          title: 'Traçado e geoprocessamento',
+          source: '113:1934',
+          comments: [256],
           fields: [
-            {
-              ...numberField('extensaoDuto', 'Extensão do duto', 'km', true),
-              comments: [251, 256],
-              hint: 'Extensão informada no requerimento / traçado geoespacial (#251, #256).',
-            },
-            {
-              ...choice('tipoInstalacaoDuto', 'Tipo de assentamento do duto', ['Subterrâneo (enterrado)', 'Aéreo (suportes)', 'Submarino / Subaquático', 'Misto']),
-            },
-            {
-              ...numberField('diametroNominalDuto', 'Diâmetro nominal do duto', 'pol'),
-            },
+            pending('eixoDutovia', 'Eixo da dutovia (SIRGAS 2000)', 'Upload vetorial e validação espacial (RN-G-04 / RN-G-05) dependem do serviço geoespacial.'),
+            computedField(
+              'extensaoInformada',
+              'Extensão informada',
+              (data, phase) => {
+                const base = parseNumber(String(data.extensaoDuto || '')) || 0;
+                const amp = phase === 'LA' ? parseNumber(String(data.extensaoAmpliacao || '')) || 0 : 0;
+                const total = base + amp;
+                return total > 0 ? `${formatBrNumber(total)} km` : 'Não calculado';
+              },
+              'km',
+              'Rótulo atualizado para "Extensão informada" (#256).'
+            ),
+            numberField('trechosAereos', 'Trechos aéreos', 'km', false),
+            numberField('trechosEnterrados', 'Trechos enterrados', 'km', false),
+            countField('valvulasBloqueio', 'Válvulas de bloqueio', false),
+            countField('estacoesPig', 'Estações de lançamento e recebimento de PIG', false),
           ],
-          documents: ['Traçado georreferenciado da diretriz do duto (shapefile) — ATEND'],
         },
         {
           title: 'Faixa de servidão',
           source: '113:1937',
-          comments: [253, 254, 255],
+          comments: [251, 252, 253, 254, 255],
           fields: [
+            {
+              ...numberField('extensaoDuto', 'Extensão do duto', 'km', true),
+              comments: [251],
+            },
+            {
+              ...numberField('extensaoAmpliacao', 'Extensão de ampliação', 'km', false),
+              when: { phase: 'LA' },
+              comments: [252],
+              hint: 'Campo exibido somente na Licença de Alteração (LA) (#252).',
+            },
             {
               ...numberField('larguraFaixaServidao', 'Largura da faixa de servidão', 'm', true),
               comments: [253],
             },
+            computedField(
+              'extensaoTotalFaixa',
+              'Extensão total da faixa de servidão',
+              (data, phase) => {
+                const base = parseNumber(String(data.extensaoDuto || ''));
+                if (base === undefined) return 'Não calculado';
+                const amp = phase === 'LA' ? parseNumber(String(data.extensaoAmpliacao || '')) || 0 : 0;
+                return `${formatBrNumber(base + amp)} km`;
+              },
+              'km',
+              'Nomenclatura atualizada para incluir "de servidão" (#255).'
+            ),
+            computedField(
+              'areaTotalFaixa',
+              'Área total da faixa de servidão',
+              (data, phase) => {
+                const base = parseNumber(String(data.extensaoDuto || ''));
+                const larg = parseNumber(String(data.larguraFaixaServidao || ''));
+                if (base === undefined || larg === undefined) return 'Não calculado';
+                const amp = phase === 'LA' ? parseNumber(String(data.extensaoAmpliacao || '')) || 0 : 0;
+                return `${formatBrNumber(((base + amp) * larg) / 10)} ha`;
+              },
+              'ha'
+            ),
             {
-              ...choice('faixaInterceptaAreasRestritas', 'A faixa de servidão intercepta áreas restritas ou de preservação?', yesNo),
+              ...choice('faixaCompartilhada', 'A faixa de servidão é compartilhada com outras dutovias?', yesNo, 'radio'),
               comments: [254],
             },
             {
-              ...textField('usoOcupacaoFaixa', 'Uso e ocupação da faixa de servidão'),
+              key: 'tabelaFaixaCompartilhada',
+              label: 'Dutovias compartilhadas',
+              type: 'table',
+              when: { key: 'faixaCompartilhada', value: 'Sim' },
+              required: true,
+              columns: [
+                textField('empresaProprietaria', 'Empresa proprietária'),
+                textField('produtoTransportado', 'Produto transportado'),
+                textField('trechoComum', 'Trecho comum'),
+              ],
+            },
+          ],
+        },
+        {
+          title: 'Cruzamentos e interseções',
+          source: '113:1940',
+          comments: [240],
+          fields: [
+            {
+              key: 'tabelaCruzamentos',
+              label: 'Cruzamentos e interseções',
+              type: 'table',
+              required: false,
+              comments: [240],
+              columns: [
+                {
+                  ...choice(
+                    'tipoCruzamento',
+                    'Tipo',
+                    ['Rio', 'Rodovia', 'Ferrovia', 'Pontilhão', 'Comunidade', 'Linha de Transmissão', 'Pistas', 'APP', 'Outros'],
+                    'select'
+                  ),
+                  comments: [240],
+                },
+                textField('descricaoCruzamento', 'Descrição'),
+                textField('localizacaoKm', 'Localização (km)'),
+              ],
+            },
+          ],
+        },
+        {
+          title: 'Parâmetros operacionais',
+          source: '113:1943',
+          comments: [241, 259, 260],
+          note: 'Todos os campos de parâmetros operacionais são opcionais (#241).',
+          fields: [
+            numberField('capacidadeTransporteAnual', 'Capacidade de transporte anual', 'm³/ano', false),
+            {
+              ...numberField('vazaoProjeto', 'Vazão do projeto', 'Nm³/h', false),
+              comments: [260],
+            },
+            numberField('diametroNominalDuto', 'Diâmetro nominal', 'pol', false),
+            numberField('espessuraParede', 'Espessura da parede', 'mm', false),
+            textField('materialDuto', 'Material', false),
+            {
+              ...numberField('pressaoNominalProjeto', 'Pressão nominal do Projeto', 'bar', false),
+              comments: [259],
+            },
+            numberField('temperaturaOperacao', 'Temperatura de operação', '°C', false),
+            textField('protecaoCatodica', 'Proteção catódica', false),
+          ],
+          documents: ['FISPQ das substâncias transportadas — ATEND'],
+        },
+      ],
+    },
+    {
+      title: 'Água e efluentes',
+      whenPhase: ['LI'],
+      sections: [
+        {
+          title: 'Água para manutenção, inspeção e teste hidrostático',
+          source: '157:982',
+          comments: [261, 262],
+          note: 'Aba exibida somente na Licença de Instalação (LI) (#262).',
+          fields: [
+            {
+              ...choice('fonteAgua', 'Fonte de abastecimento', ['Subterrâneo', 'Superficial', 'Caminhão-Pipa', 'Concessionária'], 'select'),
+              comments: [261],
+            },
+            numberField('volumeEstimadoAgua', 'Volume estimado', 'm³/evento'),
+          ],
+        },
+        {
+          title: 'Efluentes de inspeções, purgas e emergências',
+          source: '157:985',
+          comments: [263],
+          fields: [
+            {
+              ...textField('correntesGeradas', 'Correntes geradas (qualitativa e quantitativa)'),
               type: 'textarea',
-              comments: [255],
-              hint: 'Descreva a destinação, acessos e restrições na faixa de servidão (#255).',
+            },
+            choice(
+              'sistemaTratamento',
+              'Sistema de tratamento',
+              [
+                'ETE própria (físico-química e biológica)',
+                'Fossa séptica e filtro anaeróbio',
+                'Caixa separadora água e óleo (SAO)',
+                'Neutralização e precipitação',
+                'CETREL ou rede coletora de terceiros',
+                'Sem tratamento',
+                'Outro',
+              ],
+              'select'
+            ),
+            {
+              ...choice(
+                'corpoReceptorDescarte',
+                'Corpo receptor do descarte',
+                ['Corpo hídrico (seleção GEOBahia pendente)', 'Não se aplica'],
+                'select'
+              ),
+              comments: [263],
+              hint: 'Opção "Não se aplica" inserida para casos sem descarte (#263). O cadastro completo de corpos hídricos depende do GEOBahia.',
             },
           ],
         },
       ],
     },
     {
-      title: 'Operação, pressão e produto transportado',
+      title: 'Emissões e resíduos',
       sections: [
         {
-          title: 'Parâmetros operacionais do projeto',
-          source: '113:1943',
-          comments: [259, 260],
+          title: 'Emissões atmosféricas',
+          source: '157:988',
+          comments: [264],
           fields: [
             {
-              ...numberField('pressaoNominal', 'Pressão nominal do Projeto', 'kgf/cm²', true),
-              comments: [259],
-              hint: 'Pressão nominal de operação do duto (#259).',
+              ...textField('estimativaEmissoes', 'Estimativa de emissões em operações e despressurizações'),
+              type: 'textarea',
+              hint: 'Inclua emissões pontuais, fugitivas e purgas de manutenção.',
             },
+            textField('sistemasControleQueimadores', 'Sistemas de controle ou queimadores'),
             {
-              ...numberField('vazaoProjeto', 'Vazão do projeto', 'm³/h', true),
-              comments: [260],
-              hint: 'Vazão máxima prevista de escoamento (#260).',
-            },
-            {
-              ...choice('produtoTransportado', 'Produto transportado', [
-                'Gás natural',
-                'Petróleo cru',
-                'Derivados de petróleo (combustíveis)',
-                'Biocombustíveis (Etanol/Biodiesel)',
-                'Mineroduto (polpa de minério)',
-                'Produtos químicos / perigosos',
-                'Água bruta industrial',
-                'Outros',
-              ], 'select'),
+              ...numberField('vazaoEmissoesPurgadores', 'Vazão das emissões em purgadores', 'Nm³/h', false),
+              required: (_d, p) => p === 'LU' || p === 'LO' || p === 'Renovacao',
+              comments: [264],
+              hint: 'Obrigatória na LU, LO e RLO (#264 / MSG-21); opcional nas fases LP e LI.',
             },
           ],
-          documents: ['Fluxograma de processo e memorial descritivo dos sistemas de bombeamento/compressão — ATEND'],
         },
         {
-          title: 'Detalhamento executivo e travessias (somente em LA)',
-          source: '113:1937',
-          comments: [252],
-          whenPhase: ['LA'],
-          note: 'Esta seção é aplicável especificamente na Licença de Alteração (LA) (#252).',
+          title: 'Resíduos sólidos',
+          source: '157:991',
+          comments: [265, 266],
+          note: 'Resíduos de manutenção, pigging e eventos emergenciais. Classificação ABNT NBR 10004:2024 (#265). Não obrigatórios somente na LP e LI (#266).',
           fields: [
             {
-              key: 'tabelaTravessias',
-              label: 'Travessias e cruzamentos especiais de dutos',
+              key: 'tabelaResiduosDutovia',
+              label: 'Resíduos sólidos (ABNT NBR 10004:2024)',
+              type: 'table',
+              required: (_d, p) => p !== 'LP' && p !== 'LI',
+              comments: [265, 266],
+              columns: [
+                choice('classeAbnt', 'Classe ABNT 10004:2024', CLASSES_ABNT_2024, 'select'),
+                textField('tipoResiduo', 'Tipo de resíduo'),
+                numberField('quantidade', 'Quantidade', 'ton/ano'),
+                textField('acondicionamento', 'Acondicionamento'),
+                textField('destinacaoFinal', 'Destinação final'),
+              ],
+            },
+            {
+              ...textField('locaisArmazenamento', 'Locais de armazenamento temporário'),
+              type: 'textarea',
+            },
+            {
+              ...textField('logisticaTransporte', 'Logística de transporte dos resíduos'),
+              type: 'textarea',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      title: 'Riscos e PGR',
+      sections: [
+        {
+          title: 'Proteção emergencial e histórico',
+          source: '157:1000',
+          comments: [249, 250],
+          fields: [
+            {
+              ...textField('travamentoDeteccaoVazamentos', 'Sistema de travamento automático de válvulas e detecção de vazamentos'),
+              type: 'textarea',
+            },
+            {
+              ...choice('eventosEmergenciaisOpcao', 'Eventos emergenciais no período da última RLO', ['Informar ocorrências', 'Não se aplica'], 'radio'),
+              when: { phase: 'Renovacao' },
+              comments: [249],
+            },
+            {
+              ...textField('eventosEmergenciaisDescricao', 'Descrição dos eventos emergenciais no período'),
+              type: 'textarea',
+              when: [{ phase: 'Renovacao' }, { key: 'eventosEmergenciaisOpcao', value: 'Informar ocorrências' }],
+              comments: [249],
+            },
+          ],
+          documents: ['RLO: Relatórios de emergência — ATEND (#250)'],
+        },
+        {
+          title: 'PGR e reanálise de riscos (CEPRAM 4578/2017 - NT-01/2017)',
+          source: '157:997',
+          comments: [267, 268, 269, 270, 271, 272],
+          fields: [],
+          documents: [
+            'PGR conforme CEPRAM 4578/2017 - NT-01/2017 (obrigatório em todas as fases exceto LP) — ATEND (#267)',
+            'Cronograma de reanálise de risco — 5 anos (opcional) — ATEND (#268, #269, #272)',
+            'Última reanálise de riscos (opcional) — ATEND (#270)',
+            'Autoavaliação do PGR com plano de ação (opcional) — ATEND (#271)',
+          ],
+          note: 'O PGR, as reanálises e os planos exigem a assinatura digital do Coordenador da CTGA (CTGA-01).',
+        },
+        {
+          title: 'Contatos de Emergência (LO e renovações)',
+          source: '157:997',
+          comments: [273],
+          whenPhase: ['LO', 'Renovacao'],
+          note: 'Adicione um ou mais contatos Próprios ou Terceiros (#273).',
+          fields: [
+            {
+              key: 'contatosEmergencia',
+              label: 'Contatos de emergência cadastrados',
               type: 'table',
               required: true,
-              comments: [252],
+              comments: [273],
+              columns: CONTATOS_EMERGENCIA_COLUNAS,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      title: 'Comunidades e educação ambiental',
+      sections: [
+        {
+          title: 'Comunidades em áreas vulneráveis',
+          source: '170:989',
+          comments: [274],
+          fields: [
+            {
+              key: 'tabelaComunidades',
+              label: 'Comunidades no entorno da faixa de servidão',
+              type: 'table',
+              required: false,
+              comments: [274],
               columns: [
-                textField('tipoTravessia', 'Tipo (curso d’água / rodovia / ferrovia)'),
-                textField('metodoExecutivo', 'Método construtivo (Perfuração Direcional / Vala a céu aberto)'),
-                numberField('extensaoTravessia', 'Extensão do trecho', 'm'),
-                textField('profundidadeEnterrio', 'Profundidade mínima de cobertura (m)'),
+                choice('tipoComunidade', 'Tipo', ['Comunidade', 'Terra indígena', 'Quilombola', 'Povos e Comunidades Tradicionais'], 'select'),
+                textField('nomeComunidade', 'Nome'),
+                numberField('distanciaFaixa', 'Distância da faixa', 'm'),
               ],
             },
           ],
-          documents: ['Projeto executivo das travessias aprovado pela concessionária ou órgão rodoviário — ATEND'],
         },
         {
-          title: 'Área de influência e entorno (10 km)',
-          source: '94:2050',
-          comments: [215, 216],
+          title: 'Medidas, comunicação e planos',
+          source: '157:1006',
+          comments: [275, 276],
           fields: [
             {
-              ...choice('interferenciaRaio10km', 'Foram identificadas comunidades ou infraestruturas críticas no raio de 10 km?', yesNo),
-              comments: [215, 216],
-              hint: 'Raio de análise de 10 km conforme diretriz do formulário (#215, #216).',
+              ...textField('medidasMitigadoras', 'Medidas mitigadoras e compensatórias'),
+              type: 'textarea',
+              when: { phase: 'LP' },
+              comments: [276],
+              hint: 'Exibido apenas na LP; nas demais fases utilize a tabela de planos abaixo (#276).',
             },
             {
-              ...textField('descricaoEntorno10km', 'Descrição das interferências no raio de 10 km', false),
+              ...textField('planoComunicacaoSocial', 'Plano de comunicação social'),
               type: 'textarea',
-              when: { key: 'interferenciaRaio10km', value: 'Sim' },
-              comments: [215, 216],
+              when: { phase: 'LP' },
+              comments: [276],
+            },
+            {
+              key: 'tabelaPlanosExecutados',
+              label: 'Planos Elaborados/Executados Durante a Vigência da Licença',
+              type: 'table',
+              required: true,
+              when: { notPhase: 'LP' },
+              comments: [275, 276],
+              hint: 'Tabela exibida nas fases pós-LP para listagem alfanumérica dos planos elaborados/executados durante a vigência (#275).',
+              columns: [textField('planoExecutado', 'Plano Elaborado / Executado')],
             },
           ],
+        },
+        {
+          title: 'Educação ambiental',
+          source: '157:1006',
+          fields: [],
           documents: [
-            'Estudo de Dispersão e Análise de Risco com abrangência de 10 km — ATEND',
-            'Plano de Atendimento a Emergências (PAE) para vazamento em dutovia — ATEND',
+            'Programas de educação ambiental — ATEND (assinatura digital CTGA-01)',
+            'Plano de ação — ATEND',
           ],
         },
       ],
@@ -690,32 +1214,52 @@ export const coindDefinitions: Record<CoindKind, CoindDefinition> = {
   dutovia,
 };
 
-// Funções de visibilidade e cálculo
+function matchesCondition(c: Condition, data: FceData, currentPhase?: FcePhase): boolean {
+  if (c.phase !== undefined) {
+    const allowed = Array.isArray(c.phase) ? c.phase : [c.phase];
+    if (currentPhase && !allowed.includes(currentPhase)) return false;
+  }
+  if (c.notPhase !== undefined) {
+    const forbidden = Array.isArray(c.notPhase) ? c.notPhase : [c.notPhase];
+    if (currentPhase && forbidden.includes(currentPhase)) return false;
+  }
+  if (c.key !== undefined) {
+    const val = data[c.key];
+    const strArr = Array.isArray(val)
+      ? val.filter((v): v is string => typeof v === 'string')
+      : null;
+    if (c.value !== undefined) {
+      return strArr ? strArr.includes(c.value) : val === c.value;
+    }
+    if (c.notValue !== undefined) {
+      return strArr
+        ? strArr.length > 0 && !strArr.includes(c.notValue)
+        : val !== undefined && val !== '' && val !== c.notValue;
+    }
+    if (c.notIn !== undefined) {
+      if (strArr) return !strArr.some(v => c.notIn!.includes(v));
+      return typeof val !== 'string' || !c.notIn.includes(val);
+    }
+  }
+  return true;
+}
+
 export function visibleField(field: FceField, data: FceData, currentPhase?: FcePhase): boolean {
   if (!field.when) return true;
   const conditions = Array.isArray(field.when) ? field.when : [field.when];
-  return conditions.every(c => {
-    if (c.phase !== undefined) {
-      const allowed = Array.isArray(c.phase) ? c.phase : [c.phase];
-      if (currentPhase && !allowed.includes(currentPhase)) return false;
-    }
-    if (c.notPhase !== undefined) {
-      const forbidden = Array.isArray(c.notPhase) ? c.notPhase : [c.notPhase];
-      if (currentPhase && forbidden.includes(currentPhase)) return false;
-    }
-    if (c.key !== undefined) {
-      const val = data[c.key];
-      if (c.value !== undefined) return val === c.value;
-      if (c.notValue !== undefined) return val !== undefined && val !== '' && val !== c.notValue;
-    }
-    return true;
-  });
+  return conditions.every(c => matchesCondition(c, data, currentPhase));
 }
 
-export function visibleSection(section: FceSection, currentPhase?: FcePhase): boolean {
-  if (!section.whenPhase) return true;
-  const allowed = Array.isArray(section.whenPhase) ? section.whenPhase : [section.whenPhase];
-  return currentPhase ? allowed.includes(currentPhase) : true;
+export function visibleSection(section: FceSection, currentPhase?: FcePhase, data: FceData = {}): boolean {
+  if (section.whenPhase) {
+    const allowed = Array.isArray(section.whenPhase) ? section.whenPhase : [section.whenPhase];
+    if (currentPhase && !allowed.includes(currentPhase)) return false;
+  }
+  if (section.when) {
+    const conditions = Array.isArray(section.when) ? section.when : [section.when];
+    if (!conditions.every(c => matchesCondition(c, data, currentPhase))) return false;
+  }
+  return true;
 }
 
 export function visibleStep(step: FceStep, currentPhase?: FcePhase): boolean {
@@ -765,8 +1309,9 @@ export function fieldError(field: FceField, data: FceData, phase?: FcePhase): st
 
 export function stepErrors(step: FceStep, data: FceData, phase?: FcePhase): Record<string, string> {
   const errors: Record<string, string> = {};
+  if (!visibleStep(step, phase)) return errors;
   for (const s of step.sections) {
-    if (!visibleSection(s, phase)) continue;
+    if (!visibleSection(s, phase, data)) continue;
     for (const f of activeFields(s, data, phase)) {
       const error = fieldError(f, data, phase);
       if (error) errors[f.key] = error;

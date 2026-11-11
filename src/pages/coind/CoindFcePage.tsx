@@ -16,9 +16,9 @@ import {
   FceValue,
   isFieldRequired,
   stepErrors,
-  SUBSTANCIAS_ONU_MAP,
   visibleField,
   visibleSection,
+  visibleStep,
 } from './coindFces';
 import './coind-fces.css';
 
@@ -26,8 +26,9 @@ const inputClass = 'w-full min-w-0 border-0 bg-transparent px-3 py-2 text-sm tex
 const hasOther = (value: FceValue | undefined) =>
   (Array.isArray(value) ? value : [value]).some(v => typeof v === 'string' && /^(outro|outra)/i.test(v));
 
-const displayValue = (field: FceField, data: FceData): string => {
+const displayValue = (field: FceField, data: FceData, phase?: FcePhase): string => {
   if (field.type === 'pending') return 'Pendente de integração';
+  if (field.type === 'computed') return field.compute ? field.compute(data, phase) : 'Não calculado';
   const value = data[field.key];
   if (field.type === 'table') return `${Array.isArray(value) ? value.length : 0} registro(s)`;
   if (Array.isArray(value)) return (value as string[]).join(', ') || 'Não informado';
@@ -57,6 +58,12 @@ function Field({
 
   if (field.type === 'pending') {
     control = <p id={id} className="coind-pending">Pendente de integração</p>;
+  } else if (field.type === 'computed') {
+    control = (
+      <p id={id} className="coind-output" aria-describedby={description}>
+        {field.compute ? field.compute(data, phase) : 'Não calculado'}
+      </p>
+    );
   } else if (field.type === 'radio' || field.type === 'checks') {
     control = (
       <div
@@ -99,15 +106,7 @@ function Field({
     };
 
     const updateRow = (rowIndex: number, columnKey: string, cellValue: string) => {
-      const updatedRows = rows.map((r, n) => {
-        if (n !== rowIndex) return r;
-        const newRow = { ...r, [columnKey]: cellValue };
-        // Preenchimento automático de código ONU / Classe ao selecionar a substância (#224)
-        if (columnKey === 'substancia' && SUBSTANCIAS_ONU_MAP[cellValue]) {
-          newRow['codigoOnu'] = SUBSTANCIAS_ONU_MAP[cellValue];
-        }
-        return newRow;
-      });
+      const updatedRows = rows.map((r, n) => (n === rowIndex ? { ...r, [columnKey]: cellValue } : r));
       onChange(field.key, updatedRows);
     };
 
@@ -226,7 +225,7 @@ function Field({
   return (
     <div className={`coind-field ${['table', 'textarea', 'radio', 'checks'].includes(field.type || '') ? 'coind-field-wide' : ''}`} data-field={field.key}>
       {field.type !== 'table' &&
-        (['radio', 'checks', 'pending'].includes(field.type || '') ? (
+        (['radio', 'checks', 'pending', 'computed'].includes(field.type || '') ? (
           <span id={`${id}-label`} className="coind-label">
             {field.label}
             {isReq && <span aria-hidden="true"> *</span>}
@@ -273,10 +272,11 @@ export function CoindFcePage({
   const heading = useRef<HTMLHeadingElement>(null);
   const wizard = useRef<HTMLDivElement>(null);
 
-  const current = definition.steps[step - 1];
-  const last = step === definition.steps.length;
+  const steps = definition.steps.filter(s => visibleStep(s, phase));
+  const current = steps[Math.min(step, steps.length) - 1];
+  const last = step === steps.length;
   const errors = last
-    ? Object.assign({}, ...definition.steps.map(s => stepErrors(s, data, phase)))
+    ? Object.assign({}, ...steps.map(s => stepErrors(s, data, phase)))
     : stepErrors(current, data, phase);
   const dirty = JSON.stringify(data) !== saved;
   const storageKey = `inema-coind-${definition.kind}-${phase}-v1`;
@@ -381,10 +381,12 @@ export function CoindFcePage({
             id="coind-phase-select"
             value={phase}
             onChange={e => {
-              setPhase(e.target.value as FcePhase);
-              setStep(s => Math.min(s, definition.steps.length));
+              const nextPhase = e.target.value as FcePhase;
+              const nextCount = definition.steps.filter(s => visibleStep(s, nextPhase)).length;
+              setPhase(nextPhase);
+              setStep(s => Math.min(s, Math.max(1, nextCount)));
               setChecked([]);
-              setNotice(`Fase alterada para ${e.target.value}. O formulário reajustou campos e regras condicionais.`);
+              setNotice(`Fase alterada para ${nextPhase}. O formulário reajustou etapas, seções e regras condicionais.`);
             }}
           >
             {definition.availablePhases.map(p => (
@@ -432,10 +434,10 @@ export function CoindFcePage({
       <div ref={wizard} className="coind-wizard">
         <FilamentWizard
           currentStep={step}
-          steps={definition.steps.map((s, i) => ({
+          steps={steps.map((s, i) => ({
             id: i + 1,
             label: s.title,
-            isCompleted: checked.includes(i + 1) && !Object.keys(stepErrors(s, data, phase)).length && i < definition.steps.length - 1,
+            isCompleted: checked.includes(i + 1) && !Object.keys(stepErrors(s, data, phase)).length && i < steps.length - 1,
           }))}
           onStepClick={go}
         />
@@ -443,7 +445,7 @@ export function CoindFcePage({
 
       <main>
         <p className="coind-stage" aria-live="polite">
-          Etapa {step} de {definition.steps.length} — {current.title}
+          Etapa {step} de {steps.length} — {current.title}
         </p>
 
         {notice && (
@@ -455,7 +457,7 @@ export function CoindFcePage({
         {!last ? (
           <div className="coind-sections">
             {current.sections
-              .filter(s => visibleSection(s, phase))
+              .filter(s => visibleSection(s, phase, data))
               .map(section => (
                 <Section key={section.title} heading={section.title} description={section.note}>
                   <div className="coind-grid">
@@ -507,7 +509,7 @@ export function CoindFcePage({
               </p>
             </Section>
 
-            {definition.steps.slice(0, -1).map((stage, i) => (
+            {steps.slice(0, -1).map((stage, i) => (
               <Section
                 key={stage.title}
                 heading={stage.title}
@@ -518,7 +520,7 @@ export function CoindFcePage({
                 }
               >
                 {stage.sections
-                  .filter(s => visibleSection(s, phase))
+                  .filter(s => visibleSection(s, phase, data))
                   .map(section => (
                     <div className="coind-review-section" key={section.title}>
                       <h4>{section.title}</h4>
@@ -527,7 +529,7 @@ export function CoindFcePage({
                           <React.Fragment key={f.key}>
                             <dt>{f.label}</dt>
                             <dd data-review={f.key}>
-                              {displayValue(f, data)}
+                              {displayValue(f, data, phase)}
                               {hasOther(data[f.key]) && data[f.key + 'Descricao'] ? ` — ${data[f.key + 'Descricao']}` : ''}
                               {f.type === 'table' &&
                                 ((data[f.key] as Record<string, string>[]) || []).map((r, index) => (

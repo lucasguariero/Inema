@@ -6,6 +6,7 @@ import * as Popover from '@radix-ui/react-popover';
 export interface SelectOption {
   value: string;
   label: string;
+  group?: string;
   badge?: string;
   description?: string;
 }
@@ -66,7 +67,7 @@ export const FilamentSelect: React.FC<FilamentSelectProps> = ({
   const shouldEnableSearch = searchable || normalizedOptions.length > 8;
 
   const filteredOptions = normalizedOptions.filter((opt) =>
-    fold(opt.label).includes(fold(searchTerm))
+    fold(opt.label).includes(fold(searchTerm)) || (opt.group ? fold(opt.group).includes(fold(searchTerm)) : false)
   );
 
   useEffect(() => {
@@ -135,8 +136,11 @@ export const FilamentSelect: React.FC<FilamentSelectProps> = ({
       >
         <div className="flex items-center gap-2 truncate">
           {PrefixIcon && <PrefixIcon className="w-3.5 h-3.5 text-slate-400 shrink-0" />}
-          <span className={cn('truncate font-normal', !selectedOption && 'text-slate-400')}>
-            {selectedOption ? selectedOption.label : placeholder}
+          <span
+            title={selectedOption ? (selectedOption.group ? `${selectedOption.group} · ${selectedOption.label}` : selectedOption.label) : undefined}
+            className={cn('truncate font-normal', !selectedOption && 'text-slate-400')}
+          >
+            {selectedOption ? (selectedOption.group ? `${selectedOption.group} · ${selectedOption.label}` : selectedOption.label) : placeholder}
           </span>
         </div>
         <ChevronDown
@@ -186,36 +190,49 @@ export const FilamentSelect: React.FC<FilamentSelectProps> = ({
             ) : (
               filteredOptions.map((opt, index) => {
                 const isSelected = opt.value === value;
+                const showGroupHeader = Boolean(opt.group) && (index === 0 || filteredOptions[index - 1].group !== opt.group);
                 return (
-                  <button
-                    key={opt.value}
-                    type="button"
-                    role="option"
-                    id={`${listId}-${index}`}
-                    tabIndex={-1}
-                    onMouseMove={() => setActiveIndex(index)}
-                    aria-selected={isSelected}
-                    onClick={() => handleSelect(opt.value)}
-                    className={cn(
-                      'fi-select-option w-full min-h-9 text-left px-2.5 py-1.5 rounded-lg text-xs flex items-center justify-between gap-2 transition-colors cursor-pointer',
-                      activeIndex === index && 'ring-1 ring-inset ring-[var(--input-border-focus)] bg-[var(--color-brand-primary-subtle)]',
-                      isSelected
-                        ? 'bg-[var(--color-brand-primary-subtle)] text-[var(--color-text-link)] font-semibold'
-                        : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-slate-100'
+                  <React.Fragment key={opt.value}>
+                    {showGroupHeader && (
+                      <div
+                        role="presentation"
+                        className={cn(
+                          'px-2.5 pb-1 text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 select-none',
+                          index === 0 ? 'pt-1' : 'pt-2.5 mt-1 border-t border-slate-100 dark:border-slate-800'
+                        )}
+                      >
+                        {opt.group}
+                      </div>
                     )}
-                  >
-                    <div className="min-w-0">
-                      <div className="whitespace-normal break-words">{opt.label}</div>
-                      {opt.description && (
-                        <span className="text-xs text-slate-400 block truncate">
-                          {opt.description}
-                        </span>
+                    <button
+                      type="button"
+                      role="option"
+                      id={`${listId}-${index}`}
+                      tabIndex={-1}
+                      onMouseMove={() => setActiveIndex(index)}
+                      aria-selected={isSelected}
+                      onClick={() => handleSelect(opt.value)}
+                      className={cn(
+                        'fi-select-option w-full min-h-9 text-left px-2.5 py-1.5 rounded-lg text-xs flex items-center justify-between gap-2 transition-colors cursor-pointer',
+                        activeIndex === index && 'ring-1 ring-inset ring-[var(--input-border-focus)] bg-[var(--color-brand-primary-subtle)]',
+                        isSelected
+                          ? 'bg-[var(--color-brand-primary-subtle)] text-[var(--color-text-link)] font-semibold'
+                          : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-slate-100'
                       )}
-                    </div>
-                    {isSelected && (
-                      <Check className="w-3.5 h-3.5 text-[var(--color-text-link)] shrink-0" />
-                    )}
-                  </button>
+                    >
+                      <div className="min-w-0">
+                        <div className="whitespace-normal break-words">{opt.label}</div>
+                        {opt.description && (
+                          <span className="text-xs text-slate-400 block truncate">
+                            {opt.description}
+                          </span>
+                        )}
+                      </div>
+                      {isSelected && (
+                        <Check className="w-3.5 h-3.5 text-[var(--color-text-link)] shrink-0" />
+                      )}
+                    </button>
+                  </React.Fragment>
                 );
               })
             )}
