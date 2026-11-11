@@ -10,6 +10,13 @@
       "htmlId": "subRegulacao",
       "items": [
         {
+          "id": "iniciar-requerimento",
+          "label": "Iniciar Requerimento",
+          "href": "/?rota=iniciar-requerimento",
+          "route": "iniciar-requerimento",
+          "htmlId": "menu-iniciar-requerimento"
+        },
+        {
           "id": "coine-bess",
           "label": "FCE BESS (Licença Prévia)",
           "href": "/?rota=coine-bess&escopo=coine-fces",

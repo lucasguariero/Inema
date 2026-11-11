@@ -226,6 +226,18 @@
       "destination": "/index.html"
     },
     {
+      "source": "/requerimento",
+      "destination": "/index.html?rota=iniciar-requerimento"
+    },
+    {
+      "source": "/requerimento/:path*",
+      "destination": "/index.html?rota=iniciar-requerimento"
+    },
+    {
+      "source": "/iniciar-requerimento",
+      "destination": "/index.html?rota=iniciar-requerimento"
+    },
+    {
       "source": "/conceito-01",
       "destination": "/index.html"
     },

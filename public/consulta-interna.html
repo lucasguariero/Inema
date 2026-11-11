@@ -127,11 +127,39 @@
                         <span id="icon_regulacao" class="material-symbols-outlined text-lg text-slate-500 transition-transform duration-200 rotate-180">expand_more</span>
                     </button>
                     <div id="subRegulacao" class="mt-1 border-l-2 border-slate-200 ml-4 pl-3 space-y-1">
+                        <a href="/?rota=iniciar-requerimento" id="menu-iniciar-requerimento" data-testid="menu-iniciar-requerimento"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                            <span class="truncate">Iniciar Requerimento</span>
+                        </a>
+                        <a href="/?rota=coine-bess&escopo=coine-fces" id="coine-bess" data-testid="coine-bess"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                            <span class="truncate">FCE BESS (Licença Prévia)</span>
+                        </a>
+                        <a href="/?rota=coine-eolica&escopo=coine-fces" id="coine-eolica" data-testid="coine-eolica"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                            <span class="truncate">FCE de Energia Eólica</span>
+                        </a>
+                        <a href="/?rota=coine-solar&escopo=coine-fces" id="coine-solar" data-testid="coine-solar"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                            <span class="truncate">FCE de Energia Solar</span>
+                        </a>
+                        <a href="/?rota=coine-datacenter&escopo=coine-fces" id="coine-datacenter" data-testid="coine-datacenter"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                            <span class="truncate">FCE de Data Center</span>
+                        </a>
+                        <a href="/?rota=coine-turismo&escopo=coine-fces" id="coine-turismo" data-testid="coine-turismo"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                            <span class="truncate">FCE de Turismo e Lazer</span>
+                        </a>
+                        <a href="/?rota=reg-pauta-area&escopo=padronizacao-pauta" id="menu-reg-pauta-area" data-testid="menu-reg-pauta-area"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                            <span class="truncate">Pauta da Área</span>
+                        </a>
                         <a href="/relatorios-antigo.html" id="menu-relatorios" data-testid="menu-relatorios"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                             <span class="truncate">Relatórios de Regulação</span>
                         </a>
                         <a href="/?rota=dashboard" id="menu-dashboard" data-testid="menu-dashboard"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                             <span class="truncate">Dashboard Gerencial</span>
+                        </a>
+                        <a href="/?rota=cad-empreendimentos" id="menu-cerh-empreendimentos" data-testid="menu-cerh-empreendimentos"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                            <span class="truncate">Empreendimentos (CERH)</span>
+                        </a>
+                        <a href="/cerh/consulta" id="menu-cerh-consulta" data-testid="menu-cerh-consulta"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                            <span class="truncate">Consulta CERH</span>
+                            <span class="text-[9px] font-mono tracking-tight px-1.5 py-0.5 rounded shrink-0 ml-1.5 whitespace-nowrap text-slate-400 bg-slate-100/70">DR001</span>
                         </a>
                     </div>
                 </div>
@@ -156,6 +184,22 @@
                             <span class="truncate">Pauta do Gestor - Registros</span>
                             <span class="text-[9px] font-mono tracking-tight px-1.5 py-0.5 rounded shrink-0 ml-1.5 whitespace-nowrap text-slate-400 bg-slate-100/70">DOR011</span>
                         </a>
+                        <a href="/?rota=fisc-aiad" id="menu-fisc-aiad" data-testid="menu-fisc-aiad"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                            <span class="truncate">Auto de Infração - Advertência</span>
+                            <span class="text-[9px] font-mono tracking-tight px-1.5 py-0.5 rounded shrink-0 ml-1.5 whitespace-nowrap text-slate-400 bg-slate-100/70">DOR013</span>
+                        </a>
+                        <a href="/?rota=fisc-aiap&escopo=fiscalizacao" id="menu-fisc-aiap" data-testid="menu-fisc-aiap"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                            <span class="truncate">AIAP — Apreensão</span>
+                            <span class="text-[9px] font-mono tracking-tight px-1.5 py-0.5 rounded shrink-0 ml-1.5 whitespace-nowrap text-slate-400 bg-slate-100/70">DOR014</span>
+                        </a>
+                        <a href="/?rota=fisc-rfa&escopo=fiscalizacao" id="menu-fisc-rfa" data-testid="menu-fisc-rfa"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                            <span class="truncate">RFA</span>
+                            <span class="text-[9px] font-mono tracking-tight px-1.5 py-0.5 rounded shrink-0 ml-1.5 whitespace-nowrap text-slate-400 bg-slate-100/70">DOR008</span>
+                        </a>
+                        <a href="/?rota=fisc-rae&escopo=fiscalizacao" id="menu-fisc-rae" data-testid="menu-fisc-rae"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                            <span class="truncate">RAE</span>
+                            <span class="text-[9px] font-mono tracking-tight px-1.5 py-0.5 rounded shrink-0 ml-1.5 whitespace-nowrap text-slate-400 bg-slate-100/70">DOR009</span>
+                        </a>
                         <a href="/?rota=fisc-plantonista" id="menu-fisc-plantonista" data-testid="menu-fisc-plantonista"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                             <span class="truncate">Cadastro de Plantonista</span>
                         </a>
@@ -178,8 +222,11 @@
                         <a href="/?rota=ceuc" id="menu-ceuc-consulta" data-testid="menu-ceuc-consulta"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                             <span class="truncate">Cadastro de UC (CEUC)</span>
                         </a>
+                        <a href="/?rota=uc-conselhos&escopo=conselho-gestor" id="menu-uc-conselhos" data-testid="menu-uc-conselhos"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                            <span class="truncate">Conselhos Gestores</span>
+                        </a>
                         <a href="/?rota=uc-agendamento" id="menu-uc-agendamento" data-testid="menu-uc-agendamento"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
-                            <span class="truncate">Agendamento de Visitação</span>
+                            <span class="min-w-0 whitespace-normal break-words leading-5">Entrada Única para Realização de Atividade em Unidade de Conservação</span>
                         </a>
                         <a href="/?rota=uc-autorizacao-visitacao" id="menu-uc-autorizacao-visitacao" data-testid="menu-uc-autorizacao-visitacao"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                             <span class="truncate">Autorização de Eventos (AAV)</span>
@@ -227,9 +274,25 @@
                             <span class="truncate">Tipos de Manejo</span>
                             <span class="text-[9px] font-mono tracking-tight px-1.5 py-0.5 rounded shrink-0 ml-1.5 whitespace-nowrap text-slate-400 bg-slate-100/70">DR006</span>
                         </a>
+                        <a href="/?rota=fauna-admissao" id="menu-fauna-admissao" data-testid="menu-fauna-admissao"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                            <span class="truncate">Admissão e Termo de Recebimento</span>
+                            <span class="text-[9px] font-mono tracking-tight px-1.5 py-0.5 rounded shrink-0 ml-1.5 whitespace-nowrap text-slate-400 bg-slate-100/70">DR008</span>
+                        </a>
                         <a href="/?rota=fauna-animais" id="menu-fauna-animais" data-testid="menu-fauna-animais"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
                             <span class="truncate">Animais</span>
                             <span class="text-[9px] font-mono tracking-tight px-1.5 py-0.5 rounded shrink-0 ml-1.5 whitespace-nowrap text-slate-400 bg-slate-100/70">DR001</span>
+                        </a>
+                        <a href="/?rota=fauna-asas" id="menu-fauna-asas" data-testid="menu-fauna-asas"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                            <span class="truncate">Áreas de Soltura (ASAS)</span>
+                            <span class="text-[9px] font-mono tracking-tight px-1.5 py-0.5 rounded shrink-0 ml-1.5 whitespace-nowrap text-slate-400 bg-slate-100/70">DR009</span>
+                        </a>
+                        <a href="/?rota=fauna-mapa-asas" id="menu-fauna-mapa-asas" data-testid="menu-fauna-mapa-asas"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                            <span class="truncate">Mapa de ASAS e Destinações</span>
+                            <span class="text-[9px] font-mono tracking-tight px-1.5 py-0.5 rounded shrink-0 ml-1.5 whitespace-nowrap text-slate-400 bg-slate-100/70">DR010</span>
+                        </a>
+                        <a href="/?rota=fauna-guardiao" id="menu-fauna-guardiao" data-testid="menu-fauna-guardiao"  class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs md:text-sm transition-colors duration-150 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium">
+                            <span class="truncate">Guardiões e TGAS</span>
+                            <span class="text-[9px] font-mono tracking-tight px-1.5 py-0.5 rounded shrink-0 ml-1.5 whitespace-nowrap text-slate-400 bg-slate-100/70">DR012</span>
                         </a>
                     </div>
                 </div>

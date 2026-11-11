@@ -21,6 +21,7 @@ import { AutorizacaoVisitacaoPage } from '@/pages/uc/AutorizacaoVisitacaoPage';
 import { AtividadesDidaticasPage } from '@/pages/uc/AtividadesDidaticasPage';
 import { PesquisaCientificaPage } from '@/pages/uc/PesquisaCientificaPage';
 import { RelatoriosRegulacaoPage } from '@/pages/regulacao/RelatoriosRegulacaoPage';
+import { IniciarRequerimentoPage } from '@/pages/regulacao/IniciarRequerimentoPage';
 import { PautaCoordenadorPage } from '@/pages/regulacao/pauta/PautaCoordenadorPage';
 import { CeucConsultaPage } from '@/pages/uc/CeucConsultaPage';
 import { EspeciesTaxonomiaPage } from '@/pages/fauna/EspeciesTaxonomiaPage';
@@ -87,6 +88,8 @@ export function App() {
         return r;
       }
 
+      if (path.startsWith('/requerimento')) return 'iniciar-requerimento';
+
       const scope = getCurrentScope();
       if (scope === 'assinatura-eletronica') return 'a-assinar';
       if (scope === 'padronizacao-pauta') return 'reg-pauta-area';
@@ -94,6 +97,7 @@ export function App() {
       if (scope === 'ceuc' || scope === 'herikles' || path.startsWith('/ceuc')) return 'ceuc';
       if (scope === 'fiscalizacao') return 'consulta-interna';
       if (scope === 'naiane' || scope === 'regulacao' || path.startsWith('/relatorios') || path.startsWith('/regulacao')) return 'relatorios';
+      if (scope === 'thays') return 'iniciar-requerimento';
       if (scope === 'maria') return 'cad-empreendimentos';
     }
     return 'relatorios';
@@ -143,6 +147,8 @@ export function App() {
       setActiveRoute('ceuc');
     } else if (rotaParam) {
       setActiveRoute(rotaParam);
+    } else if (path.startsWith('/requerimento')) {
+      setActiveRoute('iniciar-requerimento');
     } else if (scope === 'assinatura-eletronica') {
       setActiveRoute('a-assinar');
     } else if (scope === 'padronizacao-pauta') {
@@ -151,6 +157,8 @@ export function App() {
       setActiveRoute('ceuc');
     } else if (scope === 'regulacao' || scope === 'naiane' || path.startsWith('/relatorios') || path.startsWith('/regulacao')) {
       setActiveRoute('relatorios');
+    } else if (scope === 'thays') {
+      setActiveRoute('iniciar-requerimento');
     } else if (scope === 'maria') {
       setActiveRoute('cad-empreendimentos');
     } else if (fluxoParam === 'externo') {
@@ -194,7 +202,7 @@ export function App() {
     }
     setActiveRoute(route);
     const url = new URL(window.location.href);
-    if (url.pathname.startsWith('/cerh')) {
+    if (url.pathname.startsWith('/cerh') || url.pathname.startsWith('/requerimento')) {
       url.pathname = '/';
     }
     url.searchParams.set('rota', route);
@@ -290,6 +298,10 @@ export function App() {
       case 'relatorios':
       case 'regulacao':
         return <RelatoriosRegulacaoPage />;
+      case 'iniciar-requerimento':
+      case 'requerimento':
+      case 'requerimento-informacoes':
+        return <IniciarRequerimentoPage />;
       case 'reg-pauta-area':
         return <PautaCoordenadorPage onImmersiveChange={setPautaImmersive} />;
       case 'cad-empreendimentos':

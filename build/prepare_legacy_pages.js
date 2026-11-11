@@ -7,7 +7,7 @@ const navConfig = require('../src/data/navigationConfig.json');
 // Map legacy items strictly to legacy HTML files so navigation remains within the backup project
 const LEGACY_PAGE_MAP = {
   'inicio': '/relatorios-antigo.html',
-  'iniciar-requerimento': 'https://gla-inema-hml.acto.com.br/requerimento/informacoes',
+  'iniciar-requerimento': '/?rota=iniciar-requerimento',
   'meus-processos': 'https://gla-inema-hml.acto.com.br/meus-processos',
   'notificacoes': 'https://gla-inema-hml.acto.com.br/notificacoes',
   'acesso-publico': 'https://gla-inema-hml.acto.com.br/acesso-publico',
