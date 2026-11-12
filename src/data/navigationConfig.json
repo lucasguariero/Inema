@@ -47,6 +47,36 @@
           "route": "coine-turismo"
         },
         {
+          "id": "coine-metro",
+          "label": "FCE de Metrô, VLT e BRT",
+          "href": "/?rota=coine-metro&escopo=coine-fces",
+          "route": "coine-metro"
+        },
+        {
+          "id": "coine-transmissao",
+          "label": "FCE de Linha de Transmissão",
+          "href": "/?rota=coine-transmissao&escopo=coine-fces",
+          "route": "coine-transmissao"
+        },
+        {
+          "id": "coine-rodovia",
+          "label": "FCE de Rodovia",
+          "href": "/?rota=coine-rodovia&escopo=coine-fces",
+          "route": "coine-rodovia"
+        },
+        {
+          "id": "coine-termeletrica",
+          "label": "FCE de Termelétrica",
+          "href": "/?rota=coine-termeletrica&escopo=coine-fces",
+          "route": "coine-termeletrica"
+        },
+        {
+          "id": "coine-aeroporto",
+          "label": "FCE de Aeroporto",
+          "href": "/?rota=coine-aeroporto&escopo=coine-fces",
+          "route": "coine-aeroporto"
+        },
+        {
           "id": "reg-pauta-area",
           "label": "Pauta da Área",
           "href": "/?rota=reg-pauta-area&escopo=padronizacao-pauta",

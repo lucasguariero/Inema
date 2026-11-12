@@ -42,6 +42,7 @@ import { ContractPreview } from '@/pages/seia-v2/cerh/ContractPreview';
 import { PartnersPage } from '@/pages/seia-v2/cerh/PartnersPage';
 import { SeiaV2RootPage } from '@/pages/seia-v2/SeiaV2RootPage';
 import { CoineBessLpPage } from '@/pages/coine/CoineBessLpPage';
+import { inem20Definitions } from '@/pages/coine/coineInem20';
 import { CoineFcePage } from '@/pages/coine/CoineFcePage';
 import { eolica, solar, datacenter, turismo } from '@/pages/coine/coineFces';
 import { CoindFcePage } from '@/pages/coind/CoindFcePage';
@@ -323,6 +324,16 @@ export function App() {
       case 'coine-bess':
       case 'bess-lp':
         return <CoineBessLpPage onNavigate={handleNavigate} />;
+      case 'coine-metro':
+        return <CoineFcePage key="metro" definition={inem20Definitions.metro} onNavigate={handleNavigate} />;
+      case 'coine-transmissao':
+        return <CoineFcePage key="transmissao" definition={inem20Definitions.transmissao} onNavigate={handleNavigate} />;
+      case 'coine-rodovia':
+        return <CoineFcePage key="rodovia" definition={inem20Definitions.rodovia} onNavigate={handleNavigate} />;
+      case 'coine-termeletrica':
+        return <CoineFcePage key="termeletrica" definition={inem20Definitions.termeletrica} onNavigate={handleNavigate} />;
+      case 'coine-aeroporto':
+        return <CoineFcePage key="aeroporto" definition={inem20Definitions.aeroporto} onNavigate={handleNavigate} />;
       case 'coine-eolica':
         return <CoineFcePage key="eolica" definition={eolica} onNavigate={handleNavigate} />;
       case 'coine-solar':

@@ -33,6 +33,7 @@ import { NotificacoesPage } from '@/pages/seia-v2/NotificacoesPage';
 import { AcessoPublicoPage } from '@/pages/seia-v2/AcessoPublicoPage';
 import { CoineBessLpPage } from '@/pages/coine/CoineBessLpPage';
 import { CoineFcePage } from '@/pages/coine/CoineFcePage';
+import { inem20Definitions } from '@/pages/coine/coineInem20';
 import { fceDefinitions } from '@/pages/coine/coineFces';
 import { CoindFcePage } from '@/pages/coind/CoindFcePage';
 import { coindDefinitions } from '@/pages/coind/coindFces';
@@ -235,6 +236,16 @@ export const SeiaV2RootPage: React.FC = () => {
       case 'bess-lp':
       case 'bess':
         return <CoineBessLpPage onNavigate={handleNavigate} />;
+      case 'coine-metro':
+        return <CoineFcePage key="metro" definition={inem20Definitions.metro} onNavigate={handleNavigate} nested />;
+      case 'coine-transmissao':
+        return <CoineFcePage key="transmissao" definition={inem20Definitions.transmissao} onNavigate={handleNavigate} nested />;
+      case 'coine-rodovia':
+        return <CoineFcePage key="rodovia" definition={inem20Definitions.rodovia} onNavigate={handleNavigate} nested />;
+      case 'coine-termeletrica':
+        return <CoineFcePage key="termeletrica" definition={inem20Definitions.termeletrica} onNavigate={handleNavigate} nested />;
+      case 'coine-aeroporto':
+        return <CoineFcePage key="aeroporto" definition={inem20Definitions.aeroporto} onNavigate={handleNavigate} nested />;
       case 'coine-eolica':
         return <CoineFcePage key="eolica" definition={fceDefinitions.eolica} onNavigate={handleNavigate} nested />;
       case 'coine-solar':

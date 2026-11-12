@@ -1,17 +1,17 @@
-export type FceKind = 'eolica' | 'solar' | 'datacenter' | 'turismo';
+export type FceKind = 'eolica' | 'solar' | 'datacenter' | 'turismo' | 'metro' | 'transmissao' | 'rodovia' | 'termeletrica' | 'aeroporto';
 export type FceValue = string | string[] | Record<string, string>[];
 export type FceData = Record<string, FceValue>;
-export type Condition = { key: string; value?: string; notValue?: string };
+export type Condition = { key: string; value?: string; notValue?: string; values?: string[] };
 export interface FceField {
   key: string; label: string;
-  type?: 'text' | 'number' | 'integer' | 'textarea' | 'radio' | 'select' | 'checks' | 'table' | 'computed' | 'pending';
+  type?: 'text' | 'number' | 'integer' | 'textarea' | 'radio' | 'select' | 'checks' | 'table' | 'computed' | 'pending' | 'document';
   unit?: string; required?: boolean | ((data: FceData) => boolean); options?: string[]; when?: Condition | Condition[];
   hint?: string; source?: string; comments?: number[];
-  columns?: FceField[];
+  columns?: FceField[]; compute?: (data: FceData) => string;
 }
 export interface FceSection { title: string; source: string; comments?: number[]; note?: string; fields: FceField[]; documents?: string[] }
 export interface FceStep { title: string; sections: FceSection[] }
-export interface FceDefinition { kind: FceKind; title: string; route: string; steps: FceStep[] }
+export interface FceDefinition { kind: FceKind; title: string; route: string; phases?: string[]; phaseNote?: string; steps: FceStep[] }
 export const yesNo = ['Sim', 'Não'];
 export const numberField = (key: string, label: string, unit = '', required = true): FceField => ({key, label, type:'number', unit, required});
 export const textField = (key: string, label: string, required = true): FceField => ({key, label, required});
@@ -156,13 +156,14 @@ export const turismo: FceDefinition = {
     {title:'Revisão e conclusão',sections:[]},
   ],
 };
-export const fceDefinitions: Record<FceKind,FceDefinition> = {eolica,solar,datacenter,turismo};
+export const fceDefinitions: Record<'eolica'|'solar'|'datacenter'|'turismo',FceDefinition> = {eolica,solar,datacenter,turismo};
 
 export function visibleField(field: FceField, data: FceData): boolean {
   if (!field.when) return true;
   const conditions = Array.isArray(field.when) ? field.when : [field.when];
   return conditions.every(c => {
     const val = data[c.key];
+    if (c.values) return typeof val === 'string' && c.values.includes(val);
     if (c.value !== undefined) return val === c.value;
     if (c.notValue !== undefined) return val !== undefined && val !== '' && val !== c.notValue;
     return true;
@@ -197,6 +198,7 @@ export function fieldError(field: FceField, data: FceData): string | undefined {
   if (field.type==='table') {
     for (const row of (Array.isArray(value)? value : []) as Record<string,string>[]) for(const column of field.columns || []) {
       const error = fieldError(column,row); if(error) return `${column.label}: ${error}`;
+      if (column.options?.some(o=>/^(outro|outra)/i.test(o)) && /^(outro|outra)/i.test(String(row[column.key] || '')) && !String(row[column.key+'Descricao'] || '').trim()) return `${column.label}: descreva a opção informada.`;
     }
   }
 }
